@@ -1,5 +1,6 @@
 package com.zhcdata.jc.xml;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -11,10 +12,10 @@ import java.util.List;
  * @author : 高阳
  * @version : 0.0.1
  */
-public interface BaseXmlProtocol<T> {
+public interface BaseXmlProtocolTest<T> {
 
-  public String getUrl();
+  public String ReqXml(String url);
 
-  public List<T> xmlHandleMethod(String xml) throws Exception;
+  public List<T> xmlHandleMethod(String xml,Class c) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException;
 
 }

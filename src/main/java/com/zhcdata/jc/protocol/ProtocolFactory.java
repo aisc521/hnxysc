@@ -1,6 +1,7 @@
 package com.zhcdata.jc.protocol;
 
 import com.zhcdata.jc.tools.SpringUtil;
+import com.zhcdata.jc.xml.BaseXmlProtocol;
 
 /**
  * Title:
@@ -16,7 +17,9 @@ public class ProtocolFactory {
     public static BaseProtocol getProtocolInstance(String protocolCode) {
         return SpringUtil.getBean(protocolCode, BaseProtocol.class);
     }
-
+    public static BaseXmlProtocol getQiuTanProtocolInstance(String protocolCode) {
+        return SpringUtil.getBean(protocolCode, BaseXmlProtocol.class);
+    }
     public static void main(String[] args) {
 
     }
