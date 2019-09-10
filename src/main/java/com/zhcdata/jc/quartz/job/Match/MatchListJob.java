@@ -46,7 +46,7 @@ public class MatchListJob{
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Scheduled(cron = "0/5 * * * * ?")
+    /*@Scheduled(cron = "0/5 * * * * ?")*/
     public void execute() throws Exception {
         LOGGER.info("赛程赛果定时任务启动");long s = System.currentTimeMillis();
         String xmlStr = HttpUtils.httpGet("http://interface.win007.com/zq/BF_XML.aspx?date=2019-09-10", null);

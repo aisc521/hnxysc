@@ -105,3 +105,4 @@ custom:
   qiutan:
     url:
       todayurl: http://interface.win007.com/zq/today.aspx
+      lotterTypeMacthUrl: http://interface.win007.com/zq/MatchidInterface.aspx
