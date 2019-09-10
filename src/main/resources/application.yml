@@ -101,4 +101,4 @@ custom:
   url:
     acc: http://ceshiacc.zhongcaishou.com/accCenter
     push: http://ceshiu.zhongcaishou.com/push.do
-  job: false
+  job: true
