@@ -19,7 +19,7 @@ import java.util.List;
  */
 public class QiuTanXmlComm<T>  {
 
-  public List<T> handleMothod(String url, Class<T> clas){
+  public List<T> handleMothod(String url, Class<T> ...clas){
     String xml = "";
     try {
       xml = HttpUtils.httpPost(url,"UTF-8");
@@ -29,7 +29,8 @@ public class QiuTanXmlComm<T>  {
     }
     XStream xStream = new XStream(new DomDriver());
     XStream.setupDefaultSecurity(xStream);
-    xStream.allowTypes(new Class[]{List.class,clas});
+    //xStream.allowTypes(new Class[]{List.class,clas});
+    xStream.allowTypes(clas);
     xStream.processAnnotations(clas);
     List<T> list = (List<T>) xStream.fromXML(xml);
 
@@ -37,7 +38,7 @@ public class QiuTanXmlComm<T>  {
   }
   public static void main(String argsp[]){
     //String xml = HttpUtils.httpPost("http://interface.win007.com/zq/today.aspx","UTF-8");
-    List<ToDayMatchRsp> list  = new QiuTanXmlComm().handleMothod("http://interface.win007.com/zq/today.aspx",ToDayMatchRsp.class);
+    List<ToDayMatchRsp> list  = new QiuTanXmlComm().handleMothod("http://interface.win007.com/zq/today.aspx",List.class,ToDayMatchRsp.class);
     for (ToDayMatchRsp a : list) {
       System.out.println(a.getID());
 
