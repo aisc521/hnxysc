@@ -1,6 +1,11 @@
 package com.zhcdata.jc.tools;
 
 import com.google.common.base.Strings;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.utils.mapper.JsonMapper;
@@ -8,6 +13,7 @@ import org.springside.modules.utils.time.ClockUtil;
 import org.springside.modules.utils.time.DateFormatUtil;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -346,6 +352,31 @@ public class HttpUtils {
         }
 
         return new String(resultBytes);
+    }
+
+
+    /**
+     * yyc 2019-09-10
+     * @param url
+     * @return
+     */
+    public static String getHtmlResult(String url) {
+        CloseableHttpClient httpCilent = HttpClients.createDefault();//Creates CloseableHttpClient instance with default configuration.
+        HttpGet httpGet = new HttpGet(url);
+        try {
+            CloseableHttpResponse httpResponse = httpCilent.execute(httpGet);
+            //System.out.println(EntityUtils.toString(httpResponse.getEntity()));
+            return EntityUtils.toString(httpResponse.getEntity());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                httpCilent.close();//释放资源
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "";
     }
 
 }
