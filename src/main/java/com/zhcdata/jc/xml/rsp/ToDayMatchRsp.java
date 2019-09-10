@@ -1,5 +1,6 @@
 package com.zhcdata.jc.xml.rsp;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@XStreamAlias("match")
 public class ToDayMatchRsp {
   String ID;//比赛Id
   String color;//颜色值
@@ -28,5 +30,23 @@ public class ToDayMatchRsp {
   String time2;//开场时间;
   String home;//主队信息简体名,繁体名,英文名,主队ID
   String away;//客队信息:简体名,繁体名,英文名,客队ID
+  String state;
+  String homeScore;
+  String awayScore;
+  String bc1;
+  String bc2;
+  String red1;
+  String red2;
+  String yellow1;
+  String yellow2;
+  String order1;
+  String order2;
+  String explain;
+  String zl;
+  String tv;
+  String lineup;
+  String explain2;
+  String corner1;
+  String corner2;
 
 }
