@@ -1,5 +1,13 @@
 package com.zhcdata.jc.xml.impl;
 
+import com.zhcdata.jc.tools.HttpUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
+import java.util.List;
+
 /**
  * CopyRight (c)1999-2019 : zhcw.com
  * Project : jc-new-server
@@ -12,7 +20,23 @@ package com.zhcdata.jc.xml.impl;
  */
 public class TestXml {
 
-    public static void main(String args[]){
+   public static List<Element> xmlRootHandle(String xml,String node) throws DocumentException {
+     Document doc = null;
+     doc = DocumentHelper.parseText(xml); // 将字符串转为XML
+     Element rootElt = doc.getRootElement(); // 获取根节点
+     System.out.println("根节点：" + rootElt.getName()); // 拿到根节点的名称
+     List<Element> list = rootElt.elements(node);
+     return list;
+   }
+
+    public static void main(String args[]) throws Exception {
+
+      String xml = HttpUtils.httpPost("http://interface.win007.com/zq/today.aspx","UTF-8");
+
+      List<Element> list = xmlRootHandle(xml,"match");
+      for(Element e:list){
+        System.out.println("ID="+e.elementTextTrim("ID"));
+      }
 
     }
 }

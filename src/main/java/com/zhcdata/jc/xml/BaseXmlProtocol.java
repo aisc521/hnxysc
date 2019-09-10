@@ -9,8 +9,11 @@ package com.zhcdata.jc.xml;
  * @author : 高阳
  * @version : 0.0.1
  */
-public interface BaseXmlService {
+public interface BaseXmlProtocol {
+  //url接口请求地址
+  public String url = null;
 
-  public Object handle();
+  public String ReqXml(String url);
+
 
 }
