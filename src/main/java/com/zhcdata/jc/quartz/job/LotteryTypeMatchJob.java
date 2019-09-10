@@ -49,8 +49,8 @@ public class LotteryTypeMatchJob{
         log.error("彩票赛程与球探网ID关联表定时任务启动");
         long s = System.currentTimeMillis();
         try {
-            List<LotteryTypeMatchRsp> list  = new QiuTanXmlComm().handleMothod(requestUrl,List.class,LotteryTypeMatchRsp.class);
-            System.out.println(list);
+           /* List<LotteryTypeMatchRsp> list  = new QiuTanXmlComm().handleMothod(requestUrl,List.class,LotteryTypeMatchRsp.class);
+            System.out.println(list);*/
         } catch (Exception e) {
             log.error("彩票赛程与球探网ID关联表定时任务启动异常",e);
             e.printStackTrace();
