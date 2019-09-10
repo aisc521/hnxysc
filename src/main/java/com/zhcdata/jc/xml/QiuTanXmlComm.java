@@ -3,6 +3,7 @@ package com.zhcdata.jc.xml;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.zhcdata.jc.tools.HttpUtils;
+import com.zhcdata.jc.xml.rsp.ToDayMatchRsp;
 
 import java.util.List;
 
@@ -33,5 +34,13 @@ public class QiuTanXmlComm<T>  {
     List<T> list = (List<T>) xStream.fromXML(xml);
 
     return list;
+  }
+  public static void main(String argsp[]){
+    //String xml = HttpUtils.httpPost("http://interface.win007.com/zq/today.aspx","UTF-8");
+    List<ToDayMatchRsp> list  = new QiuTanXmlComm().handleMothod("http://interface.win007.com/zq/today.aspx",ToDayMatchRsp.class);
+    for (ToDayMatchRsp a : list) {
+      System.out.println(a.getID());
+
+    }
   }
 }
