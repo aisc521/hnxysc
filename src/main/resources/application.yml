@@ -1,0 +1,104 @@
+# REDIS (RedisProperties)
+spring:
+  redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    # Redis服务器地址
+    host: 192.168.65.198
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password: 1234
+    # 连接超时时间（毫秒）
+    timeout: 5000
+    lettuce:
+      pool:
+      # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 8
+      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+      # 连接池中的最大空闲连接
+        max-idle: 200
+      # 连接池中的最小空闲连接
+        min-idle: 0
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.65.198:3306/goods?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8
+      username: goods
+      password: goods
+      initial-size: 1                     #连接池初始大小
+      max-active: 20                      #连接池中最大的活跃连接数
+      min-idle: 1                         #连接池中最小的活跃连接数
+      max-wait: 60000                     #配置获取连接等待超时的时间
+      pool-prepared-statements: true    #打开PSCache，并且指定每个连接上PSCache的大小
+      max-pool-prepared-statement-per-connection-size: 20
+      validation-query: SELECT 1 FROM DUAL
+      validation-query-timeout: 30000
+      test-on-borrow: false             #是否在获得连接后检测其可用性
+      test-on-return: false             #是否在连接放回连接池后检测其可用性
+      test-while-idle: true             #是否在连接空闲一段时间后检测其可用性
+      #通过别名的方式配置扩展插件，常用的插件有： 监控统计用的filter:stat日志用的filter:log4j防御sql注入的filter:wall
+      filters: stat, wall
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      use-global-data-source-stat: true
+
+  quartz:
+    #相关属性配置
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: scheduler
+            instanceId: AUTO
+#          jobStore:
+#            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+#            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+#            tablePrefix: QRTZ_
+#            isClustered: false
+#            clusterCheckinInterval: 10000
+#            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 50
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.zhcdata.db.model
+  configuration:
+    map-underscore-to-camel-case: true
+    use-generated-keys: true
+
+mapper:
+  mappers:
+    - tk.mybatis.mapper.common.Mapper
+    - com.zhcdata.jc.tools.CustomInterfaceMapper
+  not-empty: false
+  identity: MYSQL
+  enable-method-annotation: true
+#  before: true
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+
+logging:
+  level:
+    com:
+      zhcdata:
+        db:
+          mapper: debug
+
+# 自定义属性
+custom:
+  url:
+    acc: http://ceshiacc.zhongcaishou.com/accCenter
+    push: http://ceshiu.zhongcaishou.com/push.do
+  job: false

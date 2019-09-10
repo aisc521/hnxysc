@@ -1,0 +1,53 @@
+
+//正常请求：
+{
+  "message":{
+    "head":{
+      "ua":"GT-N7102",
+      "transactionType":"10230202",
+      "src":"0000100001|0301003000",
+      "messageID":"99992015082513281396",
+      "timeStamp":"20150825132813",
+      "messengerID":"9999",
+      "imei":"355546051185141",
+      "sysType": "WTG"
+    },
+    "body": {
+      "pageAmount":"20",
+      "timeId":"-1"
+    }
+  }
+}
+
+//正常响应
+{
+  "message": {
+    "head": {
+      "messageID": "99992015082513281396",
+      "timeStamp": "20150825132813|20190624163351318",
+      "src": "0000100001|0301003000",
+      "sysType": "WTG",
+      "messengerID": "9999",
+      "transactionType": "10230202",
+      "ua": "GT-N7102",
+      "imei": "355546051185141",
+      "deviceId": "",
+      "digest": "",
+      "resCode": "000000",
+      "message": "成功"
+    },
+    "body": {
+      "timeId": "20190624163412398",
+      "resCode": "000000",
+      "list": [
+        {
+          "issueId": "10001",
+          "itemName": "手机",
+          "issueName": "10001",
+          "userName": "小谢"
+        }
+      ],
+      "message": "成功"
+    }
+  }
+}

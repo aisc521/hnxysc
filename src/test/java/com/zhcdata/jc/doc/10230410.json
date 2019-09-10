@@ -1,0 +1,71 @@
+
+//正常请求：
+{
+  "message":{
+    "head":{
+      "ua":"GT-N7102",
+      "transactionType":"10230410",
+      "src":"0000100001|0301003000",
+      "messageID":"99992015082513281396",
+      "timeStamp":"20150825132813",
+      "messengerID":"9999",
+      "imei":"355546051185141",
+      "sysType": "WTG"
+    },
+    "body": {
+      "userId":"10021"
+    }
+  }
+}
+
+//正常响应
+{
+  "message": {
+    "head": {
+      "messageID": "99992015082513281396",
+      "timeStamp": "20150825132813|20190708153921693",
+      "src": "0000100001|0301003000",
+      "sysType": "WTG",
+      "messengerID": "9999",
+      "transactionType": "10230410",
+      "ua": "GT-N7102",
+      "imei": "355546051185141",
+      "deviceId": "",
+      "digest": "",
+      "resCode": "000000",
+      "message": "成功"
+    },
+    "body": {
+      "resCode": "000000",
+      "list": [
+        {
+          "id": "7",
+          "userId": "10021",
+          "isDefault": "0",
+          "accName": "小谢",
+          "cell": "15014167913",
+          "address": "北京市昌平区",
+          "provinceName": "北京",
+          "provinceCode": "11",
+          "cityName": "昌平",
+          "area": "北京市",
+          "areaCode": ""
+        },
+        {
+          "id": "6",
+          "userId": "10021",
+          "isDefault": "0",
+          "accName": "小谢",
+          "cell": "15014167913",
+          "address": "北京市石景山区",
+          "provinceName": "北京",
+          "provinceCode": "11",
+          "cityName": "石景山",
+          "area": "北京市",
+          "areaCode": ""
+        }
+      ],
+      "message": "成功"
+    }
+  }
+}

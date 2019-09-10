@@ -1,0 +1,52 @@
+
+//正常请求：
+{
+  "message":{
+    "head":{
+      "ua":"GT-N7102",
+      "transactionType":"10230411",
+      "src":"0000100001|0301003000",
+      "messageID":"99992015082513281396",
+      "timeStamp":"20150825132813",
+      "messengerID":"9999",
+      "imei":"355546051185141",
+      "sysType": "WTG"
+    },
+    "body": {
+      "userId":"10021",
+      "isDefault":"0",
+      "accName":"董加彬",
+      "cell":"18611272755",
+      "provinceName":"北京市",
+      "provinceCode":"11",
+      "cityName":"北京市",
+      "area":"海淀区",
+      "areaCode":"110108",
+      "address":"阜成路77号"
+    }
+  }
+}
+
+//正常响应
+{
+  "message": {
+    "head": {
+      "messageID": "99992015082513281396",
+      "timeStamp": "20150825132813|20190621141257032",
+      "src": "0000100001|0301003000",
+      "sysType": "WM",
+      "messengerID": "9999",
+      "transactionType": "10230411",
+      "ua": "GT-N7102",
+      "imei": "355546051185141",
+      "deviceId": "",
+      "digest": "",
+      "resCode": "000000",
+      "message": "成功"
+    },
+    "body": {
+      "resCode": "000000",
+      "message": "成功"
+    }
+  }
+}

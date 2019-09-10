@@ -1,0 +1,55 @@
+
+//正常请求：
+{
+  "message":{
+    "head":{
+      "ua":"GT-N7102",
+      "transactionType":"10230417",
+      "src":"0000100001|0301003000",
+      "messageID":"99992015082513281396",
+      "timeStamp":"20150825132813",
+      "messengerID":"9999",
+      "imei":"355546051185141",
+      "sysType": "WTG"
+    },
+    "body": {
+      "userId":"10021",
+      "pageNo":"20"
+    }
+  }
+}
+
+//正常响应
+{
+  "message": {
+    "head": {
+      "messageID": "99992015082513281396",
+      "timeStamp": "20150825132813|20190624150803435",
+      "src": "0000100001|0301003000",
+      "sysType": "WTG",
+      "messengerID": "9999",
+      "transactionType": "10230417",
+      "ua": "GT-N7102",
+      "imei": "355546051185141",
+      "deviceId": "",
+      "digest": "",
+      "resCode": "000000",
+      "message": "成功"
+    },
+    "body": {
+      "pageTotal": "1",
+      "totalNum": "1",
+      "pageNo": "20",
+      "resCode": "000000",
+      "list": [
+        {
+          "createTime": "2019-06-22 23:40:23",
+          "lottery": "FC_SSQ",
+          "type": "1",
+          "content": "01,02,03,04,05,06,07,08,09,10"
+        }
+      ],
+      "message": "成功"
+    }
+  }
+}
