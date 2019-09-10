@@ -20,20 +20,25 @@ import java.util.List;
 public class QiuTanXmlComm<T>  {
 
   public List<T> handleMothod(String url, Class<T> clas){
-    String xml = "";
     try {
-      xml = HttpUtils.httpPost(url,"UTF-8");
+      String xml = "";
+      try {
+        xml = HttpUtils.httpPost(url, "UTF-8");
 
-    } catch (Exception e) {
-      e.printStackTrace();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      XStream xStream = new XStream(new DomDriver());
+      XStream.setupDefaultSecurity(xStream);
+      xStream.allowTypes(new Class[]{List.class, clas});
+      xStream.processAnnotations(clas);
+      List<T> list = (List<T>) xStream.fromXML(xml);
+
+      return list;
+    }catch (Exception ex){
+      String str=ex.getMessage();
     }
-    XStream xStream = new XStream(new DomDriver());
-    XStream.setupDefaultSecurity(xStream);
-    xStream.allowTypes(new Class[]{List.class,clas});
-    xStream.processAnnotations(clas);
-    List<T> list = (List<T>) xStream.fromXML(xml);
-
-    return list;
+    return null;
   }
   public static void main(String argsp[]){
     //String xml = HttpUtils.httpPost("http://interface.win007.com/zq/today.aspx","UTF-8");
