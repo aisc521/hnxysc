@@ -29,17 +29,17 @@ import java.util.*;
 @MapperScan("com.zhcdata.db.mapper")
 @SpringBootApplication
 @EnableAsync
-public class WinTheGoodsApplication extends SpringBootServletInitializer {
+public class JcNewServerApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
-        SpringApplication.run(WinTheGoodsApplication.class, args);
+        SpringApplication.run(JcNewServerApplication.class, args);
         System.out.println("1111111111");
     }
 
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(WinTheGoodsApplication.class);
+        return application.sources(JcNewServerApplication.class);
     }
 
     @Bean

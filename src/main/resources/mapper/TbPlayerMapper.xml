@@ -2,6 +2,229 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhcdata.db.mapper.TbPlayerMapper">
   <select id="queryPlayer" resultType="com.zhcdata.db.model.PlayerInfo">
-    select * from player LIMIT 1
+    select * from player where PlayerID=${PlayerID}
   </select>
+
+  <insert id="insertPlayer" parameterType="com.zhcdata.db.model.PlayerInfo">
+    insert into Player (PlayerID,Kind, Name_short,Name_F,Name_J,
+    Name_E,Name_Es,Birthday,Tallness,Weight,
+    Country,Photo,Introduce,Health,ModifyTime,
+    CountryID,ExpectedValue,HonorInfo,EndDateContract,IdiomaticFeet,
+    Country2ID,hotSortNumber)
+    values (#{playerid}, #{kind}, #{nameShort},#{nameF}, #{nameJ},
+     #{nameE},#{nameEs},#{birthday},#{tallness},#{weight},
+     #{country},#{photo},#{introduce},#{health},#{modifytime},
+     #{countryid},#{expectedvalue},#{honorInfo},#{enddatecontract},#{idiomaticfeet},
+     #{country2id},#{hotsortnumber})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.PlayerInfo" >
+    insert into player
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="playerid != null" >
+        PlayerID,
+      </if>
+      <if test="kind != null" >
+        Kind,
+      </if>
+      <if test="nameShort != null" >
+        Name_short,
+      </if>
+      <if test="nameF != null" >
+        Name_F,
+      </if>
+      <if test="nameJ != null" >
+        Name_J,
+      </if>
+      <if test="nameE != null" >
+        Name_E,
+      </if>
+      <if test="nameEs != null" >
+        Name_Es,
+      </if>
+      <if test="birthday != null" >
+        Birthday,
+      </if>
+      <if test="tallness != null" >
+        Tallness,
+      </if>
+      <if test="weight != null" >
+        Weight,
+      </if>
+      <if test="country != null" >
+        Country,
+      </if>
+      <if test="photo != null" >
+        Photo,
+      </if>
+      <if test="health != null" >
+        Health,
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime,
+      </if>
+      <if test="countryid != null" >
+        CountryID,
+      </if>
+      <if test="expectedvalue != null" >
+        ExpectedValue,
+      </if>
+      <if test="enddatecontract != null" >
+        EndDateContract,
+      </if>
+      <if test="idiomaticfeet != null" >
+        IdiomaticFeet,
+      </if>
+      <if test="country2id != null" >
+        Country2ID,
+      </if>
+      <if test="hotsortnumber != null" >
+        hotSortNumber,
+      </if>
+      <if test="introduce != null" >
+        Introduce,
+      </if>
+      <if test="honorinfo != null" >
+        HonorInfo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="playerid != null" >
+        #{playerid,jdbcType=INTEGER},
+      </if>
+      <if test="kind != null" >
+        #{kind,jdbcType=SMALLINT},
+      </if>
+      <if test="nameShort != null" >
+        #{nameShort,jdbcType=CHAR},
+      </if>
+      <if test="nameF != null" >
+        #{nameF,jdbcType=CHAR},
+      </if>
+      <if test="nameJ != null" >
+        #{nameJ,jdbcType=CHAR},
+      </if>
+      <if test="nameE != null" >
+        #{nameE,jdbcType=CHAR},
+      </if>
+      <if test="nameEs != null" >
+        #{nameEs,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tallness != null" >
+        #{tallness,jdbcType=SMALLINT},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=SMALLINT},
+      </if>
+      <if test="country != null" >
+        #{country,jdbcType=CHAR},
+      </if>
+      <if test="photo != null" >
+        #{photo,jdbcType=CHAR},
+      </if>
+      <if test="health != null" >
+        #{health,jdbcType=CHAR},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="countryid != null" >
+        #{countryid,jdbcType=INTEGER},
+      </if>
+      <if test="expectedvalue != null" >
+        #{expectedvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="enddatecontract != null" >
+        #{enddatecontract,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idiomaticfeet != null" >
+        #{idiomaticfeet,jdbcType=INTEGER},
+      </if>
+      <if test="country2id != null" >
+        #{country2id,jdbcType=INTEGER},
+      </if>
+      <if test="hotsortnumber != null" >
+        #{hotsortnumber,jdbcType=INTEGER},
+      </if>
+      <if test="introduce != null" >
+        #{introduce,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="honorinfo != null" >
+        #{honorinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.PlayerInfo" >
+    update player
+    <set >
+      <if test="kind != null" >
+        Kind = #{kind,jdbcType=SMALLINT},
+      </if>
+      <if test="nameShort != null" >
+        Name_short = #{nameShort,jdbcType=CHAR},
+      </if>
+      <if test="nameF != null" >
+        Name_F = #{nameF,jdbcType=CHAR},
+      </if>
+      <if test="nameJ != null" >
+        Name_J = #{nameJ,jdbcType=CHAR},
+      </if>
+      <if test="nameE != null" >
+        Name_E = #{nameE,jdbcType=CHAR},
+      </if>
+      <if test="nameEs != null" >
+        Name_Es = #{nameEs,jdbcType=CHAR},
+      </if>
+      <if test="birthday != null" >
+        Birthday = #{birthday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tallness != null" >
+        Tallness = #{tallness,jdbcType=SMALLINT},
+      </if>
+      <if test="weight != null" >
+        Weight = #{weight,jdbcType=SMALLINT},
+      </if>
+      <if test="country != null" >
+        Country = #{country,jdbcType=CHAR},
+      </if>
+      <if test="photo != null" >
+        Photo = #{photo,jdbcType=CHAR},
+      </if>
+      <if test="health != null" >
+        Health = #{health,jdbcType=CHAR},
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="countryid != null" >
+        CountryID = #{countryid,jdbcType=INTEGER},
+      </if>
+      <if test="expectedvalue != null" >
+        ExpectedValue = #{expectedvalue,jdbcType=VARCHAR},
+      </if>
+      <if test="enddatecontract != null" >
+        EndDateContract = #{enddatecontract,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idiomaticfeet != null" >
+        IdiomaticFeet = #{idiomaticfeet,jdbcType=INTEGER},
+      </if>
+      <if test="country2id != null" >
+        Country2ID = #{country2id,jdbcType=INTEGER},
+      </if>
+      <if test="hotsortnumber != null" >
+        hotSortNumber = #{hotsortnumber,jdbcType=INTEGER},
+      </if>
+      <if test="introduce != null" >
+        Introduce = #{introduce,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="honorinfo != null" >
+        HonorInfo = #{honorinfo,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where PlayerID = #{playerid,jdbcType=INTEGER}
+  </update>
 </mapper>
