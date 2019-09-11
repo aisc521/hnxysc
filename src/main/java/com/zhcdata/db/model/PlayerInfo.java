@@ -17,7 +17,7 @@ public class PlayerInfo {
 
     private String nameEs;
 
-    private Date birthday;
+    private String birthday;
 
     private Short tallness;
 
@@ -27,15 +27,19 @@ public class PlayerInfo {
 
     private String photo;
 
+    private String introduce;
+
     private String health;
 
-    private Date modifytime;
+    private String modifytime;
 
     private Integer countryid;
 
     private String expectedvalue;
 
-    private Date enddatecontract;
+    private String honorinfo;
+
+    private String enddatecontract;
 
     private Integer idiomaticfeet;
 
@@ -99,11 +103,11 @@ public class PlayerInfo {
         this.nameEs = nameEs == null ? null : nameEs.trim();
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -147,11 +151,11 @@ public class PlayerInfo {
         this.health = health == null ? null : health.trim();
     }
 
-    public Date getModifytime() {
+    public String getModifytime() {
         return modifytime;
     }
 
-    public void setModifytime(Date modifytime) {
+    public void setModifytime(String modifytime) {
         this.modifytime = modifytime;
     }
 
@@ -171,11 +175,11 @@ public class PlayerInfo {
         this.expectedvalue = expectedvalue == null ? null : expectedvalue.trim();
     }
 
-    public Date getEnddatecontract() {
+    public String getEnddatecontract() {
         return enddatecontract;
     }
 
-    public void setEnddatecontract(Date enddatecontract) {
+    public void setEnddatecontract(String enddatecontract) {
         this.enddatecontract = enddatecontract;
     }
 
@@ -201,5 +205,21 @@ public class PlayerInfo {
 
     public void setHotsortnumber(Integer hotsortnumber) {
         this.hotsortnumber = hotsortnumber;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
+
+    public String getHonorinfo() {
+        return honorinfo;
+    }
+
+    public void setHonorinfo(String honorinfo) {
+        this.honorinfo = honorinfo;
     }
 }
