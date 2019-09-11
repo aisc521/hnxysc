@@ -59,7 +59,7 @@ public class MatchListJob{
     @Resource
     ScheduleMapper scheduleMapper;
 
-    @Scheduled(cron = "1 * * * * ?")
+    //@Scheduled(cron = "1 * * * * ?")
     public void execute() throws Exception {
         LOGGER.info("赛程赛果定时任务启动");
         long s = System.currentTimeMillis();

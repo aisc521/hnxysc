@@ -52,7 +52,7 @@ public class GetMatchInfoByIdListJob {
     @Resource
     ScheduleMapper scheduleMapper;
 
-    @Scheduled(cron = "1 0/5 * * * ?")
+    //@Scheduled(cron = "1 0/5 * * * ?")
     public void execute() throws Exception {
         LOGGER.info("id查询比赛信息定时任务启动");
         long s = System.currentTimeMillis();
