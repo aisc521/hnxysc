@@ -80,13 +80,4 @@ public class XmlUtils {
         }
         return obj;
     }
-    public static String xml2JsonString(String xml){
-        try {
-            org.json.JSONObject jsonObj = XML.toJSONObject(xml);
-            return jsonObj.toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }
