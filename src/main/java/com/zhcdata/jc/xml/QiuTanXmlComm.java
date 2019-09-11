@@ -3,7 +3,8 @@ package com.zhcdata.jc.xml;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.zhcdata.jc.tools.HttpUtils;
-import com.zhcdata.jc.xml.rsp.ToDayMatchRsp;
+import com.zhcdata.jc.xml.rsp.LotteryTypeMatchFristRsp;
+import com.zhcdata.jc.xml.rsp.LotteryTypeMatchRsp;
 
 import java.util.List;
 
@@ -19,11 +20,26 @@ import java.util.List;
  */
 public class QiuTanXmlComm<T>  {
 
-  public List<T> handleMothod(String url, Class<T> ...clas){
+  public Object handleMothod(String url, Class ...clas){
     String xml = "";
     try {
       xml = HttpUtils.httpPost(url,"UTF-8");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    XStream xStream = new XStream(new DomDriver());
+    XStream.setupDefaultSecurity(xStream);
+    //xStream.allowTypes(new Class[]{List.class,clas});
+    xStream.allowTypes(clas);
+    xStream.processAnnotations(clas);
+    //List<T> list = (List<T>) xStream.fromXML(xml);
 
+    return xStream.fromXML(xml);
+  }
+  public List<T> handleMothodList(String url, Class ...clas){
+    String xml = "";
+    try {
+      xml = HttpUtils.httpPost(url,"UTF-8");
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -38,10 +54,17 @@ public class QiuTanXmlComm<T>  {
   }
   public static void main(String argsp[]){
     //String xml = HttpUtils.httpPost("http://interface.win007.com/zq/today.aspx","UTF-8");
-    List<ToDayMatchRsp> list  = new QiuTanXmlComm().handleMothod("http://interface.win007.com/zq/today.aspx",List.class,ToDayMatchRsp.class);
+   /* List<ToDayMatchRsp> list  = (List<ToDayMatchRsp>) new QiuTanXmlComm().handleMothod("http://interface.win007.com/zq/today.aspx",List.class,ToDayMatchRsp.class);
     for (ToDayMatchRsp a : list) {
       System.out.println(a.getID());
 
+    }*/
+
+   String url = "http://interface.win007.com/zq/MatchidInterface.aspx";
+    LotteryTypeMatchFristRsp object  = (LotteryTypeMatchFristRsp) new QiuTanXmlComm().handleMothod(url,LotteryTypeMatchFristRsp.class,LotteryTypeMatchRsp.class);
+    List<LotteryTypeMatchRsp> list = object.getList();
+    for (LotteryTypeMatchRsp lotteryTypeMatchRsp : list) {
+      System.out.println(lotteryTypeMatchRsp.getID());
     }
   }
 }

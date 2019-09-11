@@ -170,9 +170,13 @@ public interface Const {
     String IS_DEFAULT = "isDefault";
     String ACCEPT_ADDRESS_ID = "acceptAddressId";
     String AREA_CODE = "areaCode";
-
+    String ONE_FOUR_SFC = "14场胜负彩";
+    String SINGLE_R_SPF = "单场让球胜平负";
+    String JC_FOOTBALL = "竞彩足球";
     /**
      * end
      * ======================================================================================================
      */
+
+
 }

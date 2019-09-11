@@ -10,6 +10,7 @@ package com.zhcdata.jc.tools.xml;
  * @version 1.0
  * @Date 2019/6/25 09:37
  */
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.jdom2.Document;
@@ -23,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
-
+import org.json.XML;
 /**
  *
  */
@@ -78,5 +79,14 @@ public class XmlUtils {
             }
         }
         return obj;
+    }
+    public static String xml2JsonString(String xml){
+        try {
+            org.json.JSONObject jsonObj = XML.toJSONObject(xml);
+            return jsonObj.toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

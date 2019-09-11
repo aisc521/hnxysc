@@ -15,9 +15,9 @@
     <!--数据库连接信息 -->
     <jdbcConnection
       driverClass="com.mysql.jdbc.Driver"
-      connectionURL="jdbc:mysql://192.168.65.198:3306/goods?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;requireSSL=false&amp;verifyServerCertificate=false"
-      userId="goods"
-      password="goods">
+      connectionURL="jdbc:mysql://192.168.65.198:3306/datas?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false&amp;requireSSL=false&amp;verifyServerCertificate=false"
+      userId="yanyongchao"
+      password="zhcw@123">
     </jdbcConnection>
 
     <javaModelGenerator targetPackage="com.zhcdata.db.model" targetProject="src/main/java"/>
@@ -44,5 +44,8 @@
     <!--<table tableName="tb_dc_third"/>-->
    <!-- <table tableName="tb_user_rech_offline"/>
 -->
+    <table tableName="jc_lotter_type_bd"/>
+    <table tableName="jc_lotter_type_jc"/>
+    <table tableName="jc_lotter_type_zc"/>
   </context>
 </generatorConfiguration>
