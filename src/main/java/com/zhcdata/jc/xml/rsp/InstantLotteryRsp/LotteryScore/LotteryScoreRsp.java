@@ -1,6 +1,5 @@
 package com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotteryScore;
 
-import com.sun.xml.internal.ws.server.ServerRtException;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Getter;
 import lombok.Setter;

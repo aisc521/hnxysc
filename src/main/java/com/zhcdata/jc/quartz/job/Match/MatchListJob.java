@@ -25,17 +25,13 @@ package com.zhcdata.jc.quartz.job.Match;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.javafx.collections.MappingChange;
 import com.zhcdata.jc.tools.HttpUtils;
 import com.zhcdata.jc.tools.xml.XmlUtils;
-import com.zhcdata.jc.xml_model.MatchList;
 import com.zhcdata.jc.xml_model.MatchListModel;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import java.util.List;
 import java.util.Map;
