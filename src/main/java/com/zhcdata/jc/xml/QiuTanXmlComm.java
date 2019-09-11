@@ -6,9 +6,6 @@ import com.zhcdata.jc.tools.HttpUtils;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BdrealTimeSp.*;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BjDcLotteryQuery.BjDcLotteryQueryFirstRsp;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BjDcLotteryQuery.BjDcLotteryQueryRsp;
-import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterMatchStatistics.LotterMatchStatEventRsp;
-import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterMatchStatistics.LotterMatchStatFirstRsp;
-import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterMatchStatistics.LotterMatchStatTechnicRsp;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotteryScore.LotteryScoreFirstRsp;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotteryScore.LotteryScoreRsp;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.*;
@@ -74,12 +71,5 @@ public class QiuTanXmlComm<T>  {
       System.out.println(lotteryTypeMatchRsp.getID());
     }*/
 
-    String url = "http://interface.win007.com/zq/cp/Cp_EventDetail.aspx";
-    LotterMatchStatFirstRsp object  = (LotterMatchStatFirstRsp) new QiuTanXmlComm().handleMothod(url,LotterMatchStatFirstRsp.class,LotterMatchStatEventRsp.class,LotterMatchStatTechnicRsp.class);
-    System.out.println(object);
-    /*List<LotteryScoreRsp> list = object.getMatch();
-    for (LotteryScoreRsp lotteryTypeMatchRsp : list) {
-      System.out.println(lotteryTypeMatchRsp.getAway());
-    }*/
   }
 }
