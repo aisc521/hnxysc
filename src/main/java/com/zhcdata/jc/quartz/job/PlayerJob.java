@@ -35,7 +35,7 @@ public class PlayerJob {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
-            List<PlayerRsp> result_list = new QiuTanXmlComm().handleMothod(url, PlayerRsp.class);
+            List<PlayerRsp> result_list = new QiuTanXmlComm().handleMothodList(url, PlayerRsp.class);
             for (PlayerRsp a : result_list) {
                 List<PlayerInfo> list = tbPlayerMapper.queryPlayer(a.getPlayerID());
                 if (list != null && list.size() > 0) {

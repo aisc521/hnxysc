@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.ScheduleMapper" >
+
+<!--  <resultMap id="ResultMapWithBLOBs" type="com.zhcw.model.Schedule" extends="BaseResultMap" >-->
+<!--    <result column="Explain" property="explain" jdbcType="LONGVARCHAR" />-->
+<!--  </resultMap>-->
+  <sql id="Base_Column_List" >
+    ScheduleID, SclassID, MatchSeason, round, grouping, HomeTeamID, GuestTeamID, HomeTeam, 
+    GuestTeam, Neutrality, MatchTime, MatchTime2, Location, Home_Order, Guest_Order, 
+    MatchState, WeatherIcon, Weather, Temperature, TV, Umpire, Visitor, HomeScore, GuestScore, 
+    HomeHalfScore, GuestHalfScore, Home_Red, Guest_Red, Home_Yellow, Guest_Yellow, bf_changetime, 
+    shangpan, grouping2, bfShow, subSclassID, Explainlist, VenuesID, isGuessRed, isLive, 
+    homeCorner, homeCornerHalf, guestCorner, guestCornerHalf
+  </sql>
+
+  <sql id="Blob_Column_List" >
+    Explain
+  </sql>
+
+  <select id="selectByPrimaryKey" resultType="com.zhcdata.db.model.Schedule" parameterType="java.lang.Integer" >
+    select 
+    *
+    from schedule
+    where ScheduleID = #{scheduleid}
+  </select>
+  <select id="selectPastAndFutureNoEnd" resultType="com.zhcdata.db.model.Schedule">
+    select * from schedule where MatchTime > #{past} and matchTime &lt; #{future} and MatchState != #{i}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from schedule
+    where ScheduleID = #{scheduleid,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.zhcdata.db.model.Schedule" >
+    insert into schedule (ScheduleID, SclassID, MatchSeason, 
+      round, grouping, HomeTeamID, 
+      GuestTeamID, HomeTeam, GuestTeam, 
+      Neutrality, MatchTime, MatchTime2, 
+      Location, Home_Order, Guest_Order, 
+      MatchState, WeatherIcon, Weather, 
+      Temperature, TV, Umpire, 
+      Visitor, HomeScore, GuestScore, 
+      HomeHalfScore, GuestHalfScore, Home_Red, 
+      Guest_Red, Home_Yellow, Guest_Yellow, 
+      bf_changetime, shangpan, grouping2, 
+      bfShow, subSclassID, Explainlist, 
+      VenuesID, isGuessRed, isLive, 
+      homeCorner, homeCornerHalf, guestCorner, 
+      guestCornerHalf, Explain)
+    values (#{scheduleid,jdbcType=INTEGER}, #{sclassid,jdbcType=INTEGER}, #{matchseason,jdbcType=CHAR}, 
+      #{round,jdbcType=SMALLINT}, #{grouping,jdbcType=CHAR}, #{hometeamid,jdbcType=INTEGER}, 
+      #{guestteamid,jdbcType=INTEGER}, #{hometeam,jdbcType=CHAR}, #{guestteam,jdbcType=CHAR}, 
+      #{neutrality,jdbcType=BIT}, #{matchtime,jdbcType=TIMESTAMP}, #{matchtime2,jdbcType=TIMESTAMP}, 
+      #{location,jdbcType=VARCHAR}, #{homeOrder,jdbcType=CHAR}, #{guestOrder,jdbcType=CHAR}, 
+      #{matchstate,jdbcType=SMALLINT}, #{weathericon,jdbcType=SMALLINT}, #{weather,jdbcType=CHAR}, 
+      #{temperature,jdbcType=CHAR}, #{tv,jdbcType=VARCHAR}, #{umpire,jdbcType=CHAR}, 
+      #{visitor,jdbcType=INTEGER}, #{homescore,jdbcType=SMALLINT}, #{guestscore,jdbcType=SMALLINT}, 
+      #{homehalfscore,jdbcType=SMALLINT}, #{guesthalfscore,jdbcType=SMALLINT}, #{homeRed,jdbcType=SMALLINT}, 
+      #{guestRed,jdbcType=SMALLINT}, #{homeYellow,jdbcType=SMALLINT}, #{guestYellow,jdbcType=SMALLINT}, 
+      #{bfChangetime,jdbcType=TIMESTAMP}, #{shangpan,jdbcType=INTEGER}, #{grouping2,jdbcType=CHAR}, 
+      #{bfshow,jdbcType=BIT}, #{subsclassid,jdbcType=INTEGER}, #{explainlist,jdbcType=VARCHAR}, 
+      #{venuesid,jdbcType=INTEGER}, #{isguessred,jdbcType=BIT}, #{islive,jdbcType=BIT}, 
+      #{homecorner,jdbcType=INTEGER}, #{homecornerhalf,jdbcType=INTEGER}, #{guestcorner,jdbcType=INTEGER}, 
+      #{guestcornerhalf,jdbcType=INTEGER}, #{explain,jdbcType=LONGVARCHAR})
+  </insert>
+
+
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.Schedule" >
+    insert into schedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scheduleid != null" >
+        ScheduleID,
+      </if>
+      <if test="sclassid != null" >
+        SclassID,
+      </if>
+      <if test="matchseason != null" >
+        MatchSeason,
+      </if>
+      <if test="round != null" >
+        round,
+      </if>
+      <if test="grouping != null" >
+        grouping,
+      </if>
+      <if test="hometeamid != null" >
+        HomeTeamID,
+      </if>
+      <if test="guestteamid != null" >
+        GuestTeamID,
+      </if>
+      <if test="hometeam != null" >
+        HomeTeam,
+      </if>
+      <if test="guestteam != null" >
+        GuestTeam,
+      </if>
+      <if test="neutrality != null" >
+        Neutrality,
+      </if>
+      <if test="matchtime != null" >
+        MatchTime,
+      </if>
+      <if test="matchtime2 != null" >
+        MatchTime2,
+      </if>
+      <if test="location != null" >
+        Location,
+      </if>
+      <if test="homeOrder != null" >
+        Home_Order,
+      </if>
+      <if test="guestOrder != null" >
+        Guest_Order,
+      </if>
+      <if test="matchstate != null" >
+        MatchState,
+      </if>
+      <if test="weathericon != null" >
+        WeatherIcon,
+      </if>
+      <if test="weather != null" >
+        Weather,
+      </if>
+      <if test="temperature != null" >
+        Temperature,
+      </if>
+      <if test="tv != null" >
+        TV,
+      </if>
+      <if test="umpire != null" >
+        Umpire,
+      </if>
+      <if test="visitor != null" >
+        Visitor,
+      </if>
+      <if test="homescore != null" >
+        HomeScore,
+      </if>
+      <if test="guestscore != null" >
+        GuestScore,
+      </if>
+      <if test="homehalfscore != null" >
+        HomeHalfScore,
+      </if>
+      <if test="guesthalfscore != null" >
+        GuestHalfScore,
+      </if>
+      <if test="homeRed != null" >
+        Home_Red,
+      </if>
+      <if test="guestRed != null" >
+        Guest_Red,
+      </if>
+      <if test="homeYellow != null" >
+        Home_Yellow,
+      </if>
+      <if test="guestYellow != null" >
+        Guest_Yellow,
+      </if>
+      <if test="bfChangetime != null" >
+        bf_changetime,
+      </if>
+      <if test="shangpan != null" >
+        shangpan,
+      </if>
+      <if test="grouping2 != null" >
+        grouping2,
+      </if>
+      <if test="bfshow != null" >
+        bfShow,
+      </if>
+      <if test="subsclassid != null" >
+        subSclassID,
+      </if>
+      <if test="explainlist != null" >
+        Explainlist,
+      </if>
+      <if test="venuesid != null" >
+        VenuesID,
+      </if>
+      <if test="isguessred != null" >
+        isGuessRed,
+      </if>
+      <if test="islive != null" >
+        isLive,
+      </if>
+      <if test="homecorner != null" >
+        homeCorner,
+      </if>
+      <if test="homecornerhalf != null" >
+        homeCornerHalf,
+      </if>
+      <if test="guestcorner != null" >
+        guestCorner,
+      </if>
+      <if test="guestcornerhalf != null" >
+        guestCornerHalf,
+      </if>
+      <if test="explain != null" >
+        Explain,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scheduleid != null" >
+        #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="sclassid != null" >
+        #{sclassid,jdbcType=INTEGER},
+      </if>
+      <if test="matchseason != null" >
+        #{matchseason,jdbcType=CHAR},
+      </if>
+      <if test="round != null" >
+        #{round,jdbcType=SMALLINT},
+      </if>
+      <if test="grouping != null" >
+        #{grouping,jdbcType=CHAR},
+      </if>
+      <if test="hometeamid != null" >
+        #{hometeamid,jdbcType=INTEGER},
+      </if>
+      <if test="guestteamid != null" >
+        #{guestteamid,jdbcType=INTEGER},
+      </if>
+      <if test="hometeam != null" >
+        #{hometeam,jdbcType=CHAR},
+      </if>
+      <if test="guestteam != null" >
+        #{guestteam,jdbcType=CHAR},
+      </if>
+      <if test="neutrality != null" >
+        #{neutrality,jdbcType=BIT},
+      </if>
+      <if test="matchtime != null" >
+        #{matchtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="matchtime2 != null" >
+        #{matchtime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="homeOrder != null" >
+        #{homeOrder,jdbcType=CHAR},
+      </if>
+      <if test="guestOrder != null" >
+        #{guestOrder,jdbcType=CHAR},
+      </if>
+      <if test="matchstate != null" >
+        #{matchstate,jdbcType=SMALLINT},
+      </if>
+      <if test="weathericon != null" >
+        #{weathericon,jdbcType=SMALLINT},
+      </if>
+      <if test="weather != null" >
+        #{weather,jdbcType=CHAR},
+      </if>
+      <if test="temperature != null" >
+        #{temperature,jdbcType=CHAR},
+      </if>
+      <if test="tv != null" >
+        #{tv,jdbcType=VARCHAR},
+      </if>
+      <if test="umpire != null" >
+        #{umpire,jdbcType=CHAR},
+      </if>
+      <if test="visitor != null" >
+        #{visitor,jdbcType=INTEGER},
+      </if>
+      <if test="homescore != null" >
+        #{homescore,jdbcType=SMALLINT},
+      </if>
+      <if test="guestscore != null" >
+        #{guestscore,jdbcType=SMALLINT},
+      </if>
+      <if test="homehalfscore != null" >
+        #{homehalfscore,jdbcType=SMALLINT},
+      </if>
+      <if test="guesthalfscore != null" >
+        #{guesthalfscore,jdbcType=SMALLINT},
+      </if>
+      <if test="homeRed != null" >
+        #{homeRed,jdbcType=SMALLINT},
+      </if>
+      <if test="guestRed != null" >
+        #{guestRed,jdbcType=SMALLINT},
+      </if>
+      <if test="homeYellow != null" >
+        #{homeYellow,jdbcType=SMALLINT},
+      </if>
+      <if test="guestYellow != null" >
+        #{guestYellow,jdbcType=SMALLINT},
+      </if>
+      <if test="bfChangetime != null" >
+        #{bfChangetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shangpan != null" >
+        #{shangpan,jdbcType=INTEGER},
+      </if>
+      <if test="grouping2 != null" >
+        #{grouping2,jdbcType=CHAR},
+      </if>
+      <if test="bfshow != null" >
+        #{bfshow,jdbcType=BIT},
+      </if>
+      <if test="subsclassid != null" >
+        #{subsclassid,jdbcType=INTEGER},
+      </if>
+      <if test="explainlist != null" >
+        #{explainlist,jdbcType=VARCHAR},
+      </if>
+      <if test="venuesid != null" >
+        #{venuesid,jdbcType=INTEGER},
+      </if>
+      <if test="isguessred != null" >
+        #{isguessred,jdbcType=BIT},
+      </if>
+      <if test="islive != null" >
+        #{islive,jdbcType=BIT},
+      </if>
+      <if test="homecorner != null" >
+        #{homecorner,jdbcType=INTEGER},
+      </if>
+      <if test="homecornerhalf != null" >
+        #{homecornerhalf,jdbcType=INTEGER},
+      </if>
+      <if test="guestcorner != null" >
+        #{guestcorner,jdbcType=INTEGER},
+      </if>
+      <if test="guestcornerhalf != null" >
+        #{guestcornerhalf,jdbcType=INTEGER},
+      </if>
+      <if test="explain != null" >
+        #{explain,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.Schedule" >
+    update schedule
+    <set >
+      <if test="sclassid != null" >
+        SclassID = #{sclassid,jdbcType=INTEGER},
+      </if>
+      <if test="matchseason != null" >
+        MatchSeason = #{matchseason,jdbcType=CHAR},
+      </if>
+      <if test="round != null" >
+        round = #{round,jdbcType=SMALLINT},
+      </if>
+      <if test="grouping != null" >
+        grouping = #{grouping,jdbcType=CHAR},
+      </if>
+      <if test="hometeamid != null" >
+        HomeTeamID = #{hometeamid,jdbcType=INTEGER},
+      </if>
+      <if test="guestteamid != null" >
+        GuestTeamID = #{guestteamid,jdbcType=INTEGER},
+      </if>
+      <if test="hometeam != null" >
+        HomeTeam = #{hometeam,jdbcType=CHAR},
+      </if>
+      <if test="guestteam != null" >
+        GuestTeam = #{guestteam,jdbcType=CHAR},
+      </if>
+      <if test="neutrality != null" >
+        Neutrality = #{neutrality,jdbcType=BIT},
+      </if>
+      <if test="matchtime != null" >
+        MatchTime = #{matchtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="matchtime2 != null" >
+        MatchTime2 = #{matchtime2,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null" >
+        Location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="homeOrder != null" >
+        Home_Order = #{homeOrder,jdbcType=CHAR},
+      </if>
+      <if test="guestOrder != null" >
+        Guest_Order = #{guestOrder,jdbcType=CHAR},
+      </if>
+      <if test="matchstate != null" >
+        MatchState = #{matchstate,jdbcType=SMALLINT},
+      </if>
+      <if test="weathericon != null" >
+        WeatherIcon = #{weathericon,jdbcType=SMALLINT},
+      </if>
+      <if test="weather != null" >
+        Weather = #{weather,jdbcType=CHAR},
+      </if>
+      <if test="temperature != null" >
+        Temperature = #{temperature,jdbcType=CHAR},
+      </if>
+      <if test="tv != null" >
+        TV = #{tv,jdbcType=VARCHAR},
+      </if>
+      <if test="umpire != null" >
+        Umpire = #{umpire,jdbcType=CHAR},
+      </if>
+      <if test="visitor != null" >
+        Visitor = #{visitor,jdbcType=INTEGER},
+      </if>
+      <if test="homescore != null" >
+        HomeScore = #{homescore,jdbcType=SMALLINT},
+      </if>
+      <if test="guestscore != null" >
+        GuestScore = #{guestscore,jdbcType=SMALLINT},
+      </if>
+      <if test="homehalfscore != null" >
+        HomeHalfScore = #{homehalfscore,jdbcType=SMALLINT},
+      </if>
+      <if test="guesthalfscore != null" >
+        GuestHalfScore = #{guesthalfscore,jdbcType=SMALLINT},
+      </if>
+      <if test="homeRed != null" >
+        Home_Red = #{homeRed,jdbcType=SMALLINT},
+      </if>
+      <if test="guestRed != null" >
+        Guest_Red = #{guestRed,jdbcType=SMALLINT},
+      </if>
+      <if test="homeYellow != null" >
+        Home_Yellow = #{homeYellow,jdbcType=SMALLINT},
+      </if>
+      <if test="guestYellow != null" >
+        Guest_Yellow = #{guestYellow,jdbcType=SMALLINT},
+      </if>
+      <if test="bfChangetime != null" >
+        bf_changetime = #{bfChangetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shangpan != null" >
+        shangpan = #{shangpan,jdbcType=INTEGER},
+      </if>
+      <if test="grouping2 != null" >
+        grouping2 = #{grouping2,jdbcType=CHAR},
+      </if>
+      <if test="bfshow != null" >
+        bfShow = #{bfshow,jdbcType=BIT},
+      </if>
+      <if test="subsclassid != null" >
+        subSclassID = #{subsclassid,jdbcType=INTEGER},
+      </if>
+      <if test="explainlist != null" >
+        Explainlist = #{explainlist,jdbcType=VARCHAR},
+      </if>
+      <if test="venuesid != null" >
+        VenuesID = #{venuesid,jdbcType=INTEGER},
+      </if>
+      <if test="isguessred != null" >
+        isGuessRed = #{isguessred,jdbcType=BIT},
+      </if>
+      <if test="islive != null" >
+        isLive = #{islive,jdbcType=BIT},
+      </if>
+      <if test="homecorner != null" >
+        homeCorner = #{homecorner,jdbcType=INTEGER},
+      </if>
+      <if test="homecornerhalf != null" >
+        homeCornerHalf = #{homecornerhalf,jdbcType=INTEGER},
+      </if>
+      <if test="guestcorner != null" >
+        guestCorner = #{guestcorner,jdbcType=INTEGER},
+      </if>
+      <if test="guestcornerhalf != null" >
+        guestCornerHalf = #{guestcornerhalf,jdbcType=INTEGER},
+      </if>
+      <if test="explain != null" >
+        Explain = #{explain,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ScheduleID = #{scheduleid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.zhcdata.db.model.Schedule" >
+    update schedule
+    set SclassID = #{sclassid,jdbcType=INTEGER},
+      MatchSeason = #{matchseason,jdbcType=CHAR},
+      round = #{round,jdbcType=SMALLINT},
+      grouping = #{grouping,jdbcType=CHAR},
+      HomeTeamID = #{hometeamid,jdbcType=INTEGER},
+      GuestTeamID = #{guestteamid,jdbcType=INTEGER},
+      HomeTeam = #{hometeam,jdbcType=CHAR},
+      GuestTeam = #{guestteam,jdbcType=CHAR},
+      Neutrality = #{neutrality,jdbcType=BIT},
+      MatchTime = #{matchtime,jdbcType=TIMESTAMP},
+      MatchTime2 = #{matchtime2,jdbcType=TIMESTAMP},
+      Location = #{location,jdbcType=VARCHAR},
+      Home_Order = #{homeOrder,jdbcType=CHAR},
+      Guest_Order = #{guestOrder,jdbcType=CHAR},
+      MatchState = #{matchstate,jdbcType=SMALLINT},
+      WeatherIcon = #{weathericon,jdbcType=SMALLINT},
+      Weather = #{weather,jdbcType=CHAR},
+      Temperature = #{temperature,jdbcType=CHAR},
+      TV = #{tv,jdbcType=VARCHAR},
+      Umpire = #{umpire,jdbcType=CHAR},
+      Visitor = #{visitor,jdbcType=INTEGER},
+      HomeScore = #{homescore,jdbcType=SMALLINT},
+      GuestScore = #{guestscore,jdbcType=SMALLINT},
+      HomeHalfScore = #{homehalfscore,jdbcType=SMALLINT},
+      GuestHalfScore = #{guesthalfscore,jdbcType=SMALLINT},
+      Home_Red = #{homeRed,jdbcType=SMALLINT},
+      Guest_Red = #{guestRed,jdbcType=SMALLINT},
+      Home_Yellow = #{homeYellow,jdbcType=SMALLINT},
+      Guest_Yellow = #{guestYellow,jdbcType=SMALLINT},
+      bf_changetime = #{bfChangetime,jdbcType=TIMESTAMP},
+      shangpan = #{shangpan,jdbcType=INTEGER},
+      grouping2 = #{grouping2,jdbcType=CHAR},
+      bfShow = #{bfshow,jdbcType=BIT},
+      subSclassID = #{subsclassid,jdbcType=INTEGER},
+      Explainlist = #{explainlist,jdbcType=VARCHAR},
+      VenuesID = #{venuesid,jdbcType=INTEGER},
+      isGuessRed = #{isguessred,jdbcType=BIT},
+      isLive = #{islive,jdbcType=BIT},
+      homeCorner = #{homecorner,jdbcType=INTEGER},
+      homeCornerHalf = #{homecornerhalf,jdbcType=INTEGER},
+      guestCorner = #{guestcorner,jdbcType=INTEGER},
+      guestCornerHalf = #{guestcornerhalf,jdbcType=INTEGER},
+      Explain = #{explain,jdbcType=LONGVARCHAR}
+    where ScheduleID = #{scheduleid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.Schedule" >
+    update schedule
+    set SclassID = #{sclassid,jdbcType=INTEGER},
+      MatchSeason = #{matchseason,jdbcType=CHAR},
+      round = #{round,jdbcType=SMALLINT},
+      grouping = #{grouping,jdbcType=CHAR},
+      HomeTeamID = #{hometeamid,jdbcType=INTEGER},
+      GuestTeamID = #{guestteamid,jdbcType=INTEGER},
+      HomeTeam = #{hometeam,jdbcType=CHAR},
+      GuestTeam = #{guestteam,jdbcType=CHAR},
+      Neutrality = #{neutrality,jdbcType=BIT},
+      MatchTime = #{matchtime,jdbcType=TIMESTAMP},
+      MatchTime2 = #{matchtime2,jdbcType=TIMESTAMP},
+      Location = #{location,jdbcType=VARCHAR},
+      Home_Order = #{homeOrder,jdbcType=CHAR},
+      Guest_Order = #{guestOrder,jdbcType=CHAR},
+      MatchState = #{matchstate,jdbcType=SMALLINT},
+      WeatherIcon = #{weathericon,jdbcType=SMALLINT},
+      Weather = #{weather,jdbcType=CHAR},
+      Temperature = #{temperature,jdbcType=CHAR},
+      TV = #{tv,jdbcType=VARCHAR},
+      Umpire = #{umpire,jdbcType=CHAR},
+      Visitor = #{visitor,jdbcType=INTEGER},
+      HomeScore = #{homescore,jdbcType=SMALLINT},
+      GuestScore = #{guestscore,jdbcType=SMALLINT},
+      HomeHalfScore = #{homehalfscore,jdbcType=SMALLINT},
+      GuestHalfScore = #{guesthalfscore,jdbcType=SMALLINT},
+      Home_Red = #{homeRed,jdbcType=SMALLINT},
+      Guest_Red = #{guestRed,jdbcType=SMALLINT},
+      Home_Yellow = #{homeYellow,jdbcType=SMALLINT},
+      Guest_Yellow = #{guestYellow,jdbcType=SMALLINT},
+      bf_changetime = #{bfChangetime,jdbcType=TIMESTAMP},
+      shangpan = #{shangpan,jdbcType=INTEGER},
+      grouping2 = #{grouping2,jdbcType=CHAR},
+      bfShow = #{bfshow,jdbcType=BIT},
+      subSclassID = #{subsclassid,jdbcType=INTEGER},
+      Explainlist = #{explainlist,jdbcType=VARCHAR},
+      VenuesID = #{venuesid,jdbcType=INTEGER},
+      isGuessRed = #{isguessred,jdbcType=BIT},
+      isLive = #{islive,jdbcType=BIT},
+      homeCorner = #{homecorner,jdbcType=INTEGER},
+      homeCornerHalf = #{homecornerhalf,jdbcType=INTEGER},
+      guestCorner = #{guestcorner,jdbcType=INTEGER},
+      guestCornerHalf = #{guestcornerhalf,jdbcType=INTEGER}
+    where ScheduleID = #{scheduleid,jdbcType=INTEGER}
+  </update>
+</mapper>
