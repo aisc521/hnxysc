@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhcdata.db.mapper.JcLotterTypeBdMapper" >
-  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.JcLotterTypeBd" >
+<mapper namespace="com.zhcdata.db.mapper.JcMatchZcMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.JcMatchZc" >
     <!--
       WARNING - @mbg.generated
     -->
     <result column="ID" property="id" jdbcType="BIGINT" />
     <result column="LOTTERY_NAME" property="lotteryName" jdbcType="VARCHAR" />
-    <result column="ISSUE_NUM" property="issueNum" jdbcType="BIGINT" />
-    <result column="NO_ID" property="noId" jdbcType="BIGINT" />
+    <result column="LOTTERY" property="lottery" jdbcType="VARCHAR" />
+    <result column="ISSUE_NUM" property="issueNum" jdbcType="VARCHAR" />
+    <result column="NO_ID" property="noId" jdbcType="VARCHAR" />
     <result column="ID_BET007" property="idBet007" jdbcType="BIGINT" />
     <result column="START_TIME" property="startTime" jdbcType="DATE" />
     <result column="SPORT" property="sport" jdbcType="VARCHAR" />
@@ -20,4 +21,10 @@
     <result column="lEAGUE" property="league" jdbcType="VARCHAR" />
     <result column="RECORD_ID" property="recordId" jdbcType="BIGINT" />
   </resultMap>
+  <select id="queryJcLotterTypeZcByIDBet007" resultType="com.zhcdata.db.model.JcMatchZc">
+    select
+    *
+    from jc_match_zc zc
+    where zc.ID_BET007 = #{idBet007}
+  </select>
 </mapper>

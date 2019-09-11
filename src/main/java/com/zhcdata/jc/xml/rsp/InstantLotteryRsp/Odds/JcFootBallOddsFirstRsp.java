@@ -1,4 +1,4 @@
-package com.zhcdata.jc.xml.rsp;
+package com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
@@ -10,12 +10,12 @@ import java.util.List;
 /**
  * @Description TODO
  * @Author cuishuai
- * @Date 2019/9/10 19:09
+ * @Date 2019/9/11 10:42
  */
 @Getter
 @Setter
-@XStreamAlias("match")
-public class LotteryTypeMatchFristRsp {
+@XStreamAlias("list")
+public class JcFootBallOddsFirstRsp {
     @XStreamImplicit
-    List<LotteryTypeMatchRsp> list;
+    List<JcFootBallOddsRsp> list;
 }

@@ -1,4 +1,4 @@
-package com.zhcdata.jc.xml.rsp;
+package com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterType;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Getter;

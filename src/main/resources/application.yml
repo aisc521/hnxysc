@@ -106,3 +106,7 @@ custom:
     url:
       todayurl: http://interface.win007.com/zq/today.aspx
       lotterTypeMacthUrl: http://interface.win007.com/zq/MatchidInterface.aspx
+      jcZqOddsUrl: http://interface.win007.com/zq/JcZqOdds.aspx
+      bdRealTimeSpUrl: http://interface.win007.com/zq/BdOdds.aspx
+      bdLotterQueryUrl: http://interface.win007.com/zq/BdOdds.aspx?type=result
+      lotterScoreUrl: http://interface.win007.com/zq/cp/CP_BF.aspx

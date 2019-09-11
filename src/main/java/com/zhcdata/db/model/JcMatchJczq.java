@@ -4,19 +4,22 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "jc_lotter_type_jc")
-public class JcLotterTypeJc implements Serializable {
+@Table(name = "jc_match_jczq")
+public class JcMatchJczq implements Serializable {
     @Column(name = "ID")
     private Long id;
 
     @Column(name = "LOTTERY_NAME")
     private String lotteryName;
 
+    @Column(name = "LOTTERY")
+    private String lottery;
+
     @Column(name = "ISSUE_NUM")
-    private Long issueNum;
+    private String issueNum;
 
     @Column(name = "NO_ID")
-    private Long noId;
+    private String noId;
 
     @Column(name = "ID_BET007")
     private Long idBet007;
@@ -79,30 +82,44 @@ public class JcLotterTypeJc implements Serializable {
     }
 
     /**
+     * @return LOTTERY
+     */
+    public String getLottery() {
+        return lottery;
+    }
+
+    /**
+     * @param lottery
+     */
+    public void setLottery(String lottery) {
+        this.lottery = lottery;
+    }
+
+    /**
      * @return ISSUE_NUM
      */
-    public Long getIssueNum() {
+    public String getIssueNum() {
         return issueNum;
     }
 
     /**
      * @param issueNum
      */
-    public void setIssueNum(Long issueNum) {
+    public void setIssueNum(String issueNum) {
         this.issueNum = issueNum;
     }
 
     /**
      * @return NO_ID
      */
-    public Long getNoId() {
+    public String getNoId() {
         return noId;
     }
 
     /**
      * @param noId
      */
-    public void setNoId(Long noId) {
+    public void setNoId(String noId) {
         this.noId = noId;
     }
 

@@ -69,6 +69,8 @@ public enum ProtocolCodeMsg {
     DATABASE_EXCEPTION("888888", "数据异常"),
 
 
+    UPDATE_FAILE("888888","更新失败"),
+    INSERT_FAILE("888888","插入失败"),
     ;
     private String code;
 
