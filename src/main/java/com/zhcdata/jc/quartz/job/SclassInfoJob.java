@@ -22,7 +22,7 @@ public class SclassInfoJob {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource
-    TbSclassInfoMapper tbSclassMapper;
+    TbSclassInfoMapper tbSclassInfoMapper;
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -33,7 +33,7 @@ public class SclassInfoJob {
             String url = "http://interface.win007.com/zq/League_XML.aspx";
             List<SclassInfoRsp> result_list = new QiuTanXmlComm().handleMothodList(url, SclassInfoRsp.class);
             for (SclassInfoRsp a : result_list) {
-                List<TbSclassInfo> list = tbSclassMapper.querySclassInfo(a.getCountry());
+                List<TbSclassInfo> list = tbSclassInfoMapper.querySclassInfo(a.getCountry());
                 if (list == null || list.size() < 1) {
                     TbSclassInfo info = new TbSclassInfo();
                     info.setNamecn(a.getCountry());                     //国家球队简体名
@@ -44,7 +44,7 @@ public class SclassInfoJob {
                     info.setInfoType(Integer.valueOf(a.getAreaID()));   //1 欧洲 2 美洲 3 亚洲 4 大洋洲 5 非洲
                     info.setModifytime(df.format(new Date()));          //修改时间
                     //info.setAllorder("");                             //所有国家的排序
-                    if (tbSclassMapper.insertSelective(info) > 0) {
+                    if (tbSclassInfoMapper.insertSelective(info) > 0) {
                         LOGGER.info(a.getCountry() + "入库成功!");
                     } else {
                         LOGGER.info("入库失败!");
