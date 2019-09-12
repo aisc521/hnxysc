@@ -41,20 +41,25 @@ public class QiuTanXmlComm<T>  {
     return xStream.fromXML(xml);
   }
   public List<T> handleMothodList(String url, Class ...clas){
-    String xml = "";
     try {
-      xml = HttpUtils.httpPost(url,"UTF-8");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    XStream xStream = new XStream(new DomDriver());
-    XStream.setupDefaultSecurity(xStream);
-    //xStream.allowTypes(new Class[]{List.class,clas});
-    xStream.allowTypes(clas);
-    xStream.processAnnotations(clas);
-    List<T> list = (List<T>) xStream.fromXML(xml);
+      String xml = "";
+      try {
+        xml = HttpUtils.httpPost(url, "UTF-8");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      XStream xStream = new XStream(new DomDriver());
+      XStream.setupDefaultSecurity(xStream);
+      //xStream.allowTypes(new Class[]{List.class,clas});
+      xStream.allowTypes(clas);
+      xStream.processAnnotations(clas);
+      List<T> list = (List<T>) xStream.fromXML(xml);
 
-    return list;
+      return list;
+    }catch (Exception ex){
+      String sd=ex.getMessage();
+    }
+    return null;
   }
   public static void main(String argsp[]){
     //String xml = HttpUtils.httpPost("http://interface.win007.com/zq/today.aspx","UTF-8");
