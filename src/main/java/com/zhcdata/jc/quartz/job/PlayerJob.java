@@ -29,14 +29,13 @@ public class PlayerJob {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Async
-    @Scheduled(cron = "1 7 14 ? * *")
+    @Scheduled(cron = "51 49 15 ? * *")
     public void work() {
         String url = "http://interface.win007.com/zq/Player_XML.aspx?day=1";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
-            PlayerRsp object=(PlayerRsp) new QiuTanXmlComm().handleMothod(url, PlayerRsp.class);
-            List<PlayerRsp> result_list = null;
+            List<PlayerRsp> result_list = new QiuTanXmlComm().handleMothodList(url, PlayerRsp.class);
             for (PlayerRsp a : result_list) {
                 List<PlayerInfo> list = tbPlayerMapper.queryPlayer(a.getPlayerID());
                 if (list != null && list.size() > 0) {

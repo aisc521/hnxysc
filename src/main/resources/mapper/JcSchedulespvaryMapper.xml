@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.JcSchedulespvaryMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.JcSchedulespvary" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="VaryID" property="varyid" jdbcType="INTEGER" />
+    <result column="SPID" property="spid" jdbcType="INTEGER" />
+    <result column="TypeID" property="typeid" jdbcType="SMALLINT" />
+    <result column="SP" property="sp" jdbcType="VARCHAR" />
+    <result column="ChangeTime" property="changetime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.TbTeamMapper">
+  <select id="queryTeam" resultType="com.zhcdata.db.model.TeamInfo">
+    select * from team where TeamID=${TeamID}
+  </select>
+</mapper>

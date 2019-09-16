@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.TbSclassMapper">
+
+  <select id="querySClass" resultType="com.zhcdata.db.model.SclassInfo">
+    select * from sclass where SClassID=${SClassID}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.SclassInfo" >
+    insert into sclass
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sclassid != null" >
+        sclassID,
+      </if>
+      <if test="color != null" >
+        Color,
+      </if>
+      <if test="nameJ != null" >
+        Name_J,
+      </if>
+      <if test="nameF != null" >
+        Name_F,
+      </if>
+      <if test="nameE != null" >
+        Name_E,
+      </if>
+      <if test="nameJs != null" >
+        Name_JS,
+      </if>
+      <if test="nameFs != null" >
+        Name_FS,
+      </if>
+      <if test="nameEs != null" >
+        Name_ES,
+      </if>
+      <if test="nameS != null" >
+        Name_S,
+      </if>
+      <if test="kind != null" >
+        Kind,
+      </if>
+      <if test="mode != null" >
+        Mode,
+      </if>
+      <if test="countRound != null" >
+        count_round,
+      </if>
+      <if test="currRound != null" >
+        curr_round,
+      </if>
+      <if test="currMatchseason != null" >
+        Curr_matchSeason,
+      </if>
+      <if test="sclassPic != null" >
+        Sclass_pic,
+      </if>
+      <if test="ifstop != null" >
+        ifstop,
+      </if>
+      <if test="sclassType != null" >
+        Sclass_type,
+      </if>
+      <if test="countGroup != null" >
+        count_group,
+      </if>
+      <if test="bfSimplyDisp != null" >
+        Bf_simply_disp,
+      </if>
+      <if test="sclassSequence != null" >
+        sclass_sequence,
+      </if>
+      <if test="infoid != null" >
+        InfoID,
+      </if>
+      <if test="bfIfdisp != null" >
+        Bf_IfDisp,
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime,
+      </if>
+      <if test="beginseason != null" >
+        BeginSeason,
+      </if>
+      <if test="subsclassid != null" >
+        subSclassID,
+      </if>
+      <if test="ifhavesub != null" >
+        ifHaveSub,
+      </if>
+      <if test="ifsort != null" >
+        ifSort,
+      </if>
+      <if test="ifhavepaper != null" >
+        ifHavePaper,
+      </if>
+      <if test="ifshowscore != null" >
+        ifShowScore,
+      </if>
+      <if test="rankMatchseason != null" >
+        rank_matchSeason,
+      </if>
+      <if test="sclassRule != null" >
+        sclass_rule,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sclassid != null" >
+        #{sclassid,jdbcType=INTEGER},
+      </if>
+      <if test="color != null" >
+        #{color,jdbcType=CHAR},
+      </if>
+      <if test="nameJ != null" >
+        #{nameJ,jdbcType=CHAR},
+      </if>
+      <if test="nameF != null" >
+        #{nameF,jdbcType=CHAR},
+      </if>
+      <if test="nameE != null" >
+        #{nameE,jdbcType=CHAR},
+      </if>
+      <if test="nameJs != null" >
+        #{nameJs,jdbcType=CHAR},
+      </if>
+      <if test="nameFs != null" >
+        #{nameFs,jdbcType=CHAR},
+      </if>
+      <if test="nameEs != null" >
+        #{nameEs,jdbcType=CHAR},
+      </if>
+      <if test="nameS != null" >
+        #{nameS,jdbcType=CHAR},
+      </if>
+      <if test="kind != null" >
+        #{kind,jdbcType=SMALLINT},
+      </if>
+      <if test="mode != null" >
+        #{mode,jdbcType=SMALLINT},
+      </if>
+      <if test="countRound != null" >
+        #{countRound,jdbcType=SMALLINT},
+      </if>
+      <if test="currRound != null" >
+        #{currRound,jdbcType=SMALLINT},
+      </if>
+      <if test="currMatchseason != null" >
+        #{currMatchseason,jdbcType=CHAR},
+      </if>
+      <if test="sclassPic != null" >
+        #{sclassPic,jdbcType=VARCHAR},
+      </if>
+      <if test="ifstop != null" >
+        #{ifstop,jdbcType=INTEGER},
+      </if>
+      <if test="sclassType != null" >
+        #{sclassType,jdbcType=INTEGER},
+      </if>
+      <if test="countGroup != null" >
+        #{countGroup,jdbcType=SMALLINT},
+      </if>
+      <if test="bfSimplyDisp != null" >
+        #{bfSimplyDisp,jdbcType=INTEGER},
+      </if>
+      <if test="sclassSequence != null" >
+        #{sclassSequence,jdbcType=SMALLINT},
+      </if>
+      <if test="infoid != null" >
+        #{infoid,jdbcType=SMALLINT},
+      </if>
+      <if test="bfIfdisp != null" >
+        #{bfIfdisp,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="beginseason != null" >
+        #{beginseason,jdbcType=VARCHAR},
+      </if>
+      <if test="subsclassid != null" >
+        #{subsclassid,jdbcType=INTEGER},
+      </if>
+      <if test="ifhavesub != null" >
+        #{ifhavesub,jdbcType=BIT},
+      </if>
+      <if test="ifsort != null" >
+        #{ifsort,jdbcType=BIT},
+      </if>
+      <if test="ifhavepaper != null" >
+        #{ifhavepaper,jdbcType=BIT},
+      </if>
+      <if test="ifshowscore != null" >
+        #{ifshowscore,jdbcType=BIT},
+      </if>
+      <if test="rankMatchseason != null" >
+        #{rankMatchseason,jdbcType=CHAR},
+      </if>
+      <if test="sclassRule != null" >
+        #{sclassRule,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

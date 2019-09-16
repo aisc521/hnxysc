@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.JcSchedulespMapper">
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.JcSchedulesp">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="spID" jdbcType="VARCHAR" property="spid" />
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="kind" jdbcType="VARCHAR" property="kind" />
+    <result column="wl3" jdbcType="VARCHAR" property="wl3" />
+    <result column="wl1" jdbcType="VARCHAR" property="wl1" />
+    <result column="wl0" jdbcType="VARCHAR" property="wl0" />
+    <result column="wlEnd" jdbcType="VARCHAR" property="wlend" />
+    <result column="t0" jdbcType="VARCHAR" property="t0" />
+    <result column="t1" jdbcType="VARCHAR" property="t1" />
+    <result column="t2" jdbcType="VARCHAR" property="t2" />
+    <result column="t3" jdbcType="VARCHAR" property="t3" />
+    <result column="t4" jdbcType="VARCHAR" property="t4" />
+    <result column="t5" jdbcType="VARCHAR" property="t5" />
+    <result column="t6" jdbcType="VARCHAR" property="t6" />
+    <result column="t7" jdbcType="VARCHAR" property="t7" />
+    <result column="tEnd" jdbcType="VARCHAR" property="tend" />
+    <result column="sw10" jdbcType="VARCHAR" property="sw10" />
+    <result column="sw20" jdbcType="VARCHAR" property="sw20" />
+    <result column="sw21" jdbcType="VARCHAR" property="sw21" />
+    <result column="sw30" jdbcType="VARCHAR" property="sw30" />
+    <result column="sw31" jdbcType="VARCHAR" property="sw31" />
+    <result column="sw32" jdbcType="VARCHAR" property="sw32" />
+    <result column="sw40" jdbcType="VARCHAR" property="sw40" />
+    <result column="sw41" jdbcType="VARCHAR" property="sw41" />
+    <result column="sw42" jdbcType="VARCHAR" property="sw42" />
+    <result column="sw50" jdbcType="VARCHAR" property="sw50" />
+    <result column="sw51" jdbcType="VARCHAR" property="sw51" />
+    <result column="sw52" jdbcType="VARCHAR" property="sw52" />
+    <result column="sw5" jdbcType="VARCHAR" property="sw5" />
+    <result column="sd00" jdbcType="VARCHAR" property="sd00" />
+    <result column="sd11" jdbcType="VARCHAR" property="sd11" />
+    <result column="sd22" jdbcType="VARCHAR" property="sd22" />
+    <result column="sd33" jdbcType="VARCHAR" property="sd33" />
+    <result column="sd4" jdbcType="VARCHAR" property="sd4" />
+    <result column="sl01" jdbcType="VARCHAR" property="sl01" />
+    <result column="sl02" jdbcType="VARCHAR" property="sl02" />
+    <result column="sl12" jdbcType="VARCHAR" property="sl12" />
+    <result column="sl03" jdbcType="VARCHAR" property="sl03" />
+    <result column="sl13" jdbcType="VARCHAR" property="sl13" />
+    <result column="sl23" jdbcType="VARCHAR" property="sl23" />
+    <result column="sl04" jdbcType="VARCHAR" property="sl04" />
+    <result column="sl14" jdbcType="VARCHAR" property="sl14" />
+    <result column="sl24" jdbcType="VARCHAR" property="sl24" />
+    <result column="sl05" jdbcType="VARCHAR" property="sl05" />
+    <result column="sl15" jdbcType="VARCHAR" property="sl15" />
+    <result column="sl25" jdbcType="VARCHAR" property="sl25" />
+    <result column="sl5" jdbcType="VARCHAR" property="sl5" />
+    <result column="sEnd" jdbcType="VARCHAR" property="send" />
+    <result column="ht33" jdbcType="VARCHAR" property="ht33" />
+    <result column="ht31" jdbcType="VARCHAR" property="ht31" />
+    <result column="ht30" jdbcType="VARCHAR" property="ht30" />
+    <result column="ht13" jdbcType="VARCHAR" property="ht13" />
+    <result column="ht11" jdbcType="VARCHAR" property="ht11" />
+    <result column="ht10" jdbcType="VARCHAR" property="ht10" />
+    <result column="ht03" jdbcType="VARCHAR" property="ht03" />
+    <result column="ht01" jdbcType="VARCHAR" property="ht01" />
+    <result column="ht00" jdbcType="VARCHAR" property="ht00" />
+    <result column="htEnd" jdbcType="VARCHAR" property="htend" />
+    <result column="UpdateTime" jdbcType="VARCHAR" property="updatetime" />
+    <result column="wlStop" jdbcType="VARCHAR" property="wlstop" />
+    <result column="tStop" jdbcType="VARCHAR" property="tstop" />
+    <result column="sStop" jdbcType="VARCHAR" property="sstop" />
+    <result column="htStop" jdbcType="VARCHAR" property="htstop" />
+    <result column="sf3" jdbcType="VARCHAR" property="sf3" />
+    <result column="sf1" jdbcType="VARCHAR" property="sf1" />
+    <result column="sf0" jdbcType="VARCHAR" property="sf0" />
+    <result column="sfEnd" jdbcType="VARCHAR" property="sfend" />
+    <result column="sfStop" jdbcType="VARCHAR" property="sfstop" />
+    <result column="first_wl3" jdbcType="VARCHAR" property="firstWl3" />
+    <result column="first_wl1" jdbcType="VARCHAR" property="firstWl1" />
+    <result column="first_wl0" jdbcType="VARCHAR" property="firstWl0" />
+    <result column="first_sf3" jdbcType="VARCHAR" property="firstSf3" />
+    <result column="first_sf1" jdbcType="VARCHAR" property="firstSf1" />
+    <result column="first_sf0" jdbcType="VARCHAR" property="firstSf0" />
+  </resultMap>
+  <select id="queryJcSchedulespByScId" resultType="com.zhcdata.db.model.JcSchedulesp">
+    select * from jc_schedulesp where ID=#{bet007Id}
+  </select>
+</mapper>

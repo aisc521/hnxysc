@@ -101,7 +101,7 @@ custom:
   url:
     acc: http://ceshiacc.zhongcaishou.com/accCenter
     push: http://ceshiu.zhongcaishou.com/push.do
-  job: false
+  job: true
   qiutan:
     url:
       todayurl: http://interface.win007.com/zq/today.aspx

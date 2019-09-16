@@ -1,7 +1,9 @@
 package com.zhcdata.jc.service;
-import com.zhcdata.db.model.JcMatchBjdc;
-import com.zhcdata.db.model.JcMatchJczq;
-import com.zhcdata.db.model.JcMatchZc;
+
+import com.zhcdata.db.model.JcMatchLottery;
+import com.zhcdata.db.model.JcSchedule;
+import com.zhcdata.db.model.JcSchedulesp;
+import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterType.LotteryTypeMatchRsp;
 
@@ -12,37 +14,62 @@ import java.text.ParseException;
  *              功   能： 区分赛事彩种信息
  */
 public interface LotteryTypeMatchJobService {
+
     /**
-     * 根据IDBet007 查询是否有对应数据信息
+     * 根据bet007查询JcMatchLottery数据
+     * @param Betoo7
+     * @return
+     */
+    JcMatchLottery queryJcMatchLotteryByBet007(long Betoo7);
+
+    /**
+     * 更新JcMatchLottery数据
+     * @param jcMatchLottery
+     * @param lotteryTypeMatchRsp
+     */
+    void updateJcMatchLottery(JcMatchLottery jcMatchLottery, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws BaseException;
+    /**
+     * 新增JcMatchLottery数据
+     * @param lotteryTypeMatchRsp
+     * @param lotteryTypeMatchRsp
+     */
+    void insertJcMatchLottery(LotteryTypeMatchRsp lotteryTypeMatchRsp) throws BaseException;
+
+    /**
+     * 根据bet007查询JcSchedule数据
      * @param l
      * @return
      */
-    JcMatchZc queryJcLotterTypeZcByIDBet007(long l);
+    JcSchedule queryJcScheduleByBet007(long Bet007);
+
     /**
-     * 根据IDBet007 查询是否有对应数据信息
+     * 根据id查询赛程表信息
      * @param l
      * @return
      */
-    JcMatchJczq queryJcLotterTypeJcByIDBet007(long l);
-
-    JcMatchBjdc queryJcLotterTypeBdByIDBet007(long l);
-
-    void updateJcLotterTypeZc(JcMatchZc jcLotterTypeZc, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
-
-    void insertJcLotterTypeZc(LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
-
-    void updateJcLotterTypeJc(JcMatchJczq jcLotterTypeJc, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
-
-    void insertJcLotterTypeJc(LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
-
-    void updateJcLotterTypeBd(JcMatchBjdc jcLotterTypeBd, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws BaseException, ParseException;
-
-    void insertJcLotterTypeBd(LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
+    Schedule queryScheduleByBet007(int l);
 
     /**
-     * 根据NOID 插叙
-     * @param id
+     * 查询竞彩赔率表
+     * @param i
      * @return
      */
-    JcMatchJczq queryJcLotterTypeJcByNoId(String id);
+    JcSchedulesp queryJcSchedulespByScId(int i);
+
+    /**
+     * 更新竞彩表
+     * @param jcSchedule
+     * @param schedule
+     * @param jcSchedulesp
+     * @param lotteryTypeMatchRsp
+     */
+    void updateJcSchedule(JcSchedule jcSchedule, Schedule schedule, JcSchedulesp jcSchedulesp, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
+
+    /**
+     * 新增竞彩表
+     * @param schedule
+     * @param jcSchedulesp
+     * @param lotteryTypeMatchRsp
+     */
+    void insertJcSchedule(Schedule schedule, JcSchedulesp jcSchedulesp, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
 }

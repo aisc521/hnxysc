@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.TbSubSclassMapper">
+
+  <select id="querySubSclass" resultType="com.zhcdata.db.model.SubSclassInfo">
+    select * from SubSclass where subsclassID=${subsclassID}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.SubSclassInfo" >
+    insert into subsclass
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="subsclassid != null" >
+        subSclassID,
+      </if>
+      <if test="sclassid != null" >
+        sclassid,
+      </if>
+      <if test="ishavescore != null" >
+        IsHaveScore,
+      </if>
+      <if test="sortnumber != null" >
+        sortNumber,
+      </if>
+      <if test="currRound != null" >
+        curr_round,
+      </if>
+      <if test="countRound != null" >
+        count_round,
+      </if>
+      <if test="iscurrentsclass != null" >
+        IsCurrentSclass,
+      </if>
+      <if test="subsclassname != null" >
+        subSclassName,
+      </if>
+      <if test="subnameJs != null" >
+        subName_Js,
+      </if>
+      <if test="includeseason != null" >
+        IncludeSeason,
+      </if>
+      <if test="isanalyscore != null" >
+        IsAnalyScore,
+      </if>
+      <if test="iszu != null" >
+        IsZu,
+      </if>
+      <if test="currentseason != null" >
+        CurrentSeason,
+      </if>
+      <if test="refOrderseason != null" >
+        ref_orderSeason,
+      </if>
+      <if test="refOrdersubid != null" >
+        ref_orderSubId,
+      </if>
+      <if test="isprimary != null" >
+        isPrimary,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="subsclassid != null" >
+        #{subsclassid,jdbcType=INTEGER},
+      </if>
+      <if test="sclassid != null" >
+        #{sclassid,jdbcType=INTEGER},
+      </if>
+      <if test="ishavescore != null" >
+        #{ishavescore,jdbcType=BIT},
+      </if>
+      <if test="sortnumber != null" >
+        #{sortnumber,jdbcType=INTEGER},
+      </if>
+      <if test="currRound != null" >
+        #{currRound,jdbcType=INTEGER},
+      </if>
+      <if test="countRound != null" >
+        #{countRound,jdbcType=INTEGER},
+      </if>
+      <if test="iscurrentsclass != null" >
+        #{iscurrentsclass,jdbcType=BIT},
+      </if>
+      <if test="subsclassname != null" >
+        #{subsclassname,jdbcType=VARCHAR},
+      </if>
+      <if test="subnameJs != null" >
+        #{subnameJs,jdbcType=VARCHAR},
+      </if>
+      <if test="includeseason != null" >
+        #{includeseason,jdbcType=VARCHAR},
+      </if>
+      <if test="isanalyscore != null" >
+        #{isanalyscore,jdbcType=BIT},
+      </if>
+      <if test="iszu != null" >
+        #{iszu,jdbcType=BIT},
+      </if>
+      <if test="currentseason != null" >
+        #{currentseason,jdbcType=VARCHAR},
+      </if>
+      <if test="refOrderseason != null" >
+        #{refOrderseason,jdbcType=VARCHAR},
+      </if>
+      <if test="refOrdersubid != null" >
+        #{refOrdersubid,jdbcType=INTEGER},
+      </if>
+      <if test="isprimary != null" >
+        #{isprimary,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,7 +1,8 @@
 package com.zhcdata.jc.quartz.job.InstantLottery;
-import com.zhcdata.db.model.JcMatchBjdc;
-import com.zhcdata.db.model.JcMatchJczq;
-import com.zhcdata.db.model.JcMatchZc;
+import com.zhcdata.db.model.JcMatchLottery;
+import com.zhcdata.db.model.JcSchedule;
+import com.zhcdata.db.model.JcSchedulesp;
+import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.service.LotteryTypeMatchJobService;
 import com.zhcdata.jc.tools.Const;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
@@ -48,30 +49,25 @@ public class LotteryTypeMatchJob{
             List<LotteryTypeMatchRsp> lotteryTypeMatchRspList = object.getList();
             for(int i = 0; i < lotteryTypeMatchRspList.size(); i++){
                 LotteryTypeMatchRsp lotteryTypeMatchRsp = lotteryTypeMatchRspList.get(i);
-
-                if(lotteryTypeMatchRsp.getLotteryName().trim().equals(Const.ONE_FOUR_SFC)){//足彩
-                    JcMatchZc jcLotterTypeZc = lotteryTypeMatchJobService.queryJcLotterTypeZcByIDBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()));
-                    if(jcLotterTypeZc != null){
-                        lotteryTypeMatchJobService.updateJcLotterTypeZc(jcLotterTypeZc,lotteryTypeMatchRsp);
-                    }else{
-                        lotteryTypeMatchJobService.insertJcLotterTypeZc(lotteryTypeMatchRsp);
-                    }
+                //全部入lottery表数据
+                //根据bet007查询是否有对应数据
+                JcMatchLottery jcMatchLottery = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()));
+                if(jcMatchLottery != null){//更新
+                    lotteryTypeMatchJobService.updateJcMatchLottery(jcMatchLottery,lotteryTypeMatchRsp);
+                }else{//新增
+                    lotteryTypeMatchJobService.insertJcMatchLottery(lotteryTypeMatchRsp);
                 }
-                if(lotteryTypeMatchRsp.getLotteryName().trim().equals(Const.JC_FOOTBALL)){//竞彩
-                    JcMatchJczq jcLotterTypeJc = lotteryTypeMatchJobService.queryJcLotterTypeJcByIDBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()));
-                    if(jcLotterTypeJc != null){
-                        lotteryTypeMatchJobService.updateJcLotterTypeJc(jcLotterTypeJc,lotteryTypeMatchRsp);
-                    }else{
-                        lotteryTypeMatchJobService.insertJcLotterTypeJc(lotteryTypeMatchRsp);
-                    }
-                }
-                if(lotteryTypeMatchRsp.getLotteryName().trim().equals(Const.SINGLE_R_SPF)){//北单
-                    JcMatchBjdc jcLotterTypeBd = lotteryTypeMatchJobService.queryJcLotterTypeBdByIDBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()));
-                    if(jcLotterTypeBd != null){
-                        lotteryTypeMatchJobService.updateJcLotterTypeBd(jcLotterTypeBd,lotteryTypeMatchRsp);
-                    }else{
-                        lotteryTypeMatchJobService.insertJcLotterTypeBd(lotteryTypeMatchRsp);
-                    }
+                //单独记录竞彩数据
+                //根据bet007查询竞彩表是否有对应数据
+                JcSchedule jcSchedule = lotteryTypeMatchJobService.queryJcScheduleByBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()));
+                //根据bet007查询赛程表
+                Schedule schedule = lotteryTypeMatchJobService.queryScheduleByBet007(Integer.parseInt(lotteryTypeMatchRsp.getID_bet007()));
+                //根据id查询竞彩足球赔率表
+                JcSchedulesp jcSchedulesp = lotteryTypeMatchJobService.queryJcSchedulespByScId(Integer.parseInt(lotteryTypeMatchRsp.getID_bet007()));
+                if(jcSchedule != null){//更新
+                    lotteryTypeMatchJobService.updateJcSchedule(jcSchedule,schedule,jcSchedulesp,lotteryTypeMatchRsp);
+                }else{//新增
+                    lotteryTypeMatchJobService.insertJcSchedule(schedule,jcSchedulesp,lotteryTypeMatchRsp);
                 }
             }
         } catch (Exception e) {
