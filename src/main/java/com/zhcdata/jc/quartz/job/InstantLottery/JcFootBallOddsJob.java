@@ -2,10 +2,8 @@ package com.zhcdata.jc.quartz.job.InstantLottery;
 
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.JcSchedulesp;
-import com.zhcdata.jc.service.JcScheduleService;
-import com.zhcdata.jc.service.JcSchedulespService;
-import com.zhcdata.jc.service.JcSchedulespvaryService;
-import com.zhcdata.jc.service.LotteryTypeMatchJobService;
+import com.zhcdata.db.model.Schedule;
+import com.zhcdata.jc.service.*;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.*;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +39,8 @@ public class JcFootBallOddsJob {
     @Resource
     private JcSchedulespvaryService jcSchedulespvaryService;
 
+    @Resource
+    private ScheduleService scheduleService;
     /**
      * 两分钟
      */
@@ -57,34 +57,26 @@ public class JcFootBallOddsJob {
                 JcFootBallOddsRsp jcFootBallOddsRsp = jcFootBallOddsRspList.get(i);
                 JcSchedule jcSchedule = jcScheduleService.queryJcScheduleByMatchID(jcFootBallOddsRsp.getID());
                 if(jcSchedule != null){
-                    //每一次sp变化都insert入库
-                    /**
-                     * 问题
-                     * 1、每个玩法的开奖sp
-                     * 2、过关类型
-                     */
                     //查询是否有此条信息
-                    JcSchedulesp jcSchedulesp = jcSchedulespService.queryJcSchedulespById(jcSchedule.getScheduleid());
-                    if(jcSchedulesp != null){//更新
-                        jcSchedulespService.updateJcSchedulesp(jcSchedulesp,jcSchedule,jcFootBallOddsRsp);
-                    }else{//新增
-
+                    //查询赛程表
+                    Schedule schedule = scheduleService.queryScheduleById(Long.valueOf(jcSchedule.getScheduleid()));
+                    if(schedule != null){
+                        JcSchedulesp jcSchedulesp = jcSchedulespService.queryJcSchedulespById(jcSchedule.getScheduleid());
+                        if(jcSchedulesp != null){//更新
+                            jcSchedulespService.updateJcSchedulesp(jcSchedulesp,jcSchedule,jcFootBallOddsRsp,schedule);
+                            //插入竞彩sp变化表数据
+                            jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,jcSchedulesp.getSpid(),jcSchedulesp,schedule);
+                        }else{//新增
+                            Integer spId = jcSchedulespService.insertJcSchedulesp(jcSchedule,jcFootBallOddsRsp,schedule);
+                            //插入竞彩sp变化表数据
+                            jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,spId,jcSchedulesp,schedule);
+                        }
+                        //更新竞彩对阵表
+                        jcScheduleService.updateJcSchedule(jcSchedule,jcFootBallOddsRsp);
+                    }else{
+                        log.error("竞彩足球赔率定时任务查询赛程为空，Scheduleid：" + jcSchedule.getScheduleid());
                     }
-                    Integer spId = jcSchedulespService.insertJcSchedulesp(jcSchedule,jcFootBallOddsRsp);
 
-
-
-
-                    //插入竞彩sp变化表数据
-                    /**
-                     * 问题
-                     * 1、彩种id是哪个id
-                     * 2、sp变化的记录格式
-                     * 3、变化时间是每次的创建时间？
-                     */
-                    jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,spId);
-                    //更新竞彩对阵表
-                    jcScheduleService.updateJcSchedule(jcSchedule,jcFootBallOddsRsp);
                 }else{
                     log.error("竞彩足球赔率定时任务根据MacthId查询结果为空，MactchId：" + jcFootBallOddsRsp.getID());
                 }

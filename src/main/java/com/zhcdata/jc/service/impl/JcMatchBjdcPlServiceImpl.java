@@ -95,6 +95,25 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
                 BdrealimeSpSpfRsp bdrealimeSpSpfRsp = spf.get(0);
                 BjdcPl1.setConCedNum(bdrealimeSpSpfRsp.getGoal());
             }
+
+            /**
+             * 上下单双
+             */
+            if("16".equals(BjdcPl1.getLotteryPlay())){
+                BjdcPl1.setIssueNum(bdrealimeSpRsp.getIssueNum());
+                BjdcPl1.setNoId(bdrealimeSpRsp.getID());
+                BjdcPl1.setLotteryName("上下单双");
+                BjdcPl1.setLotteryPlay("16");
+                if(jcMatchLottery != null){
+                    BjdcPl1.setIdBet007(jcMatchLottery.getIdBet007());
+                }
+                BjdcPl1.setPlayType(1);//玩法类型 默认单关
+                String sxdsSp = JcLotteryUtils.bJDcPlInfo(bdrealimeSpRsp,"16");
+                BjdcPl1.setRateResult(sxdsSp);//赔率
+                BjdcPl1.setStatus(0);
+                BjdcPl1.setUpdateTime(new Date());
+                BjdcPl1.setCreateTime(new Date());
+            }
             Example example = new Example(JcMatchBjdcPl.class);
             example.createCriteria().andEqualTo("id",BjdcPl1.getId());
             int j = jcMatchBjdcPlMapper.updateByExampleSelective(BjdcPl1,example);
@@ -157,8 +176,8 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
             JcMatchBjdcPl jqPl = new JcMatchBjdcPl();
             jqPl.setIssueNum(bdrealimeSpRsp.getIssueNum());
             jqPl.setNoId(bdrealimeSpRsp.getID());
-            jqPl.setLotteryName("比分");
-            jqPl.setLotteryPlay("12");
+            jqPl.setLotteryName("总进球");
+            jqPl.setLotteryPlay("13");
                 if(jcMatchLottery != null){
                     jqPl.setIdBet007(jcMatchLottery.getIdBet007());
                 }
@@ -180,8 +199,8 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
             JcMatchBjdcPl bqcPl = new JcMatchBjdcPl();
             bqcPl.setIssueNum(bdrealimeSpRsp.getIssueNum());
             bqcPl.setNoId(bdrealimeSpRsp.getID());
-            bqcPl.setLotteryName("比分");
-            bqcPl.setLotteryPlay("12");
+            bqcPl.setLotteryName("半全场胜平负");
+            bqcPl.setLotteryPlay("14");
             if(jcMatchLottery != null){
                 bqcPl.setIdBet007(jcMatchLottery.getIdBet007());
             }
@@ -191,8 +210,31 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
             bqcPl.setStatus(0);
             bqcPl.setUpdateTime(new Date());
             bqcPl.setCreateTime(new Date());
-            int l = jcMatchBjdcPlMapper.insertSelective(bqcPl);
+            int l = jcMatchBjdcPlMapper.insertSelective(jqPl);
             if(l <= 0){
+                throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
+                        ProtocolCodeMsg.INSERT_FAILE.getMsg());
+            }
+
+            /**
+             * 上下单双
+             */
+            JcMatchBjdcPl sxds = new JcMatchBjdcPl();
+            sxds.setIssueNum(bdrealimeSpRsp.getIssueNum());
+            sxds.setNoId(bdrealimeSpRsp.getID());
+            sxds.setLotteryName("上下单双");
+            sxds.setLotteryPlay("16");
+            if(jcMatchLottery != null){
+                sxds.setIdBet007(jcMatchLottery.getIdBet007());
+            }
+            sxds.setPlayType(1);//玩法类型 默认单关
+            String sxdsSp = JcLotteryUtils.bJDcPlInfo(bdrealimeSpRsp,"16");
+            bqcPl.setRateResult(sxdsSp);//赔率
+            bqcPl.setStatus(0);
+            bqcPl.setUpdateTime(new Date());
+            bqcPl.setCreateTime(new Date());
+            int m = jcMatchBjdcPlMapper.insertSelective(bqcPl);
+            if(m <= 0){
                 throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
                         ProtocolCodeMsg.INSERT_FAILE.getMsg());
             }

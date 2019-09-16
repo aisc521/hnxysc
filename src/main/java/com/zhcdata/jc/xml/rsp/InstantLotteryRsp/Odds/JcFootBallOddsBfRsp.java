@@ -43,7 +43,7 @@ public class JcFootBallOddsBfRsp {
     private String sl25;
     private String sw5;
     private String sd4;
-    private String sl5;
+    private String sl4;
     private String stop;
 
 

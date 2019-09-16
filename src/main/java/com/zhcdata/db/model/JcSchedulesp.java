@@ -5,8 +5,10 @@ import javax.persistence.*;
 
 @Table(name = "jc_schedulesp")
 public class JcSchedulesp implements Serializable {
+    @Id
     @Column(name = "spID")
-    private String spid;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private Integer spid;
 
     @Column(name = "ID")
     private String id;
@@ -174,17 +176,11 @@ public class JcSchedulesp implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @return spID
-     */
-    public String getSpid() {
+    public Integer getSpid() {
         return spid;
     }
 
-    /**
-     * @param spid
-     */
-    public void setSpid(String spid) {
+    public void setSpid(Integer spid) {
         this.spid = spid;
     }
 
