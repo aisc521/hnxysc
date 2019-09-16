@@ -32,7 +32,6 @@ public enum ProtocolCodeMsg {
 
     PROVINCE_CODE_NOT_EXIST("102017", "分省编码为空"),
     LOTTEYR_NAME_NOT_EXIST("102018", "彩种名称为空"),
-    ISSUE_NOT_EXIST("102019", "期次为空"),
     TIME_ID_NOT_EXIST("102020", "timeId不合法"),
     USER_ID_NOT_EXIST("102021", "userId不合法"),
     VALUE_NOT_EXIST("102022", "value为空"),
@@ -49,20 +48,14 @@ public enum ProtocolCodeMsg {
     ACCOUNT_RECHARGE_MONEY("040804", "充值金额不合法"),
     ORDER_ID_NOT_EXIST("040805", "orderId为空"),
     ORDER_ID_NOT_HAVE("040806", "查询订单不存在"),
-    LUCKY_NUM_INSERT_ERROR("040807","幸运号码生成失败"),
 
-    USER_WIN_EXCHANGE_NOT_EXIST("041601","该奖品已领取，无法重复提交"),
-    USER_WIN_EXCHANGE_ERROR("041602","兑换失败"),
 
-    ITEM_ISSUE_CAN_NOT_JOIN("030601","该奖品暂无法参与"),
-    ITEM_BUY_TIME_NUMBER_ILLEGAL("030602","参与人次非法"),
-    ITEM_BUY_JOIN_FAIL("030603","参与失败"),
-    ITEM_BUY_MONEY_NOT_ENOUGH("030604","幸运币不足，请获取后再参与！"),
-    ITEM_BUY_PROVINCE_GET_ERROR("030605","省份获取失败，请重试"),
-    ITEM_BUY_CODE_CREATE_ERROR("030606","奖品幸运码生产失败"),
-    ITEM_ISSUE_REMAIN_NOT_ENOUGH("030607","剩余幸运码不足"),
-    ITEM_JOIN_PEOPLE_ENOUGH("030608","该期人次已满 是否参与最新一期"),
-    ITEM_BUY_ENOUGH("030609","参与失败，请重试！"),
+    //2.1.8  欧赔/亚盘/大小球数据(10200208)
+    MATCH_ID_NOT_ASSIGNED("020801", "比赛Id不合法"),
+    TYPE_NOT_ASSIGNED("020802", "状态值不合法"),
+    TIME_ID_NOT_ASSIGNED("020803", "timeId不合法"),
+    //2.1.9欧赔/亚盘/大小球详情
+    OP_ID_NOT_ASSIGNED("020O901", "opId不合法"),
 
     SUCCESS("000000", "成功"),
     FAIL("444444", "失败"),

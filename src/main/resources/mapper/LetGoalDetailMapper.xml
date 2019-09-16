@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.LetGoalDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.LetGoalDetail" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="OddsID" property="oddsid" jdbcType="INTEGER" />
+    <result column="upOdds" property="upodds" jdbcType="REAL" />
+    <result column="Goal" property="goal" jdbcType="REAL" />
+    <result column="downOdds" property="downodds" jdbcType="REAL" />
+    <result column="ModifyTime" property="modifytime" jdbcType="TIMESTAMP" />
+    <result column="isEarly" property="isearly" jdbcType="BIT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, OddsID, upOdds, Goal, downOdds, ModifyTime, isEarly
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from letgoaldetail
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from letgoaldetail
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhcdata.db.model.LetGoalDetail" >
+    insert into letgoaldetail (ID, OddsID, upOdds, 
+      Goal, downOdds, ModifyTime, 
+      isEarly)
+    values (#{id,jdbcType=INTEGER}, #{oddsid,jdbcType=INTEGER}, #{upodds,jdbcType=REAL}, 
+      #{goal,jdbcType=REAL}, #{downodds,jdbcType=REAL}, #{modifytime,jdbcType=TIMESTAMP}, 
+      #{isearly,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.LetGoalDetail" >
+    insert into letgoaldetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="oddsid != null" >
+        OddsID,
+      </if>
+      <if test="upodds != null" >
+        upOdds,
+      </if>
+      <if test="goal != null" >
+        Goal,
+      </if>
+      <if test="downodds != null" >
+        downOdds,
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime,
+      </if>
+      <if test="isearly != null" >
+        isEarly,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="oddsid != null" >
+        #{oddsid,jdbcType=INTEGER},
+      </if>
+      <if test="upodds != null" >
+        #{upodds,jdbcType=REAL},
+      </if>
+      <if test="goal != null" >
+        #{goal,jdbcType=REAL},
+      </if>
+      <if test="downodds != null" >
+        #{downodds,jdbcType=REAL},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isearly != null" >
+        #{isearly,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.LetGoalDetail" >
+    update letgoaldetail
+    <set >
+      <if test="oddsid != null" >
+        OddsID = #{oddsid,jdbcType=INTEGER},
+      </if>
+      <if test="upodds != null" >
+        upOdds = #{upodds,jdbcType=REAL},
+      </if>
+      <if test="goal != null" >
+        Goal = #{goal,jdbcType=REAL},
+      </if>
+      <if test="downodds != null" >
+        downOdds = #{downodds,jdbcType=REAL},
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isearly != null" >
+        isEarly = #{isearly,jdbcType=BIT},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.LetGoalDetail" >
+    update letgoaldetail
+    set OddsID = #{oddsid,jdbcType=INTEGER},
+      upOdds = #{upodds,jdbcType=REAL},
+      Goal = #{goal,jdbcType=REAL},
+      downOdds = #{downodds,jdbcType=REAL},
+      ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      isEarly = #{isearly,jdbcType=BIT}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
