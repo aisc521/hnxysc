@@ -30,7 +30,7 @@ public class JcFootBallOddsJob {
     /**
      * 两分钟
      */
-    @Scheduled(cron = "0 0/2 * * * ?")
+    //@Scheduled(cron = "0 0/2 * * * ?")
     public void execute(){
         log.error("竞彩足球赔率定时任务启动");
         long s = System.currentTimeMillis();

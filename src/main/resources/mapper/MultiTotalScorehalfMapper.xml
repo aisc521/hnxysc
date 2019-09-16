@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.MultiTotalScorehalfMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.MultiTotalScorehalf" >
+    <id column="OddsID" property="oddsid" jdbcType="INTEGER" />
+    <result column="ScheduleID" property="scheduleid" jdbcType="INTEGER" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+    <result column="FirstGoal" property="firstgoal" jdbcType="REAL" />
+    <result column="FirstUpodds" property="firstupodds" jdbcType="REAL" />
+    <result column="FirstDownodds" property="firstdownodds" jdbcType="REAL" />
+    <result column="Goal" property="goal" jdbcType="REAL" />
+    <result column="UpOdds" property="upodds" jdbcType="REAL" />
+    <result column="DownOdds" property="downodds" jdbcType="REAL" />
+    <result column="Zoudi" property="zoudi" jdbcType="BIT" />
+    <result column="Num" property="num" jdbcType="SMALLINT" />
+    <result column="modifyTime" property="modifytime" jdbcType="TIMESTAMP" />
+    <result column="Goal_Real" property="goalReal" jdbcType="REAL" />
+    <result column="UpOdds_Real" property="upoddsReal" jdbcType="REAL" />
+    <result column="DownOdds_Real" property="downoddsReal" jdbcType="REAL" />
+    <result column="StartTime" property="starttime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    OddsID, ScheduleID, CompanyID, FirstGoal, FirstUpodds, FirstDownodds, Goal, UpOdds, 
+    DownOdds, Zoudi, Num, modifyTime, Goal_Real, UpOdds_Real, DownOdds_Real, StartTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from multitotalscorehalf
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </select>
+
+    <select id="selectByMatchIdAndCpyAndNum" resultType="com.zhcdata.db.model.MultiTotalScorehalf">
+      -- Integer scheduleid, Integer companyid, Short num
+      select * from multitotalscorehalf where ScheduleID = #{scheduleid} and CompanyID = #{companyid} and num = #{num}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from multitotalscorehalf
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhcdata.db.model.MultiTotalScorehalf" >
+    insert into multitotalscorehalf (OddsID, ScheduleID, CompanyID, 
+      FirstGoal, FirstUpodds, FirstDownodds, 
+      Goal, UpOdds, DownOdds, Zoudi, 
+      Num, modifyTime, Goal_Real, 
+      UpOdds_Real, DownOdds_Real, StartTime
+      )
+    values (#{oddsid,jdbcType=INTEGER}, #{scheduleid,jdbcType=INTEGER}, #{companyid,jdbcType=INTEGER}, 
+      #{firstgoal,jdbcType=REAL}, #{firstupodds,jdbcType=REAL}, #{firstdownodds,jdbcType=REAL}, 
+      #{goal,jdbcType=REAL}, #{upodds,jdbcType=REAL}, #{downodds,jdbcType=REAL}, #{zoudi,jdbcType=BIT}, 
+      #{num,jdbcType=SMALLINT}, #{modifytime,jdbcType=TIMESTAMP}, #{goalReal,jdbcType=REAL}, 
+      #{upoddsReal,jdbcType=REAL}, #{downoddsReal,jdbcType=REAL}, #{starttime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.MultiTotalScorehalf" >
+    insert into multitotalscorehalf
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oddsid != null" >
+        OddsID,
+      </if>
+      <if test="scheduleid != null" >
+        ScheduleID,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+      <if test="firstgoal != null" >
+        FirstGoal,
+      </if>
+      <if test="firstupodds != null" >
+        FirstUpodds,
+      </if>
+      <if test="firstdownodds != null" >
+        FirstDownodds,
+      </if>
+      <if test="goal != null" >
+        Goal,
+      </if>
+      <if test="upodds != null" >
+        UpOdds,
+      </if>
+      <if test="downodds != null" >
+        DownOdds,
+      </if>
+      <if test="zoudi != null" >
+        Zoudi,
+      </if>
+      <if test="num != null" >
+        Num,
+      </if>
+      <if test="modifytime != null" >
+        modifyTime,
+      </if>
+      <if test="goalReal != null" >
+        Goal_Real,
+      </if>
+      <if test="upoddsReal != null" >
+        UpOdds_Real,
+      </if>
+      <if test="downoddsReal != null" >
+        DownOdds_Real,
+      </if>
+      <if test="starttime != null" >
+        StartTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oddsid != null" >
+        #{oddsid,jdbcType=INTEGER},
+      </if>
+      <if test="scheduleid != null" >
+        #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="firstgoal != null" >
+        #{firstgoal,jdbcType=REAL},
+      </if>
+      <if test="firstupodds != null" >
+        #{firstupodds,jdbcType=REAL},
+      </if>
+      <if test="firstdownodds != null" >
+        #{firstdownodds,jdbcType=REAL},
+      </if>
+      <if test="goal != null" >
+        #{goal,jdbcType=REAL},
+      </if>
+      <if test="upodds != null" >
+        #{upodds,jdbcType=REAL},
+      </if>
+      <if test="downodds != null" >
+        #{downodds,jdbcType=REAL},
+      </if>
+      <if test="zoudi != null" >
+        #{zoudi,jdbcType=BIT},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=SMALLINT},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goalReal != null" >
+        #{goalReal,jdbcType=REAL},
+      </if>
+      <if test="upoddsReal != null" >
+        #{upoddsReal,jdbcType=REAL},
+      </if>
+      <if test="downoddsReal != null" >
+        #{downoddsReal,jdbcType=REAL},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.MultiTotalScorehalf" >
+    update multitotalscorehalf
+    <set >
+      <if test="scheduleid != null" >
+        ScheduleID = #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="firstgoal != null" >
+        FirstGoal = #{firstgoal,jdbcType=REAL},
+      </if>
+      <if test="firstupodds != null" >
+        FirstUpodds = #{firstupodds,jdbcType=REAL},
+      </if>
+      <if test="firstdownodds != null" >
+        FirstDownodds = #{firstdownodds,jdbcType=REAL},
+      </if>
+      <if test="goal != null" >
+        Goal = #{goal,jdbcType=REAL},
+      </if>
+      <if test="upodds != null" >
+        UpOdds = #{upodds,jdbcType=REAL},
+      </if>
+      <if test="downodds != null" >
+        DownOdds = #{downodds,jdbcType=REAL},
+      </if>
+      <if test="zoudi != null" >
+        Zoudi = #{zoudi,jdbcType=BIT},
+      </if>
+      <if test="num != null" >
+        Num = #{num,jdbcType=SMALLINT},
+      </if>
+      <if test="modifytime != null" >
+        modifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goalReal != null" >
+        Goal_Real = #{goalReal,jdbcType=REAL},
+      </if>
+      <if test="upoddsReal != null" >
+        UpOdds_Real = #{upoddsReal,jdbcType=REAL},
+      </if>
+      <if test="downoddsReal != null" >
+        DownOdds_Real = #{downoddsReal,jdbcType=REAL},
+      </if>
+      <if test="starttime != null" >
+        StartTime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.MultiTotalScorehalf" >
+    update multitotalscorehalf
+    set ScheduleID = #{scheduleid,jdbcType=INTEGER},
+      CompanyID = #{companyid,jdbcType=INTEGER},
+      FirstGoal = #{firstgoal,jdbcType=REAL},
+      FirstUpodds = #{firstupodds,jdbcType=REAL},
+      FirstDownodds = #{firstdownodds,jdbcType=REAL},
+      Goal = #{goal,jdbcType=REAL},
+      UpOdds = #{upodds,jdbcType=REAL},
+      DownOdds = #{downodds,jdbcType=REAL},
+      Zoudi = #{zoudi,jdbcType=BIT},
+      Num = #{num,jdbcType=SMALLINT},
+      modifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      Goal_Real = #{goalReal,jdbcType=REAL},
+      UpOdds_Real = #{upoddsReal,jdbcType=REAL},
+      DownOdds_Real = #{downoddsReal,jdbcType=REAL},
+      StartTime = #{starttime,jdbcType=TIMESTAMP}
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </update>
+</mapper>

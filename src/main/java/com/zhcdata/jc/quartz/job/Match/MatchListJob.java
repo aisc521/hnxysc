@@ -59,14 +59,14 @@ public class MatchListJob{
     @Resource
     ScheduleMapper scheduleMapper;
 
-    //@Scheduled(cron = "1 * * * * ?")
+    //@Scheduled(cron = "1 0/3 * * * ?")
     public void execute() throws Exception {
         LOGGER.info("赛程赛果定时任务启动");
         long s = System.currentTimeMillis();
         int insert = 0;
         int hasIn = 0;
         QiuTanXmlComm parse = new QiuTanXmlComm();
-        List<MatchListRsp> models = parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date=2019-09-10", MatchListRsp.class);
+        List<MatchListRsp> models = parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx", MatchListRsp.class);
         for (MatchListRsp model : models) {
             try {
                 Schedule inDb = scheduleMapper.selectByPrimaryKey(Integer.parseInt(model.getA()));
