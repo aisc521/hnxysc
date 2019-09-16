@@ -9,6 +9,9 @@ import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterType.LotteryTypeMatchFristRsp;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterType.LotteryTypeMatchRsp;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -30,7 +33,7 @@ import java.util.List;
 @Configuration
 @EnableScheduling
 @Slf4j
-public class LotteryTypeMatchJob{
+public class LotteryTypeMatchJob implements Job {
     @Resource
     private LotteryTypeMatchJobService lotteryTypeMatchJobService;
     @Value("${custom.qiutan.url.lotterTypeMacthUrl}")
@@ -40,8 +43,9 @@ public class LotteryTypeMatchJob{
      * 每十分钟执行一次 定时任务
      */
 
-    @Scheduled(cron = "0 0/10 * * * ?")
-    public void execute(){
+   /* @Scheduled(cron = "0 0/10 * * * ?")*/
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         log.error("彩票赛程与球探网ID关联表定时任务启动");
         long s = System.currentTimeMillis();
         try {

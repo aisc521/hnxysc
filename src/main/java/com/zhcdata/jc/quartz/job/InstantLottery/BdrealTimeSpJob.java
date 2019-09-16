@@ -8,6 +8,9 @@ import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BdrealTimeSp.*;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.*;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -24,7 +27,7 @@ import java.util.List;
 @Configuration
 @EnableScheduling
 @Slf4j
-public class BdrealTimeSpJob {
+public class BdrealTimeSpJob implements Job {
     @Value("${custom.qiutan.url.bdRealTimeSpUrl}")
     String requestUrl;
 
@@ -38,8 +41,9 @@ public class BdrealTimeSpJob {
     /**
      * 四分钟
      */
-    @Scheduled(cron = "0 0/4 * * * ?")
-    public void execute(){
+    /*@Scheduled(cron = "0 0/4 * * * ?")*/
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException{
         log.error("北京单场实时SP值定时任务启动");
         long s = System.currentTimeMillis();
         try {

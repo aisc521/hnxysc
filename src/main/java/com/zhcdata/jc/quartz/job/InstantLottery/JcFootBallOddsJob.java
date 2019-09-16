@@ -7,6 +7,9 @@ import com.zhcdata.jc.service.*;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.*;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -23,7 +26,7 @@ import java.util.List;
 @Configuration
 @EnableScheduling
 @Slf4j
-public class JcFootBallOddsJob {
+public class JcFootBallOddsJob implements Job {
     @Resource
     private LotteryTypeMatchJobService lotteryTypeMatchJobService;
     @Value("${custom.qiutan.url.jcZqOddsUrl}")
@@ -44,8 +47,9 @@ public class JcFootBallOddsJob {
     /**
      * 两分钟
      */
-    //@Scheduled(cron = "0 0/2 * * * ?")
-    public void execute(){
+   /* @Scheduled(cron = "0 0/2 * * * ?")*/
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         log.error("竞彩足球赔率定时任务启动");
         long s = System.currentTimeMillis();
         try {
