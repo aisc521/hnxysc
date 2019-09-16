@@ -242,9 +242,9 @@ public class HttpUtils {
             // 获取所有响应头字段
             Map<String, List<String>> map = connection.getHeaderFields();
             // 遍历所有的响应头字段
-            for (String key : map.keySet()) {
-                LOGGER.debug(key + ": " + map.get(key));
-            }
+            //for (String key : map.keySet()) {
+                //LOGGER.debug(key + ": " + map.get(key));
+            //}
 
             input = connection.getInputStream();
             output = new ByteArrayOutputStream();
@@ -274,8 +274,8 @@ public class HttpUtils {
         }
         String returnStr = new String(resultBytes, "utf-8");
         long end = System.currentTimeMillis();
-        LOGGER.error("响应={}", returnStr);
-        LOGGER.error("交易时间:{}" ,(end - start));
+        //LOGGER.error("响应={}", returnStr);
+        //LOGGER.error("交易时间:{}" ,(end - start));
         return returnStr;
 
     }
