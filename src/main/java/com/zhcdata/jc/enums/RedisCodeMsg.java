@@ -13,30 +13,32 @@ package com.zhcdata.jc.enums;
  */
 public enum RedisCodeMsg {
 
-  GOODS_COMM_MSG_LIST("GOODS_COMM_MSG_LIST", "操作消息", -1),
-          ;
-  private String name;//缓存名
+    SOCCER_COMM_MSG_LIST("SOCCER_COMM_MSG_LIST", "操作消息", -1),
+    SOCCER_HSET_ODDS_QT("SOCCER_HSET_ODDS_QT", "比赛赔率列表(球探)", 1 * 60 * 60 * 24 * 35),
+    SOCCER_ODDS_DETAIL("SOCCER_ODDS_DETAIL", "比赛赔率详情", 1 * 60 * 60 * 24 * 35),
+    ;
+    private String name;//缓存名
 
-  private String message;//缓存备注
+    private String message;//缓存备注
 
-  private long seconds;//缓存失效时间
+    private long seconds;//缓存失效时间
 
-  RedisCodeMsg(String name, String message, long seconds) {
-    this.name = name;
-    this.message = message;
-    this.seconds = seconds;
-  }
+    RedisCodeMsg(String name, String message, long seconds) {
+        this.name = name;
+        this.message = message;
+        this.seconds = seconds;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public long getSeconds() {
-    return seconds;
-  }
+    public long getSeconds() {
+        return seconds;
+    }
 
 }
