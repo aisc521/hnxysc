@@ -44,8 +44,13 @@
     <!--<table tableName="tb_dc_third"/>-->
    <!-- <table tableName="tb_user_rech_offline"/>
 -->
-    <table tableName="jc_match_bjdc"/>
-    <table tableName="jc_match_jczq"/>
-    <table tableName="jc_match_zc"/>
+
+   <!-- <table tableName="jc_match_bjdc_pl"/>-->
+    <!--<table tableName="jc_match_bjdcreslut"/>
+    <table tableName="jc_match_lottery"/>
+    <table tableName="jc_schedule"/>
+    <table tableName="jc_schedulesp"/>
+    <table tableName="jc_schedulespvary"/>-->
+    <table tableName="jc_schedulesp"/>
   </context>
 </generatorConfiguration>

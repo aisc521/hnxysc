@@ -173,6 +173,7 @@ public interface Const {
     String ONE_FOUR_SFC = "14场胜负彩";
     String SINGLE_R_SPF = "单场让球胜平负";
     String JC_FOOTBALL = "竞彩足球";
+    String JC_BASKTBALL = "竞彩篮球";
     /**
      * end
      * ======================================================================================================

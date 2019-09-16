@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.JcMatchBjdcPlMapper">
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.JcMatchBjdcPl">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" jdbcType="BIGINT" property="id" />
+    <result column="ISSUE_NUM" jdbcType="VARCHAR" property="issueNum" />
+    <result column="NO_ID" jdbcType="VARCHAR" property="noId" />
+    <result column="LOTTERY_NAME" jdbcType="VARCHAR" property="lotteryName" />
+    <result column="LOTTERY_PLAY" jdbcType="VARCHAR" property="lotteryPlay" />
+    <result column="ID_BET007" jdbcType="BIGINT" property="idBet007" />
+    <result column="PLAY_TYPE" jdbcType="INTEGER" property="playType" />
+    <result column="RATE_RESULT" jdbcType="VARCHAR" property="rateResult" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="MATCH_RESULT" jdbcType="VARCHAR" property="matchResult" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <select id="queryJcMatchBjdcPlByIssuemAndNoId" resultType="com.zhcdata.db.model.JcMatchBjdcPl">
+    select * from jc_match_bjdc_pl where ISSUE_NUM=#{issueNum} and NO_ID = #{noId}
+  </select>
+</mapper>

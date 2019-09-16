@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.JcScheduleMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.JcSchedule" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" property="id" jdbcType="INTEGER" />
+    <result column="ScheduleID" property="scheduleid" jdbcType="INTEGER" />
+    <result column="MatchID" property="matchid" jdbcType="VARCHAR" />
+    <result column="MatchTime" property="matchtime" jdbcType="TIMESTAMP" />
+    <result column="SelloutTime" property="sellouttime" jdbcType="TIMESTAMP" />
+    <result column="Sclass" property="sclass" jdbcType="VARCHAR" />
+    <result column="HomeTeam" property="hometeam" jdbcType="VARCHAR" />
+    <result column="HomeTeamID" property="hometeamid" jdbcType="INTEGER" />
+    <result column="GuestTeam" property="guestteam" jdbcType="VARCHAR" />
+    <result column="GuestTeamID" property="guestteamid" jdbcType="INTEGER" />
+    <result column="HomeTeamF" property="hometeamf" jdbcType="VARCHAR" />
+    <result column="GuestTeamF" property="guestteamf" jdbcType="VARCHAR" />
+    <result column="MatchState" property="matchstate" jdbcType="SMALLINT" />
+    <result column="HomeScore" property="homescore" jdbcType="SMALLINT" />
+    <result column="GuestScore" property="guestscore" jdbcType="SMALLINT" />
+    <result column="HomeHalfScore" property="homehalfscore" jdbcType="SMALLINT" />
+    <result column="GuestHalfScore" property="guesthalfscore" jdbcType="SMALLINT" />
+    <result column="PolyGoal" property="polygoal" jdbcType="REAL" />
+    <result column="IsEnd" property="isend" jdbcType="BIT" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="IsTurned" property="isturned" jdbcType="BIT" />
+    <result column="IsAudit" property="isaudit" jdbcType="BIT" />
+    <result column="HomeTeamGov" property="hometeamgov" jdbcType="VARCHAR" />
+    <result column="GuestTeamGov" property="guestteamgov" jdbcType="VARCHAR" />
+    <result column="Single101" property="single101" jdbcType="BIT" />
+    <result column="Single102" property="single102" jdbcType="BIT" />
+    <result column="Single103" property="single103" jdbcType="BIT" />
+    <result column="Single104" property="single104" jdbcType="BIT" />
+    <result column="Single105" property="single105" jdbcType="BIT" />
+    <result column="MatchTime2" property="matchtime2" jdbcType="TIMESTAMP" />
+    <result column="AddTime" property="addtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="queryJcScheduleByBet007" resultType="com.zhcdata.db.model.JcSchedule">
+    select * from jc_schedule jc where jc.ScheduleID = #{bet007Id}
+  </select>
+  <select id="queryJcScheduleByMatchID" resultType="com.zhcdata.db.model.JcSchedule">
+    select * from jc_schedule jc where jc.MatchID = #{matchid}
+  </select>
+</mapper>

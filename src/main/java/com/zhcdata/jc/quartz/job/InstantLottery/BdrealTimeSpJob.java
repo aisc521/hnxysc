@@ -1,6 +1,9 @@
 package com.zhcdata.jc.quartz.job.InstantLottery;
 
-import com.zhcdata.db.model.JcMatchJczq;
+import com.zhcdata.db.model.JcMatchBjdcPl;
+import com.zhcdata.db.model.JcMatchLottery;
+import com.zhcdata.jc.service.JcMatchBjdcPlService;
+import com.zhcdata.jc.service.JcMatchLotteryService;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BdrealTimeSp.*;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.*;
@@ -10,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -25,6 +29,12 @@ public class BdrealTimeSpJob {
     String requestUrl;
 
 
+    @Resource
+    private JcMatchLotteryService JcMatchLotteryService;
+
+    @Resource
+    private JcMatchBjdcPlService jcMatchBjdcPlService;
+
     /**
      * 四分钟
      */
@@ -35,6 +45,20 @@ public class BdrealTimeSpJob {
         try {
             BdrealimeSpFirstRsp object  = (BdrealimeSpFirstRsp) new QiuTanXmlComm().handleMothod(requestUrl,BdrealimeSpFirstRsp.class,BdrealimeSpRsp.class,BdrealimeSpSpfRsp.class,
                     BdrealimeSpBfRsp.class,BdrealimeSpBqcRsp.class,BdrealimeSpSxdsRsp.class);
+            List<BdrealimeSpRsp> list = object.getList();
+            for(int i = 0; i < list.size(); i++){
+                BdrealimeSpRsp bdrealimeSpRsp = new BdrealimeSpRsp();
+                String issueNum = bdrealimeSpRsp.getIssueNum();
+                String noId = bdrealimeSpRsp.getID();
+                //根据期号和场次查询lottery表查询 bet007 字段信息
+                JcMatchLottery jcMatchLottery = JcMatchLotteryService.queryJcMatchLotteryByIssueNumAndNoId(issueNum,noId);
+                List<JcMatchBjdcPl> jcMatchBjdcPl = jcMatchBjdcPlService.queryJcMatchBjdcPlByIssuemAndNoId(issueNum,noId);
+                if(jcMatchBjdcPl.size() >= 0){//更新
+                    jcMatchBjdcPlService.updateJcMatchBjdcPl(jcMatchBjdcPl,jcMatchLottery,bdrealimeSpRsp);
+                }else{//新增
+                    jcMatchBjdcPlService.insertJcMatchBjdcPl(jcMatchLottery,bdrealimeSpRsp);
+                }
+            }
         } catch (Exception e) {
             log.error("北京单场实时SP值定时任务启动异常",e);
             e.printStackTrace();

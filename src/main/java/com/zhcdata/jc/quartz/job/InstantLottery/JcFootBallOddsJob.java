@@ -1,6 +1,10 @@
 package com.zhcdata.jc.quartz.job.InstantLottery;
 
-import com.zhcdata.db.model.JcMatchJczq;
+import com.zhcdata.db.model.JcSchedule;
+import com.zhcdata.db.model.JcSchedulesp;
+import com.zhcdata.jc.service.JcScheduleService;
+import com.zhcdata.jc.service.JcSchedulespService;
+import com.zhcdata.jc.service.JcSchedulespvaryService;
 import com.zhcdata.jc.service.LotteryTypeMatchJobService;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.*;
@@ -27,6 +31,16 @@ public class JcFootBallOddsJob {
     @Value("${custom.qiutan.url.jcZqOddsUrl}")
     String requestUrl;
 
+
+    @Resource
+    private JcScheduleService jcScheduleService;
+
+    @Resource
+    private JcSchedulespService jcSchedulespService;
+
+    @Resource
+    private JcSchedulespvaryService jcSchedulespvaryService;
+
     /**
      * 两分钟
      */
@@ -41,12 +55,38 @@ public class JcFootBallOddsJob {
             List<JcFootBallOddsRsp> jcFootBallOddsRspList = object.getList();
             for(int i = 0; i < jcFootBallOddsRspList.size(); i++){
                 JcFootBallOddsRsp jcFootBallOddsRsp = jcFootBallOddsRspList.get(i);
-                JcMatchJczq jcLotterTypeJc = lotteryTypeMatchJobService.queryJcLotterTypeJcByNoId(jcFootBallOddsRsp.getID());
-                if(jcLotterTypeJc != null){
-                    Long matchId = jcLotterTypeJc.getIdBet007();
-                    System.out.println(matchId);
+                JcSchedule jcSchedule = jcScheduleService.queryJcScheduleByMatchID(jcFootBallOddsRsp.getID());
+                if(jcSchedule != null){
+                    //每一次sp变化都insert入库
+                    /**
+                     * 问题
+                     * 1、每个玩法的开奖sp
+                     * 2、过关类型
+                     */
+                    //查询是否有此条信息
+                    JcSchedulesp jcSchedulesp = jcSchedulespService.queryJcSchedulespById(jcSchedule.getScheduleid());
+                    if(jcSchedulesp != null){//更新
+                        jcSchedulespService.updateJcSchedulesp(jcSchedulesp,jcSchedule,jcFootBallOddsRsp);
+                    }else{//新增
+
+                    }
+                    Integer spId = jcSchedulespService.insertJcSchedulesp(jcSchedule,jcFootBallOddsRsp);
+
+
+
+
+                    //插入竞彩sp变化表数据
+                    /**
+                     * 问题
+                     * 1、彩种id是哪个id
+                     * 2、sp变化的记录格式
+                     * 3、变化时间是每次的创建时间？
+                     */
+                    jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,spId);
+                    //更新竞彩对阵表
+                    jcScheduleService.updateJcSchedule(jcSchedule,jcFootBallOddsRsp);
                 }else{
-                    log.error("查询竞彩彩种信息为空，ID：" + jcFootBallOddsRsp.getID());
+                    log.error("竞彩足球赔率定时任务根据MacthId查询结果为空，MactchId：" + jcFootBallOddsRsp.getID());
                 }
             }
 

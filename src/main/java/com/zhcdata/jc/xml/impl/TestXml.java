@@ -34,13 +34,13 @@ public class TestXml {
 
     public static void main(String args[]) throws Exception {
 
-      String xml = HttpUtils.httpPost("http://interface.win007.com/zq/today.aspx","UTF-8");
+     /* String xml = HttpUtils.httpPost("http://interface.win007.com/zq/today.aspx","UTF-8");
 
 
-      /*List<Element> list = xmlRootHandle(xml,"match");
+      *//*List<Element> list = xmlRootHandle(xml,"match");
       for(Element e:list){
         System.out.println("ID="+e.elementTextTrim("ID"));
-      }*/
+      }*//*
       XStream xStream = new XStream(new DomDriver());
       XStream.setupDefaultSecurity(xStream);
       xStream.allowTypes(new Class[]{List.class, ToDayMatchRsp.class});
@@ -48,8 +48,9 @@ public class TestXml {
       List<ToDayMatchRsp> list = (List<ToDayMatchRsp>) xStream.fromXML(xml);
       for (ToDayMatchRsp toDayMatchRsp : list) {
         System.out.println(toDayMatchRsp.getID());
-      }
+      }*/
 
-
+        Boolean ooo = Boolean.valueOf("True");
+        System.out.println(ooo);
     }
 }
