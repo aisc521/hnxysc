@@ -1,6 +1,6 @@
 package com.zhcdata.jc.service.impl;
 
-import com.zhcdata.db.mapper.PlayerinteamMapper;
+import com.google.common.collect.Lists;
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.mapper.TbJcMatchLineupMapper;
 import com.zhcdata.db.model.JcMatchLineupInfo;
@@ -47,14 +47,17 @@ public class ScheduleServiceImpl implements ScheduleService {
         Map<String, Object> map = new HashMap<>(3);
         //根据比赛id获取阵容
         JcMatchLineupInfo lineupInfo = matchLineupMapper.selectByPrimaryKey(matchId);
-        //处理阵容数据
-        List<LineupDataDto> infoList = processingLineupData(lineupInfo);
-        //组装数据
-        map.put("hostTeamLineUp", lineupInfo.getHomeArray());
+        if (lineupInfo != null) {
+            //处理阵容数据
+            List<LineupDataDto> infoList = processingLineupData(lineupInfo);
+            //组装数据
+            map.put("hostTeamLineUp", lineupInfo.getHomeArray());
+            map.put("guestTeamLineUp", lineupInfo.getAwayArray());
+            map.put("infoList", infoList);
+        }
         map.putIfAbsent("hostTeamLineUp", "");
-        map.put("guestTeamLineUp", lineupInfo.getAwayArray());
         map.putIfAbsent("guestTeamLineUp", "");
-        map.put("infoList", infoList);
+        map.put("infoList", Lists.newArrayList());
         //处理redis
         String key = RedisCodeMsg.SOCCER_LINEUP_DATA.getName() + ":" + matchId;
         redisUtils.hset(key, "data", JsonMapper.defaultMapper().toJson(map));
