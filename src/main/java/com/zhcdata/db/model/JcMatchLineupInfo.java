@@ -1,95 +1,31 @@
 package com.zhcdata.db.model;
 
-import java.util.Date;
+import lombok.Data;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Data
+@Table(name = "jc_match_lineup")
 public class JcMatchLineupInfo {
+    @Id
+    @Column(name = "ID")
     private Long id;
-
+    @Column(name = "HOME_ARRAY")
     private String homeArray;
-
+    @Column(name = "AWAY_ARRAY")
     private String awayArray;
-
+    @Column(name = "HOME_LINEUP")
     private String homeLineup;
-
+    @Column(name = "AWAY_LINEUP")
     private String awayLineup;
-
+    @Column(name = "HOME_BACKUP")
     private String homeBackup;
-
+    @Column(name = "AWAY_BACKUP")
     private String awayBackup;
-
+    @Column(name = "CREATE_TIME")
     private String createTime;
-
+    @Column(name = "UPDATE_TIME")
     private String updateTime;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getHomeArray() {
-        return homeArray;
-    }
-
-    public void setHomeArray(String homeArray) {
-        this.homeArray = homeArray == null ? null : homeArray.trim();
-    }
-
-    public String getAwayArray() {
-        return awayArray;
-    }
-
-    public void setAwayArray(String awayArray) {
-        this.awayArray = awayArray == null ? null : awayArray.trim();
-    }
-
-    public String getHomeLineup() {
-        return homeLineup;
-    }
-
-    public void setHomeLineup(String homeLineup) {
-        this.homeLineup = homeLineup == null ? null : homeLineup.trim();
-    }
-
-    public String getAwayLineup() {
-        return awayLineup;
-    }
-
-    public void setAwayLineup(String awayLineup) {
-        this.awayLineup = awayLineup == null ? null : awayLineup.trim();
-    }
-
-    public String getHomeBackup() {
-        return homeBackup;
-    }
-
-    public void setHomeBackup(String homeBackup) {
-        this.homeBackup = homeBackup == null ? null : homeBackup.trim();
-    }
-
-    public String getAwayBackup() {
-        return awayBackup;
-    }
-
-    public void setAwayBackup(String awayBackup) {
-        this.awayBackup = awayBackup == null ? null : awayBackup.trim();
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
 }

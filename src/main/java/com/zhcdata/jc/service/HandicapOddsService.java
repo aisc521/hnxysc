@@ -12,7 +12,15 @@ package com.zhcdata.jc.service;
  */
 public interface HandicapOddsService {
 
+    /**
+     * 获取Count天之前的赔率数据
+     * @param count
+     */
     void updateHandicapOddsData(int count);
 
+    /**
+     * 获取Count天之前的赔率公司变化数据
+     * @param count
+     */
     void updateHandicapOddsDetailData(int count);
 }

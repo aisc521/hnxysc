@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.PlayerinteamMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.Playerinteam" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" property="id" jdbcType="INTEGER" />
+    <result column="PlayerID" property="playerid" jdbcType="INTEGER" />
+    <result column="PlayerName" property="playername" jdbcType="CHAR" />
+    <result column="TeamID" property="teamid" jdbcType="INTEGER" />
+    <result column="TeamName" property="teamname" jdbcType="CHAR" />
+    <result column="Place" property="place" jdbcType="VARCHAR" />
+    <result column="Number" property="number" jdbcType="CHAR" />
+    <result column="Score" property="score" jdbcType="SMALLINT" />
+    <result column="ModifyTime" property="modifytime" jdbcType="TIMESTAMP" />
+    <result column="coachTypeID" property="coachtypeid" jdbcType="INTEGER" />
+    <result column="captainTypeID" property="captaintypeid" jdbcType="INTEGER" />
+    <result column="PlayerPositionID" property="playerpositionid" jdbcType="INTEGER" />
+    <result column="startTime" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="endTime" property="endtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+</mapper>

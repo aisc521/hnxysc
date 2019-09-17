@@ -30,7 +30,7 @@ import java.util.Map;
  * @Date 2019/9/16 9:58
  */
 @Slf4j
-@Service("10200208")
+@Service("20200208")
 public class HandicapOddsProtocol implements BaseProtocol {
     @Resource
     private CommonUtils commonUtils;
