@@ -28,6 +28,10 @@
     select * from schedule where MatchTime > #{past} and matchTime &lt; #{future} and MatchState != #{i}
   </select>
 
+  <select id="selectScheduleListByMatchTime" resultType="com.zhcdata.db.model.Schedule">
+    select * from schedule where MatchTime > #{past} and matchTime &lt; #{future}
+  </select>
+
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from schedule

@@ -6,6 +6,10 @@
     select * from SubSclass where subsclassID=${subsclassID}
   </select>
 
+  <select id="querySubSclassID" resultType="com.zhcdata.db.model.SubSclassInfo">
+    select * from SubSclass where SclassID=${SclassID}
+  </select>
+
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.SubSclassInfo" >
     insert into subsclass
     <trim prefix="(" suffix=")" suffixOverrides="," >
