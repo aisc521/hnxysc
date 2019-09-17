@@ -25,9 +25,9 @@ public class LineupJob {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Async
-    @Scheduled(cron = "11 51 19 ? * *")
+    @Scheduled(cron = "31 48 13 ? * *")
     public void work() {
-        String url = "http://interface.win007.com/zq/lineup.aspx";
+        String url = "http://interface.win007.com/zq/lineup.aspx?cmd=new";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try{
@@ -42,10 +42,10 @@ public class LineupJob {
                     info.setId(Long.parseLong(result_list.get(i).getID()));
                     info.setHomeArray(result_list.get(i).getHomeArray());
                     info.setAwayArray(result_list.get(i).getAwayArray());
-                    info.setHomeLineup(result_list.get(i).getHomeLineup_cn());
-                    info.setAwayLineup(result_list.get(i).getAwayLineup_cn());
-                    info.setHomeBackup(result_list.get(i).getHomeBackup_cn());
-                    info.setAwayBackup(result_list.get(i).getAwayBackup_cn());
+                    info.setHomeLineup(result_list.get(i).getHomeLineup());
+                    info.setAwayLineup(result_list.get(i).getAwayLineup());
+                    info.setHomeBackup(result_list.get(i).getHomeBackup());
+                    info.setAwayBackup(result_list.get(i).getAwayBackup());
                     info.setCreateTime(df.format(new Date()));
                     if (tbJcMatchLineupMapper.insertSelective(info) > 0) {
                         LOGGER.info("阵容信息保存成功");

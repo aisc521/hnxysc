@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @XStreamAlias("match")
-public class LineupMatchRsp {
+public class PTSMatchRsp {
     String ScheduleID;
     String league;
     String matchtime;

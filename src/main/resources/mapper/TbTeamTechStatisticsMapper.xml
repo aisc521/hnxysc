@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.TbTeamTechStatisticsMapper">
+  <select id="queryTTS" resultType="com.zhcdata.db.model.TTSInfo">
+    SELECT * from teamtechstatistics where scheduleID=#{scheduleID} and teamID=#{teamID}
+  </select>
+
+
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.TTSInfo" >
+    insert into teamtechstatistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="scheduleid != null" >
+        scheduleID,
+      </if>
+      <if test="teamid != null" >
+        teamID,
+      </if>
+      <if test="kickofffirst != null" >
+        kickOffFirst,
+      </if>
+      <if test="firstcorner != null" >
+        firstCorner,
+      </if>
+      <if test="lastcorner != null" >
+        lastCorner,
+      </if>
+      <if test="firstyellow != null" >
+        firstYellow,
+      </if>
+      <if test="lastyellow != null" >
+        lastYellow,
+      </if>
+      <if test="firstsubst != null" >
+        firstSubst,
+      </if>
+      <if test="lastsubst != null" >
+        lastSubst,
+      </if>
+      <if test="firstoffside != null" >
+        firstOffside,
+      </if>
+      <if test="lastoffside != null" >
+        lastOffside,
+      </if>
+      <if test="shots != null" >
+        shots,
+      </if>
+      <if test="target != null" >
+        target,
+      </if>
+      <if test="offtarget != null" >
+        offTarget,
+      </if>
+      <if test="hitwoodwork != null" >
+        hitWoodwork,
+      </if>
+      <if test="fouls != null" >
+        fouls,
+      </if>
+      <if test="corner != null" >
+        corner,
+      </if>
+      <if test="cornerover != null" >
+        cornerOver,
+      </if>
+      <if test="freekick != null" >
+        freeKick,
+      </if>
+      <if test="offside != null" >
+        offside,
+      </if>
+      <if test="offsideover != null" >
+        offsideOver,
+      </if>
+      <if test="owngoal != null" >
+        ownGoal,
+      </if>
+      <if test="yellow != null" >
+        yellow,
+      </if>
+      <if test="yellowover != null" >
+        yellowOver,
+      </if>
+      <if test="red != null" >
+        red,
+      </if>
+      <if test="header != null" >
+        header,
+      </if>
+      <if test="save != null" >
+        save,
+      </if>
+      <if test="gkpounced != null" >
+        GKPounced,
+      </if>
+      <if test="lostball != null" >
+        lostBall,
+      </if>
+      <if test="stealsuc != null" >
+        stealSuc,
+      </if>
+      <if test="holdup != null" >
+        holdUp,
+      </if>
+      <if test="blocked != null" >
+        blocked,
+      </if>
+      <if test="longpass != null" >
+        longPass,
+      </if>
+      <if test="shortpass != null" >
+        shortPass,
+      </if>
+      <if test="successcross != null" >
+        successCross,
+      </if>
+      <if test="assists != null" >
+        assists,
+      </if>
+      <if test="subst != null" >
+        subst,
+      </if>
+      <if test="substover != null" >
+        substOver,
+      </if>
+      <if test="dribbles != null" >
+        dribbles,
+      </if>
+      <if test="throwins != null" >
+        throwIns,
+      </if>
+      <if test="controlpercent != null" >
+        controlPercent,
+      </if>
+      <if test="tackle != null" >
+        tackle,
+      </if>
+      <if test="passball != null" >
+        passBall,
+      </if>
+      <if test="passballsuc != null" >
+        passBallSuc,
+      </if>
+      <if test="headersuc != null" >
+        headerSuc,
+      </if>
+      <if test="rating != null" >
+        rating,
+      </if>
+      <if test="attack != null" >
+        attack,
+      </if>
+      <if test="dangerousatt != null" >
+        dangerousAtt,
+      </if>
+      <if test="cornerhalf != null" >
+        cornerHalf,
+      </if>
+      <if test="controlpercenthalf != null" >
+        controlPercentHalf,
+      </if>
+      <if test="modifytime != null" >
+        modifyTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="scheduleid != null" >
+        #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="teamid != null" >
+        #{teamid,jdbcType=INTEGER},
+      </if>
+      <if test="kickofffirst != null" >
+        #{kickofffirst,jdbcType=BIT},
+      </if>
+      <if test="firstcorner != null" >
+        #{firstcorner,jdbcType=BIT},
+      </if>
+      <if test="lastcorner != null" >
+        #{lastcorner,jdbcType=BIT},
+      </if>
+      <if test="firstyellow != null" >
+        #{firstyellow,jdbcType=BIT},
+      </if>
+      <if test="lastyellow != null" >
+        #{lastyellow,jdbcType=BIT},
+      </if>
+      <if test="firstsubst != null" >
+        #{firstsubst,jdbcType=BIT},
+      </if>
+      <if test="lastsubst != null" >
+        #{lastsubst,jdbcType=BIT},
+      </if>
+      <if test="firstoffside != null" >
+        #{firstoffside,jdbcType=BIT},
+      </if>
+      <if test="lastoffside != null" >
+        #{lastoffside,jdbcType=BIT},
+      </if>
+      <if test="shots != null" >
+        #{shots,jdbcType=INTEGER},
+      </if>
+      <if test="target != null" >
+        #{target,jdbcType=INTEGER},
+      </if>
+      <if test="offtarget != null" >
+        #{offtarget,jdbcType=INTEGER},
+      </if>
+      <if test="hitwoodwork != null" >
+        #{hitwoodwork,jdbcType=INTEGER},
+      </if>
+      <if test="fouls != null" >
+        #{fouls,jdbcType=INTEGER},
+      </if>
+      <if test="corner != null" >
+        #{corner,jdbcType=INTEGER},
+      </if>
+      <if test="cornerover != null" >
+        #{cornerover,jdbcType=INTEGER},
+      </if>
+      <if test="freekick != null" >
+        #{freekick,jdbcType=INTEGER},
+      </if>
+      <if test="offside != null" >
+        #{offside,jdbcType=INTEGER},
+      </if>
+      <if test="offsideover != null" >
+        #{offsideover,jdbcType=INTEGER},
+      </if>
+      <if test="owngoal != null" >
+        #{owngoal,jdbcType=INTEGER},
+      </if>
+      <if test="yellow != null" >
+        #{yellow,jdbcType=INTEGER},
+      </if>
+      <if test="yellowover != null" >
+        #{yellowover,jdbcType=INTEGER},
+      </if>
+      <if test="red != null" >
+        #{red,jdbcType=INTEGER},
+      </if>
+      <if test="header != null" >
+        #{header,jdbcType=INTEGER},
+      </if>
+      <if test="save != null" >
+        #{save,jdbcType=INTEGER},
+      </if>
+      <if test="gkpounced != null" >
+        #{gkpounced,jdbcType=INTEGER},
+      </if>
+      <if test="lostball != null" >
+        #{lostball,jdbcType=INTEGER},
+      </if>
+      <if test="stealsuc != null" >
+        #{stealsuc,jdbcType=INTEGER},
+      </if>
+      <if test="holdup != null" >
+        #{holdup,jdbcType=INTEGER},
+      </if>
+      <if test="blocked != null" >
+        #{blocked,jdbcType=INTEGER},
+      </if>
+      <if test="longpass != null" >
+        #{longpass,jdbcType=INTEGER},
+      </if>
+      <if test="shortpass != null" >
+        #{shortpass,jdbcType=INTEGER},
+      </if>
+      <if test="successcross != null" >
+        #{successcross,jdbcType=INTEGER},
+      </if>
+      <if test="assists != null" >
+        #{assists,jdbcType=INTEGER},
+      </if>
+      <if test="subst != null" >
+        #{subst,jdbcType=INTEGER},
+      </if>
+      <if test="substover != null" >
+        #{substover,jdbcType=INTEGER},
+      </if>
+      <if test="dribbles != null" >
+        #{dribbles,jdbcType=INTEGER},
+      </if>
+      <if test="throwins != null" >
+        #{throwins,jdbcType=INTEGER},
+      </if>
+      <if test="controlpercent != null" >
+        #{controlpercent,jdbcType=INTEGER},
+      </if>
+      <if test="tackle != null" >
+        #{tackle,jdbcType=INTEGER},
+      </if>
+      <if test="passball != null" >
+        #{passball,jdbcType=INTEGER},
+      </if>
+      <if test="passballsuc != null" >
+        #{passballsuc,jdbcType=INTEGER},
+      </if>
+      <if test="headersuc != null" >
+        #{headersuc,jdbcType=INTEGER},
+      </if>
+      <if test="rating != null" >
+        #{rating,jdbcType=REAL},
+      </if>
+      <if test="attack != null" >
+        #{attack,jdbcType=SMALLINT},
+      </if>
+      <if test="dangerousatt != null" >
+        #{dangerousatt,jdbcType=SMALLINT},
+      </if>
+      <if test="cornerhalf != null" >
+        #{cornerhalf,jdbcType=INTEGER},
+      </if>
+      <if test="controlpercenthalf != null" >
+        #{controlpercenthalf,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.TTSInfo" >
+    update teamtechstatistics
+    <set >
+      <if test="scheduleid != null" >
+        scheduleID = #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="teamid != null" >
+        teamID = #{teamid,jdbcType=INTEGER},
+      </if>
+      <if test="kickofffirst != null" >
+        kickOffFirst = #{kickofffirst,jdbcType=BIT},
+      </if>
+      <if test="firstcorner != null" >
+        firstCorner = #{firstcorner,jdbcType=BIT},
+      </if>
+      <if test="lastcorner != null" >
+        lastCorner = #{lastcorner,jdbcType=BIT},
+      </if>
+      <if test="firstyellow != null" >
+        firstYellow = #{firstyellow,jdbcType=BIT},
+      </if>
+      <if test="lastyellow != null" >
+        lastYellow = #{lastyellow,jdbcType=BIT},
+      </if>
+      <if test="firstsubst != null" >
+        firstSubst = #{firstsubst,jdbcType=BIT},
+      </if>
+      <if test="lastsubst != null" >
+        lastSubst = #{lastsubst,jdbcType=BIT},
+      </if>
+      <if test="firstoffside != null" >
+        firstOffside = #{firstoffside,jdbcType=BIT},
+      </if>
+      <if test="lastoffside != null" >
+        lastOffside = #{lastoffside,jdbcType=BIT},
+      </if>
+      <if test="shots != null" >
+        shots = #{shots,jdbcType=INTEGER},
+      </if>
+      <if test="target != null" >
+        target = #{target,jdbcType=INTEGER},
+      </if>
+      <if test="offtarget != null" >
+        offTarget = #{offtarget,jdbcType=INTEGER},
+      </if>
+      <if test="hitwoodwork != null" >
+        hitWoodwork = #{hitwoodwork,jdbcType=INTEGER},
+      </if>
+      <if test="fouls != null" >
+        fouls = #{fouls,jdbcType=INTEGER},
+      </if>
+      <if test="corner != null" >
+        corner = #{corner,jdbcType=INTEGER},
+      </if>
+      <if test="cornerover != null" >
+        cornerOver = #{cornerover,jdbcType=INTEGER},
+      </if>
+      <if test="freekick != null" >
+        freeKick = #{freekick,jdbcType=INTEGER},
+      </if>
+      <if test="offside != null" >
+        offside = #{offside,jdbcType=INTEGER},
+      </if>
+      <if test="offsideover != null" >
+        offsideOver = #{offsideover,jdbcType=INTEGER},
+      </if>
+      <if test="owngoal != null" >
+        ownGoal = #{owngoal,jdbcType=INTEGER},
+      </if>
+      <if test="yellow != null" >
+        yellow = #{yellow,jdbcType=INTEGER},
+      </if>
+      <if test="yellowover != null" >
+        yellowOver = #{yellowover,jdbcType=INTEGER},
+      </if>
+      <if test="red != null" >
+        red = #{red,jdbcType=INTEGER},
+      </if>
+      <if test="header != null" >
+        header = #{header,jdbcType=INTEGER},
+      </if>
+      <if test="save != null" >
+        save = #{save,jdbcType=INTEGER},
+      </if>
+      <if test="gkpounced != null" >
+        GKPounced = #{gkpounced,jdbcType=INTEGER},
+      </if>
+      <if test="lostball != null" >
+        lostBall = #{lostball,jdbcType=INTEGER},
+      </if>
+      <if test="stealsuc != null" >
+        stealSuc = #{stealsuc,jdbcType=INTEGER},
+      </if>
+      <if test="holdup != null" >
+        holdUp = #{holdup,jdbcType=INTEGER},
+      </if>
+      <if test="blocked != null" >
+        blocked = #{blocked,jdbcType=INTEGER},
+      </if>
+      <if test="longpass != null" >
+        longPass = #{longpass,jdbcType=INTEGER},
+      </if>
+      <if test="shortpass != null" >
+        shortPass = #{shortpass,jdbcType=INTEGER},
+      </if>
+      <if test="successcross != null" >
+        successCross = #{successcross,jdbcType=INTEGER},
+      </if>
+      <if test="assists != null" >
+        assists = #{assists,jdbcType=INTEGER},
+      </if>
+      <if test="subst != null" >
+        subst = #{subst,jdbcType=INTEGER},
+      </if>
+      <if test="substover != null" >
+        substOver = #{substover,jdbcType=INTEGER},
+      </if>
+      <if test="dribbles != null" >
+        dribbles = #{dribbles,jdbcType=INTEGER},
+      </if>
+      <if test="throwins != null" >
+        throwIns = #{throwins,jdbcType=INTEGER},
+      </if>
+      <if test="controlpercent != null" >
+        controlPercent = #{controlpercent,jdbcType=INTEGER},
+      </if>
+      <if test="tackle != null" >
+        tackle = #{tackle,jdbcType=INTEGER},
+      </if>
+      <if test="passball != null" >
+        passBall = #{passball,jdbcType=INTEGER},
+      </if>
+      <if test="passballsuc != null" >
+        passBallSuc = #{passballsuc,jdbcType=INTEGER},
+      </if>
+      <if test="headersuc != null" >
+        headerSuc = #{headersuc,jdbcType=INTEGER},
+      </if>
+      <if test="rating != null" >
+        rating = #{rating,jdbcType=REAL},
+      </if>
+      <if test="attack != null" >
+        attack = #{attack,jdbcType=SMALLINT},
+      </if>
+      <if test="dangerousatt != null" >
+        dangerousAtt = #{dangerousatt,jdbcType=SMALLINT},
+      </if>
+      <if test="cornerhalf != null" >
+        cornerHalf = #{cornerhalf,jdbcType=INTEGER},
+      </if>
+      <if test="controlpercenthalf != null" >
+        controlPercentHalf = #{controlpercenthalf,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        modifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
