@@ -47,8 +47,8 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
     private JcSchedulespMapper jcSchedulespMapper;
 
     @Override
-    public JcMatchLottery queryJcMatchLotteryByBet007(long Betoo7) {
-        return jcMatchLotteryMapper.queryJcMatchLotteryByBet007(Betoo7);
+    public JcMatchLottery queryJcMatchLotteryByBet007(long Betoo7,String gameType) {
+        return jcMatchLotteryMapper.queryJcMatchLotteryByBet007(Betoo7,gameType);
     }
 
     @Override
@@ -71,6 +71,7 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
         jcMatchLottery.setNoId(lotteryTypeMatchRsp.getID());
         jcMatchLottery.setTurn(lotteryTypeMatchRsp.getTurn());
         jcMatchLottery.setRecordId(Long.valueOf(lotteryTypeMatchRsp.getRecordID()));
+        jcMatchLottery.setIdBet007(Long.valueOf(lotteryTypeMatchRsp.getID_bet007()));
 
         /**
          * 2 五大联赛
@@ -108,6 +109,7 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
         jcMatchLottery.setNoId(lotteryTypeMatchRsp.getID());
         jcMatchLottery.setTurn(lotteryTypeMatchRsp.getTurn());
         jcMatchLottery.setRecordId(Long.valueOf(lotteryTypeMatchRsp.getRecordID()));
+        jcMatchLottery.setIdBet007(Long.valueOf(lotteryTypeMatchRsp.getID_bet007()));
 
         /**
          * 2 五大联赛
@@ -161,10 +163,8 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
     }
 
     private JcSchedule generJcSchedule(JcSchedule jcSchedule,Schedule schedule, JcSchedulesp jcSchedulesp, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException {
-        if(jcSchedule == null){
-            jcSchedule.setAddtime(new Date());
-        }
-        jcSchedule.setScheduleid(schedule.getScheduleid());
+        jcSchedule.setAddtime(new Date());
+        jcSchedule.setScheduleid(Integer.valueOf(lotteryTypeMatchRsp.getID_bet007()));
         jcSchedule.setMatchid(lotteryTypeMatchRsp.getID());
         jcSchedule.setMatchtime(sdf.parse(lotteryTypeMatchRsp.getTime()));
         jcSchedule.setSclass(lotteryTypeMatchRsp.getLeague());

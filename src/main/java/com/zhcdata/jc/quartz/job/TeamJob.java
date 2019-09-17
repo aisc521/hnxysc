@@ -29,7 +29,7 @@ public class TeamJob {
     TbTeamMapper tbTeamMapper;
 
     @Async
-    @Scheduled(cron = "51 24 16 ? * *")
+    /*@Scheduled(cron = "51 24 16 ? * *")*/
     public void work() {
         String url = "http://interface.win007.com/zq/Team_XML.aspx";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

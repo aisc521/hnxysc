@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.List;
 @Configuration
 @EnableScheduling
 @Slf4j
+@Component
 public class JcFootBallOddsJob implements Job {
     @Resource
     private LotteryTypeMatchJobService lotteryTypeMatchJobService;
@@ -57,35 +59,40 @@ public class JcFootBallOddsJob implements Job {
                     JcFootBallOddsBfRsp.class,JcFootBallOddsJqRsp.class,JcFootBallOddsBqcRsp.class,JcFootBallOddsSfRsp.class);
             //查询竞彩足球彩种库  查询比赛id 入库
             List<JcFootBallOddsRsp> jcFootBallOddsRspList = object.getList();
-            for(int i = 0; i < jcFootBallOddsRspList.size(); i++){
-                JcFootBallOddsRsp jcFootBallOddsRsp = jcFootBallOddsRspList.get(i);
-                JcSchedule jcSchedule = jcScheduleService.queryJcScheduleByMatchID(jcFootBallOddsRsp.getID());
-                if(jcSchedule != null){
-                    //查询是否有此条信息
-                    //查询赛程表
-                    Schedule schedule = scheduleService.queryScheduleById(Long.valueOf(jcSchedule.getScheduleid()));
-                    if(schedule != null){
-                        JcSchedulesp jcSchedulesp = jcSchedulespService.queryJcSchedulespById(jcSchedule.getScheduleid());
-                        if(jcSchedulesp != null){//更新
-                            jcSchedulespService.updateJcSchedulesp(jcSchedulesp,jcSchedule,jcFootBallOddsRsp,schedule);
-                            //插入竞彩sp变化表数据
-                            jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,jcSchedulesp.getSpid(),jcSchedulesp,schedule);
-                        }else{//新增
-                            Integer spId = jcSchedulespService.insertJcSchedulesp(jcSchedule,jcFootBallOddsRsp,schedule);
-                            //插入竞彩sp变化表数据
-                            jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,spId,jcSchedulesp,schedule);
+            if(jcFootBallOddsRspList.size() > 0){
+                for(int i = 0; i < jcFootBallOddsRspList.size(); i++){
+                    JcFootBallOddsRsp jcFootBallOddsRsp = jcFootBallOddsRspList.get(i);
+                    String [] timeArr =  jcFootBallOddsRsp.getMatchTime().split("\\s+");
+                    String time = timeArr[0];
+                    JcSchedule jcSchedule = jcScheduleService.queryJcScheduleByMatchID(jcFootBallOddsRsp.getID(),time);
+                    if(jcSchedule != null){
+                        //查询是否有此条信息
+                        //查询赛程表
+                        Schedule schedule = scheduleService.queryScheduleById(Long.valueOf(jcSchedule.getScheduleid()));
+                        if(schedule != null){
+                            JcSchedulesp jcSchedulesp = jcSchedulespService.queryJcSchedulespById(jcSchedule.getScheduleid());
+                            if(jcSchedulesp != null){//更新
+                                jcSchedulespService.updateJcSchedulesp(jcSchedulesp,jcSchedule,jcFootBallOddsRsp,schedule);
+                                //插入竞彩sp变化表数据
+                                jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,jcSchedulesp.getSpid(),jcSchedulesp,schedule);
+                            }else{//新增
+                                Integer spId = jcSchedulespService.insertJcSchedulesp(jcSchedule,jcFootBallOddsRsp,schedule);
+                                //插入竞彩sp变化表数据
+                                jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,spId,jcSchedulesp,schedule);
+                            }
+                            //更新竞彩对阵表
+                            jcScheduleService.updateJcSchedule(jcSchedule,jcFootBallOddsRsp);
+                        }else{
+                            log.error("竞彩足球赔率定时任务查询赛程为空，Scheduleid：" + jcSchedule.getScheduleid());
                         }
-                        //更新竞彩对阵表
-                        jcScheduleService.updateJcSchedule(jcSchedule,jcFootBallOddsRsp);
+
                     }else{
-                        log.error("竞彩足球赔率定时任务查询赛程为空，Scheduleid：" + jcSchedule.getScheduleid());
+                        log.error("竞彩足球赔率定时任务根据MacthId查询结果为空，MactchId：" + jcFootBallOddsRsp.getID());
                     }
-
-                }else{
-                    log.error("竞彩足球赔率定时任务根据MacthId查询结果为空，MactchId：" + jcFootBallOddsRsp.getID());
                 }
+            }else{
+                log.error("竞彩足球赔率定时任务返回数据为空");
             }
-
         } catch (Exception e) {
             log.error("竞彩足球赔率定时任务启动异常",e);
             e.printStackTrace();

@@ -5,6 +5,7 @@ import com.zhcdata.db.model.JcSchedulesp;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.service.LotteryTypeMatchJobService;
 import com.zhcdata.jc.tools.Const;
+import com.zhcdata.jc.tools.JcLotteryUtils;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterType.LotteryTypeMatchFristRsp;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterType.LotteryTypeMatchRsp;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
 import javax.annotation.Resource;
 
 import java.util.List;
@@ -33,6 +36,7 @@ import java.util.List;
 @Configuration
 @EnableScheduling
 @Slf4j
+@Component
 public class LotteryTypeMatchJob implements Job {
     @Resource
     private LotteryTypeMatchJobService lotteryTypeMatchJobService;
@@ -51,28 +55,45 @@ public class LotteryTypeMatchJob implements Job {
         try {
             LotteryTypeMatchFristRsp object  = (LotteryTypeMatchFristRsp) new QiuTanXmlComm().handleMothod(requestUrl,LotteryTypeMatchFristRsp.class,LotteryTypeMatchRsp.class);
             List<LotteryTypeMatchRsp> lotteryTypeMatchRspList = object.getList();
-            for(int i = 0; i < lotteryTypeMatchRspList.size(); i++){
-                LotteryTypeMatchRsp lotteryTypeMatchRsp = lotteryTypeMatchRspList.get(i);
-                //全部入lottery表数据
-                //根据bet007查询是否有对应数据
-                JcMatchLottery jcMatchLottery = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()));
-                if(jcMatchLottery != null){//更新
-                    lotteryTypeMatchJobService.updateJcMatchLottery(jcMatchLottery,lotteryTypeMatchRsp);
-                }else{//新增
-                    lotteryTypeMatchJobService.insertJcMatchLottery(lotteryTypeMatchRsp);
+            if(lotteryTypeMatchRspList.size() > 0){
+                for(int i = 0; i < lotteryTypeMatchRspList.size(); i++){
+                    LotteryTypeMatchRsp lotteryTypeMatchRsp = lotteryTypeMatchRspList.get(i);
+                    //全部入lottery表数据
+                    //判断是否是足球玩法
+                    if(!"0".equals(lotteryTypeMatchRsp.getID_bet007())){
+                       //根据bet007 和玩法查询是否有对应数据
+                        String gameType = JcLotteryUtils.JcLotterZh(lotteryTypeMatchRsp.getLotteryName());
+                        JcMatchLottery jcMatchLottery = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()),gameType);
+                        if(jcMatchLottery != null){//更新
+                            lotteryTypeMatchJobService.updateJcMatchLottery(jcMatchLottery,lotteryTypeMatchRsp);
+                        }else{//新增
+                            lotteryTypeMatchJobService.insertJcMatchLottery(lotteryTypeMatchRsp);
+                        }
+
+                        //判断是否是竞彩的玩法
+                        if("JC_JC".equals(gameType)){
+                            //单独记录竞彩数据
+                            //根据bet007查询竞彩表是否有对应数据
+                            JcSchedule jcSchedule = lotteryTypeMatchJobService.queryJcScheduleByBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()));
+                            //根据bet007查询赛程表
+                            Schedule schedule = lotteryTypeMatchJobService.queryScheduleByBet007(Integer.parseInt(lotteryTypeMatchRsp.getID_bet007()));
+                            //根据id查询竞彩足球赔率表
+                            JcSchedulesp jcSchedulesp = lotteryTypeMatchJobService.queryJcSchedulespByScId(Integer.parseInt(lotteryTypeMatchRsp.getID_bet007()));
+                            if(jcSchedule != null){//更新
+                                lotteryTypeMatchJobService.updateJcSchedule(jcSchedule,schedule,jcSchedulesp,lotteryTypeMatchRsp);
+                            }else{//新增
+                                lotteryTypeMatchJobService.insertJcSchedule(schedule,jcSchedulesp,lotteryTypeMatchRsp);
+                            }
+                        }else{
+                            log.error("彩票赛程与球探网ID关联表定时任务返回数据不是竞彩玩法不需入库");
+                        }
+
+                    }else{
+                        log.error("彩票赛程与球探网ID关联表定时任务返回数据不是足球玩法：玩法名称:" + lotteryTypeMatchRsp.getLotteryName());
+                    }
                 }
-                //单独记录竞彩数据
-                //根据bet007查询竞彩表是否有对应数据
-                JcSchedule jcSchedule = lotteryTypeMatchJobService.queryJcScheduleByBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()));
-                //根据bet007查询赛程表
-                Schedule schedule = lotteryTypeMatchJobService.queryScheduleByBet007(Integer.parseInt(lotteryTypeMatchRsp.getID_bet007()));
-                //根据id查询竞彩足球赔率表
-                JcSchedulesp jcSchedulesp = lotteryTypeMatchJobService.queryJcSchedulespByScId(Integer.parseInt(lotteryTypeMatchRsp.getID_bet007()));
-                if(jcSchedule != null){//更新
-                    lotteryTypeMatchJobService.updateJcSchedule(jcSchedule,schedule,jcSchedulesp,lotteryTypeMatchRsp);
-                }else{//新增
-                    lotteryTypeMatchJobService.insertJcSchedule(schedule,jcSchedulesp,lotteryTypeMatchRsp);
-                }
+            }else{
+                log.error("彩票赛程与球探网ID关联表定时任务返回数据为空");
             }
         } catch (Exception e) {
             log.error("彩票赛程与球探网ID关联表定时任务启动异常",e);

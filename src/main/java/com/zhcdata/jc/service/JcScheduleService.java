@@ -10,7 +10,7 @@ public interface JcScheduleService {
      * @param id
      * @return
      */
-    JcSchedule queryJcScheduleByMatchID(String id);
+    JcSchedule queryJcScheduleByMatchID(String id,String time);
 
     /**
      * 更新竞彩对阵表

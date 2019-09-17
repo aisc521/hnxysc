@@ -28,12 +28,11 @@ public class JcSchedulespvaryServiceImpl implements JcSchedulespvaryService {
     private JcSchedulespvaryMapper jcSchedulespvaryMapper;
     @Override
     public void insertJcSchedulespvary(JcSchedule jcSchedule, JcFootBallOddsRsp jcFootBallOddsRsp,Integer spId,JcSchedulesp jcSchedulesp1,Schedule schedule) throws BaseException {
-        JcSchedulesp jcSchedulesp = new JcSchedulesp();
         //让球胜平负
         JcSchedulespvary rqsp = new JcSchedulespvary();
         rqsp.setSpid(spId);
         rqsp.setTypeid(Short.parseShort("101"));
-        rqsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp,"101",schedule));
+        rqsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp1,"101",schedule));
         rqsp.setChangetime(new Date());
         int i = jcSchedulespvaryMapper.insertSelective(rqsp);
         if(i <= 0){
@@ -44,7 +43,7 @@ public class JcSchedulespvaryServiceImpl implements JcSchedulespvaryService {
         JcSchedulespvary bfsp = new JcSchedulespvary();
         bfsp.setSpid(spId);
         bfsp.setTypeid(Short.parseShort("101"));
-        bfsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp,"102",schedule));
+        bfsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp1,"102",schedule));
         bfsp.setChangetime(new Date());
         int j = jcSchedulespvaryMapper.insertSelective(bfsp);
         if(j <= 0){
@@ -55,7 +54,7 @@ public class JcSchedulespvaryServiceImpl implements JcSchedulespvaryService {
         JcSchedulespvary jqsp = new JcSchedulespvary();
         jqsp.setSpid(spId);
         jqsp.setTypeid(Short.parseShort("101"));
-        jqsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp,"103",schedule));
+        jqsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp1,"103",schedule));
         jqsp.setChangetime(new Date());
         int k = jcSchedulespvaryMapper.insertSelective(jqsp);
         if(k <= 0){
@@ -66,7 +65,7 @@ public class JcSchedulespvaryServiceImpl implements JcSchedulespvaryService {
         JcSchedulespvary bqcsp = new JcSchedulespvary();
         bqcsp.setSpid(spId);
         bqcsp.setTypeid(Short.parseShort("101"));
-        bqcsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp,"104",schedule));
+        bqcsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp1,"104",schedule));
         bqcsp.setChangetime(new Date());
         int l = jcSchedulespvaryMapper.insertSelective(bqcsp);
         if(l <= 0){
@@ -77,7 +76,7 @@ public class JcSchedulespvaryServiceImpl implements JcSchedulespvaryService {
         JcSchedulespvary spfcsp = new JcSchedulespvary();
         spfcsp.setSpid(spId);
         spfcsp.setTypeid(Short.parseShort("101"));
-        spfcsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp,"105",schedule));
+        spfcsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp1,"105",schedule));
         spfcsp.setChangetime(new Date());
         int m = jcSchedulespvaryMapper.insertSelective(spfcsp);
         if(m <= 0){

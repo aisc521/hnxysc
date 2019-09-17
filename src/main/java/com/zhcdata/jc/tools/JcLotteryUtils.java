@@ -71,14 +71,14 @@ public class JcLotteryUtils {
         String type = "4";
         for(int i = 0; i< matchNameArr.length; i++){
             String macth = matchNameArr[i];
-            if(macthName.equals(macth)){
+            if(macthName.indexOf(macth)!=-1){
                 type = "3";
             }
         }
         String[] fiveLsArr = fiveLsStr.split(",");
         for(int j = 0; j < fiveLsArr.length; j++){
             String fiveLs = fiveLsArr[j];
-            if(macthName.equals(fiveLs)){
+            if(macthName.indexOf(fiveLs) != -1){
                 type = "2";
             }
         }
@@ -514,7 +514,7 @@ public class JcLotteryUtils {
                         sp = jcFootBallOddsBfRsp.getSd4();
                     }
                     if(homeScore < gestScore){//负其他
-                        sp = jcFootBallOddsBfRsp.getSl4();
+                        sp = jcFootBallOddsBfRsp.getSl5();
                     }
                 break;
             }
@@ -615,37 +615,37 @@ public class JcLotteryUtils {
                 JcFootBallOddsRqRsp jcFootBallOddsRqRsp = rq.get(0);
                 if(jcSchedulesp == null){
                     JSONArray rs = new JSONArray();
-                    rs.add(jcFootBallOddsRqRsp.getRq3());
+
+                    rs.add(judgeWhetherItIsEmpty(jcFootBallOddsRqRsp.getRq3()));
                     rs.add(0.00);
 
-
                     JSONArray rp = new JSONArray();
-                    rp.add(jcFootBallOddsRqRsp.getRq1());
+                    rp.add(judgeWhetherItIsEmpty(jcFootBallOddsRqRsp.getRq1()));
                     rp.add(0.00);
 
 
                     JSONArray rf = new JSONArray();
-                    rf.add(jcFootBallOddsRqRsp.getRq0());
+                    rf.add(judgeWhetherItIsEmpty(jcFootBallOddsRqRsp.getRq0()));
                     rf.add(0.00);
                     result = rs.toString() + "," + rp.toString() + "," + rf.toString();
                 }else{
                     JSONArray rs = new JSONArray();
-                    rs.add(jcFootBallOddsRqRsp.getRq3());
-                    Double rsChange = Double.parseDouble(jcFootBallOddsRqRsp.getRq3()) - Double.parseDouble(jcSchedulesp.getWl3());
+                    rs.add(judgeWhetherItIsEmpty(jcFootBallOddsRqRsp.getRq3()));
+                    Double rsChange = judgeWhetherItIsEmpty(jcFootBallOddsRqRsp.getRq3()) - judgeWhetherItIsEmpty(jcSchedulesp.getWl3());
                     BigDecimal b = new BigDecimal(rsChange);
                     rs.add(b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
 
                     JSONArray rp = new JSONArray();
-                    rp.add(jcFootBallOddsRqRsp.getRq1());
-                    Double rpChange = Double.parseDouble(jcFootBallOddsRqRsp.getRq1()) - Double.parseDouble(jcSchedulesp.getWl1());
+                    rp.add(judgeWhetherItIsEmpty(jcFootBallOddsRqRsp.getRq1()));
+                    Double rpChange = judgeWhetherItIsEmpty(jcFootBallOddsRqRsp.getRq1()) - judgeWhetherItIsEmpty(jcSchedulesp.getWl1());
                     BigDecimal b1 = new BigDecimal(rpChange);
                     rp.add(b1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
 
                     JSONArray rf = new JSONArray();
-                    rf.add(jcFootBallOddsRqRsp.getRq0());
-                    Double rfChange = Double.parseDouble(jcFootBallOddsRqRsp.getRq0()) - Double.parseDouble(jcSchedulesp.getWl0());
+                    rf.add(judgeWhetherItIsEmpty(jcFootBallOddsRqRsp.getRq0()));
+                    Double rfChange = judgeWhetherItIsEmpty(jcFootBallOddsRqRsp.getRq0()) - judgeWhetherItIsEmpty(jcSchedulesp.getWl0());
                     BigDecimal b2 = new BigDecimal(rfChange);
                     rf.add(b2.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
@@ -656,55 +656,55 @@ public class JcLotteryUtils {
                 List<JcFootBallOddsBfRsp> bf = jcFootBallOddsRsp.getBf();
                 JcFootBallOddsBfRsp jcFootBallOddsBfRsp = bf.get(0);
                 JSONArray oo = new JSONArray();
-                oo.add(jcFootBallOddsBfRsp.getSd00());
+                oo.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSd00()));
                 JSONArray o1 = new JSONArray();
-                o1.add(jcFootBallOddsBfRsp.getSl01());
+                o1.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl01()));
                 JSONArray o2 = new JSONArray();
-                o2.add(jcFootBallOddsBfRsp.getSl02());
+                o2.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl02()));
                 JSONArray o3 = new JSONArray();
-                o3.add(jcFootBallOddsBfRsp.getSl03());
+                o3.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl03()));
                 JSONArray oneo = new JSONArray();
-                oneo.add(jcFootBallOddsBfRsp.getSw10());
+                oneo.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw10()));
                 JSONArray one1 = new JSONArray();
-                one1.add(jcFootBallOddsBfRsp.getSd11());
+                one1.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSd11()));
                 JSONArray one2 = new JSONArray();
-                one2.add(jcFootBallOddsBfRsp.getSl12());
+                one2.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl12()));
                 JSONArray one3 = new JSONArray();
-                one3.add(jcFootBallOddsBfRsp.getSl13());
+                one3.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl13()));
                 JSONArray twoo = new JSONArray();
-                twoo.add(jcFootBallOddsBfRsp.getSw20());
+                twoo.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw20()));
                 JSONArray two1 = new JSONArray();
-                two1.add(jcFootBallOddsBfRsp.getSw21());
+                two1.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw21()));
                 JSONArray two2 = new JSONArray();
-                two2.add(jcFootBallOddsBfRsp.getSd22());
+                two2.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSd22()));
                 JSONArray two3 = new JSONArray();
-                two3.add(jcFootBallOddsBfRsp.getSl23());
+                two3.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl23()));
                 JSONArray threeo = new JSONArray();
-                threeo.add(jcFootBallOddsBfRsp.getSw30());
+                threeo.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw30()));
                 JSONArray three1 = new JSONArray();
-                three1.add(jcFootBallOddsBfRsp.getSw31());
+                three1.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw31()));
                 JSONArray three2 = new JSONArray();
-                three2.add(jcFootBallOddsBfRsp.getSw32());
+                three2.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw32()));
                 JSONArray three3 = new JSONArray();
-                three3.add(jcFootBallOddsBfRsp.getSd33());
+                three3.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSd33()));
                 JSONArray fouro = new JSONArray();
-                fouro.add(jcFootBallOddsBfRsp.getSw40());
+                fouro.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw40()));
                 JSONArray four1 = new JSONArray();
-                four1.add(jcFootBallOddsBfRsp.getSw41());
+                four1.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw41()));
                 JSONArray four2 = new JSONArray();
-                four2.add(jcFootBallOddsBfRsp.getSw42());
+                four2.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw42()));
                 JSONArray o4 = new JSONArray();
-                o4.add(jcFootBallOddsBfRsp.getSl04());
+                o4.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl04()));
                 JSONArray one4 = new JSONArray();
-                one4.add(jcFootBallOddsBfRsp.getSl14());
+                one4.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl14()));
                 JSONArray two4 = new JSONArray();
-                two4.add(jcFootBallOddsBfRsp.getSl24());
+                two4.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl24()));
                 JSONArray w = new JSONArray();
-                w.add(jcFootBallOddsBfRsp.getSw5());
+                w.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw5()));
                 JSONArray d = new JSONArray();
-                d.add(jcFootBallOddsBfRsp.getSd4());
+                d.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSd4()));
                 JSONArray l = new JSONArray();
-                l.add(jcFootBallOddsBfRsp.getSl4());
+                l.add(judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl5()));
                 if(jcSchedulesp == null){//比分
                     oo.add(0.00);
                     o1.add(0.00);
@@ -732,104 +732,104 @@ public class JcLotteryUtils {
                     d.add(0.00);
                     l.add(0.00);
                 }else{
-                    Double ooChange = Double.parseDouble(jcFootBallOddsBfRsp.getSd00()) - Double.parseDouble(jcSchedulesp.getSd00());
+                    Double ooChange = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSd00()) - judgeWhetherItIsEmpty(jcSchedulesp.getSd00());
                     BigDecimal b1 = new BigDecimal(ooChange);
                     oo.add(b1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double o1Change = Double.parseDouble(jcFootBallOddsBfRsp.getSl01()) - Double.parseDouble(jcSchedulesp.getSl01());
+                    Double o1Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl01()) - judgeWhetherItIsEmpty(jcSchedulesp.getSl01());
                     BigDecimal b2 = new BigDecimal(o1Change);
                     o1.add(b2.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double o2Change = Double.parseDouble(jcFootBallOddsBfRsp.getSl02()) - Double.parseDouble(jcSchedulesp.getSl02());
+                    Double o2Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl02()) - judgeWhetherItIsEmpty(jcSchedulesp.getSl02());
                     BigDecimal b3 = new BigDecimal(o2Change);
                     o2.add(b3.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double o3Change = Double.parseDouble(jcFootBallOddsBfRsp.getSl03()) - Double.parseDouble(jcSchedulesp.getSl03());
+                    Double o3Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl03()) - judgeWhetherItIsEmpty(jcSchedulesp.getSl03());
                     BigDecimal b4 = new BigDecimal(o3Change);
                     o3.add(b4.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double one0Change = Double.parseDouble(jcFootBallOddsBfRsp.getSw10()) - Double.parseDouble(jcSchedulesp.getSw10());
+                    Double one0Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw10()) - judgeWhetherItIsEmpty(jcSchedulesp.getSw10());
                     BigDecimal b5 = new BigDecimal(one0Change);
                     oneo.add(b5.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double one1Change = Double.parseDouble(jcFootBallOddsBfRsp.getSd11()) - Double.parseDouble(jcSchedulesp.getSd11());
+                    Double one1Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSd11()) - judgeWhetherItIsEmpty(jcSchedulesp.getSd11());
                     BigDecimal b6 = new BigDecimal(one1Change);
                     one1.add(b6.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double one2Change = Double.parseDouble(jcFootBallOddsBfRsp.getSl12()) - Double.parseDouble(jcSchedulesp.getSl12());
+                    Double one2Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl12()) - judgeWhetherItIsEmpty(jcSchedulesp.getSl12());
                     BigDecimal b7 = new BigDecimal(one2Change);
                     one2.add(b7.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double one3Change = Double.parseDouble(jcFootBallOddsBfRsp.getSl13()) - Double.parseDouble(jcSchedulesp.getSl13());
+                    Double one3Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl13()) - judgeWhetherItIsEmpty(jcSchedulesp.getSl13());
                     BigDecimal b8 = new BigDecimal(one3Change);
                     one3.add(b8.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double two0Change = Double.parseDouble(jcFootBallOddsBfRsp.getSw20()) - Double.parseDouble(jcSchedulesp.getSw20());
+                    Double two0Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw20()) - judgeWhetherItIsEmpty(jcSchedulesp.getSw20());
                     BigDecimal b9 = new BigDecimal(two0Change);
                     twoo.add(b9.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double two1Change = Double.parseDouble(jcFootBallOddsBfRsp.getSw21()) - Double.parseDouble(jcSchedulesp.getSw21());
+                    Double two1Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw21()) - judgeWhetherItIsEmpty(jcSchedulesp.getSw21());
                     BigDecimal b10 = new BigDecimal(two1Change);
                     two1.add(b10.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double two2Change = Double.parseDouble(jcFootBallOddsBfRsp.getSd22()) - Double.parseDouble(jcSchedulesp.getSd22());
+                    Double two2Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSd22()) - judgeWhetherItIsEmpty(jcSchedulesp.getSd22());
                     BigDecimal b11 = new BigDecimal(two2Change);
                     two2.add(b11.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double two3Change = Double.parseDouble(jcFootBallOddsBfRsp.getSl23()) - Double.parseDouble(jcSchedulesp.getSl23());
+                    Double two3Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl23()) - judgeWhetherItIsEmpty(jcSchedulesp.getSl23());
                     BigDecimal b12 = new BigDecimal(two3Change);
                     two3.add(b12.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double three0Change = Double.parseDouble(jcFootBallOddsBfRsp.getSw30()) - Double.parseDouble(jcSchedulesp.getSw30());
+                    Double three0Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw30()) - judgeWhetherItIsEmpty(jcSchedulesp.getSw30());
                     BigDecimal b13 = new BigDecimal(three0Change);
                     threeo.add(b13.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
 
-                    Double three1Change = Double.parseDouble(jcFootBallOddsBfRsp.getSw31()) - Double.parseDouble(jcSchedulesp.getSw31());
+                    Double three1Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw31()) - judgeWhetherItIsEmpty(jcSchedulesp.getSw31());
                     BigDecimal b14 = new BigDecimal(three1Change);
                     three1.add(b14.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double three2Change = Double.parseDouble(jcFootBallOddsBfRsp.getSw32()) - Double.parseDouble(jcSchedulesp.getSw32());
+                    Double three2Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw32()) - judgeWhetherItIsEmpty(jcSchedulesp.getSw32());
                     BigDecimal b15 = new BigDecimal(three2Change);
                     three2.add(b15.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double three3Change = Double.parseDouble(jcFootBallOddsBfRsp.getSd33()) - Double.parseDouble(jcSchedulesp.getSd33());
+                    Double three3Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSd33()) - judgeWhetherItIsEmpty(jcSchedulesp.getSd33());
                     BigDecimal b16 = new BigDecimal(three3Change);
                     three3.add(b16.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double four0Change = Double.parseDouble(jcFootBallOddsBfRsp.getSw40()) - Double.parseDouble(jcSchedulesp.getSw40());
+                    Double four0Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw40()) - judgeWhetherItIsEmpty(jcSchedulesp.getSw40());
                     BigDecimal b17 = new BigDecimal(four0Change);
                     fouro.add(b17.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double four1Change = Double.parseDouble(jcFootBallOddsBfRsp.getSw41()) - Double.parseDouble(jcSchedulesp.getSw41());
+                    Double four1Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw41()) - judgeWhetherItIsEmpty(jcSchedulesp.getSw41());
                     BigDecimal b18 = new BigDecimal(four1Change);
                     four1.add(b18.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double four2Change = Double.parseDouble(jcFootBallOddsBfRsp.getSw42()) - Double.parseDouble(jcSchedulesp.getSw42());
+                    Double four2Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw42()) - judgeWhetherItIsEmpty(jcSchedulesp.getSw42());
                     BigDecimal b19 = new BigDecimal(four2Change);
                     four2.add(b19.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double o4Change = Double.parseDouble(jcFootBallOddsBfRsp.getSl04()) - Double.parseDouble(jcSchedulesp.getSl04());
+                    Double o4Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl04()) - judgeWhetherItIsEmpty(jcSchedulesp.getSl04());
                     BigDecimal b20 = new BigDecimal(o4Change);
                     o4.add(b20.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double one4Change = Double.parseDouble(jcFootBallOddsBfRsp.getSl14()) - Double.parseDouble(jcSchedulesp.getSl14());
+                    Double one4Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl14()) - judgeWhetherItIsEmpty(jcSchedulesp.getSl14());
                     BigDecimal b21 = new BigDecimal(one4Change);
                     one4.add(b21.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double two4Change = Double.parseDouble(jcFootBallOddsBfRsp.getSl24()) - Double.parseDouble(jcSchedulesp.getSl24());
+                    Double two4Change = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl24()) - judgeWhetherItIsEmpty(jcSchedulesp.getSl24());
                     BigDecimal b22 = new BigDecimal(two4Change);
                     two4.add(b22.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double wChange = Double.parseDouble(jcFootBallOddsBfRsp.getSw5()) - Double.parseDouble(jcSchedulesp.getSw5());
+                    Double wChange = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSw5()) - judgeWhetherItIsEmpty(jcSchedulesp.getSw5());
                     BigDecimal b23 = new BigDecimal(wChange);
                     w.add(b23.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double dChange = Double.parseDouble(jcFootBallOddsBfRsp.getSd4()) - Double.parseDouble(jcSchedulesp.getSd4());
+                    Double dChange = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSd4()) - judgeWhetherItIsEmpty(jcSchedulesp.getSd4());
                     BigDecimal b24 = new BigDecimal(dChange);
                     d.add(b24.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double lChange = Double.parseDouble(jcFootBallOddsBfRsp.getSl4()) - Double.parseDouble(jcSchedulesp.getSl5());
+                    Double lChange = judgeWhetherItIsEmpty(jcFootBallOddsBfRsp.getSl5()) - judgeWhetherItIsEmpty(jcSchedulesp.getSl5());
                     BigDecimal b25 = new BigDecimal(lChange);
                     l.add(b25.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                 }
@@ -844,21 +844,21 @@ public class JcLotteryUtils {
                 List<JcFootBallOddsJqRsp> jq = jcFootBallOddsRsp.getJq();
                 JcFootBallOddsJqRsp jcFootBallOddsJqRsp = jq.get(0);
                 JSONArray zore = new JSONArray();
-                zore.add(jcFootBallOddsJqRsp.getT0());
+                zore.add(judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT0()));
                 JSONArray one = new JSONArray();
-                one.add(jcFootBallOddsJqRsp.getT1());
+                one.add(judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT1()));
                 JSONArray two = new JSONArray();
-                two.add(jcFootBallOddsJqRsp.getT2());
+                two.add(judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT2()));
                 JSONArray three = new JSONArray();
-                three.add(jcFootBallOddsJqRsp.getT3());
+                three.add(judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT3()));
                 JSONArray four = new JSONArray();
-                four.add(jcFootBallOddsJqRsp.getT4());
+                four.add(judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT4()));
                 JSONArray five = new JSONArray();
-                five.add(jcFootBallOddsJqRsp.getT5());
+                five.add(judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT5()));
                 JSONArray six = new JSONArray();
-                six.add(jcFootBallOddsJqRsp.getT6());
+                six.add(judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT6()));
                 JSONArray seven = new JSONArray();
-                seven.add(jcFootBallOddsJqRsp.getT7());
+                seven.add(judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT7()));
                 if(jcSchedulesp == null){
                     zore.add(0.00);
                     one.add(0.00);
@@ -869,35 +869,35 @@ public class JcLotteryUtils {
                     six.add(0.00);
                     seven.add(0.00);
                 }else{
-                    Double zoreChange = Double.parseDouble(jcFootBallOddsJqRsp.getT0()) - Double.parseDouble(jcSchedulesp.getT0());
+                    Double zoreChange =judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT0()) - judgeWhetherItIsEmpty(jcSchedulesp.getT0());
                     BigDecimal b1 = new BigDecimal(zoreChange);
                     zore.add(b1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double oneChange = Double.parseDouble(jcFootBallOddsJqRsp.getT1()) - Double.parseDouble(jcSchedulesp.getT1());
+                    Double oneChange = judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT1()) - judgeWhetherItIsEmpty(jcSchedulesp.getT1());
                     BigDecimal b2 = new BigDecimal(oneChange);
                     one.add(b2.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double twoChange = Double.parseDouble(jcFootBallOddsJqRsp.getT2()) - Double.parseDouble(jcSchedulesp.getT2());
+                    Double twoChange = judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT2()) - judgeWhetherItIsEmpty(jcSchedulesp.getT2());
                     BigDecimal b3 = new BigDecimal(twoChange);
                     two.add(b3.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double threeChange = Double.parseDouble(jcFootBallOddsJqRsp.getT3()) - Double.parseDouble(jcSchedulesp.getT3());
+                    Double threeChange = judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT3()) - judgeWhetherItIsEmpty(jcSchedulesp.getT3());
                     BigDecimal b4 = new BigDecimal(threeChange);
                     three.add(b4.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double fourChange = Double.parseDouble(jcFootBallOddsJqRsp.getT4()) - Double.parseDouble(jcSchedulesp.getT4());
+                    Double fourChange = judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT4()) - judgeWhetherItIsEmpty(jcSchedulesp.getT4());
                     BigDecimal b5 = new BigDecimal(fourChange);
                     four.add(b5.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double fiveChange = Double.parseDouble(jcFootBallOddsJqRsp.getT5()) - Double.parseDouble(jcSchedulesp.getT5());
+                    Double fiveChange = judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT5()) - judgeWhetherItIsEmpty(jcSchedulesp.getT5());
                     BigDecimal b6 = new BigDecimal(fiveChange);
                     five.add(b6.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double sixChange = Double.parseDouble(jcFootBallOddsJqRsp.getT6()) - Double.parseDouble(jcSchedulesp.getT6());
+                    Double sixChange = judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT6()) - judgeWhetherItIsEmpty(jcSchedulesp.getT6());
                     BigDecimal b7 = new BigDecimal(sixChange);
                     six.add(b7.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
 
-                    Double sevenChange = Double.parseDouble(jcFootBallOddsJqRsp.getT7()) - Double.parseDouble(jcSchedulesp.getT7());
+                    Double sevenChange = judgeWhetherItIsEmpty(jcFootBallOddsJqRsp.getT7()) - judgeWhetherItIsEmpty(jcSchedulesp.getT7());
                     BigDecimal b8 = new BigDecimal(sevenChange);
                     seven.add(b8.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                 }
@@ -914,10 +914,6 @@ public class JcLotteryUtils {
             case "104":
                 List<JcFootBallOddsBqcRsp> bqc = jcFootBallOddsRsp.getBqc();
                 JcFootBallOddsBqcRsp jcFootBallOddsBqcRsp = bqc.get(0);
-                Short homeScore = schedule.getHomescore();
-                Short gestScore = schedule.getGuestscore();
-                Short homeHalfScore = schedule.getHomehalfscore();
-                Short guestHalfScore = schedule.getGuesthalfscore();
                 //3 胜 1 平 0 负
                 JSONArray ss = new JSONArray();
                 JSONArray sp = new JSONArray();
@@ -928,102 +924,99 @@ public class JcLotteryUtils {
                 JSONArray fs = new JSONArray();
                 JSONArray fp = new JSONArray();
                 JSONArray ff = new JSONArray();
-                if(homeHalfScore > guestHalfScore){
-                    if(homeScore > gestScore){//33
-                        ss.add(jcFootBallOddsBqcRsp.getHt33());
+
+                        //33
+                        ss.add(judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt33()));
                         if(jcSchedulesp == null){
                             ss.add(0.00);
                         }else{
-                            Double ssChange = Double.parseDouble(jcFootBallOddsBqcRsp.getHt33()) - Double.parseDouble(jcSchedulesp.getHt33());
+                            Double ssChange = judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt33()) - judgeWhetherItIsEmpty(jcSchedulesp.getHt33());
                             BigDecimal b1 = new BigDecimal(ssChange);
                             ss.add(b1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                         }
-                    }
-                    if(homeScore == gestScore){//31
-                        sp.add(jcFootBallOddsBqcRsp.getHt31());
+
+
+                        sp.add(judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt31()));
                         if(jcSchedulesp == null){
                             sp.add(0.00);
                         }else{
-                            Double spChange = Double.parseDouble(jcFootBallOddsBqcRsp.getHt31()) - Double.parseDouble(jcSchedulesp.getHt31());
+                            Double spChange = judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt31()) - judgeWhetherItIsEmpty(jcSchedulesp.getHt31());
                             BigDecimal b2 = new BigDecimal(spChange);
                             sp.add(b2.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                         }
-                    }
-                    if(homeScore < gestScore){//30
-                        sf.add(jcFootBallOddsBqcRsp.getHt30());
+
+
+                        sf.add(judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt30()));
                         if(jcSchedulesp == null){
                             sf.add(0.00);
                         }else{
-                            Double sfChange = Double.parseDouble(jcFootBallOddsBqcRsp.getHt30()) - Double.parseDouble(jcSchedulesp.getHt30());
+                            Double sfChange = judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt30()) - judgeWhetherItIsEmpty(jcSchedulesp.getHt30());
                             BigDecimal b3 = new BigDecimal(sfChange);
                             sf.add(b3.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                         }
-                    }
-                }
-                if(homeHalfScore == guestHalfScore){
-                    if(homeScore > gestScore){//13
-                        ps.add(jcFootBallOddsBqcRsp.getHt13());
+
+
+
+
+                        ps.add(judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt13()));
                         if(jcSchedulesp == null){
                             ps.add(0.00);
                         }else{
-                            Double psChange = Double.parseDouble(jcFootBallOddsBqcRsp.getHt13()) - Double.parseDouble(jcSchedulesp.getHt13());
+                            Double psChange = judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt13()) - judgeWhetherItIsEmpty(jcSchedulesp.getHt13());
                             BigDecimal b4 = new BigDecimal(psChange);
                             ps.add(b4.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                         }
-                    }
-                    if(homeScore == gestScore){//11
-                        pp.add(jcFootBallOddsBqcRsp.getHt11());
+
+
+                        pp.add(judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt11()));
                         if(jcSchedulesp == null){
                             pp.add(0.00);
                         }else{
-                            Double ppChange = Double.parseDouble(jcFootBallOddsBqcRsp.getHt11()) - Double.parseDouble(jcSchedulesp.getHt11());
+                            Double ppChange = judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt11()) - judgeWhetherItIsEmpty(jcSchedulesp.getHt11());
                             BigDecimal b5 = new BigDecimal(ppChange);
                             pp.add(b5.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                         }
-                    }
-                    if(homeScore < gestScore){//10
-                        pf.add(jcFootBallOddsBqcRsp.getHt10());
+
+
+                        pf.add(judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt10()));
                         if(jcSchedulesp == null){
                             pf.add(0.00);
                         }else{
-                            Double pfChange = Double.parseDouble(jcFootBallOddsBqcRsp.getHt10()) - Double.parseDouble(jcSchedulesp.getHt10());
+                            Double pfChange = judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt10()) - judgeWhetherItIsEmpty(jcSchedulesp.getHt10());
                             BigDecimal b6 = new BigDecimal(pfChange);
                             pf.add(b6.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                         }
-                    }
-                }
-                if(homeHalfScore < guestHalfScore){
-                    if(homeScore > gestScore){//03
-                        fs.add(jcFootBallOddsBqcRsp.getHt03());
+
+
+
+                        fs.add(judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt03()));
                         if(jcSchedulesp == null){
                             fs.add(0.00);
                         }else{
-                            Double fsChange = Double.parseDouble(jcFootBallOddsBqcRsp.getHt03()) - Double.parseDouble(jcSchedulesp.getHt03());
+                            Double fsChange = judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt03()) - judgeWhetherItIsEmpty(jcSchedulesp.getHt03());
                             BigDecimal b7 = new BigDecimal(fsChange);
                             fs.add(b7.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                         }
-                    }
-                    if(homeScore == gestScore){//01
-                        fp.add(jcFootBallOddsBqcRsp.getHt01());
+
+
+                        fp.add(judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt01()));
                         if(jcSchedulesp == null){
                             fp.add(0.00);
                         }else{
-                            Double fpChange = Double.parseDouble(jcFootBallOddsBqcRsp.getHt01()) - Double.parseDouble(jcSchedulesp.getHt01());
+                            Double fpChange = judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt01()) - judgeWhetherItIsEmpty(jcSchedulesp.getHt01());
                             BigDecimal b8 = new BigDecimal(fpChange);
                             fp.add(b8.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                         }
-                    }
-                    if(homeScore < gestScore){//00
-                        ff.add(jcFootBallOddsBqcRsp.getHt00());
+
+
+                        ff.add(judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt00()));
                         if(jcSchedulesp == null){
                             ff.add(0.00);
                         }else{
-                            Double ffChange = Double.parseDouble(jcFootBallOddsBqcRsp.getHt00()) - Double.parseDouble(jcSchedulesp.getHt00());
+                            Double ffChange = judgeWhetherItIsEmpty(jcFootBallOddsBqcRsp.getHt00()) - judgeWhetherItIsEmpty(jcSchedulesp.getHt00());
                             BigDecimal b9 = new BigDecimal(ffChange);
                             ff.add(b9.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                         }
-                    }
-                }
                 result = ss.toString() + "," + sp.toString() + "," + sf.toString() + ","
                         + ps.toString() + "," + pp.toString() + "," + pf.toString() + ","
                         + fs.toString() + "," + fp.toString() + "," + ff.toString();
@@ -1031,45 +1024,53 @@ public class JcLotteryUtils {
             case "105":
                 List<JcFootBallOddsSfRsp> sfList = jcFootBallOddsRsp.getSf();
                 JcFootBallOddsSfRsp jcFootBallOddsSfRsp = sfList.get(0);
-                Short homeScore1 = schedule.getHomescore();
-                Short gestScore1 = schedule.getGuestscore();
+
                 JSONArray s = new JSONArray();
                 JSONArray p = new JSONArray();
                 JSONArray f = new JSONArray();
-                if(homeScore1 > gestScore1){//胜
-                    s.add(jcFootBallOddsSfRsp.getSf3());
+
+                    s.add(judgeWhetherItIsEmpty(jcFootBallOddsSfRsp.getSf3()));
                     if(jcSchedulesp == null){
                         s.add(0.00);
                     }else{
-                        Double sChange = Double.parseDouble(jcFootBallOddsSfRsp.getSf3()) - Double.parseDouble(jcSchedulesp.getSf3());
+                        Double sChange = judgeWhetherItIsEmpty(jcFootBallOddsSfRsp.getSf3()) - judgeWhetherItIsEmpty(jcSchedulesp.getSf3());
                         BigDecimal b1 = new BigDecimal(sChange);
                         s.add(b1.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                     }
-                }
-                if(homeScore1 == gestScore1){//平
-                    p.add(jcFootBallOddsSfRsp.getSf1());
+
+
+                    p.add(judgeWhetherItIsEmpty(jcFootBallOddsSfRsp.getSf1()));
                     if(jcSchedulesp == null){
                         p.add(0.00);
                     }else{
-                        Double pChange = Double.parseDouble(jcFootBallOddsSfRsp.getSf1()) - Double.parseDouble(jcSchedulesp.getSf1());
+                        Double pChange = judgeWhetherItIsEmpty(jcFootBallOddsSfRsp.getSf1()) - judgeWhetherItIsEmpty(jcSchedulesp.getSf1());
                         BigDecimal b2 = new BigDecimal(pChange);
                         p.add(b2.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                     }
-                }
-                if(homeScore1 < gestScore1){//负
-                    f.add(jcFootBallOddsSfRsp.getSf0());
+
+
+                    f.add(judgeWhetherItIsEmpty(jcFootBallOddsSfRsp.getSf0()));
                     if(jcSchedulesp == null){
                         f.add(0.00);
                     }else{
-                        Double fChange = Double.parseDouble(jcFootBallOddsSfRsp.getSf0()) - Double.parseDouble(jcSchedulesp.getSf0());
+                        Double fChange = judgeWhetherItIsEmpty(jcFootBallOddsSfRsp.getSf0()) - judgeWhetherItIsEmpty(jcSchedulesp.getSf0());
                         BigDecimal b3 = new BigDecimal(fChange);
                         f.add(b3.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
                     }
-                }
+
                 result = s.toString() + "," + p.toString() + "," + f.toString();
                 break;
         }
         return result;
     }
 
+
+
+    public static Double judgeWhetherItIsEmpty(String pl){
+        Double d = 0.00;
+        if(StringUtils.isNotBlank(pl)){
+            d = Double.parseDouble(pl);
+        }
+        return d;
+    }
 }

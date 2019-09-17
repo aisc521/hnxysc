@@ -25,8 +25,10 @@ public class JcScheduleServiceImpl implements JcScheduleService {
     @Resource
     private JcScheduleMapper jcScheduleMapper;
     @Override
-    public JcSchedule queryJcScheduleByMatchID(String id) {
-        return jcScheduleMapper.queryJcScheduleByMatchID(id);
+    public JcSchedule queryJcScheduleByMatchID(String id,String time) {
+        String startTime = time + " 00:00:00";
+        String endTime = time + " 23:59:59";
+        return jcScheduleMapper.queryJcScheduleByMatchID(id,startTime,endTime);
     }
 
     @Override

@@ -25,7 +25,7 @@ public class SubSclassJob {
     TbSubSclassMapper tbSubSclassMapper;
 
     @Async
-    @Scheduled(cron = "1 17 12 ? * *")
+    /*@Scheduled(cron = "1 17 12 ? * *")*/
     public void work() {
         String url = "http://interface.win007.com/zq/SubLeague_XML.aspx";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
