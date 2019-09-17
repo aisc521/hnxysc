@@ -9,6 +9,7 @@ public class JcSchedulespvary implements Serializable {
     /**
      * 编号
      */
+    @Id
     @Column(name = "VaryID")
     private Integer varyid;
 

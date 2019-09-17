@@ -23,7 +23,7 @@ public class SclassJob {
     TbSclassMapper tbSclassMapper;
 
     @Async
-    @Scheduled(cron = "51 24 16 ? * *")
+  /*  @Scheduled(cron = "51 24 16 ? * *")*/
     public void work() {
         String url = "http://interface.win007.com/zq/League_XML.aspx";
         try {

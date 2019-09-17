@@ -91,7 +91,7 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
         jcSchedulesp.setSl05(jcFootBallOddsBfRsp.getSl05());
         jcSchedulesp.setSl15(jcFootBallOddsBfRsp.getSl15());
         jcSchedulesp.setSl25(jcFootBallOddsBfRsp.getSl25());
-        jcSchedulesp.setSl5(jcFootBallOddsBfRsp.getSl4());
+        jcSchedulesp.setSl5(jcFootBallOddsBfRsp.getSl5());
 
         //半全场即时sp
         List<JcFootBallOddsBqcRsp> bqc = jcFootBallOddsRsp.getBqc();
@@ -221,7 +221,7 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
         jcSchedulesp.setSl05(jcFootBallOddsBfRsp.getSl05());
         jcSchedulesp.setSl15(jcFootBallOddsBfRsp.getSl15());
         jcSchedulesp.setSl25(jcFootBallOddsBfRsp.getSl25());
-        jcSchedulesp.setSl5(jcFootBallOddsBfRsp.getSl4());
+        jcSchedulesp.setSl5(jcFootBallOddsBfRsp.getSl5());
 
         //半全场即时sp
         List<JcFootBallOddsBqcRsp> bqc = jcFootBallOddsRsp.getBqc();

@@ -41,6 +41,6 @@
     select * from jc_schedule jc where jc.ScheduleID = #{bet007Id}
   </select>
   <select id="queryJcScheduleByMatchID" resultType="com.zhcdata.db.model.JcSchedule">
-    select * from jc_schedule jc where jc.MatchID = #{matchid}
+    select * from jc_schedule jc where jc.MatchID = #{matchid} and jc.MatchTime between #{startTime} and #{endTime}
   </select>
 </mapper>

@@ -20,4 +20,9 @@
   <select id="queryJcMatchLotteryByIssueNumAndNoId" resultType="com.zhcdata.db.model.JcMatchLottery">
     select * from jc_match_lottery jc where jc.ISSUE_NUM=#{issueNum} and jc.NO_ID = #{noId}
   </select>
+
+  <select id="queryJcMatchLotteryByBet007" resultType="com.zhcdata.db.model.JcMatchLottery">
+    select * from jc_match_lottery jc where jc.ID_BET007=#{bet007Id} and jc.LOTTERY = #{gameType}
+  </select>
+
 </mapper>

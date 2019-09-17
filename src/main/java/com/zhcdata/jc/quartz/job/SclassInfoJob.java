@@ -27,7 +27,7 @@ public class SclassInfoJob {
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Async
-    @Scheduled(cron = "21 2 18 ? * *")
+    /*@Scheduled(cron = "21 2 18 ? * *")*/
     public void work() {
         try {
             String url = "http://interface.win007.com/zq/League_XML.aspx";

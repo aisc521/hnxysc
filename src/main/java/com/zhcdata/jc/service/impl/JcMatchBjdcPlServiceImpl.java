@@ -210,7 +210,7 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
             bqcPl.setStatus(0);
             bqcPl.setUpdateTime(new Date());
             bqcPl.setCreateTime(new Date());
-            int l = jcMatchBjdcPlMapper.insertSelective(jqPl);
+            int l = jcMatchBjdcPlMapper.insertSelective(bqcPl);
             if(l <= 0){
                 throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
                         ProtocolCodeMsg.INSERT_FAILE.getMsg());
@@ -229,11 +229,11 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
             }
             sxds.setPlayType(1);//玩法类型 默认单关
             String sxdsSp = JcLotteryUtils.bJDcPlInfo(bdrealimeSpRsp,"16");
-            bqcPl.setRateResult(sxdsSp);//赔率
-            bqcPl.setStatus(0);
-            bqcPl.setUpdateTime(new Date());
-            bqcPl.setCreateTime(new Date());
-            int m = jcMatchBjdcPlMapper.insertSelective(bqcPl);
+            sxds.setRateResult(sxdsSp);//赔率
+            sxds.setStatus(0);
+            sxds.setUpdateTime(new Date());
+            sxds.setCreateTime(new Date());
+            int m = jcMatchBjdcPlMapper.insertSelective(sxds);
             if(m <= 0){
                 throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
                         ProtocolCodeMsg.INSERT_FAILE.getMsg());

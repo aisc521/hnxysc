@@ -29,7 +29,7 @@ public class PlayerJob {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Async
-    @Scheduled(cron = "51 49 15 ? * *")
+    /*@Scheduled(cron = "51 49 15 ? * *")*/
     public void work() {
         String url = "http://interface.win007.com/zq/Player_XML.aspx?day=1";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
