@@ -3,12 +3,8 @@ package com.zhcdata.jc.xml;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.zhcdata.jc.tools.HttpUtils;
-import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BdrealTimeSp.*;
-import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BjDcLotteryQuery.BjDcLotteryQueryFirstRsp;
-import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BjDcLotteryQuery.BjDcLotteryQueryRsp;
-import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotteryScore.LotteryScoreFirstRsp;
-import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotteryScore.LotteryScoreRsp;
-import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.*;
+import com.zhcdata.jc.xml.rsp.MoreHandicapOddsLisAlltRsp;
+import com.zhcdata.jc.xml.rsp.MoreHandicapOddsARsp;
 
 import java.util.List;
 
@@ -24,6 +20,39 @@ import java.util.List;
  */
 public class QiuTanXmlComm<T>  {
 
+  public Object handleMothodHttpGet(String url, Class ...clas){
+    String xml = "";
+    try {
+      xml = HttpUtils.httpGet(url,"UTF-8");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    XStream xStream = new XStream(new DomDriver());
+    XStream.setupDefaultSecurity(xStream);
+    //xStream.allowTypes(new Class[]{List.class,clas});
+    xStream.allowTypes(clas);
+    xStream.processAnnotations(clas);
+    //List<T> list = (List<T>) xStream.fromXML(xml);
+    xml = xml.replaceAll("\uFEFF", "");
+   /* byte[] buf = new byte[0];
+    try {
+      buf = xml.getBytes("UTF-8");
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }
+    if (buf.length > 3 && (byte) 0XEF == buf[0] && (byte) 0XBB == buf[1] && (byte) 0XBF == buf[2]) {
+      try {
+        xml = new String(buf, 3, buf.length - 3, "UTF-8");
+      } catch (UnsupportedEncodingException e) {
+        e.printStackTrace();
+      }
+    } else {
+      xml = new String(buf);
+    }*/
+
+
+    return xStream.fromXML(xml);
+  }
   public Object handleMothod(String url, Class ...clas){
     String xml = "";
     try {
@@ -75,6 +104,12 @@ public class QiuTanXmlComm<T>  {
     for (LotteryTypeMatchRsp lotteryTypeMatchRsp : list) {
       System.out.println(lotteryTypeMatchRsp.getID());
     }*/
-
+  String url = "http://interface.win007.com/zq/ch_odds_m.xml";
+    MoreHandicapOddsLisAlltRsp object  = (MoreHandicapOddsLisAlltRsp) new QiuTanXmlComm().handleMothodHttpGet(url,MoreHandicapOddsLisAlltRsp.class,List.class,MoreHandicapOddsARsp.class);
+    System.out.println(object);
+    List<String> listA = object.getA().getH();
+    for (String bean : listA) {
+      System.out.println(bean);
+    }
   }
 }
