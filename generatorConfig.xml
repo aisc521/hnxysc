@@ -26,31 +26,13 @@
 
     <javaClientGenerator targetPackage="com.zhcdata.db.mapper" targetProject="src/main/java" type="XMLMAPPER"/>
 
-    <!--<table tableName="tb_ds_quartz_job"/>-->
-    <!--<table tableName="tb_item"/>-->
-    <!--<table tableName="tb_item_buy_code"/>-->
-    <!--<table tableName="tb_item_image"/>-->
-    <!--<table tableName="tb_item_issue"/>-->
-    <!--<table tableName="tb_user"/>-->
-    <!--<table tableName="tb_user_address"/>-->
-    <!--<table tableName="tb_user_area"/>-->
-    <!--<table tableName="tb_user_award_record"/>-->
-    <!--<table tableName="tb_user_give"/>-->
-    <!--<table tableName="tb_user_mobile_card"/>-->
-    <!--<table tableName="tb_user_order"/>-->
-    <!--<table tableName="tb_user_lucky_num"/>-->
-    <!--<table tableName="tb_user_recharge"/>-->
-    <!--<table tableName="tb_user_win"/>-->
-    <!--<table tableName="tb_dc_third"/>-->
-   <!-- <table tableName="tb_user_rech_offline"/>
--->
-
    <!-- <table tableName="jc_match_bjdc_pl"/>-->
     <!--<table tableName="jc_match_bjdcreslut"/>
     <table tableName="jc_match_lottery"/>
     <table tableName="jc_schedule"/>
     <table tableName="jc_schedulesp"/>
     <table tableName="jc_schedulespvary"/>-->
-    <table tableName="jc_schedulesp"/>
+    <!--<table tableName="jc_schedulesp"/>-->
+    <table tableName="playerinteam"/>
   </context>
 </generatorConfiguration>

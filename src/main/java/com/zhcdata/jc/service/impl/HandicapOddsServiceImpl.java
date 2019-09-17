@@ -41,7 +41,7 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
     public void updateHandicapOddsData(int count) {
         log.error("查询比赛");
         //根据条件查询比赛id
-        List<Integer> list = scheduleMapper.selectScheduleIdByDate(count);
+        List<Integer> list = scheduleMapper.selectScheduleIdByDate(count, 5);
         log.error("查询{}天前的比赛数量为{}", count, list.size());
         log.error("开始遍历比赛，查询数据");
         long l = ClockUtil.currentTimeMillis();
@@ -72,24 +72,36 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
     @Override
     public void updateHandicapOddsDetailData(int count) {
         //根据条件查询比赛id
-        List<Integer> list = scheduleMapper.selectScheduleIdByDate(count);
+        List<Integer> list = scheduleMapper.selectScheduleIdByDate(count,5);
         for (Integer matchId : list) {
+            //遍历比赛
             String key = RedisCodeMsg.SOCCER_ODDS_DETAIL.getName() + ":" + matchId;
             for (String type : types) {
+                //遍历类型
                 int[] coms = null;
+                //根据类型获取博彩公司
                 if ("1".equals(type)) {
                     coms = OP_COM;
                 } else {
                     coms = OTHER_COM;
                 }
                 for (int comId : coms) {
+                    //获取对应赔率
                     List<HandicapOddsDetailsResult> results = scheduleMapper.selectOddsResultDetailByMatchId(matchId, comId, type);
+                    //更新redis
                     updateRedis(key, type + ":" + comId, results, RedisCodeMsg.SOCCER_ODDS_DETAIL.getSeconds());
                 }
             }
         }
     }
 
+    /**
+     *
+     * @param key
+     * @param type
+     * @param results
+     * @param time
+     */
     private void updateRedis(String key, String type, List results,long time) {
         String json = JsonMapper.defaultMapper().toJson(results);
         String timeIdKey = type + "_" + "TIME_ID";

@@ -1,4 +1,4 @@
-package com.zhcdata.jc.quartz.job;
+package com.zhcdata.jc.quartz.job.redis;
 
 import com.google.gson.Gson;
 import com.zhcdata.jc.service.HandicapOddsService;

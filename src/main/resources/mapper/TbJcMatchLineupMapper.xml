@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.TbJcMatchLineupMapper">
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.JcMatchLineupInfo">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" jdbcType="BIGINT" property="id" />
+    <result column="HOME_ARRAY" jdbcType="VARCHAR" property="homeArray" />
+    <result column="AWAY_ARRAY" jdbcType="VARCHAR" property="awayArray" />
+    <result column="HOME_LINEUP" jdbcType="VARCHAR" property="homeLineup" />
+    <result column="AWAY_LINEUP" jdbcType="VARCHAR" property="awayLineup" />
+    <result column="HOME_BACKUP" jdbcType="VARCHAR" property="homeBackup" />
+    <result column="AWAY_BACKUP" jdbcType="VARCHAR" property="awayBackup" />
+    <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <select id="queryLineup" resultType="com.zhcdata.db.model.JcMatchLineupInfo">
+    select * from jc_match_lineup where id=${id}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.JcMatchLineupInfo" >
+    insert into jc_match_lineup
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="homeArray != null" >
+        HOME_ARRAY,
+      </if>
+      <if test="awayArray != null" >
+        AWAY_ARRAY,
+      </if>
+      <if test="homeLineup != null" >
+        HOME_LINEUP,
+      </if>
+      <if test="awayLineup != null" >
+        AWAY_LINEUP,
+      </if>
+      <if test="homeBackup != null" >
+        HOME_BACKUP,
+      </if>
+      <if test="awayBackup != null" >
+        AWAY_BACKUP,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="homeArray != null" >
+        #{homeArray,jdbcType=VARCHAR},
+      </if>
+      <if test="awayArray != null" >
+        #{awayArray,jdbcType=VARCHAR},
+      </if>
+      <if test="homeLineup != null" >
+        #{homeLineup,jdbcType=VARCHAR},
+      </if>
+      <if test="awayLineup != null" >
+        #{awayLineup,jdbcType=VARCHAR},
+      </if>
+      <if test="homeBackup != null" >
+        #{homeBackup,jdbcType=VARCHAR},
+      </if>
+      <if test="awayBackup != null" >
+        #{awayBackup,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+</mapper>
