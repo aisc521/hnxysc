@@ -20,7 +20,7 @@ public class ScheduleServiceTest {
     @Test
     public void queryLineupDataByMatch() {
         Gson gson = new Gson();
-        Map<String, Object> map = scheduleService.queryLineupDataByMatch(1721166);
+        Map<String, Object> map = scheduleService.queryLineupDataByMatch(1721166L);
         System.out.println(gson.toJson(map));
     }
 
