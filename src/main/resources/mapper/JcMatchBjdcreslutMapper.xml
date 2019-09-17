@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.JcMatchBjdcreslutMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.JcMatchBjdcreslut" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="ID_BET007" property="idBet007" jdbcType="BIGINT" />
+    <result column="AWARD_TIME" property="awardTime" jdbcType="TIMESTAMP" />
+    <result column="MATCH_RESULT" property="matchResult" jdbcType="VARCHAR" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <select id="queryJcMatchBjdcreslutByBet007" resultType="com.zhcdata.db.model.JcMatchBjdcreslut">
+    select * from jc_match_bjdcreslut jc where jc.ID_BET007=#{bet007}
+  </select>
+</mapper>

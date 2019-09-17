@@ -175,9 +175,9 @@ public class ProtocolController {
         String result;
         String msg;
         if (ProtocolCodeMsg.SUCCESS.getCode().equals(code)) {
-            msg = (String) redisUtils.hget(RedisCodeMsg.GOODS_COMM_MSG_LIST.getName(), transactionType + code);
+            msg = (String) redisUtils.hget(RedisCodeMsg.SOCCER_COMM_MSG_LIST.getName(), transactionType + code);
         } else {
-            msg = (String) redisUtils.hget(RedisCodeMsg.GOODS_COMM_MSG_LIST.getName(), code);
+            msg = (String) redisUtils.hget(RedisCodeMsg.SOCCER_COMM_MSG_LIST.getName(), code);
         }
         if (Strings.isNullOrEmpty(msg)) {
             result = defaultMsg;

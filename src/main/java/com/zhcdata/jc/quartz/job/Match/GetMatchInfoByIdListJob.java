@@ -79,7 +79,6 @@ public class GetMatchInfoByIdListJob {
                     update++;
                 }
             } else hasIn++;
-
         }
 
         System.out.println(models.size());

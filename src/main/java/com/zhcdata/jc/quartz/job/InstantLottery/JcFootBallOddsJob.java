@@ -1,10 +1,15 @@
 package com.zhcdata.jc.quartz.job.InstantLottery;
 
-import com.zhcdata.db.model.JcMatchJczq;
-import com.zhcdata.jc.service.LotteryTypeMatchJobService;
+import com.zhcdata.db.model.JcSchedule;
+import com.zhcdata.db.model.JcSchedulesp;
+import com.zhcdata.db.model.Schedule;
+import com.zhcdata.jc.service.*;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.*;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -21,17 +26,30 @@ import java.util.List;
 @Configuration
 @EnableScheduling
 @Slf4j
-public class JcFootBallOddsJob {
+public class JcFootBallOddsJob implements Job {
     @Resource
     private LotteryTypeMatchJobService lotteryTypeMatchJobService;
     @Value("${custom.qiutan.url.jcZqOddsUrl}")
     String requestUrl;
 
+
+    @Resource
+    private JcScheduleService jcScheduleService;
+
+    @Resource
+    private JcSchedulespService jcSchedulespService;
+
+    @Resource
+    private JcSchedulespvaryService jcSchedulespvaryService;
+
+    @Resource
+    private ScheduleService scheduleService;
     /**
      * 两分钟
      */
-    @Scheduled(cron = "0 0/2 * * * ?")
-    public void execute(){
+   /* @Scheduled(cron = "0 0/2 * * * ?")*/
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         log.error("竞彩足球赔率定时任务启动");
         long s = System.currentTimeMillis();
         try {
@@ -41,12 +59,30 @@ public class JcFootBallOddsJob {
             List<JcFootBallOddsRsp> jcFootBallOddsRspList = object.getList();
             for(int i = 0; i < jcFootBallOddsRspList.size(); i++){
                 JcFootBallOddsRsp jcFootBallOddsRsp = jcFootBallOddsRspList.get(i);
-                JcMatchJczq jcLotterTypeJc = lotteryTypeMatchJobService.queryJcLotterTypeJcByNoId(jcFootBallOddsRsp.getID());
-                if(jcLotterTypeJc != null){
-                    Long matchId = jcLotterTypeJc.getIdBet007();
-                    System.out.println(matchId);
+                JcSchedule jcSchedule = jcScheduleService.queryJcScheduleByMatchID(jcFootBallOddsRsp.getID());
+                if(jcSchedule != null){
+                    //查询是否有此条信息
+                    //查询赛程表
+                    Schedule schedule = scheduleService.queryScheduleById(Long.valueOf(jcSchedule.getScheduleid()));
+                    if(schedule != null){
+                        JcSchedulesp jcSchedulesp = jcSchedulespService.queryJcSchedulespById(jcSchedule.getScheduleid());
+                        if(jcSchedulesp != null){//更新
+                            jcSchedulespService.updateJcSchedulesp(jcSchedulesp,jcSchedule,jcFootBallOddsRsp,schedule);
+                            //插入竞彩sp变化表数据
+                            jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,jcSchedulesp.getSpid(),jcSchedulesp,schedule);
+                        }else{//新增
+                            Integer spId = jcSchedulespService.insertJcSchedulesp(jcSchedule,jcFootBallOddsRsp,schedule);
+                            //插入竞彩sp变化表数据
+                            jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,spId,jcSchedulesp,schedule);
+                        }
+                        //更新竞彩对阵表
+                        jcScheduleService.updateJcSchedule(jcSchedule,jcFootBallOddsRsp);
+                    }else{
+                        log.error("竞彩足球赔率定时任务查询赛程为空，Scheduleid：" + jcSchedule.getScheduleid());
+                    }
+
                 }else{
-                    log.error("查询竞彩彩种信息为空，ID：" + jcFootBallOddsRsp.getID());
+                    log.error("竞彩足球赔率定时任务根据MacthId查询结果为空，MactchId：" + jcFootBallOddsRsp.getID());
                 }
             }
 
