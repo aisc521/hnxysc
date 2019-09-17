@@ -33,6 +33,6 @@
     <table tableName="jc_schedulesp"/>
     <table tableName="jc_schedulespvary"/>-->
     <!--<table tableName="jc_schedulesp"/>-->
-    <table tableName="playerinteam"/>
+    <table tableName="score"/>
   </context>
 </generatorConfiguration>

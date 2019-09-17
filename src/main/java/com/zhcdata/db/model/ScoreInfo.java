@@ -1,35 +1,56 @@
 package com.zhcdata.db.model;
 
-public class ScoreInfo {
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
+
+@Table(name = "score")
+public class ScoreInfo implements Serializable {
+    private static final long serialVersionUID = 7000500109417718416L;
+    @Id
+    @Column(name = "ID")
     private Integer id;
 
+    @Column(name = "TeamID")
     private Integer teamid;
 
+    @Column(name = "SclassID")
     private Integer sclassid;
 
+    @Column(name = "Win_Score")
     private Integer winScore;
 
+    @Column(name = "Flat_Score")
     private Integer flatScore;
 
+    @Column(name = "Fail_Score")
     private Integer failScore;
 
+    @Column(name = "Total_Homescore")
     private Integer totalHomescore;
 
+    @Column(name = "Total_Guestscore")
     private Integer totalGuestscore;
 
     private Integer homeorguest;
 
+    @Column(name = "Matchseason")
     private String matchseason;
 
     private Integer deduct;
 
     private String cause;
 
+    @Column(name = "Goal")
     private Integer goal;
 
+    @Column(name = "subSclassID")
     private Integer subsclassid;
 
+    @Column(name = "RedCard")
     private Integer redcard;
+
 
     public Integer getId() {
         return id;

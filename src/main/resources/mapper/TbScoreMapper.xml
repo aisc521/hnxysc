@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhcdata.db.mapper.TbScoreMapper">
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.ScoreInfo" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" property="id" jdbcType="INTEGER" />
+    <result column="TeamID" property="teamid" jdbcType="INTEGER" />
+    <result column="SclassID" property="sclassid" jdbcType="INTEGER" />
+    <result column="Win_Score" property="winScore" jdbcType="INTEGER" />
+    <result column="Flat_Score" property="flatScore" jdbcType="INTEGER" />
+    <result column="Fail_Score" property="failScore" jdbcType="INTEGER" />
+    <result column="Total_Homescore" property="totalHomescore" jdbcType="INTEGER" />
+    <result column="Total_Guestscore" property="totalGuestscore" jdbcType="INTEGER" />
+    <result column="homeorguest" property="homeorguest" jdbcType="INTEGER" />
+    <result column="Matchseason" property="matchseason" jdbcType="CHAR" />
+    <result column="deduct" property="deduct" jdbcType="INTEGER" />
+    <result column="cause" property="cause" jdbcType="CHAR" />
+    <result column="Goal" property="goal" jdbcType="INTEGER" />
+    <result column="subSclassID" property="subsclassid" jdbcType="INTEGER" />
+    <result column="RedCard" property="redcard" jdbcType="INTEGER" />
+  </resultMap>
   <select id="queryScore" resultType="com.zhcdata.db.model.ScoreInfo">
     select * from Score where
     SclassID=${SclassID} and
@@ -8,6 +28,63 @@
     Homeorguest=${Homeorguest} and
     TeamID=${TeamID} and
     MatchSeason=${Season}
+  </select>
+  <select id="queryIntegralRanking" resultType="com.zhcdata.jc.dto.IntegralRankingDto">
+    select ifnull(rank,0) rank,
+    ifnull(matchCount,0)  matchCount,
+    ifnull(winCount,0) winCount,
+    ifnull(flatCount,0) flatCount,
+    ifnull(loseCount,0) loseCount,
+    ifnull(goal,0) goal,
+    ifnull(lost,0) lost,
+    ifnull(goalDiff,0) goalDiff,
+    ifnull(score,0) score from (
+    SELECT
+        @sortnum :=@sortnum + 1 rank,
+        winCount+flatCount+loseCount matchCount,
+        winCount,
+        flatCount,
+        loseCount,
+        goal,
+        lost,
+        goalDiff,
+        score,
+        teamid
+    FROM
+        (
+            SELECT
+                teamid,
+                sum(win_score * 3 + flat_score) as 'score',
+                SUM(win_score) winCount,
+                sum(flat_score) flatCount,
+                sum(fail_score) loseCount,
+                sum(total_homescore) goal,
+                sum(total_guestscore) lost,
+                sum(total_homescore-total_guestscore) goalDiff
+            FROM
+                score
+            WHERE
+                sclassid = #{sclassId}
+            AND Matchseason = #{season}
+            <if test="subSclassID == null">
+            AND subsclassId is null
+            </if>
+            <if test="subSclassID != null">
+            AND subsclassId = #{subSclassID}
+            </if>
+            <if test="homeorguest == 0 or homeorguest == 1">
+            AND homeorguest = #{homeorguest}
+            </if>
+            GROUP BY
+                teamid
+            ORDER BY
+                score desc,
+                goalDiff desc,
+                goal desc,
+                teamid ASC
+        ) s,(select @sortnum := 0) a
+    ) temp
+    where teamid = #{teamid}
   </select>
 
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.ScoreInfo" >

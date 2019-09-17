@@ -23,5 +23,9 @@ public class ScheduleServiceTest {
         Map<String, Object> map = scheduleService.queryLineupDataByMatch(1721166L);
         System.out.println(gson.toJson(map));
     }
+//    @Test
+//    public void queryMatchAnalysis() {
+//        scheduleService.updateMatchAnalysis(1,1);
+//    }
 
 }

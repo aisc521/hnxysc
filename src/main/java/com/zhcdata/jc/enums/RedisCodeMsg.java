@@ -17,6 +17,7 @@ public enum RedisCodeMsg {
     SOCCER_HSET_ODDS_QT("SOCCER_HSET_ODDS_QT", "比赛赔率列表(球探)", 1 * 60 * 60 * 24 * 35),
     SOCCER_ODDS_DETAIL("SOCCER_ODDS_DETAIL", "比赛赔率详情", 1 * 60 * 60 * 24 * 35),
     SOCCER_LINEUP_DATA("SOCCER_LINEUP_DATA","阵容数据",1 * 60 * 60 * 24 * 30),
+    SOCCER_ANALYSIS("SOCCER_ANALYSIS","分析(积分+近期+交锋)",1 * 60 * 60 * 24 * 30),
     ;
     private String name;//缓存名
 
