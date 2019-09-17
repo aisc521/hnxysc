@@ -57,7 +57,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
         map.putIfAbsent("hostTeamLineUp", "");
         map.putIfAbsent("guestTeamLineUp", "");
-        map.put("infoList", Lists.newArrayList());
+        map.putIfAbsent("infoList", Lists.newArrayList());
         //处理redis
         String key = RedisCodeMsg.SOCCER_LINEUP_DATA.getName() + ":" + matchId;
         redisUtils.hset(key, "data", JsonMapper.defaultMapper().toJson(map));
