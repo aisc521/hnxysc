@@ -71,7 +71,7 @@ public class LotteryTypeMatchJob implements Job {
                         }
 
                         //判断是否是竞彩的玩法
-                        if("JC_JC".equals(gameType)){
+                        if("JCZQ".equals(gameType)){
                             //单独记录竞彩数据
                             //根据bet007查询竞彩表是否有对应数据
                             JcSchedule jcSchedule = lotteryTypeMatchJobService.queryJcScheduleByBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()));

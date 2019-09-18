@@ -39,25 +39,25 @@ public class JcLotteryUtils {
     public static String JcLotterZh(String lottery){
         String lotteryName = "";
         if("14场胜负彩".equals(lottery)){
-            lotteryName = "JC_ZC";
+            lotteryName = "SF14";
         }
         if("六场半全场".equals(lottery)){
-            lotteryName = "JC_6_HAF_ALL";
+            lotteryName = "BQ6";
         }
         if("四场进球彩".equals(lottery)){
-            lotteryName = "JC_14";
+            lotteryName = "JQ14";
         }
         if("单场让球胜平负".equals(lottery)){
-            lotteryName = "JC_BD";
+            lotteryName = "BJDC";
         }
         if("竞彩足球".equals(lottery)){
-            lotteryName = "JC_JC";
+            lotteryName = "JCZQ";
         }
         if("竞彩篮球".equals(lottery)){
-            lotteryName = "JC_LQ";
+            lotteryName = "JCLQ";
         }
         if("北京单场胜负过关".equals(lottery)){
-            lotteryName = "JC_BD_SF";
+            lotteryName = "BJDC_SF";
         }
         return lotteryName;
     }
