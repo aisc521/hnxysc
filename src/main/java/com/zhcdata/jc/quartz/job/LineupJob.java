@@ -4,12 +4,13 @@ import com.zhcdata.db.mapper.TbJcMatchLineupMapper;
 import com.zhcdata.db.model.JcMatchLineupInfo;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.LineupRsp;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -18,15 +19,14 @@ import java.util.List;
 
 @Configuration
 @EnableScheduling
-public class LineupJob {
+public class LineupJob implements Job {
     @Resource
     TbJcMatchLineupMapper tbJcMatchLineupMapper;
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    @Async
-    @Scheduled(cron = "31 48 13 ? * *")
-    public void work() {
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         String url = "http://interface.win007.com/zq/lineup.aspx?cmd=new";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

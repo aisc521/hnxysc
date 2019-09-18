@@ -90,6 +90,29 @@ public class QiuTanXmlComm<T>  {
     }
     return null;
   }
+
+  public List<T> handleMothodTeamList(String url, Class ...clas){
+    try {
+      String xml = "";
+      try {
+        xml = HttpUtils.getHtmlResult(url);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      XStream xStream = new XStream(new DomDriver());
+      XStream.setupDefaultSecurity(xStream);
+      //xStream.allowTypes(new Class[]{List.class,clas});
+      xStream.allowTypes(clas);
+      xStream.processAnnotations(clas);
+      List<T> list = (List<T>) xStream.fromXML(xml);
+
+      return list;
+    }catch (Exception ex){
+      String sd=ex.getMessage();
+    }
+    return null;
+  }
+
   public static void main(String argsp[]){
     //String xml = HttpUtils.httpPost("http://interface.win007.com/zq/today.aspx","UTF-8");
    /* List<ToDayMatchRsp> list  = (List<ToDayMatchRsp>) new QiuTanXmlComm().handleMothod("http://interface.win007.com/zq/today.aspx",List.class,ToDayMatchRsp.class);

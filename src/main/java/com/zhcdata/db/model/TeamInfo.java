@@ -39,7 +39,7 @@ public class TeamInfo {
 
     private String homepoloshirt;
 
-    private Date modifytime;
+    private String modifytime;
 
     private String masterintro;
 
@@ -195,11 +195,11 @@ public class TeamInfo {
         this.homepoloshirt = homepoloshirt == null ? null : homepoloshirt.trim();
     }
 
-    public Date getModifytime() {
+    public String getModifytime() {
         return modifytime;
     }
 
-    public void setModifytime(Date modifytime) {
+    public void setModifytime(String modifytime) {
         this.modifytime = modifytime;
     }
 

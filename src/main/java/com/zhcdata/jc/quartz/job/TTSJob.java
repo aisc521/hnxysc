@@ -7,10 +7,11 @@ import com.zhcdata.db.model.TTSInfo;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.TTSRsp;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -20,7 +21,7 @@ import java.util.List;
 @Slf4j
 @Configuration
 @EnableScheduling
-public class TTSJob {
+public class TTSJob implements Job {
 
     @Resource
     ScheduleMapper scheduleMapper;
@@ -28,9 +29,8 @@ public class TTSJob {
     @Resource
     TbTeamTechStatisticsMapper tbTeamTechStatisticsMapper;
 
-    @Async
-    @Scheduled(cron = "11 39 19 ? * *")
-    public void work() {
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         String url = "http://interface.win007.com/zq/Technic_XML.aspx";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

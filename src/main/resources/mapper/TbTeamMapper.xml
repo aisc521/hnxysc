@@ -2,6 +2,233 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhcdata.db.mapper.TbTeamMapper">
   <select id="queryTeam" resultType="com.zhcdata.db.model.TeamInfo">
-    select * from team where TeamID=${TeamID}
+    select * from team where TeamID=#{TeamID}
   </select>
+
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.TeamInfo" >
+    insert into team
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="teamid != null" >
+        TeamID,
+      </if>
+      <if test="kind != null" >
+        Kind,
+      </if>
+      <if test="sclassid != null" >
+        SClassID,
+      </if>
+      <if test="nameShort != null" >
+        Name_Short,
+      </if>
+      <if test="nameJ != null" >
+        Name_J,
+      </if>
+      <if test="nameF != null" >
+        Name_F,
+      </if>
+      <if test="nameE != null" >
+        Name_E,
+      </if>
+      <if test="foundDate != null" >
+        Found_date,
+      </if>
+      <if test="area != null" >
+        Area,
+      </if>
+      <if test="gymnasium != null" >
+        Gymnasium,
+      </if>
+      <if test="capacity != null" >
+        Capacity,
+      </if>
+      <if test="flag != null" >
+        Flag,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="drillmaster != null" >
+        Drillmaster,
+      </if>
+      <if test="masterpic != null" >
+        MasterPic,
+      </if>
+      <if test="guestpoloshirt != null" >
+        GuestPoloShirt,
+      </if>
+      <if test="homepoloshirt != null" >
+        HomePoloShirt,
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime,
+      </if>
+      <if test="masterintro != null" >
+        MasterIntro,
+      </if>
+      <if test="venuesid != null" >
+        VenuesID,
+      </if>
+      <if test="conference != null" >
+        Conference,
+      </if>
+      <if test="isnational != null" >
+        isNational,
+      </if>
+      <if test="introduce != null" >
+        Introduce,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="teamid != null" >
+        #{teamid,jdbcType=INTEGER},
+      </if>
+      <if test="kind != null" >
+        #{kind,jdbcType=SMALLINT},
+      </if>
+      <if test="sclassid != null" >
+        #{sclassid,jdbcType=INTEGER},
+      </if>
+      <if test="nameShort != null" >
+        #{nameShort,jdbcType=CHAR},
+      </if>
+      <if test="nameJ != null" >
+        #{nameJ,jdbcType=CHAR},
+      </if>
+      <if test="nameF != null" >
+        #{nameF,jdbcType=CHAR},
+      </if>
+      <if test="nameE != null" >
+        #{nameE,jdbcType=CHAR},
+      </if>
+      <if test="foundDate != null" >
+        #{foundDate,jdbcType=CHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=CHAR},
+      </if>
+      <if test="gymnasium != null" >
+        #{gymnasium,jdbcType=VARCHAR},
+      </if>
+      <if test="capacity != null" >
+        #{capacity,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=CHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=CHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=CHAR},
+      </if>
+      <if test="drillmaster != null" >
+        #{drillmaster,jdbcType=CHAR},
+      </if>
+      <if test="masterpic != null" >
+        #{masterpic,jdbcType=CHAR},
+      </if>
+      <if test="guestpoloshirt != null" >
+        #{guestpoloshirt,jdbcType=CHAR},
+      </if>
+      <if test="homepoloshirt != null" >
+        #{homepoloshirt,jdbcType=CHAR},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="masterintro != null" >
+        #{masterintro,jdbcType=CHAR},
+      </if>
+      <if test="venuesid != null" >
+        #{venuesid,jdbcType=INTEGER},
+      </if>
+      <if test="conference != null" >
+        #{conference,jdbcType=INTEGER},
+      </if>
+      <if test="isnational != null" >
+        #{isnational,jdbcType=BIT},
+      </if>
+      <if test="introduce != null" >
+        #{introduce,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.TeamInfo" >
+    update team
+    <set >
+      <if test="kind != null" >
+        Kind = #{kind,jdbcType=SMALLINT},
+      </if>
+      <if test="sclassid != null" >
+        SClassID = #{sclassid,jdbcType=INTEGER},
+      </if>
+      <if test="nameShort != null" >
+        Name_Short = #{nameShort,jdbcType=CHAR},
+      </if>
+      <if test="nameJ != null" >
+        Name_J = #{nameJ,jdbcType=CHAR},
+      </if>
+      <if test="nameF != null" >
+        Name_F = #{nameF,jdbcType=CHAR},
+      </if>
+      <if test="nameE != null" >
+        Name_E = #{nameE,jdbcType=CHAR},
+      </if>
+      <if test="foundDate != null" >
+        Found_date = #{foundDate,jdbcType=CHAR},
+      </if>
+      <if test="area != null" >
+        Area = #{area,jdbcType=CHAR},
+      </if>
+      <if test="gymnasium != null" >
+        Gymnasium = #{gymnasium,jdbcType=VARCHAR},
+      </if>
+      <if test="capacity != null" >
+        Capacity = #{capacity,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null" >
+        Flag = #{flag,jdbcType=CHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=CHAR},
+      </if>
+      <if test="url != null" >
+        URL = #{url,jdbcType=CHAR},
+      </if>
+      <if test="drillmaster != null" >
+        Drillmaster = #{drillmaster,jdbcType=CHAR},
+      </if>
+      <if test="masterpic != null" >
+        MasterPic = #{masterpic,jdbcType=CHAR},
+      </if>
+      <if test="guestpoloshirt != null" >
+        GuestPoloShirt = #{guestpoloshirt,jdbcType=CHAR},
+      </if>
+      <if test="homepoloshirt != null" >
+        HomePoloShirt = #{homepoloshirt,jdbcType=CHAR},
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="masterintro != null" >
+        MasterIntro = #{masterintro,jdbcType=CHAR},
+      </if>
+      <if test="venuesid != null" >
+        VenuesID = #{venuesid,jdbcType=INTEGER},
+      </if>
+      <if test="conference != null" >
+        Conference = #{conference,jdbcType=INTEGER},
+      </if>
+      <if test="isnational != null" >
+        isNational = #{isnational,jdbcType=BIT},
+      </if>
+      <if test="introduce != null" >
+        Introduce = #{introduce,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where TeamID = #{teamid,jdbcType=INTEGER}
+  </update>
 </mapper>

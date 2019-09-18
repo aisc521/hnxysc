@@ -4,12 +4,13 @@ import com.zhcdata.db.mapper.TbSclassInfoMapper;
 import com.zhcdata.db.model.TbSclassInfo;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.SclassInfoRsp;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Configuration
 @EnableScheduling
-public class SclassInfoJob {
+public class SclassInfoJob implements Job {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource
@@ -26,9 +27,8 @@ public class SclassInfoJob {
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    @Async
-    /*@Scheduled(cron = "21 2 18 ? * *")*/
-    public void work() {
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
             String url = "http://interface.win007.com/zq/League_XML.aspx";
             List<SclassInfoRsp> result_list = new QiuTanXmlComm().handleMothodList(url, SclassInfoRsp.class);

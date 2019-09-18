@@ -1,20 +1,17 @@
 package com.zhcdata.jc.quartz.job;
 
-import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.mapper.TbPlayerTechStatisticsMapper;
-import com.zhcdata.db.mapper.TbScoreMapper;
-import com.zhcdata.db.mapper.TbSubSclassMapper;
 import com.zhcdata.db.model.PTSInfo;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.PTSMatchRsp;
 import com.zhcdata.jc.xml.rsp.PTSRsp;
-import lombok.extern.slf4j.Slf4j;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -23,15 +20,14 @@ import java.util.List;
 
 @Configuration
 @EnableScheduling
-public class PTSJob {
+public class PTSJob implements Job {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource
     TbPlayerTechStatisticsMapper tbPlayerTechStatisticsMapper;
 
-    @Async
-    @Scheduled(cron = "11 24 14 ? * *")
-    public void work() {
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         String url = "http://interface.win007.com/zq/PlayDetail.aspx";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
