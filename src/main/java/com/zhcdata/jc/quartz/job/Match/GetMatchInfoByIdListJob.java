@@ -60,7 +60,7 @@ public class GetMatchInfoByIdListJob {
         QiuTanXmlComm parse = new QiuTanXmlComm();
         Date past = new Date(System.currentTimeMillis()-(8*60*60*1000));//8小时前
         Date future = new Date(System.currentTimeMillis()+(72*60*60*1000));//72小时后
-        List<Schedule> models = scheduleMapper.selectPastAndFutureNoEnd(sdf.format(past),sdf.format(future),-1);
+        List<Schedule> models = scheduleMapper.selectPastAndFutureNoEnd(sdf.format(past),sdf.format(future),"-1");
         Map<String, Schedule> moMap = new HashMap<>();
         StringBuilder sb = new StringBuilder().append("?id=");
         for (Schedule model : models) {

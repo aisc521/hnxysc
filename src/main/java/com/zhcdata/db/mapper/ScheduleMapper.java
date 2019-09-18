@@ -28,7 +28,7 @@ public interface ScheduleMapper {
 
     int updateByPrimaryKey(Schedule record);
 
-    List<Schedule> selectPastAndFutureNoEnd(String past, String future, int i);
+    List<Schedule> selectPastAndFutureNoEnd(@Param("past") String past,@Param("future") String future, @Param("i") String i);
 
     /**
      * 按日期查询指定天数之间的比赛Id

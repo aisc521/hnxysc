@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.TbLiveMapper">
+
+  <select id="queryLive" resultType="com.zhcdata.db.model.LiveInfo">
+    select * from jc_match_live where ID=${ID}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.LiveInfo" >
+    insert into jc_match_live
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="time != null" >
+        TIME,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="scheduleid != null" >
+        ScheduleID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scheduleid != null" >
+        #{scheduleid,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -45,7 +45,7 @@ public class ScoreJob implements Job {
             String url = "http://interface.win007.com/zq/jifen.aspx";   //"?ID=1&subID=418";
 
             //查询当天的比赛信息
-            List<Schedule> schedules = scheduleMapper.selectPastAndFutureNoEnd(s, e, -1);
+            List<Schedule> schedules = scheduleMapper.selectPastAndFutureNoEnd(s, e, "-1");
             if (schedules != null && schedules.size() > 0) {
                 for (int i = 0; i < schedules.size(); i++) {
                     //联赛ID
