@@ -143,6 +143,9 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
             spfPl.setStatus(0);
             spfPl.setUpdateTime(new Date());
             spfPl.setCreateTime(new Date());
+            List<BdrealimeSpSpfRsp> spf = bdrealimeSpRsp.getSpf();
+            BdrealimeSpSpfRsp bdrealimeSpSpfRsp = spf.get(0);
+            spfPl.setConCedNum(bdrealimeSpSpfRsp.getGoal());
             int i = jcMatchBjdcPlMapper.insertSelective(spfPl);
             if(i <= 0){
                 throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
