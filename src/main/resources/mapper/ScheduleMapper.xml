@@ -99,7 +99,10 @@
     sum(case when hometeamid =  #{teamId} then homescore else guestscore END) goal,
     sum(case when hometeamid =  #{teamId} then guestscore else homescore end) lost
     FROM(
-    SELECT * from schedule where matchState = -1 AND  #{teamId} in (hometeamid,guestteamid) order by matchtime desc limit #{count}) t
+    SELECT * from schedule where matchState = -1
+              AND matchtime <![CDATA[<]]> #{matchTime}
+     AND (hometeamid = #{teamId} or guestteamid = #{teamId})
+     order by matchtime desc limit #{count}) t
     )t2
   </select>
     <select id="selectHistoryMatchByTeam" resultType="com.zhcdata.jc.dto.HistoryMatchDto">
@@ -120,6 +123,7 @@
         LEFT JOIN team t2 ON s.guestteamid = t2.teamid
         WHERE
             matchState = -1
+          AND matchtime <![CDATA[<]]> #{matchTime}
         <if test="type == 1">
             AND hometeamid = #{teamId}
         </if>
@@ -127,7 +131,7 @@
             AND guestteamid = #{teamId}
         </if>
         <if test="type != 2 and type != 1">
-            AND #{teamId} IN (hometeamid, guestteamid)
+            AND (hometeamid = #{teamId} or guestteamid = #{teamId})
         </if>
         <if test="sclassId != null">
             AND s.sclassid = #{sclassId}
@@ -155,13 +159,14 @@
         LEFT JOIN team t2 ON s.guestteamid = t2.teamid
         WHERE
         matchState = -1
+        AND matchtime <![CDATA[<]]> #{matchTime}
         <if test="type == 1">
             AND hometeamid = #{homeTeamId}
             AND guestteamid = #{guestTeamId}
         </if>
         <if test="type == null">
-            AND #{homeTeamId} IN (hometeamid, guestteamid)
-            AND #{guestTeamId} IN (hometeamid, guestteamid)
+            AND (hometeamid = #{homeTeamId} or guestteamid = #{homeTeamId})
+            AND (hometeamid = #{guestTeamId} or guestteamid = #{guestTeamId})
         </if>
         ORDER BY
         matchtime DESC

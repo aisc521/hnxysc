@@ -74,7 +74,7 @@ public interface ScheduleMapper {
      * @param count
      * @return
      */
-    IntegralRankingDto selectNearlyMatchData(@Param("teamId") Integer teamId, @Param("count") int count);
+    IntegralRankingDto selectNearlyMatchData(@Param("teamId") Integer teamId,@Param("matchTime") Date matchTime, @Param("count") int count);
 
     /**
      * 近期战绩 根据球队、赛事、主客获取对应个数比赛记录
@@ -85,7 +85,8 @@ public interface ScheduleMapper {
      * @return
      */
     List<HistoryMatchDto> selectHistoryMatchByTeam(@Param("teamId") Integer teamId, @Param("type") String type,
-                                                   @Param("sclassId") Integer sclassid, @Param("count") int count);
+                                                   @Param("sclassId") Integer sclassid,@Param("matchTime") Date matchTime,
+                                                   @Param("count") int count);
 
     /**
      * 主客队历史交锋
@@ -97,6 +98,7 @@ public interface ScheduleMapper {
      */
     List<HistoryMatchDto> selectHistoryMatchByTwoTeam(@Param("homeTeamId") Integer homeTeamId,
                                                       @Param("guestTeamId") Integer guestTeamId,
+                                                      @Param("matchTime") Date matchTime,
                                                       @Param("type") String type,
                                                       @Param("count") int count);
 

@@ -19,13 +19,14 @@ public class ScheduleServiceTest {
 
     @Test
     public void queryLineupDataByMatch() {
-        Gson gson = new Gson();
-        Map<String, Object> map = scheduleService.queryLineupDataByMatch(1721166L);
-        System.out.println(gson.toJson(map));
+//        Gson gson = new Gson();
+//        Map<String, Object> map = scheduleService.queryLineupDataByMatch(1721166L);
+//        System.out.println(gson.toJson(map));
     }
-//    @Test
-//    public void queryMatchAnalysis() {
+    @Test
+    public void queryMatchAnalysis() {
 //        scheduleService.updateMatchAnalysis(1,1);
-//    }
+//        scheduleService.matchAnalysisByType(1797123, null);
+    }
 
 }

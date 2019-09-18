@@ -22,10 +22,7 @@ import org.springside.modules.utils.time.ClockUtil;
 import org.springside.modules.utils.time.DateFormatUtil;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description TODO
@@ -164,13 +161,22 @@ public class ScheduleServiceImpl implements ScheduleService {
         Map<String, Object> map = null;
         //type 为空，更新缓存
         if (Strings.isBlank(type)) {
+            long l0 = ClockUtil.currentTimeMillis();
             matchAnalysisType0(schedule);
+            long l1 = ClockUtil.currentTimeMillis();
             matchAnalysisType1(schedule);
+            long l2 = ClockUtil.currentTimeMillis();
             matchAnalysisType2(schedule);
+            long l3 = ClockUtil.currentTimeMillis();
             matchAnalysisType3(schedule);
+            long l4 = ClockUtil.currentTimeMillis();
             matchAnalysisType4(schedule);
+            long l5 = ClockUtil.currentTimeMillis();
             matchAnalysisType5(schedule);
+            long l6 = ClockUtil.currentTimeMillis();
             matchAnalysisType6(schedule);
+            long l = ClockUtil.currentTimeMillis();
+            log.error("总计算耗时{}ms", l - l0);
             return null;
         }
         switch (type) {
@@ -215,6 +221,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         Integer sclassid = schedule.getSclassid();
         //子联赛id
         Integer subSclassID = schedule.getSubsclassid();
+        Date matchtime = schedule.getMatchtime();
         List<IntegralRankingDto> hostInfoList = new ArrayList<>();
         List<IntegralRankingDto> guestInfoList = new ArrayList<>();
         //主队积分数据  积分排行
@@ -237,7 +244,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         //近六场
-        IntegralRankingDto homeNearly6 = scheduleMapper.selectNearlyMatchData(hometeamid, 6);
+        IntegralRankingDto homeNearly6 = scheduleMapper.selectNearlyMatchData(hometeamid, matchtime, 6);
         hostInfoList.add(homeTotalData);
         hostInfoList.add(homeHomeData);
         hostInfoList.add(homeGuestData);
@@ -261,21 +268,21 @@ public class ScheduleServiceImpl implements ScheduleService {
             guestGuestData = new IntegralRankingDto();
         }
         //近六场
-        IntegralRankingDto guestNearly6 = scheduleMapper.selectNearlyMatchData(guestteamid, 6);
+        IntegralRankingDto guestNearly6 = scheduleMapper.selectNearlyMatchData(guestteamid, matchtime, 6);
         guestInfoList.add(guestTotalData);
         guestInfoList.add(guestHomeData);
         guestInfoList.add(guestGuestData);
         guestInfoList.add(guestNearly6);
 
         //主队战绩
-        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, null, null, 10);
+        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, null, null, matchtime, 10);
         TeamHistoryStatisticDto homeLately = processingHistoryMatchData(homeHistory);
         //客队战绩
-        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, null, null, 10);
+        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, null, null, matchtime, 10);
         TeamHistoryStatisticDto guestLately = processingHistoryMatchData(guestHistory);
 
         //历史交锋
-        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, null, 6);
+        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, matchtime,null, 6);
         TeamHistoryStatisticDto lately = processingHistoryMatchData(historyMatchDtos);
 
         //拼接数据
@@ -310,11 +317,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
         Integer guestteamid = schedule.getGuestteamid();
+        Date matchtime = schedule.getMatchtime();
         //主队战绩
-        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, "1", null, 10);
+        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, "1", null, matchtime, 10);
         TeamHistoryStatisticDto homeLately = processingHistoryMatchData(homeHistory);
         //客队战绩
-        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, "2", null, 10);
+        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, "2", null, matchtime, 10);
         TeamHistoryStatisticDto guestLately = processingHistoryMatchData(guestHistory);
 
         //拼接数据
@@ -345,11 +353,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         Integer sclassid = schedule.getSclassid();
         Integer hometeamid = schedule.getHometeamid();
         Integer guestteamid = schedule.getGuestteamid();
+        Date matchtime = schedule.getMatchtime();
         //主队战绩
-        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, null, sclassid, 10);
+        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, null, sclassid, matchtime, 10);
         TeamHistoryStatisticDto homeLately = processingHistoryMatchData(homeHistory);
         //客队战绩
-        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, null, sclassid, 10);
+        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, null, sclassid, matchtime, 10);
         TeamHistoryStatisticDto guestLately = processingHistoryMatchData(guestHistory);
 
         //拼接数据
@@ -379,11 +388,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
         Integer guestteamid = schedule.getGuestteamid();
+        Date matchtime = schedule.getMatchtime();
         //主队战绩
-        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, null, null, 10);
+        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, null, null, matchtime, 10);
         TeamHistoryStatisticDto homeLately = processingHistoryMatchData(homeHistory);
         //客队战绩
-        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, null, null, 10);
+        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, null, null, matchtime, 10);
         TeamHistoryStatisticDto guestLately = processingHistoryMatchData(guestHistory);
 
         //拼接数据
@@ -414,11 +424,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         Integer sclassid = schedule.getSclassid();
         Integer hometeamid = schedule.getHometeamid();
         Integer guestteamid = schedule.getGuestteamid();
+        Date matchtime = schedule.getMatchtime();
         //主队战绩
-        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, "1", sclassid, 10);
+        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, "1", sclassid, matchtime, 10);
         TeamHistoryStatisticDto homeLately = processingHistoryMatchData(homeHistory);
         //客队战绩
-        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, "2", sclassid, 10);
+        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, "2", sclassid, matchtime, 10);
         TeamHistoryStatisticDto guestLately = processingHistoryMatchData(guestHistory);
 
         //拼接数据
@@ -448,8 +459,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
         Integer guestteamid = schedule.getGuestteamid();
+        Date matchtime = schedule.getMatchtime();
         //历史交锋
-        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, "1", 5);
+        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, matchtime, "1", 5);
         TeamHistoryStatisticDto lately = processingHistoryMatchData(historyMatchDtos);
 
         //拼接数据
@@ -476,8 +488,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
         Integer guestteamid = schedule.getGuestteamid();
+        Date matchtime = schedule.getMatchtime();
         //历史交锋
-        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, null, 5);
+        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, matchtime, null, 5);
         TeamHistoryStatisticDto lately = processingHistoryMatchData(historyMatchDtos);
         //拼接数据
         //放入缓存
