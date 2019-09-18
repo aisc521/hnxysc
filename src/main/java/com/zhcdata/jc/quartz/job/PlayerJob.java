@@ -4,12 +4,13 @@ import com.zhcdata.db.mapper.TbPlayerMapper;
 import com.zhcdata.db.model.PlayerInfo;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.PlayerRsp;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -21,16 +22,15 @@ import java.util.List;
  */
 @Configuration
 @EnableScheduling
-public class PlayerJob {
+public class PlayerJob implements Job {
 
     @Resource
     TbPlayerMapper tbPlayerMapper;
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    @Async
-    /*@Scheduled(cron = "51 49 15 ? * *")*/
-    public void work() {
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         String url = "http://interface.win007.com/zq/Player_XML.aspx?day=1";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -204,7 +204,7 @@ public class PlayerJob {
                     if(!a.getWeight().equals("")) {
                         info.setWeight(Short.valueOf(a.getWeight()));
                     }
-                     //国家
+                    //国家
                     info.setCountry(a.getCountry());
                     //图片
                     info.setPhoto(a.getPhoto());

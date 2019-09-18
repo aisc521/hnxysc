@@ -4,12 +4,13 @@ import com.zhcdata.db.mapper.TbJcMatchLineupMapper;
 import com.zhcdata.db.model.JcMatchLineupInfo;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.LineupRsp;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -18,16 +19,15 @@ import java.util.List;
 
 @Configuration
 @EnableScheduling
-public class LineupJob {
+public class LineupJob implements Job {
     @Resource
     TbJcMatchLineupMapper tbJcMatchLineupMapper;
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    @Async
-    @Scheduled(cron = "11 51 19 ? * *")
-    public void work() {
-        String url = "http://interface.win007.com/zq/lineup.aspx";
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        String url = "http://interface.win007.com/zq/lineup.aspx?cmd=new";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try{
@@ -42,10 +42,10 @@ public class LineupJob {
                     info.setId(Long.parseLong(result_list.get(i).getID()));
                     info.setHomeArray(result_list.get(i).getHomeArray());
                     info.setAwayArray(result_list.get(i).getAwayArray());
-                    info.setHomeLineup(result_list.get(i).getHomeLineup_cn());
-                    info.setAwayLineup(result_list.get(i).getAwayLineup_cn());
-                    info.setHomeBackup(result_list.get(i).getHomeBackup_cn());
-                    info.setAwayBackup(result_list.get(i).getAwayBackup_cn());
+                    info.setHomeLineup(result_list.get(i).getHomeLineup());
+                    info.setAwayLineup(result_list.get(i).getAwayLineup());
+                    info.setHomeBackup(result_list.get(i).getHomeBackup());
+                    info.setAwayBackup(result_list.get(i).getAwayBackup());
                     info.setCreateTime(df.format(new Date()));
                     if (tbJcMatchLineupMapper.insertSelective(info) > 0) {
                         LOGGER.info("阵容信息保存成功");

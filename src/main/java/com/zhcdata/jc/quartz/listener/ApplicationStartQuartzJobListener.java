@@ -1,6 +1,7 @@
 package com.zhcdata.jc.quartz.listener;
 
 import com.zhcdata.jc.quartz.manager.QuartzManager;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +21,9 @@ import org.springframework.context.event.ContextRefreshedEvent;
  * @version 1.0
  * @Date 2019/5/14 17:15
  */
+@Slf4j
 @Configuration
 public class ApplicationStartQuartzJobListener implements ApplicationListener<ContextRefreshedEvent> {
-    /**
-     * 日志
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(QuartzManager.class);
-
     @Autowired
     private QuartzManager quartzManager;
     @Value("${custom.job}")
@@ -37,9 +34,9 @@ public class ApplicationStartQuartzJobListener implements ApplicationListener<Co
         try {
             if ("true".equals(jobFlag)) {
                 quartzManager.startJob();
-                LOGGER.error("任务已经启动......");
+                log.error("任务已经启动......");
             } else {
-                LOGGER.error("非定时任务项目，不启动定时任务");
+                log.error("非定时任务项目，不启动定时任务");
             }
         } catch (SchedulerException e) {
             e.printStackTrace();

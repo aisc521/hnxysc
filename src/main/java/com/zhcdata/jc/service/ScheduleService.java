@@ -22,4 +22,8 @@ public interface ScheduleService {
      * @Date 2019-09-17 14:35
      */
     void updateLineupDataRedis(int before,int after);
+
+    Map<String, Object> matchAnalysisByType(Integer matchId, String type);
+
+    void updateMatchAnalysis(int before, int after);
 }

@@ -7,12 +7,13 @@ import com.zhcdata.db.model.Schedule;
 import com.zhcdata.db.model.ScoreInfo;
 import com.zhcdata.db.model.SubSclassInfo;
 import com.zhcdata.jc.tools.HttpUtils;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ import java.util.List;
 
 @Configuration
 @EnableScheduling
-public class ScoreJob {
+public class ScoreJob implements Job {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource
@@ -35,9 +36,8 @@ public class ScoreJob {
     @Resource
     TbScoreMapper tbScoreMapper;
 
-    @Async
-    @Scheduled(cron = "41 33 17 ? * *")
-    public void work() {
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
             String s = getSE().split(",")[0];
             String e = getSE().split(",")[1];
@@ -204,7 +204,6 @@ public class ScoreJob {
 
         String sd = "";
     }
-
 
     public String getSE() {
         String startDate = "";

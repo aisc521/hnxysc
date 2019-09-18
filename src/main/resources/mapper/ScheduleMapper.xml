@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhcdata.db.mapper.ScheduleMapper" >
+<mapper namespace="com.zhcdata.db.mapper.ScheduleMapper">
 
-<!--  <resultMap id="ResultMapWithBLOBs" type="com.zhcw.model.Schedule" extends="BaseResultMap" >-->
-<!--    <result column="Explain" property="explain" jdbcType="LONGVARCHAR" />-->
-<!--  </resultMap>-->
-  <sql id="Base_Column_List" >
+    <!--  <resultMap id="ResultMapWithBLOBs" type="com.zhcw.model.Schedule" extends="BaseResultMap" >-->
+    <!--    <result column="Explain" property="explain" jdbcType="LONGVARCHAR" />-->
+    <!--  </resultMap>-->
+    <sql id="Base_Column_List">
     ScheduleID, SclassID, MatchSeason, round, grouping, HomeTeamID, GuestTeamID, HomeTeam, 
     GuestTeam, Neutrality, MatchTime, MatchTime2, Location, Home_Order, Guest_Order, 
     MatchState, WeatherIcon, Weather, Temperature, TV, Umpire, Visitor, HomeScore, GuestScore, 
@@ -14,75 +14,167 @@
     homeCorner, homeCornerHalf, guestCorner, guestCornerHalf
   </sql>
 
-  <sql id="Blob_Column_List" >
+    <sql id="Blob_Column_List">
     Explain
   </sql>
 
-  <select id="selectByPrimaryKey" resultType="com.zhcdata.db.model.Schedule" parameterType="java.lang.Integer" >
+    <select id="selectByPrimaryKey" resultType="com.zhcdata.db.model.Schedule" parameterType="java.lang.Integer">
     select 
     *
     from schedule
     where ScheduleID = #{scheduleid}
   </select>
-  <select id="selectPastAndFutureNoEnd" resultType="com.zhcdata.db.model.Schedule">
+    <select id="selectPastAndFutureNoEnd" resultType="com.zhcdata.db.model.Schedule">
     select * from schedule where MatchTime > #{past} and matchTime &lt; #{future} and MatchState != #{i}
   </select>
 
-  <select id="selectScheduleIdByDate" resultType="java.lang.Integer">
+    <select id="selectScheduleIdByDate" resultType="java.lang.Integer">
     select ScheduleID from schedule WHERE
     matchTime <![CDATA[>= ]]>date(date_sub(now() ,interval #{before} day))
     and matchTime <![CDATA[<=]]> date(date_add(now() ,interval #{after} day))
   </select>
 
-  <select id="selectScheduleIdByTime" resultType="java.lang.Integer">
+    <select id="selectScheduleIdByTime" resultType="java.lang.Integer">
     select ScheduleID from schedule WHERE
     matchTime <![CDATA[>= ]]>date_sub(now() ,interval #{before} day)
     and matchTime <![CDATA[<=]]> date_add(now() ,interval #{after} day)
   </select>
-  <select id="selectOddsResultsByMatchId" resultType="com.zhcdata.jc.dto.HandicapOddsResult">
-      <if test="type == 1">
-      /* 欧赔 */
-          select c.CompanyId opId,c.Name_Cn opName,l.FirstHomeWin opSatWin,l.FirstStandoff opSatFlat,l.FirstGuestwin opStaLose,IFNULL(l.RealHomeWin,l.FirstHomeWin) opNowWin,IFNULL(l.RealStandoff,l.FirstStandoff) opNowFlat,IFNULL(l.RealGuestWin,l.FirstGuestwin) opNowLose from europeodds l LEFT JOIN europecompany c on l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
-          AND c.CompanyID in (16,80,81,82,90,104,115,158,255,281,545,1129)
-      </if>
-      <if test="type == 2">
-          /* 亚盘 */
-          SELECT c.CompanyId opId,c.Name_Cn opName,l.FirstUpodds opSatWin,l.FirstGoal opSatFlat,l.FirstDownodds opStaLose,l.Upodds_Real opNowWin,l.Goal_Real opNowFlat,l.Downodds_Real opNowLose from letgoal l LEFT JOIN company c on l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
-          AND c.CompanyID in (1,3,8,12,17,23,24,31)
-      </if>
-      <if test="type == 3">
-          /* 大小球 */
-          SELECT c.CompanyId opId,c.Name_Cn opName,l.FirstUpodds opSatWin,l.FirstGoal opSatFlat,l.FirstDownodds opStaLose,l.Upodds_Real opNowWin,l.Goal_Real opNowFlat,l.Downodds_Real opNowLose from TotalScore l LEFT JOIN company c on l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
-          AND c.CompanyID in (1,3,8,12,17,23,24,31)
-      </if>
+    <select id="selectOddsResultsByMatchId" resultType="com.zhcdata.jc.dto.HandicapOddsResult">
+        <if test="type == 1">
+            /* 欧赔 */
+            select c.CompanyId opId,c.Name_Cn opName,l.FirstHomeWin opSatWin,l.FirstStandoff opSatFlat,l.FirstGuestwin
+            opStaLose,IFNULL(l.RealHomeWin,l.FirstHomeWin) opNowWin,IFNULL(l.RealStandoff,l.FirstStandoff)
+            opNowFlat,IFNULL(l.RealGuestWin,l.FirstGuestwin) opNowLose from europeodds l LEFT JOIN europecompany c on
+            l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
+            AND c.CompanyID in (16,80,81,82,90,104,115,158,255,281,545,1129)
+        </if>
+        <if test="type == 2">
+            /* 亚盘 */
+            SELECT c.CompanyId opId,c.Name_Cn opName,l.FirstUpodds opSatWin,l.FirstGoal opSatFlat,l.FirstDownodds
+            opStaLose,l.Upodds_Real opNowWin,l.Goal_Real opNowFlat,l.Downodds_Real opNowLose from letgoal l LEFT JOIN
+            company c on l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
+            AND c.CompanyID in (1,3,8,12,17,23,24,31)
+        </if>
+        <if test="type == 3">
+            /* 大小球 */
+            SELECT c.CompanyId opId,c.Name_Cn opName,l.FirstUpodds opSatWin,l.FirstGoal opSatFlat,l.FirstDownodds
+            opStaLose,l.Upodds_Real opNowWin,l.Goal_Real opNowFlat,l.Downodds_Real opNowLose from TotalScore l LEFT JOIN
+            company c on l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
+            AND c.CompanyID in (1,3,8,12,17,23,24,31)
+        </if>
 
+    </select>
+    <select id="selectOddsResultDetailByMatchId" resultType="com.zhcdata.jc.dto.HandicapOddsDetailsResult">
+        <if test="type == 1">
+            /* 欧赔 */
+            select ModifyTime oddTime,HomeWin oddWin,Standoff oddFlat,GuestWin oddLose from europeoddsdetail l WHERE
+            l.oddsid = (select oddsid from europeodds where
+            ScheduleID = #{matchId}
+            AND CompanyID = #{companyId}) ORDER BY oddTime asc
+        </if>
+        <if test="type == 2">
+            /* 亚盘 */
+            select ModifyTime oddTime,upOdds oddWin,Goal oddFlat,downOdds oddLose from letgoaldetail l WHERE
+            l.oddsid = (select oddsid from letgoal where
+            ScheduleID = #{matchId}
+            AND CompanyID = #{companyId}) ORDER BY oddTime asc
+        </if>
+        <if test="type == 3">
+            /* 大小球 */
+            select ModifyTime oddTime,upOdds oddWin,Goal oddFlat,downOdds oddLose from totalscoredetail l WHERE
+            l.oddsid = (select oddsid from TotalScore where
+            ScheduleID = #{matchId}
+            AND CompanyID = #{companyId}) ORDER BY oddTime asc
+        </if>
+    </select>
+    <select id="selectNearlyMatchData" resultType="com.zhcdata.jc.dto.IntegralRankingDto">
+    select t2.matchCount,t2.winCount,t2.flatCount,t2.loseCount,t2.goal,t2.lost,(winCount*3+flatCount) score,(t2.goal-t2.lost) goalDiff from (
+    SELECT
+    count(Scheduleid) matchCount,
+    sum(case when hometeamid = #{teamId} and homescore>guestscore then 1
+    when guestteamid =  #{teamId} and homescore <![CDATA[ < ]]> guestscore then 1 else 0 END)  winCount,
+    sum(case when homescore = guestscore then 1 else 0 END) flatCount,
+    sum(case when hometeamid =  #{teamId} and homescore <![CDATA[ < ]]> guestscore then 1
+    when guestteamid =  #{teamId} and homescore > guestscore then 1 else 0 END) loseCount,
+    sum(case when hometeamid =  #{teamId} then homescore else guestscore END) goal,
+    sum(case when hometeamid =  #{teamId} then guestscore else homescore end) lost
+    FROM(
+    SELECT * from schedule where matchState = -1
+              AND matchtime <![CDATA[<]]> #{matchTime}
+     AND (hometeamid = #{teamId} or guestteamid = #{teamId})
+     order by matchtime desc limit #{count}) t
+    )t2
   </select>
-  <select id="selectOddsResultDetailByMatchId" resultType="com.zhcdata.jc.dto.HandicapOddsDetailsResult">
-    <if test="type == 1">
-      /* 欧赔 */
-      select ModifyTime oddTime,HomeWin oddWin,Standoff oddFlat,GuestWin oddLose from europeoddsdetail l WHERE
-      l.oddsid = (select oddsid from europeodds where
-      ScheduleID = #{matchId}
-      AND CompanyID = #{companyId}) ORDER BY oddTime asc
-    </if>
-    <if test="type == 2">
-      /* 亚盘 */
-      select ModifyTime oddTime,upOdds oddWin,Goal oddFlat,downOdds oddLose from letgoaldetail l WHERE
-      l.oddsid = (select oddsid from letgoal where
-      ScheduleID = #{matchId}
-      AND CompanyID = #{companyId}) ORDER BY oddTime asc
-    </if>
-    <if test="type == 3">
-      /* 大小球 */
-      select ModifyTime oddTime,upOdds oddWin,Goal oddFlat,downOdds oddLose from totalscoredetail l WHERE
-      l.oddsid = (select oddsid from TotalScore where
-      ScheduleID = #{matchId}
-      AND CompanyID = #{companyId}) ORDER BY oddTime asc
-    </if>
-  </select>
+    <select id="selectHistoryMatchByTeam" resultType="com.zhcdata.jc.dto.HistoryMatchDto">
+        SELECT
+            matchtime matchDate,
+            sc.name_js matchName,
+            t.name_j homeName,
+            s.homescore hostScore,
+            s.homehalfscore hostHalfScore,
+            t2.name_j guestName,
+            s.guestscore guestScore,
+            s.guesthalfscore guestHalfScore,
+            CASE WHEN s.hometeamid = #{teamId} THEN 1 ELSE 2 END panlu
+        FROM
+            schedule s
+        LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
+        LEFT JOIN team t ON s.hometeamid = t.teamid
+        LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+        WHERE
+            matchState = -1
+          AND matchtime <![CDATA[<]]> #{matchTime}
+        <if test="type == 1">
+            AND hometeamid = #{teamId}
+        </if>
+        <if test="type == 2">
+            AND guestteamid = #{teamId}
+        </if>
+        <if test="type != 2 and type != 1">
+            AND (hometeamid = #{teamId} or guestteamid = #{teamId})
+        </if>
+        <if test="sclassId != null">
+            AND s.sclassid = #{sclassId}
+        </if>
+        ORDER BY
+            matchtime DESC
+        LIMIT #{count}
+    </select>
+
+    <select id="selectHistoryMatchByTwoTeam" resultType="com.zhcdata.jc.dto.HistoryMatchDto">
+        SELECT
+        matchtime matchDate,
+        sc.name_js matchName,
+        t.name_j homeName,
+        s.homescore hostScore,
+        s.homehalfscore hostHalfScore,
+        t2.name_j guestName,
+        s.guestscore guestScore,
+        s.guesthalfscore guestHalfScore,
+        CASE WHEN s.hometeamid = #{homeTeamId} THEN 1 ELSE 2 END panlu
+        FROM
+        schedule s
+        LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
+        LEFT JOIN team t ON s.hometeamid = t.teamid
+        LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+        WHERE
+        matchState = -1
+        AND matchtime <![CDATA[<]]> #{matchTime}
+        <if test="type == 1">
+            AND hometeamid = #{homeTeamId}
+            AND guestteamid = #{guestTeamId}
+        </if>
+        <if test="type == null">
+            AND (hometeamid = #{homeTeamId} or guestteamid = #{homeTeamId})
+            AND (hometeamid = #{guestTeamId} or guestteamid = #{guestTeamId})
+        </if>
+        ORDER BY
+        matchtime DESC
+        LIMIT #{count}
+    </select>
 
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from schedule
     where ScheduleID = #{scheduleid,jdbcType=INTEGER}
   </delete>
