@@ -3,14 +3,14 @@ package com.zhcdata.jc.quartz.job;
 import com.zhcdata.db.mapper.TbPlayerInTeamMapper;
 import com.zhcdata.db.mapper.TbTeamMapper;
 import com.zhcdata.db.model.PlayerInTeamInfo;
-import com.zhcdata.db.model.TeamInfo;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.PlayerRsp;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 @Configuration
 @EnableScheduling
-public class PlayerTeamJob {
+public class PlayerTeamJob implements Job {
 
     @Resource
     TbTeamMapper tbTeamMapper;
@@ -28,9 +28,9 @@ public class PlayerTeamJob {
     @Resource
     TbPlayerInTeamMapper tbPlayerInTeamMapper;
 
-    @Async
-    @Scheduled(cron = "11 16 12 ? * *")
-    public void work() {
+
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String url = "http://interface.win007.com/zq/Player_XML.aspx?day=1";
         try {

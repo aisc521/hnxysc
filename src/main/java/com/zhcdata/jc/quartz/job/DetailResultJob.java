@@ -5,16 +5,14 @@ import com.zhcdata.db.mapper.TbDetailResultMapper;
 import com.zhcdata.db.model.DetailResultInfo;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.tools.HttpUtils;
-import com.zhcdata.jc.xml.QiuTanXmlComm;
-import com.zhcdata.jc.xml.rsp.DetailResultRsp;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
-import org.omg.PortableInterceptor.INACTIVE;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
@@ -25,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Configuration
 @EnableScheduling
-public class DetailResultJob {
+public class DetailResultJob implements Job {
 
     @Resource
     ScheduleMapper scheduleMapper;
@@ -33,9 +31,10 @@ public class DetailResultJob {
     @Resource
     TbDetailResultMapper tbDetailResultMapper;
 
-    @Async
-    @Scheduled(cron = "41 19 11 ? * *")
-    public void work() {
+
+
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String url = "http://interface.win007.com/zq/Event_XML.aspx?type=new&date=" + df.format(new Date());
 
