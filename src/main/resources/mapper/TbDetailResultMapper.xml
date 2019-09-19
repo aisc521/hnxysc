@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.TbDetailResultMapper">
+  <select id="queryDetailResult" resultType="com.zhcdata.db.model.DetailResultInfo">
+    select * from DetailResult where ScheduleID=#{ScheduleID} and ID=#{ID}
+  </select>
+
+
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.DetailResultInfo" >
+    insert into detailresult
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="scheduleid != null" >
+        ScheduleID,
+      </if>
+      <if test="happentime != null" >
+        HappenTime,
+      </if>
+      <if test="teamid != null" >
+        TeamID,
+      </if>
+      <if test="playername != null" >
+        playername,
+      </if>
+      <if test="playerid != null" >
+        PlayerID,
+      </if>
+      <if test="kind != null" >
+        Kind,
+      </if>
+      <if test="modifytime != null" >
+        modifyTime,
+      </if>
+      <if test="playernameE != null" >
+        playername_e,
+      </if>
+      <if test="playernameJ != null" >
+        playername_j,
+      </if>
+      <if test="playeridIn != null" >
+        PlayerID_in,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="scheduleid != null" >
+        #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="happentime != null" >
+        #{happentime,jdbcType=SMALLINT},
+      </if>
+      <if test="teamid != null" >
+        #{teamid,jdbcType=INTEGER},
+      </if>
+      <if test="playername != null" >
+        #{playername,jdbcType=VARCHAR},
+      </if>
+      <if test="playerid != null" >
+        #{playerid,jdbcType=INTEGER},
+      </if>
+      <if test="kind != null" >
+        #{kind,jdbcType=SMALLINT},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="playernameE != null" >
+        #{playernameE,jdbcType=VARCHAR},
+      </if>
+      <if test="playernameJ != null" >
+        #{playernameJ,jdbcType=VARCHAR},
+      </if>
+      <if test="playeridIn != null" >
+        #{playeridIn,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.DetailResultInfo" >
+    update detailresult
+    <set >
+      <if test="scheduleid != null" >
+        ScheduleID = #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="happentime != null" >
+        HappenTime = #{happentime,jdbcType=SMALLINT},
+      </if>
+      <if test="teamid != null" >
+        TeamID = #{teamid,jdbcType=INTEGER},
+      </if>
+      <if test="playername != null" >
+        playername = #{playername,jdbcType=VARCHAR},
+      </if>
+      <if test="playerid != null" >
+        PlayerID = #{playerid,jdbcType=INTEGER},
+      </if>
+      <if test="kind != null" >
+        Kind = #{kind,jdbcType=SMALLINT},
+      </if>
+      <if test="modifytime != null" >
+        modifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="playernameE != null" >
+        playername_e = #{playernameE,jdbcType=VARCHAR},
+      </if>
+      <if test="playernameJ != null" >
+        playername_j = #{playernameJ,jdbcType=VARCHAR},
+      </if>
+      <if test="playeridIn != null" >
+        PlayerID_in = #{playeridIn,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

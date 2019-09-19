@@ -1,10 +1,9 @@
 package com.zhcdata.jc.quartz.job;
 
-import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.mapper.TbLiveMapper;
 import com.zhcdata.db.model.LiveInfo;
-import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
+import com.zhcdata.jc.xml.rsp.LiveDetailRsp;
 import com.zhcdata.jc.xml.rsp.LiveRsp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -25,33 +24,24 @@ public class LiveJob {
     @Resource
     TbLiveMapper tbLiveMapper;
 
-    @Resource
-    ScoreJob scoreJob;
-
-    @Resource
-    ScheduleMapper scheduleMapper;
-
     @Async
-    @Scheduled(cron = "1 41 20 ? * *")
+    @Scheduled(cron = "31 39 9 ? * *")
     public void work() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String url = "http://interface.win007.com/zq/TextLive.aspx";
         try {
-            String s = scoreJob.getSE().split(",")[0];
-            String e = scoreJob.getSE().split(",")[1];
-            List<Schedule> schedules = scheduleMapper.selectPastAndFutureNoEnd(s, e, "-1");
-            for (int i = 0; i < schedules.size(); i++) {
-                System.out.println(i);
-                List<LiveRsp> result_list = new QiuTanXmlComm().handleMothodList(url + "?id=" + "1552518", LiveRsp.class);
-                for (LiveRsp a : result_list) {
+            List<LiveRsp> result_list = new QiuTanXmlComm().handleMothodList(url, LiveRsp.class);
+            for (LiveRsp a : result_list) {
+                List<LiveDetailRsp> result_Detail = new QiuTanXmlComm().handleMothodList(url + "?id=" + a.getID(), LiveDetailRsp.class);
+                for (LiveDetailRsp b : result_Detail) {
                     List<LiveInfo> list = tbLiveMapper.queryLive(a.getID());
                     if (list == null || list.size() == 0) {
                         LiveInfo info = new LiveInfo();
-                        info.setId(Long.valueOf(a.getID()));
-                        info.setContent(a.getContent());
-                        info.setTime(a.getTime());
+                        info.setId(Long.valueOf(b.getID()));
+                        info.setContent(b.getContent());
+                        info.setTime(b.getTime());
                         info.setCreateTime(df.format(new Date()));
-                        info.setScheduleid(Long.valueOf(schedules.get(i).getScheduleid()));
+                        info.setScheduleid(Long.valueOf(a.getID()));
                         if (tbLiveMapper.insertSelective(info) > 0) {
                             log.info("直播数据保存成功");
                         } else {

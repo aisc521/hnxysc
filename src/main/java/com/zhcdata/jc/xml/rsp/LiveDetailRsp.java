@@ -7,10 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @XStreamAlias("match")
-public class LiveRsp {
+public class LiveDetailRsp {
     String ID;
-    String league;
-    String matchtime;
-    String home;
-    String away;
+    String content;
+    String time;
 }
