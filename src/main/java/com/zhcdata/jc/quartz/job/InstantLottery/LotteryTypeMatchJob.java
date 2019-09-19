@@ -62,7 +62,7 @@ public class LotteryTypeMatchJob implements Job {
                     //判断是否是足球玩法
                     if(!"0".equals(lotteryTypeMatchRsp.getID_bet007())){
                        //根据bet007 和玩法查询是否有对应数据
-                        String gameType = JcLotteryUtils.JcLotterZh(lotteryTypeMatchRsp.getLotteryName());
+                        String gameType = JcLotteryUtils.JcLotterZh(lotteryTypeMatchRsp.getLotteryName().trim());
                         JcMatchLottery jcMatchLottery = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()),gameType);
                         if(jcMatchLottery != null){//更新
                             lotteryTypeMatchJobService.updateJcMatchLottery(jcMatchLottery,lotteryTypeMatchRsp);
