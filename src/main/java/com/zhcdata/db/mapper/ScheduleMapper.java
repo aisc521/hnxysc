@@ -2,10 +2,7 @@ package com.zhcdata.db.mapper;
 
 
 import com.zhcdata.db.model.Schedule;
-import com.zhcdata.jc.dto.HandicapOddsDetailsResult;
-import com.zhcdata.jc.dto.HandicapOddsResult;
-import com.zhcdata.jc.dto.HistoryMatchDto;
-import com.zhcdata.jc.dto.IntegralRankingDto;
+import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.tools.CustomInterfaceMapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -101,5 +98,19 @@ public interface ScheduleMapper {
                                                       @Param("matchTime") Date matchTime,
                                                       @Param("type") String type,
                                                       @Param("count") int count);
+
+    /**
+     * 根据日期查询比赛赔率数据-同赔精选使用
+     * @param date
+     * @return
+     */
+    List<SameOddsDto> selectMatchAndOdds(String date);
+
+    /**
+     * 根据比赛赔率数据查询同赔、胜负数量
+     * @param sameOddsDto
+     * @return
+     */
+    SameOddsStatisticDto selectSameOddsStatistic(SameOddsDto sameOddsDto);
 
 }

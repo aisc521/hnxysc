@@ -30,13 +30,15 @@
 
     <select id="selectScheduleIdByDate" resultType="java.lang.Integer">
     select ScheduleID from schedule WHERE
-    matchTime <![CDATA[>= ]]>date(date_sub(now() ,interval #{before} day))
+    matchState = 0
+    and matchTime <![CDATA[>= ]]>date(date_sub(now() ,interval #{before} day))
     and matchTime <![CDATA[<=]]> date(date_add(now() ,interval #{after} day))
   </select>
 
     <select id="selectScheduleIdByTime" resultType="java.lang.Integer">
     select ScheduleID from schedule WHERE
-    matchTime <![CDATA[>= ]]>date_sub(now() ,interval #{before} day)
+    matchState = 0
+    and matchTime <![CDATA[>= ]]>date_sub(now() ,interval #{before} day)
     and matchTime <![CDATA[<=]]> date_add(now() ,interval #{after} day)
   </select>
     <select id="selectOddsResultsByMatchId" resultType="com.zhcdata.jc.dto.HandicapOddsResult">
@@ -171,6 +173,84 @@
         ORDER BY
         matchtime DESC
         LIMIT #{count}
+    </select>
+    <select id="selectMatchAndOdds" resultType="com.zhcdata.jc.dto.SameOddsDto">
+
+        select t.lotteryType,t.issueNum,t.noId,
+        t.matchId,t.matchName,t.matchState,t.matchTime1,t.matchTime2,t.homeName,t.homeScore,t.homeHalfScore,t.guestName,t.guestScore,t.guestHalfScore,
+        t.homeRedCard,t.guestRedCard,t.homeYlwCard,t.guestYlwCard,
+        o.FirstHomeWin tpeiWinHandicap,
+        o.FirstStandoff tpeiFlatHandicap,
+        o.FirstGuestWin tpeilLoseHandicap,
+        case when o.FirstHomeWin <![CDATA[<]]> o.FirstGuestWin then 0
+        else 1 end flag,
+        case when o.FirstHomeWin <![CDATA[<]]> o.FirstGuestWin then
+        (case when o.FirstHomeWin <![CDATA[<]]> o.RealHomeWin then 1 else -1 end)
+        else
+        (case when o.FirstGuestWin <![CDATA[<]]> o.RealGuestWin then 1 else -1 end) end trend,
+        l.FirstGoal from (
+        SELECT
+        CASE l.lottery WHEN 'JCZQ' THEN '1' WHEN 'BJDC' THEN '2' WHEN 'SF14' THEN '3' ELSE '4' END lotteryType,
+        l.issue_num issueNum,
+        l.no_id noId,
+        sc.name_js matchName,
+        s.matchTime matchTime1,
+        s.matchTime2 matchTime2,
+        t.name_j homeName,
+        s.homescore homeScore,
+        s.homehalfscore homeHalfScore,
+        t2.name_j guestName,
+        s.guestscore guestScore,
+        s.guesthalfscore guestHalfScore,
+        s.home_red homeRedCard,
+        s.guest_red guestRedCard,
+        s.home_yellow homeYlwCard,
+        s.guest_yellow guestYlwCard,
+        s.scheduleid matchId,
+        s.matchstate matchState
+        FROM SCHEDULE s
+        LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
+        LEFT JOIN team t ON s.hometeamid = t.teamid
+        LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+        LEFT JOIN jc_match_lottery l ON s.scheduleid = l.ID_BET007
+        WHERE
+        1 = 1
+        AND s.matchtime >= concat(#{date},' 11:00:00') AND s.matchtime <![CDATA[<]]> concat(DATE_ADD(#{date},INTERVAL 2 DAY),' 11:00:00')
+        GROUP BY
+        scheduleid
+        ) t left join europeodds o on t.matchId = o.scheduleid and o.companyid = 281
+        left join letgoal l on t.matchId = l.scheduleid and l.companyid = 8
+        where 1=1
+        and o.RealHomeWin is not NULL and o.FirstHomeWin != o.RealHomeWin
+    </select>
+    <select id="selectSameOddsStatistic" resultType="com.zhcdata.jc.dto.SameOddsStatisticDto">
+        select
+        count(s.ScheduleID) total,
+        sum(case when s.HomeScore>s.GuestScore then 1 else 0 end) win,
+        sum(case when s.HomeScore=s.GuestScore then 1 else 0 end) flat,
+        sum(case when s.HomeScore<![CDATA[<]]>s.GuestScore then 1 else 0 end) lose,
+        sum(case when s.HomeScore-(#{firstGoal})>s.GuestScore then 1 else 0 end) winp,
+        sum(case when s.HomeScore-(#{firstGoal})=s.GuestScore then 1 else 0 end) flatp,
+        sum(case when s.HomeScore-(#{firstGoal})<![CDATA[<]]>s.GuestScore then 1 else 0 end) losep
+        from europeodds e left join SCHEDULE s on e.ScheduleID = s.ScheduleID where e.FirstHomeWin = #{winOdds}
+        and e.FirstGuestWin = #{loseOdds} and e.FirstStandoff = #{loseOdds}
+        <if test="flag == 0">
+            <if test="trend == 1">
+                and e.RealHomeWin > e.FirstHomeWin
+            </if>
+            <if test="trend == -1">
+                and e.FirstHomeWin > e.RealHomeWin
+            </if>
+        </if>
+        <if test="flag == 1">
+            <if test="trend == 1">
+                and e.RealGuestWin > e.FirstGuestWin
+            </if>
+            <if test="trend == -1">
+                and e.FirstGuestWin > e.RealGuestWin
+            </if>
+        </if>
+         limit 200
     </select>
 
 

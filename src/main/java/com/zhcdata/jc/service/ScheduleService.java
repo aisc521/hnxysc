@@ -2,6 +2,7 @@ package com.zhcdata.jc.service;
 
 import com.zhcdata.db.model.Schedule;
 
+import java.text.ParseException;
 import java.util.Map;
 
 public interface ScheduleService {
@@ -23,7 +24,30 @@ public interface ScheduleService {
      */
     void updateLineupDataRedis(int before,int after);
 
+    /**
+     * 指定比赛分析数据
+     * @param matchId 比赛id
+     * @param type NULL 全部分析并放入缓存 0默认数据, 战绩：1同主客,2同赛事,3没有选择条件,4是同主客+同赛事,  历史交锋：5主客相同，6没有选择条件
+     * @return
+     */
     Map<String, Object> matchAnalysisByType(Integer matchId, String type);
 
+    /**
+     * 更新之前{before}天，之后{after}天的比赛分析数据
+     * @param before
+     * @param after
+     */
     void updateMatchAnalysis(int before, int after);
+
+    /**
+     * 同赔精选比赛计算
+     * @param date
+     */
+    void sameOddsMatchCompute(String date) throws ParseException;
+
+    /**
+     * 更新同赔精选比赛
+     * @param date
+     */
+    void updateSameOddsMatchData(String date);
 }

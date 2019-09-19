@@ -1,15 +1,14 @@
 package com.zhcdata.jc.service.impl;
+import java.util.Date;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.google.common.collect.Lists;
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.mapper.TbJcMatchLineupMapper;
 import com.zhcdata.db.mapper.TbScoreMapper;
 import com.zhcdata.db.model.JcMatchLineupInfo;
 import com.zhcdata.db.model.Schedule;
-import com.zhcdata.jc.dto.HistoryMatchDto;
-import com.zhcdata.jc.dto.IntegralRankingDto;
-import com.zhcdata.jc.dto.LineupDataDto;
-import com.zhcdata.jc.dto.TeamHistoryStatisticDto;
+import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.enums.RedisCodeMsg;
 import com.zhcdata.jc.service.ScheduleService;
 import com.zhcdata.jc.tools.Const;
@@ -22,6 +21,8 @@ import org.springside.modules.utils.time.ClockUtil;
 import org.springside.modules.utils.time.DateFormatUtil;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -550,4 +551,469 @@ public class ScheduleServiceImpl implements ScheduleService {
         return result;
     }
 
+    @Override
+    public void sameOddsMatchCompute(String date) throws ParseException {
+        //根据日志查询本日（今日11点到明日11点）所有比赛
+        List<SameOddsDto> sameOddsDtos = scheduleMapper.selectMatchAndOdds(date);
+        //计算几率、同赔火焰，并删除不符合条件的记录（同赔记录小于15条）
+        processingProbability(sameOddsDtos);
+        //判断今日是否周末
+        Calendar instance = Calendar.getInstance();
+        instance.setTime(DateFormatUtil.pareDate(Const.YYYY_MM_DD, date));
+        int i = instance.get(Calendar.DAY_OF_WEEK);
+        //1.0-1.5，1.5-2.0，2.0-2.7三个档次分别获取的个数,平时个数为3-4-3，周末为5-6-4
+        int count1 = 3;
+        int count2 = 4;
+        int count3 = 3;
+        if (i == Calendar.SUNDAY || i == Calendar.SATURDAY) {
+            count1 = 5;
+            count2 = 6;
+            count3 = 4;
+        }
+        //循环判断比赛放入各部分list集合
+        List<SameOddsDto> jcList = new ArrayList<>();
+        List<SameOddsDto> bdList = new ArrayList<>();
+        List<SameOddsDto> zcList = new ArrayList<>();
+        List<SameOddsDto> allList = new ArrayList<>();
+        processingSameOddsDtoGroup(count1, "1.0", "1.5", sameOddsDtos, jcList, bdList, zcList, allList);
+        processingSameOddsDtoGroup(count2, "1.5", "2.0", sameOddsDtos, jcList, bdList, zcList, allList);
+        processingSameOddsDtoGroup(count3, "2.0", "2.7", sameOddsDtos, jcList, bdList, zcList, allList);
+        //list排序
+        allList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
+        jcList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
+        bdList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
+        zcList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
+
+        //设置缓存
+        String key = RedisCodeMsg.SOCCER_SAME_ODDS_MATCH.getName() + ":" + date;
+        String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
+        long seconds = RedisCodeMsg.SOCCER_SAME_ODDS_MATCH.getSeconds();
+        String type = "0";
+        String s = processingTypeToLottery(type);
+        String item = type + "_" + s;
+        redisUtils.hset(key, item, JsonMapper.defaultMapper().toJson(allList));
+        redisUtils.hset(key, item + "_TIME_ID", timeId, seconds);
+        type = "1";
+        s = processingTypeToLottery(type);
+        item = type + "_" + s;
+        redisUtils.hset(key, item, JsonMapper.defaultMapper().toJson(jcList));
+        redisUtils.hset(key, item + "_TIME_ID", timeId, seconds);
+        type = "2";
+        s = processingTypeToLottery(type);
+        item = type + "_" + s;
+        redisUtils.hset(key, item, JsonMapper.defaultMapper().toJson(bdList));
+        redisUtils.hset(key, item + "_TIME_ID", timeId, seconds);
+        type = "3";
+        s = processingTypeToLottery(type);
+        item = type + "_" + s;
+        redisUtils.hset(key, item, JsonMapper.defaultMapper().toJson(zcList));
+        redisUtils.hset(key, item + "_TIME_ID", timeId, seconds);
+    }
+
+
+    @Override
+    public void updateSameOddsMatchData(String date){
+        String key = RedisCodeMsg.SOCCER_SAME_ODDS_MATCH.getName() + ":" + date;
+        JsonMapper jsonMapper = JsonMapper.defaultMapper();
+        JavaType javaType = jsonMapper.buildCollectionType(List.class, SameOddsDto.class);
+        for (int i = 0; i < 4; i++) {
+            String type = i + "";
+            String s = processingTypeToLottery(type);
+            String item = type + "_" + s;
+            String redisData = (String) redisUtils.hget(key, item);
+            if (Strings.isNotBlank(redisData)) {
+                List<SameOddsDto> list = jsonMapper.fromJson(redisData, javaType);
+                for (SameOddsDto sameOddsDto : list) {
+                    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(sameOddsDto.getMatchId()));
+                    if (schedule != null) {
+                        changeSameOddsMatchInfo(sameOddsDto, schedule);
+                    }
+                }
+                long seconds = RedisCodeMsg.SOCCER_SAME_ODDS_MATCH.getSeconds();
+                redisUtils.hset(key, item, jsonMapper.toJson(list));
+                String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
+                redisUtils.hset(key, item + "_TIME_ID", timeId, seconds);
+            }
+        }
+    }
+
+    /**
+     * 筛选同赔精选比赛
+     * @param maxCount 本类需要记录数
+     * @param startOdds 本类开始赔率
+     * @param endOdds   本类结束赔率
+     * @param sameOddsDtos 未筛选的同赔比赛记录
+     * @param jcList    筛选后的竞彩同赔记录
+     * @param bdList    筛选后的北单同赔记录
+     * @param zcList    筛选后的足彩同赔记录
+     * @param allList   筛选后的全部同赔记录
+     */
+    private void processingSameOddsDtoGroup(int maxCount,String startOdds,String endOdds,
+                                            List<SameOddsDto> sameOddsDtos,List<SameOddsDto> jcList,
+                                            List<SameOddsDto> bdList,List<SameOddsDto> zcList,List<SameOddsDto> allList){
+        //记录全部list已存放记录数
+        int allCount = 0;
+        //是否需要向全部list中放数据
+        boolean flag = true;
+        for (int i = 1; i <= 4; i++) {
+            //记录各子类型存放记录数
+            int count = 0;
+            for (SameOddsDto sameOddsDto : sameOddsDtos) {
+                if (String.valueOf(i).equals(sameOddsDto.getLotteryType())) {
+                    String originalOdds;
+                    //flag 为0，获取主队胜赔率否则获取主队负赔率
+                    if (0 == sameOddsDto.getFlag()) {
+                        originalOdds = sameOddsDto.getTpeiWinHandicap();
+                    } else {
+                        originalOdds = sameOddsDto.getTpeilLoseHandicap();
+                    }
+                    //判断是否在赔率范围内
+                    if (new BigDecimal(originalOdds).compareTo(new BigDecimal(startOdds)) >= 0 &&
+                            new BigDecimal(originalOdds).compareTo(new BigDecimal(endOdds)) <= 0) {
+                        //如果类型为1 为竞彩
+                        if (i == 1) {
+                            //设置期次文字
+                            sameOddsDto.setWeekNum(sameOddsDto.getNoId());
+                            if (!jcList.contains(sameOddsDto)) {
+                                jcList.add(sameOddsDto);
+                                count++;
+                            }
+                            //如果类型为2 为北单
+                        } else if(i == 2) {
+                            //设置期次文字
+                            sameOddsDto.setIssueBD(sameOddsDto.getIssueNum());
+                            sameOddsDto.setNum(sameOddsDto.getNoId());
+                            if (!bdList.contains(sameOddsDto)) {
+                                bdList.add(sameOddsDto);
+                                count++;
+                            }
+                            //如果类型为3 为足彩
+                        } else if (i == 3) {
+                            //设置期次文字
+                            sameOddsDto.setIssueZC(sameOddsDto.getIssueNum());
+                            sameOddsDto.setNum(sameOddsDto.getNoId());
+                            if (!zcList.contains(sameOddsDto)) {
+                                zcList.add(sameOddsDto);
+                                count++;
+                            }
+                        }
+                        //否则为外围
+                        //如果本类已经满足条件，进入下次类型
+                        if (count >= maxCount) {
+                            continue;
+                        }
+                        if (flag) {
+                            //如果当前比赛不存在AllList，向Alllist中添加
+                            if (!allList.contains(sameOddsDto)) {
+                                allList.add(sameOddsDto);
+                                allCount++;
+                                //如果已经满足，则不需要再向AllList中添加数据
+                                if (allCount >= maxCount) {
+                                    flag = false;
+                                    if (4 == i) {
+                                        break;
+                                    }
+                                }
+                            }
+                        } else {
+                            //如果AllList中数据已满并且竞彩、北单、足彩已跑完数据，结束本次循环
+                            if (i == 4) {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        List<SameOddsDto> allList = new ArrayList<>();
+        for (int i = 10; i > 0; i--) {
+            SameOddsDto dto = new SameOddsDto();
+            dto.setLotteryType(""+i);
+            dto.setIssueNum(""+i);
+            dto.setNoId(""+i);
+            dto.setMatchId(""+i);
+            dto.setMatchName(""+i);
+            dto.setMatchState(""+i);
+            dto.setMatchTime(""+i);
+            dto.setMatchTime1(new Date());
+            dto.setMatchTime2(new Date());
+            dto.setMatchMinute(""+i);
+            dto.setHomeName(""+i);
+            dto.setGuestName(""+i);
+            dto.setHomeHalfScore(""+i);
+            dto.setGuestHalfScore(""+i);
+            dto.setHomeRedCard(""+i);
+            dto.setGuestRedCard(""+i);
+            dto.setHomeYlwCard(""+i);
+            dto.setGuestYlwCard(""+i);
+            dto.setHomeScore(""+i);
+            dto.setGuestScore(""+i);
+            dto.setText(""+i);
+            dto.setIssueBD(""+i);
+            dto.setIssueZC(""+i);
+            dto.setWeekNum(""+i);
+            dto.setNum(""+i);
+            dto.setTpeiWinHandicap(""+i);
+            dto.setTpeiWinOdds(new BigDecimal(new Random().nextInt(10)).divide(BigDecimal.TEN).toString());
+            dto.setTpeiFlatHandicap(""+i);
+            dto.setTpeiFlatOdds(""+i);
+            dto.setTpeilLoseHandicap(""+i);
+            dto.setTpeilLoseOdds(""+i);
+            dto.setTpanWinHandicap(""+i);
+            dto.setTpanWinOdds(""+i);
+            dto.setTpanFlatHandicap(""+i);
+            dto.setTpanFlatOdds(""+i);
+            dto.setTpanLoseHandicap(""+i);
+            dto.setTpanLoseOdds(""+i);
+            dto.setFirstGoal(i);
+            dto.setFlag(i);
+            dto.setTrend(i);
+            dto.setFireFlagWin(i);
+            dto.setFireFlagFlat(i);
+            dto.setFireFlagLose(i);
+            allList.add(dto);
+        }
+//        allList.sort(Comparator.comparing(o -> new BigDecimal(o.getTpeiWinOdds())));
+        allList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
+        for (SameOddsDto sameOddsDto : allList) {
+            System.out.println(JsonMapper.defaultMapper().toJson(sameOddsDto));
+        }
+    }
+
+    /**
+     * 计算几率，返回同配数据不够15条的记录
+     * @param list
+     * @return
+     */
+    private void processingProbability(List<SameOddsDto> list) {
+        List<SameOddsDto> removeList = new ArrayList<>();
+        for (SameOddsDto sameOddsDto : list) {
+            SameOddsStatisticDto statisticDto = scheduleMapper.selectSameOddsStatistic(sameOddsDto);
+            int total = statisticDto.getTotal();
+            if (total < 15) {
+                removeList.add(sameOddsDto);
+            } else {
+                changeSameOddsMatchInfo(sameOddsDto, null);
+                if (Integer.parseInt(sameOddsDto.getMatchState()) >= 4) {
+                    removeList.add(sameOddsDto);
+                    continue;
+                }
+                //默认全部无火，判断概率后赋值
+                sameOddsDto.setFireFlagWin(0);
+                sameOddsDto.setFireFlagFlat(0);
+                sameOddsDto.setFireFlagLose(0);
+                processingOdds(sameOddsDto, statisticDto);
+            }
+        }
+
+        list.removeAll(removeList);
+    }
+
+    private void changeSameOddsMatchInfo(SameOddsDto dto, Schedule schedule) {
+        //如果存在schedule对象，则使用，否则使用SameOddsDto的数据
+        String matchState = dto.getMatchState();
+        Date matchTime1 = dto.getMatchTime1();
+        Date matchTime2 = dto.getMatchTime2();
+        String matchMinute = null;
+        String text = "未";
+        if (null != schedule) {
+            matchState = String.valueOf(schedule.getMatchstate());
+            matchTime1 = dto.getMatchTime1();
+            matchTime2 = dto.getMatchTime2();
+        }
+        //格式化比赛时间
+        String matchTime = DateFormatUtil.formatDate("HH:mm", matchTime1);
+        if ("0".equals(matchState)) {
+            //未开场
+            matchState = "1";
+        } else if ("1".equals(matchState)) {
+            //上半场
+            matchState = "2";
+            if (matchTime2 != null) {
+                //计算上半场进行的时长 matchTime2为半场开始时间
+                long l = ClockUtil.currentTimeMillis();
+                long time2 = matchTime2.getTime();
+                long minute = (l - time2) / 1000 / 60;
+                text = minute + "'";
+                matchMinute = minute + "";
+            } else {
+                text = "1'";
+                matchMinute = "1";
+            }
+        } else if ("2".equals(matchState)) {
+            //中场
+            matchState = "2";
+            text =  "中";
+        } else if ("3".equals(matchState)) {
+            //下半场
+            matchState = "2";
+            if (matchTime2 != null) {
+                //计算下半场进行的时长 matchTime2为半场开始时间，在计算的时间上+45分钟
+                long l = ClockUtil.currentTimeMillis();
+                long time2 = matchTime2.getTime();
+                long minute = (l - time2) / 1000 / 60 + 45;
+                text = minute + "'";
+                matchMinute = minute + "";
+            } else {
+                text = "46'";
+                matchMinute = "46";
+            }
+        } else if ("4".equals(matchState)) {
+            //加时
+            matchState = "2";
+            text = "90'";
+            matchMinute = "90";
+        } else if ("5".equals(matchState)) {
+            //点球
+            matchState = "2";
+            text = "90'";
+            matchMinute = "90";
+        } else if ("-1".equals(matchState)) {
+            //完结
+            matchState = "3";
+            text = "完";
+        } else if ("-14".equals(matchState)) {
+            //推迟
+            matchState = "4";
+            text = "推迟";
+        } else if ("-12".equals(matchState)) {
+            //腰斩
+            matchState = "5";
+            text = "腰斩";
+        } else if ("-13".equals(matchState)) {
+            //中断
+            matchState = "5";
+            text = "腰斩";
+        } else if ("-10".equals(matchState)) {
+            //取消
+            matchState = "6";
+            text = "取消";
+        } else if ("-11".equals(matchState)) {
+            //待定
+            matchState = "7";
+            text = "待定";
+        }
+        dto.setMatchState(matchState);
+        dto.setMatchMinute(matchMinute);
+        dto.setMatchTime(matchTime);
+        dto.setText(text);
+    }
+
+    /**
+     * 根据查询到的胜平负数据，计算概率，设置火焰值（同赔精选热度火焰  0无  2中  3大）
+     * @param sameOddsDto
+     * @param statisticDto
+     */
+    private void processingOdds(SameOddsDto sameOddsDto, SameOddsStatisticDto statisticDto) {
+        //同赔总数
+        int total = statisticDto.getTotal();
+        //同赔胜场数
+        int winCount = statisticDto.getWinCount();
+        //同赔平场数
+        int flatCount = statisticDto.getFlatCount();
+        //同赔负场数
+        int loseCount = statisticDto.getLoseCount();
+        //计算让球盘口后的胜场数
+        int winPanCount = statisticDto.getWinPanCount();
+        //计算让球盘口后的平场数
+        int flatPanCount = statisticDto.getFlatPanCount();
+        //计算让球盘口后的负场数
+        int losePanCount = statisticDto.getLosePanCount();
+        //胜、平、负 概率，保留2位小数
+        BigDecimal winOdds = new BigDecimal(winCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_UP);
+        sameOddsDto.setTpeiWinOdds(winOdds.toString());
+        BigDecimal flatOdds = new BigDecimal(flatCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_UP);
+        sameOddsDto.setTpeiFlatOdds(flatOdds.toString());
+        //最后一个概率用1-胜概率-平概率
+        BigDecimal loseOdds = BigDecimal.ONE.subtract(winOdds).subtract(flatOdds);
+        sameOddsDto.setTpeilLoseOdds(loseOdds.toString());
+        //减去让球后的胜、平、负 概率，保留2位小数
+        String goal = String.valueOf(sameOddsDto.getFirstGoal());
+        sameOddsDto.setTpanWinHandicap(goal);
+        BigDecimal winPanOdds = new BigDecimal(winPanCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_UP);
+        sameOddsDto.setTpanWinOdds(winPanOdds.toString());
+        sameOddsDto.setTpanFlatHandicap(goal);
+        BigDecimal flatPanOdds = new BigDecimal(flatPanCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_UP);
+        sameOddsDto.setTpanFlatOdds(flatPanOdds.toString());
+        sameOddsDto.setTpanLoseHandicap(goal);
+        //最后一个概率用1-胜概率-平概率
+        BigDecimal losePanOdds = BigDecimal.ONE.subtract(winPanOdds).subtract(flatPanOdds);
+        sameOddsDto.setTpanLoseOdds(losePanOdds.toString());
+
+        //若单项选择超过70%，则给这个打上标签。标签是长火
+        if (winOdds.compareTo(new BigDecimal("0.7")) >= 0) {
+            sameOddsDto.setFireFlagWin(3);
+        }else
+        if (flatOdds.compareTo(new BigDecimal("0.7")) >= 0) {
+            sameOddsDto.setFireFlagFlat(3);
+        }else
+        if (loseOdds.compareTo(new BigDecimal("0.7")) >= 0) {
+            sameOddsDto.setFireFlagLose(3);
+        }else
+        //若双项（胜平，胜负，平负）取max大于80%，则给这两个打上标签，其中几率较高的是长火，较低的短火.再做个判断如果几率都小于50%，则都是小火
+        if (winOdds.add(flatOdds).compareTo(new BigDecimal("0.8")) >= 0) {
+            if (winOdds.compareTo(flatOdds) >= 0) {
+                sameOddsDto.setFireFlagWin(3);
+                sameOddsDto.setFireFlagFlat(2);
+            } else {
+                sameOddsDto.setFireFlagWin(2);
+                sameOddsDto.setFireFlagFlat(3);
+            }
+            if (winOdds.compareTo(new BigDecimal("0.5")) < 0 && flatOdds.compareTo(new BigDecimal("0.5")) < 0) {
+                sameOddsDto.setFireFlagWin(2);
+                sameOddsDto.setFireFlagFlat(2);
+            }
+        }else if (loseOdds.add(winOdds).compareTo(new BigDecimal("0.8")) >= 0) {
+            if (winOdds.compareTo(loseOdds) >= 0) {
+                sameOddsDto.setFireFlagWin(3);
+                sameOddsDto.setFireFlagLose(2);
+            } else {
+                sameOddsDto.setFireFlagWin(2);
+                sameOddsDto.setFireFlagLose(3);
+            }
+            if (winOdds.compareTo(new BigDecimal("0.5")) < 0 && loseOdds.compareTo(new BigDecimal("0.5")) < 0) {
+                sameOddsDto.setFireFlagWin(2);
+                sameOddsDto.setFireFlagLose(2);
+            }
+        }else if (loseOdds.add(flatOdds).compareTo(new BigDecimal("0.8")) >= 0) {
+            if (flatOdds.compareTo(loseOdds) >= 0) {
+                sameOddsDto.setFireFlagFlat(3);
+                sameOddsDto.setFireFlagLose(2);
+            } else {
+                sameOddsDto.setFireFlagFlat(2);
+                sameOddsDto.setFireFlagLose(3);
+            }
+            if (flatOdds.compareTo(new BigDecimal("0.5")) < 0 && loseOdds.compareTo(new BigDecimal("0.5")) < 0) {
+                sameOddsDto.setFireFlagFlat(2);
+                sameOddsDto.setFireFlagLose(2);
+            }
+        }
+        //不满足以上条件的就不打标签
+
+    }
+
+    private String processingTypeToLottery(String type){
+        String lottery;
+        if (Strings.isBlank(type)) {
+            lottery = "all";
+        } else {
+            switch (type) {
+                case "1":
+                    lottery = "JCZQ";
+                    break;
+                case "2":
+                    lottery = "BJDC";
+                    break;
+                case "3":
+                    lottery = "SF14";
+                    break;
+                default:
+                    lottery = "all";
+            }
+        }
+        return lottery;
+    }
 }
