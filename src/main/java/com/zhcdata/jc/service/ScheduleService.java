@@ -50,4 +50,11 @@ public interface ScheduleService {
      * @param date
      */
     void updateSameOddsMatchData(String date);
+
+    /**
+     * 根据类型转换为彩种 1竞彩 2北单 3足彩 其他为all
+     * @param type
+     * @return
+     */
+    String processingSameOddsTypeToLottery(String type);
 }

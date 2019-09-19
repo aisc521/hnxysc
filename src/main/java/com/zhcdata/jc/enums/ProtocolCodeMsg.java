@@ -55,7 +55,9 @@ public enum ProtocolCodeMsg {
     TYPE_NOT_ASSIGNED("020802", "状态值不合法"),
     TIME_ID_NOT_ASSIGNED("020803", "timeId不合法"),
     //2.1.9欧赔/亚盘/大小球详情
-    OP_ID_NOT_ASSIGNED("020O901", "opId不合法"),
+    OP_ID_NOT_ASSIGNED("020901", "opId不合法"),
+    //2.1.9欧赔/亚盘/大小球详情
+    DATE_NOT_ASSIGNED("021201", "日期不合法"),
 
     SUCCESS("000000", "成功"),
     FAIL("444444", "失败"),
