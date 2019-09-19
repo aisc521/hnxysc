@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.TbPlayerInTeamMapper">
+  <select id="queryPlayerInTeam" resultType="com.zhcdata.db.model.PlayerInTeamInfo">
+    select * from PlayerInTeam where ID=#{ID}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.PlayerInTeamInfo" >
+    insert into playerinteam
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="playerid != null" >
+        PlayerID,
+      </if>
+      <if test="playername != null" >
+        PlayerName,
+      </if>
+      <if test="teamid != null" >
+        TeamID,
+      </if>
+      <if test="teamname != null" >
+        TeamName,
+      </if>
+      <if test="place != null" >
+        Place,
+      </if>
+      <if test="number != null" >
+        Number,
+      </if>
+      <if test="score != null" >
+        Score,
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime,
+      </if>
+      <if test="coachtypeid != null" >
+        coachTypeID,
+      </if>
+      <if test="captaintypeid != null" >
+        captainTypeID,
+      </if>
+      <if test="playerpositionid != null" >
+        PlayerPositionID,
+      </if>
+      <if test="starttime != null" >
+        startTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="playerid != null" >
+        #{playerid,jdbcType=INTEGER},
+      </if>
+      <if test="playername != null" >
+        #{playername,jdbcType=CHAR},
+      </if>
+      <if test="teamid != null" >
+        #{teamid,jdbcType=INTEGER},
+      </if>
+      <if test="teamname != null" >
+        #{teamname,jdbcType=CHAR},
+      </if>
+      <if test="place != null" >
+        #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=CHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=SMALLINT},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="coachtypeid != null" >
+        #{coachtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="captaintypeid != null" >
+        #{captaintypeid,jdbcType=INTEGER},
+      </if>
+      <if test="playerpositionid != null" >
+        #{playerpositionid,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.PlayerInTeamInfo" >
+    update playerinteam
+    <set >
+      <if test="playerid != null" >
+        PlayerID = #{playerid,jdbcType=INTEGER},
+      </if>
+      <if test="playername != null" >
+        PlayerName = #{playername,jdbcType=CHAR},
+      </if>
+      <if test="teamid != null" >
+        TeamID = #{teamid,jdbcType=INTEGER},
+      </if>
+      <if test="teamname != null" >
+        TeamName = #{teamname,jdbcType=CHAR},
+      </if>
+      <if test="place != null" >
+        Place = #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="number != null" >
+        Number = #{number,jdbcType=CHAR},
+      </if>
+      <if test="score != null" >
+        Score = #{score,jdbcType=SMALLINT},
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="coachtypeid != null" >
+        coachTypeID = #{coachtypeid,jdbcType=INTEGER},
+      </if>
+      <if test="captaintypeid != null" >
+        captainTypeID = #{captaintypeid,jdbcType=INTEGER},
+      </if>
+      <if test="playerpositionid != null" >
+        PlayerPositionID = #{playerpositionid,jdbcType=INTEGER},
+      </if>
+      <if test="starttime != null" >
+        startTime = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
