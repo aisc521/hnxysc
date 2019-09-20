@@ -113,4 +113,19 @@ public interface ScheduleMapper {
      */
     SameOddsStatisticDto selectSameOddsStatistic(SameOddsDto sameOddsDto);
 
+    /**
+     * 修改主客队角球数
+     * @param homeCorner 主队角球
+     * @param homeCornerHalf 主队半场角球
+     * @param guestCorner 客队角球
+     * @param guestCornerHalf 客队半场角球
+     * @param ScheduleID 赛程ID
+     * @return
+     */
+    int updateByScheduleID(@Param("homeCorner") String homeCorner,
+                           @Param("homeCornerHalf") String homeCornerHalf,
+                           @Param("guestCorner") String guestCorner,
+                           @Param("guestCornerHalf") String guestCornerHalf,
+                           @Param("ScheduleID") String ScheduleID
+                           );
 }

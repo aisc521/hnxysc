@@ -792,4 +792,12 @@
       guestCornerHalf = #{guestcornerhalf,jdbcType=INTEGER}
     where ScheduleID = #{scheduleid,jdbcType=INTEGER}
   </update>
+
+    <update id="updateByScheduleID" parameterType="com.zhcdata.db.model.Schedule">
+        update schedule set  homeCorner=#{homeCorner},
+                              homeCornerHalf=#{homeCornerHalf},
+                              guestCorner=#{guestCorner},
+                              guestCornerHalf=#{guestCornerHalf}
+        where ScheduleID=#{ScheduleID}
+    </update>
 </mapper>
