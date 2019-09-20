@@ -58,7 +58,6 @@ public class TeamJob implements Job {
                 for (org.dom4j.Element two : twos) {
                     if (two.getName().equals("id")) {
                         info.setTeamid(Integer.valueOf(two.getText()));         //球队 ID
-                        System.out.println(two.getText());
                     } else if (two.getName().equals("lsID")) {
                         info.setSclassid(Integer.valueOf(two.getText()));       //所属联赛ID
                     } else if (two.getName().equals("g")) {
@@ -91,11 +90,13 @@ public class TeamJob implements Job {
 
                 List<TeamInfo> list = tbTeamMapper.queryTeam(info.getTeamid().toString());
                 if (list != null && list.size() > 0) {
-                    log.info("球队信息已经存在" + info.getTeamid());
-                    if (tbTeamMapper.updateByPrimaryKeySelective(info) > 0) {
-                        log.info("球队信息修改成功" + info.getTeamid());
-                    } else {
-                        log.info("球队信息修改失败" + info.getTeamid());
+                    if (!info.equals(list.get(0))) {
+                        log.info("球队信息已经存在" + info.getTeamid());
+                        if (tbTeamMapper.updateByPrimaryKeySelective(info) > 0) {
+                            log.info("球队信息修改成功" + info.getTeamid());
+                        } else {
+                            log.info("球队信息修改失败" + info.getTeamid());
+                        }
                     }
                 } else {
                     log.info("球队信息已经存在" + info.getTeamid());

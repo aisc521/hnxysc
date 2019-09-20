@@ -263,21 +263,12 @@ public class TeamInfo {
                 Objects.equals(flag, teamInfo.flag) &&
                 Objects.equals(address, teamInfo.address) &&
                 Objects.equals(url, teamInfo.url) &&
-                Objects.equals(drillmaster, teamInfo.drillmaster) &&
-                Objects.equals(masterpic, teamInfo.masterpic) &&
-                Objects.equals(guestpoloshirt, teamInfo.guestpoloshirt) &&
-                Objects.equals(homepoloshirt, teamInfo.homepoloshirt) &&
-                Objects.equals(modifytime, teamInfo.modifytime) &&
-                Objects.equals(masterintro, teamInfo.masterintro) &&
-                Objects.equals(venuesid, teamInfo.venuesid) &&
-                Objects.equals(conference, teamInfo.conference) &&
-                Objects.equals(isnational, teamInfo.isnational) &&
-                Objects.equals(introduce, teamInfo.introduce);
+                Objects.equals(drillmaster, teamInfo.drillmaster);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(teamid, kind, sclassid, nameShort, nameJ, nameF, nameE, foundDate, area, gymnasium, capacity, flag, address, url, drillmaster, masterpic, guestpoloshirt, homepoloshirt, modifytime, masterintro, venuesid, conference, isnational, introduce);
+        return Objects.hash(teamid, kind, sclassid, nameShort, nameJ, nameF, nameE, foundDate, area, gymnasium, capacity, flag, address, url, drillmaster);
     }
 }

@@ -9,4 +9,6 @@ public interface TbSclassMapper {
     List<SclassInfo> querySClass(@Param("SClassID") String SClassID);
 
     int insertSelective(SclassInfo sclassInfo);
+
+    int updateByPrimaryKeySelective(SclassInfo sclassInfo);
 }
