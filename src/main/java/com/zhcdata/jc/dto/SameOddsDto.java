@@ -1,4 +1,5 @@
 package com.zhcdata.jc.dto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,8 +13,11 @@ import java.util.Objects;
 @Data
 public class SameOddsDto implements Serializable {
     private static final long serialVersionUID = 2779194988862235161L;
+    @JsonIgnore
     private String lotteryType;         //比赛类型 1竞彩 2北单 3足彩 4其他
+    @JsonIgnore
     private String issueNum;
+    @JsonIgnore
     private String noId;
     private String matchId;
     private String matchName;            //比赛名称(亚冠…)
@@ -52,9 +56,11 @@ public class SameOddsDto implements Serializable {
     private String tpanFlatOdds;        //	同盘平几率
     private String tpanLoseHandicap;    //		同盘负盘口
     private String tpanLoseOdds;        //	同盘负几率
-
+    @JsonIgnore
     private int firstGoal;  //盘口
+    @JsonIgnore
     private int flag; //0按主队赔率  1按客队赔率
+    @JsonIgnore
     private int trend;//赔率趋势 1上升  -1 下降
 
     //同赔精选热度火焰  0无  2中  3大

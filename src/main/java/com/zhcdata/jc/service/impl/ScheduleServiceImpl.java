@@ -591,22 +591,22 @@ public class ScheduleServiceImpl implements ScheduleService {
         String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
         long seconds = RedisCodeMsg.SOCCER_SAME_ODDS_MATCH.getSeconds();
         String type = "0";
-        String s = processingTypeToLottery(type);
+        String s = processingSameOddsTypeToLottery(type);
         String item = type + "_" + s;
         redisUtils.hset(key, item, JsonMapper.defaultMapper().toJson(allList));
         redisUtils.hset(key, item + "_TIME_ID", timeId, seconds);
         type = "1";
-        s = processingTypeToLottery(type);
+        s = processingSameOddsTypeToLottery(type);
         item = type + "_" + s;
         redisUtils.hset(key, item, JsonMapper.defaultMapper().toJson(jcList));
         redisUtils.hset(key, item + "_TIME_ID", timeId, seconds);
         type = "2";
-        s = processingTypeToLottery(type);
+        s = processingSameOddsTypeToLottery(type);
         item = type + "_" + s;
         redisUtils.hset(key, item, JsonMapper.defaultMapper().toJson(bdList));
         redisUtils.hset(key, item + "_TIME_ID", timeId, seconds);
         type = "3";
-        s = processingTypeToLottery(type);
+        s = processingSameOddsTypeToLottery(type);
         item = type + "_" + s;
         redisUtils.hset(key, item, JsonMapper.defaultMapper().toJson(zcList));
         redisUtils.hset(key, item + "_TIME_ID", timeId, seconds);
@@ -620,7 +620,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         JavaType javaType = jsonMapper.buildCollectionType(List.class, SameOddsDto.class);
         for (int i = 0; i < 4; i++) {
             String type = i + "";
-            String s = processingTypeToLottery(type);
+            String s = processingSameOddsTypeToLottery(type);
             String item = type + "_" + s;
             String redisData = (String) redisUtils.hget(key, item);
             if (Strings.isNotBlank(redisData)) {
@@ -731,61 +731,6 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
     }
 
-    public static void main(String[] args) {
-        List<SameOddsDto> allList = new ArrayList<>();
-        for (int i = 10; i > 0; i--) {
-            SameOddsDto dto = new SameOddsDto();
-            dto.setLotteryType(""+i);
-            dto.setIssueNum(""+i);
-            dto.setNoId(""+i);
-            dto.setMatchId(""+i);
-            dto.setMatchName(""+i);
-            dto.setMatchState(""+i);
-            dto.setMatchTime(""+i);
-            dto.setMatchTime1(new Date());
-            dto.setMatchTime2(new Date());
-            dto.setMatchMinute(""+i);
-            dto.setHomeName(""+i);
-            dto.setGuestName(""+i);
-            dto.setHomeHalfScore(""+i);
-            dto.setGuestHalfScore(""+i);
-            dto.setHomeRedCard(""+i);
-            dto.setGuestRedCard(""+i);
-            dto.setHomeYlwCard(""+i);
-            dto.setGuestYlwCard(""+i);
-            dto.setHomeScore(""+i);
-            dto.setGuestScore(""+i);
-            dto.setText(""+i);
-            dto.setIssueBD(""+i);
-            dto.setIssueZC(""+i);
-            dto.setWeekNum(""+i);
-            dto.setNum(""+i);
-            dto.setTpeiWinHandicap(""+i);
-            dto.setTpeiWinOdds(new BigDecimal(new Random().nextInt(10)).divide(BigDecimal.TEN).toString());
-            dto.setTpeiFlatHandicap(""+i);
-            dto.setTpeiFlatOdds(""+i);
-            dto.setTpeilLoseHandicap(""+i);
-            dto.setTpeilLoseOdds(""+i);
-            dto.setTpanWinHandicap(""+i);
-            dto.setTpanWinOdds(""+i);
-            dto.setTpanFlatHandicap(""+i);
-            dto.setTpanFlatOdds(""+i);
-            dto.setTpanLoseHandicap(""+i);
-            dto.setTpanLoseOdds(""+i);
-            dto.setFirstGoal(i);
-            dto.setFlag(i);
-            dto.setTrend(i);
-            dto.setFireFlagWin(i);
-            dto.setFireFlagFlat(i);
-            dto.setFireFlagLose(i);
-            allList.add(dto);
-        }
-//        allList.sort(Comparator.comparing(o -> new BigDecimal(o.getTpeiWinOdds())));
-        allList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
-        for (SameOddsDto sameOddsDto : allList) {
-            System.out.println(JsonMapper.defaultMapper().toJson(sameOddsDto));
-        }
-    }
 
     /**
      * 计算几率，返回同配数据不够15条的记录
@@ -999,7 +944,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     }
 
-    private String processingTypeToLottery(String type){
+    @Override
+    public String processingSameOddsTypeToLottery(String type){
         String lottery;
         if (Strings.isBlank(type)) {
             lottery = "all";

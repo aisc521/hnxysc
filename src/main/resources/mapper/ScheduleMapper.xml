@@ -793,6 +793,14 @@
     where ScheduleID = #{scheduleid,jdbcType=INTEGER}
   </update>
 
+    <update id="updateByScheduleID" parameterType="com.zhcdata.db.model.Schedule">
+        update schedule set  homeCorner=#{homeCorner},
+                              homeCornerHalf=#{homeCornerHalf},
+                              guestCorner=#{guestCorner},
+                              guestCornerHalf=#{guestCornerHalf}
+        where ScheduleID=#{ScheduleID}
+    </update>
+
     <select id="queryMacthListForJob" resultType="com.zhcdata.jc.dto.MatchResult1">
         select
         class.Name_JS matchName,/*联赛名称*/

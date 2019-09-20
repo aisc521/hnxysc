@@ -1,6 +1,7 @@
 package com.zhcdata.db.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class TeamInfo {
     private Integer teamid;
@@ -241,5 +242,42 @@ public class TeamInfo {
 
     public void setIntroduce(String introduce) {
         this.introduce = introduce == null ? null : introduce.trim();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TeamInfo teamInfo = (TeamInfo) o;
+        return Objects.equals(teamid, teamInfo.teamid) &&
+                Objects.equals(kind, teamInfo.kind) &&
+                Objects.equals(sclassid, teamInfo.sclassid) &&
+                Objects.equals(nameShort, teamInfo.nameShort) &&
+                Objects.equals(nameJ, teamInfo.nameJ) &&
+                Objects.equals(nameF, teamInfo.nameF) &&
+                Objects.equals(nameE, teamInfo.nameE) &&
+                Objects.equals(foundDate, teamInfo.foundDate) &&
+                Objects.equals(area, teamInfo.area) &&
+                Objects.equals(gymnasium, teamInfo.gymnasium) &&
+                Objects.equals(capacity, teamInfo.capacity) &&
+                Objects.equals(flag, teamInfo.flag) &&
+                Objects.equals(address, teamInfo.address) &&
+                Objects.equals(url, teamInfo.url) &&
+                Objects.equals(drillmaster, teamInfo.drillmaster) &&
+                Objects.equals(masterpic, teamInfo.masterpic) &&
+                Objects.equals(guestpoloshirt, teamInfo.guestpoloshirt) &&
+                Objects.equals(homepoloshirt, teamInfo.homepoloshirt) &&
+                Objects.equals(modifytime, teamInfo.modifytime) &&
+                Objects.equals(masterintro, teamInfo.masterintro) &&
+                Objects.equals(venuesid, teamInfo.venuesid) &&
+                Objects.equals(conference, teamInfo.conference) &&
+                Objects.equals(isnational, teamInfo.isnational) &&
+                Objects.equals(introduce, teamInfo.introduce);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(teamid, kind, sclassid, nameShort, nameJ, nameF, nameE, foundDate, area, gymnasium, capacity, flag, address, url, drillmaster, masterpic, guestpoloshirt, homepoloshirt, modifytime, masterintro, venuesid, conference, isnational, introduce);
     }
 }

@@ -56,6 +56,13 @@ public interface ScheduleService {
     void updateSameOddsMatchData(String date);
 
     /**
+     * 根据类型转换为彩种 1竞彩 2北单 3足彩 其他为all
+     * @param type
+     * @return
+     */
+    String processingSameOddsTypeToLottery(String type);
+
+    /**
      * 定时任务 比赛列表
      * @param startDate
      * @param endDate
