@@ -64,6 +64,25 @@ public enum ProtocolCodeMsg {
 
     UPDATE_FAILE("888888","更新失败"),
     INSERT_FAILE("888888","插入失败"),
+    //收藏取消
+    COLLECT_MATCHID("020201", "非法的比赛ID"),
+    COLLECT_TYPE("020202", "收藏类型不合法"),
+    COLLECT_MATCHTIME("020203", "开赛时间不能为空"),
+    COLLECT_FLAG_FAIL("020206", "标志非法"),
+    COLLECT_COUNT("020204", "收藏已达上限"),
+    COLLECT_DB_FAIL("020205", "操作失败，请稍后重试"),
+    NO_COLLECT_INFO("020207","无对应的收藏记录"),
+    //关注列表
+    TYPE_NULL("2001020101","type不能为空"),
+    TIME_NULL("2001020101","matchTime不能为空"),
+    PAGEAMOUNT_NULL("2001020101","每页总条数不能为空"),
+    PAGENO_NULL("2001020101","当前页能为空"),
+    EXPERT_ID("1020021701","专家ID不能为空"),
+    PLAN_TYPE("1020021901","方案类型不能为空"),
+    PLANID_NULL("1020022001","方案ID不能为空"),
+    SEARCH_MATCH_TYPE("02171", "比赛类型不合法"),
+    SEARCH_MATCH_MATCH_TYPE("02172", "标签代码不合法"),
+    SEARCH_MATCH_MATCH_TIME("02173", "时间参数不合法"),
     ;
     private String code;
 

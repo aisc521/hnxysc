@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.TbJcPlanMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.TbJcPlan" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="ascription_expert" property="ascriptionExpert" jdbcType="BIGINT" />
+    <result column="title_show_type" property="titleShowType" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="introduc_show_type" property="introducShowType" jdbcType="BIGINT" />
+    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
+    <result column="num_info" property="numInfo" jdbcType="VARCHAR" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="BIGINT" />
+    <result column="is_right" property="isRight" jdbcType="BIGINT" />
+    <result column="end_Time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="plan_Hit" property="planHit" jdbcType="VARCHAR" />
+    <result column="red_Count" property="redCount" jdbcType="INTEGER" />
+    <result column="red_Pay_Count" property="redPayCount" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="queryPlanCountByExpertId" resultType="Integer">
+    SELECT count(*) from tb_jc_plan where status=1 and ascription_expert=${expertId}
+  </select>
+  <select id="queryPlanByExpertId" resultType="com.zhcdata.jc.dto.PlanResult1">
+    SELECT e.id,
+    e.nick_name nickName,
+    e.img,
+    e.lable,
+    e.fans,
+    e.popularity,
+    v.lz_now lz,
+    v.z_three_days zThreeDays,
+    v.z_five_days zFiveDays,
+    v.z_seven_days zSevenDays,
+    p.title_show_type,
+    p.price,
+    p.is_right isRight,
+    p.type,
+    p.create_time
+    from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
+    LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
+    LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
+    where 1=1
+    <if test="id != null" >
+      and e.id = ${id}
+    </if>
+    <if test="planId != null" >
+      and e.id in(${planId})
+    </if>
+  </select>
+
+  <select id="queryPlanList" resultType="com.zhcdata.db.model.TbJcPlan">
+    select * from tb_jc_plan where 1=1
+    <if test="status != null" >
+      and status = ${status}
+    </if>
+    <if test="expert != null" >
+      and ascription_expert = ${expert}
+    </if>
+    ORDER BY create_time asc
+  </select>
+
+  <select id="queryScore" resultType="com.zhcdata.jc.dto.TbScoreResult">
+    SELECT * from(
+    SELECT c.*,e.status_type statusType,e.id,e.status_descFK statusescFK,e.ut from(
+    SELECT b.*,jc.date_Of_Match dateOfMatch,jc.num from ch_sportteryf jc
+    LEFT JOIN
+    (SELECT l.name,r.Value,ep1.number,ep1.eventFK,p.id teamId from event_participants ep1
+    LEFT JOIN participant p on ep1.participantFK=p.id
+    LEFT JOIN language l on l.objectFK=p.id and language_typeFK in (57)  and l.object='participant'
+    LEFT JOIN result r on ep1.id=r.Event_participantsFK and r.Result_typeFK=1
+    ) b on b.eventFK=jc.unique_match_id
+    where eventFK=${matchId}
+    ) c
+    LEFT JOIN event e on c.eventFK=e.id
+    ) f ORDER BY dateOfMatch asc,num asc,number asc
+  </select>
+
+  <select id="querySPFList" resultType="com.zhcdata.jc.dto.TbSPFInfo">
+    (SELECT * from(
+    (SELECT sp.unique_match_id matchId,sp.gameid,spf1.levelrate,spf1.loserate,spf1.winrate,1 type,0 concedenum,spf1.create_time from (
+    SELECT * from ch_sportteryf where unique_match_id=${MatchId}
+    ) sp LEFT JOIN ch_jczq_win_and_lose spf1 on sp.gameid=spf1.gameid WHERE spf1.finishstatus=1)
+    )b ORDER BY create_time desc LIMIT 1
+    )
+    UNION
+    (
+    SELECT * from(
+    (SELECT sp.unique_match_id,sp.gameid,spf1.levelrate,spf1.loserate,spf1.winrate,2 type,spf1.concedenum,spf1.create_time from (
+    SELECT * from ch_sportteryf where unique_match_id=${MatchId}
+    ) sp LEFT JOIN ch_jczq_rqspf spf1 on sp.gameid=spf1.gameid WHERE spf1.finishstatus=1)
+    ) b ORDER BY create_time desc LIMIT 1
+    )
+  </select>
+  <update id="updateStatus">
+    update tb_jc_plan set status='0',plan_Hit='${planHit}',is_right='${isRight}' where id=${id}
+  </update>
+  <select id="queryPlanById" resultType="com.zhcdata.jc.dto.PlanResult2">
+    SELECT e.id,
+    e.nick_name nickName,
+    e.img,
+    e.lable,
+    e.fans,
+    e.introduction,
+    p.num_info numInfo,
+    p.title,
+    f.status
+    from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
+    LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
+    LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
+    where 1=1
+    and p.id=1
+  </select>
+  <select id="queryPlanId" resultType="com.zhcdata.jc.dto.PlanResult1">
+    SELECT plan_id id from tb_jc_match where match_id in(SELECT match_id from tb_jc_match where plan_id=${planId})
+  </select>
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.TbPgUCollectMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.TbPgUCollect" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="match_id" property="matchId" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="match_time" property="matchTime" jdbcType="TIMESTAMP" />
+    <result column="over_time" property="overTime" jdbcType="TIMESTAMP" />
+    <result column="src" property="src" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+
+  <select id="queryUserCollectCount" resultType="java.lang.Integer" parameterType="com.zhcdata.db.model.TbPgUCollect">
+    SELECT count(*) FROM  tb_pg_u_collect  WHERE user_id = #{userId,jdbcType=BIGINT}
+
+    <choose>
+      <when test="matchId!=null">
+        AND  match_id = #{matchId,jdbcType=BIGINT}
+      </when>
+      <otherwise>
+        AND `status` = 1
+      </otherwise>
+    </choose>
+    AND over_time <![CDATA[>=]]>  now()
+  </select>
+
+  <select id="queryUserCollectByMatchId" resultType="java.lang.Integer" parameterType="com.zhcdata.db.model.TbPgUCollect">
+    SELECT count(*) FROM  tb_pg_u_collect  WHERE user_id = #{userId,jdbcType=BIGINT}
+
+    <choose>
+      <when test="matchId!=null">
+        AND  match_id = #{matchId,jdbcType=BIGINT}
+      </when>
+      <otherwise>
+        AND `status` = 1
+      </otherwise>
+    </choose>
+  </select>
+
+  <update id="updateStatusByUserId" parameterType="com.zhcdata.db.model.TbPgUCollect">
+    update tb_pg_u_collect set status = #{status,jdbcType=INTEGER} ,type=#{type,jdbcType=INTEGER}, update_time = now()
+    where user_id = #{userId,jdbcType=BIGINT} and match_id=#{matchId,jdbcType=BIGINT}
+  </update>
+
+
+  <select id="queryUserCollectByUserIdAndMacthId" resultType="java.lang.Integer" parameterType="com.zhcdata.db.model.TbPgUCollect">
+    SELECT * FROM  tb_pg_u_collect pg WHERE pg.user_id = #{userId} and pg.match_id = #{macthId}
+  </select>
+
+
+</mapper>

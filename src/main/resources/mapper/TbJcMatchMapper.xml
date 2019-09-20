@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.TbJcMatchMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.TbJcMatch" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="plan_id" property="planId" jdbcType="BIGINT" />
+    <result column="match_id" property="matchId" jdbcType="BIGINT" />
+    <result column="match_name" property="matchName" jdbcType="VARCHAR" />
+    <result column="match_num" property="matchNum" jdbcType="VARCHAR" />
+    <result column="date_of_match" property="dateOfMatch" jdbcType="VARCHAR" />
+    <result column="home_team" property="homeTeam" jdbcType="VARCHAR" />
+    <result column="visiting_team" property="visitingTeam" jdbcType="VARCHAR" />
+    <result column="planInfo" property="planinfo" jdbcType="VARCHAR" />
+    <result column="matchResult" property="matchresult" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="queryList" resultType="com.zhcdata.jc.dto.MatchPlanResult">
+    SELECT match_Id matchId,match_num matchNum,match_name matchName,home_team hostTeam,visiting_team visitTeam,date_Of_Match dateOfMatch from tb_jc_match
+    where plan_id =${planId} ORDER BY match_num asc
+  </select>
+  <update id="updateStatus">
+    update tb_jc_match set status=${status},matchResult='${score}' where id=${id}
+  </update>
+  <select id="queryList1" resultType="com.zhcdata.jc.dto.MatchPlanResult1">
+    SELECT match_num matchNum,match_name matchName,home_team hostTeam,visiting_team visitTeam,date_Of_Match dateOfMatch,status,matchResult score from tb_jc_match
+    where plan_id =${planId} ORDER BY match_num asc
+  </select>
+
+</mapper>

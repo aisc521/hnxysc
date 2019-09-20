@@ -113,4 +113,13 @@ public interface ScheduleMapper {
      */
     SameOddsStatisticDto selectSameOddsStatistic(SameOddsDto sameOddsDto);
 
+    List<MatchResult1> queryMacthListForJob(@Param("startTime") String startDate, @Param("endTime")String endDate, @Param("type")String type, @Param("userId") String userId, @Param("state")String state);
+
+    String queryZcNum(@Param("startDate")String startDate, @Param("endTime")String endDate);
+
+    String queryBdNum(@Param("startDate")String startDate, @Param("endTime")String endDate);
+
+    List<MatchResult1> queryAttentionList(@Param("userId") long userId);
+
+    List<Integer> selectMatchIdExceedNow();
 }

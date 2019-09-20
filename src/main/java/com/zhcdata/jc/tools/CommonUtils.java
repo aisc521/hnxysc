@@ -16,6 +16,7 @@ import org.springside.modules.utils.time.ClockUtil;
 import org.springside.modules.utils.time.DateFormatUtil;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -116,6 +117,21 @@ public class CommonUtils {
         return true;
     }
 
+    /**
+     * 校验请求参数是否存在
+     *
+     * @param map      响应结果
+     * @param paramMap 参数map
+     * @return true 通过校验  false 未通过校验
+     */
+    public boolean validParamExistAndNumber(Map<String, Object> map, Map<String, String> paramMap, String key, ProtocolCodeMsg protocolCodeMsg) {
+        String value = paramMap.get(key);
+        if (Strings.isNullOrEmpty(value) || !NumberUtil.isNumber(value)) {
+            errorMessageToMap(map, protocolCodeMsg);
+            return false;
+        }
+        return true;
+    }
     /**
      * 校验请求参数是否存在且是正整数
      *
@@ -452,4 +468,35 @@ public class CommonUtils {
         }
         return remark;
     }
+
+
+    public String getSE() {
+        String startDate = "";
+        String endDate = "";
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dt = df.format(new Date());
+        String hour = dt.substring(11, 13);
+        if (Integer.parseInt(hour) > 10) {
+            Date date = new Date();//获取当前时间
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            startDate = df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
+
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            endDate = df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
+
+            //过11点,过了11:00点则不显示昨天的赛果只显示今天的对阵
+        } else {
+            Date date = new Date();//获取当前时间
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            endDate = df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
+
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            startDate = df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
+            //未过11点,每天中午11:00前都显示昨日比赛结果
+        }
+        return startDate + "," + endDate;
+    }
+
 }
