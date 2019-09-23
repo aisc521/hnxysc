@@ -50,7 +50,7 @@
   </update>
 
 
-  <select id="queryUserCollectByUserIdAndMacthId" resultType="java.lang.Integer" parameterType="com.zhcdata.db.model.TbPgUCollect">
+  <select id="queryUserCollectByUserIdAndMacthId" resultType="com.zhcdata.db.model.TbPgUCollect" parameterType="com.zhcdata.db.model.TbPgUCollect">
     SELECT * FROM  tb_pg_u_collect pg WHERE pg.user_id = #{userId} and pg.match_id = #{macthId}
   </select>
 

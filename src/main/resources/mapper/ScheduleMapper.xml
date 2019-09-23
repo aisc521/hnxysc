@@ -869,13 +869,13 @@
     <select id="queryBdNum" resultType="String">
          SELECT lottery.ISSUE_NUM num from schedule  sc
        LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007 and lottery.LOTTERY = 'BJDC'
-       where sc.MatchTime >= #{startDate}
+       where sc.MatchTime >= #{startDate} ORDER BY sc.MatchTime desc LIMIT 1
     </select>
 
     <select id="queryAttentionList" resultType="com.zhcdata.jc.dto.MatchResult1">
         select
-            class.Name_JS,/*联赛名称*/
-            sc.MatchTime,/*开始时间*/
+            class.Name_JS matchName,/*联赛名称*/
+            sc.MatchTime matchTime,/*开始时间*/
             case when sc.MatchState = '0' then '未开始' /*未开始*/
                  when sc.MatchState in('1','3','4','5') then '正在进行' /*正在进行*/
                  when sc.MatchState = '2' then '中场' /*中场*/
@@ -885,20 +885,20 @@
                  end as matchState,/*比赛状态*/
             case when	 sc.MatchState in ('1','2') then TIMESTAMPDIFF(MINUTE ,sc.MatchTime2,now(3))
                  when sc.MatchState =  '3' then TIMESTAMPDIFF(MINUTE ,sc.MatchTime2,now(3)) + 45
-                 else ''
+                 else '0'
                  end as makeTime,/*比赛进行分钟数*/
             goal.FirstGoal matchPankou,/*盘口*/
-            sc.HomeHalfScore,/*主队半场比分*/
-            sc.GuestHalfScore,/*客队半场比分*/
-            sc.Home_Red,/*主队红牌*/
-            sc.Guest_Red,/*客队红牌*/
-            sc.Home_Yellow,/*主队黄牌*/
-            sc.Guest_Yellow,/*客队黄牌*/
-            t.Name_J,/*主队名称*/
-            t2.Name_J,/*客队名称*/
-            sc.HomeScore,/*主队比分*/
-            sc.GuestScore,/*客队比分*/
-            sc.ScheduleID,/*比赛id*/
+            sc.HomeHalfScore homeHalfScore,/*主队半场比分*/
+            sc.GuestHalfScore guestHalfScore,/*客队半场比分*/
+            sc.Home_Red homeReadCard,/*主队红牌*/
+            sc.Guest_Red guestReadCard,/*客队红牌*/
+            sc.Home_Yellow homeYlwCard,/*主队黄牌*/
+            sc.Guest_Yellow guestYlwCard,/*客队黄牌*/
+            t.Name_J homeName,/*主队名称*/
+            t2.Name_J guestName,/*客队名称*/
+            sc.HomeScore homeScore,/*主队比分*/
+            sc.GuestScore guestScore,/*客队比分*/
+            sc.ScheduleID matchId,/*比赛id*/
             lottery.ISSUE_NUM num,/*期数场次*/
             lottery.NO_ID number,/*期数场次*/
             IFNULL(pg.status,'0') iscollect/*是否收藏*/
@@ -908,7 +908,7 @@
             LEFT JOIN team t ON sc.HomeTeamID = t.TeamID
             LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
             LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
-            LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id and pg.user_id = '1'
+            LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id and pg.user_id = #{userId}
             WHERE pg.status = '1'
             ORDER BY sc.MatchTime
     </select>

@@ -39,4 +39,6 @@ public interface TbPlanService {
     List<PlanResult2> queryPlanById(String id);
 
     List<PlanResult1> queryPlanId(String id);
+
+    List<PlanResult1> queryPlanByExpertId1(String id);
 }

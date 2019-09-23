@@ -85,6 +85,7 @@ public enum ProtocolCodeMsg {
     SEARCH_MATCH_TYPE("02171", "比赛类型不合法"),
     SEARCH_MATCH_MATCH_TYPE("02172", "标签代码不合法"),
     SEARCH_MATCH_MATCH_TIME("02173", "时间参数不合法"),
+    NO_GANE_TYPE("02174", "无对应的比赛类型信息"),
     ;
     private String code;
 

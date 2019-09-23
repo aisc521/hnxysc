@@ -131,9 +131,18 @@ public class UserCollectProtocol implements BaseProtocol {
             JcMatchLottery lottery1 = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(matchId),"BJDC");
             if(lottery1 != null){
                 tbPgUCollect.setType(2);//北单
-            }else{
+            }
+            JcMatchLottery lottery2 = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(matchId),"SF14");
+            if(lottery2 != null){
                 tbPgUCollect.setType(3);//足彩
             }
+
+            if(lottery == null && lottery2 == null && lottery1 == null){
+                resultMap.put("resCode", ProtocolCodeMsg.NO_GANE_TYPE.getCode());
+                resultMap.put("message", ProtocolCodeMsg.NO_GANE_TYPE.getMsg());
+                return resultMap;
+            }
+
             int insert = tbPgUCollectService.insertTbPgUCollect(tbPgUCollect);
             if(insert > 0){
                 return resultMap;

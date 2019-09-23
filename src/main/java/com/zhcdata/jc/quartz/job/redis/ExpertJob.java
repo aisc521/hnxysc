@@ -39,7 +39,7 @@ public class ExpertJob implements Job {
 
     //处理热门专家
     @Async
-    @Scheduled(cron = "1 1/2 * * * *")
+    //@Scheduled(cron = "1 1/2 * * * *")
     public void execute(JobExecutionContext context) throws JobExecutionException {
         LOGGER.info("[热门专家定时任务开启]" + df.format(new Date()));
         try {

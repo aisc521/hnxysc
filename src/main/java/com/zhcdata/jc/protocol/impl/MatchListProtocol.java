@@ -12,6 +12,7 @@ import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.utils.number.NumberUtil;
 
@@ -25,6 +26,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/20 10:29
  */
+@Service("10200201")
 public class MatchListProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource

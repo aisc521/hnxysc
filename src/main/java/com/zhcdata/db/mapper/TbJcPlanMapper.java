@@ -13,7 +13,7 @@ import java.util.List;
 public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     int queryPlanCountByExpertId(@Param("expertId")String expertId);
 
-    List<PlanResult1> queryPlanByExpertId(@Param("id") long expertId, @Param("planId")long planId);
+    List<PlanResult1> queryPlanByExpertId(@Param("id") long expertId, @Param("planId")String planId);
 
     List<TbJcPlan> queryPlanList(@Param("expert") String expert, @Param("status") String status);
 
@@ -26,4 +26,6 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     List<PlanResult2> queryPlanById(@Param("id") String id);
 
     List<PlanResult1> queryPlanId(@Param("planId") String planId);
+
+    List<PlanResult1> queryPlanByExpertId1(@Param("id") long expertId);
 }

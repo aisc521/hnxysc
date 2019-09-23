@@ -21,11 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description < 关注列表(10200211)>
+ * @Description < 关注列表(10200228)>
  * @Author cuishuai
  * @Date 2019/9/19 17:51
  */
-@Service("10200211")
+@Service("10200228")
 public class AttentionListProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource
@@ -37,7 +37,7 @@ public class AttentionListProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
-        String type = paramMap.get("type");
+       /* String type = paramMap.get("type");
         if (Strings.isNullOrEmpty(type)) {
             LOGGER.info("[" + ProtocolCodeMsg.TYPE_NULL.getMsg() + "]:type---" + type);
             map.put("resCode", ProtocolCodeMsg.TYPE_NULL.getCode());
@@ -52,7 +52,7 @@ public class AttentionListProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.TIME_NULL.getMsg());
             return map;
         }
-
+*/
         String pageNo = paramMap.get("pageNo");
         if (Strings.isNullOrEmpty(pageNo) || !NumberUtil.isNumber(pageNo)) {
             LOGGER.info("[" + ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg() + "]:pageNo---" + pageNo);

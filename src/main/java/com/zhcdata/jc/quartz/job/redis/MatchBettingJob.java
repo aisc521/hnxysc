@@ -1,11 +1,13 @@
 package com.zhcdata.jc.quartz.job.redis;
 
 import com.zhcdata.jc.protocol.impl.MatchBettingCollectProtocol;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -15,6 +17,8 @@ import java.text.SimpleDateFormat;
  * @Author cuishuai
  * @Date 2019/9/20 15:17
  */
+@Slf4j
+@Component
 public class MatchBettingJob implements Job {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 

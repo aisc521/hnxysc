@@ -8,6 +8,7 @@ import com.zhcdata.jc.dto.PlanResult2;
 import com.zhcdata.jc.dto.TbSPFInfo;
 import com.zhcdata.jc.dto.TbScoreResult;
 import com.zhcdata.jc.service.TbPlanService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,7 +30,7 @@ public class TbPlanServiceImpl implements TbPlanService {
 
     @Override
     public List<PlanResult1> queryPlanByExpertId(String id, String planId) {
-        return tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),Long.parseLong(planId));
+            return tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId);
     }
 
     @Override
@@ -60,5 +61,10 @@ public class TbPlanServiceImpl implements TbPlanService {
     @Override
     public List<PlanResult1> queryPlanId(String id) {
         return tbJcPlanMapper.queryPlanId(id);
+    }
+
+    @Override
+    public List<PlanResult1> queryPlanByExpertId1(String id) {
+        return tbJcPlanMapper.queryPlanByExpertId1(Long.parseLong(id));
     }
 }
