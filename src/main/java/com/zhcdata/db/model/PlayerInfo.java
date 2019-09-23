@@ -1,6 +1,7 @@
 package com.zhcdata.db.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class PlayerInfo {
     private Integer playerid;
@@ -221,5 +222,40 @@ public class PlayerInfo {
 
     public void setHonorinfo(String honorinfo) {
         this.honorinfo = honorinfo;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerInfo that = (PlayerInfo) o;
+        return Objects.equals(playerid, that.playerid) &&
+                Objects.equals(kind, that.kind) &&
+                Objects.equals(nameShort, that.nameShort) &&
+                Objects.equals(nameF, that.nameF) &&
+                Objects.equals(nameJ, that.nameJ) &&
+                Objects.equals(nameE, that.nameE) &&
+                Objects.equals(nameEs, that.nameEs) &&
+                Objects.equals(birthday, that.birthday) &&
+                Objects.equals(tallness, that.tallness) &&
+                Objects.equals(weight, that.weight) &&
+                Objects.equals(country, that.country) &&
+                Objects.equals(photo, that.photo) &&
+                Objects.equals(introduce, that.introduce) &&
+                Objects.equals(health, that.health) &&
+                Objects.equals(modifytime, that.modifytime) &&
+                Objects.equals(countryid, that.countryid) &&
+                Objects.equals(expectedvalue, that.expectedvalue) &&
+                Objects.equals(honorinfo, that.honorinfo) &&
+                Objects.equals(enddatecontract, that.enddatecontract) &&
+                Objects.equals(idiomaticfeet, that.idiomaticfeet) &&
+                Objects.equals(country2id, that.country2id) &&
+                Objects.equals(hotsortnumber, that.hotsortnumber);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(playerid, kind, nameShort, nameF, nameJ, nameE, nameEs, birthday, tallness, weight, country, photo, introduce, health, modifytime, countryid, expectedvalue, honorinfo, enddatecontract, idiomaticfeet, country2id, hotsortnumber);
     }
 }

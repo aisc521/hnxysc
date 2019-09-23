@@ -1,5 +1,7 @@
 package com.zhcdata.db.model;
 
+import java.util.Objects;
+
 public class PlayerInTeamInfo {
     private Integer id;
 
@@ -139,5 +141,24 @@ public class PlayerInTeamInfo {
 
     public void setEndtime(String endtime) {
         this.endtime = endtime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PlayerInTeamInfo that = (PlayerInTeamInfo) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(playerid, that.playerid) &&
+                Objects.equals(playername, that.playername) &&
+                Objects.equals(teamid, that.teamid) &&
+                Objects.equals(place, that.place) &&
+                Objects.equals(number, that.number);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, playerid, playername, teamid, place, number);
     }
 }
