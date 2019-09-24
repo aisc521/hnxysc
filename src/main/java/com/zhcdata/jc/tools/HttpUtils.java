@@ -279,12 +279,13 @@ public class HttpUtils {
         return returnStr;
 
     }
+
     /**
      * HTTP GET
      *
      * @param url
-     * @param param 参数map
-     * @param charset   URLEncode编码方式
+     * @param param   参数map
+     * @param charset URLEncode编码方式
      * @return resultBytes 返回页面字节码
      * @author lixiaoguang
      */
@@ -378,5 +379,4 @@ public class HttpUtils {
         }
         return "";
     }
-
 }

@@ -21,4 +21,18 @@
   <select id="queryJcMatchBjdcPlByIssuemAndNoId" resultType="com.zhcdata.db.model.JcMatchBjdcPl">
     select * from jc_match_bjdc_pl where ISSUE_NUM=#{issueNum} and NO_ID = #{noId}
   </select>
+  <select id="queryBjdcListReuslt" resultType="java.util.Map">
+    select l.ID_BET007,l.ISSUE_NUM,a.*,l.lottery,l.LOTTERY_NAME,d.MATCH_RESULT from (
+    SELECT m.ScheduleID,m.HomeTeam hostname,m.GuestTeam guestName,m.MatchTime matchTime,s.Name_JS matchName,m.MatchState
+    ,m.HomeScore,m.GuestScore,m.HomeHalfScore,m.GuestHalfScore
+    from schedule m LEFT JOIN Sclass s on s.sclassID = m.SclassID
+    where
+    m.MatchTime >= str_to_date('2019-09-17 00:00:01', '%Y-%m-%d %H:%i:%s')
+    and
+    m.MatchTime <![CDATA[ <= ]]>str_to_date('2019-09-17 23:59:59', '%Y-%m-%d %H:%i:%s')
+     and MatchState =-1
+    ) a,jc_match_lottery l,JC_MATCH_BJDCRESLUT d where a.ScheduleID = l.ID_BET007 and a.ScheduleID = d.ID_BET007
+    and l.LOTTERY = 'JC_BD'
+    order by l.ISSUE_NUM desc ,matchTime
+  </select>
 </mapper>

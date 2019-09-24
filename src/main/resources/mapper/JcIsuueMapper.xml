@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.JcIsuueMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.JcIsuue" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" property="id" jdbcType="BIGINT" />
+    <result column="ISSUE" property="issue" jdbcType="VARCHAR" />
+    <result column="WIN_NUM" property="winNum" jdbcType="VARCHAR" />
+    <result column="LOTTERY" property="lottery" jdbcType="VARCHAR" />
+    <result column="LOTTERY_NAME" property="lotteryName" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+    <result column="SALE_TIME_START" property="saleTimeStart" jdbcType="TIMESTAMP" />
+    <result column="SALE_TIME_END" property="saleTimeEnd" jdbcType="TIMESTAMP" />
+    <result column="REAL_SALE_START_TIME" property="realSaleStartTime" jdbcType="TIMESTAMP" />
+    <result column="REAL_SALE_END_TIME" property="realSaleEndTime" jdbcType="TIMESTAMP" />
+    <result column="AWARD_TIME" property="awardTime" jdbcType="TIMESTAMP" />
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="YEAR" property="year" jdbcType="VARCHAR" />
+    <result column="MONTH" property="month" jdbcType="VARCHAR" />
+    <result column="DAY" property="day" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="queryIssueResult" resultType="java.util.Map">
+    select a.issue_num matchIssue,cn,IFNULL(i.ISSUE,0) issue
+     from (
+    select l.issue_num,count(*) cn from jc_match_lottery l
+    , schedule s where
+      CREATE_TIME>DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 10 DAY),'%Y-%m-%d') and LOTTERY = 'SF14'
+    and s.ScheduleID = l.ID_BET007
+    and MatchState in(-1,-10,12)
+    group by l.issue_num ) a left join JC_ISUUE i on i.ISSUE = a.issue_num and i.STATUS = 2
+    where a.cn='14'
+  </select>
+  <select id="queryMatchReslutByIssue" resultType="java.util.Map">
+
+    select s.HomeScore,s.GuestScore,s.MatchState from jc_match_lottery l,schedule s where l.issue_num = '2019125' and s.ScheduleID = l.ID_BET007
+    and MatchState in(-1,-10,12)
+  </select>
+  <select id="queryAwardNumByIssue" resultType="java.util.Map">
+     select issue issueNum,win_num content,'' time from JC_ISUUE i where i.lottery='SF14' and
+     <if test="startIssue == '-1'">
+       i.issue = (select max(issue) from  JC_ISUUE where lottery='SF14')
+     </if>
+    <if test="startIssue != '-1'">
+      i.issue > #{startIssue}
+    </if>
+    order by issue
+  </select>
+</mapper>

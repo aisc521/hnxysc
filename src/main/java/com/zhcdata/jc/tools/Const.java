@@ -53,7 +53,7 @@ public interface Const {
 
     String TIME_ID = "timeId";
 
-    String SYS_TYPE = "WTG";
+    String SYS_TYPE = "SMP";
 
     String SUCCESS_STR = "success";
 

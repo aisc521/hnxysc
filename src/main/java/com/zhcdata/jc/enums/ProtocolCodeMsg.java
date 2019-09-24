@@ -55,7 +55,10 @@ public enum ProtocolCodeMsg {
     TYPE_NOT_ASSIGNED("020802", "状态值不合法"),
     TIME_ID_NOT_ASSIGNED("020803", "timeId不合法"),
     //2.1.9欧赔/亚盘/大小球详情
-    OP_ID_NOT_ASSIGNED("020901", "opId不合法"),
+    OP_ID_NOT_ASSIGNED("020O901", "opId不合法"),
+    //公共号相关参数提示
+    BDJC_DAY("090101","日期不能为空"),
+    BDJC_FLAG("090102","标识不能为空"),
     //2.1.9欧赔/亚盘/大小球详情
     DATE_NOT_ASSIGNED("021201", "日期不合法"),
 
@@ -87,6 +90,7 @@ public enum ProtocolCodeMsg {
     SEARCH_MATCH_MATCH_TIME("02173", "时间参数不合法"),
     NO_GANE_TYPE("02174", "无对应的比赛类型信息"),
     LINEUP_MATCHID("020201", "非法的比赛ID"),
+    SF14_startIssue("090401","开始期次不能为空");
     ;
     private String code;
 
