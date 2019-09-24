@@ -23,19 +23,13 @@
  */
 package com.zhcdata.jc.quartz.job.Match;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.sun.javafx.collections.MappingChange;
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.tools.BeanUtils;
-import com.zhcdata.jc.tools.HttpUtils;
-import com.zhcdata.jc.tools.xml.XmlUtils;
+
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.MatchListRsp;
-import com.zhcdata.jc.xml_model.MatchList;
-import com.zhcdata.jc.xml_model.MatchListModel;
-import org.quartz.JobExecutionException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -59,27 +53,49 @@ public class MatchListJob{
     @Resource
     ScheduleMapper scheduleMapper;
 
-    //@Scheduled(cron = "1 0/3 * * * ?")
+    @Scheduled(cron = "44 24 * * * ?")
     public void execute() throws Exception {
         LOGGER.info("赛程赛果定时任务启动");
         long s = System.currentTimeMillis();
         int insert = 0;
         int hasIn = 0;
+        int update = 0;
         QiuTanXmlComm parse = new QiuTanXmlComm();
-        List<MatchListRsp> models = parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx", MatchListRsp.class);
+        List<MatchListRsp> models = parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date=2019-09-23", MatchListRsp.class);
+        models.addAll(parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date=2019-09-24", MatchListRsp.class));
+        //models.addAll(parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date=2019-09-24", MatchListRsp.class));
+        //models.addAll(parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date=2019-09-25", MatchListRsp.class));
         for (MatchListRsp model : models) {
+            Schedule xml = BeanUtils.parseSchedule(model);
             try {
                 Schedule inDb = scheduleMapper.selectByPrimaryKey(Integer.parseInt(model.getA()));
                 if (inDb != null && inDb.getScheduleid() != null)
-                    hasIn++;
+                    if (inDb.matchEquals(xml))
+                        hasIn++;
+                    else {
+                        //更新
+                        Schedule toUpdate = new Schedule();
+                        toUpdate.setScheduleid(xml.getScheduleid());
+                        toUpdate.setMatchstate(xml.getMatchstate());
+                        toUpdate.setHomescore(xml.getHomescore());
+                        toUpdate.setGuestscore(xml.getGuestscore());
+                        toUpdate.setHomehalfscore(xml.getHomehalfscore());
+                        toUpdate.setGuesthalfscore(xml.getGuesthalfscore());
+
+                        toUpdate.setHomeRed(xml.getHomeRed());
+                        toUpdate.setHomeYellow(xml.getHomeYellow());
+                        toUpdate.setGuestRed(xml.getGuestRed());
+                        toUpdate.setGuestYellow(xml.getGuestYellow());
+                        toUpdate.setBfChangetime(xml.getBfChangetime());
+                        if (scheduleMapper.updateByPrimaryKeySelective(toUpdate)>0) update++;
+                    }
                 else {
-                    inDb = BeanUtils.parseSchedule(model);
                     //主客队半场全场角球数
-                    inDb.setHomecorner(0);
-                    inDb.setHomecornerhalf(0);
-                    inDb.setGuestcorner(0);
-                    inDb.setGuestcornerhalf(0);
-                    if (scheduleMapper.insertSelective(inDb) > 0)
+                    xml.setHomecorner(0);
+                    xml.setHomecornerhalf(0);
+                    xml.setGuestcorner(0);
+                    xml.setGuestcornerhalf(0);
+                    if (scheduleMapper.insertSelective(xml) > 0)
                         insert++;
                 }
             } catch (Exception e) {
@@ -87,7 +103,7 @@ public class MatchListJob{
                 e.printStackTrace();
             }
         }
-        LOGGER.info("赛程赛果定时任务结束,共：" + models.size() + ",插入:" + insert + "条,跳过:" + hasIn + ",耗时：" + (System.currentTimeMillis() - s) + "毫秒");
+        LOGGER.info("赛程赛果定时任务结束,共：" + models.size() + ",插入:" + insert + "条,跳过:" + hasIn + ",更新"+update+"，耗时：" + (System.currentTimeMillis() - s) + "毫秒");
     }
 
 

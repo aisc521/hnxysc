@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.MultiLetGoalhalfDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.MultiLetGoalhalfDetail" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="OddsID" property="oddsid" jdbcType="INTEGER" />
+    <result column="upOdds" property="upodds" jdbcType="REAL" />
+    <result column="Goal" property="goal" jdbcType="REAL" />
+    <result column="downOdds" property="downodds" jdbcType="REAL" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="addTime" property="addtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, OddsID, upOdds, Goal, downOdds, type, addTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from multiletgoalhalfdetail
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByMidAndCpyAndNum" resultType="com.zhcdata.db.model.MultiLetGoalhalfDetail">
+    select d.* from MultiLetGoalhalf l,MultiLetGoalhalfDetail d where d.OddsID = l.OddsID and l.CompanyID = #{cpy} and l.ScheduleID = #{mid} and num = #{num}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from multiletgoalhalfdetail
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhcdata.db.model.MultiLetGoalhalfDetail" >
+    insert into multiletgoalhalfdetail (ID, OddsID, upOdds, 
+      Goal, downOdds, type, addTime
+      )
+    values (#{id,jdbcType=INTEGER}, #{oddsid,jdbcType=INTEGER}, #{upodds,jdbcType=REAL}, 
+      #{goal,jdbcType=REAL}, #{downodds,jdbcType=REAL}, #{type,jdbcType=SMALLINT}, #{addtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.MultiLetGoalhalfDetail" >
+    insert into multiletgoalhalfdetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="oddsid != null" >
+        OddsID,
+      </if>
+      <if test="upodds != null" >
+        upOdds,
+      </if>
+      <if test="goal != null" >
+        Goal,
+      </if>
+      <if test="downodds != null" >
+        downOdds,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="addtime != null" >
+        addTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="oddsid != null" >
+        #{oddsid,jdbcType=INTEGER},
+      </if>
+      <if test="upodds != null" >
+        #{upodds,jdbcType=REAL},
+      </if>
+      <if test="goal != null" >
+        #{goal,jdbcType=REAL},
+      </if>
+      <if test="downodds != null" >
+        #{downodds,jdbcType=REAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="addtime != null" >
+        #{addtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.MultiLetGoalhalfDetail" >
+    update multiletgoalhalfdetail
+    <set >
+      <if test="oddsid != null" >
+        OddsID = #{oddsid,jdbcType=INTEGER},
+      </if>
+      <if test="upodds != null" >
+        upOdds = #{upodds,jdbcType=REAL},
+      </if>
+      <if test="goal != null" >
+        Goal = #{goal,jdbcType=REAL},
+      </if>
+      <if test="downodds != null" >
+        downOdds = #{downodds,jdbcType=REAL},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="addtime != null" >
+        addTime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.MultiLetGoalhalfDetail" >
+    update multiletgoalhalfdetail
+    set OddsID = #{oddsid,jdbcType=INTEGER},
+      upOdds = #{upodds,jdbcType=REAL},
+      Goal = #{goal,jdbcType=REAL},
+      downOdds = #{downodds,jdbcType=REAL},
+      type = #{type,jdbcType=SMALLINT},
+      addTime = #{addtime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

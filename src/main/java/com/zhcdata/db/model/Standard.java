@@ -1,5 +1,6 @@
 package com.zhcdata.db.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Standard {
@@ -35,7 +36,7 @@ public class Standard {
 
     private Boolean isstoplive;
 
-    private Date starttime;
+    //private Timestamp startTime;
 
     public Integer getOddsid() {
         return oddsid;
@@ -165,13 +166,13 @@ public class Standard {
         this.isstoplive = isstoplive;
     }
 
-    public Date getStarttime() {
-        return starttime;
-    }
+    //public Timestamp getStarttime() {
+    //    return startTime;
+    //}
 
-    public void setStarttime(Date starttime) {
-        this.starttime = starttime;
-    }
+    //public void setStarttime(Timestamp starttime) {
+    //    this.startTime = starttime;
+    //}
 
     public boolean same(Standard db) {
         return (db.getHomewinR().equals(homewinR) && db.getGuestwinR().equals(guestwinR) && db.getStandoffR().equals(standoffR));

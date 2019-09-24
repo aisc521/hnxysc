@@ -19,7 +19,12 @@
     from letgoalhalfdetail
     where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+
+    <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.LetGoalhalfDetail">
+      select d.* from letgoalhalf l,letgoalhalfdetail d where l.OddsID = d.OddsID and l.ScheduleID = #{mid} and l.CompanyID = #{cpy} limit 1
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from letgoalhalfdetail
     where ID = #{id,jdbcType=INTEGER}
   </delete>

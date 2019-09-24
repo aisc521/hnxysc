@@ -16,4 +16,6 @@ public interface MultiTotalScorehalfMapper {
     int updateByPrimaryKey(MultiTotalScorehalf record);
 
     MultiTotalScorehalf selectByMatchIdAndCpyAndNum(Integer scheduleid, Integer companyid, Short num);
+
+    MultiTotalScorehalf selectByMidAndCpyAndNum(String mid, String cpy, String num);
 }

@@ -14,4 +14,6 @@ public interface LetGoalhalfDetailMapper {
     int updateByPrimaryKeySelective(LetGoalhalfDetail record);
 
     int updateByPrimaryKey(LetGoalhalfDetail record);
+
+    LetGoalhalfDetail selectByMidAndCpy(String mid, String cpy);
 }
