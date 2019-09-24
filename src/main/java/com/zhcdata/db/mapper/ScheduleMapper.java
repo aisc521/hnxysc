@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface ScheduleMapper {
 
@@ -137,4 +138,8 @@ public interface ScheduleMapper {
     List<MatchResult1> queryAttentionList(@Param("userId") long userId);
 
     List<Integer> selectMatchIdExceedNow();
+
+    List<DrawNoResult> queryList(@Param("startDate")String startDate);
+
+    IconAndTimeDto selectIconAndTime(@Param("matchId")Integer matchId);
 }

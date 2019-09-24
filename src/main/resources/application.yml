@@ -113,3 +113,6 @@ custom:
       bdRealTimeSpUrl: http://interface.win007.com/zq/BdOdds.aspx
       bdLotterQueryUrl: http://interface.win007.com/zq/BdOdds.aspx?type=result
       lotterScoreUrl: http://interface.win007.com/zq/cp/CP_BF.aspx
+      imageUrl: http://zq.win007.com/Image/team/
+      locolUrl: F:/qiutai/
+      yuMing: http:http://csjch5.xhjingling.com/

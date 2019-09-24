@@ -3,7 +3,10 @@ package com.zhcdata.jc.service.impl;
 import com.zhcdata.db.mapper.TbJcMatchMapper;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.MatchPlanResult1;
+import com.zhcdata.jc.dto.MatchResult1;
+import com.zhcdata.jc.dto.TbScoreInfo;
 import com.zhcdata.jc.service.TbJcMatchService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +35,13 @@ public class TbJcMatchServiceImpl implements TbJcMatchService {
     @Override
     public List<MatchPlanResult1> queryList1(Long id) {
         return tbJcMatchMapper.queryList1(id);
+    }
+
+    @Override
+    public MatchResult1 queryScore(String matchId) {
+
+        MatchResult1 queryScore1 = tbJcMatchMapper.queryScore1(matchId);
+
+        return queryScore1;
     }
 }

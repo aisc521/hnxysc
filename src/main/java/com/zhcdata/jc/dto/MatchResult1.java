@@ -44,6 +44,51 @@ public class MatchResult1 {
 
     private String imgValue;
 
+
+    private String homeImg;
+    private String visitImg;
+
+    private String statusescFK;
+
+
+
+    private String homeId;
+    private String visitingId;
+
+
+
+    public String getHomeId() {
+        return homeId;
+    }
+
+    public void setHomeId(String homeId) {
+        this.homeId = homeId;
+    }
+
+    public String getVisitingId() {
+        return visitingId;
+    }
+
+    public void setVisitingId(String visitingId) {
+        this.visitingId = visitingId;
+    }
+
+    public String getHomeImg() {
+        return homeImg;
+    }
+
+    public void setHomeImg(String homeImg) {
+        this.homeImg = homeImg;
+    }
+
+    public String getVisitImg() {
+        return visitImg;
+    }
+
+    public void setVisitImg(String visitImg) {
+        this.visitImg = visitImg;
+    }
+
     public String getIscollect() {
         return iscollect;
     }

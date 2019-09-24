@@ -1004,4 +1004,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleMapper.selectMatchIdExceedNow();
     }
 
+    @Override
+    public List<DrawNoResult> queryList(String startDate) {
+        return scheduleMapper.queryList(startDate);
+    }
+
+    @Override
+    public IconAndTimeDto selectIconAndTime(Integer matchId) {
+        return scheduleMapper.selectIconAndTime(matchId);
+    }
+
 }

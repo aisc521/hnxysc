@@ -916,5 +916,54 @@
     <select id="selectMatchIdExceedNow" resultType="java.lang.Integer">
         select ScheduleID from schedule cf where cf.MatchTime > now()
     </select>
+    <select id="queryList" resultType="com.zhcdata.jc.dto.DrawNoResult">
+        SELECT
+        *
+        FROM
+        (
+        (
+        SELECT
+        lottery.ISSUE_NUM drawno
+        FROM
+        SCHEDULE sc
+        LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID  = lottery.ID_BET007
+        WHERE
+        sc.MatchTime <![CDATA[<]]> #{startDate}
+        AND sc.MatchState = '-1'
+        AND lottery.LOTTERY = 'SF14'
+        GROUP BY
+        drawno
+        ORDER BY
+        drawno DESC
+        LIMIT 10
+        ) UNION
+        (
+        SELECT
+        lottery.ISSUE_NUM drawno
+        FROM
+        SCHEDULE sc
+        LEFT JOIN jc_match_lottery lottery ON  sc.ScheduleID  = lottery.ID_BET007
+        WHERE
+        sc.MatchTime > #{startDate}
+        AND lottery.LOTTERY = 'SF14'
+        GROUP BY
+        drawno
+        )
+        ) a
+        ORDER BY
+        drawno ASC
+    </select>
 
+    <select id="selectIconAndTime" resultType="com.zhcdata.jc.dto.IconAndTimeDto" parameterType="java.lang.Integer">
+       select
+        sc.MatchTime time,
+        t1.Flag homeImg,
+        t2.Flag guestImg,
+        t1.TeamID homeId,
+        t2.TeamID guestId
+        from schedule sc
+        LEFT JOIN team t1 ON sc.HomeTeamID = t1.TeamID
+        LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
+        where sc.ScheduleID = '#{matchId}'
+    </select>
 </mapper>

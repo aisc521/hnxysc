@@ -2,6 +2,8 @@ package com.zhcdata.jc.service;
 
 import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.Schedule;
+import com.zhcdata.jc.dto.DrawNoResult;
+import com.zhcdata.jc.dto.IconAndTimeDto;
 import com.zhcdata.jc.dto.MatchResult1;
 import org.apache.ibatis.annotations.Param;
 
@@ -80,4 +82,8 @@ public interface ScheduleService {
     PageInfo<MatchResult1> queryAttentionList(String userId, String pageNo, String pageAmount);
 
     List<Integer> selectMatchIdExceedNow();
+
+    List<DrawNoResult> queryList(String s);
+
+    IconAndTimeDto selectIconAndTime(Integer matchId);
 }
