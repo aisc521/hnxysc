@@ -56,10 +56,12 @@ public class PlayerTeamJob implements Job {
                         log.info("球员所属球队插入失败");
                     }
                 }else {
-                    if(tbPlayerInTeamMapper.updateByPrimaryKeySelective(info)>0){
-                        log.info("球员所属球队修改成功");
-                    }else {
-                        log.info("球员所属球队修改失败");
+                    if (!info.equals(list.get(0))) {
+                        if (tbPlayerInTeamMapper.updateByPrimaryKeySelective(info) > 0) {
+                            log.info("球员所属球队修改成功");
+                        } else {
+                            log.info("球员所属球队修改失败");
+                        }
                     }
                 }
             }

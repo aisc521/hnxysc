@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.TbJcExpertSettlementMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.TbJcExpertSettlement" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="statistics_date" property="statisticsDate" jdbcType="VARCHAR" />
+    <result column="nike_name" property="nikeName" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="expert_person" property="expertPerson" jdbcType="VARCHAR" />
+    <result column="expert_plan_num" property="expertPlanNum" jdbcType="BIGINT" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="pay_ondemand_price" property="payOndemandPrice" jdbcType="DECIMAL" />
+    <result column="ondemand_average" property="ondemandAverage" jdbcType="DECIMAL" />
+    <result column="free_ondemand_price" property="freeOndemandPrice" jdbcType="DECIMAL" />
+    <result column="settlement_amount" property="settlementAmount" jdbcType="DECIMAL" />
+    <result column="divide_proport" property="divideProport" jdbcType="VARCHAR" />
+    <result column="real_income" property="realIncome" jdbcType="DECIMAL" />
+    <result column="settlemen_status" property="settlemenStatus" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="expert_person_name" property="expertPersonName" jdbcType="VARCHAR" />
+    <result column="expert_id" property="expertId" jdbcType="BIGINT" />
+  </resultMap>
+</mapper>

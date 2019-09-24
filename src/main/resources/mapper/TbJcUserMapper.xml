@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.TbJcUserMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.TbJcUser" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="USER_ID" property="userId" jdbcType="BIGINT" />
+    <result column="CELL" property="cell" jdbcType="CHAR" />
+    <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="STATUS" property="status" jdbcType="CHAR" />
+    <result column="SRC" property="src" jdbcType="VARCHAR" />
+    <result column="INVITED_CODE" property="invitedCode" jdbcType="VARCHAR" />
+    <result column="INVITED_USER" property="invitedUser" jdbcType="BIGINT" />
+    <result column="TOTAL_COMMISSION" property="totalCommission" jdbcType="DECIMAL" />
+    <result column="VERSION" property="version" jdbcType="INTEGER" />
+    <result column="AGENT_TIME" property="agentTime" jdbcType="TIMESTAMP" />
+    <result column="WARN_PUSH" property="warnPush" jdbcType="CHAR" />
+    <result column="REGI_SRC" property="regiSrc" jdbcType="VARCHAR" />
+  </resultMap>
+</mapper>

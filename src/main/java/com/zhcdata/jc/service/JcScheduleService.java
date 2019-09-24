@@ -18,4 +18,6 @@ public interface JcScheduleService {
      * @param jcFootBallOddsRsp
      */
     void updateJcSchedule(JcSchedule jcSchedule, JcFootBallOddsRsp jcFootBallOddsRsp) throws BaseException;
+
+    JcSchedule queryJcScheduleByBet007(Integer matchId);
 }

@@ -1,6 +1,7 @@
 package com.zhcdata.db.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class SclassInfo {
     private Integer sclassid;
@@ -311,5 +312,32 @@ public class SclassInfo {
 
     public void setSclassRule(String sclassRule) {
         this.sclassRule = sclassRule == null ? null : sclassRule.trim();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SclassInfo info = (SclassInfo) o;
+        return Objects.equals(sclassid, info.sclassid) &&
+                Objects.equals(color, info.color) &&
+                Objects.equals(nameJ, info.nameJ) &&
+                Objects.equals(nameF, info.nameF) &&
+                Objects.equals(nameE, info.nameE) &&
+                Objects.equals(nameJs, info.nameJs) &&
+                Objects.equals(nameFs, info.nameFs) &&
+                Objects.equals(nameEs, info.nameEs) &&
+                Objects.equals(kind, info.kind) &&
+                Objects.equals(mode, info.mode) &&
+                Objects.equals(countRound, info.countRound) &&
+                Objects.equals(currRound, info.currRound) &&
+                Objects.equals(currMatchseason, info.currMatchseason) &&
+                Objects.equals(sclassPic, info.sclassPic);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(sclassid, color, nameJ, nameF, nameE, nameJs, nameFs, nameEs, nameS, kind, mode, countRound, currRound, currMatchseason, sclassPic, ifstop, sclassType, countGroup, bfSimplyDisp, sclassSequence, infoid, bfIfdisp, modifytime, beginseason, subsclassid, ifhavesub, ifsort, ifhavepaper, ifshowscore, rankMatchseason, sclassRule);
     }
 }

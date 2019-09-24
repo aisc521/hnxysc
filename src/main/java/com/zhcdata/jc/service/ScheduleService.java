@@ -1,8 +1,14 @@
 package com.zhcdata.jc.service;
 
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.Schedule;
+import com.zhcdata.jc.dto.DrawNoResult;
+import com.zhcdata.jc.dto.IconAndTimeDto;
+import com.zhcdata.jc.dto.MatchResult1;
+import org.apache.ibatis.annotations.Param;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 public interface ScheduleService {
@@ -57,4 +63,27 @@ public interface ScheduleService {
      * @return
      */
     String processingSameOddsTypeToLottery(String type);
+
+    /**
+     * 定时任务 比赛列表
+     * @param startDate
+     * @param endDate
+     * @param s
+     * @param s1
+     * @param s2
+     * @return
+     */
+    List<MatchResult1> queryMacthListForJob( String startDate, String endDate, String s, String s1, String s2);
+
+    String queryZcNum( String startDate,  String endDate);
+
+    String queryBdNum(String s, String s1);
+
+    PageInfo<MatchResult1> queryAttentionList(String userId, String pageNo, String pageAmount);
+
+    List<Integer> selectMatchIdExceedNow();
+
+    List<DrawNoResult> queryList(String s);
+
+    IconAndTimeDto selectIconAndTime(Integer matchId);
 }

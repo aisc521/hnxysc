@@ -53,7 +53,7 @@ public interface Const {
 
     String TIME_ID = "timeId";
 
-    String SYS_TYPE = "WTG";
+    String SYS_TYPE = "SMP";
 
     String SUCCESS_STR = "success";
 
@@ -174,6 +174,8 @@ public interface Const {
     String SINGLE_R_SPF = "单场让球胜平负";
     String JC_FOOTBALL = "竞彩足球";
     String JC_BASKTBALL = "竞彩篮球";
+
+    String MATCH_ID_KEY = "matchId";
     /**
      * end
      * ======================================================================================================

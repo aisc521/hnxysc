@@ -29,10 +29,22 @@
    <!-- <table tableName="jc_match_bjdc_pl"/>-->
     <!--<table tableName="jc_match_bjdcreslut"/>
     <table tableName="jc_match_lottery"/>
-    <table tableName="jc_schedule"/>
+
     <table tableName="jc_schedulesp"/>
     <table tableName="jc_schedulespvary"/>-->
     <!--<table tableName="jc_schedulesp"/>-->
-    <table tableName="score"/>
+   <!-- <table tableName="tb_pg_u_collect"/>-->
+    <table tableName="tb_jc_dictionary"/>
+    <table tableName="tb_jc_expert"/>
+    <table tableName="tb_jc_expert_settlement"/>
+    <table tableName="tb_jc_fans"/>
+    <table tableName="tb_jc_level"/>
+    <table tableName="tb_jc_match"/>
+    <table tableName="tb_jc_plan"/>
+    <table tableName="tb_jc_purchase_detailed"/>
+    <table tableName="tb_jc_record_focus"/>
+    <table tableName="tb_jc_static"/>
+    <table tableName="tb_jc_user"/>
+    <table tableName="tb_jc_victory"/>
   </context>
 </generatorConfiguration>
