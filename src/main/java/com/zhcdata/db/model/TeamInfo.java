@@ -250,9 +250,7 @@ public class TeamInfo {
         if (o == null || getClass() != o.getClass()) return false;
         TeamInfo teamInfo = (TeamInfo) o;
         return Objects.equals(teamid, teamInfo.teamid) &&
-                Objects.equals(kind, teamInfo.kind) &&
                 Objects.equals(sclassid, teamInfo.sclassid) &&
-                Objects.equals(nameShort, teamInfo.nameShort) &&
                 Objects.equals(nameJ, teamInfo.nameJ) &&
                 Objects.equals(nameF, teamInfo.nameF) &&
                 Objects.equals(nameE, teamInfo.nameE) &&
@@ -263,12 +261,13 @@ public class TeamInfo {
                 Objects.equals(flag, teamInfo.flag) &&
                 Objects.equals(address, teamInfo.address) &&
                 Objects.equals(url, teamInfo.url) &&
-                Objects.equals(drillmaster, teamInfo.drillmaster);
+                Objects.equals(drillmaster, teamInfo.drillmaster
+                );
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(teamid, kind, sclassid, nameShort, nameJ, nameF, nameE, foundDate, area, gymnasium, capacity, flag, address, url, drillmaster);
+        return Objects.hash(teamid, sclassid, nameJ, nameF, nameE, foundDate, area, gymnasium, capacity, flag, address, url, drillmaster);
     }
 }

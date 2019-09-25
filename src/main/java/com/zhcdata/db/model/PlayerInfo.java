@@ -1,6 +1,5 @@
 package com.zhcdata.db.model;
 
-import java.util.Date;
 import java.util.Objects;
 
 public class PlayerInfo {
@@ -236,26 +235,26 @@ public class PlayerInfo {
                 Objects.equals(nameJ, that.nameJ) &&
                 Objects.equals(nameE, that.nameE) &&
                 Objects.equals(nameEs, that.nameEs) &&
-                Objects.equals(birthday, that.birthday) &&
+                //Objects.equals(birthday, that.birthday) &&
                 Objects.equals(tallness, that.tallness) &&
                 Objects.equals(weight, that.weight) &&
                 Objects.equals(country, that.country) &&
                 Objects.equals(photo, that.photo) &&
                 Objects.equals(introduce, that.introduce) &&
                 Objects.equals(health, that.health) &&
-                Objects.equals(modifytime, that.modifytime) &&
-                Objects.equals(countryid, that.countryid) &&
+                //Objects.equals(modifytime, that.modifytime) &&
+                //Objects.equals(countryid, that.countryid) &&
                 Objects.equals(expectedvalue, that.expectedvalue) &&
-                Objects.equals(honorinfo, that.honorinfo) &&
+                //Objects.equals(honorinfo, that.honorinfo) &&
                 Objects.equals(enddatecontract, that.enddatecontract) &&
-                Objects.equals(idiomaticfeet, that.idiomaticfeet) &&
-                Objects.equals(country2id, that.country2id) &&
-                Objects.equals(hotsortnumber, that.hotsortnumber);
+                Objects.equals(idiomaticfeet, that.idiomaticfeet)
+                //Objects.equals(country2id, that.country2id) &&
+                //Objects.equals(hotsortnumber, that.hotsortnumber)
+                ;
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(playerid, kind, nameShort, nameF, nameJ, nameE, nameEs, birthday, tallness, weight, country, photo, introduce, health, modifytime, countryid, expectedvalue, honorinfo, enddatecontract, idiomaticfeet, country2id, hotsortnumber);
+        return Objects.hash(playerid, kind, nameShort, nameF, nameJ, nameE, nameEs, tallness, weight, country, photo, introduce, health, expectedvalue, enddatecontract, idiomaticfeet);
     }
 }

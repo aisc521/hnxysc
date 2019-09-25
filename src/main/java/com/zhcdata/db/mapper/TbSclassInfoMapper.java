@@ -10,4 +10,6 @@ public interface TbSclassInfoMapper {
     List<TbSclassInfo> querySclassInfo(@Param("NameCN") String NameCN);
 
     int insertSelective(TbSclassInfo tbSclassInfo);
+
+    int updateByPrimaryKeySelective(TbSclassInfo tbSclassInfo);
 }

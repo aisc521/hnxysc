@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Table(name = "score")
 public class ScoreInfo implements Serializable {
@@ -170,5 +171,28 @@ public class ScoreInfo implements Serializable {
 
     public void setRedcard(Integer redcard) {
         this.redcard = redcard;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ScoreInfo info = (ScoreInfo) o;
+        return Objects.equals(id, info.id) &&
+                Objects.equals(teamid, info.teamid) &&
+                Objects.equals(sclassid, info.sclassid) &&
+                Objects.equals(winScore, info.winScore) &&
+                Objects.equals(flatScore, info.flatScore) &&
+                Objects.equals(failScore, info.failScore) &&
+                Objects.equals(totalHomescore, info.totalHomescore) &&
+                Objects.equals(totalGuestscore, info.totalGuestscore) &&
+                Objects.equals(deduct, info.deduct) &&
+                Objects.equals(cause, info.cause) ;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, teamid, sclassid, winScore, flatScore, failScore, totalHomescore, totalGuestscore, deduct, cause);
     }
 }

@@ -45,12 +45,17 @@ public class SclassInfoJob implements Job {
                 List<TbSclassInfo> list = tbSclassInfoMapper.querySclassInfo(a.getCountry());
                 if (list == null || list.size() < 1) {
                     if (tbSclassInfoMapper.insertSelective(info) > 0) {
-                        LOGGER.info(a.getCountry() + "入库成功!");
+                        LOGGER.info(a.getCountry() + "[杯赛联赛资料]入库成功!");
                     } else {
-                        LOGGER.info("入库失败!");
+                        LOGGER.info("[杯赛联赛资料]入库失败!");
                     }
                 } else {
-                    LOGGER.info(a.getCountry() + "已经存在，不再入库");
+                    info.setInfoid(list.get(0).getInfoid());
+                    if (tbSclassInfoMapper.updateByPrimaryKeySelective(info) > 0) {
+                        LOGGER.info(a.getCountry() + "[杯赛联赛资料]修改成功!");
+                    } else {
+                        LOGGER.info("[杯赛联赛资料]修改失败!");
+                    }
                 }
             }
         } catch (Exception ex) {

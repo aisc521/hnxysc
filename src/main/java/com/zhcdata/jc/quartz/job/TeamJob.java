@@ -10,12 +10,8 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
@@ -30,8 +26,6 @@ import java.util.List;
 @Configuration
 @EnableScheduling
 public class TeamJob implements Job {
-    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
-
     @Resource
     TbTeamMapper tbTeamMapper;
 
@@ -50,65 +44,86 @@ public class TeamJob implements Job {
             org.dom4j.Document docDom4j = saxReader.read(new ByteArrayInputStream(xml.getBytes("utf-8")));
             org.dom4j.Element root = docDom4j.getRootElement();
             List<Element> childElements = root.elements();
+            int p=0;
             for (org.dom4j.Element one : childElements) {
-
+                p++;
+                System.out.println(p);
                 TeamInfo info = new TeamInfo();
                 info.setKind(Short.valueOf("1"));
                 List<Element> twos = one.elements();
                 for (org.dom4j.Element two : twos) {
                     if (two.getName().equals("id")) {
-                        info.setTeamid(Integer.valueOf(two.getText()));         //球队 ID
+                        info.setTeamid(Integer.valueOf(two.getText()));             //球队 ID
                     } else if (two.getName().equals("lsID")) {
-                        info.setSclassid(Integer.valueOf(two.getText()));       //所属联赛ID
+                        info.setSclassid(Integer.valueOf(two.getText()));           //所属联赛ID
                     } else if (two.getName().equals("g")) {
-                        info.setNameJ(two.getText());                           //简体名
+                        if(two.getText().length()>0) {
+                            info.setNameJ(two.getText());                           //简体名
+                        }
                     } else if (two.getName().equals("b")) {
-                        info.setNameF(two.getText());                           //繁体名
+                        if(two.getText().length()>0) {
+                            info.setNameF(two.getText());                           //繁体名
+                        }
                     } else if (two.getName().equals("e")) {
-                        info.setNameE(two.getText());                           //英文名
+                        if(two.getText().length()>0) {
+                            info.setNameE(two.getText());                           //英文名
+                        }
                     } else if (two.getName().equals("Found")) {
-                        info.setFoundDate(two.getText());                       //球队成立日期
+                        if(two.getText().length()>0) {
+                            info.setFoundDate(two.getText());                       //球队成立日期
+                        }
                     } else if (two.getName().equals("Area")) {
-                        info.setArea(two.getText());                            //所在地
+                        if(two.getText().length()>0) {
+                            info.setArea(two.getText());                            //所在地
+                        }
                     } else if (two.getName().equals("gym")) {
-                        info.setGymnasium(two.getText());                       //球场
+                        if(two.getText().length()>0) {
+                            info.setGymnasium(two.getText());                       //球场
+                        }
                     } else if (two.getName().equals("Capacity")) {
-                        if(!two.getText().equals("")) {
-                            info.setCapacity(Integer.valueOf(two.getText()));   //球场容量
+                        if (!two.getText().equals("")) {
+                            info.setCapacity(Integer.valueOf(two.getText()));       //球场容量
                         }
                     } else if (two.getName().equals("Flag")) {
-                        info.setFlag(two.getText());                            //队标
+                        if(two.getText().length()>0) {
+                            info.setFlag(two.getText());                            //队标
+                        }
                     } else if (two.getName().equals("addr")) {
-                        info.setAddress(two.getText());                         //地址
+                        if(two.getText().length()>0) {
+                            info.setAddress(two.getText());                         //地址
+                        }
                     } else if (two.getName().equals("URL")) {
-                        info.setUrl(two.getText());                             //球队网址
+                        if(two.getText().length()>0) {
+                            info.setUrl(two.getText());                             //球队网址
+                        }
                     } else if (two.getName().equals("master")) {
-                        info.setDrillmaster(two.getText());                     //主教练
+                        if(two.getText().length()>0) {
+                            info.setDrillmaster(two.getText());                     //主教练
+                        }
                     }
                 }
                 info.setModifytime(df.format(new Date()));
 
                 List<TeamInfo> list = tbTeamMapper.queryTeam(info.getTeamid().toString());
                 if (list != null && list.size() > 0) {
-                    if (!info.equals(list.get(0))) {
-                        log.info("球队信息已经存在" + info.getTeamid());
+                    //此接口不做数据是否改变的判断,直接修改(该接口一天一次，没关系)
+                    if(!info.equals(list.get(0))) {
                         if (tbTeamMapper.updateByPrimaryKeySelective(info) > 0) {
-                            log.info("球队信息修改成功" + info.getTeamid());
+                            log.info("[球队资料]修改成功" + info.getTeamid() + df.format(new Date()));
                         } else {
-                            log.info("球队信息修改失败" + info.getTeamid());
+                            log.info("[球队资料]修改失败" + info.getTeamid() + df.format(new Date()));
                         }
                     }
                 } else {
-                    log.info("球队信息已经存在" + info.getTeamid());
                     if (tbTeamMapper.insertSelective(info) > 0) {
-                        log.info("球队信息添加成功" + info.getTeamid());
+                        log.info("[球队资料]添加成功" + info.getTeamid() + df.format(new Date()));
                     } else {
-                        log.info("球队信息添加失败" + info.getTeamid());
+                        log.info("[球队资料]添加失败" + info.getTeamid() + df.format(new Date()));
                     }
                 }
             }
         } catch (Exception ex) {
-            log.error("球队信息处理异常" + ex.toString());
+            log.error("[球队资料]处理异常" + ex.toString());
         }
         log.error("Instance detail: " + key + " trigger:" + jobKey + "执行完成");
         long end = System.currentTimeMillis();

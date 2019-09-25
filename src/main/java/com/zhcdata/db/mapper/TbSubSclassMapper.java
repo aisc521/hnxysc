@@ -12,4 +12,6 @@ public interface TbSubSclassMapper {
     List<SubSclassInfo> querySubSclassID(@Param("SclassID") String SclassID);
 
     int insertSelective(SubSclassInfo subSclassInfo);
+
+    int updateByPrimaryKeySelective(SubSclassInfo subSclassInfo);
 }

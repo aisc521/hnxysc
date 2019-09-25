@@ -43,15 +43,15 @@ public class LiveJob implements Job {
                         info.setCreateTime(df.format(new Date()));
                         info.setScheduleid(Long.valueOf(a.getID()));
                         if (tbLiveMapper.insertSelective(info) > 0) {
-                            log.info("直播数据保存成功");
+                            log.info("[文字直播]保存成功");
                         } else {
-                            log.info("直播数据保存失败");
+                            log.info("[文字直播]保存失败");
                         }
                     }
                 }
             }
         } catch (Exception ex) {
-            log.error("直播接口处理异常：" + ex.getMessage());
+            log.error("文字直播接口处理异常：" + ex.getMessage());
         }
     }
 }
