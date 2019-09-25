@@ -1,6 +1,7 @@
 package com.zhcdata.jc.service.impl;
 
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.JcMatchBjdcPlMapper;
 import com.zhcdata.db.model.JcMatchBjdcPl;
 import com.zhcdata.db.model.JcMatchLottery;
@@ -8,13 +9,15 @@ import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.JcMatchBjdcPlService;
 import com.zhcdata.jc.tools.JcLotteryUtils;
-import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BdrealTimeSp.*;
+import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BdrealTimeSp.BdrealimeSpRsp;
+import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.BdrealTimeSp.BdrealimeSpSpfRsp;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description TODO
@@ -242,4 +245,13 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
                         ProtocolCodeMsg.INSERT_FAILE.getMsg());
             }
     }
+
+  @Override
+  public PageInfo<Map<String, String>> queryBjdcListReuslt(int pageNo, int pageAmount, String date) {
+    PageHelper.startPage(pageNo, pageAmount);
+    String startDate = date+" 00:00:01";
+    String endvDate = date+" 23:59:59";
+    List<Map<String, String>> list = jcMatchBjdcPlMapper.queryBjdcListReuslt(startDate,endvDate);
+    return new PageInfo<>(list);
+  }
 }

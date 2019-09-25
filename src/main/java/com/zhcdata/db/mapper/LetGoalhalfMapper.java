@@ -16,4 +16,6 @@ public interface LetGoalhalfMapper {
     int updateByPrimaryKey(LetGoalhalf record);
 
     LetGoalhalf selectByMatchIdAndCmpAndFristGoal(Integer scheduleid, Integer companyid, Float firstgoal);
+
+    LetGoalhalf selectByMatchIdAndCmp(Integer mid, Integer cpy);
 }

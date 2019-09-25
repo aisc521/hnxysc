@@ -18,12 +18,11 @@
     <result column="GuestWin_R" property="guestwinR" jdbcType="VARCHAR" />
     <result column="Standoff_R" property="standoffR" jdbcType="VARCHAR" />
     <result column="isStopLive" property="isstoplive" jdbcType="BIT" />
-    <result column="StartTime" property="starttime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
     OddsID, ScheduleID, CompanyID, FirstHomeWin, FirstStandoff, FirstGuestWin, HomeWin, 
     Standoff, GuestWin, ModifyTime, Result, ClosePan, HomeWin_R, GuestWin_R, Standoff_R, 
-    isStopLive, StartTime
+    isStopLive
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -36,7 +35,11 @@
     select * from standard where ScheduleID = #{scheduleid} and CompanyID = #{companyid}
   </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.Standard">
+      select * from standard where ScheduleID = #{mid} and CompanyID = #{cpy}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from standard
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>
@@ -46,13 +49,13 @@
       HomeWin, Standoff, GuestWin, 
       ModifyTime, Result, ClosePan, 
       HomeWin_R, GuestWin_R, Standoff_R, 
-      isStopLive, StartTime)
+      isStopLive)
     values (#{oddsid,jdbcType=INTEGER}, #{scheduleid,jdbcType=INTEGER}, #{companyid,jdbcType=INTEGER}, 
       #{firsthomewin,jdbcType=VARCHAR}, #{firststandoff,jdbcType=VARCHAR}, #{firstguestwin,jdbcType=VARCHAR}, 
       #{homewin,jdbcType=VARCHAR}, #{standoff,jdbcType=VARCHAR}, #{guestwin,jdbcType=VARCHAR}, 
       #{modifytime,jdbcType=TIMESTAMP}, #{result,jdbcType=INTEGER}, #{closepan,jdbcType=BIT}, 
       #{homewinR,jdbcType=VARCHAR}, #{guestwinR,jdbcType=VARCHAR}, #{standoffR,jdbcType=VARCHAR}, 
-      #{isstoplive,jdbcType=BIT}, #{starttime,jdbcType=TIMESTAMP})
+      #{isstoplive,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.Standard" >
     insert into standard
@@ -105,9 +108,7 @@
       <if test="isstoplive != null" >
         isStopLive,
       </if>
-      <if test="starttime != null" >
-        StartTime,
-      </if>
+
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="oddsid != null" >
@@ -158,9 +159,7 @@
       <if test="isstoplive != null" >
         #{isstoplive,jdbcType=BIT},
       </if>
-      <if test="starttime != null" >
-        #{starttime,jdbcType=TIMESTAMP},
-      </if>
+
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.Standard" >
@@ -211,9 +210,7 @@
       <if test="isstoplive != null" >
         isStopLive = #{isstoplive,jdbcType=BIT},
       </if>
-      <if test="starttime != null" >
-        StartTime = #{starttime,jdbcType=TIMESTAMP},
-      </if>
+
     </set>
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </update>
@@ -234,7 +231,6 @@
       GuestWin_R = #{guestwinR,jdbcType=VARCHAR},
       Standoff_R = #{standoffR,jdbcType=VARCHAR},
       isStopLive = #{isstoplive,jdbcType=BIT},
-      StartTime = #{starttime,jdbcType=TIMESTAMP}
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </update>
 </mapper>

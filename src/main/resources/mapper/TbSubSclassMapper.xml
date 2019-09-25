@@ -113,4 +113,56 @@
       </if>
     </trim>
   </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.SubSclassInfo" >
+    update subsclass
+    <set >
+      <if test="sclassid != null" >
+        sclassid = #{sclassid,jdbcType=INTEGER},
+      </if>
+      <if test="ishavescore != null" >
+        IsHaveScore = #{ishavescore,jdbcType=BIT},
+      </if>
+      <if test="sortnumber != null" >
+        sortNumber = #{sortnumber,jdbcType=INTEGER},
+      </if>
+      <if test="currRound != null" >
+        curr_round = #{currRound,jdbcType=INTEGER},
+      </if>
+      <if test="countRound != null" >
+        count_round = #{countRound,jdbcType=INTEGER},
+      </if>
+      <if test="iscurrentsclass != null" >
+        IsCurrentSclass = #{iscurrentsclass,jdbcType=BIT},
+      </if>
+      <if test="subsclassname != null" >
+        subSclassName = #{subsclassname,jdbcType=VARCHAR},
+      </if>
+      <if test="subnameJs != null" >
+        subName_Js = #{subnameJs,jdbcType=VARCHAR},
+      </if>
+      <if test="includeseason != null" >
+        IncludeSeason = #{includeseason,jdbcType=VARCHAR},
+      </if>
+      <if test="isanalyscore != null" >
+        IsAnalyScore = #{isanalyscore,jdbcType=BIT},
+      </if>
+      <if test="iszu != null" >
+        IsZu = #{iszu,jdbcType=BIT},
+      </if>
+      <if test="currentseason != null" >
+        CurrentSeason = #{currentseason,jdbcType=VARCHAR},
+      </if>
+      <if test="refOrderseason != null" >
+        ref_orderSeason = #{refOrderseason,jdbcType=VARCHAR},
+      </if>
+      <if test="refOrdersubid != null" >
+        ref_orderSubId = #{refOrdersubid,jdbcType=INTEGER},
+      </if>
+      <if test="isprimary != null" >
+        isPrimary = #{isprimary,jdbcType=BIT},
+      </if>
+    </set>
+    where subSclassID = #{subsclassid,jdbcType=INTEGER}
+  </update>
 </mapper>

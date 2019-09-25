@@ -38,6 +38,13 @@
     select * from letgoal where ScheduleID = #{matchId} and CompanyId = #{cpy} limit 1
   </select>
 
+  <select id="selectOddsIdAndStartTimeByByMatchIdAndCompany" resultType="java.util.Map">
+-- select * from letgoal where ScheduleID
+    select s.ScheduleID as sid,l.OddsID as oid,s.MatchTime as time from schedule s,letgoal l where l.ScheduleID = s.ScheduleID and l.CompanyID = #{cpy} and l.ScheduleID = #{matchId}
+  </select>
+
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from letgoal
     where OddsID = #{oddsid,jdbcType=INTEGER}

@@ -1,5 +1,7 @@
 package com.zhcdata.db.model;
 
+import java.util.Objects;
+
 public class TTSInfo {
     private Integer id;
 
@@ -519,5 +521,69 @@ public class TTSInfo {
 
     public void setModifytime(String modifytime) {
         this.modifytime = modifytime;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TTSInfo info = (TTSInfo) o;
+        return  Objects.equals(scheduleid, info.scheduleid) &&
+                Objects.equals(teamid, info.teamid) &&
+                Objects.equals(kickofffirst, info.kickofffirst) &&
+                Objects.equals(firstcorner, info.firstcorner) &&
+                Objects.equals(lastcorner, info.lastcorner) &&
+                Objects.equals(firstyellow, info.firstyellow) &&
+                Objects.equals(lastyellow, info.lastyellow) &&
+                Objects.equals(firstsubst, info.firstsubst) &&
+                Objects.equals(lastsubst, info.lastsubst) &&
+                Objects.equals(firstoffside, info.firstoffside) &&
+                Objects.equals(lastoffside, info.lastoffside) &&
+                Objects.equals(shots, info.shots) &&
+                Objects.equals(target, info.target) &&
+                Objects.equals(offtarget, info.offtarget) &&
+                Objects.equals(hitwoodwork, info.hitwoodwork) &&
+                Objects.equals(fouls, info.fouls) &&
+                Objects.equals(corner, info.corner) &&
+                Objects.equals(cornerover, info.cornerover) &&
+                Objects.equals(freekick, info.freekick) &&
+                Objects.equals(offside, info.offside) &&
+                Objects.equals(offsideover, info.offsideover) &&
+                Objects.equals(owngoal, info.owngoal) &&
+                Objects.equals(yellow, info.yellow) &&
+                Objects.equals(yellowover, info.yellowover) &&
+                Objects.equals(red, info.red) &&
+                Objects.equals(header, info.header) &&
+                Objects.equals(save, info.save) &&
+                Objects.equals(gkpounced, info.gkpounced) &&
+                Objects.equals(lostball, info.lostball) &&
+                Objects.equals(stealsuc, info.stealsuc) &&
+                Objects.equals(holdup, info.holdup) &&
+                Objects.equals(blocked, info.blocked) &&
+                Objects.equals(longpass, info.longpass) &&
+                Objects.equals(shortpass, info.shortpass) &&
+                Objects.equals(successcross, info.successcross) &&
+                Objects.equals(assists, info.assists) &&
+                Objects.equals(subst, info.subst) &&
+                Objects.equals(substover, info.substover) &&
+                Objects.equals(dribbles, info.dribbles) &&
+                Objects.equals(throwins, info.throwins) &&
+                Objects.equals(controlpercent, info.controlpercent) &&
+                Objects.equals(tackle, info.tackle) &&
+                Objects.equals(passball, info.passball) &&
+                Objects.equals(passballsuc, info.passballsuc) &&
+                Objects.equals(headersuc, info.headersuc) &&
+                Objects.equals(rating, info.rating) &&
+                Objects.equals(attack, info.attack) &&
+                Objects.equals(dangerousatt, info.dangerousatt) &&
+                Objects.equals(cornerhalf, info.cornerhalf) &&
+                Objects.equals(controlpercenthalf, info.controlpercenthalf);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, scheduleid, teamid, kickofffirst, firstcorner, lastcorner, firstyellow, lastyellow, firstsubst, lastsubst, firstoffside, lastoffside, shots, target, offtarget, hitwoodwork, fouls, corner, cornerover, freekick, offside, offsideover, owngoal, yellow, yellowover, red, header, save, gkpounced, lostball, stealsuc, holdup, blocked, longpass, shortpass, successcross, assists, subst, substover, dribbles, throwins, controlpercent, tackle, passball, passballsuc, headersuc, rating, attack, dangerousatt, cornerhalf, controlpercenthalf, modifytime);
     }
 }

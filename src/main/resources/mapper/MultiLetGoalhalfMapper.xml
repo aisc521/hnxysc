@@ -34,7 +34,11 @@
         select * from multiletgoalhalf where ScheduleID = #{scheduleid} and CompanyID = #{companyid} and FirstGoal = #{firstgoal} and num = #{num}
   </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <select id="selectByMatchIdAndCmpAndNum" resultType="com.zhcdata.db.model.MultiLetGoalhalf">
+      select * from multiLetGoalhalf where ScheduleID = #{mid} and CompanyID = #{cpy} and Num = #{num} limit 1
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from multiletgoalhalf
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>

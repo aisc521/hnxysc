@@ -19,7 +19,12 @@
     from letgoaldetail
     where ID = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+
+    <select id="selectByMatchAndCpyOrderByTimeDescLimit1" resultType="com.zhcdata.db.model.LetGoalDetail">
+        select ld.* from letgoal l,letgoaldetail ld where ScheduleID = #{id} and CompanyID = #{cpy} and l.OddsID = ld.OddsID order by ld.ModifyTime desc limit 1
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from letgoaldetail
     where ID = #{id,jdbcType=INTEGER}
   </delete>

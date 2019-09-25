@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.EuropeOddsMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.EuropeOdds" >
+    <id column="OddsID" property="oddsid" jdbcType="INTEGER" />
+    <result column="ScheduleID" property="scheduleid" jdbcType="INTEGER" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+    <result column="FirstHomeWin" property="firsthomewin" jdbcType="REAL" />
+    <result column="FirstStandoff" property="firststandoff" jdbcType="REAL" />
+    <result column="FirstGuestWin" property="firstguestwin" jdbcType="REAL" />
+    <result column="RealHomeWin" property="realhomewin" jdbcType="REAL" />
+    <result column="RealStandoff" property="realstandoff" jdbcType="REAL" />
+    <result column="RealGuestWin" property="realguestwin" jdbcType="REAL" />
+    <result column="ModifyTime" property="modifytime" jdbcType="TIMESTAMP" />
+    <result column="HomeWin_R" property="homewinR" jdbcType="REAL" />
+    <result column="GuestWin_R" property="guestwinR" jdbcType="REAL" />
+    <result column="Standoff_R" property="standoffR" jdbcType="REAL" />
+    <result column="isStopLive" property="isstoplive" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    OddsID, ScheduleID, CompanyID, FirstHomeWin, FirstStandoff, FirstGuestWin, RealHomeWin, 
+    RealStandoff, RealGuestWin, ModifyTime, HomeWin_R, GuestWin_R, Standoff_R, isStopLive
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from europeodds
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByMidAndCpyAnd" resultType="com.zhcdata.db.model.EuropeOdds">
+    select * from europeodds where ScheduleID = #{mid} and CompanyID = #{cpy} order by modifytime desc limit 1
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from europeodds
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhcdata.db.model.EuropeOdds" >
+    insert into europeodds (OddsID, ScheduleID, CompanyID, 
+      FirstHomeWin, FirstStandoff, FirstGuestWin, 
+      RealHomeWin, RealStandoff, RealGuestWin, 
+      ModifyTime, HomeWin_R, GuestWin_R, 
+      Standoff_R, isStopLive)
+    values (#{oddsid,jdbcType=INTEGER}, #{scheduleid,jdbcType=INTEGER}, #{companyid,jdbcType=INTEGER}, 
+      #{firsthomewin,jdbcType=REAL}, #{firststandoff,jdbcType=REAL}, #{firstguestwin,jdbcType=REAL}, 
+      #{realhomewin,jdbcType=REAL}, #{realstandoff,jdbcType=REAL}, #{realguestwin,jdbcType=REAL}, 
+      #{modifytime,jdbcType=TIMESTAMP}, #{homewinR,jdbcType=REAL}, #{guestwinR,jdbcType=REAL}, 
+      #{standoffR,jdbcType=REAL}, #{isstoplive,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.EuropeOdds" >
+    insert into europeodds
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oddsid != null" >
+        OddsID,
+      </if>
+      <if test="scheduleid != null" >
+        ScheduleID,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+      <if test="firsthomewin != null" >
+        FirstHomeWin,
+      </if>
+      <if test="firststandoff != null" >
+        FirstStandoff,
+      </if>
+      <if test="firstguestwin != null" >
+        FirstGuestWin,
+      </if>
+      <if test="realhomewin != null" >
+        RealHomeWin,
+      </if>
+      <if test="realstandoff != null" >
+        RealStandoff,
+      </if>
+      <if test="realguestwin != null" >
+        RealGuestWin,
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime,
+      </if>
+      <if test="homewinR != null" >
+        HomeWin_R,
+      </if>
+      <if test="guestwinR != null" >
+        GuestWin_R,
+      </if>
+      <if test="standoffR != null" >
+        Standoff_R,
+      </if>
+      <if test="isstoplive != null" >
+        isStopLive,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oddsid != null" >
+        #{oddsid,jdbcType=INTEGER},
+      </if>
+      <if test="scheduleid != null" >
+        #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="firsthomewin != null" >
+        #{firsthomewin,jdbcType=REAL},
+      </if>
+      <if test="firststandoff != null" >
+        #{firststandoff,jdbcType=REAL},
+      </if>
+      <if test="firstguestwin != null" >
+        #{firstguestwin,jdbcType=REAL},
+      </if>
+      <if test="realhomewin != null" >
+        #{realhomewin,jdbcType=REAL},
+      </if>
+      <if test="realstandoff != null" >
+        #{realstandoff,jdbcType=REAL},
+      </if>
+      <if test="realguestwin != null" >
+        #{realguestwin,jdbcType=REAL},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="homewinR != null" >
+        #{homewinR,jdbcType=REAL},
+      </if>
+      <if test="guestwinR != null" >
+        #{guestwinR,jdbcType=REAL},
+      </if>
+      <if test="standoffR != null" >
+        #{standoffR,jdbcType=REAL},
+      </if>
+      <if test="isstoplive != null" >
+        #{isstoplive,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.EuropeOdds" >
+    update europeodds
+    <set >
+      <if test="scheduleid != null" >
+        ScheduleID = #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="firsthomewin != null" >
+        FirstHomeWin = #{firsthomewin,jdbcType=REAL},
+      </if>
+      <if test="firststandoff != null" >
+        FirstStandoff = #{firststandoff,jdbcType=REAL},
+      </if>
+      <if test="firstguestwin != null" >
+        FirstGuestWin = #{firstguestwin,jdbcType=REAL},
+      </if>
+      <if test="realhomewin != null" >
+        RealHomeWin = #{realhomewin,jdbcType=REAL},
+      </if>
+      <if test="realstandoff != null" >
+        RealStandoff = #{realstandoff,jdbcType=REAL},
+      </if>
+      <if test="realguestwin != null" >
+        RealGuestWin = #{realguestwin,jdbcType=REAL},
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="homewinR != null" >
+        HomeWin_R = #{homewinR,jdbcType=REAL},
+      </if>
+      <if test="guestwinR != null" >
+        GuestWin_R = #{guestwinR,jdbcType=REAL},
+      </if>
+      <if test="standoffR != null" >
+        Standoff_R = #{standoffR,jdbcType=REAL},
+      </if>
+      <if test="isstoplive != null" >
+        isStopLive = #{isstoplive,jdbcType=TINYINT},
+      </if>
+    </set>
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.EuropeOdds" >
+    update europeodds
+    set ScheduleID = #{scheduleid,jdbcType=INTEGER},
+      CompanyID = #{companyid,jdbcType=INTEGER},
+      FirstHomeWin = #{firsthomewin,jdbcType=REAL},
+      FirstStandoff = #{firststandoff,jdbcType=REAL},
+      FirstGuestWin = #{firstguestwin,jdbcType=REAL},
+      RealHomeWin = #{realhomewin,jdbcType=REAL},
+      RealStandoff = #{realstandoff,jdbcType=REAL},
+      RealGuestWin = #{realguestwin,jdbcType=REAL},
+      ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      HomeWin_R = #{homewinR,jdbcType=REAL},
+      GuestWin_R = #{guestwinR,jdbcType=REAL},
+      Standoff_R = #{standoffR,jdbcType=REAL},
+      isStopLive = #{isstoplive,jdbcType=TINYINT}
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </update>
+</mapper>

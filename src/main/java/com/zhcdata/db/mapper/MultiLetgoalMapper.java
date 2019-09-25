@@ -18,4 +18,6 @@ public interface MultiLetgoalMapper {
     int updateByPrimaryKey(MultiLetgoal record);
 
     MultiLetgoal selectByMatchIdAndCompanyAndHandicap(String matchId, String cpy, String frist_goal);
+
+    MultiLetgoal selectByMatchIdAndCompanyAndHandicapNum(String matchId, String cpy, Short num);
 }

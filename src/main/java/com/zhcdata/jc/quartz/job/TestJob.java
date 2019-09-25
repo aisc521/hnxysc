@@ -27,11 +27,11 @@ public class TestJob implements Job {
         JobKey key = context.getJobDetail().getKey();
         JobKey jobKey = context.getTrigger().getJobKey();
         long start = System.currentTimeMillis();
-        LOGGER.error("Instance detail: " + key + " trigger:" + jobKey + "开始执行");
+        //LOGGER.error("Instance detail: " + key + " trigger:" + jobKey + "开始执行");
         JobDataMap dataMap = context.getJobDetail().getJobDataMap();
-        LOGGER.error("dataMap:" + new Gson().toJson(dataMap));
-        LOGGER.error("Instance detail: " + key + " trigger:" + jobKey + "执行完成");
+        //LOGGER.error("dataMap:" + new Gson().toJson(dataMap));
+        //LOGGER.error("Instance detail: " + key + " trigger:" + jobKey + "执行完成");
         long end = System.currentTimeMillis();
-        LOGGER.error("Instance detail: " + key + " trigger:" + jobKey + "执行耗时" + ((double) (end - start) / 1000) + "(s)");
+        //LOGGER.error("Instance detail: " + key + " trigger:" + jobKey + "执行耗时" + ((double) (end - start) / 1000) + "(s)");
     }
 }

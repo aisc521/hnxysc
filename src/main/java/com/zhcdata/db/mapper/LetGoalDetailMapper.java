@@ -14,4 +14,6 @@ public interface LetGoalDetailMapper {
     int updateByPrimaryKeySelective(LetGoalDetail record);
 
     int updateByPrimaryKey(LetGoalDetail record);
+
+    LetGoalDetail selectByMatchAndCpyOrderByTimeDescLimit1(int id, int cpy);
 }

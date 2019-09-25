@@ -16,4 +16,6 @@ public interface TotalScorehalfMapper {
     int updateByPrimaryKey(TotalScorehalf record);
 
     TotalScorehalf selectByMatchIdAndCpyAndFristGoal(Integer scheduleid, Integer companyid, Float firstgoal);
+
+    TotalScorehalf selectByMidAndCpy(String mid, String cpy);
 }

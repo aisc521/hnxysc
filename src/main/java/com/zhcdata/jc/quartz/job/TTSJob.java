@@ -82,7 +82,7 @@ public class TTSJob implements Job {
                                 } else if (b.split(",")[0].equals("13")) {
                                     info.setRed(Integer.parseInt(b.split(",")[k]));             //13.红牌数
                                 } else if (b.split(",")[0].equals("14")) {
-                                    info.setControlpercent(Integer.parseInt(b.split(",")[k].replace("%","")));  //14.控球时间(控球率)
+                                    info.setControlpercent(Integer.parseInt(b.split(",")[k].replace("%", "")));  //14.控球时间(控球率)
                                 } else if (b.split(",")[0].equals("15")) {
                                     info.setHeader(Integer.parseInt(b.split(",")[k]));          //15.头球
                                 } else if (b.split(",")[0].equals("16")) {
@@ -146,26 +146,27 @@ public class TTSJob implements Job {
                                 } else if (b.split(",")[0].equals("45")) {
                                     info.setCornerhalf(Integer.parseInt(b.split(",")[k]));      //45.半场角球
                                 } else if (b.split(",")[0].equals("46")) {
-                                    info.setControlpercenthalf(Integer.parseInt(b.split(",")[k].replace("%","")));//46.半场控球
+                                    info.setControlpercenthalf(Integer.parseInt(b.split(",")[k].replace("%", "")));//46.半场控球
                                 }
                             }
                             info.setModifytime(df.format(new Date()));
 
                             List<TTSInfo> ttsInfos = tbTeamTechStatisticsMapper.queryTTS(info.getScheduleid().toString(), info.getTeamid().toString());
                             if (ttsInfos != null && ttsInfos.size() > 0) {
-                                log.info("球队技术统计已存在，进行修改");
-                                info.setId(ttsInfos.get(0).getId());
-                                if (tbTeamTechStatisticsMapper.updateByPrimaryKeySelective(info) > 0) {
-                                    log.info("球队技术统计修改成功");
-                                } else {
-                                    log.info("球队技术统计修改失败");
-                                }
+                                //判断先注销
+                                //if(!info.equals(ttsInfos.get(0))) {
+                                    info.setId(ttsInfos.get(0).getId());
+                                    if (tbTeamTechStatisticsMapper.updateByPrimaryKeySelective(info) > 0) {
+                                        log.info("[球队技术统计]修改成功");
+                                    } else {
+                                        log.info("[球队技术统计]修改失败");
+                                    }
+                                //}
                             } else {
-                                log.info("球队技术统计已存在，进行插入");
                                 if (tbTeamTechStatisticsMapper.insertSelective(info) > 0) {
-                                    log.info("球队技术统计保存成功");
+                                    log.info("[球队技术统计]保存成功");
                                 } else {
-                                    log.info("球队技术统计保存失败");
+                                    log.info("[球队技术统计]保存失败");
                                 }
                             }
                         }

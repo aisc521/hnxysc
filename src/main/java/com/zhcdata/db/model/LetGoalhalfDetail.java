@@ -72,4 +72,8 @@ public class LetGoalhalfDetail {
     public void setIsearly(Boolean isearly) {
         this.isearly = isearly;
     }
+
+    public boolean oddsEquals(LetGoalhalfDetail xml) {
+        return xml.upodds.equals(upodds) && xml.getGoal().equals(goal) && xml.getDownodds().equals(downodds) && xml.getModifytime().getTime() == modifytime.getTime();
+    }
 }

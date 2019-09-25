@@ -65,7 +65,7 @@ public class Change2Job {
                     info.setGuestRed(Short.valueOf(strings[7]));        //客队红牌7
                 }
                 if (strings.length > 8 && strings[1].length() > 0) {
-                    info.setMatchtime2(df.parse(strings[9]));           //开场时间9
+                    info.setMatchtime2(strings[9]);           //开场时间9
                 }
                 if (strings.length > 10 && strings[1].length() > 0) {
                     info.setVisitor(Integer.valueOf(strings[11]));      //是否有阵容11

@@ -37,7 +37,11 @@
     select * from totalscore where ScheduleID = #{scheduleid} and CompanyID = #{companyid} and FirstGoal = #{firstgoal}
   </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <select id="selectTotalScoreByMatchAndCpy" resultType="com.zhcdata.db.model.TotalScore">
+          select * from totalscore where ScheduleID = #{scheduleid} and CompanyID = #{companyid} limit 1
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from totalscore
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>

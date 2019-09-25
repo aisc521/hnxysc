@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.StandardHalfMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.StandardHalf" >
+    <id column="OddsID" property="oddsid" jdbcType="INTEGER" />
+    <result column="ScheduleID" property="scheduleid" jdbcType="INTEGER" />
+    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
+    <result column="FirstHomeWin" property="firsthomewin" jdbcType="REAL" />
+    <result column="FirstStandoff" property="firststandoff" jdbcType="REAL" />
+    <result column="FirstGuestWin" property="firstguestwin" jdbcType="REAL" />
+    <result column="HomeWin" property="homewin" jdbcType="REAL" />
+    <result column="Standoff" property="standoff" jdbcType="REAL" />
+    <result column="GuestWin" property="guestwin" jdbcType="REAL" />
+    <result column="ModifyTime" property="modifytime" jdbcType="TIMESTAMP" />
+    <result column="HomeWin_R" property="homewinR" jdbcType="REAL" />
+    <result column="Standoff_R" property="standoffR" jdbcType="REAL" />
+    <result column="GuestWin_R" property="guestwinR" jdbcType="REAL" />
+<!--    <result column="StartTime" property="starttime" jdbcType="TIMESTAMP" />-->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    OddsID, ScheduleID, CompanyID, FirstHomeWin, FirstStandoff, FirstGuestWin, HomeWin,
+    Standoff, GuestWin, ModifyTime, HomeWin_R, Standoff_R, GuestWin_R
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from standardhalf
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from standardhalf
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.zhcdata.db.model.StandardHalf" >
+    insert into standardhalf (OddsID, ScheduleID, CompanyID,
+      FirstHomeWin, FirstStandoff, FirstGuestWin,
+      HomeWin, Standoff, GuestWin,
+      ModifyTime, HomeWin_R, Standoff_R,
+      GuestWin_R)
+    values (#{oddsid,jdbcType=INTEGER}, #{scheduleid,jdbcType=INTEGER}, #{companyid,jdbcType=INTEGER},
+      #{firsthomewin,jdbcType=REAL}, #{firststandoff,jdbcType=REAL}, #{firstguestwin,jdbcType=REAL},
+      #{homewin,jdbcType=REAL}, #{standoff,jdbcType=REAL}, #{guestwin,jdbcType=REAL},
+      #{modifytime,jdbcType=TIMESTAMP}, #{homewinR,jdbcType=REAL}, #{standoffR,jdbcType=REAL},
+      #{guestwinR,jdbcType=REAL})
+  </insert>
+
+<!--  <insert id="insertSelective" parameterType="com.zhcdata.db.model.StandardHalf" useGeneratedKeys="true" keyProperty="oddsid">-->
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.StandardHalf">
+    insert into standardhalf
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oddsid != null" >
+        OddsID,
+      </if>
+      <if test="scheduleid != null" >
+        ScheduleID,
+      </if>
+      <if test="companyid != null" >
+        CompanyID,
+      </if>
+      <if test="firsthomewin != null" >
+        FirstHomeWin,
+      </if>
+      <if test="firststandoff != null" >
+        FirstStandoff,
+      </if>
+      <if test="firstguestwin != null" >
+        FirstGuestWin,
+      </if>
+      <if test="homewin != null" >
+        HomeWin,
+      </if>
+      <if test="standoff != null" >
+        Standoff,
+      </if>
+      <if test="guestwin != null" >
+        GuestWin,
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime,
+      </if>
+      <if test="homewinR != null" >
+        HomeWin_R,
+      </if>
+      <if test="standoffR != null" >
+        Standoff_R,
+      </if>
+      <if test="guestwinR != null" >
+        GuestWin_R,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oddsid != null" >
+        #{oddsid,jdbcType=INTEGER},
+      </if>
+      <if test="scheduleid != null" >
+        #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="firsthomewin != null" >
+        #{firsthomewin,jdbcType=REAL},
+      </if>
+      <if test="firststandoff != null" >
+        #{firststandoff,jdbcType=REAL},
+      </if>
+      <if test="firstguestwin != null" >
+        #{firstguestwin,jdbcType=REAL},
+      </if>
+      <if test="homewin != null" >
+        #{homewin,jdbcType=REAL},
+      </if>
+      <if test="standoff != null" >
+        #{standoff,jdbcType=REAL},
+      </if>
+      <if test="guestwin != null" >
+        #{guestwin,jdbcType=REAL},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="homewinR != null" >
+        #{homewinR,jdbcType=REAL},
+      </if>
+      <if test="standoffR != null" >
+        #{standoffR,jdbcType=REAL},
+      </if>
+      <if test="guestwinR != null" >
+        #{guestwinR,jdbcType=REAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.StandardHalf" >
+    update standardhalf
+    <set >
+      <if test="scheduleid != null" >
+        ScheduleID = #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="companyid != null" >
+        CompanyID = #{companyid,jdbcType=INTEGER},
+      </if>
+      <if test="firsthomewin != null" >
+        FirstHomeWin = #{firsthomewin,jdbcType=REAL},
+      </if>
+      <if test="firststandoff != null" >
+        FirstStandoff = #{firststandoff,jdbcType=REAL},
+      </if>
+      <if test="firstguestwin != null" >
+        FirstGuestWin = #{firstguestwin,jdbcType=REAL},
+      </if>
+      <if test="homewin != null" >
+        HomeWin = #{homewin,jdbcType=REAL},
+      </if>
+      <if test="standoff != null" >
+        Standoff = #{standoff,jdbcType=REAL},
+      </if>
+      <if test="guestwin != null" >
+        GuestWin = #{guestwin,jdbcType=REAL},
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="homewinR != null" >
+        HomeWin_R = #{homewinR,jdbcType=REAL},
+      </if>
+      <if test="standoffR != null" >
+        Standoff_R = #{standoffR,jdbcType=REAL},
+      </if>
+      <if test="guestwinR != null" >
+        GuestWin_R = #{guestwinR,jdbcType=REAL},
+      </if>
+
+    </set>
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.StandardHalf" >
+    update standardhalf
+    set ScheduleID = #{scheduleid,jdbcType=INTEGER},
+      CompanyID = #{companyid,jdbcType=INTEGER},
+      FirstHomeWin = #{firsthomewin,jdbcType=REAL},
+      FirstStandoff = #{firststandoff,jdbcType=REAL},
+      FirstGuestWin = #{firstguestwin,jdbcType=REAL},
+      HomeWin = #{homewin,jdbcType=REAL},
+      Standoff = #{standoff,jdbcType=REAL},
+      GuestWin = #{guestwin,jdbcType=REAL},
+      ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      HomeWin_R = #{homewinR,jdbcType=REAL},
+      Standoff_R = #{standoffR,jdbcType=REAL},
+      GuestWin_R = #{guestwinR,jdbcType=REAL},
+    where OddsID = #{oddsid,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.StandardHalf">
+    select * from standardhalf where ScheduleID = #{mid} and CompanyID = #{cpy} order by ModifyTime desc limit 1
+  </select>
+</mapper>

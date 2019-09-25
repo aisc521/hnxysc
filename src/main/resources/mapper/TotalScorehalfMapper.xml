@@ -34,7 +34,11 @@
     select * from totalscorehalf where ScheduleID = #{scheduleid} and CompanyID = #{companyid} and FirstGoal = #{firstgoal}
   </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.TotalScorehalf">
+      select * from totalscorehalf where ScheduleID = #{mid} and CompanyID = #{cpy}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from totalscorehalf
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>

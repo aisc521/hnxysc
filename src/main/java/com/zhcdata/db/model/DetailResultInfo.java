@@ -1,5 +1,7 @@
 package com.zhcdata.db.model;
 
+import java.util.Objects;
+
 public class DetailResultInfo {
     private Integer id;
 
@@ -109,5 +111,27 @@ public class DetailResultInfo {
 
     public void setPlayeridIn(Integer playeridIn) {
         this.playeridIn = playeridIn;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DetailResultInfo that = (DetailResultInfo) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(scheduleid, that.scheduleid) &&
+                Objects.equals(happentime, that.happentime) &&
+                Objects.equals(teamid, that.teamid) &&
+                Objects.equals(playername, that.playername) &&
+                Objects.equals(playerid, that.playerid) &&
+                Objects.equals(kind, that.kind) &&
+                Objects.equals(playernameJ, that.playernameJ) &&
+                Objects.equals(playeridIn, that.playeridIn);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, scheduleid, happentime, teamid, playername, playerid, kind, playernameJ, playeridIn);
     }
 }
