@@ -388,14 +388,14 @@ public class Schedule implements Serializable {
     /**
      * @return MatchTime2
      */
-    public Date getMatchtime2() {
+    public String getMatchtime2() {
         return matchtime2;
     }
 
     /**
      * @param matchtime2
      */
-    public void setMatchtime2(Date matchtime2) {
+    public void setMatchtime2(String matchtime2) {
         this.matchtime2 = matchtime2;
     }
 
@@ -654,14 +654,14 @@ public class Schedule implements Serializable {
     /**
      * @return bf_changetime
      */
-    public Date getBfChangetime() {
+    public String getBfChangetime() {
         return bfChangetime;
     }
 
     /**
      * @param bfChangetime
      */
-    public void setBfChangetime(Date bfChangetime) {
+    public void setBfChangetime(String bfChangetime) {
         this.bfChangetime = bfChangetime;
     }
 
