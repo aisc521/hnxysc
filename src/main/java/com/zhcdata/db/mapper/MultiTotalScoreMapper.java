@@ -17,4 +17,6 @@ public interface MultiTotalScoreMapper {
     int updateByPrimaryKey(MultiTotalScore record);
 
     MultiTotalScore selectByMatchIdAndCpyAndNum(Integer scheduleid, Integer companyid, Short num);
+
+    MultiTotalScore selectTotalScoreByMatchAndCpyAndNum(int mid, int cpy, int num);
 }

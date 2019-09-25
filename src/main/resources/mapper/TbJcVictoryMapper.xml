@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.TbJcVictoryMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.TbJcVictory" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="expert_id" property="expertId" jdbcType="BIGINT" />
+    <result column="lz_now" property="lzNow" jdbcType="BIGINT" />
+    <result column="f" property="f" jdbcType="BIGINT" />
+    <result column="z" property="z" jdbcType="BIGINT" />
+    <result column="z_three_days" property="zThreeDays" jdbcType="BIGINT" />
+    <result column="z_five_days" property="zFiveDays" jdbcType="BIGINT" />
+    <result column="z_seven_days" property="zSevenDays" jdbcType="BIGINT" />
+    <result column="return_seven_days" property="returnSevenDays" jdbcType="BIGINT" />
+    <result column="trend" property="trend" jdbcType="VARCHAR" />
+    <result column="return_all" property="returnAll" jdbcType="BIGINT" />
+    <result column="z_all" property="zAll" jdbcType="BIGINT" />
+    <result column="lz_big" property="lzBig" jdbcType="BIGINT" />
+    <result column="yl_seven_days" property="ylSevenDays" jdbcType="BIGINT" />
+    <result column="ten_z" property="tenZ" jdbcType="INTEGER" />
+    <result column="nine_z" property="nineZ" jdbcType="INTEGER" />
+    <result column="eight_z" property="eightZ" jdbcType="INTEGER" />
+    <result column="seven_z" property="sevenZ" jdbcType="INTEGER" />
+    <result column="six_z" property="sixZ" jdbcType="INTEGER" />
+    <result column="five_z" property="fiveZ" jdbcType="INTEGER" />
+    <result column="four_z" property="fourZ" jdbcType="INTEGER" />
+    <result column="three_z" property="threeZ" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="queryVictory" resultType="com.zhcdata.jc.dto.VictoryResult">
+    SELECT * from tb_jc_victory where expert_Id=${expertId}
+  </select>
+
+  <insert id="insertVictoryInfo" parameterType="com.zhcdata.jc.dto.VictoryInfo">
+    insert into tb_jc_victory (
+    expert_id,lz_now,f,z,z_three_days,
+    z_five_days,z_seven_days,return_seven_days,trend,return_all,
+    z_all,lz_big,yl_seven_days,ten_z,nine_z,
+    eight_z,seven_z,six_z,five_z,four_z,
+    three_z
+    )
+    values (
+    #{expertId,jdbcType=VARCHAR}, #{lzNow,jdbcType=VARCHAR}, #{f,jdbcType=VARCHAR}, #{z,jdbcType=VARCHAR}, #{zThreeDays,jdbcType=VARCHAR},
+    #{zFiveDays,jdbcType=VARCHAR},#{zSevenDays,jdbcType=VARCHAR},#{returnSevenDays,jdbcType=VARCHAR},#{trend,jdbcType=VARCHAR},#{returnAll,jdbcType=VARCHAR},
+    #{zAll,jdbcType=VARCHAR},#{lzBig,jdbcType=VARCHAR},#{ylSevenDays,jdbcType=VARCHAR},#{ten_z,jdbcType=VARCHAR},#{nine_z,jdbcType=VARCHAR},
+    #{eight_z,jdbcType=VARCHAR},#{seven_z,jdbcType=VARCHAR},#{six_z,jdbcType=VARCHAR},#{five_z,jdbcType=VARCHAR},#{four_z,jdbcType=VARCHAR},
+    #{three_z,jdbcType=VARCHAR}
+    )
+  </insert>
+
+  <update id="updateById" parameterType="com.zhcdata.jc.dto.VictoryInfo">
+    update tb_jc_victory set
+    expert_id=#{expertId,jdbcType=VARCHAR},
+    lz_now=#{lzNow,jdbcType=VARCHAR},
+    f=#{f,jdbcType=VARCHAR},
+    z=#{z,jdbcType=VARCHAR},
+    z_three_days=#{zThreeDays,jdbcType=VARCHAR},
+
+    z_five_days=#{zFiveDays,jdbcType=VARCHAR},
+    z_seven_days=#{zSevenDays,jdbcType=VARCHAR},
+    return_seven_days=#{returnSevenDays,jdbcType=VARCHAR},
+    trend=#{trend,jdbcType=VARCHAR},
+    return_all=#{returnAll,jdbcType=VARCHAR},
+
+    z_all=#{zAll,jdbcType=VARCHAR},
+    lz_big=#{lzBig,jdbcType=VARCHAR},
+    yl_seven_days=#{ylSevenDays,jdbcType=VARCHAR},
+    ten_z=#{zAll,jdbcType=VARCHAR},
+    nine_z=#{zAll,jdbcType=VARCHAR},
+
+    eight_z=#{zAll,jdbcType=VARCHAR},
+    seven_z=#{zAll,jdbcType=VARCHAR},
+    six_z=#{zAll,jdbcType=VARCHAR},
+    five_z=#{zAll,jdbcType=VARCHAR},
+    four_z=#{zAll,jdbcType=VARCHAR},
+
+    three_z=#{zAll,jdbcType=VARCHAR}
+
+
+    where expert_Id=#{expertId,jdbcType=VARCHAR}
+  </update>
+</mapper>

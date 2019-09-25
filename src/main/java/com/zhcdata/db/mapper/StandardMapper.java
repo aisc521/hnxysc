@@ -18,4 +18,6 @@ public interface StandardMapper {
     int updateByPrimaryKey(Standard record);
 
     Standard selectMatchIdAndCpy(Integer scheduleid, Integer companyid);
+
+    Standard selectByMidAndCpy(String mid, String cpy);
 }

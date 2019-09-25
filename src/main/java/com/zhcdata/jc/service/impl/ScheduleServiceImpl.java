@@ -2,6 +2,8 @@ package com.zhcdata.jc.service.impl;
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.mapper.TbJcMatchLineupMapper;
@@ -637,6 +639,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
     }
 
+
+
     /**
      * 筛选同赔精选比赛
      * @param maxCount 本类需要记录数
@@ -962,4 +966,52 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
         return lottery;
     }
+
+
+    /**
+     * 定时任务查询比赛列表
+     * @param startDate
+     * @param endDate
+     * @param s
+     * @param s1
+     * @param s2
+     * @return
+     */
+    @Override
+    public List<MatchResult1> queryMacthListForJob(String startDate, String endDate, String type, String userId, String state) {
+        return scheduleMapper.queryMacthListForJob(startDate,endDate,type,userId,state);
+    }
+
+    @Override
+    public String queryZcNum(String startDate, String endDate) {
+        return scheduleMapper.queryZcNum(startDate,endDate);
+    }
+
+    @Override
+    public String queryBdNum(String startDate, String endDate) {
+        return scheduleMapper.queryBdNum(startDate,endDate);
+    }
+
+    @Override
+    public PageInfo<MatchResult1> queryAttentionList(String userId, String pageNo, String pageAmount) {
+        PageHelper.startPage(Integer.parseInt(pageNo), Integer.parseInt(pageAmount));
+        List<MatchResult1> matchResult1s = scheduleMapper.queryAttentionList(Long.parseLong(userId));
+        return new PageInfo<>(matchResult1s);
+    }
+
+    @Override
+    public List<Integer> selectMatchIdExceedNow() {
+        return scheduleMapper.selectMatchIdExceedNow();
+    }
+
+    @Override
+    public List<DrawNoResult> queryList(String startDate) {
+        return scheduleMapper.queryList(startDate);
+    }
+
+    @Override
+    public IconAndTimeDto selectIconAndTime(Integer matchId) {
+        return scheduleMapper.selectIconAndTime(matchId);
+    }
+
 }

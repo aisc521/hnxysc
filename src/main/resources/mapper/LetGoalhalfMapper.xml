@@ -31,10 +31,13 @@
 
   <select id="selectByMatchIdAndCmpAndFristGoal" resultType="com.zhcdata.db.model.LetGoalhalf">
     -- Integer scheduleid, Integer companyid, Float firstgoal
-    select * from letgoalhalf where ScheduleID = #{scheduleid} and CompanyID = #{companyid} and FirstGoal = #}{firstgoal}
+    select * from letgoalhalf where ScheduleID = #{scheduleid} and CompanyID = #{companyid} and FirstGoal = #{firstgoal}
   </select>
+    <select id="selectByMatchIdAndCmp" resultType="com.zhcdata.db.model.LetGoalhalf">
+      select * from letgoalhalf where ScheduleID = #{mid} and CompanyID = #{cpy} limit 1
+    </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from letgoalhalf
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>

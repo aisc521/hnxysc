@@ -18,4 +18,6 @@ public interface TotalScoreMapper {
     int updateByPrimaryKey(TotalScore record);
 
     TotalScore selectTotalScoreByMatchAndCpyAndFristHandicap(Integer scheduleid, Integer companyid, Float firstgoal);
+
+    TotalScore selectTotalScoreByMatchAndCpy(Integer scheduleid, Integer companyid);
 }

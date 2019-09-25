@@ -50,4 +50,9 @@ public class JcScheduleServiceImpl implements JcScheduleService {
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
         }
     }
+
+    @Override
+    public JcSchedule queryJcScheduleByBet007(Integer matchId) {
+        return jcScheduleMapper.queryJcScheduleByBet007(matchId);
+    }
 }

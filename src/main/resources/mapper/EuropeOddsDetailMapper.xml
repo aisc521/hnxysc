@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.EuropeOddsDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.EuropeOddsDetail" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="OddsID" property="oddsid" jdbcType="INTEGER" />
+    <result column="HomeWin" property="homewin" jdbcType="REAL" />
+    <result column="Standoff" property="standoff" jdbcType="REAL" />
+    <result column="GuestWin" property="guestwin" jdbcType="REAL" />
+    <result column="ModifyTime" property="modifytime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, OddsID, HomeWin, Standoff, GuestWin, ModifyTime, type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from europeoddsdetail
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByOddsNewest" resultType="com.zhcdata.db.model.EuropeOddsDetail">
+    select * from europeoddsdetail where OddsID = #{oddsid} order by modifytime desc limit 1
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from europeoddsdetail
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhcdata.db.model.EuropeOddsDetail" >
+    insert into europeoddsdetail (ID, OddsID, HomeWin, 
+      Standoff, GuestWin, ModifyTime, 
+      type)
+    values (#{id,jdbcType=INTEGER}, #{oddsid,jdbcType=INTEGER}, #{homewin,jdbcType=REAL}, 
+      #{standoff,jdbcType=REAL}, #{guestwin,jdbcType=REAL}, #{modifytime,jdbcType=TIMESTAMP}, 
+      #{type,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.EuropeOddsDetail" >
+    insert into europeoddsdetail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="oddsid != null" >
+        OddsID,
+      </if>
+      <if test="homewin != null" >
+        HomeWin,
+      </if>
+      <if test="standoff != null" >
+        Standoff,
+      </if>
+      <if test="guestwin != null" >
+        GuestWin,
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="oddsid != null" >
+        #{oddsid,jdbcType=INTEGER},
+      </if>
+      <if test="homewin != null" >
+        #{homewin,jdbcType=REAL},
+      </if>
+      <if test="standoff != null" >
+        #{standoff,jdbcType=REAL},
+      </if>
+      <if test="guestwin != null" >
+        #{guestwin,jdbcType=REAL},
+      </if>
+      <if test="modifytime != null" >
+        #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.EuropeOddsDetail" >
+    update europeoddsdetail
+    <set >
+      <if test="oddsid != null" >
+        OddsID = #{oddsid,jdbcType=INTEGER},
+      </if>
+      <if test="homewin != null" >
+        HomeWin = #{homewin,jdbcType=REAL},
+      </if>
+      <if test="standoff != null" >
+        Standoff = #{standoff,jdbcType=REAL},
+      </if>
+      <if test="guestwin != null" >
+        GuestWin = #{guestwin,jdbcType=REAL},
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.EuropeOddsDetail" >
+    update europeoddsdetail
+    set OddsID = #{oddsid,jdbcType=INTEGER},
+      HomeWin = #{homewin,jdbcType=REAL},
+      Standoff = #{standoff,jdbcType=REAL},
+      GuestWin = #{guestwin,jdbcType=REAL},
+      ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=INTEGER}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

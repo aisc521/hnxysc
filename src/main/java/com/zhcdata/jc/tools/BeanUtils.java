@@ -25,18 +25,20 @@ package com.zhcdata.jc.tools;
 
 import com.zhcdata.db.model.*;
 import com.zhcdata.jc.xml.rsp.MatchListRsp;
+import com.zhcdata.jc.xml.rsp.StandardHalfRsps.H;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import static com.zhcdata.jc.quartz.job.Match.MatchListJob.parseToFormat;
 
 public class BeanUtils {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat sdf_X = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 
     public static Schedule parseSchedule(MatchListRsp model) throws ParseException {
@@ -88,8 +90,11 @@ public class BeanUtils {
             inDb.setGuestscore(Short.parseShort("" + model.getK()));//客队得分
         if (StringUtils.isNotEmpty(model.getL()))
             inDb.setHomehalfscore(Short.parseShort(model.getL()));//主队半场
+        else inDb.setHomehalfscore(Short.parseShort("0"));//主队半场
+
         if (StringUtils.isNotEmpty(model.getM()))
             inDb.setGuesthalfscore(Short.parseShort(model.getM()));//客队半场
+        else inDb.setGuesthalfscore(Short.parseShort("0"));//客队半场
         // TODO: 2019/9/10 比分说明或者其他说明
         // TODO: 2019/9/10 比分说明2
         if (model.getN() != null)
@@ -386,6 +391,219 @@ public class BeanUtils {
             System.err.println("parseTotalScore,dateFormatException,变化时间转换失败");
         }
         mo.setNum(Short.parseShort(info[8]));
+        return mo;
+    }
+
+    public static LetGoalDetail parseLetGoalDetail(String[] item) {
+        //亚赔（让球盘）变化数据:比赛ID,公司ID,即时盘口,主队即时赔率,客队即时赔率,是否封盘1,是否走地,盘口序号,变盘时间,是否封盘2
+        LetGoalDetail mo = new LetGoalDetail();
+        mo.setUpodds(Float.parseFloat(item[3]));
+        mo.setGoal(Float.parseFloat(item[2]));
+        mo.setDownodds(Float.parseFloat(item[4]));
+        try {
+            mo.setModifytime(sdf.parse(item[8]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseLetGoalDetail,dateFormatException,变化时间转换失败");
+        }
+        return mo;
+    }
+
+    public static MultiLetGoalDetail parseMultiLetGoalDetail(String[] item) {
+        //亚赔（让球盘）变化数据:比赛ID,公司ID,即时盘口,主队即时赔率,客队即时赔率,是否封盘1,是否走地,盘口序号,变盘时间,是否封盘2
+        MultiLetGoalDetail mo = new MultiLetGoalDetail();
+        mo.setUpodds(Float.parseFloat(item[3]));
+        mo.setGoal(Float.parseFloat(item[2]));
+        mo.setDownodds(Float.parseFloat(item[4]));
+        try {
+            mo.setAddtime(sdf.parse(item[8]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseMultiLetGoalDetail,dateFormatException,变化时间转换失败");
+        }
+        return mo;
+    }
+
+    public static StandardDetail parseStandardDetail(String[] s) {
+        //比赛ID,公司ID,即时盘主胜赔率,即时盘平局赔率,即时盘客胜赔率,盘口序号,变盘时间,是否封盘2
+        StandardDetail mo = new StandardDetail();
+        mo.setHomewin(Float.valueOf(s[2]));
+        mo.setStandoff(Float.valueOf(s[3]));
+        mo.setGuestwin(Float.valueOf(s[4]));
+        try {
+            mo.setModifytime(sdf.parse(s[6]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseMultiLetGoalDetail,dateFormatException,变化时间转换失败");
+        }
+        return mo;
+    }
+
+    public static TotalScoreDetail parseTotalScoreDetail(String[] info) {
+        /*大小球变化数据 比赛ID,公司ID,时盘盘口,即时盘大球赔率,即时盘小球赔率,盘口序号,变盘时间,是否封盘2*/
+        TotalScoreDetail mo = new TotalScoreDetail();
+        mo.setUpodds(Float.parseFloat(info[3]));
+        mo.setDownodds(Float.parseFloat(info[4]));
+        mo.setGoal(Float.parseFloat(info[2]));
+        try {
+            mo.setModifytime(sdf.parse(info[6]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseMultiLetGoalDetail,dateFormatException,变化时间转换失败");
+        }
+        return mo;
+    }
+
+    public static MultiTotalScoreDetail parseparseMultiTotalScoreDetail(String[] info) {
+        /*大小球变化数据 比赛ID,公司ID,时盘盘口,即时盘大球赔率,即时盘小球赔率,盘口序号,变盘时间,是否封盘2*/
+        MultiTotalScoreDetail mo = new MultiTotalScoreDetail();
+        mo.setUpodds(Float.parseFloat(info[3]));
+        mo.setDownodds(Float.parseFloat(info[4]));
+        mo.setGoal(Float.parseFloat(info[2]));
+        try {
+            mo.setAddtime(sdf.parse(info[6]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseMultiLetGoalDetail,dateFormatException,变化时间转换失败");
+        }
+        return mo;
+    }
+
+    public static LetGoalhalfDetail parseLetGoalhalfDetail(String[] info) {
+        //比赛ID,公司ID,即时盘口,主队即时赔率,客队即时赔率,是否走地,盘口序号,变盘时间
+        LetGoalhalfDetail mo = new LetGoalhalfDetail();
+        mo.setUpodds(Float.parseFloat(info[3]));
+        mo.setGoal(Float.parseFloat(info[2]));
+        mo.setDownodds(Float.parseFloat(info[4]));
+        try {
+            mo.setModifytime(sdf.parse(info[7]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseLetGoalhalfDetail,dateFormatException,变化时间转换失败");
+        }
+        return mo;
+    }
+
+    public static MultiLetGoalhalfDetail parseMultiLetGoalhalfDetail(String[] info) {
+        MultiLetGoalhalfDetail mo = new MultiLetGoalhalfDetail();
+        mo.setUpodds(Float.parseFloat(info[3]));
+        mo.setGoal(Float.parseFloat(info[2]));
+        mo.setDownodds(Float.parseFloat(info[4]));
+        try {
+            mo.setAddtime(sdf.parse(info[7]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseMultiLetGoalhalfDetail,dateFormatException,变化时间转换失败");
+        }
+        return mo;
+    }
+
+    public static TotalScorehalfDetail parseTotalScorehalfDetail(String[] info) {
+        //比赛ID,公司ID,时盘盘口,即时盘大球赔率,即时盘小球赔率,盘口序号,变盘时间
+        TotalScorehalfDetail mo = new TotalScorehalfDetail();
+        mo.setGoal(Float.parseFloat(info[2]));
+        mo.setUpodds(Float.parseFloat(info[3]));
+        mo.setDownodds(Float.parseFloat(info[4]));
+        try {
+            mo.setModifytime(sdf.parse(info[6]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseLetGoalhalfDetail,dateFormatException,变化时间转换失败");
+        }
+        return mo;
+    }
+
+    public static MultiTotalScorehalfDetail parseMultiTotalScorehalfDetail(String[] info) {
+        MultiTotalScorehalfDetail mo = new MultiTotalScorehalfDetail();
+        //比赛ID,公司ID,时盘盘口,即时盘大球赔率,即时盘小球赔率,盘口序号,变盘时间
+        mo.setGoal(Float.parseFloat(info[2]));
+        mo.setUpodds(Float.parseFloat(info[3]));
+        mo.setDownodds(Float.parseFloat(info[4]));
+        try {
+            mo.setAddtime(sdf.parse(info[6]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseLetGoalhalfDetail,dateFormatException,变化时间转换失败");
+        }
+        return mo;
+    }
+
+    public static List<StandardHalf> parseStandardHalf(H h) {
+        //半场欧赔    博彩公司ID,博彩公司名,初盘主胜,初盘平局,初盘客胜,主胜,平局,客胜,变化时间
+        List<StandardHalf> mos = new ArrayList<>();
+        List<String> odds = h.getOdds().getO();
+        for (int i = 0; i < odds.size(); i++) {
+            String[] str = odds.get(i).split(",");
+            StandardHalf mo = new StandardHalf();
+            mo.setScheduleid(Integer.parseInt(h.getId()));
+            mo.setCompanyid(Integer.parseInt(str[0]));
+
+            mo.setFirsthomewin(Float.parseFloat(str[2]));//初盘主胜水位
+            mo.setFirststandoff(Float.parseFloat(str[3]));//初盘和局水位
+            mo.setFirstguestwin(Float.parseFloat(str[4]));//初盘客胜水位
+
+            /*终盘水位就是即时水位，但是到了比赛开始时间就不更新了*/
+            mo.setHomewin(Float.parseFloat(str[5]));//终盘
+            mo.setStandoff(Float.parseFloat(str[6]));//终盘
+            mo.setGuestwin(Float.parseFloat(str[7]));//终盘
+
+            mo.setHomewinR(Float.parseFloat(str[5]));//即时主胜
+            mo.setStandoffR(Float.parseFloat(str[6]));//即时和局
+            mo.setGuestwinR(Float.parseFloat(str[7]));//即时主胜
+
+            try {
+                mo.setModifytime(sdf.parse(parseToFormat(str[8])));//修改时间
+            } catch (ParseException e) {
+                System.err.println("parseStandardHalf,dateFormatException,变化时间转换失败 : "+str[8]);
+            }
+            mos.add(mo);
+        }
+        return mos;
+    }
+
+    public static StandardHalfDetail parseStandardHalfDetail(StandardHalf half) {
+        StandardHalfDetail mo = new StandardHalfDetail();
+        mo.setHomewin(half.getHomewinR());
+        mo.setGuestwin(half.getGuestwinR());
+        mo.setStandoff(half.getStandoffR());
+        mo.setModifytime(half.getModifytime());
+        return mo;
+    }
+
+    public static Date parseTime(String time) {
+        try {
+            return sdf_X.parse(time);
+        } catch (ParseException e) {
+            System.err.println("BeanUtils.parseTime exception,time:"+time);
+        }
+        return new Date();
+    }
+
+    public static EuropeOdds parseEuropeOdds(String id, String[] mos) {
+        //博彩公司ID,博彩公司英文名,初盘主胜,初盘平局,初盘客胜,主胜,平局,客胜,变化时间,博彩公司简体名
+        EuropeOdds mo = new EuropeOdds();
+        mo.setScheduleid(Integer.parseInt(id));
+        mo.setCompanyid(Integer.parseInt(mos[0]));
+
+        mo.setFirsthomewin(Float.parseFloat(mos[2]));
+        mo.setFirststandoff(Float.parseFloat(mos[3]));
+        mo.setFirstguestwin(Float.parseFloat(mos[4]));
+
+        mo.setRealhomewin(Float.parseFloat(mos[5]));
+        mo.setRealstandoff(Float.parseFloat(mos[6]));
+        mo.setRealguestwin(Float.parseFloat(mos[7]));
+
+        try {
+            mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : "+mos[8]);
+        }
+
+        return mo;
+    }
+
+    public static EuropeOddsDetail parseEuropeOddsDetail(String[] mos) {
+        ////博彩公司ID,博彩公司英文名,初盘主胜,初盘平局,初盘客胜,主胜,平局,客胜,变化时间,博彩公司简体名
+        EuropeOddsDetail mo = new EuropeOddsDetail();
+        mo.setHomewin(Float.parseFloat(mos[5]));
+        mo.setStandoff(Float.parseFloat(mos[6]));
+        mo.setGuestwin(Float.parseFloat(mos[7]));
+        try {
+            mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
+        } catch (ParseException e) {
+            System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : "+mos[8]);
+        }
         return mo;
     }
 }

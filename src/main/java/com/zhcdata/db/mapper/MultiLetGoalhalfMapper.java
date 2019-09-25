@@ -16,4 +16,6 @@ public interface MultiLetGoalhalfMapper {
     int updateByPrimaryKey(MultiLetGoalhalf record);
 
     MultiLetGoalhalf selectByMatchIdAndCmpAndFristGoalAndNum(Integer scheduleid, Integer companyid, Float firstgoal,Short num);
+
+    MultiLetGoalhalf selectByMatchIdAndCmpAndNum(String mid, String cpy, String num);
 }

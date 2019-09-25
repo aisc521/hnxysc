@@ -5,7 +5,10 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface JcMatchBjdcPlMapper extends Mapper<JcMatchBjdcPl> {
     List<JcMatchBjdcPl> queryJcMatchBjdcPlByIssuemAndNoId(@Param("issueNum") String issueNum, @Param("noId") String noId);
+    //按时间查询比赛完成的数据
+    List<Map<String,String>> queryBjdcListReuslt(@Param("startDate") String startDate,@Param("endDate") String endDate);
 }

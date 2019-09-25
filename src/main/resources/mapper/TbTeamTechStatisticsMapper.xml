@@ -484,4 +484,21 @@
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="queryEventStandDataSum" resultType="com.zhcdata.jc.dto.EventStandDataSum">
+   SELECT
+    stat.shots,
+    stat.target,
+    stat.red,
+    stat.yellow,
+    stat.fouls,
+    stat.offside,
+    case when stat.teamID = sc.HomeTeamID   then '1'
+         when stat.teamID = sc.GuestTeamID  then '2'
+             end as zk
+    from teamtechstatistics stat
+    LEFT JOIN schedule sc ON stat.scheduleID = sc.ScheduleID
+    where stat.scheduleID = #{matchId};
+  </select>
+
 </mapper>

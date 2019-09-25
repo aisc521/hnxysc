@@ -72,4 +72,8 @@ public class LetGoalDetail {
     public void setIsearly(Boolean isearly) {
         this.isearly = isearly;
     }
+
+    public boolean oddsEquals(LetGoalDetail db) {
+        return db.goal.equals(goal) && db.upodds.equals(upodds) && db.getDownodds().equals(downodds);
+    }
 }

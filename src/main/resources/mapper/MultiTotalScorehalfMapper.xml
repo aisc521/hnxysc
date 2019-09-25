@@ -35,6 +35,10 @@
       select * from multitotalscorehalf where ScheduleID = #{scheduleid} and CompanyID = #{companyid} and num = #{num}
     </select>
 
+    <select id="selectByMidAndCpyAndNum" resultType="com.zhcdata.db.model.MultiTotalScorehalf">
+      select * from multitotalscorehalf where ScheduleID = #{mid} and CompanyID = #{cpy} and num = #{num}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from multitotalscorehalf
     where OddsID = #{oddsid,jdbcType=INTEGER}
