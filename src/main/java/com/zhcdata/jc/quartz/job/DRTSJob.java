@@ -10,6 +10,9 @@ import com.zhcdata.jc.tools.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -24,7 +27,7 @@ import java.util.List;
 @Slf4j
 @Configuration
 @EnableScheduling
-public class DRTSJob {
+public class DRTSJob implements Job {
 
     @Resource
     ScheduleMapper scheduleMapper;
@@ -35,19 +38,19 @@ public class DRTSJob {
     @Resource
     TbTeamTechStatisticsMapper tbTeamTechStatisticsMapper;
 
-    @Async
-    @Scheduled(cron = "11 43 20 * * *")
-    public void work() {
+
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         //String a="1716564^1^1^90^^^^6894074^^";
         //String b1="1681920^0^3^74^罗伊博阿腾^172289^罗伊博阿腾^6894043^^Roy Boateng";
-        String b2="1673766^0^1^54^^^^6894378^^";
+        //String b2="1673766^0^1^54^^^^6894378^^";
         //int j=a.split("\\^").length;
         //int j1=b1.split("\\^").length;
-        int j2=b2.split("\\^").length;
-
+        //int j2=b2.split("\\^").length;
 
         String url = "http://interface.win007.com/zq/detail.aspx?type=new";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
             String xml = HttpUtils.getHtmlResult(url);
@@ -56,27 +59,35 @@ public class DRTSJob {
             org.dom4j.Element root = docDom4j.getRootElement();
             List<Element> childElements = root.elements();
             for (org.dom4j.Element one : childElements) {
-                if(one.getName().equals("event")){
+                if (one.getName().equals("event")) {
                     //比赛的详细事件
+                    int j=0;
                     List<Element> twos = one.elements();
                     for (org.dom4j.Element two : twos) {
-
+                        j++;
+                        System.out.println(twos.size());
+                        System.out.println(j);
                         System.out.println(two.getName());
                         System.out.println(two.getText());
-                        String[] values=two.getText().split("\\^");
+                        String[] values = two.getText().split("\\^");
 
-                        if(values[0].contains("1673766")){
-                            String sdfa="";
+                        if (values[0].contains("1673766")) {
+                            String sdfa = "";
                         }
 
                         //赛程ID^主客队标志^事件类型^时间^球员名字^球名ID^简体球员名^记录ID(不重复）^助攻球员ID
                         //     0         1        2    3       4      5         6              7          8
-                        DetailResultInfo info=new DetailResultInfo();
+                        DetailResultInfo info = new DetailResultInfo();
                         info.setId(Integer.valueOf(values[7]));                 //详细结果 ID
                         info.setScheduleid(Integer.parseInt(values[0]));        //赛程 ID
                         info.setHappentime(Short.parseShort(values[3]));        //发生时间
-                        Schedule scheduleInfo=scheduleMapper.selectByPrimaryKey(info.getScheduleid());
-                        if(scheduleInfo!=null) {                                //球队 ID
+
+                        //if(info.getId().toString().contains("6920165")){
+                        //   String sdsd="";
+                        //}
+
+                        Schedule scheduleInfo = scheduleMapper.selectByPrimaryKey(info.getScheduleid());
+                        if (scheduleInfo != null) {                             //球队 ID
                             if (values[1].equals("1")) {
                                 info.setTeamid(scheduleInfo.getHometeamid());
                             } else {
@@ -84,43 +95,40 @@ public class DRTSJob {
                             }
                         }
                         info.setPlayername(values[4]);                          //球员名称
-                        if(values[5].contains(",")) {
-                            info.setPlayerid(Integer.parseInt(values[5].split(",")[0]));//球员 ID
-                        }else {
-                            if(values[5].length()>0) {
-                                info.setPlayerid(Integer.parseInt(values[5]));  //球员 ID
-                            }
-                        }
-                        info.setKind(Short.valueOf(values[2]));                 //类型
-                        info.setModifytime(df.format(new Date()));              //修改时间
-                        info.setPlayernameJ(values[6]);                         //球员简体名
-                        if(values[5].contains(",")) {
+                        if (values[5].contains(",")) {
+                            info.setPlayerid(Integer.parseInt(values[5].split(",")[0]));      //球员 ID
                             info.setPlayeridIn(Integer.parseInt(values[5].split(",")[1]));
-                        }else {
-                            if(values.length>7) {
-                                if (values[8].length() > 0) {
-                                    info.setPlayeridIn(Integer.valueOf(values[8]));     //球员
-                                }
-                                //如果值为空,数组没那么长
+                        } else {
+                            if (values[5].length() > 0) {
+                                info.setPlayerid(Integer.parseInt(values[5]));      //球员 ID
                             }
                         }
-                        List<DetailResultInfo> queryDetailResult=tbDetailResultMapper.queryDetailResult(info.getScheduleid().toString(),info.getId().toString());
-                        if(queryDetailResult==null||queryDetailResult.size()==0){
-                            if(tbDetailResultMapper.insertSelective(info)>0){
+
+                        info.setKind(Short.valueOf(values[2]));                 //类型
+                        info.setModifytime(dfs.format(new Date()));              //修改时间
+                        info.setPlayernameJ(values[6]);                         //球员简体名
+                        if (values.length > 8) {
+                            if (values[8].length() > 0) {
+                                info.setPlayeridIn(Integer.valueOf(values[8]));      //球员
+                            }
+                        }
+                        List<DetailResultInfo> queryDetailResult = tbDetailResultMapper.queryDetailResult(info.getScheduleid().toString(), info.getId().toString());
+                        if (queryDetailResult == null || queryDetailResult.size() == 0) {
+                            if (tbDetailResultMapper.insertSelective(info) > 0) {
                                 log.info("比赛详细事件接口插入成功");
-                            }else {
+                            } else {
                                 log.info("比赛详细事件接口插入失败");
                             }
-                        }else {
-                            if(tbDetailResultMapper.updateByPrimaryKeySelective(info)>0){
+                        } else {
+                            if (tbDetailResultMapper.updateByPrimaryKeySelective(info) > 0) {
                                 log.info("比赛详细事件接口修改成功");
-                            }else {
+                            } else {
                                 log.info("比赛详细事件接口修改失败");
                             }
                         }
                     }
 
-                }else if(one.getName().equals("technic")){
+                } else if (one.getName().equals("technic")) {
                     //技术统计
                     List<Element> twos = one.elements();
                     for (org.dom4j.Element two : twos) {
@@ -171,7 +179,7 @@ public class DRTSJob {
                                     } else if (b.split(",")[0].equals("13")) {
                                         info.setRed(Integer.parseInt(b.split(",")[k]));             //13.红牌数
                                     } else if (b.split(",")[0].equals("14")) {
-                                        info.setControlpercent(Integer.parseInt(b.split(",")[k].replace("%","")));  //14.控球时间(控球率)
+                                        info.setControlpercent(Integer.parseInt(b.split(",")[k].replace("%", "")));  //14.控球时间(控球率)
                                     } else if (b.split(",")[0].equals("15")) {
                                         info.setHeader(Integer.parseInt(b.split(",")[k]));          //15.头球
                                     } else if (b.split(",")[0].equals("16")) {
@@ -235,7 +243,7 @@ public class DRTSJob {
                                     } else if (b.split(",")[0].equals("45")) {
                                         info.setCornerhalf(Integer.parseInt(b.split(",")[k]));      //45.半场角球
                                     } else if (b.split(",")[0].equals("46")) {
-                                        info.setControlpercenthalf(Integer.parseInt(b.split(",")[k].replace("%","")));//46.半场控球
+                                        info.setControlpercenthalf(Integer.parseInt(b.split(",")[k].replace("%", "")));//46.半场控球
                                     }
                                 }
                                 info.setModifytime(df.format(new Date()));

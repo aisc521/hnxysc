@@ -82,7 +82,9 @@ public class DetailResultJob implements Job {
                 info.setModifytime(dfs.format(new Date()));              //修改时间
                 info.setPlayernameJ(values[6]);                         //球员简体名
                 if (values.length > 8) {
-                    info.setPlayeridIn(Integer.valueOf(values[8]));      //球员
+                    if(values[8].length()>9) {
+                        info.setPlayeridIn(Integer.valueOf(values[8]));  //球员
+                    }
                 }
                 List<DetailResultInfo> queryDetailResult = tbDetailResultMapper.queryDetailResult(info.getScheduleid().toString(), info.getId().toString());
                 if (queryDetailResult == null || queryDetailResult.size() == 0) {
