@@ -127,10 +127,10 @@ public class QiuTanXmlComm<T>  {
     for (LotteryTypeMatchRsp lotteryTypeMatchRsp : list) {
       System.out.println(lotteryTypeMatchRsp.getID());
     }*/
-  String url = "http://interface.win007.com/zq/ch_odds_m.xml";
-    MoreHandicapOddsLisAlltRsp object  = (MoreHandicapOddsLisAlltRsp) new QiuTanXmlComm().handleMothodHttpGet(url,MoreHandicapOddsLisAlltRsp.class,List.class,MoreHandicapOddsARsp.class);
-    System.out.println(object);
-    List<String> listA = object.getA().getH();
+    String url = "http://interface.win007.com/zq/ch_odds_m.xml";
+    MoreHandicapOddsLisAlltRsp rsp  = (MoreHandicapOddsLisAlltRsp) new QiuTanXmlComm().handleMothodHttpGet(url,MoreHandicapOddsLisAlltRsp.class,List.class,MoreHandicapOddsARsp.class);
+    System.out.println(rsp);
+    List<String> listA = rsp.getA().getH();
     for (String bean : listA) {
       System.out.println(bean);
     }

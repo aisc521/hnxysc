@@ -21,7 +21,8 @@
   </select>
 
   <select id="selectByMidAndCpyAndNum" resultType="com.zhcdata.db.model.MultiLetGoalDetail">
-select ld.* from multiletgoal l,multiletgoaldetail ld where l.OddsID = ld.OddsID and ScheduleID = #{mid} and CompanyID = #{cpy} and num = #{num} order by addTime desc limit 1
+        select l.oddsid,ld.* from multiletgoal l left join multiletgoaldetail ld on l.OddsID = ld.OddsID
+        where ScheduleID = #{mid} and CompanyID = #{cpy} and num = #{num} order by addTime desc limit 1
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

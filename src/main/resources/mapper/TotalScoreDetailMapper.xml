@@ -21,7 +21,9 @@
   </select>
 
   <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.TotalScoreDetail">
-    select ol.* from totalscore o ,totalscoredetail ol where o.OddsID = ol.OddsID and o.ScheduleID = #{mid} and o.CompanyID = #{cpy} limit 1
+
+      select o.OddsID,ol.* from totalscore o left join totalscoredetail ol on o.OddsID = ol.OddsID
+       where  o.ScheduleID = #{mid} and o.CompanyID = #{cpy} limit 1
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

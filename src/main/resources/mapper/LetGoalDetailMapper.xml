@@ -21,8 +21,10 @@
   </select>
 
     <select id="selectByMatchAndCpyOrderByTimeDescLimit1" resultType="com.zhcdata.db.model.LetGoalDetail">
-        select ld.* from letgoal l,letgoaldetail ld where ScheduleID = #{id} and CompanyID = #{cpy} and l.OddsID = ld.OddsID order by ld.ModifyTime desc limit 1
-    </select>
+        SELECT l.oddsid,ld.*  from letgoal l LEFT JOIN letgoaldetail ld on  l.OddsID = ld.OddsID
+        where
+        l.ScheduleID =  #{id} and l.CompanyID = #{cpy}  order by ld.ModifyTime desc limit 1
+  </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from letgoaldetail

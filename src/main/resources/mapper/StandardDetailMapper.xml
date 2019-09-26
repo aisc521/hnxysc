@@ -21,7 +21,8 @@
   </select>
 
   <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.StandardDetail">
-    select sd.* from standard st,standarddetail sd where st.OddsID=sd.OddsID and st.ScheduleID = #{mid} and st.CompanyID = #{cpy} order by sd.ModifyTime desc limit 1
+    select st.oddsid,sd.* from standard st LEFT JOIN standarddetail sd on st.OddsID=sd.OddsID  where
+    st.ScheduleID = #{mid} and st.CompanyID = #{cpy} order by sd.ModifyTime desc limit 1
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

@@ -21,7 +21,9 @@
   </select>
 
   <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.TotalScorehalfDetail">
-    select d.* from totalScorehalf l,totalScorehalfDetail d where l.ScheduleID = #{mid} and l.CompanyID = #{cpy}
+    select l.oddsid,d.* from totalScorehalf l LEFT JOIN totalScorehalfDetail d
+    on d.OddsID = l.OddsID
+    where l.ScheduleID = #{mid} and l.CompanyID = #{cpy}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

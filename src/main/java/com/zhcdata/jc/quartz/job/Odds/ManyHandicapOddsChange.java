@@ -1,26 +1,3 @@
-/**
- * 　　　　　　　　┏┓　　　┏┓+ +
- * 　　　　　　　┏┛┻━━━┛┻┓ + +
- * 　　　　　　　┃　　　　　　　┃
- * 　　　　　　　┃　　　━　　　┃ ++ + + +
- * 　　　　　　 ████━████ ┃+
- * 　　　　　　　┃　　　　　　　┃ +
- * 　　　　　　　┃　　　┻　　　┃
- * 　　　　　　　┃　　　　　　　┃ + +
- * 　　　　　　　┗━┓　　　┏━┛
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃ + + + +
- * 　　　　　　　　　┃　　　┃　　　　create by xuan on 2019/9/17
- * 　　　　　　　　　┃　　　┃ + 　　　　神兽保佑,代码无bug
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃　　+
- * 　　　　　　　　　┃　 　　┗━━━┓ + +
- * 　　　　　　　　　┃ 　　　　　　　┣┓
- * 　　　　　　　　　┃ 　　　　　　　┏┛
- * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
- * 　　　　　　　　　　┃┫┫　┃┫┫
- * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
- */
 package com.zhcdata.jc.quartz.job.Odds;
 
 import com.zhcdata.db.mapper.*;
@@ -34,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
@@ -42,8 +20,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 21.多盘口赔率：30秒内变化赔率接口
+ */
 @Configuration
 @EnableScheduling
+@Component
 public class ManyHandicapOddsChange {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -99,7 +81,7 @@ public class ManyHandicapOddsChange {
     @Resource
     private MultiTotalScorehalfMapper multiTotalScorehalfMapper;
 
-    //@Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     public void execute(){
         LOGGER.error("多盘赔率详情任务开始");
         long now = System.currentTimeMillis();
