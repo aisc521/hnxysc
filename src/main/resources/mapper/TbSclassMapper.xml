@@ -6,6 +6,10 @@
     select * from sclass where SClassID=${SClassID}
   </select>
 
+  <select id="querySClassList" resultType="com.zhcdata.db.model.SclassInfo">
+    select * from sclass where LOCATE(#{year},curr_matchSeason)>0
+  </select>
+
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.SclassInfo" >
     insert into sclass
     <trim prefix="(" suffix=")" suffixOverrides="," >

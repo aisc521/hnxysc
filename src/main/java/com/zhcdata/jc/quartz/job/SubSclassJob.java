@@ -46,7 +46,7 @@ public class SubSclassJob implements Job {
                 }
                 info.setIscurrentsclass(Boolean.valueOf(a.getIsCurrentSclass()));   //是否当前子联赛（估计是用来作标识用）
                 info.setSubsclassname(a.getName());                                 //子联赛名
-                info.setSubnameJs("abc"+a.getName_big5());                          //子联赛缩略名
+                info.setSubnameJs(a.getName_big5());                                //子联赛缩略名
                 info.setIncludeseason(a.getIncludeSeason());                        //包含的了赛季
                 info.setIszu(Boolean.valueOf(a.getIsZu()));                         //是否分局数显示
 

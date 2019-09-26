@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface TbScoreMapper extends CustomInterfaceMapper<ScoreInfo> {
-    List<ScoreInfo> queryScore(@Param("SclassID") String SclassID,@Param("subSclassID") String subSclassID,@Param("Homeorguest") String Homeorguest,@Param("TeamID") String TeamID,@Param("Season") String Season);
+    List<ScoreInfo> queryScore(ScoreInfo info);
 
     int insertSelective(ScoreInfo scoreInfo);
 

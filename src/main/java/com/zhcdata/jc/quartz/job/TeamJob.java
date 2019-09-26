@@ -57,49 +57,29 @@ public class TeamJob implements Job {
                     } else if (two.getName().equals("lsID")) {
                         info.setSclassid(Integer.valueOf(two.getText()));           //所属联赛ID
                     } else if (two.getName().equals("g")) {
-                        if(two.getText().length()>0) {
                             info.setNameJ(two.getText());                           //简体名
-                        }
                     } else if (two.getName().equals("b")) {
-                        if(two.getText().length()>0) {
                             info.setNameF(two.getText());                           //繁体名
-                        }
                     } else if (two.getName().equals("e")) {
-                        if(two.getText().length()>0) {
                             info.setNameE(two.getText());                           //英文名
-                        }
                     } else if (two.getName().equals("Found")) {
-                        if(two.getText().length()>0) {
                             info.setFoundDate(two.getText());                       //球队成立日期
-                        }
                     } else if (two.getName().equals("Area")) {
-                        if(two.getText().length()>0) {
                             info.setArea(two.getText());                            //所在地
-                        }
                     } else if (two.getName().equals("gym")) {
-                        if(two.getText().length()>0) {
                             info.setGymnasium(two.getText());                       //球场
-                        }
                     } else if (two.getName().equals("Capacity")) {
-                        if (!two.getText().equals("")) {
+                        if(two.getText().length()>0) {
                             info.setCapacity(Integer.valueOf(two.getText()));       //球场容量
                         }
                     } else if (two.getName().equals("Flag")) {
-                        if(two.getText().length()>0) {
                             info.setFlag(two.getText());                            //队标
-                        }
                     } else if (two.getName().equals("addr")) {
-                        if(two.getText().length()>0) {
                             info.setAddress(two.getText());                         //地址
-                        }
                     } else if (two.getName().equals("URL")) {
-                        if(two.getText().length()>0) {
                             info.setUrl(two.getText());                             //球队网址
-                        }
                     } else if (two.getName().equals("master")) {
-                        if(two.getText().length()>0) {
                             info.setDrillmaster(two.getText());                     //主教练
-                        }
                     }
                 }
                 info.setModifytime(df.format(new Date()));

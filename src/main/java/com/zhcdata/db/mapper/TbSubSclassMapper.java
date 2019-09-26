@@ -9,7 +9,7 @@ public interface TbSubSclassMapper {
 
     List<SubSclassInfo> querySubSclass(@Param("subsclassID") String subsclassID);
 
-    List<SubSclassInfo> querySubSclassID(@Param("SclassID") String SclassID);
+    List<SubSclassInfo> querySubSclassID(@Param("SclassID") String SclassID,@Param("IncludeSeason") String IncludeSeason);
 
     int insertSelective(SubSclassInfo subSclassInfo);
 
