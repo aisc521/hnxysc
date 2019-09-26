@@ -21,7 +21,7 @@
   </select>
 
   <select id="selectByMidAndCpyAndNum" resultType="com.zhcdata.db.model.MultiLetGoalhalfDetail">
-    select d.* from MultiLetGoalhalf l,MultiLetGoalhalfDetail d where d.OddsID = l.OddsID and l.CompanyID = #{cpy} and l.ScheduleID = #{mid} and num = #{num}
+    select l.oddsid,d.* from MultiLetGoalhalf l left join MultiLetGoalhalfDetail d on  d.OddsID = l.OddsID where l.CompanyID = #{cpy} and l.ScheduleID = #{mid} and num = #{num}
   </select>
 
 

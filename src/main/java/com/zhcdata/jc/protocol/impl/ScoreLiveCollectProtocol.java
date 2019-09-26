@@ -2,11 +2,9 @@ package com.zhcdata.jc.protocol.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
-import com.google.gson.JsonObject;
 import com.zhcdata.jc.dto.IconAndTimeDto;
 import com.zhcdata.jc.dto.MatchResult1;
 import com.zhcdata.jc.dto.ProtocolParamDto;
-import com.zhcdata.jc.dto.TbScoreInfo;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.enums.RedisCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -17,14 +15,13 @@ import com.zhcdata.jc.tools.FileUtils;
 import com.zhcdata.jc.tools.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Description 比分直播
@@ -46,11 +43,11 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
 
     @Resource
     private ScheduleService scheduleService;
-    @Value("${custom.qiutan.url.yuMing}")
+    //@Value("${custom.qiutan.url.yuMing}")
     private String imgYuMing;
-    @Value("${custom.qiutan.url.imageUrl}")
+   // @Value("${custom.qiutan.url.imageUrl}")
     private String imagUrl;
-    @Value("${custom.qiutan.url.locolUrl}")
+   // @Value("${custom.qiutan.url.locolUrl}")
     private String locolUrl;
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {

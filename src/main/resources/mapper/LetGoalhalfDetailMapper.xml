@@ -21,7 +21,7 @@
   </select>
 
     <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.LetGoalhalfDetail">
-      select d.* from letgoalhalf l,letgoalhalfdetail d where l.OddsID = d.OddsID and l.ScheduleID = #{mid} and l.CompanyID = #{cpy} limit 1
+      select l.oddsid,d.* from letgoalhalf l LEFT JOIN letgoalhalfdetail d on l.OddsID = d.OddsID where l.ScheduleID = #{mid} and l.CompanyID = #{cpy} limit 1
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

@@ -140,7 +140,7 @@ public class ImmediateManyHandicapJob {
                 String[] BigMin = oddsCollection[2].split(";");
 
                 String[] halfLetBall = oddsCollection[3].split(";");//让球 半场 亚盘
-                String[] halfBigMin = oddsCollection[2].split(";");//大小球 半场
+                String[] halfBigMin = oddsCollection[4].split(";");//大小球 半场
 
                 LOGGER.info("多盘赔率接口解析,亚盘条数:" + LetBall.length + ",半场亚盘条数:" + halfLetBall.length + "欧赔条数:" + Europe.length + "大小球条数:" + BigMin.length + ",半场大小球条数:" + halfBigMin.length);
 
