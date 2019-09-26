@@ -66,4 +66,35 @@
       </if>
     </trim>
   </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.TbSclassInfo">
+    update sclassinfo
+    <set >
+      <if test="namecn != null" >
+        NameCN = #{namecn,jdbcType=VARCHAR},
+      </if>
+      <if test="nameen != null" >
+        NameEN = #{nameen,jdbcType=VARCHAR},
+      </if>
+      <if test="namefn != null" >
+        NameFN = #{namefn,jdbcType=VARCHAR},
+      </if>
+      <if test="flagpic != null" >
+        FlagPic = #{flagpic,jdbcType=VARCHAR},
+      </if>
+      <if test="infoorder != null" >
+        InfoOrder = #{infoorder,jdbcType=SMALLINT},
+      </if>
+      <if test="infoType != null" >
+        Info_type = #{infoType,jdbcType=INTEGER},
+      </if>
+      <if test="modifytime != null" >
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="allorder != null" >
+        allOrder = #{allorder,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where InfoID = #{infoid,jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -1065,6 +1065,59 @@ public class JcLotteryUtils {
     }
 
 
+    /**
+     * 赔率信息转换
+     * @param planInfo
+     * @return
+     */
+    public static String OddsInfoChange(String planInfo){
+        String result= "";
+        String[] planArr = planInfo.split("\\|");
+        String spf = planArr[0];
+        String rspf = planArr[1];
+        String[] spfArr = spf.split(",");
+        String[] rspfArr = rspf.split(",");
+        String spf1 = "";
+        if(!"0".equals(spfArr[0].toString())){
+            spf1 += "胜,";
+        }
+        if(!"0".equals(spfArr[1].toString())){
+            spf1 += "平,";
+        }
+        if(!"0".equals(spfArr[2].toString())){
+            spf1 += "负,";
+        }
+        String rspf1 = "";
+        if(!"0".equals(rspfArr[0].toString())){
+            rspf1 += "让胜,";
+        }
+        if(!"0".equals(rspfArr[1].toString())){
+            rspf1 += "让平,";
+        }
+        if(!"0".equals(rspfArr[2].toString())) {
+            rspf1 += "让负,";
+        }
+        if(spf1.endsWith(",")){
+            spf1 = spf1.substring(0,spf1.length() - 1);
+        }
+        if(rspf1.endsWith(",")){
+            rspf1 = rspf1.substring(0,rspf1.length() - 1);
+        }
+        if(StringUtils.isBlank(spf1) && StringUtils.isBlank(rspf1)){
+            result = "";
+        }
+
+        if(StringUtils.isNotBlank(spf1) && StringUtils.isBlank(rspf1)){
+            result = spf1;
+        }
+        if(StringUtils.isBlank(spf1) && StringUtils.isNotBlank(rspf1)){
+            result = rspf1;
+        }
+        if(StringUtils.isNotBlank(spf1) && StringUtils.isNotBlank(rspf1)){
+            result = spf1 + "|" + rspf1;
+        }
+        return result;
+    }
 
     public static Double judgeWhetherItIsEmpty(String pl){
         Double d = 0.00;

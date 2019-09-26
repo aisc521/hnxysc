@@ -56,7 +56,7 @@ public class ScoreJob implements Job {
                         String SubSclassID = subList.get(0).getSubsclassid().toString();
 
                         String re = HttpUtils.getHtmlResult(url + "?ID=" + SclassID + "&subID=" + SubSclassID);
-                        int pp=re.split(";").length;
+                        //int pp=re.split(";").length;
                         if(re.contains(";")) {
                             List<ScoreInfo> list = new ArrayList<>();
 
@@ -141,58 +141,56 @@ public class ScoreJob implements Job {
                                         LOGGER.info("球队积分排名入库失败" + info.getTeamid());
                                     }
                                 } else {
-                                    LOGGER.info("处理球队积分已存在" + info.getTeamid());
-                                    ScoreInfo updateInfo = new ScoreInfo();
-
-                                    boolean remark = false;
-                                    if (existingTeam.get(0).getWinScore() != info.getWinScore()) {
-                                        updateInfo.setWinScore(info.getWinScore());
-                                        remark = true;
-                                    }
-
-                                    if (existingTeam.get(0).getFlatScore() != info.getFlatScore()) {
-                                        updateInfo.setFlatScore(info.getFlatScore());
-                                        remark = true;
-                                    }
-
-                                    if (existingTeam.get(0).getFailScore() != info.getFailScore()) {
-                                        updateInfo.setFailScore(info.getFailScore());
-                                        remark = true;
-                                    }
-
-                                    if (existingTeam.get(0).getTotalHomescore() != info.getTotalHomescore()) {
-                                        updateInfo.setTotalHomescore(info.getTotalHomescore());
-                                        remark = true;
-                                    }
-
-                                    if (existingTeam.get(0).getTotalGuestscore() != info.getTotalGuestscore()) {
-                                        updateInfo.setTotalGuestscore(info.getTotalGuestscore());
-                                        remark = true;
-                                    }
-
-                                    if (existingTeam.get(0).getDeduct() != info.getDeduct()) {
-                                        updateInfo.setDeduct(info.getDeduct());
-                                        remark = true;
-                                    }
-
-                                    if (existingTeam.get(0).getCause() != info.getCause()) {
-                                        updateInfo.setCause(info.getCause());
-                                        remark = true;
-                                    }
-                                    updateInfo.setId(existingTeam.get(0).getId());
-
-                                    if(remark) {
-                                        if (tbScoreMapper.updateByPrimaryKeySelective(updateInfo) > 0) {
-                                            LOGGER.info("球队积分排名修改成功" + updateInfo.getTeamid());
+                                    if(!info.equals(existingTeam.get(0))){
+                                        if (tbScoreMapper.updateByPrimaryKeySelective(info) > 0) {
+                                            LOGGER.info("球队积分排名修改成功" + info.getTeamid());
                                         } else {
-                                            LOGGER.info("球队积分排名修改失败" + updateInfo.getTeamid());
+                                            LOGGER.info("球队积分排名修改失败" + info.getTeamid());
                                         }
                                     }
+                                    //LOGGER.info("处理球队积分已存在" + info.getTeamid());
+                                    //ScoreInfo updateInfo = new ScoreInfo();
+
+//                                    boolean remark = false;
+//                                    if (existingTeam.get(0).getWinScore() != info.getWinScore()) {
+//                                        updateInfo.setWinScore(info.getWinScore());
+//                                        remark = true;
+//                                    }
+//
+//                                    if (existingTeam.get(0).getFlatScore() != info.getFlatScore()) {
+//                                        updateInfo.setFlatScore(info.getFlatScore());
+//                                        remark = true;
+//                                    }
+//
+//                                    if (existingTeam.get(0).getFailScore() != info.getFailScore()) {
+//                                        updateInfo.setFailScore(info.getFailScore());
+//                                        remark = true;
+//                                    }
+//
+//                                    if (existingTeam.get(0).getTotalHomescore() != info.getTotalHomescore()) {
+//                                        updateInfo.setTotalHomescore(info.getTotalHomescore());
+//                                        remark = true;
+//                                    }
+//
+//                                    if (existingTeam.get(0).getTotalGuestscore() != info.getTotalGuestscore()) {
+//                                        updateInfo.setTotalGuestscore(info.getTotalGuestscore());
+//                                        remark = true;
+//                                    }
+//
+//                                    if (existingTeam.get(0).getDeduct() != info.getDeduct()) {
+//                                        updateInfo.setDeduct(info.getDeduct());
+//                                        remark = true;
+//                                    }
+//
+//                                    if (existingTeam.get(0).getCause() != info.getCause()) {
+//                                        updateInfo.setCause(info.getCause());
+//                                        remark = true;
+//                                    }
+//                                    updateInfo.setId(existingTeam.get(0).getId());
 
                                 }
                             }
                             String end="";
-
                         }
                     }
 

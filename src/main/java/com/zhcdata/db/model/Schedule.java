@@ -44,7 +44,7 @@ public class Schedule implements Serializable {
     private Date matchtime;
 
     @Column(name = "MatchTime2")
-    private Date matchtime2;
+    private String matchtime2;
 
     @Column(name = "Location")
     private String location;
@@ -101,7 +101,7 @@ public class Schedule implements Serializable {
     private Short guestYellow;
 
     @Column(name = "bf_changetime")
-    private Date bfChangetime;
+    private String bfChangetime;
 
     private Integer shangpan;
 
@@ -388,14 +388,14 @@ public class Schedule implements Serializable {
     /**
      * @return MatchTime2
      */
-    public Date getMatchtime2() {
+    public String getMatchtime2() {
         return matchtime2;
     }
 
     /**
      * @param matchtime2
      */
-    public void setMatchtime2(Date matchtime2) {
+    public void setMatchtime2(String matchtime2) {
         this.matchtime2 = matchtime2;
     }
 
@@ -654,14 +654,14 @@ public class Schedule implements Serializable {
     /**
      * @return bf_changetime
      */
-    public Date getBfChangetime() {
+    public String getBfChangetime() {
         return bfChangetime;
     }
 
     /**
      * @param bfChangetime
      */
-    public void setBfChangetime(Date bfChangetime) {
+    public void setBfChangetime(String bfChangetime) {
         this.bfChangetime = bfChangetime;
     }
 

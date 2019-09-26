@@ -31,12 +31,12 @@ public class DetailResultJob implements Job {
     @Resource
     TbDetailResultMapper tbDetailResultMapper;
 
-
-
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         String url = "http://interface.win007.com/zq/Event_XML.aspx?type=new&date=" + df.format(new Date());
+
+        SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
             String xml = HttpUtils.getHtmlResult(url);
@@ -47,16 +47,21 @@ public class DetailResultJob implements Job {
             List<Element> childElements = root.elements();
             for (org.dom4j.Element one : childElements) {
                 System.out.println(one.getText());
-                String[] values=one.getText().split("\\^");
+                String[] values = one.getText().split("\\^");
 
                 //赛程ID^主客队标志^事件类型^时间^球员名字^球名ID^简体球员名^记录ID(不重复）^助攻球员ID
                 //     0         1        2    3       4      5         6              7          8
-                DetailResultInfo info=new DetailResultInfo();
+                DetailResultInfo info = new DetailResultInfo();
                 info.setId(Integer.valueOf(values[7]));                 //详细结果 ID
                 info.setScheduleid(Integer.parseInt(values[0]));        //赛程 ID
                 info.setHappentime(Short.parseShort(values[3]));        //发生时间
-                Schedule scheduleInfo=scheduleMapper.selectByPrimaryKey(info.getScheduleid());
-                if(scheduleInfo!=null) {                                //球队 ID
+
+                //if(info.getId().toString().contains("6920165")){
+                //   String sdsd="";
+                //}
+
+                Schedule scheduleInfo = scheduleMapper.selectByPrimaryKey(info.getScheduleid());
+                if (scheduleInfo != null) {                             //球队 ID
                     if (values[1].equals("1")) {
                         info.setTeamid(scheduleInfo.getHometeamid());
                     } else {
@@ -64,28 +69,41 @@ public class DetailResultJob implements Job {
                     }
                 }
                 info.setPlayername(values[4]);                          //球员名称
-                info.setPlayerid(Integer.parseInt(values[5]));          //球员 ID
-                info.setKind(Short.valueOf(values[2]));                 //类型
-                info.setModifytime(df.format(new Date()));              //修改时间
-                info.setPlayernameJ(values[6]);                         //球员简体名
-                info.setPlayeridIn(Integer.valueOf(values[8]));         //球员
-                List<DetailResultInfo> queryDetailResult=tbDetailResultMapper.queryDetailResult(info.getScheduleid().toString(),info.getId().toString());
-                if(queryDetailResult==null||queryDetailResult.size()==0){
-                    if(tbDetailResultMapper.insertSelective(info)>0){
-                        log.info("比赛详细事件接口插入成功");
-                    }else {
-                        log.info("比赛详细事件接口插入失败");
-                    }
+                if(values[5].contains(",")){
+                    info.setPlayerid(Integer.parseInt(values[5].split(",")[0]));      //球员 ID
+                    info.setPlayeridIn(Integer.parseInt(values[5].split(",")[1]));
                 }else {
-                    if(tbDetailResultMapper.updateByPrimaryKeySelective(info)>0){
-                        log.info("比赛详细事件接口修改成功");
-                    }else {
-                        log.info("比赛详细事件接口修改失败");
+                    if (values[5].length() > 0) {
+                        info.setPlayerid(Integer.parseInt(values[5]));      //球员 ID
+                    }
+                }
+
+                info.setKind(Short.valueOf(values[2]));                 //类型
+                info.setModifytime(dfs.format(new Date()));              //修改时间
+                info.setPlayernameJ(values[6]);                         //球员简体名
+                if (values.length > 8) {
+                    info.setPlayeridIn(Integer.valueOf(values[8]));      //球员
+                }
+                List<DetailResultInfo> queryDetailResult = tbDetailResultMapper.queryDetailResult(info.getScheduleid().toString(), info.getId().toString());
+                if (queryDetailResult == null || queryDetailResult.size() == 0) {
+                    if (tbDetailResultMapper.insertSelective(info) > 0) {
+                        log.info("[比赛详细事件]接口插入成功");
+                    } else {
+                        log.info("[比赛详细事件]接口插入失败");
+                    }
+
+                } else {
+                    if (!info.equals(queryDetailResult.get(0))) {
+                        if (tbDetailResultMapper.updateByPrimaryKeySelective(info) > 0) {
+                            log.info("[比赛详细事件]接口修改成功");
+                        } else {
+                            log.info("[比赛详细事件]接口修改失败");
+                        }
                     }
                 }
             }
         } catch (Exception ex) {
-            log.error("比赛详细事件接口处理异常:" + ex.getMessage());
+            log.error("[比赛详细事件]接口处理异常:" + ex.getMessage());
         }
     }
 }

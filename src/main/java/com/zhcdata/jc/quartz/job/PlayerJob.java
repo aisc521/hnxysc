@@ -87,33 +87,33 @@ public class PlayerJob implements Job {
                 //荣誉
                 //info.setHonorInfo();
                 //合同期限
-                if (!a.getEndDateContract().contains("")) {
-                    info.setEnddatecontract(a.getEndDateContract());
+                if (!a.getEndDateContract().equals("")) {
+                    if (a.getEndDateContract().length() < 12) {
+                        info.setEnddatecontract(a.getEndDateContract() + " 00:00:00");
+                    }
                 }
                 //惯用脚
                 if (a.getFeet().contains("左脚")) {
                     info.setIdiomaticfeet(Integer.valueOf("0"));
                 } else if (a.getFeet().contains("右脚")) {
                     info.setIdiomaticfeet(Integer.valueOf("1"));
-                }
-                if (a.getFeet().contains("双脚")) {
+                } else if (a.getFeet().contains("双脚")) {
                     info.setIdiomaticfeet(Integer.valueOf("2"));
                 }
 
                 List<PlayerInfo> list = tbPlayerMapper.queryPlayer(a.getPlayerID());
                 if (list != null && list.size() > 0) {
-                    if (!info.equals(list.get(0))) {
-                        if (tbPlayerMapper.updateByPrimaryKeySelective(info) > 0) {
-                            LOGGER.info("[球员资料]信息保存成功");
-                        } else {
-                            LOGGER.info("[球员资料]信息保存失败");
-                        }
+                    //此接口不做数据是否改变的判断,直接修改(该接口一天一次，没关系)
+                    if (tbPlayerMapper.updateByPrimaryKeySelective(info) > 0) {
+                        LOGGER.info("[球员资料]信息修改成功" + df.format(new Date()));
+                    } else {
+                        LOGGER.info("[球员资料]信息修改失败" + df.format(new Date()));
                     }
                 } else {
                     if (tbPlayerMapper.insertSelective(info) > 0) {
-                        LOGGER.info("[球员资料]信息保存成功");
+                        LOGGER.info("[球员资料]信息保存成功" + df.format(new Date()));
                     } else {
-                        LOGGER.info("[球员资料]信息保存失败");
+                        LOGGER.info("[球员资料]信息保存失败" + df.format(new Date()));
                     }
                 }
             }

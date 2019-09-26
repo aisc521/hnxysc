@@ -90,16 +90,16 @@ public class PTSJob implements Job {
                             list = tbPlayerTechStatisticsMapper.queryPTS(String.valueOf(ptsInfo.getScheduleid()), String.valueOf(ptsInfo.getTeamid()), String.valueOf(ptsInfo.getPlayerid()));
                             if (list == null || list.size() == 0) {
                                 if (tbPlayerTechStatisticsMapper.insertSelective(ptsInfo) > 0) {
-                                    LOGGER.info("球员技术统计表存储成功!");
+                                    LOGGER.info("[球员技术统计表]保存成功!");
                                 } else {
-                                    LOGGER.info("球员技术统计表存储失败");
+                                    LOGGER.info("[球员技术统计表]保存失败");
                                 }
                             } else {
                                 ptsInfo.setId(list.get(0).getId());
                                 if (tbPlayerTechStatisticsMapper.updateByPrimaryKeySelective(ptsInfo) > 0) {
-                                    LOGGER.info("球员技术统计表修改成功!");
+                                    LOGGER.info("[球员技术统计表]修改成功!");
                                 } else {
-                                    LOGGER.info("球员技术统计表修改失败");
+                                    LOGGER.info("[球员技术统计表]修改失败");
                                 }
                             }
                         }
