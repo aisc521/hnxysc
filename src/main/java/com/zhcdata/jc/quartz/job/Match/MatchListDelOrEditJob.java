@@ -1,26 +1,3 @@
-/**
- * 　　　　　　　　┏┓　　　┏┓+ +
- * 　　　　　　　┏┛┻━━━┛┻┓ + +
- * 　　　　　　　┃　　　　　　　┃
- * 　　　　　　　┃　　　━　　　┃ ++ + + +
- * 　　　　　　 ████━████ ┃+
- * 　　　　　　　┃　　　　　　　┃ +
- * 　　　　　　　┃　　　┻　　　┃
- * 　　　　　　　┃　　　　　　　┃ + +
- * 　　　　　　　┗━┓　　　┏━┛
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃ + + + +
- * 　　　　　　　　　┃　　　┃　　　　create by xuan on 2019/9/10
- * 　　　　　　　　　┃　　　┃ + 　　　　神兽保佑,代码无bug
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃　　+
- * 　　　　　　　　　┃　 　　┗━━━┓ + +
- * 　　　　　　　　　┃ 　　　　　　　┣┓
- * 　　　　　　　　　┃ 　　　　　　　┏┛
- * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
- * 　　　　　　　　　　┃┫┫　┃┫┫
- * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
- */
 package com.zhcdata.jc.quartz.job.Match;
 
 import com.zhcdata.db.mapper.ScheduleMapper;
@@ -39,7 +16,9 @@ import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-//接口4
+/**
+ * 获取24小时内的赛程删除，比赛时间修改记录
+ */
 @Configuration
 @EnableScheduling
 public class MatchListDelOrEditJob {
