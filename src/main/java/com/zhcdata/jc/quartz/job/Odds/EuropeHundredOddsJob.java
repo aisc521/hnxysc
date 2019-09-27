@@ -27,23 +27,19 @@ import com.zhcdata.db.mapper.EuropeOddsMapper;
 import com.zhcdata.db.model.EuropeOdds;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.tools.HttpUtils;
-import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.C;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.EuropeHundredOddsRsp;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.H;
 import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 //百家欧赔
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 public class EuropeHundredOddsJob {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -52,7 +48,7 @@ public class EuropeHundredOddsJob {
     private EuropeOddsMapper europeOddsMapper;
 
     //@Scheduled(cron = "1 * * * * ?")
-    @Scheduled(fixedRate = 90000)
+    //@Scheduled(fixedRate = 90000)
     public void execute() throws Exception {
         LOGGER.info("百欧赔率表解析开始");
         long sat = System.currentTimeMillis();

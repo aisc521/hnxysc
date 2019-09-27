@@ -23,8 +23,8 @@ import java.util.Map;
 /**
  * 21.多盘口赔率：30秒内变化赔率接口
  */
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 @Component
 public class ManyHandicapOddsChange {
 
@@ -81,7 +81,7 @@ public class ManyHandicapOddsChange {
     @Resource
     private MultiTotalScorehalfMapper multiTotalScorehalfMapper;
 
-    @Scheduled(cron = "0/30 * * * * ?")
+    //@Scheduled(cron = "0/30 * * * * ?")
     public void execute(){
         LOGGER.error("多盘赔率详情任务开始");
         long now = System.currentTimeMillis();
