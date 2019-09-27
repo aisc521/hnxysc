@@ -25,48 +25,50 @@ import java.util.List;
 @Service("changeOddsHandleServiceImpl")
 public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeService {
 
-  @Resource
-  private StandardDetailMapper standardDetailMapper;
-  @Override
-  public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
+    @Resource
+    private StandardDetailMapper standardDetailMapper;
 
-    List<String> cah = rsp.getO().getH();
-    if(cah==null||cah.size()<1){
-      log.error("21多盘口赔率: 欧赔（让球盘）变化数据总条数:{}"," 没有可更新的数据");
-      return;
-    }
-    log.error("21多盘口赔率: 欧赔（让球盘）变化数据总条数:{}",cah.size());
-    for (int i = 0; i < cah.size(); i++) {
-      try{
-        String[] item = cah.get(i).split(",");
-        log.error("21多盘口赔率: 欧赔（让球盘）接口数据:{}",item);
-        if(item.length!=8){
-          log.error("21多盘口赔率: 欧赔（让球盘）数据格式不合法 接口数据:{}",item);
-          continue;
+    @Override
+    public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
+
+        List<String> cah = rsp.getO().getH();
+        if (cah == null || cah.size() < 1) {
+            log.error("21多盘口赔率: 欧赔（让球盘）变化数据总条数:{}", " 没有可更新的数据");
+            return;
         }
-        singleHandicap(item);
-      } catch (Exception e){
-        log.error("亚盘赔率异常:",e);
-      }
+        log.error("21多盘口赔率: 欧赔（让球盘）变化数据总条数:{}", cah.size());
+        for (int i = 0; i < cah.size(); i++) {
+            try {
+                String[] item = cah.get(i).split(",");
+                log.error("21多盘口赔率: 欧赔（让球盘）接口数据:{}", item);
+                if (item.length != 8) {
+                    log.error("21多盘口赔率: 欧赔（让球盘）数据格式不合法 接口数据:{}", item);
+                    continue;
+                }
+                singleHandicap(item);
+            } catch (Exception e) {
+                log.error("亚盘赔率异常:", e);
+            }
+        }
     }
-  }
-  //单盘口操作
-  public void singleHandicap(String item[]){
-    //存到单盘口
-    StandardDetail xml = BeanUtils.parseStandardDetail(item);
 
-    //查询此比赛最新的一条赔率
-    StandardDetail standardDetail = standardDetailMapper.selectByMidAndCpy(item[0], item[1]);
-    if(standardDetail == null){
-      return;
+    //单盘口操作
+    public void singleHandicap(String item[]) {
+        //存到单盘口
+        StandardDetail xml = BeanUtils.parseStandardDetail(item);
+
+        //查询此比赛最新的一条赔率
+        StandardDetail standardDetail = standardDetailMapper.selectByMidAndCpy(item[0], item[1]);
+        if (standardDetail == null || standardDetail.getOddsid() == null) {
+            return;
+        }
+        if (standardDetail.getId()==null || !standardDetail.oddsEquals(xml) && xml.getModifytime().getTime() > standardDetail.getModifytime().getTime()) {
+            //入数据库\
+            xml.setOddsid(standardDetail.getOddsid());
+            int inch = standardDetailMapper.insertSelective(xml);
+            if (inch > 0) {
+                log.error("21多盘口赔率: 欧赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+            }
+        }
     }
-    if(!standardDetail.oddsEquals(xml)&&xml.getModifytime().getTime()>standardDetail.getModifytime().getTime()){
-      //入数据库\
-      xml.setOddsid(standardDetail.getOddsid());
-      int inch = standardDetailMapper.insertSelective(xml) ;
-      if(inch>0){
-        log.error("21多盘口赔率: 欧赔（让球盘）单盘口 接口数据:{} 入库成功",item);
-      }
-    }
-  }
 }

@@ -18,4 +18,6 @@ public interface MultiLetGoalhalfMapper {
     MultiLetGoalhalf selectByMatchIdAndCmpAndFristGoalAndNum(Integer scheduleid, Integer companyid, Float firstgoal,Short num);
 
     MultiLetGoalhalf selectByMatchIdAndCmpAndNum(String mid, String cpy, String num);
+
+    MultiLetGoalhalf selectByMid(String id);
 }

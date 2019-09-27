@@ -86,7 +86,7 @@ public class ImmediateManyHandicapJob {
     private ScheduleMapper scheduleMapper;
 
 
-    //@Scheduled(cron = "1 0/30 * * * ?")
+    //@Scheduled(cron = "1 * * * * ?")
     public void execute() throws Exception {
         try {
             long l = System.currentTimeMillis();
@@ -143,8 +143,6 @@ public class ImmediateManyHandicapJob {
                 String[] halfBigMin = oddsCollection[4].split(";");//大小球 半场
 
                 LOGGER.info("多盘赔率接口解析,亚盘条数:" + LetBall.length + ",半场亚盘条数:" + halfLetBall.length + "欧赔条数:" + Europe.length + "大小球条数:" + BigMin.length + ",半场大小球条数:" + halfBigMin.length);
-
-
 
 
                 for (int i = 0; i < Europe.length; i++) {
@@ -212,6 +210,7 @@ public class ImmediateManyHandicapJob {
                         }
                     } catch (Exception e) {
                         LOGGER.error("亚盘数据解析错误,数据体:" + s + ",error:" + e.getMessage());
+                        e.printStackTrace();
                     }
 
 
@@ -257,7 +256,6 @@ public class ImmediateManyHandicapJob {
                                 if (multiTotalScoreMapper.updateByPrimaryKeySelective(updateModel) > 0) mBmUpdate++;
                             }
                         }
-
                     }
                 }
 

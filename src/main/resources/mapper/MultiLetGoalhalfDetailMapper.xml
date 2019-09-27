@@ -21,7 +21,7 @@
   </select>
 
   <select id="selectByMidAndCpyAndNum" resultType="com.zhcdata.db.model.MultiLetGoalhalfDetail">
-    select l.oddsid,d.* from MultiLetGoalhalf l left join MultiLetGoalhalfDetail d on  d.OddsID = l.OddsID where l.CompanyID = #{cpy} and l.ScheduleID = #{mid} and num = #{num}
+    select l.oddsid,d.* from MultiLetGoalhalf l left join MultiLetGoalhalfDetail d on  d.OddsID = l.OddsID where l.CompanyID = #{cpy} and l.ScheduleID = #{mid} and num = #{num} order by addtime desc limit 1
   </select>
 
 
@@ -29,7 +29,10 @@
     delete from multiletgoalhalfdetail
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhcdata.db.model.MultiLetGoalhalfDetail" >
+    <delete id="deleteByOddsId">
+        delete from multiletgoalhalfdetail where OddsID = #{oddsid}
+    </delete>
+    <insert id="insert" parameterType="com.zhcdata.db.model.MultiLetGoalhalfDetail" >
     insert into multiletgoalhalfdetail (ID, OddsID, upOdds, 
       Goal, downOdds, type, addTime
       )

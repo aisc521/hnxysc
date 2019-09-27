@@ -20,4 +20,6 @@ public interface StandardMapper {
     Standard selectMatchIdAndCpy(Integer scheduleid, Integer companyid);
 
     Standard selectByMidAndCpy(String mid, String cpy);
+
+    //Standard selectByMidAndCpyNew(String mid, String cpy);
 }

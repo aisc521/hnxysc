@@ -30,7 +30,12 @@
     delete from letgoaldetail
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhcdata.db.model.LetGoalDetail" >
+
+    <delete id="deleteByOddsId">
+      delete from letgoaldetail where OddsID = #{oddsid}
+    </delete>
+
+    <insert id="insert" parameterType="com.zhcdata.db.model.LetGoalDetail" >
     insert into letgoaldetail (ID, OddsID, upOdds, 
       Goal, downOdds, ModifyTime, 
       isEarly)

@@ -73,9 +73,8 @@ public class EuropeHundredOddsJob {
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getOdds() != null) {
                 List<String> o = items.get(i).getOdds().getO();
-                //System.out.println(BeanUtils.parseTime(items.get(i).getTime()).getTime() +" - "+ System.currentTimeMillis());
                 if (BeanUtils.parseTime(items.get(i).getTime()).getTime() < System.currentTimeMillis())
-                    continue;
+                    continue;//如果变化时间在比赛开始时间之后，那就跳过这条变化
 
                 for (int j = 0; j < o.size(); j++) {
                     odds++;

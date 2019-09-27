@@ -16,4 +16,6 @@ public interface LetGoalDetailMapper {
     int updateByPrimaryKey(LetGoalDetail record);
 
     LetGoalDetail selectByMatchAndCpyOrderByTimeDescLimit1(int id, int cpy);
+
+    void deleteByOddsId(Integer oddsid);
 }

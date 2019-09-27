@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.EuropeOdds;
+import com.zhcdata.jc.dto.SimplifyOdds;
 
 public interface EuropeOddsMapper {
     int deleteByPrimaryKey(Integer oddsid);
@@ -16,4 +17,5 @@ public interface EuropeOddsMapper {
     int updateByPrimaryKey(EuropeOdds record);
 
     EuropeOdds selectByMidAndCpyAnd(String mid, String cpy);
+
 }

@@ -39,7 +39,10 @@
   </select>
 
   <select id="selectByMatchIdAndCompanyAndHandicapNum" resultType="com.zhcdata.db.model.MultiLetgoal">
-    select * from multiletgoal where ScheduleID = #{matchId} and CompanyID = #{cpy} and num = #{num}
+    select * from multiletgoal where ScheduleID = #{matchId} and CompanyID = #{cpy} and num = #{num} order by ModifyTime desc limit 1
+  </select>
+  <select id="selectByMid" resultType="com.zhcdata.db.model.MultiLetgoal">
+    select * from multiletgoal where ScheduleID = #{id}
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

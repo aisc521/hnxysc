@@ -29,7 +29,12 @@
     delete from multiletgoaldetail
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhcdata.db.model.MultiLetGoalDetail" >
+
+    <delete id="deleteByOddsId">
+      delete from multiletgoaldetail where OddsID = #{oddsid}
+    </delete>
+
+    <insert id="insert" parameterType="com.zhcdata.db.model.MultiLetGoalDetail" >
     insert into multiletgoaldetail (ID, OddsID, upOdds, 
       Goal, downOdds, type, addTime
       )

@@ -27,71 +27,73 @@ import java.util.List;
 @Service("changeHalfSizesBallsHandleServiceImpl")
 public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsChangeService {
 
-  @Resource
-  TotalScorehalfDetailMapper totalScorehalfDetailMapper;
-  @Resource
-  MultiTotalScorehalfDetailMapper multiTotalScorehalfDetailMapper;
+    @Resource
+    TotalScorehalfDetailMapper totalScorehalfDetailMapper;
+    @Resource
+    MultiTotalScorehalfDetailMapper multiTotalScorehalfDetailMapper;
 
-  @Override
-  public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
+    @Override
+    public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
 
-    List<String> cah = rsp.getDh().getH();
-    if(cah==null||cah.size()<1){
-      log.error("21多盘口赔率: 半场大小球 变化数据总条数:{}"," 没有可更新的数据");
-      return;
-    }
-    log.error("21多盘口赔率: 半场大小球 变化数据总条数:{}",cah.size());
-    for (int i = 0; i < cah.size(); i++) {
-      try{
-        String[] item = cah.get(i).split(",");
-        log.error("21多盘口赔率: 半场大小球 接口数据:{}",item);
-        if(item.length!=7){
-          log.error("21多盘口赔率: 半场大小球  数据格式不合法 接口数据:{}",item);
-          continue;
+        List<String> cah = rsp.getDh().getH();
+        if (cah == null || cah.size() < 1) {
+            log.error("21多盘口赔率: 半场大小球 变化数据总条数:{}", " 没有可更新的数据");
+            return;
         }
-        if("1".equals(item[5])){//单盘口
-          singleHandicap(item);
-        }else {//存到多盘口
-          manyHandicap(item);
+        log.error("21多盘口赔率: 半场大小球 变化数据总条数:{}", cah.size());
+        for (int i = 0; i < cah.size(); i++) {
+            try {
+                String[] item = cah.get(i).split(",");
+                log.error("21多盘口赔率: 半场大小球 接口数据:{}", item);
+                if (item.length != 7) {
+                    log.error("21多盘口赔率: 半场大小球  数据格式不合法 接口数据:{}", item);
+                    continue;
+                }
+                if ("1".equals(item[5])) {//单盘口
+                    singleHandicap(item);
+                } else {//存到多盘口
+                    manyHandicap(item);
+                }
+            } catch (Exception e) {
+                log.error("亚盘赔率异常:", e);
+            }
         }
-      } catch (Exception e){
-        log.error("亚盘赔率异常:",e);
-      }
     }
-  }
-  //单盘口操作
-  public void singleHandicap(String item[]){
-    //存到单盘口
-    TotalScorehalfDetail xml = BeanUtils.parseTotalScorehalfDetail(item);
-    //比赛id，公司ID获取数据库最新一条
-    TotalScorehalfDetail totalScorehalfDetail = totalScorehalfDetailMapper.selectByMidAndCpy(item[0],item[1]);
-    if(totalScorehalfDetail == null){
-      return;
+
+    //单盘口操作
+    public void singleHandicap(String item[]) {
+        //存到单盘口
+        TotalScorehalfDetail xml = BeanUtils.parseTotalScorehalfDetail(item);
+        //比赛id，公司ID获取数据库最新一条
+        TotalScorehalfDetail totalScorehalfDetail = totalScorehalfDetailMapper.selectByMidAndCpy(item[0], item[1]);
+        if (totalScorehalfDetail == null || totalScorehalfDetail.getOddsid()==null) {
+            return;
+        }
+        if (totalScorehalfDetail.getId()==null || !totalScorehalfDetail.oddsEquals(xml) && xml.getModifytime().getTime() > totalScorehalfDetail.getModifytime().getTime()) {
+            //入数据库\
+            xml.setOddsid(totalScorehalfDetail.getOddsid());
+            int inch = totalScorehalfDetailMapper.insertSelective(xml);
+            if (inch > 0) {
+                log.error("21多盘口赔率: 半场大小球  单盘口 接口数据:{} 入库成功", item);
+            }
+        }
     }
-    if(!totalScorehalfDetail.oddsEquals(xml)&&xml.getModifytime().getTime()>totalScorehalfDetail.getModifytime().getTime()){
-      //入数据库\
-      xml.setOddsid(totalScorehalfDetail.getOddsid());
-      int inch = totalScorehalfDetailMapper.insertSelective(xml) ;
-      if(inch>0){
-        log.error("21多盘口赔率: 半场大小球  单盘口 接口数据:{} 入库成功",item);
-      }
+
+    //多盘口操作
+    public void manyHandicap(String item[]) {
+        MultiTotalScorehalfDetail xml = BeanUtils.parseMultiTotalScorehalfDetail(item);
+        MultiTotalScorehalfDetail multiTotalScorehalfDetail = multiTotalScorehalfDetailMapper.selectByMidAndCpyAndNum(item[0], item[1], item[5]);
+        if (multiTotalScorehalfDetail == null) { // 需要odds 没有就不入库
+            return;
+        }
+        if (!multiTotalScorehalfDetail.oddsEquals(xml)) {
+            xml.setOddsid(multiTotalScorehalfDetail.getOddsid());
+            int inch = multiTotalScorehalfDetailMapper.insertSelective(xml);
+            if (inch > 0) {
+                log.error("21多盘口赔率: 半场大小球  多盘口 接口数据:{} 入库成功", item);
+            }
+        }
     }
-  }
-  //多盘口操作
-  public void manyHandicap(String item[]){
-    MultiTotalScorehalfDetail xml = BeanUtils.parseMultiTotalScorehalfDetail(item);
-    MultiTotalScorehalfDetail multiTotalScorehalfDetail = multiTotalScorehalfDetailMapper.selectByMidAndCpyAndNum(item[0],item[1],item[5]);
-    if (multiTotalScorehalfDetail == null) { // 需要odds 没有就不入库
-      return;
-    }
-    if (!multiTotalScorehalfDetail.oddsEquals(xml)) {
-      xml.setOddsid(multiTotalScorehalfDetail.getOddsid());
-      int inch = multiTotalScorehalfDetailMapper.insertSelective(xml);
-      if(inch>0){
-        log.error("21多盘口赔率: 半场大小球  多盘口 接口数据:{} 入库成功",item);
-      }
-    }
-  }
 }
 
 

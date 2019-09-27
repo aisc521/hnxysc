@@ -27,6 +27,7 @@ import com.zhcdata.db.mapper.EuropeOddsDetailMapper;
 import com.zhcdata.db.mapper.EuropeOddsMapper;
 import com.zhcdata.db.model.EuropeOdds;
 import com.zhcdata.db.model.EuropeOddsDetail;
+import com.zhcdata.jc.dto.SimplifyOdds;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.tools.HttpUtils;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.EuropeHundredOddsRsp;
@@ -74,7 +75,7 @@ public class EuropeHundredOddsChangedJob {
                 if (dbl==null)
                     nexted++;
                 else {
-                    //很局oddsId查询最新的
+                    //这局oddsId查询最新的
                     EuropeOddsDetail db = detailMapper.selectByOddsNewest(dbl.getOddsid());
                     EuropeOddsDetail xml = BeanUtils.parseEuropeOddsDetail(mo);
                     if (db==null){
@@ -98,6 +99,5 @@ public class EuropeHundredOddsChangedJob {
             }
         }
         LOGGER.info("百欧赔率变化解析完成,新增:"+insert+",跳过:"+jumped+",更新:"+update+",next:"+nexted+"耗时:"+(System.currentTimeMillis()-sat));
-        LOGGER.info("wkefaijoewjiejfo");
     }
 }

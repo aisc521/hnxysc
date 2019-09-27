@@ -32,12 +32,16 @@
   </select>
 
   <select id="selectMatchIdAndCpy" resultType="com.zhcdata.db.model.Standard">
-    select * from standard where ScheduleID = #{scheduleid} and CompanyID = #{companyid}
+    select * from standard where ScheduleID = #{scheduleid} and CompanyID = #{companyid} order by ModifyTime limit 1
   </select>
 
     <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.Standard">
-      select * from standard where ScheduleID = #{mid} and CompanyID = #{cpy}
+      select * from standard where ScheduleID = #{mid} and CompanyID = #{cpy} order by ModifyTime limit 1
     </select>
+
+<!--    <select id="selectByMidAndCpyNew" resultType="com.zhcdata.db.model.Standard">-->
+<!--      select l.oddsid,d.* from Standard l LEFT JOIN standarddetail d on l.OddsID = d.OddsID where l.ScheduleID = #{mid} and l.CompanyID = #{cpy} limit 1-->
+<!--    </select>-->
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from standard

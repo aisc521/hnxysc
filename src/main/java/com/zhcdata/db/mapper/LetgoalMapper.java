@@ -2,7 +2,9 @@ package com.zhcdata.db.mapper;
 
 
 import com.zhcdata.db.model.Letgoal;
+import com.zhcdata.db.model.Standard;
 
+import java.util.List;
 import java.util.Map;
 
 public interface LetgoalMapper {
@@ -22,4 +24,10 @@ public interface LetgoalMapper {
     Letgoal selectByMatchIdAndCompany(String matchId, String cpy);
 
     Map<String, Object> selectOddsIdAndStartTimeByByMatchIdAndCompany(String matchId, String cpy);
+
+    List<Letgoal> selectByMid(String mid);
+
+    void deleteByMid(int mid);
+
+    //Letgoal selectByMidAndCpyNew(String mid, String cpy);
 }

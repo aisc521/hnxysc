@@ -2,6 +2,8 @@ package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.LetGoalhalf;
 
+import java.util.List;
+
 public interface LetGoalhalfMapper {
     int deleteByPrimaryKey(Integer oddsid);
 
@@ -18,4 +20,8 @@ public interface LetGoalhalfMapper {
     LetGoalhalf selectByMatchIdAndCmpAndFristGoal(Integer scheduleid, Integer companyid, Float firstgoal);
 
     LetGoalhalf selectByMatchIdAndCmp(Integer mid, Integer cpy);
+
+    List<LetGoalhalf> selectByMid(String id);
+
+    void deleteByMid(String mid);
 }

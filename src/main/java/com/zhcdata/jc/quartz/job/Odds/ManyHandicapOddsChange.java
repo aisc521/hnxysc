@@ -2,6 +2,7 @@ package com.zhcdata.jc.quartz.job.Odds;
 
 import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.*;
+import com.zhcdata.jc.dto.SimplifyOdds;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.MoreHandicapOddsLisAlltRsp;
@@ -140,6 +141,7 @@ public class ManyHandicapOddsChange {
                     TotalScorehalfDetail xml = BeanUtils.parseTotalScorehalfDetail(info);
                     //比赛id，公司ID获取数据库最新一条
                     TotalScorehalfDetail db = totalScorehalfDetailMapper.selectByMidAndCpy(info[0],info[1]);
+                    SimplifyOdds odds = totalScorehalfDetailMapper.selectTotalScorehalfSloByMidAndCpy(info[0],info[1]);
                     if (db==null){
                         //是否有此盘口
                         TotalScorehalf pdb = totalScorehalfMapper.selectByMidAndCpy(info[0],info[1]);
