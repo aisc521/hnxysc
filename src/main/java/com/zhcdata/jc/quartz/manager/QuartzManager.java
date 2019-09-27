@@ -8,6 +8,7 @@ import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springside.modules.utils.time.ClockUtil;
 
@@ -41,6 +42,9 @@ public class QuartzManager {
     @Resource
     private TbDsQuartzJobMapper jobMapper;
 
+    @Value("${custom.job_group}")
+    String jobGroup;
+
     private Gson gson = new Gson();
 
     /**
@@ -52,7 +56,10 @@ public class QuartzManager {
         List<TbDsQuartzJob> jobs = jobMapper.select(quartzJob);
         for (TbDsQuartzJob job : jobs) {
             try {
-                startJobTask(scheduler, job);
+                if(jobGroup.contains(job.getJobGroup())){
+                    LOGGER.error("增加的定时任务名称="+job.getJobName()+" 组名:"+job.getJobGroup());
+                    startJobTask(scheduler, job);
+                }
             } catch (ClassNotFoundException e) {
                 LOGGER.error("任务生成失败：" + job.toString());
             }
