@@ -1,71 +1,54 @@
-/**
- * 　　　　　　　　┏┓　　　┏┓+ +
- * 　　　　　　　┏┛┻━━━┛┻┓ + +
- * 　　　　　　　┃　　　　　　　┃
- * 　　　　　　　┃　　　━　　　┃ ++ + + +
- * 　　　　　　 ████━████ ┃+
- * 　　　　　　　┃　　　　　　　┃ +
- * 　　　　　　　┃　　　┻　　　┃
- * 　　　　　　　┃　　　　　　　┃ + +
- * 　　　　　　　┗━┓　　　┏━┛
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃ + + + +
- * 　　　　　　　　　┃　　　┃　　　　create by xuan on 2019/9/10
- * 　　　　　　　　　┃　　　┃ + 　　　　神兽保佑,代码无bug
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃　　+
- * 　　　　　　　　　┃　 　　┗━━━┓ + +
- * 　　　　　　　　　┃ 　　　　　　　┣┓
- * 　　　　　　　　　┃ 　　　　　　　┏┛
- * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
- * 　　　　　　　　　　┃┫┫　┃┫┫
- * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
- */
 package com.zhcdata.jc.quartz.job.Match;
-
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.tools.BeanUtils;
-
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.MatchListRsp;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 //接口4
-@Configuration
-@EnableScheduling
-public class MatchListJob{
-
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
+@Slf4j
+@Component
+public class MatchListJob implements Job{
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-
     @Resource
     ScheduleMapper scheduleMapper;
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        log.info("start赛程赛果定时任务启动......");
+        long s = System.currentTimeMillis();
+        QiuTanXmlComm parse = new QiuTanXmlComm();
+        for(int i = 0 ;i<6;i++){ //目前查往后六天的比赛
+            String str = DateFormatUtils.format(DateUtils.addDays(new Date(),i),"yyyy-MM-dd");
+            List<MatchListRsp> list = parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date="+str+"", MatchListRsp.class);
+            try {
+                executeHandle(list);
+                //接口限制60秒
+                Thread.sleep(1000*60);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        log.info("start赛程赛果定时任务结束....消耗总时间="+(System.currentTimeMillis() - s) );
+    }
+    public void executeHandle(List<MatchListRsp> list) throws Exception {
 
-    @Scheduled(cron = "44 24 * * * ?")
-    public void execute() throws Exception {
-        LOGGER.info("赛程赛果定时任务启动");
         long s = System.currentTimeMillis();
         int insert = 0;
         int hasIn = 0;
         int update = 0;
-        QiuTanXmlComm parse = new QiuTanXmlComm();
-        List<MatchListRsp> models = parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date=2019-09-23", MatchListRsp.class);
-        models.addAll(parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date=2019-09-24", MatchListRsp.class));
-        //models.addAll(parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date=2019-09-24", MatchListRsp.class));
-        //models.addAll(parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date=2019-09-25", MatchListRsp.class));
-        for (MatchListRsp model : models) {
+        for (MatchListRsp model : list) {
             Schedule xml = BeanUtils.parseSchedule(model);
             try {
                 Schedule inDb = scheduleMapper.selectByPrimaryKey(Integer.parseInt(model.getA()));
@@ -103,11 +86,16 @@ public class MatchListJob{
                 e.printStackTrace();
             }
         }
-        LOGGER.info("赛程赛果定时任务结束,共：" + models.size() + ",插入:" + insert + "条,跳过:" + hasIn + ",更新"+update+"，耗时：" + (System.currentTimeMillis() - s) + "毫秒");
+        log.info("赛程赛果定时任务结束,共：" + list.size() + ",插入:" + insert + "条,跳过:" + hasIn + ",更新"+update+"，耗时：" + (System.currentTimeMillis() - s) + "毫秒");
+    }
+
+    public String dateReq(){
+        Date date = DateUtils.addDays(new Date(),1);
+        return null;
     }
 
 
-    public static String parseToFormat(String str) {
+    /*public static String parseToFormat(String str) {
         //e:2019/9/9 0:0:0
         String temp = "0";
         String[] date = str.split(" ")[0].split("/");
@@ -140,10 +128,17 @@ public class MatchListJob{
         //System.out.println(f);
         //System.out.println(g);
 
-        short str = Short.parseShort("九与");
+*//*        short str = Short.parseShort("九与");
         //short str = Short.parseShort("九月");
         //short str = Short.valueOf("九");
-        System.out.println(str);
+        System.out.println(str);*//*
 
-    }
+
+        for(int i = 0 ;i<6;i++){
+            String str = DateFormatUtils.format(DateUtils.addDays(new Date(),i),"yyyy-MM-dd");
+            System.out.println("================"+str);
+        }
+
+
+    }*/
 }
