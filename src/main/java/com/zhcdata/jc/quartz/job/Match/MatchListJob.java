@@ -17,7 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-//接口4
+/**
+ * 4. 赛程赛果 半天一次 每次之间需要间隔60秒
+ */
 @Slf4j
 @Component
 public class MatchListJob implements Job{
