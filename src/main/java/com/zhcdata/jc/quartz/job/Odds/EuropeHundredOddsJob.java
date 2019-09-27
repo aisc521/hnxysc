@@ -52,7 +52,7 @@ public class EuropeHundredOddsJob {
     private EuropeOddsMapper europeOddsMapper;
 
     //@Scheduled(cron = "1 * * * * ?")
-    @Scheduled(fixedRate = 90000)
+   /* @Scheduled(fixedRate = 90000)*/
     public void execute() throws Exception {
         LOGGER.info("百欧赔率表解析开始");
         long sat = System.currentTimeMillis();

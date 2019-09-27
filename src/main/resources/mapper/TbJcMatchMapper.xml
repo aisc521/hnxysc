@@ -19,7 +19,7 @@
     <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
   </resultMap>
   <select id="queryList" resultType="com.zhcdata.jc.dto.MatchPlanResult">
-    SELECT match_Id matchId,match_num matchNum,match_name matchName,home_team hostTeam,visiting_team visitTeam,date_Of_Match dateOfMatch from tb_jc_match
+    SELECT match_Id matchId,match_num matchNum,match_name matchName,home_team hostTeam,visiting_team visitTeam,date_Of_Match dateOfMatch,planInfo planInfo from tb_jc_match
     where plan_id =${planId} ORDER BY match_num asc
   </select>
   <update id="updateStatus">

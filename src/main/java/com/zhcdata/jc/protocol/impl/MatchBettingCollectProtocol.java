@@ -57,6 +57,7 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.SEARCH_MATCH_TYPE.getMsg());
             return map;
         }
+
         return null;
     }
 
@@ -84,8 +85,11 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
         for (int i = 0; i < matchIds.size(); i++) {
             try {
                 Map<String, Object> oneMatch = getOneMatch(matchIds.get(i));
-                redisUtils.hset("SOCCER:BETTING:FIVEMETHOD:" + matchIds.get(i), "v", JsonMapper.defaultMapper().toJson(oneMatch));
-                redisUtils.expire("SOCCER:BETTING:FIVEMETHOD:" + matchIds.get(i), RedisCodeMsg.SAME_ODDS.getSeconds());
+                String message = oneMatch.get("message").toString();
+                if("success".equals(message)){
+                    redisUtils.hset("SOCCER:BETTING:FIVEMETHOD:" + matchIds.get(i), "v", JsonMapper.defaultMapper().toJson(oneMatch));
+                    redisUtils.expire("SOCCER:BETTING:FIVEMETHOD:" + matchIds.get(i), RedisCodeMsg.SAME_ODDS.getSeconds());
+                }
                 count++;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -190,7 +194,7 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
             result.put("timeId", String.valueOf(System.currentTimeMillis()));
         }else{
             //基础信息
-            result.put("message", "success");
+            result.put("message", "faile");
             result.put("gameid", "");
             result.put("game_name", "");
             result.put("num", "");
