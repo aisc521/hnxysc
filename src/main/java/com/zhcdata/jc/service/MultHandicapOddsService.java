@@ -1,7 +1,4 @@
 package com.zhcdata.jc.service;
-
-import com.zhcdata.jc.xml.rsp.MoreHandicapOddsLisAlltRsp;
-
 /**
  * CopyRight (c)1999-2019 : zhcw.com
  * Project : jc-new-server

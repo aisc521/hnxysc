@@ -27,7 +27,6 @@ import com.zhcdata.db.mapper.EuropeOddsDetailMapper;
 import com.zhcdata.db.mapper.EuropeOddsMapper;
 import com.zhcdata.db.model.EuropeOdds;
 import com.zhcdata.db.model.EuropeOddsDetail;
-import com.zhcdata.jc.dto.SimplifyOdds;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.tools.HttpUtils;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.EuropeHundredOddsRsp;

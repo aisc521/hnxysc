@@ -6,20 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 20.多盘口赔率：即时赔率接口
  */
-@SuppressWarnings("SpringJavaAutowiringInspection")
-@Configuration
-@EnableScheduling
 @Component
 @Slf4j
 public class MultHandicapOddsNewJob implements Job {
