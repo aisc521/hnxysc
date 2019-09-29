@@ -11,6 +11,7 @@
     <result column="MATCH_RESULT" property="matchResult" jdbcType="VARCHAR" />
     <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="CONCED_NUM" jdbcType="VARCHAR" property="conCedNum" />
   </resultMap>
 
   <select id="queryJcMatchBjdcreslutByBet007" resultType="com.zhcdata.db.model.JcMatchBjdcreslut">

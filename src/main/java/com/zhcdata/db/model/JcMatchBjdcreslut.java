@@ -39,6 +39,21 @@ public class JcMatchBjdcreslut implements Serializable {
     @Column(name = "CREATE_TIME")
     private Date createTime;
 
+    /**
+     * 让球数
+     */
+
+    @Column(name = "CONCED_NUM")
+    private String conCedNum;
+
+    public String getConCedNum() {
+        return conCedNum;
+    }
+
+    public void setConCedNum(String conCedNum) {
+        this.conCedNum = conCedNum;
+    }
+
     private static final long serialVersionUID = 1L;
 
     /**
