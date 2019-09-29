@@ -28,13 +28,15 @@ public class SclassJob implements Job {
         String url = "http://interface.win007.com/zq/League_XML.aspx";
         try {
             List<SclassInfoRsp> result_list = new QiuTanXmlComm().handleMothodList(url, SclassInfoRsp.class);
+            int i = 0;
             for (SclassInfoRsp a : result_list) {
+                i++;
                 List<SclassInfo> list = tbSclassMapper.querySClass(a.getId());
-                SclassInfo info=new SclassInfo();
-                System.out.println(a.getId());
-                if(a.getId().contains("807")){
-                    String sdf="";
-                }
+                SclassInfo info = new SclassInfo();
+                System.out.println("共" + result_list.size() + "第" + i + "ID" + a.getId());
+//                if(a.getId().contains("807")){
+//                    String sdf="";
+//                }
                 info.setSclassid(Integer.valueOf(a.getId()));       //联赛ID
                 info.setColor(a.getColor());                        //颜色
                 info.setNameJ(a.getGb());                           //简体
@@ -45,10 +47,10 @@ public class SclassJob implements Job {
                 info.setNameEs(a.getEn_short());                    //英文短
                 info.setKind(Short.valueOf(a.getType()));           //联赛、杯赛
                 info.setMode(Short.valueOf(a.getType()));           //联赛按轮 杯赛按组
-                if(a.getSum_round().length()>0) {
+                if (a.getSum_round().length() > 0) {
                     info.setCountRound(Short.valueOf(a.getSum_round()));//仅对分轮的赛程有效
                 }
-                if(a.getCurr_round().length()>0) {
+                if (a.getCurr_round().length() > 0) {
                     info.setCurrRound(Short.valueOf(a.getCurr_round()));//正在进行的轮次
                 }
                 info.setCurrMatchseason(a.getCurr_matchSeason());   //当前赛季，如 2004-2005、2005
@@ -62,18 +64,18 @@ public class SclassJob implements Job {
                 //info.setCountGroup();                           //找不到相关使用
                 //info.setSclassRule();                           //赛制，所订的规则
                 //info.setInfoid();                               //联赛信息(SclassInfo)表 ID
-                if(list!=null&&list.size()>0){
-                    if(!info.equals(info)){
-                        if(tbSclassMapper.updateByPrimaryKeySelective(info)>0){
+                if (list != null && list.size() > 0) {
+                    if (!info.equals(info)) {
+                        if (tbSclassMapper.updateByPrimaryKeySelective(info) > 0) {
                             LOGGER.info("联赛信息修改成功");
-                        }else {
+                        } else {
                             LOGGER.info("联赛信息修改失败");
                         }
                     }
-                }else {
-                    if(tbSclassMapper.insertSelective(info)>0){
+                } else {
+                    if (tbSclassMapper.insertSelective(info) > 0) {
                         LOGGER.info("联赛信息保存成功");
-                    }else {
+                    } else {
                         LOGGER.info("联赛信息保存失败");
                     }
                 }

@@ -1,30 +1,8 @@
-/**
- * 　　　　　　　　┏┓　　　┏┓+ +
- * 　　　　　　　┏┛┻━━━┛┻┓ + +
- * 　　　　　　　┃　　　　　　　┃
- * 　　　　　　　┃　　　━　　　┃ ++ + + +
- * 　　　　　　 ████━████ ┃+
- * 　　　　　　　┃　　　　　　　┃ +
- * 　　　　　　　┃　　　┻　　　┃
- * 　　　　　　　┃　　　　　　　┃ + +
- * 　　　　　　　┗━┓　　　┏━┛
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃ + + + +
- * 　　　　　　　　　┃　　　┃　　　　create by xuan on 2019/9/17
- * 　　　　　　　　　┃　　　┃ + 　　　　神兽保佑,代码无bug
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃　　+
- * 　　　　　　　　　┃　 　　┗━━━┓ + +
- * 　　　　　　　　　┃ 　　　　　　　┣┓
- * 　　　　　　　　　┃ 　　　　　　　┏┛
- * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
- * 　　　　　　　　　　┃┫┫　┃┫┫
- * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
- */
 package com.zhcdata.jc.quartz.job.Odds;
 
 import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.*;
+import com.zhcdata.jc.dto.SimplifyOdds;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.MoreHandicapOddsLisAlltRsp;
@@ -34,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
@@ -42,8 +21,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-@Configuration
-@EnableScheduling
+/**
+ * 21.多盘口赔率：30秒内变化赔率接口
+ */
+//@Configuration
+//@EnableScheduling
+@Component
 public class ManyHandicapOddsChange {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -158,6 +141,7 @@ public class ManyHandicapOddsChange {
                     TotalScorehalfDetail xml = BeanUtils.parseTotalScorehalfDetail(info);
                     //比赛id，公司ID获取数据库最新一条
                     TotalScorehalfDetail db = totalScorehalfDetailMapper.selectByMidAndCpy(info[0],info[1]);
+                    SimplifyOdds odds = totalScorehalfDetailMapper.selectTotalScorehalfSloByMidAndCpy(info[0],info[1]);
                     if (db==null){
                         //是否有此盘口
                         TotalScorehalf pdb = totalScorehalfMapper.selectByMidAndCpy(info[0],info[1]);

@@ -37,9 +37,16 @@
       select * from letgoalhalf where ScheduleID = #{mid} and CompanyID = #{cpy} limit 1
     </select>
 
+    <select id="selectByMid" resultType="com.zhcdata.db.model.LetGoalhalf">
+      select * from letgoalhalf where ScheduleID = #{id}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from letgoalhalf
     where OddsID = #{oddsid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByMid">
+    delete from letgoalhalf where ScheduleID = #{mid}
   </delete>
   <insert id="insert" parameterType="com.zhcdata.db.model.LetGoalhalf" >
     insert into letgoalhalf (OddsID, ScheduleID, CompanyID, 

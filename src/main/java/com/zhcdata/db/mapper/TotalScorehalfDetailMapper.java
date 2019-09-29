@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.TotalScorehalfDetail;
+import com.zhcdata.jc.dto.SimplifyOdds;
 
 public interface TotalScorehalfDetailMapper {
     int deleteByPrimaryKey(Integer id);
@@ -16,4 +17,6 @@ public interface TotalScorehalfDetailMapper {
     int updateByPrimaryKey(TotalScorehalfDetail record);
 
     TotalScorehalfDetail selectByMidAndCpy(String mid, String cpy);
+
+    SimplifyOdds selectTotalScorehalfSloByMidAndCpy(String mid, String cpy);
 }

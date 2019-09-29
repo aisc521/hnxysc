@@ -42,13 +42,20 @@
 -- select * from letgoal where ScheduleID
     select s.ScheduleID as sid,l.OddsID as oid,s.MatchTime as time from schedule s,letgoal l where l.ScheduleID = s.ScheduleID and l.CompanyID = #{cpy} and l.ScheduleID = #{matchId}
   </select>
-
+  <select id="selectByMid" resultType="com.zhcdata.db.model.Letgoal">
+    select * from letgoal where ScheduleID = #{mid}
+  </select>
 
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from letgoal
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>
+
+  <delete id="deleteByMid">
+    delete from letgoal where ScheduleID = #{mid}
+  </delete>
+
   <insert id="insert" parameterType="com.zhcdata.db.model.Letgoal" >
     insert into letgoal (OddsID, ScheduleID, CompanyID, 
       FirstGoal, FirstUpodds, FirstDownodds, 

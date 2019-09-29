@@ -59,7 +59,7 @@ public class SclassInfoJob implements Job {
                 }
             }
         } catch (Exception ex) {
-            LOGGER.error(ex.toString());
+            LOGGER.error("[杯赛联赛资料]" + ex.toString());
         }
     }
 }

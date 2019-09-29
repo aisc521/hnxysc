@@ -22,12 +22,16 @@
     <result column="RedCard" property="redcard" jdbcType="INTEGER" />
   </resultMap>
   <select id="queryScore" resultType="com.zhcdata.db.model.ScoreInfo">
-    select * from Score where
-    SclassID=${SclassID} and
-    subSclassID=${subSclassID} and
-    Homeorguest=${Homeorguest} and
-    TeamID=${TeamID} and
-    MatchSeason=${Season}
+    select * from Score where 1=1
+    and SclassID=#{sclassid}
+    <if test="subsclassid!=null">
+      and subSclassID=#{subsclassid}
+    </if>
+    <if test="homeorguest!=null">
+      and Homeorguest=#{homeorguest}
+    </if>
+    and TeamID=#{teamid}
+    and MatchSeason='${matchseason}'
   </select>
   <select id="queryIntegralRanking" resultType="com.zhcdata.jc.dto.IntegralRankingDto">
     select ifnull(rank,0) rank,

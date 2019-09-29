@@ -28,7 +28,6 @@ import com.zhcdata.jc.xml.rsp.MatchListRsp;
 import com.zhcdata.jc.xml.rsp.StandardHalfRsps.H;
 import org.apache.commons.lang3.StringUtils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,7 +40,7 @@ public class BeanUtils {
     private static final SimpleDateFormat sdf_X = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 
-    public static Schedule parseSchedule(MatchListRsp model) throws ParseException {
+    public static Schedule parseSchedule(MatchListRsp model){
         Schedule inDb = new Schedule();
         inDb.setScheduleid(Integer.parseInt(model.getA()));//比赛id
         if (model.getC() != null && model.getC().split(",").length == 5)//联赛id
@@ -63,8 +62,13 @@ public class BeanUtils {
         }
         if (model.getZ() != null)
             inDb.setNeutrality(model.getZ().startsWith("T"));//是否中立场'
-        if (model.getD() != null)
-            inDb.setMatchtime(sdf.parse(parseToFormat(model.getD())));//开始时间
+        if (model.getD() != null) {
+            try {
+                inDb.setMatchtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(parseToFormat(model.getD())));//开始时间
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         // TODO: 2019/9/10 下半场开始时间
         if (model.getT() != null)
             inDb.setLocation(model.getT());//比赛地点
@@ -164,9 +168,42 @@ public class BeanUtils {
         //mo.setResult(info[0]);//盘路结果 1主队赢 2走 3输
 
         try {
-            mo.setModifytime(sdf.parse(info[12]));//变化时间
-        } catch (ParseException e) {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[12]));//变化时间
+        } catch (Exception e) {
+            System.err.println("parseToLetgoal,dateFormatException,变化时间转换失败"+info[12]);
+            e.printStackTrace();
+        }
+        mo.setClosepan(info[8].startsWith("T"));//球探网手动封盘
+        mo.setZoudi(info[9].startsWith("T"));//主网是否开走地
+        mo.setIsstoplive(info[13].startsWith("T"));//主网是否封盘
+        return mo;
+    }
+
+    public static Letgoal parseLetgoal(String[] info) {
+        //String[] info = str.split(",");
+        Letgoal mo = new Letgoal();
+        mo.setScheduleid(Integer.parseInt(info[0]));//比赛id
+        mo.setCompanyid(Integer.parseInt(info[1]));//公司id
+
+        mo.setFirstgoal(Float.parseFloat(info[2]));//初盘及赔率
+        mo.setFirstupodds(Float.parseFloat(info[3]));//初盘及赔率
+        mo.setFirstdownodds(Float.parseFloat(info[4]));//初盘及赔率
+
+        mo.setGoal(Float.parseFloat(info[5]));//即时盘及赔率
+        mo.setUpodds(Float.parseFloat(info[6]));//即时盘及赔率
+        mo.setDownodds(Float.parseFloat(info[7]));//即时盘及赔率
+
+        //mo.setGoalReal(info[]);//终盘及赔率
+        //mo.setUpoddsReal(info[]);//终盘及赔率
+        //mo.setDownoddsReal(info[]);//终盘及赔率
+        //mo.setRunning(info[0]);//是否正在走地
+        //mo.setResult(info[0]);//盘路结果 1主队赢 2走 3输
+
+        try {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[12]));//变化时间
+        } catch (Exception e) {
             System.err.println("parseToLetgoal,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         mo.setClosepan(info[8].startsWith("T"));//球探网手动封盘
         mo.setZoudi(info[9].startsWith("T"));//主网是否开走地
@@ -193,9 +230,10 @@ public class BeanUtils {
         //mo.setDownoddsReal(info[]);//终盘及赔率
 
         try {
-            mo.setModifytime(sdf.parse(info[12]));//变化时间
-        } catch (ParseException e) {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[12]));//变化时间
+        } catch (Exception e) {
             System.err.println("parseMultiLetgoall,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         mo.setZoudi(info[9].startsWith("T"));//主网是否开走地
         //mo.setClosepan(info[8].startsWith("T"));//球探网手动封盘
@@ -226,9 +264,40 @@ public class BeanUtils {
 
         mo.setClosepan(info[10].startsWith("T"));//封盘
         try {
-            mo.setModifytime(sdf.parse(info[9]));//变化时间
-        } catch (ParseException e) {
-            System.err.println("parseStandard,dateFormatException,变化时间转换失败");
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[9]));//变化时间
+        } catch (Exception e) {
+            System.err.println("parseStandard,dateFormatException,变化时间转换失败"+info[9]);
+            e.printStackTrace();
+        }
+        return mo;
+    }
+
+    public static Standard parseStandard(String[] info) {
+        Standard mo = new Standard();
+        //比赛ID,公司ID,初盘主胜赔率,初盘平局赔率,初盘客胜赔率,即时主胜赔率,即时平局赔率,即时客胜赔率,盘口序号,变盘时间,是否封盘2
+        //String[] info = s.split(",");
+        mo.setScheduleid(Integer.parseInt(info[0]));//比赛id
+        mo.setCompanyid(Integer.parseInt(info[1]));//公司ID
+
+        mo.setFirsthomewin(info[2]);//初赔
+        mo.setFirststandoff(info[3]);//
+        mo.setFirstguestwin(info[4]);//
+
+        //mo.setHomewin(info[]);//终盘
+        //mo.setStandoff(info[]);//
+        //mo.setGuestwin(info[]);//
+        //mo.setResult(info[]);//盘路结果
+
+        mo.setHomewinR(info[5]);//即时
+        mo.setStandoffR(info[6]);//
+        mo.setGuestwinR(info[7]);//
+
+        mo.setClosepan(info[10].startsWith("T"));//封盘
+        try {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[9]));//变化时间
+        } catch (Exception e) {
+            System.err.println("parseStandards,dateFormatException,变化时间转换失败"+info[9]);
+            e.printStackTrace();
         }
         return mo;
     }
@@ -257,9 +326,10 @@ public class BeanUtils {
 
         //mo.setClosepan();//球探封盘
         try {
-            mo.setModifytime(sdf.parse(info[9]));//变化时间
-        } catch (ParseException e) {
-            System.err.println("parseTotalScore,dateFormatException,变化时间转换失败");
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[9]));//变化时间
+        } catch (Exception e) {
+            System.err.println("parseTotalScore,dateFormatException,变化时间转换失败"+info[9]);
+            e.printStackTrace();
         }
         mo.setIsstoplive(info[10].startsWith("T"));//主网封盘
         return mo;
@@ -281,9 +351,10 @@ public class BeanUtils {
         mo.setDownodds(Float.parseFloat(info[7]));
         mo.setNum(Short.parseShort(info[8]));
         try {
-            mo.setModifytime(sdf.parse(info[9]));//变化时间
-        } catch (ParseException e) {
-            System.err.println("parseTotalScore,dateFormatException,变化时间转换失败");
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[9]));//变化时间
+        } catch (Exception e) {
+            System.err.println("parseMultiTotalScore,dateFormatException,变化时间转换失败"+info[9]);
+            e.printStackTrace();
         }
         mo.setIsstoplive(info[10].startsWith("T"));//主网封盘
         // TODO: 2019/9/16 主网是否开走地 终盘信息
@@ -306,9 +377,10 @@ public class BeanUtils {
 
         // TODO: 2019/9/16 终盘 盘路结果
         try {
-            mo.setModifytime(sdf.parse(info[10]));//修改时间
-        } catch (ParseException e) {
-            System.err.println("parseTotalScore,dateFormatException,变化时间转换失败");
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[10]));//修改时间
+        } catch (Exception e) {
+            System.err.println("parseHalfLetGoal,dateFormatException,变化时间转换失败"+info[10]);
+            e.printStackTrace();
         }
 
         mo.setZoudi(info[8].startsWith("T"));
@@ -335,9 +407,10 @@ public class BeanUtils {
 
         // TODO: 2019/9/16 终盘 盘路结果
         try {
-            mo.setModifytime(sdf.parse(info[10]));//修改时间
-        } catch (ParseException e) {
-            System.err.println("parseTotalScore,dateFormatException,变化时间转换失败");
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[10]));//修改时间
+        } catch (Exception e) {
+            System.err.println("parseMultiLetGoalhalf,dateFormatException,变化时间转换失败"+info[10]);
+            e.printStackTrace();
         }
 
         mo.setZoudi(info[8].startsWith("T"));
@@ -362,9 +435,10 @@ public class BeanUtils {
         mo.setDownodds(Float.parseFloat(info[7]));
 
         try {
-            mo.setModifytime(sdf.parse(info[9]));//修改时间
-        } catch (ParseException e) {
-            System.err.println("parseTotalScore,dateFormatException,变化时间转换失败");
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[9]));//修改时间
+        } catch (Exception e) {
+            System.err.println("parseTotalScorehalf,dateFormatException,变化时间转换失败"+info[9]);
+            e.printStackTrace();
         }
         return mo;
     }
@@ -386,9 +460,10 @@ public class BeanUtils {
         mo.setDownodds(Float.parseFloat(info[7]));
 
         try {
-            mo.setModifytime(sdf.parse(info[9]));//修改时间
-        } catch (ParseException e) {
-            System.err.println("parseTotalScore,dateFormatException,变化时间转换失败");
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[9]));//修改时间
+        } catch (Exception e) {
+            System.err.println("parseMultiTotalScorehalf,dateFormatException,变化时间转换失败"+info[9]);
+            e.printStackTrace();
         }
         mo.setNum(Short.parseShort(info[8]));
         return mo;
@@ -401,9 +476,10 @@ public class BeanUtils {
         mo.setGoal(Float.parseFloat(item[2]));
         mo.setDownodds(Float.parseFloat(item[4]));
         try {
-            mo.setModifytime(sdf.parse(item[8]));//修改时间
-        } catch (ParseException e) {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(item[8]));//修改时间
+        } catch (Exception e) {
             System.err.println("parseLetGoalDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         return mo;
     }
@@ -415,9 +491,10 @@ public class BeanUtils {
         mo.setGoal(Float.parseFloat(item[2]));
         mo.setDownodds(Float.parseFloat(item[4]));
         try {
-            mo.setAddtime(sdf.parse(item[8]));//修改时间
-        } catch (ParseException e) {
+            mo.setAddtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(item[8]));//修改时间
+        } catch (Exception e) {
             System.err.println("parseMultiLetGoalDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         return mo;
     }
@@ -429,9 +506,10 @@ public class BeanUtils {
         mo.setStandoff(Float.valueOf(s[3]));
         mo.setGuestwin(Float.valueOf(s[4]));
         try {
-            mo.setModifytime(sdf.parse(s[6]));//修改时间
-        } catch (ParseException e) {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(s[6]));//修改时间
+        } catch (Exception e) {
             System.err.println("parseMultiLetGoalDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         return mo;
     }
@@ -443,9 +521,10 @@ public class BeanUtils {
         mo.setDownodds(Float.parseFloat(info[4]));
         mo.setGoal(Float.parseFloat(info[2]));
         try {
-            mo.setModifytime(sdf.parse(info[6]));//修改时间
-        } catch (ParseException e) {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[6]));//修改时间
+        } catch (Exception e) {
             System.err.println("parseMultiLetGoalDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         return mo;
     }
@@ -457,9 +536,10 @@ public class BeanUtils {
         mo.setDownodds(Float.parseFloat(info[4]));
         mo.setGoal(Float.parseFloat(info[2]));
         try {
-            mo.setAddtime(sdf.parse(info[6]));//修改时间
-        } catch (ParseException e) {
+            mo.setAddtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[6]));//修改时间
+        } catch (Exception e) {
             System.err.println("parseMultiLetGoalDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         return mo;
     }
@@ -471,9 +551,10 @@ public class BeanUtils {
         mo.setGoal(Float.parseFloat(info[2]));
         mo.setDownodds(Float.parseFloat(info[4]));
         try {
-            mo.setModifytime(sdf.parse(info[7]));//修改时间
-        } catch (ParseException e) {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[7]));//修改时间
+        } catch (Exception e) {
             System.err.println("parseLetGoalhalfDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         return mo;
     }
@@ -484,9 +565,10 @@ public class BeanUtils {
         mo.setGoal(Float.parseFloat(info[2]));
         mo.setDownodds(Float.parseFloat(info[4]));
         try {
-            mo.setAddtime(sdf.parse(info[7]));//修改时间
-        } catch (ParseException e) {
+            mo.setAddtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[7]));//修改时间
+        } catch (Exception e) {
             System.err.println("parseMultiLetGoalhalfDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         return mo;
     }
@@ -498,9 +580,10 @@ public class BeanUtils {
         mo.setUpodds(Float.parseFloat(info[3]));
         mo.setDownodds(Float.parseFloat(info[4]));
         try {
-            mo.setModifytime(sdf.parse(info[6]));//修改时间
-        } catch (ParseException e) {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[6]));//修改时间
+        } catch (Exception e) {
             System.err.println("parseLetGoalhalfDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         return mo;
     }
@@ -512,9 +595,10 @@ public class BeanUtils {
         mo.setUpodds(Float.parseFloat(info[3]));
         mo.setDownodds(Float.parseFloat(info[4]));
         try {
-            mo.setAddtime(sdf.parse(info[6]));//修改时间
-        } catch (ParseException e) {
+            mo.setAddtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[6]));//修改时间
+        } catch (Exception e) {
             System.err.println("parseLetGoalhalfDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
         }
         return mo;
     }
@@ -543,9 +627,10 @@ public class BeanUtils {
             mo.setGuestwinR(Float.parseFloat(str[7]));//即时主胜
 
             try {
-                mo.setModifytime(sdf.parse(parseToFormat(str[8])));//修改时间
-            } catch (ParseException e) {
+                mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(parseToFormat(str[8])));//修改时间
+            } catch (Exception e) {
                 System.err.println("parseStandardHalf,dateFormatException,变化时间转换失败 : "+str[8]);
+                e.printStackTrace();
             }
             mos.add(mo);
         }
@@ -564,7 +649,7 @@ public class BeanUtils {
     public static Date parseTime(String time) {
         try {
             return sdf_X.parse(time);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             System.err.println("BeanUtils.parseTime exception,time:"+time);
         }
         return new Date();
@@ -586,8 +671,9 @@ public class BeanUtils {
 
         try {
             mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
-        } catch (ParseException e) {
+        } catch (Exception e) {
             System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : "+mos[8]);
+            e.printStackTrace();
         }
 
         return mo;
@@ -601,8 +687,9 @@ public class BeanUtils {
         mo.setGuestwin(Float.parseFloat(mos[7]));
         try {
             mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
-        } catch (ParseException e) {
+        } catch (Exception e) {
             System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : "+mos[8]);
+            e.printStackTrace();
         }
         return mo;
     }

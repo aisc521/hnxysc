@@ -32,6 +32,7 @@
     select * from europeodds where ScheduleID = #{mid} and CompanyID = #{cpy} order by modifytime desc limit 1
   </select>
 
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from europeodds
     where OddsID = #{oddsid,jdbcType=INTEGER}

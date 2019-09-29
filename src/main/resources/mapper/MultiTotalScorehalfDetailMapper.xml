@@ -21,7 +21,8 @@
   </select>
 
     <select id="selectByMidAndCpyAndNum" resultType="com.zhcdata.db.model.MultiTotalScorehalfDetail">
-      select * from multitotalscorehalf l,multitotalscorehalfdetail d where l.OddsID = d.OddsID and l.ScheduleID = #{mid} and CompanyID = #{cpy} and num = #{num} order by id desc limit 1
+      select l.oddsId,d.* from multitotalscorehalf l left join multitotalscorehalfdetail d on
+  l.OddsID = d.OddsID where l.ScheduleID = #{mid} and CompanyID = #{cpy} and num = #{num} order by id desc limit 1
     </select>
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

@@ -20,4 +20,6 @@ public interface MultiLetgoalMapper {
     MultiLetgoal selectByMatchIdAndCompanyAndHandicap(String matchId, String cpy, String frist_goal);
 
     MultiLetgoal selectByMatchIdAndCompanyAndHandicapNum(String matchId, String cpy, Short num);
+
+    MultiLetgoal selectByMid(String id);
 }

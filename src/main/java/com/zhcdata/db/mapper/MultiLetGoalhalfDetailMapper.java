@@ -16,4 +16,6 @@ public interface MultiLetGoalhalfDetailMapper {
     int updateByPrimaryKey(MultiLetGoalhalfDetail record);
 
     MultiLetGoalhalfDetail selectByMidAndCpyAndNum(String mid, String cpy, String num);
+
+    void deleteByOddsId(Integer oddsid);
 }

@@ -29,22 +29,18 @@ import com.zhcdata.db.model.EuropeOdds;
 import com.zhcdata.db.model.EuropeOddsDetail;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.tools.HttpUtils;
-import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.C;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.EuropeHundredOddsRsp;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.H;
 import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 //百家欧赔
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 public class EuropeHundredOddsChangedJob {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -78,7 +74,7 @@ public class EuropeHundredOddsChangedJob {
                 if (dbl==null)
                     nexted++;
                 else {
-                    //很局oddsId查询最新的
+                    //这局oddsId查询最新的
                     EuropeOddsDetail db = detailMapper.selectByOddsNewest(dbl.getOddsid());
                     EuropeOddsDetail xml = BeanUtils.parseEuropeOddsDetail(mo);
                     if (db==null){
@@ -102,6 +98,5 @@ public class EuropeHundredOddsChangedJob {
             }
         }
         LOGGER.info("百欧赔率变化解析完成,新增:"+insert+",跳过:"+jumped+",更新:"+update+",next:"+nexted+"耗时:"+(System.currentTimeMillis()-sat));
-        LOGGER.info("wkefaijoewjiejfo");
     }
 }

@@ -21,7 +21,13 @@
   </select>
 
   <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.TotalScorehalfDetail">
-    select d.* from totalScorehalf l,totalScorehalfDetail d where l.ScheduleID = #{mid} and l.CompanyID = #{cpy}
+    select l.oddsid,d.* from totalScorehalf l LEFT JOIN totalScorehalfDetail d
+    on d.OddsID = l.OddsID
+    where l.ScheduleID = #{mid} and l.CompanyID = #{cpy} order by ModifyTime desc limit 1
+  </select>
+
+  <select id="selectTotalScorehalfSloByMidAndCpy" resultType="com.zhcdata.jc.dto.SimplifyOdds">
+        select t.OddsID as  from totalscorehalf t left join totalscorehalfdetail d on t.OddsID = d.OddsID where t.ScheduleID = #{mid} and t.CompanyID = #{cpy} order by d.ModifyTime desc limit 1
   </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

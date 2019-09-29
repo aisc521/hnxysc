@@ -27,23 +27,19 @@ import com.zhcdata.db.mapper.EuropeOddsMapper;
 import com.zhcdata.db.model.EuropeOdds;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.tools.HttpUtils;
-import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.C;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.EuropeHundredOddsRsp;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.H;
 import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 //百家欧赔
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 public class EuropeHundredOddsJob {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
@@ -52,7 +48,7 @@ public class EuropeHundredOddsJob {
     private EuropeOddsMapper europeOddsMapper;
 
     //@Scheduled(cron = "1 * * * * ?")
-   /* @Scheduled(fixedRate = 90000)*/
+    //@Scheduled(fixedRate = 90000)
     public void execute() throws Exception {
         LOGGER.info("百欧赔率表解析开始");
         long sat = System.currentTimeMillis();
@@ -77,9 +73,8 @@ public class EuropeHundredOddsJob {
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getOdds() != null) {
                 List<String> o = items.get(i).getOdds().getO();
-                //System.out.println(BeanUtils.parseTime(items.get(i).getTime()).getTime() +" - "+ System.currentTimeMillis());
                 if (BeanUtils.parseTime(items.get(i).getTime()).getTime() < System.currentTimeMillis())
-                    continue;
+                    continue;//如果变化时间在比赛开始时间之后，那就跳过这条变化
 
                 for (int j = 0; j < o.size(); j++) {
                     odds++;

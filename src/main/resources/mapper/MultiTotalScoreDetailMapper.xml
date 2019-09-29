@@ -22,7 +22,7 @@
   </select>
 
     <select id="selectByMidAndCpyAndNum" resultType="com.zhcdata.db.model.MultiTotalScoreDetail">
-      select d.* from MultiTotalScoreDetail d,MultiTotalScore l where d.OddsID = l.OddsID and l.CompanyID = #{cpy} and l.ScheduleID = #{mid} and Num = #{num} limit 1
+      select l.oddsid,d.* from MultiTotalScore l LEFT JOIN MultiTotalScoreDetail d ON d.OddsID = l.OddsID where l.CompanyID = #{cpy} and l.ScheduleID = #{mid} and Num = #{num} limit 1
     </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >

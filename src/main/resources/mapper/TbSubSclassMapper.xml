@@ -7,7 +7,7 @@
   </select>
 
   <select id="querySubSclassID" resultType="com.zhcdata.db.model.SubSclassInfo">
-    select * from SubSclass where SclassID=${SclassID}
+    select * from SubSclass where SclassID=${SclassID} and LOCATE(#{IncludeSeason},IncludeSeason)>0
   </select>
 
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.SubSclassInfo" >

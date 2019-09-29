@@ -23,7 +23,6 @@
  */
 package com.zhcdata.jc.quartz.job.Odds;
 
-import com.alibaba.druid.sql.visitor.functions.If;
 import com.zhcdata.db.mapper.StandardHalfDetailMapper;
 import com.zhcdata.db.mapper.StandardHalfMapper;
 import com.zhcdata.db.model.StandardHalf;
@@ -32,32 +31,37 @@ import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.tools.HttpUtils;
 import com.zhcdata.jc.xml.rsp.StandardHalfRsps.H;
 import com.zhcdata.jc.xml.rsp.StandardHalfRsps.StandardHalfRsp;
+import lombok.extern.slf4j.Slf4j;
 import org.json.XML;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 //半场欧赔
-@Configuration
-@EnableScheduling
-public class StandardHalfOddsJob {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
+/*@Configuration
+@EnableScheduling*/
+@Component
+@Slf4j
+public class StandardHalfOddsJob implements Job {
     @Resource
     private StandardHalfMapper standardHalfMapper;
-
     @Resource
     private StandardHalfDetailMapper standardHalfDetailMapper;
-
-    //@Scheduled(cron = "0/14 * * * * ?")
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        try {
+            execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+   // @Scheduled(cron = "0/10 * * * * ?")
     public void execute() throws Exception {
-        LOGGER.info("半场欧赔赔率解析开始");
+        log.info("半场欧赔赔率解析开始");
         int insert = 0;
         int update = 0;
         int jump = 0;
@@ -113,6 +117,6 @@ public class StandardHalfOddsJob {
                 }
             }
         }
-        LOGGER.info("半场欧赔赔率解析结束,新增:" + insert + ",更新:" + update + ",跳过:" + jump + ",详情新增:" + detailInsert + ",详情更新:" + detailUpdate);
+        log.info("半场欧赔赔率解析结束,新增:" + insert + ",更新:" + update + ",跳过:" + jump + ",详情新增:" + detailInsert + ",详情更新:" + detailUpdate);
     }
 }

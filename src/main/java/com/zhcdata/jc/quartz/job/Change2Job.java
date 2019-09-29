@@ -6,6 +6,9 @@ import com.zhcdata.jc.tools.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -19,13 +22,12 @@ import java.util.List;
 @Slf4j
 @Configuration
 @EnableScheduling
-public class Change2Job {
+public class Change2Job implements Job {
     @Resource
     ScheduleMapper scheduleMapper;
 
-    @Async
-    @Scheduled(cron = "21 33 14 * * *")
-    public void work() {
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         String url = "http://interface.win007.com/zq/change2.xml";
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //比赛ID0^比赛状态1^主队比分2^客队比分3^主队上半场比分4^
@@ -46,40 +48,40 @@ public class Change2Job {
                 if (strings.length > 0 && strings[1].length() > 0) {
                     info.setMatchstate(Short.valueOf(strings[1]));      //比赛状态1
                 }
-                if (strings.length > 1 && strings[1].length() > 0) {
+                if (strings.length > 1 && strings[2].length() > 0) {
                     info.setHomescore(Short.valueOf(strings[2]));       //主队比分2
                 }
-                if (strings.length > 2 && strings[1].length() > 0) {
+                if (strings.length > 2 && strings[3].length() > 0) {
                     info.setGuestscore(Short.valueOf(strings[3]));      //客队比分3
                 }
-                if (strings.length > 3 && strings[1].length() > 0) {
+                if (strings.length > 3 && strings[4].length() > 0) {
                     info.setHomehalfscore(Short.valueOf(strings[4]));   //主队上半场比分4
                 }
-                if (strings.length > 4 && strings[1].length() > 0) {
+                if (strings.length > 4 && strings[5].length() > 0) {
                     info.setGuesthalfscore(Short.valueOf(strings[5]));  //客队上半场比分5
                 }
-                if (strings.length > 5 && strings[1].length() > 0) {
+                if (strings.length > 5 && strings[6].length() > 0) {
                     info.setHomeRed(Short.valueOf(strings[6]));         //主队红牌6
                 }
-                if (strings.length > 6 && strings[1].length() > 0) {
+                if (strings.length > 6 && strings[7].length() > 0) {
                     info.setGuestRed(Short.valueOf(strings[7]));        //客队红牌7
                 }
-                if (strings.length > 8 && strings[1].length() > 0) {
+                if (strings.length > 8 && strings[9].length() > 0) {
                     info.setMatchtime2(strings[9]);           //开场时间9
                 }
-                if (strings.length > 10 && strings[1].length() > 0) {
+                if (strings.length > 10 && strings[11].length() > 0) {
                     info.setVisitor(Integer.valueOf(strings[11]));      //是否有阵容11
                 }
-                if (strings.length > 11 && strings[1].length() > 0) {
+                if (strings.length > 11 && strings[12].length() > 0) {
                     info.setHomeYellow(Short.valueOf(strings[12]));     //主队黄牌12
                 }
-                if (strings.length > 12 && strings[1].length() > 0) {
+                if (strings.length > 12 && strings[13].length() > 0) {
                     info.setGuestYellow(Short.valueOf(strings[13]));    //客队黄牌13
                 }
-                if (strings.length > 15 && strings[1].length() > 0) {
+                if (strings.length > 15 && strings[16].length() > 0) {
                     info.setHomecorner(Integer.valueOf(strings[16]));   //主队角球16
                 }
-                if (strings.length > 16 && strings[1].length() > 0) {
+                if (strings.length > 16 && strings[17].length() > 0) {
                     info.setGuestcorner(Integer.valueOf(strings[17]));  //客队角球17
                 }
 
