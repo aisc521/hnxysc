@@ -305,7 +305,7 @@ public class JcLotteryUtils {
     public static String jq(Schedule schedule,List<JcMatchBjdcPl> jcMatchBjdcPls,BjDcLotteryQueryRsp bjDcLotteryQueryRsp,String type){
         Short homeScore = schedule.getHomescore();
         Short gestScore = schedule.getGuestscore();
-        Integer jqGame = Integer.parseInt(String.valueOf(homeScore) + Integer.parseInt(String.valueOf(gestScore)));
+        Integer jqGame = Integer.valueOf(String.valueOf(homeScore)) + Integer.parseInt(String.valueOf(gestScore));
         String jq = "";
         if("1".equals(type)){
              jq = "13@" + jqGame + "_" + bjDcLotteryQueryRsp.getJq();

@@ -873,7 +873,8 @@
     </select>
 
     <select id="queryAttentionList" resultType="com.zhcdata.jc.dto.MatchResult1">
-        select
+
+ select * from (select
             class.Name_JS matchName,/*联赛名称*/
             sc.MatchTime matchTime,/*开始时间*/
             case when sc.MatchState = '0' then '未开始' /*未开始*/
@@ -901,16 +902,21 @@
             sc.ScheduleID matchId,/*比赛id*/
             lottery.ISSUE_NUM num,/*期数场次*/
             lottery.NO_ID number,/*期数场次*/
-            IFNULL(pg.status,'0') iscollect/*是否收藏*/
+            IFNULL(pg.status,'0') iscollect,/*是否收藏*/
+            case when pg.type = '1' then 'JCZQ'
+                 when pg.type = '2' then 'BJDC'
+                 when pg.type = '3' then 'SF14'
+                 end as 'Matchtype',
+						lottery.LOTTERY lotterType
             from schedule  sc
             LEFT JOIN sclass class ON sc.SclassID = class.sclassID
             LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
             LEFT JOIN team t ON sc.HomeTeamID = t.TeamID
             LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
             LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
-            LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id and pg.user_id = #{userId}
-            WHERE pg.status = '1'
-            ORDER BY sc.MatchTime
+            LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id
+            WHERE pg.status = '1' and pg.user_id = #{userId}
+            ORDER BY sc.MatchTime) as t where t.Matchtype = lotterType
     </select>
 
     <select id="selectMatchIdExceedNow" resultType="java.lang.Integer">

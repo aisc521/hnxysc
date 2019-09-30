@@ -9,6 +9,7 @@ import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
+import com.zhcdata.jc.tools.JcLotteryUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,14 @@ public class QueryPlanByExpertIdProtocol implements BaseProtocol{
                 PlanResult1 result1 = planList.get(i);
                 List<MatchPlanResult> matchPlanResults = TbJcMatchService.queryList(planList.get(i).getId());
                 if (matchPlanResults != null && matchPlanResults.size() > 0) {
-                    result1.setList(matchPlanResults);
+                    List<MatchPlanResult> matchPlanResults1 = new ArrayList<>();
+                    for(int j = 0; j < matchPlanResults.size(); j++){
+                        MatchPlanResult matchPlanResult1 = matchPlanResults.get(j);
+                        String planInfo = JcLotteryUtils.OddsInfoChange(matchPlanResult1.getPlanInfo());
+                        matchPlanResult1.setPlanInfo(planInfo);
+                        matchPlanResults1.add(matchPlanResult1);
+                    }
+                    result1.setList(matchPlanResults1);
                 }
                 result.add(result1);
             }

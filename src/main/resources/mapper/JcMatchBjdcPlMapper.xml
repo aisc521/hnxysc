@@ -17,6 +17,7 @@
     <result column="MATCH_RESULT" jdbcType="VARCHAR" property="matchResult" />
     <result column="UPDATE_TIME" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CONCED_NUM" jdbcType="VARCHAR" property="conCedNum" />
   </resultMap>
   <select id="queryJcMatchBjdcPlByIssuemAndNoId" resultType="com.zhcdata.db.model.JcMatchBjdcPl">
     select * from jc_match_bjdc_pl where ISSUE_NUM=#{issueNum} and NO_ID = #{noId}

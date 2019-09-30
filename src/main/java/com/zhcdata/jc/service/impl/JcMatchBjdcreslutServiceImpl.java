@@ -43,6 +43,13 @@ public class JcMatchBjdcreslutServiceImpl implements JcMatchBjdcreslutService {
         jcMatchBjdcreslut.setUpdateTime(new Date());
         //计算赛果
         jcMatchBjdcreslut.setMatchResult(JcLotteryUtils.gameResult(schedule, jcMatchBjdcPls,bjDcLotteryQueryRsp,"1"));
+        //更新赛果表的让球数信息
+        for(int i = 0; i < jcMatchBjdcPls.size(); i++){
+            JcMatchBjdcPl jcMatchBjdcPl = jcMatchBjdcPls.get(i);
+            if("15".equals(jcMatchBjdcPl.getLotteryPlay())){//让球胜平负
+                jcMatchBjdcreslut.setConCedNum(jcMatchBjdcPl.getConCedNum());
+            }
+        }
         Example example = new Example(JcMatchBjdcreslut.class);
         example.createCriteria().andEqualTo("id",jcMatchBjdcreslut.getId());
         int i = jcMatchBjdcreslutMapper.updateByExampleSelective(jcMatchBjdcreslut,example);
@@ -74,6 +81,13 @@ public class JcMatchBjdcreslutServiceImpl implements JcMatchBjdcreslutService {
         //计算赛果
         jcMatchBjdcreslut.setMatchResult(JcLotteryUtils.gameResult(schedule, jcMatchBjdcPls,bjDcLotteryQueryRsp,"1"));
         jcMatchBjdcreslut.setCreateTime(new Date());
+        //更新赛果表的让球数信息
+        for(int i = 0; i < jcMatchBjdcPls.size(); i++){
+            JcMatchBjdcPl jcMatchBjdcPl = jcMatchBjdcPls.get(i);
+            if("15".equals(jcMatchBjdcPl.getLotteryPlay())){//让球胜平负
+                jcMatchBjdcreslut.setConCedNum(jcMatchBjdcPl.getConCedNum());
+            }
+        }
         int i = jcMatchBjdcreslutMapper.insertSelective(jcMatchBjdcreslut);
         if(i <= 0){
             throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
