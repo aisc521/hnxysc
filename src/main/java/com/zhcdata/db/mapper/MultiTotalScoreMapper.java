@@ -3,6 +3,9 @@ package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.MultiTotalScore;
 
+import java.util.Date;
+import java.util.List;
+
 public interface MultiTotalScoreMapper {
     int deleteByPrimaryKey(Integer oddsid);
 
@@ -19,4 +22,12 @@ public interface MultiTotalScoreMapper {
     MultiTotalScore selectByMatchIdAndCpyAndNum(Integer scheduleid, Integer companyid, Short num);
 
     MultiTotalScore selectTotalScoreByMatchAndCpyAndNum(int mid, int cpy, int num);
+
+    List<MultiTotalScore> selectByMid(String mid);
+
+    void deleteByMid(String mid);
+
+    void updateOddsByOddsId(Integer oddsid, Date addtime, Float upodds, Float goal, Float downodds);
+
+
 }

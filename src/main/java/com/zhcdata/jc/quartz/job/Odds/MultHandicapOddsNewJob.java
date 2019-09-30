@@ -18,8 +18,8 @@ import java.util.List;
  * 20.多盘口赔率：即时赔率接口
  */
 @SuppressWarnings("SpringJavaAutowiringInspection")
-@Configuration
-@EnableScheduling
+//@Configuration
+//@EnableScheduling
 @Component
 @Slf4j
 public class MultHandicapOddsNewJob implements Job {

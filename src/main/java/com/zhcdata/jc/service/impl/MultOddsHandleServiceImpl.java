@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  * Project : jc-new-server
  * Create Date : 2019/9/25 10:49
  * JDK version : JDK1.8
- * Comments : 20.多盘口赔率：即时赔率接口 <半场欧赔（胜平负）即时数据:>
+ * Comments : 20.多盘口赔率：即时赔率接口 <欧赔（胜平负）即时数据:>
  *
  * @author : 高阳
  * @version : 0.0.1
@@ -43,7 +43,7 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
                         singleHandicap(item.split(","));
                 }
             }
-            log.error("半场欧赔（胜平负）即时数据解析完成");
+            log.error("欧赔（胜平负）即时数据解析完成");
         }
     }
 
@@ -59,13 +59,13 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
             if (db == null){
                 //数据库没有 要插入
                 if (standardMapper.insertSelective(xml)>0)
-                    log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+                    log.info("20多盘口赔率: 欧赔（胜平负） 接口数据:{} 入库成功", item);
             } else if (!db.same(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
                 if (sc==null || sc.getMatchtime().getTime()>xml.getModifytime().getTime()) {
                     //入数据库
                     xml.setOddsid(db.getOddsid());
                     if (standardMapper.updateByPrimaryKeySelective(xml) > 0) {
-                        log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新成功", item);
+                        log.info("20多盘口赔率: 欧赔（胜平负） 接口数据:{} 更新成功", item);
                     }
                 }
             }

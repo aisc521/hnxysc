@@ -1,7 +1,9 @@
 package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.MultiTotalScoreDetailMapper;
+import com.zhcdata.db.mapper.MultiTotalScoreMapper;
 import com.zhcdata.db.mapper.TotalScoreDetailMapper;
+import com.zhcdata.db.mapper.TotalScoreMapper;
 import com.zhcdata.db.model.MultiTotalScoreDetail;
 import com.zhcdata.db.model.TotalScoreDetail;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
@@ -29,8 +31,15 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
 
     @Resource
     TotalScoreDetailMapper totalScoreDetailMapper;
+
     @Resource
     MultiTotalScoreDetailMapper multiTotalScoreDetailMapper;
+
+    @Resource
+    TotalScoreMapper totalScoreMapper;
+
+    @Resource
+    MultiTotalScoreMapper multiTotalScoreMapper;
 
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
@@ -73,6 +82,13 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
             //入数据库\
             xml.setOddsid(totalScoreDetail.getOddsid());
             int inch = totalScoreDetailMapper.insertSelective(xml);
+            try {
+                totalScoreMapper.updateOddsByOddsId(xml.getOddsid(),xml.getModifytime(),xml.getUpodds(),xml.getGoal(),xml.getDownodds());
+            }catch (Exception e){
+                System.out.println(xml.getOddsid()+"\n"+xml.getModifytime()+"\n"+xml.getUpodds()+"\n"+xml.getGoal()+"\n"+xml.getDownodds());
+                e.printStackTrace();
+                System.out.println("-----------");
+            }
             if (inch > 0) {
                 log.error("21多盘口赔率: 大小球 单盘口 接口数据:{} 入库成功", item);
             }
@@ -89,6 +105,7 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
         if (multiTotalScoreDetail.getId()==null || !multiTotalScoreDetail.oddsEquals(xml)) {
             xml.setOddsid(multiTotalScoreDetail.getOddsid());
             int inch = multiTotalScoreDetailMapper.insertSelective(xml);
+            multiTotalScoreMapper.updateOddsByOddsId(xml.getOddsid(),xml.getAddtime(),xml.getUpodds(),xml.getGoal(),xml.getDownodds());
             if (inch > 0) {
                 log.error("21多盘口赔率: 大小球 多盘口 接口数据:{} 入库成功", item);
             }

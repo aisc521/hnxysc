@@ -17,4 +17,6 @@ public interface TotalScoreDetailMapper {
     int updateByPrimaryKey(TotalScoreDetail record);
 
     TotalScoreDetail selectByMidAndCpy(String mid, String cpy);
+
+    void deleteByOddsId(Integer oddsid);
 }

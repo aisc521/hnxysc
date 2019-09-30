@@ -34,6 +34,10 @@
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>
 
+  <delete id="deleteByMid">
+    delete from standardhalf where ScheduleID = #{mid}
+  </delete>
+
   <insert id="insert" parameterType="com.zhcdata.db.model.StandardHalf" >
     insert into standardhalf (OddsID, ScheduleID, CompanyID,
       FirstHomeWin, FirstStandoff, FirstGuestWin,
@@ -196,4 +200,7 @@
   <select id="selectByMidAndCpy" resultType="com.zhcdata.db.model.StandardHalf">
     select * from standardhalf where ScheduleID = #{mid} and CompanyID = #{cpy} order by ModifyTime desc limit 1
   </select>
+    <select id="selectByMid" resultType="com.zhcdata.db.model.StandardHalf">
+      select * from standardhalf where ScheduleID = #{mid}
+    </select>
 </mapper>

@@ -32,10 +32,17 @@
     select * from europeodds where ScheduleID = #{mid} and CompanyID = #{cpy} order by modifytime desc limit 1
   </select>
 
+    <select id="selectByMid" resultType="com.zhcdata.db.model.EuropeOdds">
+      select * from europeodds where ScheduleID = #{mid}
+    </select>
 
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from europeodds
     where OddsID = #{oddsid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByMid">
+    delete from europeodds where ScheduleID = #{mid}
   </delete>
   <insert id="insert" parameterType="com.zhcdata.db.model.EuropeOdds" >
     insert into europeodds (OddsID, ScheduleID, CompanyID, 

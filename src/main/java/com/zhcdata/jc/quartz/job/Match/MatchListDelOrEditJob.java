@@ -66,7 +66,47 @@ public class MatchListDelOrEditJob {
     @Resource
     TotalScoreDetailMapper totalScoreDetailMapper;
 
-    @Scheduled(cron = "0/20 * * * * ?")
+    @Resource
+    TotalScorehalfMapper totalScorehalfMapper;
+
+    @Resource
+    TotalScorehalfDetailMapper totalScorehalfDetailMapper;
+
+    @Resource
+    MultiTotalScoreMapper multiTotalScoreMapper;
+
+    @Resource
+    MultiTotalScoreDetailMapper multiTotalScoreDetailMapper;
+
+    @Resource
+    MultiTotalScorehalfMapper multiTotalScorehalfMapper;
+
+    @Resource
+    MultiTotalScorehalfDetailMapper multiTotalScorehalfDetailMapper;
+
+    @Resource
+    StandardMapper standardMapper;
+
+    @Resource
+    StandardDetailMapper standardDetailMapper;
+
+    @Resource
+    StandardHalfMapper standardHalfMapper;
+
+    @Resource
+    StandardHalfDetailMapper standardHalfDetailMapper;
+
+    @Resource
+    EuropeOddsMapper europeOddsMapper;
+
+    @Resource
+    EuropeOddsDetailMapper europeOddsDetailMapper;
+
+    @Resource
+    EuropeoddstotalMapper europeoddstotalMapper;
+
+
+    @Scheduled(cron = "1 0/2 * * * ?")
     public void execute() throws Exception {
         LOGGER.info("比赛删除&修改时间记录定时任务启动");
         long s = System.currentTimeMillis();
@@ -92,34 +132,67 @@ public class MatchListDelOrEditJob {
             } else if (list.get(i).getType().equals("delete")) {//删除
                 if (scheduleMapper.deleteByPrimaryKey(Integer.parseInt(list.get(i).getID())) > 0) {
                     delete++;
+
                     //删除赔率表
                     List<Letgoal> letgoal = letgoalMapper.selectByMid(list.get(i).getID());
                     letgoalMapper.deleteByMid(letgoal.get(i).getScheduleid());
-                    for (int j = 0; j < letgoal.size(); j++) {
-                        if (letgoal.get(j) != null && letgoal.get(j).getScheduleid() > 0 && letgoal.get(j).getOddsid() > 0) {
-                            letGoalDetailMapper.deleteByOddsId(letgoal.get(j).getOddsid());
-                        }
-                    }
+                    for (Letgoal value : letgoal)
+                        letGoalDetailMapper.deleteByOddsId(value.getOddsid());
 
                     List<LetGoalhalf> letGoalhalfList = letGoalhalfMapper.selectByMid(list.get(i).getID());
                     letGoalhalfMapper.deleteByMid(list.get(i).getID());
-                    for (int j = 0; j < letGoalhalfList.size(); j++) {
-                        letGoalhalfDetailMapper.deleteByOddsId(letGoalhalfList.get(j).getOddsid());
-                    }
+                    for (LetGoalhalf letGoalhalf : letGoalhalfList)
+                        letGoalhalfDetailMapper.deleteByOddsId(letGoalhalf.getOddsid());
 
+                    List<MultiLetgoal> multiLetgoals = multiLetgoalMapper.selectByMid(list.get(i).getID());
+                    multiLetgoalMapper.deleteByMid(list.get(i).getID());
+                    for (MultiLetgoal item : multiLetgoals)
+                        multiLetGoalDetailMapper.deleteByOddsId(item.getOddsid());
 
+                    List<MultiLetGoalhalf> multiLetGoalhalves = multiLetGoalhalfMapper.selectByMid(list.get(i).getID());
+                    multiLetGoalhalfMapper.deleteByMid(list.get(i).getID());
+                    for (MultiLetGoalhalf item : multiLetGoalhalves)
+                        multiLetGoalhalfDetailMapper.deleteByOddsId(item.getOddsid());
 
+                    List<TotalScore> totalScores = totalScoreMapper.selectByMid(list.get(i).getID());
+                    totalScoreMapper.deleteByMid(list.get(i).getID());
+                    for (TotalScore item : totalScores)
+                        totalScoreDetailMapper.deleteByOddsId(item.getOddsid());
 
+                    List<TotalScorehalf> totalScorehalves = totalScorehalfMapper.selectByMid(list.get(i).getID());
+                    totalScorehalfMapper.deleteByMid(list.get(i).getID());
+                    for (TotalScorehalf item : totalScorehalves)
+                        totalScorehalfDetailMapper.deleteByOddsId(item.getOddsid());
+
+                    List<MultiTotalScore> multiTotalScores = multiTotalScoreMapper.selectByMid(list.get(i).getID());
+                    multiTotalScoreMapper.deleteByMid(list.get(i).getID());
+                    for (MultiTotalScore item : multiTotalScores)
+                        multiTotalScoreDetailMapper.deleteByOddsId(item.getOddsid());
+
+                    List<MultiTotalScorehalf> multiTotalScorehalves = multiTotalScorehalfMapper.selectByMid(list.get(i).getID());
+                    multiTotalScorehalfMapper.deleteByMid(list.get(i).getID());
+                    for (MultiTotalScorehalf item : multiTotalScorehalves)
+                        multiTotalScorehalfDetailMapper.deleteByOddsId(item.getOddsid());
+
+                    List<Standard> standards = standardMapper.selectByMid(list.get(i).getID());
+                    standardMapper.deleteByMid(list.get(i).getID());
+                    for (Standard standard : standards)
+                        standardDetailMapper.deleteByOddsId(standard.getOddsid());
+
+                    List<StandardHalf> standardHalves = standardHalfMapper.selectByMid(list.get(i).getID());
+                    standardHalfMapper.deleteByMid(list.get(i).getID());
+                    for (StandardHalf standardHalf : standardHalves)
+                        standardHalfDetailMapper.deleteByOddsId(standardHalf.getOddsid());
+
+                    List<EuropeOdds> europeOdds = europeOddsMapper.selectByMid(list.get(i).getID());
+                    europeOddsMapper.deleteByMid(list.get(i).getID());
+                    for (EuropeOdds item : europeOdds)
+                        europeOddsDetailMapper.deleteByOddsId(item.getOddsid());
+
+                    europeoddstotalMapper.deleteByPrimaryKey(Integer.parseInt(list.get(i).getID()));
                 }
             }
-            //cache.add(list.get(i).getID());
-            //if (cache.size() >= 500) {
-            //    System.out.println("移除");
-            //    cache.remove(cache.get(0));
+            LOGGER.info("比赛删除&修改时间记录定时任务结束,共：" + list.size() + ",更新:" + update + "条,删除:" + delete + "耗时：" + (System.currentTimeMillis() - s) + "毫秒");
         }
-        //}
-        //}
-        //LOGGER.info("比赛删除&修改时间记录定时任务结束,共：" + list.size() + ",更新:" + update + "条,删除:" + delete + ",重复:" + repeat + ",list缓存:" + cache.size() + "耗时：" + (System.currentTimeMillis() - s) + "毫秒");
-        LOGGER.info("比赛删除&修改时间记录定时任务结束,共：" + list.size() + ",更新:" + update + "条,删除:" + delete + "耗时：" + (System.currentTimeMillis() - s) + "毫秒");
     }
 }

@@ -41,9 +41,16 @@
           select * from totalscore where ScheduleID = #{scheduleid} and CompanyID = #{companyid} limit 1
     </select>
 
+    <select id="selectByMid" resultType="com.zhcdata.db.model.TotalScore">
+      select oddsid, scheduleid, companyid, firstgoal, firstupodds, firstdownodds, goal, upodds, downodds, modifytime, result, closepan, zoudi, goal_real, upodds_real, downodds_real, isstoplive, starttime from totalscore where ScheduleID = #{mid}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from totalscore
     where OddsID = #{oddsid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByMid">
+    delete from totalscore where ScheduleID =#{mid}
   </delete>
   <insert id="insert" parameterType="com.zhcdata.db.model.TotalScore" >
     insert into totalscore (OddsID, ScheduleID, CompanyID, 
@@ -252,4 +259,16 @@
       StartTime = #{starttime,jdbcType=TIMESTAMP}
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </update>
+
+    <update id="updateOddsByOddsId">
+      update totalscore set
+        Goal = #{goal,jdbcType=REAL},
+      UpOdds = #{upodds,jdbcType=REAL},
+      DownOdds = #{downodds,jdbcType=REAL},
+      modifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      Goal_real = #{goal,jdbcType=REAL},
+      UpOdds_real = #{upodds,jdbcType=REAL},
+      DownOdds_real = #{downodds,jdbcType=REAL}
+      where oddsid = #{oddsid} and modifyTime &lt; #{modifytime}
+    </update>
 </mapper>

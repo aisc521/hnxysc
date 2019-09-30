@@ -3,6 +3,7 @@ package com.zhcdata.jc.service.impl;
 import com.zhcdata.db.mapper.LetGoalDetailMapper;
 import com.zhcdata.db.mapper.LetgoalMapper;
 import com.zhcdata.db.mapper.MultiLetGoalDetailMapper;
+import com.zhcdata.db.mapper.MultiLetgoalMapper;
 import com.zhcdata.db.model.LetGoalDetail;
 import com.zhcdata.db.model.MultiLetGoalDetail;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
@@ -30,10 +31,15 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
 
     @Resource
     private LetGoalDetailMapper letGoalDetailMapper;//让球盘赔率变化
+
     @Resource
     private LetgoalMapper letgoalMapper;//让球赔率表
+
     @Resource
     private MultiLetGoalDetailMapper multiLetGoalDetailMapper;//让球多盘赔率变化
+
+    @Resource
+    private MultiLetgoalMapper multiLetgoalMapper;
 
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
@@ -77,6 +83,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
             //入数据库\
             xml.setOddsid(letGoalDetail.getOddsid());
             int inch = letGoalDetailMapper.insertSelective(xml);
+            letgoalMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getModifytime());
             if (inch > 0) {
                 log.error("21多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
             }
@@ -94,6 +101,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
         if (!multiLetGoalDetail.oddsEquals(xml)) {
             xml.setOddsid(multiLetGoalDetail.getOddsid());
             int inch = multiLetGoalDetailMapper.insertSelective(xml);
+            multiLetgoalMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getAddtime());
             if (inch > 0) {
                 log.error("21多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库成功", item);
             }

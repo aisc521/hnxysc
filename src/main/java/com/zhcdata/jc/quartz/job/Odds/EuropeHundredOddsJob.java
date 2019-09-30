@@ -24,7 +24,9 @@
 package com.zhcdata.jc.quartz.job.Odds;
 
 import com.zhcdata.db.mapper.EuropeOddsMapper;
+import com.zhcdata.db.mapper.EuropeoddstotalMapper;
 import com.zhcdata.db.model.EuropeOdds;
+import com.zhcdata.db.model.Europeoddstotal;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.tools.HttpUtils;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.EuropeHundredOddsRsp;
@@ -33,6 +35,7 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -47,8 +50,11 @@ public class EuropeHundredOddsJob {
     @Resource
     private EuropeOddsMapper europeOddsMapper;
 
+    @Resource
+    private EuropeoddstotalMapper europeoddstotalMapper;
+
     //@Scheduled(cron = "1 * * * * ?")
-    //@Scheduled(fixedRate = 90000)
+    @Scheduled(fixedRate = 90000)
     public void execute() throws Exception {
         LOGGER.info("百欧赔率表解析开始");
         long sat = System.currentTimeMillis();
@@ -71,6 +77,10 @@ public class EuropeHundredOddsJob {
 
 
         for (int i = 0; i < items.size(); i++) {
+            float avg_win = 0;
+            float avg_and = 0;
+            float avg_lose = 0;
+            short cpy_num = 0;
             if (items.get(i).getOdds() != null) {
                 List<String> o = items.get(i).getOdds().getO();
                 if (BeanUtils.parseTime(items.get(i).getTime()).getTime() < System.currentTimeMillis())
@@ -82,6 +92,10 @@ public class EuropeHundredOddsJob {
                     //博彩公司ID,博彩公司英文名,初盘主胜,初盘平局,初盘客胜,主胜,平局,客胜,变化时间,博彩公司简体名
                     EuropeOdds dbl = europeOddsMapper.selectByMidAndCpyAnd(items.get(i).getId(), mo[0]);
                     EuropeOdds xml = BeanUtils.parseEuropeOdds(items.get(i).getId(), mo);
+                    avg_win+=xml.getRealhomewin();
+                    avg_and+=xml.getRealstandoff();
+                    avg_lose+=xml.getRealguestwin();
+                    cpy_num++;
                     if (dbl == null) {
                         //没有 需要插入
                         if (europeOddsMapper.insertSelective(xml) > 0) insert++;
@@ -99,10 +113,30 @@ public class EuropeHundredOddsJob {
                         }
                     }
                 }
+
+                Europeoddstotal total = new Europeoddstotal();
+                Europeoddstotal db = europeoddstotalMapper.selectByPrimaryKey(Integer.parseInt(items.get(i).getId()));
+                if (db==null){
+                    total.setScheduleid(Integer.parseInt(items.get(i).getId()));
+                    total.setFirsthomewin(avg_win/cpy_num);
+                    total.setFirststandoff(avg_and / cpy_num);
+                    total.setFirstguestwin(avg_lose / cpy_num);
+                    total.setRealhomewin(avg_win/cpy_num);
+                    total.setRealstandoff(avg_and / cpy_num);
+                    total.setRealguestwin(avg_lose / cpy_num);
+                    total.setNum(cpy_num);
+                    europeoddstotalMapper.insertSelective(total);
+                }else {
+                    db.setRealhomewin(avg_win/cpy_num);
+                    db.setRealstandoff(avg_and / cpy_num);
+                    db.setRealguestwin(avg_lose / cpy_num);
+                    db.setNum(cpy_num);
+                    europeoddstotalMapper.updateByPrimaryKeySelective(db);
+                }
+
             }else System.out.println("1111111111111111111111");
         }
         LOGGER.info("百欧赔率表,总:"+odds+"新增:" + insert + ",跳过:" + jumped + ",更新:" + update + ",耗时:" + (System.currentTimeMillis() - sat));
         LOGGER.info("-------------");
-
     }
 }

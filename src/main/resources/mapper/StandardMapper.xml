@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhcdata.db.mapper.StandardMapper" >
-  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.Standard" >
-    <id column="OddsID" property="oddsid" jdbcType="INTEGER" />
-    <result column="ScheduleID" property="scheduleid" jdbcType="INTEGER" />
-    <result column="CompanyID" property="companyid" jdbcType="INTEGER" />
-    <result column="FirstHomeWin" property="firsthomewin" jdbcType="VARCHAR" />
-    <result column="FirstStandoff" property="firststandoff" jdbcType="VARCHAR" />
-    <result column="FirstGuestWin" property="firstguestwin" jdbcType="VARCHAR" />
-    <result column="HomeWin" property="homewin" jdbcType="VARCHAR" />
-    <result column="Standoff" property="standoff" jdbcType="VARCHAR" />
-    <result column="GuestWin" property="guestwin" jdbcType="VARCHAR" />
-    <result column="ModifyTime" property="modifytime" jdbcType="TIMESTAMP" />
-    <result column="Result" property="result" jdbcType="INTEGER" />
-    <result column="ClosePan" property="closepan" jdbcType="BIT" />
-    <result column="HomeWin_R" property="homewinR" jdbcType="VARCHAR" />
-    <result column="GuestWin_R" property="guestwinR" jdbcType="VARCHAR" />
-    <result column="Standoff_R" property="standoffR" jdbcType="VARCHAR" />
-    <result column="isStopLive" property="isstoplive" jdbcType="BIT" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.zhcdata.db.mapper.StandardMapper">
+    <resultMap id="BaseResultMap" type="com.zhcdata.db.model.Standard">
+        <id column="OddsID" property="oddsid" jdbcType="INTEGER"/>
+        <result column="ScheduleID" property="scheduleid" jdbcType="INTEGER"/>
+        <result column="CompanyID" property="companyid" jdbcType="INTEGER"/>
+        <result column="FirstHomeWin" property="firsthomewin" jdbcType="VARCHAR"/>
+        <result column="FirstStandoff" property="firststandoff" jdbcType="VARCHAR"/>
+        <result column="FirstGuestWin" property="firstguestwin" jdbcType="VARCHAR"/>
+        <result column="HomeWin" property="homewin" jdbcType="VARCHAR"/>
+        <result column="Standoff" property="standoff" jdbcType="VARCHAR"/>
+        <result column="GuestWin" property="guestwin" jdbcType="VARCHAR"/>
+        <result column="ModifyTime" property="modifytime" jdbcType="TIMESTAMP"/>
+        <result column="Result" property="result" jdbcType="INTEGER"/>
+        <result column="ClosePan" property="closepan" jdbcType="BIT"/>
+        <result column="HomeWin_R" property="homewinR" jdbcType="VARCHAR"/>
+        <result column="GuestWin_R" property="guestwinR" jdbcType="VARCHAR"/>
+        <result column="Standoff_R" property="standoffR" jdbcType="VARCHAR"/>
+        <result column="isStopLive" property="isstoplive" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     OddsID, ScheduleID, CompanyID, FirstHomeWin, FirstStandoff, FirstGuestWin, HomeWin, 
     Standoff, GuestWin, ModifyTime, Result, ClosePan, HomeWin_R, GuestWin_R, Standoff_R, 
     isStopLive
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from standard
-    where OddsID = #{oddsid,jdbcType=INTEGER}
-  </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from standard
+        where OddsID = #{oddsid,jdbcType=INTEGER}
+    </select>
 
-  <select id="selectMatchIdAndCpy" resultType="com.zhcdata.db.model.Standard">
+    <select id="selectMatchIdAndCpy" resultType="com.zhcdata.db.model.Standard">
     select * from standard where ScheduleID = #{scheduleid} and CompanyID = #{companyid} order by ModifyTime limit 1
   </select>
 
@@ -39,15 +39,23 @@
       select * from standard where ScheduleID = #{mid} and CompanyID = #{cpy} order by ModifyTime limit 1
     </select>
 
-<!--    <select id="selectByMidAndCpyNew" resultType="com.zhcdata.db.model.Standard">-->
-<!--      select l.oddsid,d.* from Standard l LEFT JOIN standarddetail d on l.OddsID = d.OddsID where l.ScheduleID = #{mid} and l.CompanyID = #{cpy} limit 1-->
-<!--    </select>-->
+    <select id="selectByMid" resultType="com.zhcdata.db.model.Standard">
+      select * from standard where ScheduleID = #{mid}
+    </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <!--    <select id="selectByMidAndCpyNew" resultType="com.zhcdata.db.model.Standard">-->
+    <!--      select l.oddsid,d.* from Standard l LEFT JOIN standarddetail d on l.OddsID = d.OddsID where l.ScheduleID = #{mid} and l.CompanyID = #{cpy} limit 1-->
+    <!--    </select>-->
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from standard
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhcdata.db.model.Standard" >
+
+    <delete id="deleteByMid">
+    delete from standard where ScheduleID = #{mid}
+  </delete>
+    <insert id="insert" parameterType="com.zhcdata.db.model.Standard">
     insert into standard (OddsID, ScheduleID, CompanyID, 
       FirstHomeWin, FirstStandoff, FirstGuestWin, 
       HomeWin, Standoff, GuestWin, 
@@ -61,164 +69,164 @@
       #{homewinR,jdbcType=VARCHAR}, #{guestwinR,jdbcType=VARCHAR}, #{standoffR,jdbcType=VARCHAR}, 
       #{isstoplive,jdbcType=BIT})
   </insert>
-  <insert id="insertSelective" parameterType="com.zhcdata.db.model.Standard" >
-    insert into standard
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="oddsid != null" >
-        OddsID,
-      </if>
-      <if test="scheduleid != null" >
-        ScheduleID,
-      </if>
-      <if test="companyid != null" >
-        CompanyID,
-      </if>
-      <if test="firsthomewin != null" >
-        FirstHomeWin,
-      </if>
-      <if test="firststandoff != null" >
-        FirstStandoff,
-      </if>
-      <if test="firstguestwin != null" >
-        FirstGuestWin,
-      </if>
-      <if test="homewin != null" >
-        HomeWin,
-      </if>
-      <if test="standoff != null" >
-        Standoff,
-      </if>
-      <if test="guestwin != null" >
-        GuestWin,
-      </if>
-      <if test="modifytime != null" >
-        ModifyTime,
-      </if>
-      <if test="result != null" >
-        Result,
-      </if>
-      <if test="closepan != null" >
-        ClosePan,
-      </if>
-      <if test="homewinR != null" >
-        HomeWin_R,
-      </if>
-      <if test="guestwinR != null" >
-        GuestWin_R,
-      </if>
-      <if test="standoffR != null" >
-        Standoff_R,
-      </if>
-      <if test="isstoplive != null" >
-        isStopLive,
-      </if>
+    <insert id="insertSelective" parameterType="com.zhcdata.db.model.Standard">
+        insert into standard
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="oddsid != null">
+                OddsID,
+            </if>
+            <if test="scheduleid != null">
+                ScheduleID,
+            </if>
+            <if test="companyid != null">
+                CompanyID,
+            </if>
+            <if test="firsthomewin != null">
+                FirstHomeWin,
+            </if>
+            <if test="firststandoff != null">
+                FirstStandoff,
+            </if>
+            <if test="firstguestwin != null">
+                FirstGuestWin,
+            </if>
+            <if test="homewin != null">
+                HomeWin,
+            </if>
+            <if test="standoff != null">
+                Standoff,
+            </if>
+            <if test="guestwin != null">
+                GuestWin,
+            </if>
+            <if test="modifytime != null">
+                ModifyTime,
+            </if>
+            <if test="result != null">
+                Result,
+            </if>
+            <if test="closepan != null">
+                ClosePan,
+            </if>
+            <if test="homewinR != null">
+                HomeWin_R,
+            </if>
+            <if test="guestwinR != null">
+                GuestWin_R,
+            </if>
+            <if test="standoffR != null">
+                Standoff_R,
+            </if>
+            <if test="isstoplive != null">
+                isStopLive,
+            </if>
 
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="oddsid != null" >
-        #{oddsid,jdbcType=INTEGER},
-      </if>
-      <if test="scheduleid != null" >
-        #{scheduleid,jdbcType=INTEGER},
-      </if>
-      <if test="companyid != null" >
-        #{companyid,jdbcType=INTEGER},
-      </if>
-      <if test="firsthomewin != null" >
-        #{firsthomewin,jdbcType=VARCHAR},
-      </if>
-      <if test="firststandoff != null" >
-        #{firststandoff,jdbcType=VARCHAR},
-      </if>
-      <if test="firstguestwin != null" >
-        #{firstguestwin,jdbcType=VARCHAR},
-      </if>
-      <if test="homewin != null" >
-        #{homewin,jdbcType=VARCHAR},
-      </if>
-      <if test="standoff != null" >
-        #{standoff,jdbcType=VARCHAR},
-      </if>
-      <if test="guestwin != null" >
-        #{guestwin,jdbcType=VARCHAR},
-      </if>
-      <if test="modifytime != null" >
-        #{modifytime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="result != null" >
-        #{result,jdbcType=INTEGER},
-      </if>
-      <if test="closepan != null" >
-        #{closepan,jdbcType=BIT},
-      </if>
-      <if test="homewinR != null" >
-        #{homewinR,jdbcType=VARCHAR},
-      </if>
-      <if test="guestwinR != null" >
-        #{guestwinR,jdbcType=VARCHAR},
-      </if>
-      <if test="standoffR != null" >
-        #{standoffR,jdbcType=VARCHAR},
-      </if>
-      <if test="isstoplive != null" >
-        #{isstoplive,jdbcType=BIT},
-      </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="oddsid != null">
+                #{oddsid,jdbcType=INTEGER},
+            </if>
+            <if test="scheduleid != null">
+                #{scheduleid,jdbcType=INTEGER},
+            </if>
+            <if test="companyid != null">
+                #{companyid,jdbcType=INTEGER},
+            </if>
+            <if test="firsthomewin != null">
+                #{firsthomewin,jdbcType=VARCHAR},
+            </if>
+            <if test="firststandoff != null">
+                #{firststandoff,jdbcType=VARCHAR},
+            </if>
+            <if test="firstguestwin != null">
+                #{firstguestwin,jdbcType=VARCHAR},
+            </if>
+            <if test="homewin != null">
+                #{homewin,jdbcType=VARCHAR},
+            </if>
+            <if test="standoff != null">
+                #{standoff,jdbcType=VARCHAR},
+            </if>
+            <if test="guestwin != null">
+                #{guestwin,jdbcType=VARCHAR},
+            </if>
+            <if test="modifytime != null">
+                #{modifytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="result != null">
+                #{result,jdbcType=INTEGER},
+            </if>
+            <if test="closepan != null">
+                #{closepan,jdbcType=BIT},
+            </if>
+            <if test="homewinR != null">
+                #{homewinR,jdbcType=VARCHAR},
+            </if>
+            <if test="guestwinR != null">
+                #{guestwinR,jdbcType=VARCHAR},
+            </if>
+            <if test="standoffR != null">
+                #{standoffR,jdbcType=VARCHAR},
+            </if>
+            <if test="isstoplive != null">
+                #{isstoplive,jdbcType=BIT},
+            </if>
 
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.Standard" >
-    update standard
-    <set >
-      <if test="scheduleid != null" >
-        ScheduleID = #{scheduleid,jdbcType=INTEGER},
-      </if>
-      <if test="companyid != null" >
-        CompanyID = #{companyid,jdbcType=INTEGER},
-      </if>
-      <if test="firsthomewin != null" >
-        FirstHomeWin = #{firsthomewin,jdbcType=VARCHAR},
-      </if>
-      <if test="firststandoff != null" >
-        FirstStandoff = #{firststandoff,jdbcType=VARCHAR},
-      </if>
-      <if test="firstguestwin != null" >
-        FirstGuestWin = #{firstguestwin,jdbcType=VARCHAR},
-      </if>
-      <if test="homewin != null" >
-        HomeWin = #{homewin,jdbcType=VARCHAR},
-      </if>
-      <if test="standoff != null" >
-        Standoff = #{standoff,jdbcType=VARCHAR},
-      </if>
-      <if test="guestwin != null" >
-        GuestWin = #{guestwin,jdbcType=VARCHAR},
-      </if>
-      <if test="modifytime != null" >
-        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="result != null" >
-        Result = #{result,jdbcType=INTEGER},
-      </if>
-      <if test="closepan != null" >
-        ClosePan = #{closepan,jdbcType=BIT},
-      </if>
-      <if test="homewinR != null" >
-        HomeWin_R = #{homewinR,jdbcType=VARCHAR},
-      </if>
-      <if test="guestwinR != null" >
-        GuestWin_R = #{guestwinR,jdbcType=VARCHAR},
-      </if>
-      <if test="standoffR != null" >
-        Standoff_R = #{standoffR,jdbcType=VARCHAR},
-      </if>
-      <if test="isstoplive != null" >
-        isStopLive = #{isstoplive,jdbcType=BIT},
-      </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.Standard">
+        update standard
+        <set>
+            <if test="scheduleid != null">
+                ScheduleID = #{scheduleid,jdbcType=INTEGER},
+            </if>
+            <if test="companyid != null">
+                CompanyID = #{companyid,jdbcType=INTEGER},
+            </if>
+            <if test="firsthomewin != null">
+                FirstHomeWin = #{firsthomewin,jdbcType=VARCHAR},
+            </if>
+            <if test="firststandoff != null">
+                FirstStandoff = #{firststandoff,jdbcType=VARCHAR},
+            </if>
+            <if test="firstguestwin != null">
+                FirstGuestWin = #{firstguestwin,jdbcType=VARCHAR},
+            </if>
+            <if test="homewin != null">
+                HomeWin = #{homewin,jdbcType=VARCHAR},
+            </if>
+            <if test="standoff != null">
+                Standoff = #{standoff,jdbcType=VARCHAR},
+            </if>
+            <if test="guestwin != null">
+                GuestWin = #{guestwin,jdbcType=VARCHAR},
+            </if>
+            <if test="modifytime != null">
+                ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="result != null">
+                Result = #{result,jdbcType=INTEGER},
+            </if>
+            <if test="closepan != null">
+                ClosePan = #{closepan,jdbcType=BIT},
+            </if>
+            <if test="homewinR != null">
+                HomeWin_R = #{homewinR,jdbcType=VARCHAR},
+            </if>
+            <if test="guestwinR != null">
+                GuestWin_R = #{guestwinR,jdbcType=VARCHAR},
+            </if>
+            <if test="standoffR != null">
+                Standoff_R = #{standoffR,jdbcType=VARCHAR},
+            </if>
+            <if test="isstoplive != null">
+                isStopLive = #{isstoplive,jdbcType=BIT},
+            </if>
 
-    </set>
-    where OddsID = #{oddsid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.Standard" >
+        </set>
+        where OddsID = #{oddsid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.Standard">
     update standard
     set ScheduleID = #{scheduleid,jdbcType=INTEGER},
       CompanyID = #{companyid,jdbcType=INTEGER},
@@ -237,4 +245,16 @@
       isStopLive = #{isstoplive,jdbcType=BIT},
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </update>
+
+    <update id="updateOddsByOddsId">
+        update standard set
+        HomeWin = #{homewin,jdbcType=VARCHAR},
+        Standoff = #{standoff,jdbcType=VARCHAR},
+        GuestWin = #{guestwin,jdbcType=VARCHAR},
+        ModifyTime = #{modifytime,jdbcType=TIMESTAMP},
+        HomeWin_R = #{homewin,jdbcType=VARCHAR},
+        GuestWin_R = #{guestwin,jdbcType=VARCHAR},
+        Standoff_R = #{standoff,jdbcType=VARCHAR}
+            where oddsid = #{oddsid} and ModifyTime &lt; #{modifytime,jdbcType=TIMESTAMP}
+    </update>
 </mapper>

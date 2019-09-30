@@ -44,15 +44,28 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
     public void changeHandle(String[] items) {
         synchronized (this) {
             if (items.length > 0) {
-                for (String item : items) {
-                    if (StringUtils.isNotEmpty(item) && item.split(",").length == 14 && item.split(",")[10].equals("1"))
-                        singleHandicap(item);
-                    else if (StringUtils.isNotEmpty(item) && item.split(",").length == 14)
-                        manyHandicap(item);
+                //for (String item : items) {
+                //    if (StringUtils.isNotEmpty(item) && item.split(",").length == 14 && item.split(",")[10].equals("1"))
+                //        singleHandicap(item);
+                //    else if (StringUtils.isNotEmpty(item) && item.split(",").length == 14)
+                //        manyHandicap(item);
+                //    else {
+                //        boolean notEmpty = StringUtils.isNotEmpty(item);
+                //        boolean b = item.split(",").length == 14;
+                //        boolean b1 = item.split(",")[10].equals("1");
+                //        System.out.println(notEmpty + " " + b + " " + b1);
+                //    }
+                //}
+
+                for (int i = 0; i < items.length; i++) {
+                    if (StringUtils.isNotEmpty(items[i]) && items[i].split(",").length == 14 && items[i].split(",")[10].equals("1"))
+                        singleHandicap(items[i],"共"+items.length+",当前"+i);
+                    else if (StringUtils.isNotEmpty(items[i]) && items[i].split(",").length == 14)
+                        manyHandicap(items[i],"共"+items.length+",当前"+i);
                     else {
-                        boolean notEmpty = StringUtils.isNotEmpty(item);
-                        boolean b = item.split(",").length == 14;
-                        boolean b1 = item.split(",")[10].equals("1");
+                        boolean notEmpty = StringUtils.isNotEmpty(items[i]);
+                        boolean b = items[i].split(",").length == 14;
+                        boolean b1 = items[i].split(",")[10].equals("1");
                         System.out.println(notEmpty + " " + b + " " + b1);
                     }
                 }
@@ -63,7 +76,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
 
 
     //单盘口操作
-    public void singleHandicap(String item) {
+    public void singleHandicap(String item,String msg) {
         String[] info = item.split(",");
         Schedule sc = scheduleMapper.selectByPrimaryKey(Integer.parseInt(info[0]));
         //当前转化为对象
@@ -84,7 +97,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                     //入数据库
                     xml.setOddsid(db.getOddsid());
                     if (letgoalMapper.updateByPrimaryKeySelective(xml) > 0) {
-                        log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新成功", item);
+                        log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新成功"+msg, item);
                     }
                 }
             } catch (Exception e) {
@@ -95,7 +108,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
 
 
     //多盘口操作
-    public void manyHandicap(String item) {
+    public void manyHandicap(String item,String msg) {
         String[] info = item.split(",");
         Schedule sc = scheduleMapper.selectByPrimaryKey(Integer.parseInt(info[0]));
         //当前转化为对象
@@ -105,7 +118,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
         if (db == null) {
             try {
                 if (multiLetgoalMapper.insertSelective(xml) > 0)
-                    log.info("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库成功", item);
+                    log.info("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库成功"+msg, item);
             } catch (Exception e) {
                 log.error("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库异常", item);
             }

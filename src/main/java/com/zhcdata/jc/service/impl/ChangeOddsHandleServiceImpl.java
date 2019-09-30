@@ -1,6 +1,7 @@
 package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.StandardDetailMapper;
+import com.zhcdata.db.mapper.StandardMapper;
 import com.zhcdata.db.model.StandardDetail;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
 import com.zhcdata.jc.tools.BeanUtils;
@@ -27,6 +28,9 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
 
     @Resource
     private StandardDetailMapper standardDetailMapper;
+
+    @Resource
+    private StandardMapper standardMapper;
 
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
@@ -66,6 +70,7 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
             //入数据库\
             xml.setOddsid(standardDetail.getOddsid());
             int inch = standardDetailMapper.insertSelective(xml);
+            standardMapper.updateOddsByOddsId(xml.getOddsid(),xml.getHomewin(),xml.getStandoff(),xml.getGuestwin(),xml.getModifytime());
             if (inch > 0) {
                 log.error("21多盘口赔率: 欧赔（让球盘）单盘口 接口数据:{} 入库成功", item);
             }

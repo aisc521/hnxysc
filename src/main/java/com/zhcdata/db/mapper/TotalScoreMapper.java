@@ -3,6 +3,9 @@ package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.TotalScore;
 
+import java.util.Date;
+import java.util.List;
+
 public interface TotalScoreMapper {
 
     int deleteByPrimaryKey(Integer oddsid);
@@ -20,4 +23,12 @@ public interface TotalScoreMapper {
     TotalScore selectTotalScoreByMatchAndCpyAndFristHandicap(Integer scheduleid, Integer companyid, Float firstgoal);
 
     TotalScore selectTotalScoreByMatchAndCpy(Integer scheduleid, Integer companyid);
+
+    List<TotalScore> selectByMid(String mid);
+
+    void deleteByMid(String mid);
+
+    void updateOddsByOddsId(Integer oddsid, Date modifytime, Float upodds, Float goal, Float downodds);
+
+    //void updateOddsByOddsId(Integer oddsid, Date modifytime, Float upodds, Float goal, Float downodds);
 }

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.EuropeoddstotalMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.Europeoddstotal" >
+    <id column="ScheduleID" property="scheduleid" jdbcType="INTEGER" />
+    <result column="FirstHomeWin" property="firsthomewin" jdbcType="REAL" />
+    <result column="FirstStandoff" property="firststandoff" jdbcType="REAL" />
+    <result column="FirstGuestWin" property="firstguestwin" jdbcType="REAL" />
+    <result column="RealHomeWin" property="realhomewin" jdbcType="REAL" />
+    <result column="RealStandoff" property="realstandoff" jdbcType="REAL" />
+    <result column="RealGuestWin" property="realguestwin" jdbcType="REAL" />
+    <result column="Num" property="num" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ScheduleID, FirstHomeWin, FirstStandoff, FirstGuestWin, RealHomeWin, RealStandoff, 
+    RealGuestWin, Num
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from europeoddstotal
+    where ScheduleID = #{scheduleid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from europeoddstotal
+    where ScheduleID = #{scheduleid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.zhcdata.db.model.Europeoddstotal" >
+    insert into europeoddstotal (ScheduleID, FirstHomeWin, FirstStandoff, 
+      FirstGuestWin, RealHomeWin, RealStandoff, 
+      RealGuestWin, Num)
+    values (#{scheduleid,jdbcType=INTEGER}, #{firsthomewin,jdbcType=REAL}, #{firststandoff,jdbcType=REAL}, 
+      #{firstguestwin,jdbcType=REAL}, #{realhomewin,jdbcType=REAL}, #{realstandoff,jdbcType=REAL}, 
+      #{realguestwin,jdbcType=REAL}, #{num,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.Europeoddstotal" >
+    insert into europeoddstotal
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scheduleid != null" >
+        ScheduleID,
+      </if>
+      <if test="firsthomewin != null" >
+        FirstHomeWin,
+      </if>
+      <if test="firststandoff != null" >
+        FirstStandoff,
+      </if>
+      <if test="firstguestwin != null" >
+        FirstGuestWin,
+      </if>
+      <if test="realhomewin != null" >
+        RealHomeWin,
+      </if>
+      <if test="realstandoff != null" >
+        RealStandoff,
+      </if>
+      <if test="realguestwin != null" >
+        RealGuestWin,
+      </if>
+      <if test="num != null" >
+        Num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scheduleid != null" >
+        #{scheduleid,jdbcType=INTEGER},
+      </if>
+      <if test="firsthomewin != null" >
+        #{firsthomewin,jdbcType=REAL},
+      </if>
+      <if test="firststandoff != null" >
+        #{firststandoff,jdbcType=REAL},
+      </if>
+      <if test="firstguestwin != null" >
+        #{firstguestwin,jdbcType=REAL},
+      </if>
+      <if test="realhomewin != null" >
+        #{realhomewin,jdbcType=REAL},
+      </if>
+      <if test="realstandoff != null" >
+        #{realstandoff,jdbcType=REAL},
+      </if>
+      <if test="realguestwin != null" >
+        #{realguestwin,jdbcType=REAL},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.Europeoddstotal" >
+    update europeoddstotal
+    <set >
+      <if test="firsthomewin != null" >
+        FirstHomeWin = #{firsthomewin,jdbcType=REAL},
+      </if>
+      <if test="firststandoff != null" >
+        FirstStandoff = #{firststandoff,jdbcType=REAL},
+      </if>
+      <if test="firstguestwin != null" >
+        FirstGuestWin = #{firstguestwin,jdbcType=REAL},
+      </if>
+      <if test="realhomewin != null" >
+        RealHomeWin = #{realhomewin,jdbcType=REAL},
+      </if>
+      <if test="realstandoff != null" >
+        RealStandoff = #{realstandoff,jdbcType=REAL},
+      </if>
+      <if test="realguestwin != null" >
+        RealGuestWin = #{realguestwin,jdbcType=REAL},
+      </if>
+      <if test="num != null" >
+        Num = #{num,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where ScheduleID = #{scheduleid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.Europeoddstotal" >
+    update europeoddstotal
+    set FirstHomeWin = #{firsthomewin,jdbcType=REAL},
+      FirstStandoff = #{firststandoff,jdbcType=REAL},
+      FirstGuestWin = #{firstguestwin,jdbcType=REAL},
+      RealHomeWin = #{realhomewin,jdbcType=REAL},
+      RealStandoff = #{realstandoff,jdbcType=REAL},
+      RealGuestWin = #{realguestwin,jdbcType=REAL},
+      Num = #{num,jdbcType=SMALLINT}
+    where ScheduleID = #{scheduleid,jdbcType=INTEGER}
+  </update>
+</mapper>

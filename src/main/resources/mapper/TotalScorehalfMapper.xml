@@ -38,10 +38,19 @@
       select * from totalscorehalf where ScheduleID = #{mid} and CompanyID = #{cpy}
     </select>
 
+    <select id="selectByMid" resultType="com.zhcdata.db.model.TotalScorehalf">
+      select * from totalscorehalf where ScheduleID = #{mid}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from totalscorehalf
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>
+
+  <delete id="deleteByMid">
+    delete from totalscorehalf where ScheduleID =#{mid}
+  </delete>
+
   <insert id="insert" parameterType="com.zhcdata.db.model.TotalScorehalf" >
     insert into totalscorehalf (OddsID, ScheduleID, CompanyID, 
       FirstGoal, FirstUpodds, FirstDownodds, 
@@ -217,4 +226,16 @@
       StartTime = #{starttime,jdbcType=TIMESTAMP}
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </update>
+
+    <update id="updateOddsByOddsId">
+      update totalscorehalf set
+      Goal = #{goal,jdbcType=REAL},
+      UpOdds = #{upodds,jdbcType=REAL},
+      DownOdds = #{downodds,jdbcType=REAL},
+      modifyTime = #{modifytime,jdbcType=TIMESTAMP},
+      Goal_real = #{goal,jdbcType=REAL},
+      UpOdds_real = #{upodds,jdbcType=REAL},
+      DownOdds_real = #{downodds,jdbcType=REAL}
+      where oddsid = #{oddsid} and modifyTime &lt; #{modifytime}
+    </update>
 </mapper>

@@ -14,4 +14,6 @@ public interface StandardHalfDetailMapper {
     int updateByPrimaryKeySelective(StandardHalfDetail record);
 
     int updateByPrimaryKey(StandardHalfDetail record);
+
+    void deleteByOddsId(Integer oddsid);
 }

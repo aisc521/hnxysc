@@ -18,4 +18,5 @@ public interface StandardDetailMapper {
 
     StandardDetail selectByMidAndCpy(String mid, String cpy);
 
+    void deleteByOddsId(Integer oddsid);
 }

@@ -3,6 +3,8 @@ package com.zhcdata.db.mapper;
 import com.zhcdata.db.model.EuropeOdds;
 import com.zhcdata.jc.dto.SimplifyOdds;
 
+import java.util.List;
+
 public interface EuropeOddsMapper {
     int deleteByPrimaryKey(Integer oddsid);
 
@@ -18,4 +20,7 @@ public interface EuropeOddsMapper {
 
     EuropeOdds selectByMidAndCpyAnd(String mid, String cpy);
 
+    List<EuropeOdds> selectByMid(String mid);
+
+    void deleteByMid(String mid);
 }

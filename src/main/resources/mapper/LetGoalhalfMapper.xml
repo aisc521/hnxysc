@@ -19,11 +19,11 @@
     <result column="StartTime" property="starttime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    OddsID, ScheduleID, CompanyID, FirstGoal, FirstUpodds, FirstDownodds, Goal, UpOdds, 
+    OddsID, ScheduleID, CompanyID, FirstGoal, FirstUpodds, FirstDownodds, Goal, UpOdds,
     DownOdds, ModifyTime, ZouDi, Goal_Real, UpOdds_Real, DownOdds_Real, StartTime
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
+    select
     <include refid="Base_Column_List" />
     from letgoalhalf
     where OddsID = #{oddsid,jdbcType=INTEGER}
@@ -49,15 +49,15 @@
     delete from letgoalhalf where ScheduleID = #{mid}
   </delete>
   <insert id="insert" parameterType="com.zhcdata.db.model.LetGoalhalf" >
-    insert into letgoalhalf (OddsID, ScheduleID, CompanyID, 
-      FirstGoal, FirstUpodds, FirstDownodds, 
-      Goal, UpOdds, DownOdds, ModifyTime, 
-      ZouDi, Goal_Real, UpOdds_Real, 
+    insert into letgoalhalf (OddsID, ScheduleID, CompanyID,
+      FirstGoal, FirstUpodds, FirstDownodds,
+      Goal, UpOdds, DownOdds, ModifyTime,
+      ZouDi, Goal_Real, UpOdds_Real,
       DownOdds_Real, StartTime)
-    values (#{oddsid,jdbcType=INTEGER}, #{scheduleid,jdbcType=INTEGER}, #{companyid,jdbcType=INTEGER}, 
-      #{firstgoal,jdbcType=REAL}, #{firstupodds,jdbcType=REAL}, #{firstdownodds,jdbcType=REAL}, 
-      #{goal,jdbcType=REAL}, #{upodds,jdbcType=REAL}, #{downodds,jdbcType=REAL}, #{modifytime,jdbcType=TIMESTAMP}, 
-      #{zoudi,jdbcType=BIT}, #{goalReal,jdbcType=REAL}, #{upoddsReal,jdbcType=REAL}, 
+    values (#{oddsid,jdbcType=INTEGER}, #{scheduleid,jdbcType=INTEGER}, #{companyid,jdbcType=INTEGER},
+      #{firstgoal,jdbcType=REAL}, #{firstupodds,jdbcType=REAL}, #{firstdownodds,jdbcType=REAL},
+      #{goal,jdbcType=REAL}, #{upodds,jdbcType=REAL}, #{downodds,jdbcType=REAL}, #{modifytime,jdbcType=TIMESTAMP},
+      #{zoudi,jdbcType=BIT}, #{goalReal,jdbcType=REAL}, #{upoddsReal,jdbcType=REAL},
       #{downoddsReal,jdbcType=REAL}, #{starttime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.LetGoalhalf" >
@@ -223,4 +223,16 @@
       StartTime = #{starttime,jdbcType=TIMESTAMP}
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </update>
+
+    <update id="updateOddsByOddsId">
+      update letgoalhalf set
+      Goal = #{goal,jdbcType=REAL},
+      UpOdds = #{upodds,jdbcType=REAL},
+      DownOdds = #{downodds,jdbcType=REAL},
+      ModifyTime = #{time,jdbcType=TIMESTAMP},
+      Goal_Real = #{goal,jdbcType=REAL},
+      UpOdds_Real = #{upodds,jdbcType=REAL},
+      DownOdds_Real = #{downodds,jdbcType=REAL}
+      where oddsid = #{oddsid} and ModifyTime &lt; #{time}
+    </update>
 </mapper>

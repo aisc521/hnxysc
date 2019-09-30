@@ -4,6 +4,7 @@ package com.zhcdata.db.mapper;
 import com.zhcdata.db.model.Letgoal;
 import com.zhcdata.db.model.Standard;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,8 @@ public interface LetgoalMapper {
     List<Letgoal> selectByMid(String mid);
 
     void deleteByMid(int mid);
+
+    void updateOddsByOddsId(Integer oddsid, Float upodds, Float goal, Float downodds, Date modifytime);
 
     //Letgoal selectByMidAndCpyNew(String mid, String cpy);
 }

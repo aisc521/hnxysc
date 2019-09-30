@@ -16,4 +16,6 @@ public interface MultiTotalScorehalfDetailMapper {
     int updateByPrimaryKey(MultiTotalScorehalfDetail record);
 
     MultiTotalScorehalfDetail selectByMidAndCpyAndNum(String mid, String cpy, String num);
+
+    void deleteByOddsId(Integer oddsid);
 }

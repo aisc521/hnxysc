@@ -49,6 +49,9 @@
     delete from multiletgoal
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>
+  <delete id="deleteByMid">
+    delete from multiletgoal where ScheduleID = #{mid}
+  </delete>
   <insert id="insert" parameterType="com.zhcdata.db.model.MultiLetgoal" >
     insert into multiletgoal (OddsID, ScheduleID, CompanyID, 
       FirstGoal, FirstUpodds, FirstDownodds, 
@@ -266,4 +269,15 @@
       StartTime = #{starttime,jdbcType=TIMESTAMP}
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </update>
+    <update id="updateOddsByOddsId">
+      update multiletgoal set
+      Goal = #{goal,jdbcType=REAL},
+      UpOdds = #{upodds,jdbcType=REAL},
+      DownOdds = #{downodds,jdbcType=REAL},
+      Goal_Real = #{goal,jdbcType=REAL},
+      UpOdds_Real = #{upodds,jdbcType=REAL},
+      DownOdds_Real = #{downodds,jdbcType=REAL},
+      ModifyTime = #{addtime,jdbcType=TIMESTAMP}
+      where oddsid = #{oddsid} and ModifyTime &lt; #{addtime,jdbcType=TIMESTAMP}
+    </update>
 </mapper>

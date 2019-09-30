@@ -3,6 +3,9 @@ package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.MultiLetgoal;
 
+import java.util.Date;
+import java.util.List;
+
 public interface MultiLetgoalMapper {
 
     int deleteByPrimaryKey(Integer oddsid);
@@ -21,5 +24,9 @@ public interface MultiLetgoalMapper {
 
     MultiLetgoal selectByMatchIdAndCompanyAndHandicapNum(String matchId, String cpy, Short num);
 
-    MultiLetgoal selectByMid(String id);
+    List<MultiLetgoal> selectByMid(String id);
+
+    void deleteByMid(String mid);
+
+    void updateOddsByOddsId(Integer oddsid, Float upodds, Float goal, Float downodds, Date addtime);
 }

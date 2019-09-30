@@ -19,4 +19,6 @@ public interface TotalScorehalfDetailMapper {
     TotalScorehalfDetail selectByMidAndCpy(String mid, String cpy);
 
     SimplifyOdds selectTotalScorehalfSloByMidAndCpy(String mid, String cpy);
+
+    void deleteByOddsId(Integer oddsid);
 }

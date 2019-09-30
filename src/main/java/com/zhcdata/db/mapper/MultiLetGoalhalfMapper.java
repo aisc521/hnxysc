@@ -2,6 +2,9 @@ package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.MultiLetGoalhalf;
 
+import java.util.Date;
+import java.util.List;
+
 public interface MultiLetGoalhalfMapper {
     int deleteByPrimaryKey(Integer oddsid);
 
@@ -19,5 +22,9 @@ public interface MultiLetGoalhalfMapper {
 
     MultiLetGoalhalf selectByMatchIdAndCmpAndNum(String mid, String cpy, String num);
 
-    MultiLetGoalhalf selectByMid(String id);
+    List<MultiLetGoalhalf> selectByMid(String id);
+
+    void deleteByMid(String mid);
+
+    void updateOddsByOddsId(Integer oddsid, Float upodds, Float goal, Float downodds, Date addtime);
 }

@@ -1,35 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhcdata.db.mapper.MultiTotalScorehalfDetailMapper" >
-  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.MultiTotalScorehalfDetail" >
-    <id column="ID" property="id" jdbcType="INTEGER" />
-    <result column="OddsID" property="oddsid" jdbcType="INTEGER" />
-    <result column="UpOdds" property="upodds" jdbcType="REAL" />
-    <result column="Goal" property="goal" jdbcType="REAL" />
-    <result column="DownOdds" property="downodds" jdbcType="REAL" />
-    <result column="type" property="type" jdbcType="INTEGER" />
-    <result column="addTime" property="addtime" jdbcType="TIMESTAMP" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.zhcdata.db.mapper.MultiTotalScorehalfDetailMapper">
+    <resultMap id="BaseResultMap" type="com.zhcdata.db.model.MultiTotalScorehalfDetail">
+        <id column="ID" property="id" jdbcType="INTEGER"/>
+        <result column="OddsID" property="oddsid" jdbcType="INTEGER"/>
+        <result column="UpOdds" property="upodds" jdbcType="REAL"/>
+        <result column="Goal" property="goal" jdbcType="REAL"/>
+        <result column="DownOdds" property="downodds" jdbcType="REAL"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="addTime" property="addtime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     ID, OddsID, UpOdds, Goal, DownOdds, type, addTime
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from multitotalscorehalfdetail
-    where ID = #{id,jdbcType=INTEGER}
-  </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from multitotalscorehalfdetail
+        where ID = #{id,jdbcType=INTEGER}
+    </select>
 
     <select id="selectByMidAndCpyAndNum" resultType="com.zhcdata.db.model.MultiTotalScorehalfDetail">
       select l.oddsId,d.* from multitotalscorehalf l left join multitotalscorehalfdetail d on
   l.OddsID = d.OddsID where l.ScheduleID = #{mid} and CompanyID = #{cpy} and num = #{num} order by id desc limit 1
     </select>
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from multitotalscorehalfdetail
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhcdata.db.model.MultiTotalScorehalfDetail" >
+
+    <delete id="deleteByOddsId">
+      delete from multitotalscorehalfdetail where OddsID = #{oddsid}
+    </delete>
+
+    <insert id="insert" parameterType="com.zhcdata.db.model.MultiTotalScorehalfDetail">
     insert into multitotalscorehalfdetail (ID, OddsID, UpOdds, 
       Goal, DownOdds, type, addTime
       )
@@ -37,80 +42,80 @@
       #{goal,jdbcType=REAL}, #{downodds,jdbcType=REAL}, #{type,jdbcType=INTEGER}, #{addtime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.zhcdata.db.model.MultiTotalScorehalfDetail" >
-    insert into multitotalscorehalfdetail
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        ID,
-      </if>
-      <if test="oddsid != null" >
-        OddsID,
-      </if>
-      <if test="upodds != null" >
-        UpOdds,
-      </if>
-      <if test="goal != null" >
-        Goal,
-      </if>
-      <if test="downodds != null" >
-        DownOdds,
-      </if>
-      <if test="type != null" >
-        type,
-      </if>
-      <if test="addtime != null" >
-        addTime,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="oddsid != null" >
-        #{oddsid,jdbcType=INTEGER},
-      </if>
-      <if test="upodds != null" >
-        #{upodds,jdbcType=REAL},
-      </if>
-      <if test="goal != null" >
-        #{goal,jdbcType=REAL},
-      </if>
-      <if test="downodds != null" >
-        #{downodds,jdbcType=REAL},
-      </if>
-      <if test="type != null" >
-        #{type,jdbcType=INTEGER},
-      </if>
-      <if test="addtime != null" >
-        #{addtime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.MultiTotalScorehalfDetail" >
-    update multitotalscorehalfdetail
-    <set >
-      <if test="oddsid != null" >
-        OddsID = #{oddsid,jdbcType=INTEGER},
-      </if>
-      <if test="upodds != null" >
-        UpOdds = #{upodds,jdbcType=REAL},
-      </if>
-      <if test="goal != null" >
-        Goal = #{goal,jdbcType=REAL},
-      </if>
-      <if test="downodds != null" >
-        DownOdds = #{downodds,jdbcType=REAL},
-      </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=INTEGER},
-      </if>
-      <if test="addtime != null" >
-        addTime = #{addtime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where ID = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.MultiTotalScorehalfDetail" >
+    <insert id="insertSelective" parameterType="com.zhcdata.db.model.MultiTotalScorehalfDetail">
+        insert into multitotalscorehalfdetail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                ID,
+            </if>
+            <if test="oddsid != null">
+                OddsID,
+            </if>
+            <if test="upodds != null">
+                UpOdds,
+            </if>
+            <if test="goal != null">
+                Goal,
+            </if>
+            <if test="downodds != null">
+                DownOdds,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="addtime != null">
+                addTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="oddsid != null">
+                #{oddsid,jdbcType=INTEGER},
+            </if>
+            <if test="upodds != null">
+                #{upodds,jdbcType=REAL},
+            </if>
+            <if test="goal != null">
+                #{goal,jdbcType=REAL},
+            </if>
+            <if test="downodds != null">
+                #{downodds,jdbcType=REAL},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="addtime != null">
+                #{addtime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.MultiTotalScorehalfDetail">
+        update multitotalscorehalfdetail
+        <set>
+            <if test="oddsid != null">
+                OddsID = #{oddsid,jdbcType=INTEGER},
+            </if>
+            <if test="upodds != null">
+                UpOdds = #{upodds,jdbcType=REAL},
+            </if>
+            <if test="goal != null">
+                Goal = #{goal,jdbcType=REAL},
+            </if>
+            <if test="downodds != null">
+                DownOdds = #{downodds,jdbcType=REAL},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="addtime != null">
+                addTime = #{addtime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where ID = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.zhcdata.db.model.MultiTotalScorehalfDetail">
     update multitotalscorehalfdetail
     set OddsID = #{oddsid,jdbcType=INTEGER},
       UpOdds = #{upodds,jdbcType=REAL},

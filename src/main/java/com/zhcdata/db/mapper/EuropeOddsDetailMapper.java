@@ -16,4 +16,6 @@ public interface EuropeOddsDetailMapper {
     int updateByPrimaryKey(EuropeOddsDetail record);
 
     EuropeOddsDetail selectByOddsNewest(Integer oddsid);
+
+    void deleteByOddsId(Integer oddsid);
 }

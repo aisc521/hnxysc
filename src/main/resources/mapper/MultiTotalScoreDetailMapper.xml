@@ -29,7 +29,10 @@
     delete from multitotalscoredetail
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhcdata.db.model.MultiTotalScoreDetail" >
+    <delete id="deleteByOddsId">
+      delete from multitotalscoredetail where OddsID = #{oddsid}
+    </delete>
+    <insert id="insert" parameterType="com.zhcdata.db.model.MultiTotalScoreDetail" >
     insert into multitotalscoredetail (ID, OddsID, UpOdds, 
       Goal, DownOdds, type, addTime
       )

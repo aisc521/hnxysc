@@ -1,7 +1,9 @@
 package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.MultiTotalScorehalfDetailMapper;
+import com.zhcdata.db.mapper.MultiTotalScorehalfMapper;
 import com.zhcdata.db.mapper.TotalScorehalfDetailMapper;
+import com.zhcdata.db.mapper.TotalScorehalfMapper;
 import com.zhcdata.db.model.MultiTotalScorehalfDetail;
 import com.zhcdata.db.model.TotalScorehalfDetail;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
@@ -29,8 +31,15 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
 
     @Resource
     TotalScorehalfDetailMapper totalScorehalfDetailMapper;
+
     @Resource
     MultiTotalScorehalfDetailMapper multiTotalScorehalfDetailMapper;
+
+    @Resource
+    TotalScorehalfMapper totalScorehalfMapper;
+
+    @Resource
+    MultiTotalScorehalfMapper multiTotalScorehalfMapper;
 
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
@@ -73,6 +82,7 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
             //入数据库\
             xml.setOddsid(totalScorehalfDetail.getOddsid());
             int inch = totalScorehalfDetailMapper.insertSelective(xml);
+            totalScorehalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getDownodds(),xml.getModifytime(),xml.getGoal());
             if (inch > 0) {
                 log.error("21多盘口赔率: 半场大小球  单盘口 接口数据:{} 入库成功", item);
             }
@@ -89,6 +99,7 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
         if (!multiTotalScorehalfDetail.oddsEquals(xml)) {
             xml.setOddsid(multiTotalScorehalfDetail.getOddsid());
             int inch = multiTotalScorehalfDetailMapper.insertSelective(xml);
+            multiTotalScorehalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getGoal(),xml.getUpodds(),xml.getDownodds(),xml.getAddtime());
             if (inch > 0) {
                 log.error("21多盘口赔率: 半场大小球  多盘口 接口数据:{} 入库成功", item);
             }

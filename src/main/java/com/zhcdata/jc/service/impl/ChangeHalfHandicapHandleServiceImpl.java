@@ -1,9 +1,8 @@
 package com.zhcdata.jc.service.impl;
 
-import com.zhcdata.db.mapper.LetGoalhalfDetailMapper;
-import com.zhcdata.db.mapper.MultiLetGoalhalfDetailMapper;
-import com.zhcdata.db.mapper.ScheduleMapper;
+import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.LetGoalhalfDetail;
+import com.zhcdata.db.model.MultiLetGoalhalf;
 import com.zhcdata.db.model.MultiLetGoalhalfDetail;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
 import com.zhcdata.jc.tools.BeanUtils;
@@ -30,6 +29,12 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
 
     @Resource
     private LetGoalhalfDetailMapper letGoalhalfDetailMapper;
+
+    @Resource
+    private LetGoalhalfMapper letGoalhalfMapper;
+
+    @Resource
+    private MultiLetGoalhalfMapper multiLetGoalhalfMapper;
 
     @Resource
     private MultiLetGoalhalfDetailMapper multiLetGoalhalfDetailMapper;
@@ -79,6 +84,7 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
             //入数据库\
             xml.setOddsid(letGoalhalfDetail.getOddsid());
             int inch = letGoalhalfDetailMapper.insertSelective(xml);
+            letGoalhalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getModifytime());
             if (inch > 0) {
                 log.error("21多盘口赔率: 半场亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
             }
@@ -95,6 +101,7 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
         if (!multiLetGoalhalfDetail.oddsEquals(xml)) {
             xml.setOddsid(multiLetGoalhalfDetail.getOddsid());
             int inch = multiLetGoalhalfDetailMapper.insertSelective(xml);
+            multiLetGoalhalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getAddtime());
             if (inch > 0) {
                 log.error("21多盘口赔率: 半场亚赔（让球盘）多盘口 接口数据:{} 入库成功", item);
             }

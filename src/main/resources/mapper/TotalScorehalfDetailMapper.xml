@@ -34,7 +34,10 @@
     delete from totalscorehalfdetail
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhcdata.db.model.TotalScorehalfDetail" >
+    <delete id="deleteByOddsId">
+      delete from totalscorehalfdetail where OddsID = #{oddsid}
+    </delete>
+    <insert id="insert" parameterType="com.zhcdata.db.model.TotalScorehalfDetail" >
     insert into totalscorehalfdetail (ID, OddsID, UpOdds, 
       Goal, DownOdds, ModifyTime, 
       isEarly)

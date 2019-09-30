@@ -29,7 +29,10 @@
     delete from standarddetail
     where ID = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.zhcdata.db.model.StandardDetail" >
+    <delete id="deleteByOddsId">
+      delete from standarddetail where OddsID = #{oddsid}
+    </delete>
+    <insert id="insert" parameterType="com.zhcdata.db.model.StandardDetail" >
     insert into standarddetail (ID, OddsID, HomeWin, 
       Standoff, GuestWin, ModifyTime, 
       isEarly)
