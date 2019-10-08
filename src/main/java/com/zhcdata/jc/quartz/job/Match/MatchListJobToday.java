@@ -52,7 +52,7 @@ public class MatchListJobToday {
     @Resource
     ScheduleMapper scheduleMapper;
 
-    @Scheduled(cron = "44 24 * * * ?")
+    //@Scheduled(cron = "44 24 * * * ?")
     public void execute() throws Exception {
         LOGGER.info("赛程赛果定时任务启动");
         long s = System.currentTimeMillis();
