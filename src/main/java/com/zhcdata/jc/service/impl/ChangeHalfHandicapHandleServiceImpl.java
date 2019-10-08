@@ -4,6 +4,7 @@ import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.LetGoalhalfDetail;
 import com.zhcdata.db.model.MultiLetGoalhalf;
 import com.zhcdata.db.model.MultiLetGoalhalfDetail;
+import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.xml.rsp.MoreHandicapOddsLisAlltRsp;
@@ -60,8 +61,9 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
                     log.error("21多盘口赔率变化: 半场亚赔（让球盘）数据格式不合法 接口数据:{}", cah.get(i));
                     continue;
                 }
-                if (scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0])).getMatchtime().getTime()<System.currentTimeMillis()){
-                    log.error("21多盘口赔率变化: 半场亚赔（让球盘）此比赛已经开始/结束，比赛ID:{}", cah.get(i));
+                Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
+                if (schedule==null || schedule.getMatchtime().getTime()<System.currentTimeMillis()){
+                    log.error("21多盘口赔率变化: 半场亚赔（让球盘）暂无此赛程或比赛已经开始，比赛ID:{}", cah.get(i));
                     continue;
                 }
                 //如果第七位等于1 是 单盘口 相当于标准盘  6 个参数代表不是走地我们入库

@@ -2,6 +2,7 @@ package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.MultiTotalScoreDetail;
+import com.zhcdata.db.model.Schedule;
 import com.zhcdata.db.model.TotalScoreDetail;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
 import com.zhcdata.jc.tools.BeanUtils;
@@ -58,8 +59,9 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
                     log.error("21多盘口赔率变化: 大小球  数据格式不合法 接口数据:{}", item);
                     continue;
                 }
-                if (scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0])).getMatchtime().getTime()<System.currentTimeMillis()){
-                    log.error("21多盘口赔率变化: 大小球  此场比已经开始/结束 比赛ID:{}", item[0]);
+                Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
+                if (schedule==null || schedule.getMatchtime().getTime()<System.currentTimeMillis()){
+                    log.error("21多盘口赔率变化: 大小球  暂无此赛程或比赛已经开始 比赛ID:{}", item[0]);
                     continue;
                 }
                 if ("1".equals(item[5])) {//单盘口

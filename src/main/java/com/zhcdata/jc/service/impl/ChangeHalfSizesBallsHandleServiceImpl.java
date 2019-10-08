@@ -59,8 +59,9 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
                     log.error("21多盘口赔率变化: 半场大小球  数据格式不合法 接口数据:{}", item);
                     continue;
                 }
-                if(scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0])).getMatchtime().getTime()<System.currentTimeMillis()){
-                    log.error("21多盘口赔率变化: 半场大小球  此比赛已经开始/结束，比赛ID:{}", item[0]);
+                Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
+                if(schedule ==null || schedule.getMatchtime().getTime()<System.currentTimeMillis()){
+                    log.error("21多盘口赔率变化: 半场大小球  暂无此赛程或比赛已经开始，比赛ID:{}", item[0]);
                     continue;
                 }
 

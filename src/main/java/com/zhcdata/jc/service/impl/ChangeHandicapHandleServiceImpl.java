@@ -3,6 +3,7 @@ package com.zhcdata.jc.service.impl;
 import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.LetGoalDetail;
 import com.zhcdata.db.model.MultiLetGoalDetail;
+import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.xml.rsp.MoreHandicapOddsLisAlltRsp;
@@ -58,9 +59,10 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
                     log.error("21多盘口赔率变化: 亚赔（让球盘）数据格式不合法 接口数据:{}", item);
                     continue;
                 }
-                
-                if (scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0])).getMatchtime().getTime()<System.currentTimeMillis()){
-                    log.error("21多盘口赔率变化: 亚赔（让球盘）此场比赛已经开始/结束 比赛ID:{}", item[0]);
+
+                Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
+                if(schedule ==null || schedule.getMatchtime().getTime()<System.currentTimeMillis()){
+                    log.error("21多盘口赔率变化: 亚赔（让球盘）暂无此赛程或比赛已经开始 比赛ID:{}", item[0]);
                     continue;
                 }
                 //如果第七位等于1 是 单盘口 相当于标准盘  6 个参数代表不是走地我们入库

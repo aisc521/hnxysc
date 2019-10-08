@@ -3,6 +3,7 @@ package com.zhcdata.jc.service.impl;
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.mapper.StandardDetailMapper;
 import com.zhcdata.db.mapper.StandardMapper;
+import com.zhcdata.db.model.Schedule;
 import com.zhcdata.db.model.StandardDetail;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
 import com.zhcdata.jc.tools.BeanUtils;
@@ -53,9 +54,10 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
                     log.error("21多盘口赔率变化: 欧赔（让球盘）数据格式不合法 接口数据:{}", item);
                     continue;
                 }
-                
-                if (scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0])).getMatchtime().getTime()<System.currentTimeMillis()){
-                    log.error("21多盘口赔率变化: 欧赔（让球盘）此场比赛已经开始/结束，比赛ID:{}", item[0]);
+
+                Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
+                if(schedule ==null || schedule.getMatchtime().getTime()<System.currentTimeMillis()){
+                    log.error("21多盘口赔率变化: 欧赔（让球盘）暂无此赛程或比赛已经开始，比赛ID:{}", item[0]);
                     continue;
                 }
                 singleHandicap(item);
