@@ -161,9 +161,9 @@ public class BeanUtils {
         mo.setUpodds(Float.parseFloat(info[6]));//即时盘及赔率
         mo.setDownodds(Float.parseFloat(info[7]));//即时盘及赔率
 
-        //mo.setGoalReal(info[]);//终盘及赔率
-        //mo.setUpoddsReal(info[]);//终盘及赔率
-        //mo.setDownoddsReal(info[]);//终盘及赔率
+        mo.setGoalReal(Float.parseFloat(info[5]));//终
+        mo.setUpoddsReal(Float.parseFloat(info[6]));//终
+        mo.setDownoddsReal(Float.parseFloat(info[7]));//终
         //mo.setRunning(info[0]);//是否正在走地
         //mo.setResult(info[0]);//盘路结果 1主队赢 2走 3输
 
@@ -225,6 +225,9 @@ public class BeanUtils {
         mo.setUpodds(Float.parseFloat(info[6]));//即时盘及赔率
         mo.setDownodds(Float.parseFloat(info[7]));//即时盘及赔率
 
+        mo.setGoalReal(Float.parseFloat(info[5]));//终
+        mo.setUpoddsReal(Float.parseFloat(info[6]));//终
+        mo.setDownoddsReal(Float.parseFloat(info[7]));//终
         //mo.setGoalReal(info[]);//终盘及赔率
         //mo.setUpoddsReal(info[]);//终盘及赔率
         //mo.setDownoddsReal(info[]);//终盘及赔率
@@ -283,9 +286,9 @@ public class BeanUtils {
         mo.setFirststandoff(info[3]);//
         mo.setFirstguestwin(info[4]);//
 
-        //mo.setHomewin(info[]);//终盘
-        //mo.setStandoff(info[]);//
-        //mo.setGuestwin(info[]);//
+        mo.setHomewin(info[5]);//终盘
+        mo.setStandoff(info[6]);//
+        mo.setGuestwin(info[7]);//
         //mo.setResult(info[]);//盘路结果
 
         mo.setHomewinR(info[5]);//即时
@@ -318,6 +321,12 @@ public class BeanUtils {
         mo.setUpodds(Float.parseFloat(info[6]));
         mo.setDownodds(Float.parseFloat(info[7]));
 
+        mo.setGoalReal(Float.parseFloat(info[5]));
+        mo.setUpoddsReal(Float.parseFloat(info[6]));
+        mo.setDownoddsReal(Float.parseFloat(info[7]));
+
+
+
         //mo.setGoalReal();
         //mo.setUpoddsReal();
         //mo.setDownoddsReal();
@@ -349,6 +358,10 @@ public class BeanUtils {
         mo.setGoal(Float.parseFloat(info[5]));
         mo.setUpodds(Float.parseFloat(info[6]));
         mo.setDownodds(Float.parseFloat(info[7]));
+
+        mo.setGoalReal(Float.parseFloat(info[5]));
+        mo.setUpoddsReal(Float.parseFloat(info[6]));
+        mo.setDownoddsReal(Float.parseFloat(info[7]));
         mo.setNum(Short.parseShort(info[8]));
         try {
             mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[9]));//变化时间
@@ -375,6 +388,10 @@ public class BeanUtils {
         mo.setUpodds(Float.parseFloat(info[6]));
         mo.setDownodds(Float.parseFloat(info[7]));
 
+        mo.setGoalReal(Float.parseFloat(info[5]));//终盘
+        mo.setUpoddsReal(Float.parseFloat(info[6]));
+        mo.setDownoddsReal(Float.parseFloat(info[7]));
+
         // TODO: 2019/9/16 终盘 盘路结果
         try {
             mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[10]));//修改时间
@@ -382,10 +399,7 @@ public class BeanUtils {
             System.err.println("parseHalfLetGoal,dateFormatException,变化时间转换失败"+info[10]);
             e.printStackTrace();
         }
-
         mo.setZoudi(info[8].startsWith("T"));
-
-
         return mo;
     }
 
@@ -404,6 +418,10 @@ public class BeanUtils {
         mo.setGoal(Float.parseFloat(info[5]));//即时
         mo.setUpodds(Float.parseFloat(info[6]));
         mo.setDownodds(Float.parseFloat(info[7]));
+
+        mo.setGoalReal(Float.parseFloat(info[5]));//终盘
+        mo.setUpoddsReal(Float.parseFloat(info[6]));
+        mo.setDownoddsReal(Float.parseFloat(info[7]));
 
         // TODO: 2019/9/16 终盘 盘路结果
         try {
@@ -434,6 +452,10 @@ public class BeanUtils {
         mo.setUpodds(Float.parseFloat(info[6]));
         mo.setDownodds(Float.parseFloat(info[7]));
 
+        mo.setGoalReal(Float.parseFloat(info[5]));//终盘
+        mo.setUpoddsReal(Float.parseFloat(info[6]));
+        mo.setDownoddsReal(Float.parseFloat(info[7]));
+
         try {
             mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[9]));//修改时间
         } catch (Exception e) {
@@ -458,6 +480,10 @@ public class BeanUtils {
         mo.setGoal(Float.parseFloat(info[5]));//即时
         mo.setUpodds(Float.parseFloat(info[6]));
         mo.setDownodds(Float.parseFloat(info[7]));
+
+        mo.setGoalReal(Float.parseFloat(info[5]));//终盘
+        mo.setUpoddsReal(Float.parseFloat(info[6]));
+        mo.setDownoddsReal(Float.parseFloat(info[7]));
 
         try {
             mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[9]));//修改时间

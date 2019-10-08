@@ -37,25 +37,11 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
     @Resource
     private ScheduleMapper scheduleMapper;
 
-    private boolean run = false;
-
     @Async
     @Override
     public void changeHandle(String[] items) {
         synchronized (this) {
             if (items.length > 0) {
-                //for (String item : items) {
-                //    if (StringUtils.isNotEmpty(item) && item.split(",").length == 14 && item.split(",")[10].equals("1"))
-                //        singleHandicap(item);
-                //    else if (StringUtils.isNotEmpty(item) && item.split(",").length == 14)
-                //        manyHandicap(item);
-                //    else {
-                //        boolean notEmpty = StringUtils.isNotEmpty(item);
-                //        boolean b = item.split(",").length == 14;
-                //        boolean b1 = item.split(",")[10].equals("1");
-                //        System.out.println(notEmpty + " " + b + " " + b1);
-                //    }
-                //}
 
                 for (int i = 0; i < items.length; i++) {
                     if (StringUtils.isNotEmpty(items[i]) && items[i].split(",").length == 14 && items[i].split(",")[10].equals("1"))
