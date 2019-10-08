@@ -1,10 +1,8 @@
 package com.zhcdata.jc.service.impl;
 
-import com.zhcdata.db.mapper.MultiTotalScorehalfDetailMapper;
-import com.zhcdata.db.mapper.MultiTotalScorehalfMapper;
-import com.zhcdata.db.mapper.TotalScorehalfDetailMapper;
-import com.zhcdata.db.mapper.TotalScorehalfMapper;
+import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.MultiTotalScorehalfDetail;
+import com.zhcdata.db.model.Schedule;
 import com.zhcdata.db.model.TotalScorehalfDetail;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
 import com.zhcdata.jc.tools.BeanUtils;
@@ -41,23 +39,31 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
     @Resource
     MultiTotalScorehalfMapper multiTotalScorehalfMapper;
 
+    @Resource
+    ScheduleMapper scheduleMapper;
+
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
 
         List<String> cah = rsp.getDh().getH();
         if (cah == null || cah.size() < 1) {
-            log.error("21多盘口赔率: 半场大小球 变化数据总条数:{}", " 没有可更新的数据");
+            log.error("21多盘口赔率变化: 半场大小球 变化数据总条数:{}", " 没有可更新的数据");
             return;
         }
-        log.error("21多盘口赔率: 半场大小球 变化数据总条数:{}", cah.size());
+        log.error("21多盘口赔率变化: 半场大小球 变化数据总条数:{}", cah.size());
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
-                log.error("21多盘口赔率: 半场大小球 接口数据:{}", item);
+                log.error("21多盘口赔率变化: 半场大小球 接口数据:{}", item);
                 if (item.length != 7) {
-                    log.error("21多盘口赔率: 半场大小球  数据格式不合法 接口数据:{}", item);
+                    log.error("21多盘口赔率变化: 半场大小球  数据格式不合法 接口数据:{}", item);
                     continue;
                 }
+                if(scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0])).getMatchtime().getTime()<System.currentTimeMillis()){
+                    log.error("21多盘口赔率变化: 半场大小球  此比赛已经开始/结束，比赛ID:{}", item[0]);
+                    continue;
+                }
+
                 if ("1".equals(item[5])) {//单盘口
                     singleHandicap(item);
                 } else {//存到多盘口
@@ -84,7 +90,7 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
             int inch = totalScorehalfDetailMapper.insertSelective(xml);
             totalScorehalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getDownodds(),xml.getModifytime(),xml.getGoal());
             if (inch > 0) {
-                log.error("21多盘口赔率: 半场大小球  单盘口 接口数据:{} 入库成功", item);
+                log.error("21多盘口赔率变化: 半场大小球  单盘口 接口数据:{} 入库成功", item);
             }
         }
     }
@@ -101,7 +107,7 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
             int inch = multiTotalScorehalfDetailMapper.insertSelective(xml);
             multiTotalScorehalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getGoal(),xml.getUpodds(),xml.getDownodds(),xml.getAddtime());
             if (inch > 0) {
-                log.error("21多盘口赔率: 半场大小球  多盘口 接口数据:{} 入库成功", item);
+                log.error("21多盘口赔率变化: 半场大小球  多盘口 接口数据:{} 入库成功", item);
             }
         }
     }

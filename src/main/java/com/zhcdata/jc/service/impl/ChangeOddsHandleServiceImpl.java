@@ -1,5 +1,6 @@
 package com.zhcdata.jc.service.impl;
 
+import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.mapper.StandardDetailMapper;
 import com.zhcdata.db.mapper.StandardMapper;
 import com.zhcdata.db.model.StandardDetail;
@@ -32,21 +33,29 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
     @Resource
     private StandardMapper standardMapper;
 
+    @Resource
+    private ScheduleMapper scheduleMapper;
+
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
 
         List<String> cah = rsp.getO().getH();
         if (cah == null || cah.size() < 1) {
-            log.error("21多盘口赔率: 欧赔（让球盘）变化数据总条数:{}", " 没有可更新的数据");
+            log.error("21多盘口赔率变化: 欧赔（让球盘）变化数据总条数:{}", " 没有可更新的数据");
             return;
         }
-        log.error("21多盘口赔率: 欧赔（让球盘）变化数据总条数:{}", cah.size());
+        log.error("21多盘口赔率变化: 欧赔（让球盘）变化数据总条数:{}", cah.size());
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
-                log.error("21多盘口赔率: 欧赔（让球盘）接口数据:{}", item);
+                log.error("21多盘口赔率变化: 欧赔（让球盘）接口数据:{}", item);
                 if (item.length != 8) {
-                    log.error("21多盘口赔率: 欧赔（让球盘）数据格式不合法 接口数据:{}", item);
+                    log.error("21多盘口赔率变化: 欧赔（让球盘）数据格式不合法 接口数据:{}", item);
+                    continue;
+                }
+                
+                if (scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0])).getMatchtime().getTime()<System.currentTimeMillis()){
+                    log.error("21多盘口赔率变化: 欧赔（让球盘）此场比赛已经开始/结束，比赛ID:{}", item[0]);
                     continue;
                 }
                 singleHandicap(item);
@@ -72,7 +81,7 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
             int inch = standardDetailMapper.insertSelective(xml);
             standardMapper.updateOddsByOddsId(xml.getOddsid(),xml.getHomewin(),xml.getStandoff(),xml.getGuestwin(),xml.getModifytime());
             if (inch > 0) {
-                log.error("21多盘口赔率: 欧赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+                log.error("21多盘口赔率变化: 欧赔（让球盘）单盘口 接口数据:{} 入库成功", item);
             }
         }
     }

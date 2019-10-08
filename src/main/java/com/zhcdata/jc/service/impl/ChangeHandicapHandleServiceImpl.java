@@ -1,9 +1,6 @@
 package com.zhcdata.jc.service.impl;
 
-import com.zhcdata.db.mapper.LetGoalDetailMapper;
-import com.zhcdata.db.mapper.LetgoalMapper;
-import com.zhcdata.db.mapper.MultiLetGoalDetailMapper;
-import com.zhcdata.db.mapper.MultiLetgoalMapper;
+import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.LetGoalDetail;
 import com.zhcdata.db.model.MultiLetGoalDetail;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
@@ -41,21 +38,29 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
     @Resource
     private MultiLetgoalMapper multiLetgoalMapper;
 
+    @Resource
+    private ScheduleMapper scheduleMapper;
+
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
         //亚赔（让球盘）变化数据:比赛ID,公司ID,即时盘口,主队即时赔率,客队即时赔率,是否封盘1,是否走地,盘口序号,变盘时间,是否封盘2
         List<String> cah = rsp.getA().getH();
         if (cah == null || cah.size() < 1) {
-            log.error("21多盘口赔率: 亚赔（让球盘）变化数据总条数:{}", " 没有可更新的数据");
+            log.error("21多盘口赔率变化: 亚赔（让球盘）变化数据总条数:{}", " 没有可更新的数据");
             return;
         }
-        log.error("21多盘口赔率: 亚赔（让球盘）变化数据总条数:{}", cah.size());
+        log.error("21多盘口赔率变化: 亚赔（让球盘）变化数据总条数:{}", cah.size());
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
-                log.error("21多盘口赔率: 亚赔（让球盘）接口数据:{}", item);
+                log.error("21多盘口赔率变化: 亚赔（让球盘）接口数据:{}", item);
                 if (item.length != 10) {
-                    log.error("21多盘口赔率: 亚赔（让球盘）数据格式不合法 接口数据:{}", item);
+                    log.error("21多盘口赔率变化: 亚赔（让球盘）数据格式不合法 接口数据:{}", item);
+                    continue;
+                }
+                
+                if (scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0])).getMatchtime().getTime()<System.currentTimeMillis()){
+                    log.error("21多盘口赔率变化: 亚赔（让球盘）此场比赛已经开始/结束 比赛ID:{}", item[0]);
                     continue;
                 }
                 //如果第七位等于1 是 单盘口 相当于标准盘  6 个参数代表不是走地我们入库
@@ -85,7 +90,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
             int inch = letGoalDetailMapper.insertSelective(xml);
             letgoalMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getModifytime());
             if (inch > 0) {
-                log.error("21多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+                log.error("21多盘口赔率变化: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
             }
         }
 
@@ -103,7 +108,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
             int inch = multiLetGoalDetailMapper.insertSelective(xml);
             multiLetgoalMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getAddtime());
             if (inch > 0) {
-                log.error("21多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库成功", item);
+                log.error("21多盘口赔率变化: 亚赔（让球盘）多盘口 接口数据:{} 入库成功", item);
             }
         }
     }

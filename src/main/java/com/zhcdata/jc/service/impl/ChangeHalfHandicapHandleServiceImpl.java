@@ -48,16 +48,20 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
         //比赛ID,公司ID,即时盘口,主队即时赔率,客队即时赔率,是否走地,盘口序号,变盘时间
         List<String> cah = rsp.getAh().getH();
         if (cah == null || cah.size() < 1) {
-            log.error("21多盘口赔率: 半场亚赔（让球盘）变化数据总条数:{}", " 没有可更新的数据");
+            log.error("21多盘口赔率变化: 半场亚赔（让球盘）变化数据总条数:{}", " 没有可更新的数据");
             return;
         }
-        log.error("21多盘口赔率: 半场亚赔（让球盘）变化数据总条数:{}", cah.size());
+        log.error("21多盘口赔率变化: 半场亚赔（让球盘）变化数据总条数:{}", cah.size());
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
-                log.error("21多盘口赔率: 半场亚赔（让球盘）接口数据:{}", cah.get(i));
+                log.error("21多盘口赔率变化: 半场亚赔（让球盘）接口数据:{}", cah.get(i));
                 if (item.length != 8) {
-                    log.error("21多盘口赔率: 半场亚赔（让球盘）数据格式不合法 接口数据:{}", cah.get(i));
+                    log.error("21多盘口赔率变化: 半场亚赔（让球盘）数据格式不合法 接口数据:{}", cah.get(i));
+                    continue;
+                }
+                if (scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0])).getMatchtime().getTime()<System.currentTimeMillis()){
+                    log.error("21多盘口赔率变化: 半场亚赔（让球盘）此比赛已经开始/结束，比赛ID:{}", cah.get(i));
                     continue;
                 }
                 //如果第七位等于1 是 单盘口 相当于标准盘  6 个参数代表不是走地我们入库
@@ -86,7 +90,7 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
             int inch = letGoalhalfDetailMapper.insertSelective(xml);
             letGoalhalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getModifytime());
             if (inch > 0) {
-                log.error("21多盘口赔率: 半场亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+                log.error("21多盘口赔率变化: 半场亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
             }
         }
     }
@@ -103,7 +107,7 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
             int inch = multiLetGoalhalfDetailMapper.insertSelective(xml);
             multiLetGoalhalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getAddtime());
             if (inch > 0) {
-                log.error("21多盘口赔率: 半场亚赔（让球盘）多盘口 接口数据:{} 入库成功", item);
+                log.error("21多盘口赔率变化: 半场亚赔（让球盘）多盘口 接口数据:{} 入库成功", item);
             }
         }
     }
