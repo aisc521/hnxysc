@@ -6,22 +6,31 @@ import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.MatchDelOrEditRsp;
 import com.zhcdata.jc.xml.rsp.MatchListRsp;
+import lombok.extern.slf4j.Slf4j;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
  * 获取24小时内的赛程删除，比赛时间修改记录
  */
-@Configuration
-@EnableScheduling
-public class MatchListDelOrEditJob {
+@SuppressWarnings("SpringJavaAutowiringInspection")
+//@Configuration
+//@EnableScheduling
+@Component
+@Slf4j
+public class MatchListDelOrEditJob implements Job {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -105,9 +114,8 @@ public class MatchListDelOrEditJob {
     @Resource
     EuropeoddstotalMapper europeoddstotalMapper;
 
-
-    @Scheduled(cron = "1 0/2 * * * ?")
-    public void execute() throws Exception {
+    @Override
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         LOGGER.info("比赛删除&修改时间记录定时任务启动");
         long s = System.currentTimeMillis();
         int update = 0;
@@ -121,7 +129,11 @@ public class MatchListDelOrEditJob {
                     continue;
                 Schedule schedule = new Schedule();
                 schedule.setScheduleid(Integer.parseInt(list.get(i).getID()));
-                schedule.setMatchtime(sdf.parse(BeanUtils.parseToFormat(list.get(i).getMatchtime())));
+                try {
+                    schedule.setMatchtime(sdf.parse(BeanUtils.parseToFormat(list.get(i).getMatchtime())));
+                } catch (ParseException e) {
+                    System.err.println(e.toString());
+                }
                 int i1 = scheduleMapper.updateByPrimaryKeySelective(schedule);
                 if (editCache.size() > 500)
                     editCache.clear();
