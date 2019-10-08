@@ -232,7 +232,10 @@
       ModifyTime = #{time,jdbcType=TIMESTAMP},
       Goal_Real = #{goal,jdbcType=REAL},
       UpOdds_Real = #{upodds,jdbcType=REAL},
-      DownOdds_Real = #{downodds,jdbcType=REAL}
+      DownOdds_Real = #{downodds,jdbcType=REAL},
+      goal = #{goal,jdbcType=REAL},
+      UpOdds = #{upodds,jdbcType=REAL},
+      DownOdds = #{downodds,jdbcType=REAL}
       where oddsid = #{oddsid} and ModifyTime &lt; #{time}
     </update>
 </mapper>

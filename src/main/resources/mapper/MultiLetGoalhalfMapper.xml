@@ -242,6 +242,9 @@
       UpOdds = #{upodds,jdbcType=REAL},
       DownOdds = #{downodds,jdbcType=REAL},
       ModifyTime = #{addtime,jdbcType=TIMESTAMP},
+      Goal = #{goal,jdbcType=REAL},
+      UpOdds = #{upodds,jdbcType=REAL},
+      DownOdds = #{downodds,jdbcType=REAL},
       Goal_Real = #{goal,jdbcType=REAL},
       UpOdds_Real = #{upodds,jdbcType=REAL},
       DownOdds_Real = #{downodds,jdbcType=REAL}
