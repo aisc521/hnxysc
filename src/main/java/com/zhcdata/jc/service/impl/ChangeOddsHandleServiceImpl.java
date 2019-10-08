@@ -49,7 +49,7 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
             try {
                 String[] item = cah.get(i).split(",");
                 log.error("21多盘口赔率变化: 欧赔（让球盘）接口数据:{}", item);
-                if (item.length != 8) {
+                if (item.length !=9) {
                     log.error("21多盘口赔率变化: 欧赔（让球盘）数据格式不合法 接口数据:{}", item);
                     continue;
                 }

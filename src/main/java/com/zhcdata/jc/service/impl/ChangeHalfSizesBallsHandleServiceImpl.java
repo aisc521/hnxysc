@@ -55,7 +55,7 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
             try {
                 String[] item = cah.get(i).split(",");
                 log.error("21多盘口赔率变化: 半场大小球 接口数据:{}", item);
-                if (item.length != 7) {
+                if (item.length != 8) {
                     log.error("21多盘口赔率变化: 半场大小球  数据格式不合法 接口数据:{}", item);
                     continue;
                 }

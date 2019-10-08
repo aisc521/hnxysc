@@ -135,7 +135,7 @@ public class MatchListDelOrEditJob {
 
                     //删除赔率表
                     List<Letgoal> letgoal = letgoalMapper.selectByMid(list.get(i).getID());
-                    letgoalMapper.deleteByMid(letgoal.get(i).getScheduleid());
+                    letgoalMapper.deleteByMid(Integer.parseInt(list.get(i).getID()));
                     for (Letgoal value : letgoal)
                         letGoalDetailMapper.deleteByOddsId(value.getOddsid());
 
