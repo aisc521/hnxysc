@@ -42,6 +42,7 @@ public class ManyHandicapOddsChangeNewJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         log.error("21.多盘口赔率：30秒内变化赔率接口开始");
+        long start = System.currentTimeMillis();
         ManyHandicapOddsChangeService array[] = {changeHandicapHandleServiceImpl,changeOddsHandleServiceImpl,changeSizesBallsHandleServiceImpl,changeHalfHandicapHandleServiceImpl,changeHalfSizesBallsHandleServiceImpl};
 
         String url = "http://interface.win007.com/zq/ch_odds_m.xml";
@@ -49,6 +50,6 @@ public class ManyHandicapOddsChangeNewJob implements Job {
         for(ManyHandicapOddsChangeService bean:array){
             bean.changeHandle(rsp);
         }
-        log.error("21.多盘口赔率：30秒内变化赔率接口结束");
+        log.error("21.多盘口赔率：30秒内变化赔率接口结束,耗时"+(System.currentTimeMillis()-start)+"ms");
     }
 }

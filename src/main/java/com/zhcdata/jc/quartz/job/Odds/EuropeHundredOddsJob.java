@@ -31,112 +31,99 @@ import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.tools.HttpUtils;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.EuropeHundredOddsRsp;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.H;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.json.XML;
+import org.quartz.Job;
+import org.quartz.JobDataMap;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.europe_odds_flag;
+import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.europe_odds_mc;
+
 //百家欧赔
+@SuppressWarnings("SpringJavaAutowiringInspection")
 //@Configuration
 //@EnableScheduling
-public class EuropeHundredOddsJob {
+@Component
+@Slf4j
+public class EuropeHundredOddsJob implements Job {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private static final SimpleDateFormat sdf_X = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
     @Resource
     private EuropeOddsMapper europeOddsMapper;
 
-    @Resource
-    private EuropeoddstotalMapper europeoddstotalMapper;
+    //@Resource
+    //private EuropeoddstotalMapper europeoddstotalMapper;
 
-    //@Scheduled(cron = "1 * * * * ?")
-    @Scheduled(fixedRate = 90000)
-    public void execute() throws Exception {
-        LOGGER.info("百欧赔率表解析开始");
-        long sat = System.currentTimeMillis();
-        int insert = 0;
-        int update = 0;
-        int jumped = 0;
-        int odds = 0;
-        int odds1 = 0;
-        String str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx?day=3", null);
-        JSONObject jsonObject = XML.toJSONObject(str);
-        String s = jsonObject.toString();
-        EuropeHundredOddsRsp obj = com.alibaba.fastjson.JSONObject.parseObject(s, EuropeHundredOddsRsp.class);
-
-        List<H> items = obj.getC().getH();
-        System.out.println("共有比赛场次：" + items.size());
-        for (int i = 0; i < items.size(); i++) {
-            odds1 = odds1 + items.get(i).getOdds().getO().size();
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        if (europe_odds_flag)
+            return;
+        try {
+            europe_odds_flag = true;
+            LOGGER.info("百欧赔率表解析开始");
+            runs();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            europe_odds_flag = false;
         }
-        System.out.println("共有赔率条数：" + odds1);
+    }
 
-
-        for (int i = 0; i < items.size(); i++) {
-            float avg_win = 0;
-            float avg_and = 0;
-            float avg_lose = 0;
-            short cpy_num = 0;
-            if (items.get(i).getOdds() != null) {
-                List<String> o = items.get(i).getOdds().getO();
-                if (BeanUtils.parseTime(items.get(i).getTime()).getTime() < System.currentTimeMillis())
-                    continue;//如果变化时间在比赛开始时间之后，那就跳过这条变化
-
-                for (int j = 0; j < o.size(); j++) {
-                    odds++;
-                    String[] mo = o.get(j).split(",");
-                    //博彩公司ID,博彩公司英文名,初盘主胜,初盘平局,初盘客胜,主胜,平局,客胜,变化时间,博彩公司简体名
-                    EuropeOdds dbl = europeOddsMapper.selectByMidAndCpyAnd(items.get(i).getId(), mo[0]);
-                    EuropeOdds xml = BeanUtils.parseEuropeOdds(items.get(i).getId(), mo);
-                    avg_win+=xml.getRealhomewin();
-                    avg_and+=xml.getRealstandoff();
-                    avg_lose+=xml.getRealguestwin();
-                    cpy_num++;
-                    if (dbl == null) {
-                        //没有 需要插入
-                        if (europeOddsMapper.insertSelective(xml) > 0) insert++;
-                    } else {
-                        //对比赔率是否相同
-                        if (dbl.oddsEquals(xml))
-                            jumped++;
-                        else {
-                            dbl.setRealhomewin(xml.getRealhomewin());
-                            dbl.setRealstandoff(xml.getRealstandoff());
-                            dbl.setRealguestwin(xml.getRealguestwin());
-                            dbl.setModifytime(xml.getModifytime());
-                            if (europeOddsMapper.updateByPrimaryKeySelective(dbl) > 0)
-                                update++;
-                        }
+    public void runs() {
+        List<String> mc = europe_odds_mc;//存的是 比赛id：公司id
+        String str = null;
+        try {
+            //str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx?day=3", null);
+            str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx", null);
+        } catch (Exception e) {
+            log.error("百欧赔率表接口获取失败" + e.toString());
+        }
+        EuropeHundredOddsRsp obj = com.alibaba.fastjson.JSONObject.parseObject(XML.toJSONObject(str).toString(), EuropeHundredOddsRsp.class);
+        List<H> items = obj.getC().getH();
+        for (H item : items) {
+            try {
+                if(sdf_X.parse(item.getTime()).getTime()<System.currentTimeMillis())
+                    continue;
+                if (item.getOdds() == null || item.getOdds().getO() == null)
+                    continue;
+            } catch (ParseException e) {
+                log.error("百欧赔率表接口,比赛时间格式化失败，跳过比赛"+item.getId());
+                continue;
+                //e.printStackTrace();
+            }
+            List<String> os = item.getOdds().getO();
+            for (String o : os) {
+                if (!mc.contains(item.getId() + ":" + o.split(",")[0])) {
+                    //log.info("mc list中包含比赛:" + item.getId() + ",公司id:" + o.split(",")[0]);
+                //} else {//首次添加，检查europe有没有，往europe中添加数据
+                    if (europe_odds_mc.size() > 100000)//如果mc里面超过15w条，移除1条
+                        europe_odds_mc.remove(0);
+                    europe_odds_mc.add(item.getId() + ":" + o.split(",")[0]);//新增到mc
+                    EuropeOdds db = europeOddsMapper.selectByMidAndCpyAnd(item.getId(), o.split(",")[0]);
+                    if (db == null) {//新增
+                        db = BeanUtils.parseEuropeOdds(item.getId(), o.split(","));//parse
+                        europeOddsMapper.insertSelective(db);//没有新增到数据库
                     }
                 }
-
-                Europeoddstotal total = new Europeoddstotal();
-                Europeoddstotal db = europeoddstotalMapper.selectByPrimaryKey(Integer.parseInt(items.get(i).getId()));
-                if (db==null){
-                    total.setScheduleid(Integer.parseInt(items.get(i).getId()));
-                    total.setFirsthomewin(avg_win/cpy_num);
-                    total.setFirststandoff(avg_and / cpy_num);
-                    total.setFirstguestwin(avg_lose / cpy_num);
-                    total.setRealhomewin(avg_win/cpy_num);
-                    total.setRealstandoff(avg_and / cpy_num);
-                    total.setRealguestwin(avg_lose / cpy_num);
-                    total.setNum(cpy_num);
-                    europeoddstotalMapper.insertSelective(total);
-                }else {
-                    db.setRealhomewin(avg_win/cpy_num);
-                    db.setRealstandoff(avg_and / cpy_num);
-                    db.setRealguestwin(avg_lose / cpy_num);
-                    db.setNum(cpy_num);
-                    europeoddstotalMapper.updateByPrimaryKeySelective(db);
-                }
-
-            }else System.out.println("1111111111111111111111");
+            }
         }
-        LOGGER.info("百欧赔率表,总:"+odds+"新增:" + insert + ",跳过:" + jumped + ",更新:" + update + ",耗时:" + (System.currentTimeMillis() - sat));
-        LOGGER.info("-------------");
+        System.out.println("共有比赛场次：" + items.size());
     }
 }
