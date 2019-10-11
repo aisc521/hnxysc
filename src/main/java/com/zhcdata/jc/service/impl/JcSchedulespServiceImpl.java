@@ -1,7 +1,6 @@
 package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.JcSchedulespMapper;
-import com.zhcdata.db.model.JcMatchLottery;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.JcSchedulesp;
 import com.zhcdata.db.model.Schedule;
@@ -18,6 +17,7 @@ import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description TODO
@@ -300,5 +300,12 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
                     ProtocolCodeMsg.INSERT_FAILE.getMsg());
         }
         return jcSchedulesp.getSpid();
+    }
+
+    @Override
+    public List<Map<String, String>> queryJczqListReuslt(String date) throws BaseException {
+        String startDate = date+" 00:00:01";
+        String endvDate = date+" 23:59:59";
+        return jcSchedulespMapper.queryJczqListReuslt(startDate,endvDate);
     }
 }
