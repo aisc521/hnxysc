@@ -21,11 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description < 关注列表(10200228)>
+ * @Description < 关注比赛列表(10200228)>
  * @Author cuishuai
  * @Date 2019/9/19 17:51
  */
-@Service("10200228")
+@Service("20200230")
 public class AttentionListProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource

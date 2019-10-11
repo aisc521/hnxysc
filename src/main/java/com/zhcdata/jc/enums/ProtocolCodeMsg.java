@@ -90,7 +90,17 @@ public enum ProtocolCodeMsg {
     SEARCH_MATCH_MATCH_TIME("02173", "时间参数不合法"),
     NO_GANE_TYPE("02174", "无对应的比赛类型信息"),
     LINEUP_MATCHID("020201", "非法的比赛ID"),
+    PAY_TYPE("090402","支付方式不能为空"),
+    USER_BUY_FAIL("101018", "购买失败，稍后重试!"),
+    PLAN_IS_NULL("101019", "无对应的方案信息!"),
+    USER_IS_NULL("101020", "无对应的用户信息!"),
+    MONEY_IS_NULL("101020", "金额不合法!"),
+    PLAN_IS_END("101021", "方案已经结束!"),
+    ORDER_IS_NULL("101022", "无对应订单信息!"),
+    IS_BUY_PLAN("101022", "此用户此方案已经购买，不能重复购买!"),
+    STATUS_IS_NOT_EXIT("101023", "状态信息不合法!"),
     SF14_startIssue("090401","开始期次不能为空");
+
     ;
     private String code;
 

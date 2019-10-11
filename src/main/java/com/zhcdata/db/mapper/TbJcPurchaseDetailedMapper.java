@@ -9,4 +9,10 @@ import java.util.List;
 
 public interface TbJcPurchaseDetailedMapper extends Mapper<TbJcPurchaseDetailed> {
     List<PurchasedPlanDto> queryPurchasedPlanDtoByUserId(@Param("userId") long userId);
+
+    TbJcPurchaseDetailed queryPurchasedPlanByOrderId(@Param("orderId")String orderId);
+
+    List<TbJcPurchaseDetailed> queryOrder();
+
+    TbJcPurchaseDetailed queryTbJcPurchaseDetailedByUserAndPlanId(@Param("userId")Long userId, @Param("schemeId")Long schemeId);
 }

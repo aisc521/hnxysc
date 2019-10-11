@@ -25,7 +25,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/20 14:59
  */
-@Service("10200219")
+@Service("20200219")
 public class QueryHotPlanProtocl implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource

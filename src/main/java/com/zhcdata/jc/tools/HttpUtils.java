@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -379,4 +380,103 @@ public class HttpUtils {
         }
         return "";
     }
+
+
+
+    public static String PayHttpPost(String url, Map<String, Object> paramsMap, String transactionType, String charset, String src, String md5) throws Exception {
+
+        byte[] resultBytes = null;
+        URLConnection connection = null;
+        OutputStream out = null;
+        InputStream input = null;
+        ByteArrayOutputStream output = null;
+
+        String formParams = "";
+        StringBuilder sb = new StringBuilder();
+        String digest = "";
+        if (!Strings.isNullOrEmpty(md5)) {
+            digest = md5;
+        }
+        String timeStamp = DateFormatUtil.formatDate("yyyyMMddHHmmssSSS", new Date());
+        sb.append("transMessage={\"message\":{\"head\":{\"transactionType\":\"" + transactionType + "\",\"src\":\"" + src + "\",\"messageID\":\"9999\",\"messengerID\":\"9999\",\"timeStamp\":\"" + timeStamp + "\",\"digest\":\"" + digest + "\",\"sysType\": \"A\"},\"body\":{");
+        for (String key : paramsMap.keySet()) {
+            sb.append("\"" + URLEncoder.encode(key, charset) + "\":" + "\"" + URLEncoder.encode(paramsMap.get(key).toString(), charset) + "\"");
+            sb.append(",");
+        }
+        // 去掉最后的&
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append("}}}");
+        formParams = sb.toString();
+        long start = System.currentTimeMillis();
+        LOGGER.error("支付系统 请求=" + formParams);
+        try {
+            // 创建实例
+            connection = new URL(url).openConnection();
+
+            connection.setConnectTimeout(CONNECT_TIMEOUT);
+            connection.setReadTimeout(READ_TIMEOUT);
+
+            connection.setRequestProperty("User-Agent",
+                    "Mozilla/5.0 (Windows NT 6.1; rv:36.0) Gecko/20100101 Firefox/36.0");
+            connection.setRequestProperty("Accept", "*/*");
+            connection.setRequestProperty("Connection", "keep-alive");
+            connection.setRequestProperty("Content-Type",
+                    "application/x-www-form-urlencoded; charset=" + charset.toUpperCase());
+
+            // 发送POST请求必须设置如下两行
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+
+            // 建立实际的连接
+            connection.connect();
+
+            // 获取URLConnection对象对应的输出流
+            out = connection.getOutputStream();
+            // 发送请求参数
+            out.write(formParams.getBytes());
+            // flush输出流的缓冲
+            out.flush();
+
+            // 获取所有响应头字段
+            Map<String, List<String>> map = connection.getHeaderFields();
+            // 遍历所有的响应头字段
+            for (String key : map.keySet()) {
+                LOGGER.debug(key + ": " + map.get(key));
+            }
+
+            input = connection.getInputStream();
+            output = new ByteArrayOutputStream();
+
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesCount = 0;
+            while ((bytesCount = input.read(buffer, 0, buffer.length)) > 0) {
+                output.write(buffer, 0, bytesCount);
+            }
+
+            resultBytes = output.toByteArray();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("HTTP POST 执行失败");
+        } finally {
+            // 关闭连接
+            if (out != null) {
+                out.close();
+            }
+            if (output != null) {
+                output.close();
+            }
+            if (input != null) {
+                input.close();
+            }
+        }
+        String returnStr = new String(resultBytes, "utf-8");
+        long end = System.currentTimeMillis();
+        LOGGER.error("支付系统 响应=" + returnStr);
+        LOGGER.error("支付系统 交易时间:" + (end - start));
+
+        return returnStr;
+
+    }
+
 }

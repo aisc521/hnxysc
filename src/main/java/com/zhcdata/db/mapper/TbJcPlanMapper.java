@@ -28,4 +28,6 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     List<PlanResult1> queryPlanId(@Param("planId") String planId);
 
     List<PlanResult1> queryPlanByExpertId1(@Param("id") long expertId);
+
+    TbJcPlan queryPlanByPlanId(@Param("id")Long schemeId);
 }

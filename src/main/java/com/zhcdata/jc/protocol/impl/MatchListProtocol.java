@@ -22,11 +22,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description TODO
+ * @Description 比赛列表
  * @Author cuishuai
  * @Date 2019/9/20 10:29
  */
-@Service("10200201")
+@Service("20200201")
 public class MatchListProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource

@@ -6,6 +6,9 @@ import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.JcFootBallOddsRsp;
 
+import java.util.List;
+import java.util.Map;
+
 public interface JcSchedulespService {
     /**
      * 根据赛事id查询
@@ -28,4 +31,8 @@ public interface JcSchedulespService {
      * @param jcFootBallOddsRsp
      */
     Integer insertJcSchedulesp(JcSchedule jcSchedule, JcFootBallOddsRsp jcFootBallOddsRsp,Schedule schedule) throws BaseException;
+
+
+    //按时间查询比赛完成的数据
+    List<Map<String,String>> queryJczqListReuslt(String date) throws BaseException;;
 }

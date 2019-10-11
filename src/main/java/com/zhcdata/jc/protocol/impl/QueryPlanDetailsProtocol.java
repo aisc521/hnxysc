@@ -25,7 +25,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/20 15:03
  */
-@Service("10200220")
+@Service("20200220")
 public class QueryPlanDetailsProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 

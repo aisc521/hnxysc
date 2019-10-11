@@ -15,7 +15,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/24 14:27
  */
-@Service("10200225")
+@Service("20200225")
 public class QueryZcDrawNoProtocol implements BaseProtocol {
     @Resource
     private RedisUtils redisUtils;

@@ -25,7 +25,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/20 15:12
  */
-@Service("10200222")
+@Service("20200222")
 public class SearchMatchCollectProtocol implements BaseProtocol {
     private static final Logger LOGGER = LoggerFactory.getLogger(SearchMatchCollectProtocol.class);
 
