@@ -83,4 +83,11 @@
   <select id="queryJcSchedulespByScId" resultType="com.zhcdata.db.model.JcSchedulesp">
     select * from jc_schedulesp where ID=#{bet007Id}
   </select>
+  <select id="queryJczqListReuslt" resultType="java.util.Map">
+    select s.sclass matchName,s.matchId issueNum,s.HomeTeam hostname,s.GuestTeam  guestName,s. matchTime,
+    CAST(s.HomeScore AS CHAR) HomeScore  ,CAST(s.GuestScore AS CHAR) GuestScore ,CAST(s.HomeHalfScore AS CHAR) HomeHalfScore,CAST(s.GuestHalfScore AS CHAR) GuestHalfScore,CAST(s.PolyGoal AS CHAR) PolyGoal ,p.*
+    from jc_schedule s LEFT JOIN jc_schedulesp p on s.id = p.id where s.MatchState = -1
+    and  s.MatchTime >= str_to_date('2019-09-10 00:00:01', '%Y-%m-%d %H:%i:%s')
+    and s.MatchTime <![CDATA[ <= ]]>  str_to_date('2019-10-10 23:59:59', '%Y-%m-%d %H:%i:%s')
+  </select>
 </mapper>

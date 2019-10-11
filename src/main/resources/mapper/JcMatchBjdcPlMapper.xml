@@ -23,17 +23,18 @@
     select * from jc_match_bjdc_pl where ISSUE_NUM=#{issueNum} and NO_ID = #{noId}
   </select>
   <select id="queryBjdcListReuslt" resultType="java.util.Map">
-    select l.ID_BET007,l.ISSUE_NUM,a.*,l.lottery,l.LOTTERY_NAME,d.MATCH_RESULT from (
-    SELECT m.ScheduleID,m.HomeTeam hostname,m.GuestTeam guestName,m.MatchTime matchTime,s.Name_JS matchName,m.MatchState
-    ,m.HomeScore,m.GuestScore,m.HomeHalfScore,m.GuestHalfScore
+    select t.Name_J hostname,tt.Name_J guestName,aa.* from (
+    select l.ID_BET007,l.ISSUE_NUM,a.*,l.lottery,l.LOTTERY_NAME,d.MATCH_RESULT,IFNULL(d.conced_num,"0") concedNum from (
+    SELECT m.ScheduleID,M.HomeTeam hostname,m.GuestTeam guestName,m.MatchTime matchTime,s.Name_JS matchName,m.MatchState
+    ,m.HomeScore,m.GuestScore,m.HomeHalfScore,m.GuestHalfScore,m.HomeTeamID,m.GuestTeamID
     from schedule m LEFT JOIN Sclass s on s.sclassID = m.SclassID
-    where
-    m.MatchTime >= str_to_date('2019-09-17 00:00:01', '%Y-%m-%d %H:%i:%s')
-    and
-    m.MatchTime <![CDATA[ <= ]]>str_to_date('2019-09-17 23:59:59', '%Y-%m-%d %H:%i:%s')
-     and MatchState =-1
-    ) a,jc_match_lottery l,JC_MATCH_BJDCRESLUT d where a.ScheduleID = l.ID_BET007 and a.ScheduleID = d.ID_BET007
-    and l.LOTTERY = 'JC_BD'
+    where 1=1
+    and  m.MatchTime >= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
+    and m.MatchTime <![CDATA[ <= ]]> str_to_date(#{endvDate}, '%Y-%m-%d %H:%i:%s')
+    and MatchState =-1
+    ) a,jc_match_lottery l,JC_MATCH_BJDCRESLUT d where a.ScheduleID = l.ID_BET007  and a.ScheduleID = d.ID_BET007
+    and l.LOTTERY = 'BJDC'
     order by l.ISSUE_NUM desc ,matchTime
+    ) aa LEFT JOIN  team t on aa.HomeTeamID = t.teamid LEFT JOIN team tt on  aa.GuestTeamID = tt.teamid
   </select>
 </mapper>

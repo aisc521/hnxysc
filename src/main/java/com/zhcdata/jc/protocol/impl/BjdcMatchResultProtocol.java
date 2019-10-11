@@ -38,10 +38,10 @@ public class BjdcMatchResultProtocol implements BaseProtocol {
   public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
     Map<String, Object> map = new HashMap<String, Object>(2);
 
-    if (!commonUtils.validParamExistOrNoNum(map, paramMap, "date", ProtocolCodeMsg.BDJC_DAY)) {
+    if (!commonUtils.validParamExist(map, paramMap, "date", ProtocolCodeMsg.BDJC_DAY)) {
         return map;
     }
-    if (!commonUtils.validParamExistOrNoNum(map, paramMap, "flag", ProtocolCodeMsg.BDJC_FLAG)) {
+    if (!commonUtils.validParamExist(map, paramMap, "flag", ProtocolCodeMsg.BDJC_FLAG)) {
       return map;
     }
     return null;
@@ -53,10 +53,10 @@ public class BjdcMatchResultProtocol implements BaseProtocol {
 
     String pageNo = String.valueOf(paramMap.get("pageNo"));
     String pageAmount = String.valueOf(paramMap.get("pageAmount"));
-    if(StringUtils.isBlank(pageNo)){
+    if(StringUtils.isBlank(pageNo)||"null".equals(pageNo)){
       pageNo = "1";
     }
-    if(StringUtils.isBlank(pageAmount)){
+    if(StringUtils.isBlank(pageAmount)||"null".equals(pageAmount)){
       pageAmount = "20";
     }
     int pageAmountInt = Integer.parseInt(pageAmount);
@@ -68,13 +68,12 @@ public class BjdcMatchResultProtocol implements BaseProtocol {
     PageInfo<Map<String, String>> pageInfo =  jcMatchBjdcPlService.queryBjdcListReuslt(pageNoInt, pageAmountInt,date);
     //需要对查询结果编译处理或者sql处理
     List<Map<String,String>> list = pageInfo.getList();
-
     Map<String, Object>  returnMap = new HashMap<String,Object>();
     returnMap.put("pageTotal", pageInfo.getPages());
     returnMap.put("openNum", pageInfo.getTotal());
     returnMap.put("pageNo", pageInfo.getPageNum());
     returnMap.put("content",pageInfo.getList());
 
-    return null;
+    return returnMap;
   }
 }
