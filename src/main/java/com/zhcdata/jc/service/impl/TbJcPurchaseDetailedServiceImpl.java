@@ -174,10 +174,10 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(tbJcPlan.getPrice()));
         Example example = new Example(TbJcPurchaseDetailed.class);
         example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
-        int j = tbJcPurchaseDetailedMapper.updateByExampleSelective(tbJcPurchaseDetailed,example);
+        int j = tbJcPurchaseDetailedMapper.insertSelective(tbJcPurchaseDetailed);
         if(j <= 0){
-            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
-                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+            throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
+                    ProtocolCodeMsg.INSERT_FAILE.getMsg());
         }
     }
 
