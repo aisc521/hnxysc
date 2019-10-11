@@ -26,7 +26,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/20 10:29
  */
-@Service("10200201")
+@Service("20200201")
 public class MatchListProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource

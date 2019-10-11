@@ -24,7 +24,7 @@ import java.util.*;
  * @Author cuishuai
  * @Date 2019/9/19 14:32
  */
-@Service("10200202")
+@Service("20200202")
 public class UserCollectProtocol implements BaseProtocol {
     @Resource
     private TbPgUCollectService tbPgUCollectService;

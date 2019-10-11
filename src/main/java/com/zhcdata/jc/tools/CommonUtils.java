@@ -499,4 +499,32 @@ public class CommonUtils {
         return startDate + "," + endDate;
     }
 
+
+    /**
+     * 与支付系统的tradeType转换
+     */
+    public String getPayTradType(int payType,String sysType) {
+        String tradType = "";
+        switch (payType) {
+            case 0:
+                tradType = "PAY_"+sysType+"_KK_XJ";
+                break; //竞彩余额支付
+            case 3:
+                tradType = "PAY_"+sysType+"_KK_XJ";
+                break; //红包支付
+            case 20:
+                tradType = "DEPOPAY_"+sysType+"_SQ_WXNATIVE";
+                break; //微信Native
+            case 21:
+                tradType = "DEPOPAY_"+sysType+"_SQ_ZFBAP";
+                break; //好店啊支付宝支付
+            case 22:
+                tradType = "DEPOPAY_"+sysType+"_SQ_WXH5";
+                break; //微信Native
+            default:
+                break;
+        }
+        return tradType;
+    }
+
 }

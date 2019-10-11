@@ -15,7 +15,7 @@ public class TbJcPurchaseDetailed implements Serializable {
      * 支付id
      */
     @Column(name = "pay_id")
-    private Long payId;
+    private String payId;
 
     /**
      * 用户id
@@ -204,7 +204,7 @@ public class TbJcPurchaseDetailed implements Serializable {
      *
      * @return pay_id - 支付id
      */
-    public Long getPayId() {
+    public String getPayId() {
         return payId;
     }
 
@@ -213,7 +213,7 @@ public class TbJcPurchaseDetailed implements Serializable {
      *
      * @param payId 支付id
      */
-    public void setPayId(Long payId) {
+    public void setPayId(String payId) {
         this.payId = payId;
     }
 

@@ -28,7 +28,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/24 15:04
  */
-//@Service("10200206")
+@Service("20200206")
 public class ScoreLiveCollectProtocol implements BaseProtocol{
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());

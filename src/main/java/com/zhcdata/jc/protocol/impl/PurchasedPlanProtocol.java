@@ -21,7 +21,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/20 16:31
  */
-@Service("10020153")
+@Service("20020153")
 public class PurchasedPlanProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource

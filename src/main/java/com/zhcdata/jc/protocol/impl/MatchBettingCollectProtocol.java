@@ -31,7 +31,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/20 15:19
  */
-@Service("10200223")
+@Service("20200223")
 public class MatchBettingCollectProtocol implements BaseProtocol {
     //log
     private static final Logger LOGGER = LoggerFactory.getLogger(MatchBettingCollectProtocol.class);

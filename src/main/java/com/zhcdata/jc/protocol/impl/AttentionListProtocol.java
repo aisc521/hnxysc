@@ -25,7 +25,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/19 17:51
  */
-@Service("10200228")
+@Service("20200228")
 public class AttentionListProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource

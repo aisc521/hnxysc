@@ -24,7 +24,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/19 15:44
  */
-@Service("10200210")
+@Service("20200210")
 public class TextLivingProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 

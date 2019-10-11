@@ -21,7 +21,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/20 15:32
  */
-@Service("10200224")
+@Service("20200224")
 public class QueryExpertListProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 

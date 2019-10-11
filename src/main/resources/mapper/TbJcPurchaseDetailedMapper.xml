@@ -6,7 +6,7 @@
       WARNING - @mbg.generated
     -->
     <result column="id" property="id" jdbcType="BIGINT" />
-    <result column="pay_id" property="payId" jdbcType="BIGINT" />
+    <result column="pay_id" property="payId" jdbcType="VARCHAR" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="scheme_id" property="schemeId" jdbcType="BIGINT" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
@@ -64,5 +64,23 @@
     LEFT JOIN tb_jc_match match1 ON  pd.plan_id = match.plan_id
     where pd.user_id = #{userId}
   </select>
+
+
+    <select id="queryPurchasedPlanByOrderId" resultType="com.zhcdata.db.model.TbJcPurchaseDetailed">
+        SELECT
+        *
+        from tb_jc_purchase_detailed pd
+
+        where pd.order_id = #{orderId}
+    </select>
+
+
+    <select id="queryOrder" resultType="com.zhcdata.db.model.TbJcPurchaseDetailed">
+        SELECT
+        *
+        from tb_jc_purchase_detailed pd
+
+        where pd.pay_status in ('0','1') and pd.pay_type in('20','21','22')
+    </select>
 
 </mapper>

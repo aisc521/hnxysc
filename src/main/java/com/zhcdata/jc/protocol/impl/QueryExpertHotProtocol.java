@@ -19,7 +19,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/9/20 14:01
  */
-@Service("10200216")
+@Service("20200216")
 public class QueryExpertHotProtocol implements BaseProtocol {
     @Resource
     private RedisUtils redisUtils;
