@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.multi_ou;
+import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.multi_yp;
+
 /**
  * CopyRight (c)1999-2019 : zhcw.com
  * Project : jc-new-server
@@ -39,7 +42,7 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
         synchronized (this) {
             if (items.length > 0) {
                 for (String item : items) {
-                    if (StringUtils.isNotEmpty(item) && item.split(",").length == 11 && item.split(",")[8].equals("1"))
+                    if (StringUtils.isNotEmpty(item) /*&& item.split(",").length == 11 */&& item.split(",")[8].equals("1"))
                         singleHandicap(item.split(","));
                 }
             }
@@ -51,6 +54,9 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
     public void singleHandicap(String[] item) {
         //当前转化为对象
         Standard xml = BeanUtils.parseStandard(item);
+        String flag = xml.getScheduleid() + ":" + xml.getCompanyid() + ":" + item[1];
+        if (multi_ou.contains(flag))
+            return;
         //查询比赛信息
         Schedule sc = scheduleMapper.selectByPrimaryKey(xml.getScheduleid());
         //查询最新一条数据
@@ -58,20 +64,29 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
         try {
             if (db == null){
                 //数据库没有 要插入
-                if (standardMapper.insertSelective(xml)>0)
-                    log.info("20多盘口赔率: 欧赔（胜平负） 接口数据:{} 入库成功", item);
+                if (standardMapper.insertSelective(xml)>0) {
+                    //log.info("20多盘口赔率: 欧赔（胜平负） 接口数据:{} 入库成功", item);
+                }
             } else if (!db.same(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
                 if (sc==null || sc.getMatchtime().getTime()>xml.getModifytime().getTime()) {
                     //入数据库
                     xml.setOddsid(db.getOddsid());
                     if (standardMapper.updateByPrimaryKeySelective(xml) > 0) {
-                        log.info("20多盘口赔率: 欧赔（胜平负） 接口数据:{} 更新成功", item);
+                        //multi_ou_add(flag);
+                        //log.info("20多盘口赔率: 欧赔（胜平负） 接口数据:{} 更新成功", item);
                     }
                 }
             }
+            multi_ou_add(flag);
         }catch (Exception e){
             e.printStackTrace();
         }
 
+    }
+
+    private void multi_ou_add(String str) {
+        if (multi_ou.size() > 30000)
+            multi_ou.remove(0);
+        multi_ou.add(str);
     }
 }

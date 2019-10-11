@@ -6,13 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.*;
 
 /**
  * 20.多盘口赔率：即时赔率接口
@@ -45,7 +44,13 @@ public class MultHandicapOddsNewJob implements Job {
     MultHandicapOddsService multHalfSizesBallsHandleServiceImpl;
 
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        System.err.println("亚盘list条目："+multi_yp.size());
+        System.err.println("欧赔list条目："+multi_ou.size());
+        System.err.println("大小list条目："+multi_dx.size());
+        System.err.println("半场亚盘list条目："+multi_hyp.size());
+        System.err.println("半场大小list条目："+multi_hdx.size());
         log.info("多盘即时赔率解析开始");
+
         String str = null;
         try {
             str = HttpUtils.httpGet("http://interface.win007.com/zq/Odds_Mult.aspx", null);

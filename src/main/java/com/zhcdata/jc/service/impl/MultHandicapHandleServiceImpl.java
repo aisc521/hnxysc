@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.multi_yp;
+
 /**
  * CopyRight (c)1999-2019 : zhcw.com
  * Project : jc-new-server
@@ -44,15 +46,16 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
             if (items.length > 0) {
 
                 for (int i = 0; i < items.length; i++) {
-                    if (StringUtils.isNotEmpty(items[i]) && items[i].split(",").length == 14 && items[i].split(",")[10].equals("1"))
-                        singleHandicap(items[i],"共"+items.length+",当前"+i);
-                    else if (StringUtils.isNotEmpty(items[i]) && items[i].split(",").length == 14)
-                        manyHandicap(items[i],"共"+items.length+",当前"+i);
+                    if (StringUtils.isNotEmpty(items[i]) /*&& items[i].split(",").length == 14*/ && items[i].split(",")[10].equals("1"))
+                        singleHandicap(items[i], "共" + items.length + ",当前" + i);
+                    else if (StringUtils.isNotEmpty(items[i]) /*&& items[i].split(",").length == 14*/)
+                        manyHandicap(items[i], "共" + items.length + ",当前" + i);
                     else {
                         boolean notEmpty = StringUtils.isNotEmpty(items[i]);
                         boolean b = items[i].split(",").length == 14;
                         boolean b1 = items[i].split(",")[10].equals("1");
-                        System.out.println(notEmpty + " " + b + " " + b1);
+                        System.out.println("------------" + notEmpty + " " + b + " " + b1);
+                        System.err.println(items[i]);
                     }
                 }
             }
@@ -62,28 +65,34 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
 
 
     //单盘口操作
-    public void singleHandicap(String item,String msg) {
+    public void singleHandicap(String item, String msg) {
         String[] info = item.split(",");
-        Schedule sc = scheduleMapper.selectByPrimaryKey(Integer.parseInt(info[0]));
         //当前转化为对象
         Letgoal xml = BeanUtils.parseLetgoal(item);
+        String flag = xml.getScheduleid() + ":" + xml.getCompanyid() + ":" + item.split(",")[10];
+        if (multi_yp.contains(flag))
+            //如果有此 比赛id:公司id:盘口id，则return，更新让变化表来，如果没有，添加
+            return;
+        Schedule sc = scheduleMapper.selectByPrimaryKey(Integer.parseInt(info[0]));
         //查询最新一条数据
         Letgoal db = letgoalMapper.selectByMatchIdAndCompany(info[0], info[1]);
         if (db == null) {
             try {
-                if (letgoalMapper.insertSelective(xml) > 0)
-                    log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+                if (letgoalMapper.insertSelective(xml) > 0) {
+                    //log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+                    multi_yp_add(flag);
+                }
             } catch (Exception e) {
                 log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库异常", item);
             }
-
         } else if (!db.nowOddsSame(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
             try {
                 if ((sc == null) || (sc.getMatchtime().getTime() > xml.getModifytime().getTime())) {
                     //入数据库
                     xml.setOddsid(db.getOddsid());
                     if (letgoalMapper.updateByPrimaryKeySelective(xml) > 0) {
-                        log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新成功"+msg, item);
+                        //log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新成功"+msg, item);
+                        multi_yp_add(flag);
                     }
                 }
             } catch (Exception e) {
@@ -94,17 +103,22 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
 
 
     //多盘口操作
-    public void manyHandicap(String item,String msg) {
+    public void manyHandicap(String item, String msg) {
         String[] info = item.split(",");
+        MultiLetgoal xml = BeanUtils.parseMultiLetgoall(item);
+        String flag = xml.getScheduleid() + ":" + xml.getCompanyid() + ":" + item.split(",")[10];
+        if (multi_yp.contains(flag))
+            return;
         Schedule sc = scheduleMapper.selectByPrimaryKey(Integer.parseInt(info[0]));
         //当前转化为对象
-        MultiLetgoal xml = BeanUtils.parseMultiLetgoall(item);
         //查询最新一条数据
         MultiLetgoal db = multiLetgoalMapper.selectByMatchIdAndCompanyAndHandicapNum(info[0], info[1], Short.parseShort(info[10]));
         if (db == null) {
             try {
-                if (multiLetgoalMapper.insertSelective(xml) > 0)
-                    log.info("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库成功"+msg, item);
+                if (multiLetgoalMapper.insertSelective(xml) > 0) {
+                    multi_yp_add(flag);
+                    //log.info("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库成功"+msg, item);
+                }
             } catch (Exception e) {
                 log.error("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库异常", item);
             }
@@ -115,12 +129,19 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                 xml.setOddsid(db.getOddsid());
                 try {
                     if (multiLetgoalMapper.updateByPrimaryKeySelective(xml) > 0) {
-                        log.info("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 更新成功", item);
+                        multi_yp_add(flag);
+                        //log.info("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 更新成功", item);
                     }
                 } catch (Exception e) {
                     log.error("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 更新异常", item);
                 }
             }
         }
+    }
+
+    private void multi_yp_add(String str) {
+        if (multi_yp.size() > 30000)
+            multi_yp.remove(0);
+        multi_yp.add(str);
     }
 }

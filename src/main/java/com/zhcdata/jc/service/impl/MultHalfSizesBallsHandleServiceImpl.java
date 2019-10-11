@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.multi_hdx;
+import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.multi_hyp;
+
 /**
  * CopyRight (c)1999-2019 : zhcw.com
  * Project : jc-new-server
@@ -47,9 +50,9 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
         synchronized (this) {
             if (items.length > 0) {
                 for (String item : items) {
-                    if (StringUtils.isNotEmpty(item) && item.split(",").length == 10 && item.split(",")[8].equals("1"))
+                    if (StringUtils.isNotEmpty(item) /*&& item.split(",").length == 10 */&& item.split(",")[8].equals("1"))
                         singleHandicap(item);
-                    else if (StringUtils.isNotEmpty(item) && item.split(",").length == 10)
+                    else if (StringUtils.isNotEmpty(item) /*&& item.split(",").length == 10*/)
                         manyHandicap(item);
                 }
             }
@@ -62,6 +65,9 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
         String[] info = item.split(",");
         //当前转化为对象
         TotalScorehalf xml = BeanUtils.parseTotalScorehalf(item);
+        String flag = xml.getScheduleid()+":"+xml.getCompanyid()+":"+item.split(",")[8];
+        if (multi_hdx.contains(flag))
+            return;
         //查询比赛信息
         Schedule sc = scheduleMapper.selectByPrimaryKey(xml.getScheduleid());
         //查询最新一条数据
@@ -92,22 +98,34 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
         String[] info = item.split(",");
         //当前转化为对象
         MultiTotalScorehalf xml = BeanUtils.parseMultiTotalScorehalf(item);
+        String flag = xml.getScheduleid()+":"+xml.getCompanyid()+":"+item.split(",")[8];
+        if (multi_hdx.contains(flag))
+            return;
         //查询比赛信息
         Schedule sc = scheduleMapper.selectByPrimaryKey(xml.getScheduleid());
         //查询最新一条数据
         MultiTotalScorehalf db = multiTotalScorehalfMapper.selectByMidAndCpyAndNum(info[0], info[1],info[8]);
         if (db == null){
-            if (multiTotalScorehalfMapper.insertSelective(xml)>0)
-                log.info("20多盘口赔率: 即时多盘半场大小球 接口数据:{} 入库成功", item);
+            if (multiTotalScorehalfMapper.insertSelective(xml)>0){
+                multi_hdx_add(flag);
+                //log.info("20多盘口赔率: 即时多盘半场大小球 接口数据:{} 入库成功", item);
+            }
         }else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
             if (sc==null || sc.getMatchtime().getTime()>xml.getModifytime().getTime()) {
                 //入数据库
                 xml.setOddsid(db.getOddsid());
                 int inch = multiTotalScorehalfMapper.updateByPrimaryKeySelective(xml);
                 if (inch > 0) {
-                    log.info("20多盘口赔率: 即时多盘半场大小球 接口数据:{} 更新成功", item);
-                }
+                    multi_hdx_add(flag);
+                    //log.info("20多盘口赔率: 即时多盘半场大小球 接口数据:{} 更新成功", item);
+                }else multi_hdx_add(flag);
             }
         }
+    }
+
+    private void multi_hdx_add(String str) {
+        if (multi_hdx.size() > 30000)
+            multi_hdx.remove(0);
+        multi_hdx.add(str);
     }
 }
