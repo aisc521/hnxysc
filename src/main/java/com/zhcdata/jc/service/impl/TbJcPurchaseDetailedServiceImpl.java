@@ -125,7 +125,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
     }
 
     @Override
-    public TbJcPurchaseDetailed queryOrderByUserAndOrderId(Long userId, Long orderId) {
+    public TbJcPurchaseDetailed queryOrderByUserAndOrderId(Long userId, String orderId) {
         return tbJcPurchaseDetailedMapper.queryOrderByUserAndOrderId(userId,orderId);
     }
 

@@ -21,5 +21,5 @@ public interface TbJcPurchaseDetailedService {
 
     TbJcPurchaseDetailed queryTbJcPurchaseDetailedByUserAndPlanId(Long userId, Long schemeId);
 
-    TbJcPurchaseDetailed queryOrderByUserAndOrderId(Long userId, Long orderId);
+    TbJcPurchaseDetailed queryOrderByUserAndOrderId(Long userId, String orderId);
 }

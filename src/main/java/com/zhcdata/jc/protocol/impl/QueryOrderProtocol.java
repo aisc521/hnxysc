@@ -52,22 +52,22 @@ public class QueryOrderProtocol  implements BaseProtocol {
     @Override
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-        TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedService.queryOrderByUserAndOrderId(Long.valueOf(String.valueOf(paramMap.get("userId"))),Long.valueOf(String.valueOf(paramMap.get("orderId"))));
+        TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedService.queryOrderByUserAndOrderId(Long.valueOf(String.valueOf(paramMap.get("userId"))),String.valueOf(paramMap.get("orderId")));
         if(tbJcPurchaseDetailed == null){
             resultMap.put("resCode", ProtocolCodeMsg.ORDER_IS_NULL.getCode());
             resultMap.put("message", ProtocolCodeMsg.ORDER_IS_NULL.getMsg());
             return resultMap;
         }
-        if("0".equals(tbJcPurchaseDetailed.getPayStatus())){
+        if(0 == tbJcPurchaseDetailed.getPayStatus()){
             resultMap.put("status", "0");
         }
-        if("2".equals(tbJcPurchaseDetailed.getPayStatus())){
+        if(2 == tbJcPurchaseDetailed.getPayStatus()){
             resultMap.put("status", "2");
         }
-        if("8".equals(tbJcPurchaseDetailed.getPayStatus())){
+        if(8 == tbJcPurchaseDetailed.getPayStatus()){
             resultMap.put("status", "8");
         }
-        if("1".equals(tbJcPurchaseDetailed.getPayStatus())){
+        if(1 == tbJcPurchaseDetailed.getPayStatus()){
             resultMap.put("status", "2");
         }
         resultMap.put("orderId", tbJcPurchaseDetailed.getOrderId());
