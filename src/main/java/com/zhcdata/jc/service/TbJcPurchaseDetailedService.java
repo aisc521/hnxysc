@@ -20,4 +20,6 @@ public interface TbJcPurchaseDetailedService {
     int updateByExampleSelective(TbJcPurchaseDetailed tbJcPurchaseDetailed, Example example);
 
     TbJcPurchaseDetailed queryTbJcPurchaseDetailedByUserAndPlanId(Long userId, Long schemeId);
+
+    TbJcPurchaseDetailed queryOrderByUserAndOrderId(Long userId, Long orderId);
 }

@@ -89,4 +89,11 @@
 
         where pd.user_id = #{userId} and pd.scheme_id = #{schemeId}
     </select>
+    <select id="queryOrderByUserAndOrderId" resultType="com.zhcdata.db.model.TbJcPurchaseDetailed">
+        SELECT
+        *
+        from tb_jc_purchase_detailed pd
+
+        where pd.user_id = #{userId} and pd.order_id = #{orderId}
+    </select>
 </mapper>
