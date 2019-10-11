@@ -2,6 +2,7 @@ package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.LetGoalDetail;
+import com.zhcdata.db.model.Letgoal_goal;
 import com.zhcdata.db.model.MultiLetGoalDetail;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +43,9 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
 
     @Resource
     private ScheduleMapper scheduleMapper;
+
+    @Resource
+    private Letgoal_goalMapper letgoal_goalMapper;
 
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
@@ -91,6 +96,15 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
             xml.setOddsid(letGoalDetail.getOddsid());
             int inch = letGoalDetailMapper.insertSelective(xml);
             letgoalMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getModifytime());
+            //更盘口变化表，查询有没有此oddsid的变盘次数
+            int changed = letgoal_goalMapper.updateCountAddOne(letGoalDetail.getOddsid(),new Date());
+            if (changed==0){//没有更新 插入
+                Letgoal_goal goal = new Letgoal_goal();
+                goal.setOddsid(Long.parseLong(letGoalDetail.getOddsid().toString()));
+                goal.setCreateTime(new Date());
+                goal.setGoalCount(1);
+                letgoal_goalMapper.insertSelective(goal);
+            }
             if (inch > 0) {
                 log.error("21多盘口赔率变化: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
             }

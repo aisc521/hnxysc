@@ -204,7 +204,7 @@ public class MatchListDelOrEditJob implements Job {
                     europeoddstotalMapper.deleteByPrimaryKey(Integer.parseInt(list.get(i).getID()));
                 }
             }
-            LOGGER.info("比赛删除&修改时间记录定时任务结束,共：" + list.size() + ",更新:" + update + "条,删除:" + delete + "耗时：" + (System.currentTimeMillis() - s) + "毫秒");
         }
+        LOGGER.info("比赛删除&修改时间记录定时任务结束,共：" + list.size() + ",更新:" + update + "条,删除:" + delete + "耗时：" + (System.currentTimeMillis() - s) + "毫秒");
     }
 }

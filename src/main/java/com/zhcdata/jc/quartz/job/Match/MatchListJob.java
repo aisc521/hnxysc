@@ -24,8 +24,10 @@ import java.util.List;
 @Component
 public class MatchListJob implements Job{
     private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @Resource
     ScheduleMapper scheduleMapper;
+
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         log.info("start赛程赛果定时任务启动......");
@@ -33,7 +35,9 @@ public class MatchListJob implements Job{
         QiuTanXmlComm parse = new QiuTanXmlComm();
         for(int i = 0 ;i<6;i++){ //目前查往后六天的比赛
             String str = DateFormatUtils.format(DateUtils.addDays(new Date(),i),"yyyy-MM-dd");
-            List<MatchListRsp> list = parse.handleMothodList("http://interface.win007.com/zq/BF_XML.aspx?date="+str+"", MatchListRsp.class);
+            String url = "http://interface.win007.com/zq/BF_XML.aspx?date="+str+"";
+            List<MatchListRsp> list = parse.handleMothodList(url, MatchListRsp.class);
+            log.error("赛程赛果定时任务地址： "+url);
             try {
                 executeHandle(list);
                 //接口限制60秒
@@ -44,6 +48,7 @@ public class MatchListJob implements Job{
         }
         log.info("start赛程赛果定时任务结束....消耗总时间="+(System.currentTimeMillis() - s) );
     }
+
     public void executeHandle(List<MatchListRsp> list) throws Exception {
 
         long s = System.currentTimeMillis();
@@ -95,52 +100,4 @@ public class MatchListJob implements Job{
         Date date = DateUtils.addDays(new Date(),1);
         return null;
     }
-
-
-    /*public static String parseToFormat(String str) {
-        //e:2019/9/9 0:0:0
-        String temp = "0";
-        String[] date = str.split(" ")[0].split("/");
-        String[] time = str.split(" ")[1].split(":");
-
-        String y = date[0];
-        if (y.length() == 1) y = temp + y;
-        String m = date[1];
-        if (m.length() == 1) m = temp + m;
-        String d = date[2];
-        if (d.length() == 1) d = temp + d;
-
-        String h = time[0];
-        if (h.length() == 1) h = temp + h;
-        String f = time[1];
-        if (f.length() == 1) f = temp + f;
-        String s = time[2];
-        if (s.length() == 1) s = temp + s;
-
-        return y + "-" + m + "-" + d + " " + h + ":" + f + ":" + s;
-    }
-
-    public static void main(String[] args) {
-        //String s = parseToFormat("2019/9/9 1:2:3");
-        //String d = parseToFormat("2019/9/9 01:2:3");
-        //String f = parseToFormat("2019/9/9 1:20:3");
-        //String g = parseToFormat("2019/9/9 1:2:03");
-        //System.out.println(s);
-        //System.out.println(d);
-        //System.out.println(f);
-        //System.out.println(g);
-
-*//*        short str = Short.parseShort("九与");
-        //short str = Short.parseShort("九月");
-        //short str = Short.valueOf("九");
-        System.out.println(str);*//*
-
-
-        for(int i = 0 ;i<6;i++){
-            String str = DateFormatUtils.format(DateUtils.addDays(new Date(),i),"yyyy-MM-dd");
-            System.out.println("================"+str);
-        }
-
-
-    }*/
 }

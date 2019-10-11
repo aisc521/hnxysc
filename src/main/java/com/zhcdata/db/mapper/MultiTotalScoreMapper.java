@@ -28,6 +28,5 @@ public interface MultiTotalScoreMapper {
     void deleteByMid(String mid);
 
     void updateOddsByOddsId(Integer oddsid, Date addtime, Float upodds, Float goal, Float downodds);
-
-
+    
 }

@@ -263,6 +263,7 @@
       StartTime = #{starttime,jdbcType=TIMESTAMP}
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </update>
+
     <update id="updateOddsByOddsId">
         update multitotalscore set
             Goal = #{goal,jdbcType=REAL},
