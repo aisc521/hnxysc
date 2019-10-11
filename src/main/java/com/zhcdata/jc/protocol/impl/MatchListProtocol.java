@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description TODO
+ * @Description 比赛列表
  * @Author cuishuai
  * @Date 2019/9/20 10:29
  */

@@ -26,7 +26,7 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/10/10 11:06
  */
-@Service("")
+@Service("20200228")
 public class SchemePurchaseProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
@@ -65,13 +65,6 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.PAY_TYPE.getMsg());
             return map;
         }
-        String buyMoney = paramMap.get("buyMoney");
-        if (Strings.isNullOrEmpty(buyMoney) || !NumberUtil.isNumber(buyMoney)) {
-            LOGGER.info("[" + ProtocolCodeMsg.MONEY_IS_NULL.getMsg() + "]:buyMoney---" + buyMoney);
-            map.put("resCode", ProtocolCodeMsg.MONEY_IS_NULL.getCode());
-            map.put("message", ProtocolCodeMsg.MONEY_IS_NULL.getMsg());
-            return map;
-        }
         return null;
     }
 
@@ -79,7 +72,7 @@ public class SchemePurchaseProtocol implements BaseProtocol {
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         //查询方案信息
-        TbJcPlan tbJcPlan = tbPlanService.queryPlanByPlanId(Long.valueOf(paramMap.get("schemeId")));
+        TbJcPlan tbJcPlan = tbPlanService.queryPlanByPlanId(Long.valueOf(String.valueOf(paramMap.get("schemeId"))));
         if(tbJcPlan == null){
             resultMap.put("resCode", ProtocolCodeMsg.PLAN_IS_NULL.getCode());
             resultMap.put("message", ProtocolCodeMsg.PLAN_IS_NULL.getMsg());
@@ -91,10 +84,17 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             return resultMap;
         }
         //查询用户信息
-        TbJcUser tbJcUser = tbJcUserService.queryTbJcUserById(Long.valueOf(paramMap.get("userId")));
+        TbJcUser tbJcUser = tbJcUserService.queryTbJcUserById(Long.valueOf(String.valueOf(paramMap.get("userId"))));
         if(tbJcUser == null){
             resultMap.put("resCode", ProtocolCodeMsg.USER_IS_NULL.getCode());
             resultMap.put("message", ProtocolCodeMsg.USER_IS_NULL.getMsg());
+            return resultMap;
+        }
+        //查询用户是否已经购买过此方案
+        TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedService.queryTbJcPurchaseDetailedByUserAndPlanId(Long.valueOf(String.valueOf(paramMap.get("userId"))),Long.valueOf(String.valueOf(paramMap.get("schemeId"))));
+        if(tbJcPurchaseDetailed != null){
+            resultMap.put("resCode", ProtocolCodeMsg.IS_BUY_PLAN.getCode());
+            resultMap.put("message", ProtocolCodeMsg.IS_BUY_PLAN.getMsg());
             return resultMap;
         }
         //生成订单信息 并且调用支付

@@ -33,7 +33,7 @@ public class PayServiceImpl implements PayService {
     @Resource
     private CommonUtils commonUtils;
 
-    @Value("${url.acc}")
+    @Value("${custom.url.acc}")
     private String accUrl;
 
     @Override

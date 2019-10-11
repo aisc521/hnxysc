@@ -11,4 +11,7 @@
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="create_Time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
+  <select id="queryRecordFocus" resultType="com.zhcdata.db.model.TbJcRecordFocus">
+    SELECT * from tb_jc_record_focus rec where rec.user_Id = #{userId} and rec.expert_Id = #{expertId}
+  </select>
 </mapper>

@@ -48,7 +48,7 @@ public class QueryOrderStatusJob implements Job {
                     tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
                     tbJcPurchaseDetailed.setUpdateTime(new Date());
                     //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
-                    tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("amount"))));
+                    tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("thirdAmount"))));
                     try {
                         updateTbJcPurchaseDetailed(tbJcPurchaseDetailed);
                     } catch (BaseException e) {

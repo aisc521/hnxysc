@@ -148,4 +148,9 @@
   <select id="queryPlanId" resultType="com.zhcdata.jc.dto.PlanResult1">
     SELECT plan_id id from tb_jc_match where match_id in(SELECT match_id from tb_jc_match where plan_id=${planId})
   </select>
+
+
+  <select id="queryPlanByPlanId" resultType="com.zhcdata.db.model.TbJcPlan">
+    SELECT * from tb_jc_plan p where p.id = #{id}
+  </select>
 </mapper>

@@ -18,4 +18,6 @@ public interface TbJcPurchaseDetailedService {
     List<TbJcPurchaseDetailed> queryOrder();
 
     int updateByExampleSelective(TbJcPurchaseDetailed tbJcPurchaseDetailed, Example example);
+
+    TbJcPurchaseDetailed queryTbJcPurchaseDetailedByUserAndPlanId(Long userId, Long schemeId);
 }
