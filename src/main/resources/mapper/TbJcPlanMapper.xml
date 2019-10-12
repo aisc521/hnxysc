@@ -153,4 +153,16 @@
   <select id="queryPlanByPlanId" resultType="com.zhcdata.db.model.TbJcPlan">
     SELECT * from tb_jc_plan p where p.id = #{id}
   </select>
+
+  <select id="queryLatestPlanReminder" resultType="com.zhcdata.jc.dto.LatestPlanReminderDto">
+    SELECT
+    p.id planId,
+    expert.id id,
+    expert.nick_name nikeName
+    from
+    tb_jc_plan p
+    LEFT JOIN tb_jc_expert expert ON p.ascription_expert = expert.id
+    where 1 = 1
+	ORDER BY p.create_time desc LIMIT 0,1
+  </select>
 </mapper>

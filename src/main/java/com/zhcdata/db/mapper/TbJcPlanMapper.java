@@ -1,10 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.TbJcPlan;
-import com.zhcdata.jc.dto.PlanResult1;
-import com.zhcdata.jc.dto.PlanResult2;
-import com.zhcdata.jc.dto.TbSPFInfo;
-import com.zhcdata.jc.dto.TbScoreResult;
+import com.zhcdata.jc.dto.*;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -30,4 +27,6 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     List<PlanResult1> queryPlanByExpertId1(@Param("id") long expertId);
 
     TbJcPlan queryPlanByPlanId(@Param("id")Long schemeId);
+
+    LatestPlanReminderDto queryLatestPlanReminder();
 }

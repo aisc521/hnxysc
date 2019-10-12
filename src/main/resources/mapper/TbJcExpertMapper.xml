@@ -97,4 +97,7 @@
     where f.user_Id=${userId}
     ) a
   </select>
+  <select id="queryExpertDetailsById" resultType="com.zhcdata.db.model.TbJcExpert">
+    select * from tb_jc_expert e where e.id = #{id}
+  </select>
 </mapper>

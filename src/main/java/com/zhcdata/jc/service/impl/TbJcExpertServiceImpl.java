@@ -1,6 +1,7 @@
 package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.TbJcExpertMapper;
+import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
 import com.zhcdata.jc.service.TbJcExpertService;
 import org.springframework.stereotype.Service;
@@ -40,5 +41,10 @@ public class TbJcExpertServiceImpl implements TbJcExpertService {
     @Override
     public List<ExpertInfo> query(String userId) {
         return tbJcExpertMapper.query(userId);
+    }
+
+    @Override
+    public TbJcExpert queryExpertDetailsById(int id) {
+        return tbJcExpertMapper.queryExpertDetailsById(id);
     }
 }
