@@ -93,146 +93,173 @@
 
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.ScoreInfo" >
     insert into score
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         ID,
       </if>
-      <if test="teamid != null" >
+      <if test="teamid != null">
         TeamID,
       </if>
-      <if test="sclassid != null" >
+      <if test="sclassid != null">
         SclassID,
       </if>
-      <if test="winScore != null" >
+      <if test="winScore != null">
         Win_Score,
       </if>
-      <if test="flatScore != null" >
+      <if test="flatScore != null">
         Flat_Score,
       </if>
-      <if test="failScore != null" >
+      <if test="failScore != null">
         Fail_Score,
       </if>
-      <if test="totalHomescore != null" >
+      <if test="totalHomescore != null">
         Total_Homescore,
       </if>
-      <if test="totalGuestscore != null" >
+      <if test="totalGuestscore != null">
         Total_Guestscore,
       </if>
-      <if test="homeorguest != null" >
+      <if test="homeorguest != null">
         homeorguest,
       </if>
-      <if test="matchseason != null" >
+      <if test="matchseason != null">
         Matchseason,
       </if>
-      <if test="deduct != null" >
+      <if test="deduct != null">
         deduct,
       </if>
-      <if test="cause != null" >
+      <if test="cause != null">
         cause,
       </if>
-      <if test="goal != null" >
+      <if test="goal != null">
         Goal,
       </if>
-      <if test="subsclassid != null" >
+      <if test="subsclassid != null">
         subSclassID,
       </if>
-      <if test="redcard != null" >
+      <if test="redcard != null">
         RedCard,
       </if>
+      <if test="updatetime != null">
+        updateTime,
+      </if>
+      <if test="orderby != null">
+        orderBy,
+      </if>
+      <if test="score != null">
+        Score,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="teamid != null" >
+      <if test="teamid != null">
         #{teamid,jdbcType=INTEGER},
       </if>
-      <if test="sclassid != null" >
+      <if test="sclassid != null">
         #{sclassid,jdbcType=INTEGER},
       </if>
-      <if test="winScore != null" >
+      <if test="winScore != null">
         #{winScore,jdbcType=INTEGER},
       </if>
-      <if test="flatScore != null" >
+      <if test="flatScore != null">
         #{flatScore,jdbcType=INTEGER},
       </if>
-      <if test="failScore != null" >
+      <if test="failScore != null">
         #{failScore,jdbcType=INTEGER},
       </if>
-      <if test="totalHomescore != null" >
+      <if test="totalHomescore != null">
         #{totalHomescore,jdbcType=INTEGER},
       </if>
-      <if test="totalGuestscore != null" >
+      <if test="totalGuestscore != null">
         #{totalGuestscore,jdbcType=INTEGER},
       </if>
-      <if test="homeorguest != null" >
+      <if test="homeorguest != null">
         #{homeorguest,jdbcType=INTEGER},
       </if>
-      <if test="matchseason != null" >
+      <if test="matchseason != null">
         #{matchseason,jdbcType=CHAR},
       </if>
-      <if test="deduct != null" >
+      <if test="deduct != null">
         #{deduct,jdbcType=INTEGER},
       </if>
-      <if test="cause != null" >
+      <if test="cause != null">
         #{cause,jdbcType=CHAR},
       </if>
-      <if test="goal != null" >
+      <if test="goal != null">
         #{goal,jdbcType=INTEGER},
       </if>
-      <if test="subsclassid != null" >
+      <if test="subsclassid != null">
         #{subsclassid,jdbcType=INTEGER},
       </if>
-      <if test="redcard != null" >
+      <if test="redcard != null">
         #{redcard,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null">
+        #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderby != null">
+        #{orderby,jdbcType=INTEGER},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
 
   <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.ScoreInfo" >
     update score
-    <set >
-      <if test="teamid != null" >
+    <set>
+      <if test="teamid != null">
         TeamID = #{teamid,jdbcType=INTEGER},
       </if>
-      <if test="sclassid != null" >
+      <if test="sclassid != null">
         SclassID = #{sclassid,jdbcType=INTEGER},
       </if>
-      <if test="winScore != null" >
+      <if test="winScore != null">
         Win_Score = #{winScore,jdbcType=INTEGER},
       </if>
-      <if test="flatScore != null" >
+      <if test="flatScore != null">
         Flat_Score = #{flatScore,jdbcType=INTEGER},
       </if>
-      <if test="failScore != null" >
+      <if test="failScore != null">
         Fail_Score = #{failScore,jdbcType=INTEGER},
       </if>
-      <if test="totalHomescore != null" >
+      <if test="totalHomescore != null">
         Total_Homescore = #{totalHomescore,jdbcType=INTEGER},
       </if>
-      <if test="totalGuestscore != null" >
+      <if test="totalGuestscore != null">
         Total_Guestscore = #{totalGuestscore,jdbcType=INTEGER},
       </if>
-      <if test="homeorguest != null" >
+      <if test="homeorguest != null">
         homeorguest = #{homeorguest,jdbcType=INTEGER},
       </if>
-      <if test="matchseason != null" >
+      <if test="matchseason != null">
         Matchseason = #{matchseason,jdbcType=CHAR},
       </if>
-      <if test="deduct != null" >
+      <if test="deduct != null">
         deduct = #{deduct,jdbcType=INTEGER},
       </if>
-      <if test="cause != null" >
+      <if test="cause != null">
         cause = #{cause,jdbcType=CHAR},
       </if>
-      <if test="goal != null" >
+      <if test="goal != null">
         Goal = #{goal,jdbcType=INTEGER},
       </if>
-      <if test="subsclassid != null" >
+      <if test="subsclassid != null">
         subSclassID = #{subsclassid,jdbcType=INTEGER},
       </if>
-      <if test="redcard != null" >
+      <if test="redcard != null">
         RedCard = #{redcard,jdbcType=INTEGER},
+      </if>
+      <if test="updatetime != null">
+        updateTime = #{updatetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderby != null">
+        orderBy = #{orderby,jdbcType=INTEGER},
+      </if>
+      <if test="score != null">
+        Score = #{score,jdbcType=INTEGER},
       </if>
     </set>
     where ID = #{id,jdbcType=INTEGER}
