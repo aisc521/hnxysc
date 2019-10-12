@@ -13,6 +13,7 @@ import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
 import com.zhcdata.jc.tools.CommonUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
@@ -47,33 +48,64 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> schemePurchase(TbJcPlan tbJcPlan, TbJcUser tbJcUser, Map<String, String> paramMap,PayService payService) throws BaseException {
-        TbJcPurchaseDetailed tbJcPurchaseDetailed = generatedObject(tbJcPlan,tbJcUser,paramMap);
         Map<String, Object> result = new HashMap<>();
-        if("20".equals(paramMap.get("payType"))){//微信native
-            result = payService.wechatPay(String.valueOf(tbJcUser.getUserId()),String.valueOf(tbJcPlan.getPrice()),productName,description,"20",tbJcPurchaseDetailed.getOrderId(),paramMap.get("src"),paramMap.get("ip"));
+        try{
+            TbJcPurchaseDetailed tbJcPurchaseDetailed = generatedObject(tbJcPlan,tbJcUser,paramMap);
+
+            if("20".equals(paramMap.get("payType"))){//微信native
+                result = payService.wechatPay(String.valueOf(tbJcUser.getUserId()),String.valueOf(tbJcPlan.getPrice()),productName,description,"20",tbJcPurchaseDetailed.getOrderId(),paramMap.get("src"),paramMap.get("ip"));
+                if("000000".equals(result.get("resCode"))){
+                    insertOrder(tbJcPurchaseDetailed);
+                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName","JCZ");
+                    result.put("schemeName",tbJcPlan.getTitle());
+                }
+
+            }
+            if("21".equals(paramMap.get("payType"))){//支付宝支付
+                result = payService.aliPay(String.valueOf(tbJcUser.getUserId()),String.valueOf(tbJcPlan.getPrice()),description,"21",tbJcPurchaseDetailed.getOrderId(),"0003000001|0401003430","192.168.64.140");
+                if("000000".equals(result.get("resCode"))){
+                    insertOrder(tbJcPurchaseDetailed);
+                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName","JCZ");
+                    result.put("schemeName",tbJcPlan.getTitle());
+                }
+            }
+            if("22".equals(paramMap.get("payType"))){//微信H5
+                result = payService.wechatPay(String.valueOf(tbJcUser.getUserId()),String.valueOf(tbJcPlan.getPrice()),productName,description,"22",tbJcPurchaseDetailed.getOrderId(),"0003000001|0401003430","192.168.64.140");
+                if("000000".equals(result.get("resCode"))){
+                    insertOrder(tbJcPurchaseDetailed);
+                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName","JCZ");
+                    result.put("schemeName",tbJcPlan.getTitle());
+                }
+            }
+            if("0".equals(paramMap.get("payType"))){//余额支付
+                result = payService.moneyPay(String.valueOf(tbJcPlan.getPrice()), "0", String.valueOf(tbJcUser.getUserId()), tbJcPurchaseDetailed.getOrderId(), paramMap.get("src"), productName);
+                if("000000".equals(result.get("resCode"))){
+                    //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
+                    modifyOrderStatus(result,tbJcPlan,tbJcPurchaseDetailed);
+                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName","JCZ");
+                    result.put("schemeName",tbJcPlan.getTitle());
+                }
+            }
+            if("1".equals(paramMap.get("payType"))){//点播
+                result = payService.discountRecommendUse(String.valueOf(tbJcUser.getUserId()), tbJcPurchaseDetailed.getOrderId(), description, paramMap.get("src"));
+                if("000000".equals(result.get("resCode"))){
+                    //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
+                    modifyOrderStatus(result,tbJcPlan,tbJcPurchaseDetailed);
+                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName","JCZ");
+                    result.put("schemeName",tbJcPlan.getTitle());
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        if("21".equals(paramMap.get("payType"))){//支付宝支付
-            result = payService.aliPay(String.valueOf(tbJcUser.getUserId()),String.valueOf(tbJcPlan.getPrice()),description,"21",tbJcPurchaseDetailed.getOrderId(),paramMap.get("src"),paramMap.get("ip"));
-        }
-        if("22".equals(paramMap.get("payType"))){//微信H5
-            result = payService.wechatPay(String.valueOf(tbJcUser.getUserId()),String.valueOf(tbJcPlan.getPrice()),productName,description,"22",tbJcPurchaseDetailed.getOrderId(),paramMap.get("src"),paramMap.get("ip"));
-        }
-        if("0".equals(paramMap.get("payType"))){//余额支付
-            result = payService.moneyPay(String.valueOf(tbJcPlan.getPrice()), "0", String.valueOf(tbJcUser.getUserId()), tbJcPurchaseDetailed.getOrderId(), paramMap.get("src"), productName);
-            //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
-            modifyOrderStatus(result);
-        }
-        if("1".equals(paramMap.get("payType"))){//点播
-            result = payService.discountRecommendUse(String.valueOf(tbJcUser.getUserId()), tbJcPurchaseDetailed.getOrderId(), description, paramMap.get("src"));
-            //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
-            modifyOrderStatus(result);
-        }
-        int i = tbJcPurchaseDetailedMapper.insertSelective(tbJcPurchaseDetailed);
-        if(i <= 0){
-            throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
-                    ProtocolCodeMsg.INSERT_FAILE.getMsg());
-        }
+
         return result;
     }
 
@@ -87,7 +119,18 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         return tbJcPurchaseDetailedMapper.updateByExampleSelective(tbJcPurchaseDetailed,example);
     }
 
-    private TbJcPurchaseDetailed generatedObject(TbJcPlan tbJcPlan, TbJcUser tbJcUser,Map<String, String> paramMap){
+    @Override
+    public TbJcPurchaseDetailed queryTbJcPurchaseDetailedByUserAndPlanId(Long userId, Long schemeId) {
+        return tbJcPurchaseDetailedMapper.queryTbJcPurchaseDetailedByUserAndPlanId(userId,schemeId);
+    }
+
+    @Override
+    public TbJcPurchaseDetailed queryOrderByUserAndOrderId(Long userId, String orderId) {
+        return tbJcPurchaseDetailedMapper.queryOrderByUserAndOrderId(userId,orderId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public TbJcPurchaseDetailed generatedObject(TbJcPlan tbJcPlan, TbJcUser tbJcUser,Map<String, String> paramMap){
         TbJcPurchaseDetailed tbJcPurchaseDetailed = new TbJcPurchaseDetailed();
         Calendar cal = Calendar.getInstance();
         int day = cal.get(Calendar.DATE);
@@ -142,13 +185,8 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
     }
 
 
-    public void modifyOrderStatus(Map<String, Object> result) throws BaseException {
-        String orderId = String.valueOf(result.get("orderId"));
-        TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedMapper.queryPurchasedPlanByOrderId(orderId);
-        if(tbJcPurchaseDetailed == null){
-            throw new BaseException(ProtocolCodeMsg.ORDER_IS_NULL.getCode(),
-                    ProtocolCodeMsg.ORDER_IS_NULL.getMsg());
-        }
+    @Transactional(rollbackFor = Exception.class)
+    public void modifyOrderStatus(Map<String, Object> result,TbJcPlan tbJcPlan,TbJcPurchaseDetailed tbJcPurchaseDetailed) throws BaseException {
         tbJcPurchaseDetailed.setPayId(String.valueOf(result.get("payingId")));
         if("2".equals(tbJcPurchaseDetailed.getPlanType())){//不中全退
             tbJcPurchaseDetailed.setPayStatus(Long.valueOf(1));
@@ -157,16 +195,21 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         }
         tbJcPurchaseDetailed.setUpdateTime(new Date());
 
-        //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
-        tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("amount"))));
-
-
+        tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(tbJcPlan.getPrice()));
         Example example = new Example(TbJcPurchaseDetailed.class);
         example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
-        int j = tbJcPurchaseDetailedMapper.updateByExampleSelective(tbJcPurchaseDetailed,example);
+        int j = tbJcPurchaseDetailedMapper.insertSelective(tbJcPurchaseDetailed);
         if(j <= 0){
-            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
-                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+            throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
+                    ProtocolCodeMsg.INSERT_FAILE.getMsg());
+        }
+    }
+
+    public void insertOrder( TbJcPurchaseDetailed tbJcPurchaseDetailed) throws BaseException {
+        int i = tbJcPurchaseDetailedMapper.insertSelective(tbJcPurchaseDetailed);
+        if(i <= 0){
+            throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
+                    ProtocolCodeMsg.INSERT_FAILE.getMsg());
         }
     }
 }

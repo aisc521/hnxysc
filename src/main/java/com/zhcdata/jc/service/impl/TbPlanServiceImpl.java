@@ -70,6 +70,7 @@ public class TbPlanServiceImpl implements TbPlanService {
 
     @Override
     public TbJcPlan queryPlanByPlanId(Long schemeId) {
-        return tbJcPlanMapper.selectByPrimaryKey(schemeId);
+
+        return tbJcPlanMapper.queryPlanByPlanId(schemeId);
     }
 }

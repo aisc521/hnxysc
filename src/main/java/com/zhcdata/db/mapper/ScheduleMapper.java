@@ -142,4 +142,6 @@ public interface ScheduleMapper {
     List<DrawNoResult> queryList(@Param("startDate")String startDate);
 
     IconAndTimeDto selectIconAndTime(@Param("matchId")Integer matchId);
+
+    List<Schedule> selectStatusChangedToday(String sat, String end);
 }

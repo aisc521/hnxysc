@@ -19,6 +19,6 @@ public class TbJcUserServiceImpl implements TbJcUserService {
 
     @Override
     public TbJcUser queryTbJcUserById(Long userId) {
-        return tbJcUserMapper.selectByPrimaryKey(userId);
+        return tbJcUserMapper.queryTbJcUserById(userId);
     }
 }

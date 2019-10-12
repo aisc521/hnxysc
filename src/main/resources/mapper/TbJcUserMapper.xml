@@ -20,4 +20,8 @@
     <result column="WARN_PUSH" property="warnPush" jdbcType="CHAR" />
     <result column="REGI_SRC" property="regiSrc" jdbcType="VARCHAR" />
   </resultMap>
+
+  <select id="queryTbJcUserById" resultType="com.zhcdata.db.model.TbJcUser">
+    SELECT * from tb_jc_user u where u.id = #{id}
+  </select>
 </mapper>
