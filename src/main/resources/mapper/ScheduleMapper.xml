@@ -972,4 +972,7 @@
         LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
         where sc.ScheduleID = '#{matchId}'
     </select>
+    <select id="selectStatusChangedToday" resultType="com.zhcdata.db.model.Schedule">
+        select * from schedule where MatchTime > #{sat} and MatchTime &lt; #{end} and MatchState in (1,2,3,4)
+    </select>
 </mapper>

@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -34,6 +35,8 @@ public class ChangeJob implements Job {
         // 比赛说明215^主队角球16^客队角球17^无效字段，可忽略18
         try {
             String xml = HttpUtils.getHtmlResult(url);
+            System.out.println("时间："+df.format(new Date()));
+            System.out.println(xml);
             SAXReader saxReader = new SAXReader();
             org.dom4j.Document docDom4j = saxReader.read(new ByteArrayInputStream(xml.getBytes("utf-8")));
             org.dom4j.Element root = docDom4j.getRootElement();
@@ -84,9 +87,9 @@ public class ChangeJob implements Job {
                 }
 
                 if (scheduleMapper.updateByPrimaryKeySelective(info) > 0) {
-                    log.error("[即时变化的比分数据（20秒）]：更新成功");
+                    log.info("[即时变化的比分数据（20秒）]：更新成功");
                 } else {
-                    log.error("[即时变化的比分数据（20秒）]：更新失败");
+                    log.info("[即时变化的比分数据（20秒）]：更新失败");
                 }
             }
         } catch (Exception ex) {
