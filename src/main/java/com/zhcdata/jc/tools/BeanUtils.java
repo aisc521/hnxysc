@@ -709,12 +709,17 @@ public class BeanUtils {
     public static EuropeOddsDetail parseEuropeOddsDetail(String[] mos) {
         ////博彩公司ID,博彩公司英文名,初盘主胜,初盘平局,初盘客胜,主胜,平局,客胜,变化时间,博彩公司简体名
         EuropeOddsDetail mo = new EuropeOddsDetail();
-        if (StringUtils.isNotEmpty(mos[5]))
+        if (StringUtils.isEmpty(mos[5])&&StringUtils.isEmpty(mos[6])&&StringUtils.isEmpty(mos[7])){
             mo.setHomewin(Float.parseFloat(mos[5]));
-        if (StringUtils.isNotEmpty(mos[6]))
             mo.setStandoff(Float.parseFloat(mos[6]));
-        if (StringUtils.isNotEmpty(mos[7]))
             mo.setGuestwin(Float.parseFloat(mos[7]));
+        }else {//初
+            mo.setFirst(true);
+            mo.setHomewin(Float.parseFloat(mos[2]));
+            mo.setStandoff(Float.parseFloat(mos[3]));
+            mo.setGuestwin(Float.parseFloat(mos[4]));
+        }
+
         try {
             mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
         } catch (Exception e) {

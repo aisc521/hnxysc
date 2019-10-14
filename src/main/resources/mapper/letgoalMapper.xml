@@ -70,7 +70,7 @@
       #{goalReal,jdbcType=REAL}, #{upoddsReal,jdbcType=REAL}, #{downoddsReal,jdbcType=REAL}, 
       #{isstoplive,jdbcType=BIT}, #{starttime,jdbcType=TIMESTAMP})
   </insert>
-    <insert id="insertSelective" parameterType="com.zhcdata.db.model.Letgoal">
+    <insert id="insertSelective" parameterType="com.zhcdata.db.model.Letgoal" useGeneratedKeys="true" keyProperty="oddsid">
         insert into letgoal
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="oddsid != null">
