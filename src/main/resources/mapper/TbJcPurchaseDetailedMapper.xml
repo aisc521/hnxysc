@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zhcdata.db.mapper.TbJcPurchaseDetailedMapper" >
-  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.TbJcPurchaseDetailed" >
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <result column="id" property="id" jdbcType="BIGINT" />
-    <result column="pay_id" property="payId" jdbcType="VARCHAR" />
-    <result column="user_id" property="userId" jdbcType="BIGINT" />
-    <result column="scheme_id" property="schemeId" jdbcType="BIGINT" />
-    <result column="user_name" property="userName" jdbcType="VARCHAR" />
-    <result column="cell" property="cell" jdbcType="VARCHAR" />
-    <result column="lottery_name" property="lotteryName" jdbcType="VARCHAR" />
-    <result column="pay_status" property="payStatus" jdbcType="BIGINT" />
-    <result column="award_status" property="awardStatus" jdbcType="BIGINT" />
-    <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
-    <result column="third_money" property="thirdMoney" jdbcType="DECIMAL" />
-    <result column="buy_money" property="buyMoney" jdbcType="DECIMAL" />
-    <result column="red_money" property="redMoney" jdbcType="DECIMAL" />
-    <result column="rebeat_money" property="rebeatMoney" jdbcType="DECIMAL" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="year" property="year" jdbcType="VARCHAR" />
-    <result column="month" property="month" jdbcType="VARCHAR" />
-    <result column="day" property="day" jdbcType="VARCHAR" />
-    <result column="pay_type" property="payType" jdbcType="BIGINT" />
-    <result column="pay_info" property="payInfo" jdbcType="VARCHAR" />
-    <result column="src" property="src" jdbcType="VARCHAR" />
-    <result column="apple_receipt" property="appleReceipt" jdbcType="VARCHAR" />
-    <result column="apple_retuen" property="appleRetuen" jdbcType="VARCHAR" />
-    <result column="issue" property="issue" jdbcType="VARCHAR" />
-    <result column="start_issue" property="startIssue" jdbcType="VARCHAR" />
-    <result column="end_issue" property="endIssue" jdbcType="VARCHAR" />
-    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
-    <result column="expert_id" property="expertId" jdbcType="BIGINT" />
-    <result column="plan_type" property="planType" jdbcType="VARCHAR" />
-    <result column="plan_pay_type" property="planPayType" jdbcType="VARCHAR" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.zhcdata.db.model.TbJcPurchaseDetailed" >
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <result column="id" property="id" jdbcType="BIGINT" />
+        <result column="pay_id" property="payId" jdbcType="VARCHAR" />
+        <result column="user_id" property="userId" jdbcType="BIGINT" />
+        <result column="scheme_id" property="schemeId" jdbcType="BIGINT" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="cell" property="cell" jdbcType="VARCHAR" />
+        <result column="lottery_name" property="lotteryName" jdbcType="VARCHAR" />
+        <result column="pay_status" property="payStatus" jdbcType="BIGINT" />
+        <result column="award_status" property="awardStatus" jdbcType="BIGINT" />
+        <result column="trade_type" property="tradeType" jdbcType="VARCHAR" />
+        <result column="third_money" property="thirdMoney" jdbcType="DECIMAL" />
+        <result column="buy_money" property="buyMoney" jdbcType="DECIMAL" />
+        <result column="red_money" property="redMoney" jdbcType="DECIMAL" />
+        <result column="rebeat_money" property="rebeatMoney" jdbcType="DECIMAL" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="year" property="year" jdbcType="VARCHAR" />
+        <result column="month" property="month" jdbcType="VARCHAR" />
+        <result column="day" property="day" jdbcType="VARCHAR" />
+        <result column="pay_type" property="payType" jdbcType="BIGINT" />
+        <result column="pay_info" property="payInfo" jdbcType="VARCHAR" />
+        <result column="src" property="src" jdbcType="VARCHAR" />
+        <result column="apple_receipt" property="appleReceipt" jdbcType="VARCHAR" />
+        <result column="apple_retuen" property="appleRetuen" jdbcType="VARCHAR" />
+        <result column="issue" property="issue" jdbcType="VARCHAR" />
+        <result column="start_issue" property="startIssue" jdbcType="VARCHAR" />
+        <result column="end_issue" property="endIssue" jdbcType="VARCHAR" />
+        <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+        <result column="expert_id" property="expertId" jdbcType="BIGINT" />
+        <result column="plan_type" property="planType" jdbcType="VARCHAR" />
+        <result column="plan_pay_type" property="planPayType" jdbcType="VARCHAR" />
+    </resultMap>
 
-  <select id="queryPurchasedPlanDtoByUserId" resultType="com.zhcdata.jc.dto.PurchasedPlanDto">
+    <select id="queryPurchasedPlanDtoByUserId" resultType="com.zhcdata.jc.dto.PurchasedPlanDto">
    SELECT
     expert.id id,/*专家id*/
     expert.nick_name nickName,/*专家昵称*/
@@ -51,17 +51,17 @@
     victory.z_five_days zFiveDays,/*五天命中*/
     victory.z_seven_days zSevenDays,/*七天命中*/
     plan.title titleShowType,/*方案标题*/
+    plan.plan_Hit planHit,
     plan.price price,/*方案价格*/
     plan.create_time createTime,/*方案创建时间*/
-    match1.match_name matchName,/*赛事名称*/
-    match1.home_team hostTeam,/*主队名称*/
-    match1.visiting_team visitTeam,/*客队名称*/
-    match1.date_of_match dateOfMatch/*开赛时间*/
+    pd.create_time buyTime,/*购买时间*/
+    expert.grade level,/*专家等级*/
+    plan.id planId
     from tb_jc_purchase_detailed pd
     LEFT JOIN tb_jc_expert expert ON pd.expert_id = expert.id
     LEFT JOIN tb_jc_victory  victory ON pd.expert_id = victory.expert_id
     LEFT JOIN tb_jc_plan plan ON pd.scheme_id = plan.id
-    LEFT JOIN tb_jc_match match1 ON  pd.plan_id = match.plan_id
+    LEFT JOIN tb_jc_match match1 ON  pd.scheme_id = match1.plan_id
     where pd.user_id = #{userId}
   </select>
 
