@@ -7,4 +7,5 @@ import tk.mybatis.mapper.common.Mapper;
 public interface TbJcRecordFocusMapper extends Mapper<TbJcRecordFocus> {
     TbJcRecordFocus queryRecordFocus(@Param("userId") Long userId, @Param("expertId") Long expertId);
 
+    Integer queryFollowExpertPushNum(@Param("userId")Long userId);
 }

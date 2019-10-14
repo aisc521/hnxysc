@@ -44,5 +44,5 @@ public interface TbPlanService {
 
     TbJcPlan queryPlanByPlanId(Long schemeId);
 
-    LatestPlanReminderDto queryLatestPlanReminder();
+    List<LatestPlanReminderDto>  queryLatestPlanReminder();
 }

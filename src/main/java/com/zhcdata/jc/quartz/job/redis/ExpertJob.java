@@ -55,6 +55,8 @@ public class ExpertJob implements Job {
                 hot.setNickName(list1.get(i).getNickName());
                 hot.setLz(list1.get(i).getLzNow());
                 hot.setPushed(getPlanCount(list1.get(i).getId()));
+                hot.setLabel(list1.get(i).getLable());
+                hot.setType("1");
                 list.add(hot);
                 expertId += "'" + list1.get(i).getId() + "',";
             }
@@ -82,7 +84,9 @@ public class ExpertJob implements Job {
                 } else if (list2.get(i).getTenZ() != null && list2.get(i).getTenZ().equals("9")) {
                     hot.setLz("10中9");
                 }
+                hot.setType("1");
                 hot.setPushed(getPlanCount(list2.get(i).getId()));
+                hot.setLabel(list2.get(i).getLable());
                 list.add(hot);
                 expertId += "'" + list2.get(i).getId() + "',";
             }
@@ -99,6 +103,8 @@ public class ExpertJob implements Job {
                 hot.setNickName(list3.get(i).getNickName());
                 hot.setLz(list3.get(i).getReturnSevenDays() + "%");
                 hot.setPushed(getPlanCount(list3.get(i).getId()));
+                hot.setLabel(list3.get(i).getLable());
+                hot.setType("2");
                 list.add(hot);
                 expertId += "'" + list3.get(i).getId() + "',";
             }
@@ -122,7 +128,10 @@ public class ExpertJob implements Job {
                 } else if (list4.get(i).getTenZ() != null && list4.get(i).getTenZ().equals("8")) {
                     hot.setLz("10中8");
                 }
+
+                hot.setType("2");
                 hot.setPushed(getPlanCount(list4.get(i).getId()));
+                hot.setLabel(list4.get(i).getLable());
                 list.add(hot);
                 expertId += "'" + list4.get(i).getId() + "',";
             }
@@ -144,7 +153,9 @@ public class ExpertJob implements Job {
                 } else if (list5.get(i).getTenZ() != null && list5.get(i).getTenZ().equals("5")) {
                     hot.setLz("10中5");
                 }
+                hot.setType("2");
                 hot.setPushed(getPlanCount(list5.get(i).getId()));
+                hot.setLabel(list5.get(i).getLable());
                 list.add(hot);
                 expertId += "'" + list5.get(i).getId() + "',";
             }
@@ -161,6 +172,8 @@ public class ExpertJob implements Job {
                 hot.setNickName(list6.get(i).getNickName());
                 hot.setLz(list6.get(i).getLzNow());
                 hot.setPushed(getPlanCount(list6.get(i).getId()));
+                hot.setLabel(list6.get(i).getLable());
+                hot.setType("1");
                 list.add(hot);
                 expertId += "'" + list6.get(i).getId() + "',";
             }
@@ -180,7 +193,9 @@ public class ExpertJob implements Job {
                 } else if (list7.get(i).getFourZ() != null && list7.get(i).getFourZ().equals("3")) {
                     hot.setLz("4中3");
                 }
+                hot.setType("2");
                 hot.setPushed(getPlanCount(list7.get(i).getId()));
+                hot.setLabel(list7.get(i).getLable());
                 list.add(hot);
                 expertId += "'" + list7.get(i).getId() + "',";
             }
@@ -197,6 +212,8 @@ public class ExpertJob implements Job {
                 hot.setNickName(list8.get(i).getNickName());
                 hot.setLz("历史8连红");
                 hot.setPushed(getPlanCount(list8.get(i).getId()));
+                hot.setLabel(list8.get(i).getLable());
+                hot.setType("1");
                 list.add(hot);
                 expertId += "'" + list8.get(i).getId() + "',";
             }

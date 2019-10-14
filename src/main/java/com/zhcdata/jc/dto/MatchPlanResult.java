@@ -8,6 +8,15 @@ public class MatchPlanResult {
     private String visitTeam;
     private String planInfo;
     private String dateOfMatch;
+    private String isWin;
+
+    public String getIsWin() {
+        return isWin;
+    }
+
+    public void setIsWin(String isWin) {
+        this.isWin = isWin;
+    }
 
     public String getMatchId() {
         return matchId;

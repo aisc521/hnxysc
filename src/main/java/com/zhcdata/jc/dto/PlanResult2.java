@@ -14,6 +14,16 @@ public class PlanResult2 {
     private String title;
     private String status;
 
+    private String planHit;
+
+    public String getPlanHit() {
+        return planHit;
+    }
+
+    public void setPlanHit(String planHit) {
+        this.planHit = planHit;
+    }
+
     List<MatchPlanResult1> list=new ArrayList<>();
 
     public String getId() {

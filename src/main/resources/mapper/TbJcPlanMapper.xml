@@ -38,11 +38,13 @@
     v.z_three_days zThreeDays,
     v.z_five_days zFiveDays,
     v.z_seven_days zSevenDays,
-    p.title_show_type,
+    p.title title_show_type,
     p.price,
     p.is_right isRight,
     p.type,
-    p.create_time
+    p.create_time,
+    p.plan_Hit planHit,
+    p.id planId
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
@@ -138,7 +140,8 @@
     e.introduction,
     p.num_info numInfo,
     p.title,
-    f.status
+    f.status,
+    p.plan_Hit planHit
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id

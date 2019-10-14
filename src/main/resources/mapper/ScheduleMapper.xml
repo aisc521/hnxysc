@@ -830,7 +830,8 @@
         sc.ScheduleID matchId,/*比赛id*/
         lottery.ISSUE_NUM num,/*期数场次*/
         lottery.NO_ID number,/*期数场次*/
-        IFNULL(pg.status,'0') iscollect/*是否收藏*/
+        IFNULL(pg.status,'0') iscollect,/*是否收藏*/
+        lottery.ISSUE_NUM num /*北单大期号*/
         from schedule  sc
         LEFT JOIN sclass class ON sc.SclassID = class.sclassID
         LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'

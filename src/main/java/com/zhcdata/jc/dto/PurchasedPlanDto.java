@@ -25,6 +25,34 @@ public class PurchasedPlanDto {
     private String visitTeam;
     private String dateOfMatch;
 
+    private String winStatus;
+    private String buyTime;
+    private String planHit;
+
+    public String getWinStatus() {
+        return winStatus;
+    }
+
+    public void setWinStatus(String winStatus) {
+        this.winStatus = winStatus;
+    }
+
+    public String getBuyTime() {
+        return buyTime;
+    }
+
+    public void setBuyTime(String buyTime) {
+        this.buyTime = buyTime;
+    }
+
+    public String getPlanHit() {
+        return planHit;
+    }
+
+    public void setPlanHit(String planHit) {
+        this.planHit = planHit;
+    }
+
     public String getId() {
         return id;
     }
