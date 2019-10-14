@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     int queryPlanCountByExpertId(@Param("expertId")String expertId);
@@ -29,4 +30,8 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     TbJcPlan queryPlanByPlanId(@Param("id")Long schemeId);
 
     List<LatestPlanReminderDto> queryLatestPlanReminder();
+
+    //String queryExpertIdByPlanId(String id);
+
+    //List<Map<String, Object>> queryPlanInfo(String pid);
 }

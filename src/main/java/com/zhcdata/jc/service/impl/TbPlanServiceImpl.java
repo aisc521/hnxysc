@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description TODO
@@ -75,4 +76,14 @@ public class TbPlanServiceImpl implements TbPlanService {
     public List<LatestPlanReminderDto> queryLatestPlanReminder() {
         return tbJcPlanMapper.queryLatestPlanReminder();
     }
+
+    //@Override
+    //public String queryExpertIdByPlanId(String id) {
+    //    return tbJcPlanMapper.queryExpertIdByPlanId(id);
+    //}
+    //
+    //@Override
+    //public List<Map<String, Object>> queryPlanInfo(String id) {
+    //    return null;//tbJcPlanMapper.queryPlanInfo(id);
+    //}
 }

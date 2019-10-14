@@ -5,6 +5,7 @@ import com.zhcdata.jc.dto.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbPlanService {
     /**
@@ -45,4 +46,8 @@ public interface TbPlanService {
     TbJcPlan queryPlanByPlanId(Long schemeId);
 
     List<LatestPlanReminderDto>  queryLatestPlanReminder();
+
+    //String queryExpertIdByPlanId(String id);
+
+    //List<Map<String, Object>> queryPlanInfo(String id);
 }
