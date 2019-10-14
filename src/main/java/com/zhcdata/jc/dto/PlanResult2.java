@@ -16,6 +16,71 @@ public class PlanResult2 {
 
     private String planHit;
 
+    private String popularity;
+
+    private String lz;
+    private String zThreeDays;
+    private String zFiveDays;
+    private String zSevenDays;
+    private String price;
+    private String createTime;
+
+    public String getLz() {
+        return lz;
+    }
+
+    public void setLz(String lz) {
+        this.lz = lz;
+    }
+
+    public String getzThreeDays() {
+        return zThreeDays;
+    }
+
+    public void setzThreeDays(String zThreeDays) {
+        this.zThreeDays = zThreeDays;
+    }
+
+    public String getzFiveDays() {
+        return zFiveDays;
+    }
+
+    public void setzFiveDays(String zFiveDays) {
+        this.zFiveDays = zFiveDays;
+    }
+
+    public String getzSevenDays() {
+        return zSevenDays;
+    }
+
+    public void setzSevenDays(String zSevenDays) {
+        this.zSevenDays = zSevenDays;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(String popularity) {
+        this.popularity = popularity;
+    }
+
     public String getPlanHit() {
         return planHit;
     }
