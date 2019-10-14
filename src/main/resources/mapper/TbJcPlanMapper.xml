@@ -137,14 +137,22 @@
     e.img,
     e.lable,
     e.fans,
+    e.popularity popularity,
     e.introduction,
     p.num_info numInfo,
     p.title,
     f.status,
-    p.plan_Hit planHit
+    p.plan_Hit planHit,
+    v.lz_now lz,
+    v.z_three_days zThreeDays,
+    v.z_five_days zFiveDays,
+    v.z_seven_days zSevenDays,
+    p.price price,
+    p.create_time createTime
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
+    LEFT JOIN tb_jc_victory v on e.id = v.expert_id
     where 1=1
     and p.id= #{id}
   </select>
