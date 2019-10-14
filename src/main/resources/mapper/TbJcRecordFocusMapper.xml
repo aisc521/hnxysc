@@ -14,4 +14,12 @@
   <select id="queryRecordFocus" resultType="com.zhcdata.db.model.TbJcRecordFocus">
     SELECT * from tb_jc_record_focus rec where rec.user_Id = #{userId} and rec.expert_Id = #{expertId}
   </select>
+  <select id="queryFollowExpertPushNum" resultType="integer">
+    select
+    count(*)
+    from
+    tb_jc_record_focus f
+    LEFT JOIN tb_jc_plan p ON f.expert_Id = p.ascription_expert
+    where f.user_Id = #{userId} and f.status = '1'
+  </select>
 </mapper>

@@ -9,4 +9,6 @@ public interface TbJcRecordFocusService {
     void insertRecord(TbJcRecordFocus insertdb) throws BaseException;
 
     void updateRecord(TbJcRecordFocus tbJcRecordFocus) throws BaseException;
+
+    Integer queryFollowExpertPushNum(Long userId);
 }

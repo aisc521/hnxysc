@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,15 +32,13 @@ public class LatestPlanReminderProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-        LatestPlanReminderDto latestPlanReminderDto = tbPlanService.queryLatestPlanReminder();
+        List<LatestPlanReminderDto> latestPlanReminderDto = tbPlanService.queryLatestPlanReminder();
         if(latestPlanReminderDto == null){
             resultMap.put("resCode", ProtocolCodeMsg.PLAN_IS_NULL.getCode());
             resultMap.put("message", ProtocolCodeMsg.PLAN_IS_NULL.getMsg());
             return resultMap;
         }
-        resultMap.put("id", latestPlanReminderDto.getId());
-        resultMap.put("planId", latestPlanReminderDto.getPlanId());
-        resultMap.put("nickName", latestPlanReminderDto.getNikeName());
+        resultMap.put("list", latestPlanReminderDto);
         return resultMap;
     }
 }

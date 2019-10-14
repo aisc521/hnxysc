@@ -18,6 +18,24 @@ public class PlanResult1 {
     private String price;
     private String type;
     private String createTime;
+    private String planHit;
+    private String planId;
+
+    public String getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
+
+    public String getPlanHit() {
+        return planHit;
+    }
+
+    public void setPlanHit(String planHit) {
+        this.planHit = planHit;
+    }
 
     private List<MatchPlanResult> list;
 

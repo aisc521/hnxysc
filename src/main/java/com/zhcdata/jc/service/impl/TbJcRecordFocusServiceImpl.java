@@ -42,4 +42,9 @@ public class TbJcRecordFocusServiceImpl implements TbJcRecordFocusService {
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
         }
     }
+
+    @Override
+    public Integer queryFollowExpertPushNum(Long userId) {
+        return recordFocusMapper.queryFollowExpertPushNum(userId);
+    }
 }

@@ -72,7 +72,7 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public LatestPlanReminderDto queryLatestPlanReminder() {
+    public List<LatestPlanReminderDto> queryLatestPlanReminder() {
         return tbJcPlanMapper.queryLatestPlanReminder();
     }
 }

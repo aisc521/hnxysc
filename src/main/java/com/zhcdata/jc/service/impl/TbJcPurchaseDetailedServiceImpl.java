@@ -1,5 +1,7 @@
 package com.zhcdata.jc.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcPurchaseDetailedMapper;
 import com.zhcdata.db.model.JcMatchBjdcPl;
 import com.zhcdata.db.model.TbJcPlan;
@@ -42,8 +44,10 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
 
 
     @Override
-    public List<PurchasedPlanDto> queryPurchasedPlanDtoByUserId(long userId) {
-        return tbJcPurchaseDetailedMapper.queryPurchasedPlanDtoByUserId(userId);
+    public PageInfo<PurchasedPlanDto> queryPurchasedPlanDtoByUserId(int pageNo, int pageAmount,long userId) {
+        PageHelper.startPage(pageNo, pageAmount);
+        List<PurchasedPlanDto> list = tbJcPurchaseDetailedMapper.queryPurchasedPlanDtoByUserId(userId);
+        return new PageInfo<>(list);
     }
 
 

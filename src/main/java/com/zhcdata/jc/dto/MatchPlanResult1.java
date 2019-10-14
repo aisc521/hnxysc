@@ -10,6 +10,15 @@ public class MatchPlanResult1 {
     private String planInfo;
     private String score;
     private String status;
+    private String isWin;
+
+    public String getIsWin() {
+        return isWin;
+    }
+
+    public void setIsWin(String isWin) {
+        this.isWin = isWin;
+    }
 
     public String getMatchId() {
         return matchId;
