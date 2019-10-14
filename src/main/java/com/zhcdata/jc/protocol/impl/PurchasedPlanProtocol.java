@@ -9,6 +9,7 @@ import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
 import com.zhcdata.jc.tools.Const;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -54,8 +55,11 @@ public class PurchasedPlanProtocol implements BaseProtocol {
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map resultMap = new HashMap();
         String userId = paramMap.get("userId");
-        int pageAmount = 20;
         int pageNo = Integer.parseInt(paramMap.get(Const.PAGE_NO));
+        int pageAmount = Integer.parseInt(paramMap.get("pageAmount"));
+        if(StringUtils.isBlank(String.valueOf(pageAmount))){
+             pageAmount = 20;
+        }
         PageInfo<PurchasedPlanDto> pageInfo = tbJcPurchaseDetailedService.queryPurchasedPlanDtoByUserId(pageNo,pageAmount,Long.parseLong(userId));
         resultMap.put("list",pageInfo.getList());
         resultMap.put("pageTotal", pageInfo.getPages());
