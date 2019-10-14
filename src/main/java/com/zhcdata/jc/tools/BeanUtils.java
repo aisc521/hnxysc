@@ -709,7 +709,7 @@ public class BeanUtils {
     public static EuropeOddsDetail parseEuropeOddsDetail(String[] mos) {
         ////博彩公司ID,博彩公司英文名,初盘主胜,初盘平局,初盘客胜,主胜,平局,客胜,变化时间,博彩公司简体名
         EuropeOddsDetail mo = new EuropeOddsDetail();
-        if (StringUtils.isEmpty(mos[5])&&StringUtils.isEmpty(mos[5])&&StringUtils.isEmpty(mos[5])){
+        if (StringUtils.isEmpty(mos[5])&&StringUtils.isEmpty(mos[6])&&StringUtils.isEmpty(mos[7])){
             mo.setHomewin(Float.parseFloat(mos[5]));
             mo.setStandoff(Float.parseFloat(mos[6]));
             mo.setGuestwin(Float.parseFloat(mos[7]));
