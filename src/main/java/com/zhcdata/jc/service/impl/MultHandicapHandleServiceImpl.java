@@ -39,6 +39,9 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
     @Resource
     private ScheduleMapper scheduleMapper;
 
+    @Resource
+    private Letgoal_goalMapper letgoal_goalMapper;
+
     @Async
     @Override
     public void changeHandle(String[] items) {
@@ -78,9 +81,11 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
         Letgoal db = letgoalMapper.selectByMatchIdAndCompany(info[0], info[1]);
         if (db == null) {
             try {
-                if (letgoalMapper.insertSelective(xml) > 0) {
+                int insert_id = letgoalMapper.insertSelective(xml);
+                if (insert_id>0) {
                     //log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
                     multi_yp_add(flag);
+                    //letgoal_goalMapper.selectByPrimaryKey()
                 }
             } catch (Exception e) {
                 log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库异常", item);

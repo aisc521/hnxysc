@@ -132,7 +132,7 @@ public class MatchListDelOrEditJob implements Job {
                 try {
                     schedule.setMatchtime(sdf.parse(BeanUtils.parseToFormat(list.get(i).getMatchtime())));
                 } catch (ParseException e) {
-                    System.err.println(e.toString());
+                    System.err.println("A7Y8S76SD85F7A65"+e.toString());
                 }
                 int i1 = scheduleMapper.updateByPrimaryKeySelective(schedule);
                 if (editCache.size() > 500)

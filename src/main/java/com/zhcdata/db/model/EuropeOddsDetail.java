@@ -17,6 +17,16 @@ public class EuropeOddsDetail {
 
     private Integer type;
 
+    private boolean first = false;
+
+    public boolean isFirst() {
+        return first;
+    }
+
+    public void setFirst(boolean first) {
+        this.first = first;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -74,6 +84,11 @@ public class EuropeOddsDetail {
     }
 
     public boolean oddsEquals(EuropeOddsDetail xml) {
-        return xml.getGuestwin().equals(guestwin) && xml.getStandoff().equals(standoff) && xml.getHomewin().equals(homewin) && xml.getModifytime().getTime() == modifytime.getTime();
+        try {
+            return xml.getGuestwin().equals(guestwin) && xml.getStandoff().equals(standoff) && xml.getHomewin().equals(homewin) && xml.getModifytime().getTime() == modifytime.getTime();
+        }catch (Exception e){
+            System.err.println("89UASFU89HAKJN"+e.toString());
+            return false;
+        }
     }
 }
