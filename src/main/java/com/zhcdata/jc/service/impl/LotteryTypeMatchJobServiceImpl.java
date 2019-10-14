@@ -184,6 +184,7 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
             }else{
                 jcSchedule.setIsend(false);//是否已结束 --赛程表
             }
+            jcSchedule.setMatchstate(schedule.getMatchstate());//比赛状态
 
         }
 
