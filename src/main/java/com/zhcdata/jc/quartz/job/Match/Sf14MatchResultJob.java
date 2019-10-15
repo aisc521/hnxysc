@@ -7,7 +7,6 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -29,41 +28,6 @@ import java.util.Map;
 public class Sf14MatchResultJob implements Job {
   @Resource
   JcIssueService jcIssueService;
-  @Scheduled(cron = "0/10 * * * * ?")
-  public void test(){
-    long start = System.currentTimeMillis();
-    //先查询需要入库的期
-    List<Map<String,String>> list = jcIssueService.queryIssueResult();
-    for (Map<String, String> map : list) {
-      String matchIssue = map.get("matchIssue");
-      String issue = map.get("issue");
-      if(issue.equals(matchIssue)){
-        log.info("");
-        continue;
-      }
-      //查出相应期的比过赛
-      StringBuffer matchRuslt= new StringBuffer();
-      List<Map<String,String>> MatchList = jcIssueService.queryMatchReslutByIssue(matchIssue);
-      for (Map<String, String> m : MatchList) {
-        int HomeScore = Integer.parseInt(m.get("HomeScore"));
-        int GuestScore = Integer.parseInt(m.get("GuestScore"));
-        String MatchState = m.get("MatchState");
-        matchRuslt =  getHandleResult(HomeScore,GuestScore,matchRuslt,MatchState);
-
-      }
-      //先查询期次表是否有存在的期次
-      JcIsuue jcIsuue = jcIssueService.queryByIssueAndLottery("SF14",matchIssue);
-      if(jcIsuue!=null){
-        continue;
-      }
-      //入库期次表
-      int iset = jcIssueService.insert("SF14",matchIssue,matchRuslt.toString());
-      if(iset<1){
-        log.info("彩种=SF14，期次={},赛果={} 入库失败",matchIssue,matchRuslt.toString());
-      }
-    }
-    long end = System.currentTimeMillis();
-  }
   @Override
   public void execute(JobExecutionContext context) throws JobExecutionException {
     JobKey key = context.getJobDetail().getKey();
