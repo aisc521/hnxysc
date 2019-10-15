@@ -23,20 +23,23 @@
     <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <select id="queryIssueResult" resultType="java.util.Map">
-    select a.issue_num matchIssue,cn,IFNULL(i.ISSUE,0) issue
-     from (
-    select l.issue_num,count(*) cn from jc_match_lottery l
-    , schedule s where
-      CREATE_TIME>DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 10 DAY),'%Y-%m-%d') and LOTTERY = 'SF14'
-    and s.ScheduleID = l.ID_BET007
-    and MatchState in(-1,-10,12)
-    group by l.issue_num ) a left join JC_ISUUE i on i.ISSUE = a.issue_num and i.STATUS = 2
+       select a.issue_num matchIssue,cn,IFNULL(i.ISSUE,0) issue
+       from (
+      select l.issue_num,count(*) cn from jc_match_lottery l
+      , schedule s where
+        s.MatchTime>DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 10 DAY),'%Y-%m-%d') and LOTTERY = 'SF14'
+      and s.ScheduleID = l.ID_BET007
+      and MatchState in(-1,-10,12)
+      group by l.issue_num
+      ) a left join JC_ISUUE i on i.ISSUE = a.issue_num and i.STATUS = 2
     where a.cn='14'
   </select>
   <select id="queryMatchReslutByIssue" resultType="java.util.Map">
-
-    select s.HomeScore,s.GuestScore,s.MatchState from jc_match_lottery l,schedule s where l.issue_num = '2019125' and s.ScheduleID = l.ID_BET007
+     select CAST(s.HomeScore AS CHAR) HomeScore,CAST(s.GuestScore AS CHAR) GuestScore,CAST(s.MatchState AS CHAR) MatchState ,l.LOTTERY,l.no_id
+      from jc_match_lottery l,schedule s where
+    l.issue_num =#{issue}  and s.ScheduleID = l.ID_BET007 and l.LOTTERY='SF14'
     and MatchState in(-1,-10,12)
+    order by cast(l.no_id as signed)
   </select>
   <select id="queryAwardNumByIssue" resultType="java.util.Map">
      select issue issueNum,win_num content,'' time from JC_ISUUE i where i.lottery='SF14' and

@@ -35,7 +35,7 @@ import java.util.Map;
  */
 @Slf4j
 @Service("20200212")
-public class SameOddsMatchProtocol implements BaseProtocol {
+public class SameOddsMatchListProtocol implements BaseProtocol {
     @Resource
     private CommonUtils commonUtils;
     @Resource

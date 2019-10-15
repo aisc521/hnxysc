@@ -254,4 +254,11 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
     List<Map<String, String>> list = jcMatchBjdcPlMapper.queryBjdcListReuslt(startDate,endvDate);
     return new PageInfo<>(list);
   }
+
+  @Override
+  public int queryTodayMatchCount(String date) {
+    String startDate = date+" 00:00:01";
+    String endvDate = date+" 23:59:59";
+    return jcMatchBjdcPlMapper.queryTodayMatchCount(startDate,endvDate);
+  }
 }

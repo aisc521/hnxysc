@@ -66,11 +66,15 @@ public class BjdcMatchResultProtocol implements BaseProtocol {
 
     //查询北京单场的数据
     PageInfo<Map<String, String>> pageInfo =  jcMatchBjdcPlService.queryBjdcListReuslt(pageNoInt, pageAmountInt,date);
+
+    int openNumTatol = 0 ;
+    openNumTatol =  jcMatchBjdcPlService.queryTodayMatchCount(date);
     //需要对查询结果编译处理或者sql处理
     List<Map<String,String>> list = pageInfo.getList();
     Map<String, Object>  returnMap = new HashMap<String,Object>();
     returnMap.put("pageTotal", pageInfo.getPages());
     returnMap.put("openNum", pageInfo.getTotal());
+    returnMap.put("openNumTatol", openNumTatol+"");//需要的开奖场次
     returnMap.put("pageNo", pageInfo.getPageNum());
     returnMap.put("content",pageInfo.getList());
 

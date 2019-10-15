@@ -11,4 +11,6 @@ public interface JcMatchBjdcPlMapper extends Mapper<JcMatchBjdcPl> {
     List<JcMatchBjdcPl> queryJcMatchBjdcPlByIssuemAndNoId(@Param("issueNum") String issueNum, @Param("noId") String noId);
     //按时间查询比赛完成的数据
     List<Map<String,String>> queryBjdcListReuslt(@Param("startDate") String startDate,@Param("endvDate") String endDate);
+
+  int queryTodayMatchCount(@Param("startDate") String startDate,@Param("endvDate") String endDate);
 }

@@ -64,7 +64,7 @@ public class JcIssueServiceImpl implements JcIssueService {
     example.createCriteria()
             .andEqualTo("issue", Issue)
             .andEqualTo("lottery", lottery);
-    return (JcIsuue) jcIsuueMapper.selectByExample(example);
+    return (JcIsuue) jcIsuueMapper.selectOneByExample(example);
   }
 
 

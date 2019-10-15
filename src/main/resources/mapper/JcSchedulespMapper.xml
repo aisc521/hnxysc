@@ -84,10 +84,25 @@
     select * from jc_schedulesp where ID=#{bet007Id}
   </select>
   <select id="queryJczqListReuslt" resultType="java.util.Map">
-    select s.sclass matchName,s.matchId issueNum,s.HomeTeam hostname,s.GuestTeam  guestName,s. matchTime,
-    CAST(s.HomeScore AS CHAR) HomeScore  ,CAST(s.GuestScore AS CHAR) GuestScore ,CAST(s.HomeHalfScore AS CHAR) HomeHalfScore,CAST(s.GuestHalfScore AS CHAR) GuestHalfScore,CAST(s.PolyGoal AS CHAR) PolyGoal ,p.*
-    from jc_schedule s LEFT JOIN jc_schedulesp p on s.id = p.id where s.MatchState = -1
-    and  s.MatchTime >= str_to_date('2019-09-10 00:00:01', '%Y-%m-%d %H:%i:%s')
-    and s.MatchTime <![CDATA[ <= ]]>  str_to_date('2019-10-10 23:59:59', '%Y-%m-%d %H:%i:%s')
+    select s.scheduleId,s.MatchState ,s.sclass matchName,s.matchId issueNum,s.HomeTeam hostname,s.GuestTeam  guestName,s. matchTime,
+    CAST(sa.HomeScore AS CHAR) HomeScore  ,CAST(sa.GuestScore AS CHAR) GuestScore ,CAST(sa.HomeHalfScore AS CHAR) HomeHalfScore,CAST(sa.GuestHalfScore AS CHAR) GuestHalfScore,CAST(s.PolyGoal AS CHAR) PolyGoal ,p.*
+    from jc_schedule s LEFT JOIN jc_schedulesp p on s.scheduleId = p.id
+    LEFT JOIN  schedule sa on sa.scheduleId = s.scheduleId
+    where 1=1 and  sa.MatchState = -1
+    and  s.MatchTime >= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
+    and s.MatchTime <![CDATA[ <= ]]>  str_to_date(#{endvDate}, '%Y-%m-%d %H:%i:%s')
+    and  s.matchId like #{week}"%"
+    order by matchId
+
+  </select>
+  <select id="queryTodayMatchCount" resultType="java.lang.Integer">
+        select count(*)
+      from jc_schedule s LEFT JOIN jc_schedulesp p on s.scheduleId = p.id
+    LEFT JOIN  schedule sa on sa.scheduleId = s.scheduleId
+    where 1=1
+    and  s.MatchTime >= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
+    and s.MatchTime <![CDATA[ <= ]]>  str_to_date(#{endvDate}, '%Y-%m-%d %H:%i:%s')
+    and  s.matchId like #{week}"%"
+
   </select>
 </mapper>
