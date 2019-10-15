@@ -10,6 +10,7 @@ import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.Const;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springside.modules.utils.number.NumberUtil;
 import org.springside.modules.utils.time.DateFormatUtil;
 
 import javax.annotation.Resource;
@@ -53,7 +54,7 @@ public class IndexHandicapAnalysisProtocol implements BaseProtocol {
             return map;
         }
         //赔率水位变化 变盘次数为0次时使用，复选时已竖线|分隔 1：0-0.05   2：0.05-0.1   3：0.1-0.2   4：0.2-0.3   5：0.3-0.5   6：0.5+   0：全部
-        if (!commonUtils.validParamExistOrNoNum(map, paramMap, "pam", ProtocolCodeMsg.PAM_NOT_ASSIGNED)) {
+        if (!commonUtils.validParamExist(map, paramMap, "pam", ProtocolCodeMsg.PAM_NOT_ASSIGNED)) {
             return map;
         }
         //初赔
@@ -67,6 +68,13 @@ public class IndexHandicapAnalysisProtocol implements BaseProtocol {
         //类型 1不变盘口 2变盘口
         if (!commonUtils.validParamExistOrNoNum(map, paramMap, Const.TYPE, ProtocolCodeMsg.TYPE_NOT_ASSIGNED)) {
             return map;
+        }
+        if ("1".equals(paramMap.get(Const.TYPE))) {
+            String pam = paramMap.get("pam");
+            if (Strings.isNullOrEmpty(pam) || NumberUtil.isNumber(pam.replaceAll("|", ""))) {
+                commonUtils.errorMessageToMap(map, ProtocolCodeMsg.PAM_NOT_ASSIGNED);
+                return map;
+            }
         }
         //初 盘口
         if (!commonUtils.validParamExistOrNoNum(map, paramMap, "satPankou", ProtocolCodeMsg.GOAL_NOT_ASSIGNED)) {
