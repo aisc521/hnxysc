@@ -17,4 +17,6 @@ public interface JcMatchBjdcPlService {
     void insertJcMatchBjdcPl(JcMatchLottery jcMatchLottery, BdrealimeSpRsp bdrealimeSpRsp) throws BaseException;
 
     PageInfo<Map<String, String>> queryBjdcListReuslt(int pageNo, int pageAmount, String date);
+
+    int queryTodayMatchCount(String date);
 }

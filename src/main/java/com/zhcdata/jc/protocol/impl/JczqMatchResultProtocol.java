@@ -54,47 +54,57 @@ public class JczqMatchResultProtocol implements BaseProtocol {
     List<Map<String, String>> list =  JcSchedulespService.queryJczqListReuslt(date);
     //需要对数据做处理给第三国彩公众号用
     List<Map<String,String>> returnList = new ArrayList<>();
+    int openNumTatol = 0 ;
     for(Map<String, String> map :list){
-      Map<String,String> reMap = new HashMap<>();
-      reMap.put("issueNum",map.get("issueNum"));//周几00几
-      reMap.put("matchName",map.get("matchName"));//联赛名称
-      reMap.put("matchTime",map.get("matchTime"));//比赛时间
-      reMap.put("hostname",map.get("hostname"));//主队名称
-      reMap.put("guestName",map.get("guestName"));//客队名称
-      String homeScore= map.get("HomeScore");
-      String guestScore = map.get("GuestScore");
-      String homeHalfScore = map.get("HomeHalfScore");
-      String guestHalfScore = map.get("GuestHalfScore");
-      String polyGoal = map.get("PolyGoal");
-      reMap.put("hostScore",homeScore+":"+guestScore);//全场比分
-      reMap.put("guestScore",homeHalfScore+":"+guestHalfScore);//半场比分
+      try{
+        Map<String,String> reMap = new HashMap<>();
+        reMap.put("issueNum",map.get("issueNum"));//周几00几
+        reMap.put("matchName",map.get("matchName"));//联赛名称
+        reMap.put("matchTime",map.get("matchTime"));//比赛时间
+        reMap.put("hostname",map.get("hostname"));//主队名称
+        reMap.put("guestName",map.get("guestName"));//客队名称
+        String homeScore= map.get("HomeScore");
+        String guestScore = map.get("GuestScore");
+        String homeHalfScore = map.get("HomeHalfScore");
+        String guestHalfScore = map.get("GuestHalfScore");
+        String polyGoal = map.get("PolyGoal");
+        reMap.put("hostScore",homeScore+":"+guestScore);//全场比分
+        reMap.put("guestScore",homeHalfScore+":"+guestHalfScore);//半场比分
 
-      String reslutPl[] = matchReslutHandle("BQC",homeScore,guestScore,homeHalfScore,guestHalfScore);
-      reMap.put("bqcKey",reslutPl[0]);//半全场
-      reMap.put("bqcVal",map.get(reslutPl[1]));
+        String reslutPl[] = matchReslutHandle("BQC",homeScore,guestScore,homeHalfScore,guestHalfScore);
+        reMap.put("bqcKey",reslutPl[0]);//半全场
+        reMap.put("bqcVal",map.get(reslutPl[1]));
 
-      reslutPl = matchReslutHandle("GOLF",homeScore,guestScore,homeHalfScore,guestHalfScore);
-      reMap.put("goalKey",reslutPl[0]);//进球数
-      reMap.put("goalVal",map.get(reslutPl[1]));
+        reslutPl = matchReslutHandle("GOLF",homeScore,guestScore,homeHalfScore,guestHalfScore);
+        reMap.put("goalKey",reslutPl[0]);//进球数
+        reMap.put("goalVal",map.get(reslutPl[1]));
 
-      int intHomeScore = Integer.parseInt(homeScore)+Integer.parseInt(polyGoal);
-      reslutPl = matchReslutHandle("RQSPF",intHomeScore+"",guestScore,homeHalfScore,guestHalfScore);
-      reMap.put("rqspfKey","("+polyGoal+")"+reslutPl[0]);//(-1)平 让球胜名负
-      reMap.put("rqspfVal",map.get(reslutPl[1]));
+        int intHomeScore = Integer.parseInt(homeScore)+Integer.parseInt(polyGoal);
+        reslutPl = matchReslutHandle("RQSPF",intHomeScore+"",guestScore,homeHalfScore,guestHalfScore);
+        reMap.put("rqspfKey","("+polyGoal+")"+reslutPl[0]);//(-1)平 让球胜名负
+        reMap.put("rqspfVal",map.get(reslutPl[1]));
 
-      reslutPl = matchReslutHandle("BF",homeScore,guestScore,homeHalfScore,guestHalfScore);
-      reMap.put("scoreKey",reslutPl[0]);//比分
-      reMap.put("scoreVal",map.get(reslutPl[1]));
+        reslutPl = matchReslutHandle("BF",homeScore,guestScore,homeHalfScore,guestHalfScore);
+        reMap.put("scoreKey",reslutPl[0]);//比分
+        reMap.put("scoreVal",map.get(reslutPl[1]));
 
-      reslutPl = matchReslutHandle("SPF",homeScore,guestScore,homeHalfScore,guestHalfScore);
-      reMap.put("spfKey",reslutPl[0]); //胜名负
-      reMap.put("spfVal",map.get(reslutPl[1]));
-      returnList.add(reMap);
+        reslutPl = matchReslutHandle("SPF",homeScore,guestScore,homeHalfScore,guestHalfScore);
+        reMap.put("spfKey",reslutPl[0]); //胜名负
+        reMap.put("spfVal",map.get(reslutPl[1]));
+        returnList.add(reMap);
+      }catch (Exception e){
+        log.error(map.get("issueNum")+" 数据异常",e);
+      }
+
     }
+    openNumTatol =  JcSchedulespService.queryTodayMatchCount(date);
+
     Map<String, Object>  returnMap = new HashMap<String,Object>();
 
     returnMap.put("pageTotal", "1");
-    returnMap.put("openNum", list.size());
+    returnMap.put("openNum", list.size());//已开奖的场次
+
+    returnMap.put("openNumTatol", openNumTatol+"");//需要的开奖场次
     returnMap.put("pageNo", "1");
     returnMap.put("content",returnList);
     returnMap.put("dates",date);
@@ -170,7 +180,7 @@ public class JczqMatchResultProtocol implements BaseProtocol {
           else{
             reslut = "负其他";
           }
-          index = ArrayUtils.indexOf(BFARLT,hostScore+":"+guestScore);
+          index = ArrayUtils.indexOf(BFARLT,reslut);
         }
         matchReslutPl[0] = reslut;
         matchReslutPl[1] =BFARLTPL[index];
@@ -205,7 +215,7 @@ public class JczqMatchResultProtocol implements BaseProtocol {
         if(intHomeHalfScore>intGuestHalfScore){
           bc = "胜";
         }
-        else if(intHomeHalfScore==intHomeHalfScore){
+        else if(intHomeHalfScore==intGuestHalfScore){
           bc = "平";
         }
         else{
