@@ -71,7 +71,7 @@ public class IndexHandicapAnalysisProtocol implements BaseProtocol {
         }
         if ("1".equals(paramMap.get(Const.TYPE))) {
             String pam = paramMap.get("pam");
-            if (Strings.isNullOrEmpty(pam) || NumberUtil.isNumber(pam.replaceAll("|", ""))) {
+            if (Strings.isNullOrEmpty(pam) || !NumberUtil.isNumber(pam.replaceAll("|", ""))) {
                 commonUtils.errorMessageToMap(map, ProtocolCodeMsg.PAM_NOT_ASSIGNED);
                 return map;
             }
