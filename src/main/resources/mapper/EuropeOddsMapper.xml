@@ -77,7 +77,7 @@
     where o.CompanyID = #{companyId} and o.ScheduleID = #{matchId}
   </select>
   <select id="querySameOddsMatchByOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
-
+    select * from (
     select o.scheduleId,o.FirstHomeWin satWin,o.FirstStandoff satFlat,o.FirstGuestWin satLose,
     format(ifnull(o.RealHomeWin,o.FirstHomeWin),2) endWin,
     format(ifnull(o.RealStandoff,o.FirstStandoff),2) endFlat,
@@ -105,14 +105,9 @@
     LEFT JOIN team t2 ON s.guestteamid = t2.teamid
     LEFT JOIN europeoddsdetail od on od.OddsID = o.OddsID and od.ModifyTime <![CDATA[<]]> s.MatchTime
     where o.CompanyID = #{companyId} and s.MatchState = -1
-    <if test="satOdds != null">
-      and odd >= #{satOdds}
-    </if>
-    <if test="endOdds != null">
-      and odd <![CDATA[<]]> #{endOdds}
-    </if>
+
     <if test="matchType != null and matchType != 1">
-      sct.type = #{matchType}
+      and sct.type = #{matchType}
     </if>
     AND o.FirstHomeWin
     <if test="satWinMod == 0"> = </if>
@@ -132,9 +127,17 @@
     </if>
     group by o.scheduleId,s.MatchTime
     order by s.MatchTime desc
+    ) _temp where 1=1
+    <if test="satOdds != null">
+      and odd >= #{satOdds}
+    </if>
+    <if test="endOdds != null">
+      and odd <![CDATA[<]]> #{endOdds}
+    </if>
     limit 50
   </select>
   <select id="querySameOddsMatchByFlagAndOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
+    select * from (
     select o.scheduleId,o.FirstHomeWin satWin,o.FirstStandoff satFlat,o.FirstGuestWin satLose,
     format(ifnull(o.RealHomeWin,o.FirstHomeWin),2) endWin,
     format(ifnull(o.RealStandoff,o.FirstStandoff),2) endFlat,
@@ -148,32 +151,27 @@
     when s.HomeScore = s.GuestScore then 1
     else 0 end result,
     case when o.FirstHomeWin - o.FirstGuestWin <![CDATA[>=]]> 0 THEN
-    (case when (abs(max(od.HomeWin) - o.FirstHomeWin) <![CDATA[<]]> abs(min(od.HomeWin) - o.FirstHomeWin)) then abs(min(od.HomeWin) - o.FirstHomeWin)
+    (case when (abs(max(od.HomeWin) - o.FirstHomeWin) <![CDATA[<]]> abs(min(od.HomeWin) - o.FirstHomeWin)) then
+    abs(min(od.HomeWin) - o.FirstHomeWin)
     ELSE abs(max(od.HomeWin) - o.FirstHomeWin) END)
     ELSE
-    (case when (abs(max(od.GuestWin) - o.FirstGuestWin) <![CDATA[<]]> abs(min(od.GuestWin) - o.FirstGuestWin)) then abs(min(od.GuestWin) - o.FirstGuestWin)
+    (case when (abs(max(od.GuestWin) - o.FirstGuestWin) <![CDATA[<]]> abs(min(od.GuestWin) - o.FirstGuestWin)) then
+    abs(min(od.GuestWin) - o.FirstGuestWin)
     ELSE abs(max(od.GuestWin) - o.FirstGuestWin) END)
     END odd
     from europeodds o
-    LEFT JOIN `schedule` s  on o.ScheduleID = s.ScheduleID
+    LEFT JOIN `schedule` s on o.ScheduleID = s.ScheduleID
     LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
     LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
     LEFT JOIN team t ON s.hometeamid = t.teamid
     LEFT JOIN team t2 ON s.guestteamid = t2.teamid
     LEFT JOIN europeoddsdetail od on od.OddsID = o.OddsID
     where o.CompanyID = #{companyId} and s.MatchState = -1
-    <if test="satChange != null">
-      and odd >= #{satChange}
-    </if>
-    <if test="endChange != null">
-      and odd <![CDATA[<]]> #{endChange}
-    </if>
     <if test="matchType != null and matchType != 1">
-      sct.type = #{matchType}
+      AND sct.type = #{matchType}
     </if>
     <if test="hgFlag == 1">
-      AND o.FirstHomeWin
-      <if test="satOdd == 2 or satOdd == 1"> = </if>
+      AND o.FirstHomeWin<if test="satOdd == 2 or satOdd == 1">=</if>
       <if test="satOdd != 2 and satOdd != 1"> like </if>
       #{satOdd}
       AND o.RealHomeWin
@@ -184,11 +182,12 @@
     <if test="hgFlag == 2">
       AND o.FirstGuestWin
       <if test="satOdd == 2 or satOdd == 1"> = </if>
+      =like
       <if test="satOdd != 2 and satOdd != 1"> like </if>
       #{satOdd}
       AND o.RealGuestWin
-      <if test="endOdd == 2 or satOdd == 1"> = </if>
-      <if test="endOdd != 2 and satOdd != 1"> like </if>
+      <if test="endOdd == 2 or satOdd == 1"> =</if>
+      <if test="endOdd != 2 and satOdd != 1">like</if>
       #{endOdd}
     </if>
     <if test="beginDate != null">
@@ -196,6 +195,13 @@
     </if>
     group by o.scheduleId,s.MatchTime
     order by s.MatchTime desc
+    ) _temp where  1=1
+    <if test="satChange != null">
+    and odd >= #{satChange}
+    </if>
+    <if test="endChange != null">
+      and odd <![CDATA[<]]> #{endChange}
+    </if>
     limit 50
   </select>
 
