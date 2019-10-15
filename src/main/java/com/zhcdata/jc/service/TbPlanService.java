@@ -47,7 +47,7 @@ public interface TbPlanService {
 
     List<LatestPlanReminderDto>  queryLatestPlanReminder();
 
-    //String queryExpertIdByPlanId(String id);
+    String queryExpertIdByPlanId(String id);
 
-    //List<Map<String, Object>> queryPlanInfo(String id);
+    List<Map<String, Object>> queryPlanInfo(String id);
 }

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zhcdata.db.mapper.TbJcPlanMapper" >
-  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.TbJcPlan" >
+<mapper namespace="com.zhcdata.db.mapper.TbJcPlanMapper">
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.TbJcPlan">
     <!--
       WARNING - @mbg.generated
     -->
-    <result column="id" property="id" jdbcType="BIGINT" />
-    <result column="ascription_expert" property="ascriptionExpert" jdbcType="BIGINT" />
-    <result column="title_show_type" property="titleShowType" jdbcType="BIGINT" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="introduc_show_type" property="introducShowType" jdbcType="BIGINT" />
-    <result column="introduction" property="introduction" jdbcType="VARCHAR" />
-    <result column="num_info" property="numInfo" jdbcType="VARCHAR" />
-    <result column="number" property="number" jdbcType="VARCHAR" />
-    <result column="price" property="price" jdbcType="BIGINT" />
-    <result column="type" property="type" jdbcType="BIGINT" />
-    <result column="is_right" property="isRight" jdbcType="BIGINT" />
-    <result column="end_Time" property="endTime" jdbcType="TIMESTAMP" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="plan_Hit" property="planHit" jdbcType="VARCHAR" />
-    <result column="red_Count" property="redCount" jdbcType="INTEGER" />
-    <result column="red_Pay_Count" property="redPayCount" jdbcType="INTEGER" />
+    <result column="id" property="id" jdbcType="BIGINT"/>
+    <result column="ascription_expert" property="ascriptionExpert" jdbcType="BIGINT"/>
+    <result column="title_show_type" property="titleShowType" jdbcType="BIGINT"/>
+    <result column="title" property="title" jdbcType="VARCHAR"/>
+    <result column="introduc_show_type" property="introducShowType" jdbcType="BIGINT"/>
+    <result column="introduction" property="introduction" jdbcType="VARCHAR"/>
+    <result column="num_info" property="numInfo" jdbcType="VARCHAR"/>
+    <result column="number" property="number" jdbcType="VARCHAR"/>
+    <result column="price" property="price" jdbcType="BIGINT"/>
+    <result column="type" property="type" jdbcType="BIGINT"/>
+    <result column="is_right" property="isRight" jdbcType="BIGINT"/>
+    <result column="end_Time" property="endTime" jdbcType="TIMESTAMP"/>
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    <result column="status" property="status" jdbcType="INTEGER"/>
+    <result column="plan_Hit" property="planHit" jdbcType="VARCHAR"/>
+    <result column="red_Count" property="redCount" jdbcType="INTEGER"/>
+    <result column="red_Pay_Count" property="redPayCount" jdbcType="INTEGER"/>
   </resultMap>
   <select id="queryPlanCountByExpertId" resultType="Integer">
     SELECT count(*) from tb_jc_plan where status=1 and ascription_expert=${expertId}
@@ -49,10 +49,10 @@
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
     where 1=1
-    <if test="id != null" >
+    <if test="id != null">
       and e.id = ${id}
     </if>
-    <if test="planId != null" >
+    <if test="planId != null">
       and e.id in(${planId})
     </if>
   </select>
@@ -77,20 +77,20 @@
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
     where 1=1
-    <if test="id != null" >
+    <if test="id != null">
       and e.id = ${id}
     </if>
-    <if test="planId != null" >
+    <if test="planId != null">
       and e.id in(${planId})
     </if>
   </select>
 
   <select id="queryPlanList" resultType="com.zhcdata.db.model.TbJcPlan">
     select * from tb_jc_plan where 1=1
-    <if test="status != null" >
+    <if test="status != null">
       and status = ${status}
     </if>
-    <if test="expert != null" >
+    <if test="expert != null">
       and ascription_expert = ${expert}
     </if>
     ORDER BY create_time asc
@@ -176,4 +176,41 @@
     where 1 = 1
 	ORDER BY p.create_time desc LIMIT 0,1
   </select>
+
+  <select id="queryExpertIdByPlanId" resultType="java.lang.String">
+      select ascription_expert from tb_jc_plan where id = #{id}
+    </select>
+
+  <select id="queryPlanInfo" resultType="java.util.Map">
+        SELECT jc.*, sc.MatchState Status, sc.HomeScore homeBalls, sc.GuestScore awayballs, sc.MatchTime2 dateOfMatch2
+        from (SELECT kk.*, p2.teamName awayName
+        from (SELECT k.*, p1.teamName homeName
+        from (SELECT ScheduleID matchId,
+        s.MatchTime dateOfMatch,
+        s.MatchID Num,
+        s.MatchState Status1,
+        s.sclass matchName,
+        s.HomeTeam homeTeamName,
+        s.HomeScore homeBalls1,
+        s.GuestTeam awayTeamName,
+        s.GuestScore awayballs1,
+        ssp.wl3 homeTeamZhu,
+        ssp.wl1 homeTeamPing,
+        ssp.wl0 homeTeamKe,
+        ssp.sf3 awayTeamZhu,
+        ssp.sf1 awayTeamPing,
+        ssp.sf0 awayTeamKe,
+        s.HomeTeamID homeId,
+        s.GuestTeamID awayId,
+        0 homeTeamRangballs,
+        PolyGoal awayTeamRangballs,
+        Single105 smalltype
+        from jc_schedule s
+        LEFT JOIN jc_schedulesp ssp on s.ScheduleID = ssp.ID
+        where s.ScheduleID in (select match_id from tb_jc_match where plan_id = #{pid})) k
+        LEFT JOIN tb_team_pet_name_info p1 on k.homeId = p1.teamId order by dateOfMatch) kk
+        LEFT JOIN tb_team_pet_name_info p2 on kk.awayId = p2.teamId) jc
+        LEFT JOIN `schedule` sc on jc.matchId = sc.ScheduleID
+    </select>
+
 </mapper>

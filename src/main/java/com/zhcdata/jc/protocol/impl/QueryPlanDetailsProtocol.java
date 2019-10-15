@@ -73,7 +73,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                     planResult2.setList(matchPlanResults);
                 }
             }
-            /*
+
             resultMap.put("list", result);
             ExpertInfo info = tbJcExpertService.queryExpertDetails(tbPlanService.queryExpertIdByPlanId(id));
             if (info != null) {
@@ -130,10 +130,9 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
             }
             resultMap.put("first_msg", firstMsg.toString());
             resultMap.put("plan_info", plan_info);
-*/
-
 
         } catch (Exception ex) {
+            ex.printStackTrace();
             LOGGER.error("查询方案详情异常" + ex.toString());
         }
         return resultMap;

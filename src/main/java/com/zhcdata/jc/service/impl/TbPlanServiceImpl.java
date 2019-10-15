@@ -77,13 +77,13 @@ public class TbPlanServiceImpl implements TbPlanService {
         return tbJcPlanMapper.queryLatestPlanReminder();
     }
 
-    //@Override
-    //public String queryExpertIdByPlanId(String id) {
-    //    return tbJcPlanMapper.queryExpertIdByPlanId(id);
-    //}
-    //
-    //@Override
-    //public List<Map<String, Object>> queryPlanInfo(String id) {
-    //    return null;//tbJcPlanMapper.queryPlanInfo(id);
-    //}
+    @Override
+    public String queryExpertIdByPlanId(String id) {
+        return tbJcPlanMapper.queryExpertIdByPlanId(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> queryPlanInfo(String id) {
+        return tbJcPlanMapper.queryPlanInfo(id);
+    }
 }

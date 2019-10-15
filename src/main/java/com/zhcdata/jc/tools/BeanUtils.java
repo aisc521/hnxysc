@@ -709,23 +709,164 @@ public class BeanUtils {
     public static EuropeOddsDetail parseEuropeOddsDetail(String[] mos) {
         ////博彩公司ID,博彩公司英文名,初盘主胜,初盘平局,初盘客胜,主胜,平局,客胜,变化时间,博彩公司简体名
         EuropeOddsDetail mo = new EuropeOddsDetail();
-        if (StringUtils.isEmpty(mos[5])&&StringUtils.isEmpty(mos[6])&&StringUtils.isEmpty(mos[7])){
-            mo.setHomewin(Float.parseFloat(mos[5]));
-            mo.setStandoff(Float.parseFloat(mos[6]));
-            mo.setGuestwin(Float.parseFloat(mos[7]));
-        }else {//初
-            mo.setFirst(true);
-            mo.setHomewin(Float.parseFloat(mos[2]));
-            mo.setStandoff(Float.parseFloat(mos[3]));
-            mo.setGuestwin(Float.parseFloat(mos[4]));
-        }
+
 
         try {
+            if (StringUtils.isEmpty(mos[5]) && StringUtils.isEmpty(mos[6]) && StringUtils.isEmpty(mos[7])) {
+                mo.setHomewin(Float.parseFloat(mos[5]));
+                mo.setStandoff(Float.parseFloat(mos[6]));
+                mo.setGuestwin(Float.parseFloat(mos[7]));
+            } else {//初
+                mo.setFirst(true);
+                mo.setHomewin(Float.parseFloat(mos[2]));
+                mo.setStandoff(Float.parseFloat(mos[3]));
+                mo.setGuestwin(Float.parseFloat(mos[4]));
+            }
             mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
         } catch (Exception e) {
             System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : " + mos[8]);
             e.printStackTrace();
         }
+        return mo;
+    }
+
+    public static LetGoalDetail parseSingleLetGoalDetail(String[] item) {
+        //1647028,17,-0.25,0.81,1.12,False,False,2019-10-15 15:31:04,False,2
+        //比赛ID,公司ID,初盘盘口,主队初盘赔率,客队初盘赔率,即时盘口,主队即时赔率,客队即时赔率,是否封盘1,是否走地,变盘时间,是否封盘2
+        //比赛ID,公司ID,即时盘口,主队即时赔率,客队即时赔率,是否封盘1,是否走地,变盘时间,是否封盘2
+        LetGoalDetail mo = new LetGoalDetail();
+
+        try {
+            if (StringUtils.isNotEmpty(item[5]) && StringUtils.isNotEmpty(item[6]) && StringUtils.isNotEmpty(item[7])) {
+                mo.setUpodds(Float.parseFloat(item[3]));
+                mo.setGoal(Float.parseFloat(item[2]));
+                mo.setDownodds(Float.parseFloat(item[4]));
+            }
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(item[8]));//修改时间
+        } catch (Exception e) {
+            System.err.println("parseSingleLetGoalDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
+        }
+        return mo;
+    }
+
+    public static Letgoal parseSingleLetGoal(String[] info) {
+        //比赛ID,公司ID,初盘盘口,主队初盘赔率,客队初盘赔率,即时盘口,主队即时赔率,客队即时赔率,是否封盘1,是否走地,变盘时间,是否封盘2
+        Letgoal mo = new Letgoal();
+        mo.setScheduleid(Integer.parseInt(info[0]));//比赛id
+        mo.setCompanyid(Integer.parseInt(info[1]));//公司id
+
+        if (StringUtils.isNotEmpty(info[2]) && StringUtils.isNotEmpty(info[3]) && StringUtils.isNotEmpty(info[4])) {
+            mo.setFirstgoal(Float.parseFloat(info[2]));//初盘及赔率
+            mo.setFirstupodds(Float.parseFloat(info[3]));//初盘及赔率
+            mo.setFirstdownodds(Float.parseFloat(info[4]));//初盘及赔率
+        }
+
+        if (StringUtils.isNotEmpty(info[5]) && StringUtils.isNotEmpty(info[6]) && StringUtils.isNotEmpty(info[7])) {
+            mo.setGoal(Float.parseFloat(info[5]));//即时盘及赔率
+            mo.setUpodds(Float.parseFloat(info[6]));//即时盘及赔率
+            mo.setDownodds(Float.parseFloat(info[7]));//即时盘及赔率
+
+            mo.setGoalReal(Float.parseFloat(info[5]));//终
+            mo.setUpoddsReal(Float.parseFloat(info[6]));//终
+            mo.setDownoddsReal(Float.parseFloat(info[7]));//终
+        }
+
+        //mo.setRunning(info[0]);//是否正在走地
+        //mo.setResult(info[0]);//盘路结果 1主队赢 2走 3输
+
+        try {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[10]));//变化时间
+        } catch (Exception e) {
+            System.err.println("parseSingleLetGoal,dateFormatException,变化时间转换失败" + info[10]);
+            e.printStackTrace();
+        }
+        mo.setClosepan(info[8].startsWith("T"));//球探网手动封盘
+        mo.setZoudi(info[9].startsWith("T"));//主网是否开走地
+        mo.setIsstoplive(info[11].startsWith("T"));//主网是否封盘
+        return mo;
+    }
+
+    public static StandardDetail parseSingleStandardDetail(String[] item) {
+        //比赛ID,公司ID,即时盘口,主队即时赔率,客队即时赔率,是否封盘1,是否走地,变盘时间,是否封盘2
+        StandardDetail mo = new StandardDetail();
+        if (StringUtils.isNotEmpty(item[2])&&StringUtils.isNotEmpty(item[3])&&StringUtils.isNotEmpty(item[4])){
+            mo.setHomewin(Float.parseFloat(item[2]));
+            mo.setStandoff(Float.parseFloat(item[3]));
+            mo.setGuestwin(Float.parseFloat(item[4]));
+        }
+        return mo;
+    }
+
+    public static Standard parseSingleStandard(String[] info) {
+        //比赛ID,公司ID,即时盘口,主队即时赔率,客队即时赔率,是否封盘1,是否走地,变盘时间,是否封盘2
+        Standard mo = new Standard();
+        mo.setScheduleid(Integer.parseInt(info[0]));//比赛id
+        mo.setCompanyid(Integer.parseInt(info[1]));//公司ID
+
+        mo.setHomewin(info[2]);//终盘
+        mo.setStandoff(info[3]);//
+        mo.setGuestwin(info[4]);//
+        //mo.setResult(info[]);//盘路结果
+
+        mo.setHomewinR(info[2]);//即时
+        mo.setStandoffR(info[3]);//
+        mo.setGuestwinR(info[4]);//
+
+        mo.setClosepan(info[9].startsWith("T"));//封盘
+        try {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[8]));//变化时间
+        } catch (Exception e) {
+            System.err.println("parseStandard,dateFormatException,变化时间转换失败" + info[8]);
+            e.printStackTrace();
+        }
+        return mo;
+    }
+
+    public static TotalScoreDetail parseSingleTotalScoreDetail(String[] info) {
+        //比赛ID,公司ID,时盘盘口,即时盘大球赔率,即时盘小球赔率,变盘时间,是否封盘2
+        TotalScoreDetail mo = new TotalScoreDetail();
+        mo.setUpodds(Float.parseFloat(info[3]));
+        mo.setDownodds(Float.parseFloat(info[4]));
+        mo.setGoal(Float.parseFloat(info[2]));
+        try {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[5]));//修改时间
+        } catch (Exception e) {
+            System.err.println("parseSingleTotalScoreDetail,dateFormatException,变化时间转换失败");
+            e.printStackTrace();
+        }
+        return mo;
+    }
+
+    public static TotalScore parseSingleTotalScore(String[] info) {
+        TotalScore mo = new TotalScore();
+        //比赛ID,公司ID,时盘盘口,即时盘大球赔率,即时盘小球赔率,变盘时间,是否封盘2
+        mo.setScheduleid(Integer.parseInt(info[0]));
+        mo.setCompanyid(Integer.parseInt(info[1]));
+
+        mo.setGoal(Float.parseFloat(info[2]));
+        mo.setUpodds(Float.parseFloat(info[3]));
+        mo.setDownodds(Float.parseFloat(info[4]));
+
+        mo.setGoalReal(Float.parseFloat(info[2]));
+        mo.setUpoddsReal(Float.parseFloat(info[3]));
+        mo.setDownoddsReal(Float.parseFloat(info[4]));
+
+
+        //mo.setGoalReal();
+        //mo.setUpoddsReal();
+        //mo.setDownoddsReal();
+        //mo.setResult();
+        //mo.setZoudi();
+
+        //mo.setClosepan();//球探封盘
+        try {
+            mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(info[5]));//变化时间
+        } catch (Exception e) {
+            System.err.println("parseTotalScore,dateFormatException,变化时间转换失败" + info[5]);
+            e.printStackTrace();
+        }
+        mo.setIsstoplive(info[6].startsWith("T"));//主网封盘
         return mo;
     }
 }
