@@ -3,10 +3,8 @@ package com.zhcdata.db.mapper;
 import com.zhcdata.db.model.EuropeOdds;
 import com.zhcdata.jc.dto.AnalysisDto;
 import com.zhcdata.jc.dto.AnalysisMatchDto;
-import com.zhcdata.jc.dto.SimplifyOdds;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
 import java.util.List;
 
 public interface EuropeOddsMapper {
@@ -22,7 +20,7 @@ public interface EuropeOddsMapper {
 
     int updateByPrimaryKey(EuropeOdds record);
 
-    EuropeOdds selectByMidAndCpyAnd(String mid, String cpy);
+    EuropeOdds selectByMidAndCpyAnd(@Param("mid") String mid,@Param("cpy") String cpy);
 
     List<EuropeOdds> selectByMid(String mid);
 

@@ -97,6 +97,6 @@ public class MatchListProtocol implements BaseProtocol {
             List<MatchResult1> newList=jsonMapper.fromJson(s, javaType1);
             map.put("list",newList);
         }
-        return null;
+        return map;
     }
 }
