@@ -39,7 +39,7 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
 
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
-
+        //if (true)return;
         List<String> cah = rsp.getO().getH();
         if (cah == null || cah.size() < 1) {
             log.error("21多盘口赔率变化: 欧赔（让球盘）变化数据总条数:{}", " 没有可更新的数据");
@@ -50,10 +50,10 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
             try {
                 String[] item = cah.get(i).split(",");
                 log.error("21多盘口赔率变化: 欧赔（让球盘）接口数据:{}", item);
-                if (item.length !=9) {
-                    log.error("21多盘口赔率变化: 欧赔（让球盘）数据格式不合法 接口数据:{}", item);
-                    continue;
-                }
+                //if (item.length !=9) {
+                //    log.error("21多盘口赔率变化: 欧赔（让球盘）数据格式不合法 接口数据:{}", item);
+                //    continue;
+                //}
 
                 Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
                 if(schedule ==null || schedule.getMatchtime().getTime()<System.currentTimeMillis()){

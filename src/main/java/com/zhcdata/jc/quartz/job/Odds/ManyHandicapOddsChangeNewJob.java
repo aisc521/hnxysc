@@ -45,7 +45,7 @@ public class ManyHandicapOddsChangeNewJob implements Job {
         long start = System.currentTimeMillis();
         ManyHandicapOddsChangeService array[] = {changeHandicapHandleServiceImpl,changeOddsHandleServiceImpl,changeSizesBallsHandleServiceImpl,changeHalfHandicapHandleServiceImpl,changeHalfSizesBallsHandleServiceImpl};
 
-        String url = "http://interface.win007.com/zq/ch_odds_m.xml";
+        String url = "http://interface.win007.com/zq/ch_odds_m.xml?"+System.currentTimeMillis();
         MoreHandicapOddsLisAlltRsp rsp  = (MoreHandicapOddsLisAlltRsp) new QiuTanXmlComm().handleMothodHttpGet(url,MoreHandicapOddsLisAlltRsp.class,List.class,MoreHandicapOddsARsp.class);
         for(ManyHandicapOddsChangeService bean:array){
             bean.changeHandle(rsp);

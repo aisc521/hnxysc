@@ -57,10 +57,10 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
             try {
                 String[] item = cah.get(i).split(",");
                 log.error("21多盘口赔率变化: 亚赔（让球盘）接口数据:{}", item);
-                if (item.length != 11) {
-                    log.error("21多盘口赔率变化: 亚赔（让球盘）数据格式不合法 接口数据:{}", item);
-                    continue;
-                }
+                //if (item.length != 11) {
+                //    log.error("21多盘口赔率变化: 亚赔（让球盘）数据格式不合法 接口数据:{}", item);
+                //    continue;
+                //}
 
                 Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
                 if(schedule ==null || schedule.getMatchtime().getTime()<System.currentTimeMillis()){
@@ -81,6 +81,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
 
     //单盘口操作
     public void singleHandicap(String item[]) {
+        //if (true)return;
         //存到单盘口
         LetGoalDetail xml = BeanUtils.parseLetGoalDetail(item);
         //查询此比赛最新的一条赔率

@@ -8,6 +8,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class Sf14MatchResultJob implements Job {
     for (Map<String, String> map : list) {
       String matchIssue = map.get("matchIssue");
       String issue = map.get("issue");
-      if(matchIssue.equals(matchIssue)){
+      if(issue.equals(matchIssue)){
         log.info("");
         continue;
       }
@@ -50,18 +51,16 @@ public class Sf14MatchResultJob implements Job {
          int GuestScore = Integer.parseInt(m.get("GuestScore"));
          String MatchState = m.get("MatchState");
          matchRuslt =  getHandleResult(HomeScore,GuestScore,matchRuslt,MatchState);
-
-        //先查询期次表是否有存在的期次
-        JcIsuue jcIsuue = jcIssueService.queryByIssueAndLottery("SF14",matchIssue);
-        if(jcIsuue!=null){
-          continue;
-        }
-        //入库期次表
-        int iset = jcIssueService.insert("SF14",matchIssue,matchRuslt.toString());
-        if(iset<1){
-          log.info("彩种=SF14，期次={},赛果={} 入库失败",matchIssue,matchRuslt.toString());
-        }
-
+      }
+      //先查询期次表是否有存在的期次
+      JcIsuue jcIsuue = jcIssueService.queryByIssueAndLottery("SF14",matchIssue);
+      if(jcIsuue!=null){
+        continue;
+      }
+      //入库期次表
+      int iset = jcIssueService.insert("SF14",matchIssue,matchRuslt.toString());
+      if(iset<1){
+        log.info("彩种=SF14，期次={},赛果={} 入库失败",matchIssue,matchRuslt.toString());
       }
     }
     long end = System.currentTimeMillis();
@@ -80,7 +79,7 @@ public class Sf14MatchResultJob implements Job {
     }else if(HomeScore < GuestScore){
       f = "0";
     }
-    if(matchRuslt.indexOf("|")==-1){
+    if("".equals(matchRuslt.toString())){
       matchRuslt.append(f);
     }else{
       matchRuslt.append(","+f);

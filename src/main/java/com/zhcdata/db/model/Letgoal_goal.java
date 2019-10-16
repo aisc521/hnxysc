@@ -42,4 +42,14 @@ public class Letgoal_goal {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+    public Letgoal_goal() {
+    }
+
+    public Letgoal_goal(Long oddsid, Integer goalCount, Date updateTime, Date createTime) {
+        this.oddsid = oddsid;
+        this.goalCount = goalCount;
+        this.updateTime = updateTime;
+        this.createTime = createTime;
+    }
 }

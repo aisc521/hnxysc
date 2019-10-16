@@ -31,7 +31,7 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     List<LatestPlanReminderDto> queryLatestPlanReminder();
 
-    //String queryExpertIdByPlanId(String id);
+    String queryExpertIdByPlanId(String id);
 
-    //List<Map<String, Object>> queryPlanInfo(String pid);
+    List<Map<String, Object>> queryPlanInfo(String pid);
 }

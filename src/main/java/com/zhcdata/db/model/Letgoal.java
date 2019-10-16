@@ -1,6 +1,7 @@
 package com.zhcdata.db.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Letgoal {
     private Integer oddsid;
@@ -195,5 +196,30 @@ public class Letgoal {
 
     public boolean nowOddsSame(Letgoal db) {
         return db.goal.equals(goal)&&db.upodds.equals(upodds)&&db.downodds.equals(downodds);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Letgoal letgoal = (Letgoal) o;
+        return //oddsid.equals(letgoal.oddsid) &&
+                scheduleid.equals(letgoal.scheduleid) &&
+                companyid.equals(letgoal.companyid) &&
+                firstgoal.equals(letgoal.firstgoal) &&
+                firstupodds.equals(letgoal.firstupodds) &&
+                firstdownodds.equals(letgoal.firstdownodds) &&
+                Objects.equals(goal, letgoal.goal) &&
+                Objects.equals(upodds, letgoal.upodds) &&
+                Objects.equals(downodds, letgoal.downodds) &&
+                Objects.equals(modifytime, letgoal.modifytime) &&
+                Objects.equals(goalReal, letgoal.goalReal) &&
+                Objects.equals(upoddsReal, letgoal.upoddsReal) &&
+                Objects.equals(downoddsReal, letgoal.downoddsReal);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(oddsid, scheduleid, companyid, firstgoal, firstupodds, firstdownodds, goal, upodds, downodds, modifytime, goalReal, upoddsReal, downoddsReal);
     }
 }

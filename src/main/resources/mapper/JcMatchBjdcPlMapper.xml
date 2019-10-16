@@ -37,4 +37,18 @@
     order by l.ISSUE_NUM desc ,matchTime
     ) aa LEFT JOIN  team t on aa.HomeTeamID = t.teamid LEFT JOIN team tt on  aa.GuestTeamID = tt.teamid
   </select>
+  <select id="queryTodayMatchCount" resultType="java.lang.Integer">
+    select count(*) from (
+    select l.ID_BET007,l.ISSUE_NUM,a.*,l.lottery,l.LOTTERY_NAME,d.MATCH_RESULT,IFNULL(d.conced_num,"0") concedNum from (
+    SELECT m.ScheduleID,M.HomeTeam hostname,m.GuestTeam guestName,m.MatchTime matchTime,s.Name_JS matchName,m.MatchState
+    ,m.HomeScore,m.GuestScore,m.HomeHalfScore,m.GuestHalfScore,m.HomeTeamID,m.GuestTeamID
+    from schedule m LEFT JOIN Sclass s on s.sclassID = m.SclassID
+    where 1=1
+    and  m.MatchTime >= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
+    and m.MatchTime <![CDATA[ <= ]]> str_to_date(#{endvDate}, '%Y-%m-%d %H:%i:%s')
+    ) a,jc_match_lottery l,JC_MATCH_BJDCRESLUT d where a.ScheduleID = l.ID_BET007  and a.ScheduleID = d.ID_BET007
+    and l.LOTTERY = 'BJDC'
+    order by l.ISSUE_NUM desc ,matchTime
+    ) aa LEFT JOIN  team t on aa.HomeTeamID = t.teamid LEFT JOIN team tt on  aa.GuestTeamID = tt.teamid
+  </select>
 </mapper>

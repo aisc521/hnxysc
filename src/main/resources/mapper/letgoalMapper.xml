@@ -45,6 +45,271 @@
     <select id="selectByMid" resultType="com.zhcdata.db.model.Letgoal">
     select * from letgoal where ScheduleID = #{mid}
   </select>
+    <select id="queryHandicapsByCompanyAndMatch" resultType="com.zhcdata.jc.dto.AnalysisDto">
+      select
+        o.OddsID,
+        t.name_j hostName,
+        t.flag hostIcon,
+        t2.name_j guestName,
+        t2.flag guestIcon,
+        s.matchTime matchDate,
+        o.FirstGoal satFlat,
+        o.FirstUpodds satWin,
+        o.FirstDownodds satLose from letgoal o
+      LEFT JOIN SCHEDULE s on o.ScheduleID = s.ScheduleID
+      LEFT JOIN team t ON s.hometeamid = t.teamid
+      LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+      where o.CompanyID = #{companyId} and o.ScheduleID = #{matchId}
+    </select>
+    <select id="querySameHandicapsMatchByOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
+        select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
+        format(ifnull(o.UpOdds_Real,o.FirstUpodds),2) endWin,
+        format(ifnull(o.Goal_Real,o.FirstGoal),2) endFlat,
+        format(ifnull(o.DownOdds_Real,o.FirstDownodds),2) endLose,
+        s.MatchTime,
+        sc.name_js matchName,
+        t.name_j homeName,
+        s.homescore homeScore,
+        t2.name_j guestName,
+        s.guestscore guestScore,
+        case when s.HomeScore - #{satFlat} > s.GuestScore then 3
+        when s.HomeScore - #{satFlat} = s.GuestScore then 1
+        else 0 end result,
+        case when o.FirstUpodds > o.FirstDownodds THEN
+        (case when (abs(max(od.upOdds) - o.FirstUpodds) <![CDATA[<]]> abs(min(od.upOdds) - o.FirstUpodds)) then abs(min(od.upOdds) - o.FirstUpodds)
+        ELSE abs(max(od.upOdds) - o.FirstUpodds) END)
+        ELSE
+        (case when (abs(max(od.downOdds) - o.FirstDownodds) <![CDATA[<]]> abs(min(od.downOdds) - o.FirstDownodds)) then abs(min(od.downOdds) - o.FirstDownodds)
+        ELSE abs(max(od.downOdds) - o.FirstDownodds) END)
+        END odd
+        from letgoal o
+        LEFT JOIN `schedule` s  on o.ScheduleID = s.ScheduleID
+        LEFT JOIN `letgoal_goal` lg  on o.OddsID = lg.OddsID
+        LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
+        LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
+        LEFT JOIN team t ON s.hometeamid = t.teamid
+        LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+        LEFT JOIN letgoaldetail od on od.OddsID = o.OddsID and od.ModifyTime <![CDATA[<]]> s.MatchTime
+        where o.CompanyID = #{companyId} and s.MatchState = -1
+        AND o.FirstUpodds
+        <if test="satWinMod == 0"> = </if>
+        <if test="satWinMod != 0"> like </if>
+        #{satWin}
+        AND o.FirstDownodds
+        <if test="satLoseMod == 0"> = </if>
+        <if test="satLoseMod != 0"> like </if>
+        #{satLose}
+        AND o.FirstGoal = #{satFlat}
+        and o.OddsID != #{oddsId}
+        <if test="changeTimes != null and changeTimes != -1">
+            and lg.goal_count = #{changeTimes}
+        </if>
+        <if test="matchType != null and matchType != 1">
+            sct.type = #{matchType}
+        </if>
+        <if test="beginDate != null">
+            and s.MatchTime >= #{beginDate}
+        </if>
+        group by o.scheduleId,s.MatchTime
+        order by s.MatchTime desc
+        limit 50
+    </select>
+    <select id="querySameHandicapsMatchByChangeOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
+        select scheduleId,satWin,satFlat,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd from
+          <foreach collection="changeOdds" item="odds" open="(" close=") temp" separator="union" >
+              (SELECT * from (select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
+              format(ifnull(o.UpOdds_Real,o.FirstUpodds),2) endWin,
+              format(ifnull(o.Goal_Real,o.FirstGoal),2) endFlat,
+              format(ifnull(o.DownOdds_Real,o.FirstDownodds),2) endLose,
+              s.MatchTime,
+              sc.name_js matchName,
+              t.name_j homeName,
+              s.homescore homeScore,
+              t2.name_j guestName,
+              s.guestscore guestScore,
+              case when s.HomeScore - #{satFlat} > s.GuestScore then 3
+              when s.HomeScore - #{satFlat} = s.GuestScore then 1
+              else 0 end result,
+              case when o.FirstUpodds > o.FirstDownodds THEN
+              (case when (abs(max(od.upOdds) - o.FirstUpodds) <![CDATA[<]]> abs(min(od.upOdds) - o.FirstUpodds)) then
+              abs(min(od.upOdds) - o.FirstUpodds)
+              ELSE abs(max(od.upOdds) - o.FirstUpodds) END)
+              ELSE
+              (case when (abs(max(od.downOdds) - o.FirstDownodds) <![CDATA[<]]> abs(min(od.downOdds) - o.FirstDownodds))
+              then abs(min(od.downOdds) - o.FirstDownodds)
+              ELSE abs(max(od.downOdds) - o.FirstDownodds) END)
+              END odd
+              from letgoal o
+              LEFT JOIN `schedule` s on o.ScheduleID = s.ScheduleID
+              LEFT JOIN `letgoal_goal` lg on o.OddsID = lg.OddsID
+              LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
+              LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
+              LEFT JOIN team t ON s.hometeamid = t.teamid
+              LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+              LEFT JOIN letgoaldetail od on od.OddsID = o.OddsID and od.ModifyTime <![CDATA[<]]> s.MatchTime
+              where o.CompanyID = #{companyId} and s.MatchState = -1
+
+              AND o.FirstUpodds<if test="satWinMod == 0">=</if>
+              <if test="satWinMod != 0"> like </if> #{satWin}
+              AND o.FirstDownodds
+              <if test="satWinMod == 0"> = </if>
+              <if test="satWinMod != 0"> like </if> #{satLose}
+              AND o.FirstGoal = #{satFlat}
+              and o.OddsID != #{oddsId}
+              and lg.goal_count = 0
+              <if test="matchType != null and matchType != 1">
+                  sct.type = #{matchType}
+              </if>
+              <if test="beginDate != null">
+                  and s.MatchTime >= #{beginDate}
+              </if>
+              group by o.scheduleId,s.MatchTime
+              order by s.MatchTime desc
+              ) t where 1=1
+              <if test="odds.start != null">
+                  and odd >= #{odds.start}
+              </if>
+              <if test="odds.end != null">
+                  and odd <![CDATA[<]]> #{odds.end}
+              </if>
+              limit 50
+              )
+          </foreach>
+
+        order by temp.MatchTime desc
+        limit 50
+    </select>
+    <select id="querySameHandicapsMatchByOddsAndNoChange" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
+        select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
+        format(ifnull(o.UpOdds_Real,o.FirstUpodds),2) endWin,
+        format(ifnull(o.Goal_Real,o.FirstGoal),2) endFlat,
+        format(ifnull(o.DownOdds_Real,o.FirstDownodds),2) endLose,
+        s.MatchTime,
+        sc.name_js matchName,
+        t.name_j homeName,
+        s.homescore homeScore,
+        t2.name_j guestName,
+        s.guestscore guestScore,
+        case when s.HomeScore - o.FirstGoal > s.GuestScore then 3
+        when s.HomeScore - o.FirstGoal = s.GuestScore then 1
+        else 0 end result
+        from letgoal o
+        LEFT JOIN `schedule` s  on o.ScheduleID = s.ScheduleID
+        LEFT JOIN `letgoal_goal` lg  on o.OddsID = lg.OddsID
+        LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
+        LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
+        LEFT JOIN team t ON s.hometeamid = t.teamid
+        LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+        LEFT JOIN letgoaldetail od on od.OddsID = o.OddsID and od.ModifyTime <![CDATA[<]]> s.MatchTime
+        where o.CompanyID = #{companyId} and s.MatchState = -1
+        <if test="satSatOdd != null">
+          AND o.FirstUpodds >= #{satSatOdd}
+        </if>
+        <if test="satEndOdd != null">
+          AND o.FirstUpodds <![CDATA[<]]> #{satEndOdd}
+        </if>
+        <if test="endSatOdd != null">
+          AND o.UpOdds_Real >= #{endSatOdd}
+        </if>
+        <if test="endEndOdd != null">
+          AND o.UpOdds_Real <![CDATA[<]]> #{endEndOdd}
+        </if>
+        <if test="satGoal != null">
+          AND o.FirstGoal = #{satGoal}
+        </if>
+        <if test="endGoal != null">
+            AND o.Goal_Real = #{endGoal}
+        </if>
+        <if test="changeTimes != null and changeTimes != -1">
+            and lg.goal_count = #{changeTimes}
+        </if>
+        <if test="matchType != null and matchType != 1">
+            sct.type = #{matchType}
+        </if>
+        <if test="beginDate != null">
+            and s.MatchTime >= #{beginDate}
+        </if>
+        group by o.scheduleId,s.MatchTime
+        order by s.MatchTime desc
+        limit 50
+    </select>
+    <select id="querySameHandicapsMatchByOddsAndChange" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
+        select scheduleId,satWin,satFlat,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd from
+        <foreach collection="changeOdds" item="odds" open="(" close=") temp" separator="union" >
+            (select
+            scheduleId,satWin,satFlat,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd
+            from
+            (select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
+            format(ifnull(o.UpOdds_Real,o.FirstUpodds),2) endWin,
+            format(ifnull(o.Goal_Real,o.FirstGoal),2) endFlat,
+            format(ifnull(o.DownOdds_Real,o.FirstDownodds),2) endLose,
+            s.MatchTime,
+            sc.name_js matchName,
+            t.name_j homeName,
+            s.homescore homeScore,
+            t2.name_j guestName,
+            s.guestscore guestScore,
+            case when s.HomeScore - o.FirstGoal > s.GuestScore then 3
+            when s.HomeScore - o.FirstGoal = s.GuestScore then 1
+            else 0 end result,
+            case when o.FirstUpodds > o.FirstDownodds THEN
+            (case when (abs(max(od.upOdds) - o.FirstUpodds) <![CDATA[<]]> abs(min(od.upOdds) - o.FirstUpodds)) then
+            abs(min(od.upOdds) - o.FirstUpodds)
+            ELSE abs(max(od.upOdds) - o.FirstUpodds) END)
+            ELSE
+            (case when (abs(max(od.downOdds) - o.FirstDownodds) <![CDATA[<]]> abs(min(od.downOdds) - o.FirstDownodds))
+            then abs(min(od.downOdds) - o.FirstDownodds)
+            ELSE abs(max(od.downOdds) - o.FirstDownodds) END)
+            END odd
+            from letgoal o
+            LEFT JOIN `schedule` s on o.ScheduleID = s.ScheduleID
+            LEFT JOIN `letgoal_goal` lg on o.OddsID = lg.OddsID
+            LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
+            LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
+            LEFT JOIN team t ON s.hometeamid = t.teamid
+            LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+            LEFT JOIN letgoaldetail od on od.OddsID = o.OddsID and od.ModifyTime <![CDATA[<]]> s.MatchTime
+            where o.CompanyID = #{companyId} and s.MatchState = -1
+            <if test="satSatOdd != null">
+                AND o.FirstUpodds >= #{satSatOdd}
+            </if>
+            <if test="satEndOdd != null">
+                AND o.FirstUpodds <![CDATA[<]]> #{satEndOdd}
+            </if>
+            <if test="endSatOdd != null">
+                AND o.UpOdds_Real >= #{endSatOdd}
+            </if>
+            <if test="endEndOdd != null">
+                AND o.UpOdds_Real <![CDATA[<]]> #{endEndOdd}
+            </if>
+            <if test="satGoal != null">
+                AND o.FirstGoal = #{satGoal}
+            </if>
+            <if test="endGoal != null">
+                AND o.Goal_Real = #{endGoal}
+            </if>
+            and lg.goal_count = 0
+            <if test="matchType != null and matchType != 1">
+                sct.type = #{matchType}
+            </if>
+            <if test="beginDate != null">
+                and s.MatchTime >= #{beginDate}
+            </if>
+            group by o.scheduleId,s.MatchTime
+            order by s.MatchTime desc
+            ) tt where 1=1
+            <if test="odds.start != null">
+                and odd >= #{odds.start}
+            </if>
+            <if test="odds.end != null">
+                and odd <![CDATA[<]]> #{odds.end}
+            </if>
+            limit 50
+            )
+        </foreach>
+        order by temp.MatchTime desc
+        limit 50
+    </select>
 
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

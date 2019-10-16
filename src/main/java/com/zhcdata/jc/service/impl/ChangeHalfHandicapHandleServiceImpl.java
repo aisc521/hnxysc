@@ -57,10 +57,10 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
             try {
                 String[] item = cah.get(i).split(",");
                 log.error("21多盘口赔率变化: 半场亚赔（让球盘）接口数据:{}", cah.get(i));
-                if (item.length != 9) {
-                    log.error("21多盘口赔率变化: 半场亚赔（让球盘）数据格式不合法 接口数据:{}", cah.get(i));
-                    continue;
-                }
+                //if (item.length != 9) {
+                //    log.error("21多盘口赔率变化: 半场亚赔（让球盘）数据格式不合法 接口数据:{}", cah.get(i));
+                //    continue;
+                //}
                 Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
                 if (schedule==null || schedule.getMatchtime().getTime()<System.currentTimeMillis()){
                     log.error("21多盘口赔率变化: 半场亚赔（让球盘）暂无此赛程或比赛已经开始，比赛ID:{}", cah.get(i));

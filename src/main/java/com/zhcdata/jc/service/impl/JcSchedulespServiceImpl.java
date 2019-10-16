@@ -7,6 +7,7 @@ import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.JcSchedulespService;
+import com.zhcdata.jc.tools.DateTimeUtils;
 import com.zhcdata.jc.tools.JcLotteryUtils;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.*;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -304,8 +306,38 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
 
     @Override
     public List<Map<String, String>> queryJczqListReuslt(String date) throws BaseException {
-        String startDate = date+" 00:00:01";
-        String endvDate = date+" 23:59:59";
-        return jcSchedulespMapper.queryJczqListReuslt(startDate,endvDate);
+
+        Date d = null;
+        try {
+            d = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date satDate = new java.sql.Date(d.getTime() - (86400000 * 2));
+        Date endDate = new java.sql.Date(d.getTime() + (86400000 * 2));
+        String sat = new SimpleDateFormat("yyyy-MM-dd").format(satDate)+" 00:00:01";;
+        String end = new SimpleDateFormat("yyyy-MM-dd").format(endDate)+" 23:59:59";
+        String week = DateTimeUtils.getIs(d) ;
+
+        return jcSchedulespMapper.queryJczqListReuslt(sat,end,week);
     }
+
+    @Override
+    public int queryTodayMatchCount(String date) throws BaseException {
+        Date d = null;
+        try {
+            d = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date satDate = new java.sql.Date(d.getTime() - (86400000 * 2));
+        Date endDate = new java.sql.Date(d.getTime() + (86400000 * 2));
+        String sat = new SimpleDateFormat("yyyy-MM-dd").format(satDate)+" 00:00:01";;
+        String end = new SimpleDateFormat("yyyy-MM-dd").format(endDate)+" 23:59:59";
+        String week = DateTimeUtils.getIs(d) ;
+
+        return jcSchedulespMapper.queryTodayMatchCount(sat,end,week);
+    }
+
+
 }

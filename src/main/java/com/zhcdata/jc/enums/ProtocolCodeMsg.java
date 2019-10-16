@@ -61,6 +61,14 @@ public enum ProtocolCodeMsg {
     BDJC_FLAG("090102","标识不能为空"),
     //2.1.9欧赔/亚盘/大小球详情
     DATE_NOT_ASSIGNED("021201", "日期不合法"),
+    //2.1.3.同初赔分析(10200203)
+    PAM_NOT_ASSIGNED("020301", "水位变化不合法"),
+    ODDS_COMPANY_NOT_ASSIGNED("020302", "竞彩公司不合法"),
+    MATCH_TYPE_NOT_ASSIGNED("020303", "比赛类型matchType不合法"),
+    MATCH_YEARS_NOT_ASSIGNED("020304", "比赛年限不合法"),
+    CHG_TIMES_NOT_ASSIGNED("020305", "变盘次数不合法"),
+    ODDS_WATER_NOT_ASSIGNED("020306", "赔率或水位不合法"),
+    GOAL_NOT_ASSIGNED("020307", "盘口不合法"),
 
     SUCCESS("000000", "成功"),
     FAIL("444444", "失败"),

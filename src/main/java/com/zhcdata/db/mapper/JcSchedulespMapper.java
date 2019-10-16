@@ -11,5 +11,8 @@ public interface JcSchedulespMapper extends Mapper<JcSchedulesp> {
     JcSchedulesp queryJcSchedulespByScId(@Param("bet007Id") int bet007);
 
     //按时间查询比赛完成的数据
-    List<Map<String,String>> queryJczqListReuslt(@Param("startDate") String startDate, @Param("endvDate") String endDate);
+    List<Map<String,String>> queryJczqListReuslt(@Param("startDate") String startDate, @Param("endvDate") String endDate,@Param("week") String week);
+
+    //查询当日开奖的比赛
+    int queryTodayMatchCount(@Param("startDate") String startDate, @Param("endvDate") String endDate,@Param("week") String week);
 }
