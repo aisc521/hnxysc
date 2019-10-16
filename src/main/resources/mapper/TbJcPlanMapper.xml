@@ -147,7 +147,7 @@
           SCHEDULE sc
           LEFT JOIN jc_match_lottery lo ON sc.ScheduleID = lo.ID_BET007
       WHERE
-          sc.ScheduleID = '473' UNION ALL
+          sc.ScheduleID = #{matchId} UNION ALL
       SELECT
           sc1.GuestTeam name,
           sc1.GuestScore value,
@@ -179,7 +179,7 @@
           SCHEDULE sc1
           LEFT JOIN jc_match_lottery lo ON sc1.ScheduleID = lo.ID_BET007
       WHERE
-          sc1.ScheduleID = '473'
+          sc1.ScheduleID = #{matchId}
           ) a order by a.dateOfMatch asc , a.num asc , a.number asc
 
 
