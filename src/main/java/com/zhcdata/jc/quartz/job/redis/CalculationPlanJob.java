@@ -2,6 +2,7 @@ package com.zhcdata.jc.quartz.job.redis;
 
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.MatchPlanResult;
+import com.zhcdata.jc.dto.SPFListDto;
 import com.zhcdata.jc.dto.TbSPFInfo;
 import com.zhcdata.jc.dto.TbScoreResult;
 import com.zhcdata.jc.service.TbJcMatchService;
@@ -84,9 +85,9 @@ public class CalculationPlanJob implements Job {
                                             }
                                         }
                                     } else {
-                                        List<TbSPFInfo> spfs = tbPlanService.querySPFList(matchPlanResults.get(k).getMatchId());
-                                        if (spfs != null && spfs.size() > 1) {
-                                            hScore = hScore + Integer.parseInt(spfs.get(1).getConcedeNum());
+                                        SPFListDto spfs = tbPlanService.querySPFList(matchPlanResults.get(k).getMatchId());
+                                        if (spfs != null ) {
+                                            hScore = hScore + Integer.parseInt(spfs.getAwayTeamRangballs());
                                             if (!rqspf.split(",")[0].equals("0")) {
                                                 //买胜
                                                 if (hScore > vScore) {

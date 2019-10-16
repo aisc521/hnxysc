@@ -45,7 +45,7 @@ public class MatchAnalysisProtocol implements BaseProtocol {
         if (!commonUtils.validParamExistOrNoNum(map, paramMap, "matchId", ProtocolCodeMsg.MATCH_ID_NOT_ASSIGNED)) {
             return map;
         }
-        if (!commonUtils.validParamExistOrNoInteger(map, paramMap, Const.TYPE,"7", ProtocolCodeMsg.TYPE_NOT_ASSIGNED)) {
+        if (!commonUtils.validParamExistOrNoNum(map, paramMap, Const.TYPE, ProtocolCodeMsg.TYPE_NOT_ASSIGNED)) {
             return map;
         }
         if (!commonUtils.validParamExistOrNoNum(map, paramMap, Const.TIME_ID, ProtocolCodeMsg.TIME_ID_NOT_ASSIGNED)) {

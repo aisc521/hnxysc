@@ -42,7 +42,7 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public List<TbSPFInfo> querySPFList(String matchId) {
+    public SPFListDto querySPFList(String matchId) {
         return tbJcPlanMapper.querySPFList(Long.parseLong(matchId));
     }
 

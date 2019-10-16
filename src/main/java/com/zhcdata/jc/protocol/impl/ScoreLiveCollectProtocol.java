@@ -15,6 +15,7 @@ import com.zhcdata.jc.tools.FileUtils;
 import com.zhcdata.jc.tools.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springside.modules.utils.number.NumberUtil;
 
@@ -43,12 +44,12 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
 
     @Resource
     private ScheduleService scheduleService;
-    //@Value("${custom.qiutan.url.yuMing}")
+    @Value("${custom.qiutan.url.yuMing}")
     private String imgYuMing;
-   // @Value("${custom.qiutan.url.imageUrl}")
+   @Value("${custom.qiutan.url.imageUrl}")
     private String imagUrl;
-   // @Value("${custom.qiutan.url.locolUrl}")
-    private String locolUrl;
+    @Value("${custom.qiutan.url.localUrl}")
+    private String localUrl;
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -103,10 +104,10 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             }
             if (!teamId.contains(result.getHomeId())) {
                 String img = result.getHomeImg();                    //主队
-                locolUrl = locolUrl + img;
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", locolUrl);
+                localUrl = localUrl + img;
+                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl);
                 redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId + result.getHomeId() + ",");
-                resultMap.put("hostIcon",imgYuMing+ locolUrl);
+                resultMap.put("hostIcon",imgYuMing+ localUrl);
             }
 
 
@@ -114,16 +115,16 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             //客队
             resultMap.put("guestIcon", result.getGuestImg());
             String teamId1 = (String) redisUtils.hget("SOCCER:HSET:IMG", "teamId");
-            if (teamId == null) {
-                teamId = "";
+            if (teamId1 == null) {
+                teamId1 = "";
             }
-            if (!teamId.contains(result.getGuestId())) {
+            if (!teamId1.contains(result.getGuestId())) {
                 String img = result.getGuestImg();                    //主队
-                locolUrl = locolUrl + img;
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", locolUrl);
-                redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId + result.getGuestImg() + ",");
+                localUrl = localUrl + img;
+                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl);
+                redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId1 + result.getGuestImg() + ",");
             }
-            resultMap.put("guestIcon",imgYuMing+ locolUrl);
+            resultMap.put("guestIcon",imgYuMing+ localUrl);
             resultMap.put("matchDate", result.getTime());
             //计算上下半场
             if("1".equals(mo.getMatchState())){

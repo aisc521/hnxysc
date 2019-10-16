@@ -55,7 +55,15 @@ public class MatchResult1 {
     private String homeId;
     private String visitingId;
 
+    private String matchType;
 
+    public String getMatchType() {
+        return matchType;
+    }
+
+    public void setMatchType(String matchType) {
+        this.matchType = matchType;
+    }
 
     public String getHomeId() {
         return homeId;
