@@ -90,6 +90,6 @@
           LEFT JOIN team t ON sc.HomeTeamID = t.TeamID
           LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
       WHERE
-      sc.ScheduleID = '#{matchId}'
+      sc.ScheduleID = #{matchId}
   </select>
 </mapper>
