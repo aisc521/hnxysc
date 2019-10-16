@@ -46,7 +46,7 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
     @Resource
     private LetgoalMapper letgoalMapper;
 
-    @Value("${custom.url.qiutan.yuMing}")
+    @Value("${custom.qiutan.url.yuMing}")
     private String imagePrefix;
 
     private String[] types = {"1", "2", "3"};
