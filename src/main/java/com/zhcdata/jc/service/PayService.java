@@ -1,5 +1,6 @@
 package com.zhcdata.jc.service;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -73,5 +74,40 @@ public interface PayService {
      * @return
      */
     Map<String,Object> discountRecommendUse(String userId, String orderId, String description, String src);
+
+    /**
+     * 退冻结款到账户
+     * @param userId    用户id
+     * @param orderId   支付点播订单号
+     * @param amount    实际退款金额
+     * @param remark    说明文字 如点播方案不中退
+     * @param src       用户src  使用购买时的SRC即可
+     * @return
+     */
+    Map<String,Object> refundFrozenToMoney(Long userId, String orderId, BigDecimal amount, String remark, String src);
+
+    /**
+     * 扣除冻结金额
+     * @param userId    用户id
+     * @param orderId   支付点播订单号
+     * @param amount    实际退款金额
+     * @param remark    说明文字 如点播方案扣款
+     * @param src       用户src  使用购买时的SRC即可
+     * @return
+     */
+    Map<String,Object> deductFrozen(Long userId, String orderId, BigDecimal amount, String remark, String src);
+
+
+
+    /**
+     * 退回已使用的未中点播卡次数
+     * @param userId        用户id
+     * @param orderId       支付点播订单号
+     * @param type          1.无期限 2.有期限 9.有期限有次数限制 如果不填为1无期限
+     * @param productName   说明文字 如点播方案不中退
+     * @param src           用户src  使用购买时的SRC即可
+     * @return
+     */
+    Map<String,Object> refundDiscount(Long userId,String orderId,String type,String productName,String src);
 
 }

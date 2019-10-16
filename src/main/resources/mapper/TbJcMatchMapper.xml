@@ -23,7 +23,7 @@
     where plan_id =${planId} ORDER BY match_num asc
   </select>
   <update id="updateStatus">
-    update tb_jc_match set status=${status},matchResult='${score}' where id=${id}
+    update tb_jc_match set status=${status},matchResult=#{score} where id=${id}
   </update>
   <select id="queryList1" resultType="com.zhcdata.jc.dto.MatchPlanResult1">
     SELECT match_Id matchId,match_num matchNum,match_name matchName,home_team hostTeam,visiting_team visitTeam,date_Of_Match dateOfMatch,status,matchResult score,planInfo planInfo,status isWin from tb_jc_match
@@ -90,6 +90,6 @@
           LEFT JOIN team t ON sc.HomeTeamID = t.TeamID
           LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
       WHERE
-      sc.ScheduleID = '#{matchId}'
+      sc.ScheduleID = #{matchId}
   </select>
 </mapper>

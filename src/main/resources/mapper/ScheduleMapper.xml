@@ -831,7 +831,11 @@
         lottery.ISSUE_NUM num,/*期数场次*/
         lottery.NO_ID number,/*期数场次*/
         IFNULL(pg.status,'0') iscollect,/*是否收藏*/
-        lottery.ISSUE_NUM num /*北单大期号*/
+        lottery.ISSUE_NUM num,/*北单大期号*/
+        CASE WHEN lottery.LOTTERY = 'JCZQ' then '1'
+             WHEN lottery.LOTTERY = 'SF14' then '2'
+             WHEN lottery.LOTTERY = 'BJDC' then '3'
+        end as matchType
         from schedule  sc
         LEFT JOIN sclass class ON sc.SclassID = class.sclassID
         LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
@@ -853,17 +857,17 @@
             and lottery.LOTTERY = 'JCZQ'
         </if>
         <if test="type == 2" >/*足彩*/
-             and lottery.LOTTERY = 'JCZQ'
+             and lottery.LOTTERY = 'SF14'
         </if>
         <if test="type == 3" >/*北单*/
-             and lottery.LOTTERY = 'SF14'
+             and lottery.LOTTERY = 'BJDC'
         </if>
     </select>
 
 
     <select id="queryZcNum" resultType="String">
        SELECT max(lottery.ISSUE_NUM) from schedule  sc
-       LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007 and lottery.LOTTERY = 'JCZQ'
+       LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007 and lottery.LOTTERY = 'SF14'
        where sc.MatchTime >= #{startDate}
     </select>
 
@@ -904,11 +908,15 @@
             lottery.ISSUE_NUM num,/*期数场次*/
             lottery.NO_ID number,/*期数场次*/
             IFNULL(pg.status,'0') iscollect,/*是否收藏*/
+            case when pg.type = '1' then '1'
+                 when pg.type = '2' then '3'
+                 when pg.type = '3' then '2'
+                 end as 'matchtype',
             case when pg.type = '1' then 'JCZQ'
                  when pg.type = '2' then 'BJDC'
                  when pg.type = '3' then 'SF14'
-                 end as 'Matchtype',
-						lottery.LOTTERY lotterType
+                 end as 'Matchty',
+			lottery.LOTTERY lotterType
             from schedule  sc
             LEFT JOIN sclass class ON sc.SclassID = class.sclassID
             LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
@@ -917,7 +925,7 @@
             LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
             LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id
             WHERE pg.status = '1' and pg.user_id = #{userId}
-            ORDER BY sc.MatchTime) as t where t.Matchtype = lotterType
+            ORDER BY sc.MatchTime) as t where t.Matchty = lotterType
     </select>
 
     <select id="selectMatchIdExceedNow" resultType="java.lang.Integer">
@@ -971,7 +979,7 @@
         from schedule sc
         LEFT JOIN team t1 ON sc.HomeTeamID = t1.TeamID
         LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
-        where sc.ScheduleID = '#{matchId}'
+        where sc.ScheduleID = #{matchId}
     </select>
     <select id="selectStatusChangedToday" resultType="com.zhcdata.db.model.Schedule">
         select * from schedule where MatchTime > #{sat} and MatchTime &lt; #{end} and MatchState in (1,2,3,4)

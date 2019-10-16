@@ -31,7 +31,7 @@ public class HandicapOddsJob implements Job {
         log.error("Instance detail: " + key + " trigger:" + jobKey + "开始执行");
         JobDataMap dataMap = context.getJobDetail().getJobDataMap();
         String type = dataMap.getString("type");
-        int days = dataMap.getInt("days");
+        int days = dataMap.getIntFromString("days");
         if ("detail".equals(type)) {
             handicapOddsService.updateHandicapOddsDetailData(days);
         } else {

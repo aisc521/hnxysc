@@ -29,18 +29,18 @@ public interface EuropeOddsMapper {
     void deleteByMid(String mid);
 
     AnalysisDto queryOddsByCompanyAndMatch(@Param("matchId") Integer matchId, @Param("companyId") Integer companyId,
-                                           @Param("matchType") Integer matchType, @Param("beginDate") String beginDate,
-                                           @Param("satOdds") Double satOdds, @Param("endOdds") Double endOdds);
+                                           @Param("matchType")Integer matchType,@Param("beginDate")String beginDate,
+                                           @Param("satOdds") Double satOdds,@Param("endOdds") Double endOdds);
 
-    List<AnalysisMatchDto> querySameOddsMatchByOdds(@Param("companyId") Integer companyId, @Param("matchType") Integer matchType,
-                                                    @Param("satOdds") Double satOdds, @Param("endOdds") Double endOdds,
-                                                    @Param("beginDate") String beginDate, @Param("satWinMod") String satWinMod,
-                                                    @Param("satLoseMod") String satLoseMod, @Param("satFlatMod") String satFlatMod,
-                                                    @Param("satWin") Float satWin, @Param("satLose") Float satLose,
-                                                    @Param("satFlat") Float satFlat, @Param("oddsId") Integer oddsId);
+    List<AnalysisMatchDto> querySameOddsMatchByOdds(@Param("companyId")Integer companyId,@Param("matchType")Integer matchType,
+                                                    @Param("satOdds") Double satOdds,@Param("endOdds") Double endOdds,
+                                                    @Param("beginDate") String beginDate,@Param("satWinMod") String satWinMod,
+                                                    @Param("satLoseMod") String satLoseMod,@Param("satFlatMod") String satFlatMod,
+                                                    @Param("satWin") Float satWin,@Param("satLose") Float satLose,
+                                                    @Param("satFlat") Float satFlat,@Param("oddsId") Integer oddsId);
 
-    List<AnalysisMatchDto> querySameOddsMatchByFlagAndOdds(@Param("companyId") Integer companyId, @Param("matchType") Integer matchType,
-                                                           @Param("satChange") Double satChange, @Param("endChange") Double endChange,
-                                                           @Param("beginDate") String beginDate, @Param("hgFlag") String hgFlag,
-                                                           @Param("satOdd") Float satOdd, @Param("endOdd") Float endOdd);
+    List<AnalysisMatchDto> querySameOddsMatchByFlagAndOdds(@Param("companyId")Integer companyId,@Param("matchType")Integer matchType,
+                                                    @Param("satChange") Double satChange,@Param("endChange") Double endChange,
+                                                    @Param("beginDate") String beginDate,@Param("hgFlag") String hgFlag,
+                                                    @Param("satOdd") Float satOdd,@Param("endOdd") Float endOdd);
 }

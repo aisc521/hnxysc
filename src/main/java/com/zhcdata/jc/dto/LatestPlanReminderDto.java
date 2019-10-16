@@ -8,7 +8,10 @@ package com.zhcdata.jc.dto;
 public class LatestPlanReminderDto {
     private String id;//专家id
     private String planId;//方案id
-    private String nikeName;//专家昵称
+
+
+
+    private String nickName;//专家昵称
 
     public String getId() {
         return id;
@@ -26,11 +29,13 @@ public class LatestPlanReminderDto {
         this.planId = planId;
     }
 
-    public String getNikeName() {
-        return nikeName;
+
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNikeName(String nikeName) {
-        this.nikeName = nikeName;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
+
 }

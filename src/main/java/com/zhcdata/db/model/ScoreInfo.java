@@ -52,6 +52,12 @@ public class ScoreInfo implements Serializable {
     @Column(name = "RedCard")
     private Integer redcard;
 
+    private Integer orderby;
+
+    private Integer score;
+
+    private Integer totalOrder;
+
 
     public Integer getId() {
         return id;
@@ -171,6 +177,30 @@ public class ScoreInfo implements Serializable {
 
     public void setRedcard(Integer redcard) {
         this.redcard = redcard;
+    }
+
+    public Integer getOrderby() {
+        return orderby;
+    }
+
+    public void setOrderby(Integer orderby) {
+        this.orderby = orderby;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public Integer getTotalOrder() {
+        return totalOrder;
+    }
+
+    public void setTotalOrder(Integer totalOrder) {
+        this.totalOrder = totalOrder;
     }
 
     @Override

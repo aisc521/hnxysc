@@ -14,6 +14,7 @@ import com.zhcdata.jc.tools.Const;
 import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.utils.time.ClockUtil;
@@ -45,7 +46,8 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
     @Resource
     private LetgoalMapper letgoalMapper;
 
-    private String imagePrefix = "";
+    @Value("${custom.qiutan.url.yuMing}")
+    private String imagePrefix;
 
     private String[] types = {"1", "2", "3"};
     public static int[] OP_COM = {16, 80, 81, 82, 90, 104, 115, 158, 255, 281, 545, 1129};

@@ -117,8 +117,7 @@
     <select id="querySameHandicapsMatchByChangeOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
         select scheduleId,satWin,satFlat,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd from
           <foreach collection="changeOdds" item="odds" open="(" close=") temp" separator="union" >
-              SELECT * from (
-              (select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
+              (SELECT * from (select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
               format(ifnull(o.UpOdds_Real,o.FirstUpodds),2) endWin,
               format(ifnull(o.Goal_Real,o.FirstGoal),2) endFlat,
               format(ifnull(o.DownOdds_Real,o.FirstDownodds),2) endLose,
@@ -132,15 +131,17 @@
               when s.HomeScore - #{satFlat} = s.GuestScore then 1
               else 0 end result,
               case when o.FirstUpodds > o.FirstDownodds THEN
-              (case when (abs(max(od.upOdds) - o.FirstUpodds) <![CDATA[<]]> abs(min(od.upOdds) - o.FirstUpodds)) then abs(min(od.upOdds) - o.FirstUpodds)
+              (case when (abs(max(od.upOdds) - o.FirstUpodds) <![CDATA[<]]> abs(min(od.upOdds) - o.FirstUpodds)) then
+              abs(min(od.upOdds) - o.FirstUpodds)
               ELSE abs(max(od.upOdds) - o.FirstUpodds) END)
               ELSE
-              (case when (abs(max(od.downOdds) - o.FirstDownodds) <![CDATA[<]]> abs(min(od.downOdds) - o.FirstDownodds)) then abs(min(od.downOdds) - o.FirstDownodds)
+              (case when (abs(max(od.downOdds) - o.FirstDownodds) <![CDATA[<]]> abs(min(od.downOdds) - o.FirstDownodds))
+              then abs(min(od.downOdds) - o.FirstDownodds)
               ELSE abs(max(od.downOdds) - o.FirstDownodds) END)
               END odd
               from letgoal o
-              LEFT JOIN `schedule` s  on o.ScheduleID = s.ScheduleID
-              LEFT JOIN `letgoal_goal` lg  on o.OddsID = lg.OddsID
+              LEFT JOIN `schedule` s on o.ScheduleID = s.ScheduleID
+              LEFT JOIN `letgoal_goal` lg on o.OddsID = lg.OddsID
               LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
               LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
               LEFT JOIN team t ON s.hometeamid = t.teamid
@@ -148,8 +149,7 @@
               LEFT JOIN letgoaldetail od on od.OddsID = o.OddsID and od.ModifyTime <![CDATA[<]]> s.MatchTime
               where o.CompanyID = #{companyId} and s.MatchState = -1
 
-              AND o.FirstUpodds
-              <if test="satWinMod == 0"> = </if>
+              AND o.FirstUpodds<if test="satWinMod == 0">=</if>
               <if test="satWinMod != 0"> like </if> #{satWin}
               AND o.FirstDownodds
               <if test="satWinMod == 0"> = </if>
@@ -165,14 +165,15 @@
               </if>
               group by o.scheduleId,s.MatchTime
               order by s.MatchTime desc
-              ) _temp where 1=1
+              ) t where 1=1
               <if test="odds.start != null">
                   and odd >= #{odds.start}
               </if>
               <if test="odds.end != null">
                   and odd <![CDATA[<]]> #{odds.end}
               </if>
-              limit 50)
+              limit 50
+              )
           </foreach>
 
         order by temp.MatchTime desc
@@ -235,7 +236,9 @@
     <select id="querySameHandicapsMatchByOddsAndChange" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
         select scheduleId,satWin,satFlat,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd from
         <foreach collection="changeOdds" item="odds" open="(" close=") temp" separator="union" >
-            select * from (
+            (select
+            scheduleId,satWin,satFlat,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd
+            from
             (select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
             format(ifnull(o.UpOdds_Real,o.FirstUpodds),2) endWin,
             format(ifnull(o.Goal_Real,o.FirstGoal),2) endFlat,
@@ -250,15 +253,17 @@
             when s.HomeScore - o.FirstGoal = s.GuestScore then 1
             else 0 end result,
             case when o.FirstUpodds > o.FirstDownodds THEN
-            (case when (abs(max(od.upOdds) - o.FirstUpodds) <![CDATA[<]]> abs(min(od.upOdds) - o.FirstUpodds)) then abs(min(od.upOdds) - o.FirstUpodds)
+            (case when (abs(max(od.upOdds) - o.FirstUpodds) <![CDATA[<]]> abs(min(od.upOdds) - o.FirstUpodds)) then
+            abs(min(od.upOdds) - o.FirstUpodds)
             ELSE abs(max(od.upOdds) - o.FirstUpodds) END)
             ELSE
-            (case when (abs(max(od.downOdds) - o.FirstDownodds) <![CDATA[<]]> abs(min(od.downOdds) - o.FirstDownodds)) then abs(min(od.downOdds) - o.FirstDownodds)
+            (case when (abs(max(od.downOdds) - o.FirstDownodds) <![CDATA[<]]> abs(min(od.downOdds) - o.FirstDownodds))
+            then abs(min(od.downOdds) - o.FirstDownodds)
             ELSE abs(max(od.downOdds) - o.FirstDownodds) END)
             END odd
             from letgoal o
-            LEFT JOIN `schedule` s  on o.ScheduleID = s.ScheduleID
-            LEFT JOIN `letgoal_goal` lg  on o.OddsID = lg.OddsID
+            LEFT JOIN `schedule` s on o.ScheduleID = s.ScheduleID
+            LEFT JOIN `letgoal_goal` lg on o.OddsID = lg.OddsID
             LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
             LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
             LEFT JOIN team t ON s.hometeamid = t.teamid
@@ -292,14 +297,15 @@
             </if>
             group by o.scheduleId,s.MatchTime
             order by s.MatchTime desc
-            ) _temp where 1=1
+            ) tt where 1=1
             <if test="odds.start != null">
                 and odd >= #{odds.start}
             </if>
             <if test="odds.end != null">
                 and odd <![CDATA[<]]> #{odds.end}
             </if>
-            limit 50)
+            limit 50
+            )
         </foreach>
         order by temp.MatchTime desc
         limit 50

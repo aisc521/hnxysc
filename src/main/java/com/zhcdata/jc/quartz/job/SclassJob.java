@@ -2,6 +2,7 @@ package com.zhcdata.jc.quartz.job;
 
 import com.zhcdata.db.mapper.TbSclassMapper;
 import com.zhcdata.db.model.SclassInfo;
+import com.zhcdata.db.model.SclassType;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.SclassInfoRsp;
 import org.quartz.Job;
@@ -77,6 +78,34 @@ public class SclassJob implements Job {
                         LOGGER.info("联赛信息保存成功");
                     } else {
                         LOGGER.info("联赛信息保存失败");
+                    }
+                }
+
+                //处理联赛
+                SclassType sclassType=new SclassType();
+                sclassType.setSclassid(info.getSclassid());
+                String fiveMatch="'英超','意甲','德甲','西甲','法甲'";
+                String BdJc="'英冠','英甲','英乙','英足总杯','英联赛杯','英锦标赛','社区盾杯','意乙','意大利杯','意超杯','西乙','国王杯','西超杯','德乙','德国杯','德超杯','法乙','法联赛杯','法国杯','法超杯','葡超','葡甲','葡萄牙杯','葡联赛杯','葡超杯','荷甲','荷乙','荷兰杯','荷超杯','俄超','俄甲','俄罗斯杯','俄超杯','苏超','苏冠','苏联赛杯','苏足总杯','挪超','挪甲','挪威杯','挪超杯','瑞超','瑞甲','瑞典杯','瑞超杯','比甲','比乙','比利时杯','比超杯','捷甲','捷克杯','捷超杯','土超','土超杯','希超','希腊杯','瑞士超','瑞士甲','瑞士杯','以超','以色列杯','丹超','丹甲','丹麦杯','奥甲','奥乙','澳地利杯','波甲','波兰杯','波超杯','爱超','爱甲','爱联赛杯','爱足总杯','匈甲','匈牙利杯','匈联赛杯','匈超杯','芬超','芬甲','芬联赛杯','芬兰杯','罗甲','罗杯','罗超杯','克甲','克杯','乌超','乌克兰杯','乌超杯','冰超','冰甲','冰岛杯','冰超杯','巴甲','巴乙','巴保罗锦','巴西杯','阿甲','阿乙','阿根延杯','阿超杯','智利甲','智利杯','智超杯','美职足','公开赛杯','墨超','墨西哥杯','墨超杯','墨冠杯','中足杯','中超杯','日职','日乙','天皇杯','日联赛杯','日超杯','韩职','韩挑战联','韩足总杯','澳超','澳杯','欧洲杯','欧冠','世欧预','欧预赛','欧罗巴','欧国联','欧超杯','欧青赛','女欧洲杯','美洲杯','解放者杯','世南美预','俱乐部杯','优胜者杯','世亚预','中美洲杯','中北美冠','金杯赛','亚洲杯','亚冠','世亚预','亚预赛','四强赛','亚青赛','亚运男足','亚运女足','西亚锦','东南亚锦','女亚洲杯','女四强赛','非洲杯','世非预','非预赛','非国锦','世界杯','女世界杯','奥运男足','奥运女足','联合会杯','世预附加','世青赛','世俱杯','国冠杯','中国杯','世预赛'";
+                if(fiveMatch.contains(info.getNameJ())){
+                    sclassType.setType(2);
+                }else if(BdJc.contains(info.getNameJ())){
+                    sclassType.setType(3);
+                }else {
+                    sclassType.setType(4);
+                }
+
+                List<SclassType> re=tbSclassMapper.querySclassTypeList(String.valueOf(info.getSclassid()));
+                if(re!=null&&re.size()>0){
+                    if(tbSclassMapper.updateSclassTypeByPrimaryKeySelective(sclassType)>0){
+                        LOGGER.info("联赛所属类型修改成功");
+                    }else {
+                        LOGGER.info("联赛所属类型修改失败");
+                    }
+                }else {
+                    if(tbSclassMapper.insertSclassTypeSelective(sclassType)>0){
+                        LOGGER.info("联赛所属类型保存成功");
+                    }else {
+                        LOGGER.info("联赛所属类型保存失败");
                     }
                 }
             }

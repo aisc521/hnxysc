@@ -97,7 +97,7 @@
   </select>
 
   <select id="queryScore" resultType="com.zhcdata.jc.dto.TbScoreResult">
-    SELECT * from(
+    /*SELECT * from(
     SELECT c.*,e.status_type statusType,e.id,e.status_descFK statusescFK,e.ut from(
     SELECT b.*,jc.date_Of_Match dateOfMatch,jc.num from ch_sportteryf jc
     LEFT JOIN
@@ -109,11 +109,87 @@
     where eventFK=${matchId}
     ) c
     LEFT JOIN event e on c.eventFK=e.id
-    ) f ORDER BY dateOfMatch asc,num asc,number asc
+    ) f ORDER BY dateOfMatch asc,num asc,number asc*/
+
+      SELECT
+          *
+      FROM
+          (
+      SELECT
+          sc.HomeTeam name,
+          sc.HomeScore value,
+          "1" number,
+          sc.ScheduleID eventFK,
+          sc.HomeTeamID teamId,
+          sc.MatchTime dateOfMatch,
+          lo.NO_ID num,
+          CASE
+                WHEN sc.MatchState = '0' THEN
+                'notstarted' /*未开始*/
+                WHEN sc.MatchState IN ( '1', '3', '4', '5' ) THEN
+                'inprogress' /*正在进行*/
+                WHEN sc.MatchState = '2' THEN
+                'inprogress' /*中场*/
+                WHEN sc.MatchState = '-1' THEN
+                'finished' /*完结*/
+                WHEN sc.MatchState = '-14' THEN
+                'notstarted' /*推迟*/
+                WHEN sc.MatchState = '-12' THEN
+                'cancelled' /*腰斩*/
+                WHEN sc.MatchState = '-10' THEN
+                'cancelledcancelled' /*取消*/
+                END AS statusType,/*比赛大状态*/
+                  sc.ScheduleID id,
+                  sc.MatchState statusescFK
+
+
+      FROM
+          SCHEDULE sc
+          LEFT JOIN jc_match_lottery lo ON sc.ScheduleID = lo.ID_BET007
+      WHERE
+          sc.ScheduleID = #{matchId} UNION ALL
+      SELECT
+          sc1.GuestTeam name,
+          sc1.GuestScore value,
+          "2" number,
+          sc1.ScheduleID eventFK,
+          sc1.HomeTeamID teamId,
+          sc1.MatchTime dateOfMatch,
+          lo.NO_ID num,
+          CASE
+                WHEN sc1.MatchState = '0' THEN
+                'notstarted' /*未开始*/
+                WHEN sc1.MatchState IN ( '1', '3', '4', '5' ) THEN
+                'inprogress' /*正在进行*/
+                WHEN sc1.MatchState = '2' THEN
+                'inprogress' /*中场*/
+                WHEN sc1.MatchState = '-1' THEN
+                'finished' /*完结*/
+                WHEN sc1.MatchState = '-14' THEN
+                'notstarted' /*推迟*/
+                WHEN sc1.MatchState = '-12' THEN
+                'cancelled' /*腰斩*/
+                WHEN sc1.MatchState = '-10' THEN
+                'cancelledcancelled' /*取消*/
+                END AS statusType,/*比赛大状态*/
+          sc1.ScheduleID id,
+        sc1.MatchState statusescFK
+
+      FROM
+          SCHEDULE sc1
+          LEFT JOIN jc_match_lottery lo ON sc1.ScheduleID = lo.ID_BET007
+      WHERE
+          sc1.ScheduleID = #{matchId}
+          ) a order by a.dateOfMatch asc , a.num asc , a.number asc
+
+
+
+
+
   </select>
 
-  <select id="querySPFList" resultType="com.zhcdata.jc.dto.TbSPFInfo">
-    (SELECT * from(
+  <select id="querySPFList" resultType="com.zhcdata.jc.dto.SPFListDto">
+    /*(SELECT * from(
     (SELECT sp.unique_match_id matchId,sp.gameid,spf1.levelrate,spf1.loserate,spf1.winrate,1 type,0 concedenum,spf1.create_time from (
     SELECT * from ch_sportteryf where unique_match_id=${MatchId}
     ) sp LEFT JOIN ch_jczq_win_and_lose spf1 on sp.gameid=spf1.gameid WHERE spf1.finishstatus=1)
@@ -126,7 +202,21 @@
     SELECT * from ch_sportteryf where unique_match_id=${MatchId}
     ) sp LEFT JOIN ch_jczq_rqspf spf1 on sp.gameid=spf1.gameid WHERE spf1.finishstatus=1)
     ) b ORDER BY create_time desc LIMIT 1
-    )
+    )*/
+
+SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,sc.MatchTime2 dateOfMatch2  from (
+    SELECT kk.*,p2.teamName awayName from(
+    SELECT k.*,p1.teamName homeName from (
+    SELECT ScheduleID matchId,s.MatchTime dateOfMatch,s.MatchID Num,s.MatchState Status1,s.sclass matchName,s.HomeTeam homeTeamName,s.HomeScore homeBalls1,s.GuestTeam awayTeamName,s.GuestScore awayballs1
+    ,ssp.wl3 homeTeamZhu,ssp.wl1 homeTeamPing,ssp.wl0 homeTeamKe,ssp.sf3 awayTeamZhu,ssp.sf1 awayTeamPing,ssp.sf0 awayTeamKe,s.HomeTeamID homeId,s.GuestTeamID awayId,0 homeTeamRangballs,PolyGoal awayTeamRangballs,
+    Single105 smalltype
+    from jc_schedule s
+    LEFT JOIN jc_schedulesp ssp on s.ScheduleID=ssp.ID
+		where s.ScheduleID = #{MatchId}
+    ) k LEFT JOIN tb_team_pet_name_info p1 on k.homeId=p1.teamId
+    ) kk LEFT JOIN tb_team_pet_name_info p2 on kk.awayId=p2.teamId
+    ) jc LEFT JOIN `schedule` sc on jc.matchId=sc.ScheduleID
+
   </select>
   <update id="updateStatus">
     update tb_jc_plan set status='0',plan_Hit='${planHit}',is_right='${isRight}' where id=${id}
@@ -168,7 +258,7 @@
     SELECT
     p.id planId,
     expert.id id,
-    expert.nick_name nikeName
+    expert.nick_name nickName
     from
     tb_jc_plan p
     LEFT JOIN tb_jc_expert expert ON p.ascription_expert = expert.id

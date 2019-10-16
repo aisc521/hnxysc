@@ -139,14 +139,14 @@
       <if test="redcard != null">
         RedCard,
       </if>
-      <if test="updatetime != null">
-        updateTime,
-      </if>
       <if test="orderby != null">
         orderBy,
       </if>
       <if test="score != null">
         Score,
+      </if>
+      <if test="totalOrder != null">
+        totalOrder,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -195,14 +195,14 @@
       <if test="redcard != null">
         #{redcard,jdbcType=INTEGER},
       </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
-      </if>
       <if test="orderby != null">
         #{orderby,jdbcType=INTEGER},
       </if>
       <if test="score != null">
         #{score,jdbcType=INTEGER},
+      </if>
+      <if test="totalOrder != null">
+        #{totalOrder,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -252,14 +252,14 @@
       <if test="redcard != null">
         RedCard = #{redcard,jdbcType=INTEGER},
       </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
-      </if>
       <if test="orderby != null">
         orderBy = #{orderby,jdbcType=INTEGER},
       </if>
       <if test="score != null">
         Score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="totalOrder != null">
+        totalOrder = #{totalOrder,jdbcType=INTEGER},
       </if>
     </set>
     where ID = #{id,jdbcType=INTEGER}
