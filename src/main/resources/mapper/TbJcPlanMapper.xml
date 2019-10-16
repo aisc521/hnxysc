@@ -259,7 +259,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     SELECT
     p.id planId,
     expert.id id,
-    expert.nick_name nikeName
+    expert.nick_name nickName
     from
     tb_jc_plan p
     LEFT JOIN tb_jc_expert expert ON p.ascription_expert = expert.id
