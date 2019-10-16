@@ -93,19 +93,19 @@ public class ScoreJob implements Job {
                 if (re.contains("arrTeam") && re.contains("totalScore") && re.contains("homeScore") && re.contains("guestScore")) {
                     List<ScoreInfo> list = new ArrayList<>();
 
-                    String arrTeam = re.split(";")[0];              //球队信息
-                    arrTeam = arrTeam.split("=")[1];
-                    for (int k = 0; k < arrTeam.split("],").length; k++) {
-                        String arrTeamInfo = arrTeam.split("],")[k].replaceAll("\\[", "");
-
-                        ScoreInfo info = new ScoreInfo();
-                        info.setTeamid(Integer.valueOf(arrTeamInfo.split(",")[0].replaceAll(" ", "")));
-                        info.setSclassid(Integer.valueOf(SclassID));
-                        if (SubSclassID != null && SubSclassID != "") {
-                            info.setSubsclassid(Integer.valueOf(SubSclassID));
-                        }
-                        list.add(info);
-                    }
+//                    String arrTeam = re.split(";")[0];              //球队信息
+//                    arrTeam = arrTeam.split("=")[1];
+//                    for (int k = 0; k < arrTeam.split("],").length; k++) {
+//                        String arrTeamInfo = arrTeam.split("],")[k].replaceAll("\\[", "");
+//
+//                        ScoreInfo info = new ScoreInfo();
+//                        info.setTeamid(Integer.valueOf(arrTeamInfo.split(",")[0].replaceAll(" ", "")));
+//                        info.setSclassid(Integer.valueOf(SclassID));
+//                        if (SubSclassID != null && SubSclassID != "") {
+//                            info.setSubsclassid(Integer.valueOf(SubSclassID));
+//                        }
+//                        list.add(info);
+//                    }
 
                     //String scoreColor = re.split(";")[1];                 //升降级
 
@@ -114,15 +114,9 @@ public class ScoreJob implements Job {
                     totalScore = totalScore.split("=")[1];
                     for (int k = 0; k < totalScore.split("],").length; k++) {
                         String scoreColorInfo = totalScore.split("],")[k].replaceAll("\\[", "");
-                        ScoreInfo info = list.get(k);
-                        //info.setWinScore(Integer.valueOf(scoreColorInfo.split(",")[5]));
-                        //info.setFlatScore(Integer.valueOf(scoreColorInfo.split(",")[6]));
-                        //info.setFailScore(Integer.valueOf(scoreColorInfo.split(",")[7]));
-                        //info.setTotalHomescore(Integer.valueOf(scoreColorInfo.split(",")[8]));
-                        //info.setTotalGuestscore(Integer.valueOf(scoreColorInfo.split(",")[9]));
-                        info.setRedcard(Integer.valueOf(scoreColorInfo.split(",")[3]));
-                        info.setDeduct(Integer.valueOf(scoreColorInfo.split(",")[17]));
-                        info.setCause(scoreColorInfo.split(",")[18]);
+                        ScoreInfo info = new ScoreInfo();
+                        info.setTeamid(Integer.valueOf(scoreColorInfo.split(",")[2]));      //球队ID
+                        info.setTotalOrder(Integer.valueOf(scoreColorInfo.split(",")[1]));  //总场排名
                         totalScoreList.add(info);
                     }
 
@@ -132,48 +126,76 @@ public class ScoreJob implements Job {
                     for (int k = 0; k < homeScore.split("],").length; k++) {
                         String homeScoreInfo = homeScore.split("],")[k].replaceAll("\\[", "");
                         String[] homeScoreInfos=homeScoreInfo.split(",");
-                        ScoreInfo info = list.get(k);
-                        info.setWinScore(Integer.valueOf(homeScoreInfos[2]));
-                        info.setFlatScore(Integer.valueOf(homeScoreInfos[3]));
-                        info.setFailScore(Integer.valueOf(homeScoreInfos[4]));
-                        info.setTotalHomescore(Integer.valueOf(homeScoreInfos[5]));
-                        info.setTotalGuestscore(Integer.valueOf(homeScoreInfos[6]));
-                        info.setHomeorguest(1);    //主
-                        info.setOrderby(Integer.valueOf(homeScoreInfos[0].replace(" ","")));
-                        info.setScore(Integer.valueOf(homeScoreInfos[14].replace("]]","")));
+                        ScoreInfo info = new ScoreInfo();
+                        info.setTeamid(Integer.valueOf(homeScoreInfos[1]));                                      //球队
+                        info.setWinScore(Integer.valueOf(homeScoreInfos[3]));                                    //胜
+                        info.setFlatScore(Integer.valueOf(homeScoreInfos[4]));                                   //平
+                        info.setFailScore(Integer.valueOf(homeScoreInfos[5]));                                   //负
+                        info.setTotalHomescore(Integer.valueOf(homeScoreInfos[6]));                              //得
+                        info.setTotalGuestscore(Integer.valueOf(homeScoreInfos[7]));                             //失
+                        info.setHomeorguest(1);                                                                  //主
+                        info.setOrderby(Integer.valueOf(homeScoreInfos[0].replace(" ",""))); //排名
+                        info.setScore(Integer.valueOf(homeScoreInfos[14].replace("]]",""))); //积分
                         homeScoreList.add(info);
                     }
 
-                    //List<ScoreInfo> guestScoreList = new ArrayList<>();
+                    List<ScoreInfo> guestScoreList = new ArrayList<>();
                     String guestScore = re.split(";")[4];           //客场积分
                     guestScore = guestScore.split("=")[1];
                     for (int k = 0; k < guestScore.split("],").length; k++) {
                         String guestScoreInfo = guestScore.split("],")[k].replaceAll("\\[", "");
                         String[] guestScoreInfos=guestScoreInfo.split(",");
-                        ScoreInfo info = list.get(k);
-                        info.setWinScore(Integer.valueOf(guestScoreInfos[2]));
-                        info.setFlatScore(Integer.valueOf(guestScoreInfos[3]));
-                        info.setFailScore(Integer.valueOf(guestScoreInfos[4]));
-                        info.setTotalHomescore(Integer.valueOf(guestScoreInfos[5]));
-                        info.setTotalGuestscore(Integer.valueOf(guestScoreInfos[6]));
-                        info.setHomeorguest(0);     //客
-                        info.setOrderby(Integer.valueOf(guestScoreInfos[0].replace(" ","")));
-                        info.setScore(Integer.valueOf(guestScoreInfos[14].replace("]]","")));
-                        homeScoreList.add(info);
+                        ScoreInfo info = new ScoreInfo();
+                        info.setTeamid(Integer.valueOf(guestScoreInfos[1]));                                     //球队
+                        info.setWinScore(Integer.valueOf(guestScoreInfos[3]));                                   //胜
+                        info.setFlatScore(Integer.valueOf(guestScoreInfos[4]));                                  //平
+                        info.setFailScore(Integer.valueOf(guestScoreInfos[5]));                                  //负
+                        info.setTotalHomescore(Integer.valueOf(guestScoreInfos[6]));                             //得
+                        info.setTotalGuestscore(Integer.valueOf(guestScoreInfos[7]));                            //失
+                        info.setHomeorguest(0);                                                                  //客
+                        info.setOrderby(Integer.valueOf(guestScoreInfos[0].replace(" ","")));//排名
+                        info.setScore(Integer.valueOf(guestScoreInfos[14].replace("]]","")));//积分
+                        guestScoreList.add(info);
                     }
 
                     //String halfScore = re.split(";")[5];                      //半场积分
                     //String homeHalfScore = re.split(";")[6];                  //主场半场积分
                     //String guestHalfScore = re.split(";")[7];                 //客场半场积分
-
-                    //List<ScoreInfo> SeasonList = new ArrayList<>();
                     String Season = re.split(";")[8];                     //赛季
                     Season = Season.split("=")[1];
                     Season = Season.replaceAll("'", "");
-                    for (int k = 0; k < homeScoreList.size(); k++) {
+
+
+                    if(totalScoreList.size()==homeScoreList.size()&&homeScoreList.size()==guestScoreList.size()){
+                        //主队
+                        for(int m=0;m<homeScoreList.size();m++){
+                            ScoreInfo info = homeScoreList.get(m);
+                            for(int j=0;j<totalScoreList.size();j++){
+                                if(info.getTeamid().equals(totalScoreList.get(j).getTeamid())){
+                                    info.setTotalOrder(totalScoreList.get(j).getTotalOrder());
+                                    continue;
+                                }
+                            }
+                            list.add(info);
+                        }
+
+                        //客队
+                        for(int n=0;n<guestScoreList.size();n++){
+                            ScoreInfo info = guestScoreList.get(n);
+                            for(int k=0;k<totalScoreList.size();k++){
+                                if(info.getTeamid().equals(totalScoreList.get(k).getTeamid())){
+                                    info.setTotalOrder(totalScoreList.get(k).getTotalOrder());
+                                    continue;
+                                }
+                            }
+                            list.add(info);
+                        }
+                    }
+
+                    for (int p = 0; p < list.size(); p++) {
                         //System.out.println(Season);
                         //System.out.println(Season.length());
-                        ScoreInfo info = homeScoreList.get(k);
+                        ScoreInfo info = list.get(p);
                         info.setMatchseason(Season);
                         dealTable(info);
                     }
@@ -279,6 +301,9 @@ public class ScoreJob implements Job {
                 }
             } else {
                 //if (!info.equals(existingTeam.get(0))) {
+                if(info.getTeamid()==2001){
+                    String sds="";
+                }
                 info.setId(existingTeam.get(0).getId());
                 if (tbScoreMapper.updateByPrimaryKeySelective(info) > 0) {
                     LOGGER.info("[球队积分排名]修改成功" + info.getTeamid());

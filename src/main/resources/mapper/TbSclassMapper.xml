@@ -11,8 +11,7 @@
   </select>
 
   <select id="querySClassIDList" resultType="com.zhcdata.db.model.SclassInfo">
---     SELECT sclassid from schedule where scheduleID in(SELECT scheduleID from jc_schedule where MatchTime>'2019-10-15 11:00:00' and MatchTime&lt;'2019-10-16 11:00:00') GROUP BY sclassid
-  SELECT sclassid from schedule where MatchTime>#{s} and MatchTime&lt;#{e} GROUP BY sclassID
+    SELECT sclassid from schedule where MatchTime>#{s} and MatchTime&lt;#{e} GROUP BY sclassID
 </select>
 
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.SclassInfo" >

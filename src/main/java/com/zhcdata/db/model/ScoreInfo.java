@@ -56,6 +56,8 @@ public class ScoreInfo implements Serializable {
 
     private Integer score;
 
+    private Integer totalOrder;
+
 
     public Integer getId() {
         return id;
@@ -191,6 +193,14 @@ public class ScoreInfo implements Serializable {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public Integer getTotalOrder() {
+        return totalOrder;
+    }
+
+    public void setTotalOrder(Integer totalOrder) {
+        this.totalOrder = totalOrder;
     }
 
     @Override
