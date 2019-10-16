@@ -1,5 +1,6 @@
 package com.zhcdata.jc.service;
 
+import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
 
 import java.util.List;
@@ -33,4 +34,6 @@ public interface TbJcExpertService {
     List<ExpertInfo> queryExpertsByType(String type);
 
     List<ExpertInfo> query(String userId);
+
+    TbJcExpert queryExpertDetailsById(int id);
 }

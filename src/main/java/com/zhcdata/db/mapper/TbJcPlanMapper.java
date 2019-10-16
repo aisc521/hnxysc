@@ -1,14 +1,12 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.TbJcPlan;
-import com.zhcdata.jc.dto.PlanResult1;
-import com.zhcdata.jc.dto.PlanResult2;
-import com.zhcdata.jc.dto.TbSPFInfo;
-import com.zhcdata.jc.dto.TbScoreResult;
+import com.zhcdata.jc.dto.*;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     int queryPlanCountByExpertId(@Param("expertId")String expertId);
@@ -30,4 +28,10 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     List<PlanResult1> queryPlanByExpertId1(@Param("id") long expertId);
 
     TbJcPlan queryPlanByPlanId(@Param("id")Long schemeId);
+
+    List<LatestPlanReminderDto> queryLatestPlanReminder();
+
+    String queryExpertIdByPlanId(String id);
+
+    List<Map<String, Object>> queryPlanInfo(String pid);
 }

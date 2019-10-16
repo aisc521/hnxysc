@@ -3,6 +3,9 @@ package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.Letgoal;
 import com.zhcdata.db.model.Standard;
+import com.zhcdata.jc.dto.AnalysisDto;
+import com.zhcdata.jc.dto.AnalysisMatchDto;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -33,4 +36,30 @@ public interface LetgoalMapper {
     void updateOddsByOddsId(Integer oddsid, Float upodds, Float goal, Float downodds, Date modifytime);
 
     //Letgoal selectByMidAndCpyNew(String mid, String cpy);
+
+
+    AnalysisDto queryHandicapsByCompanyAndMatch(@Param("matchId") Integer matchId, @Param("companyId") Integer companyId);
+
+    List<AnalysisMatchDto> querySameHandicapsMatchByOdds(@Param("companyId")Integer companyId, @Param("matchType")Integer matchType,
+                                                    @Param("beginDate") String beginDate,@Param("changeTimes") Integer changeTimes,
+                                                     @Param("oddsId") Integer oddsId,@Param("satWin") Float satWin,
+                                                     @Param("satLose") Float satLose,@Param("satFlat") Float satFlat,
+                                                         @Param("satWinMod") Float satWinMod,@Param("satLoseMod") Float satLoseMod);
+    List<AnalysisMatchDto> querySameHandicapsMatchByChangeOdds(@Param("companyId")Integer companyId, @Param("matchType")Integer matchType,
+                                                    @Param("changeOdds") List<Map<String,Double>> changeOdds,@Param("beginDate") String beginDate,
+                                                    @Param("oddsId") Integer oddsId,@Param("satWin") Float satWin, @Param("satLose") Float satLose,
+                                                    @Param("satFlat") Float satFlat,@Param("satWinMod") Float satWinMod,@Param("satLoseMod") Float satLoseMod);
+
+    List<AnalysisMatchDto> querySameHandicapsMatchByOddsAndNoChange(@Param("companyId")Integer companyId,@Param("matchType")Integer matchType,
+                                                           @Param("satGoal") Float satGoal,@Param("endGoal") Float endGoal,
+                                                           @Param("beginDate") String beginDate,@Param("changeTimes") Integer changeTimes,
+                                                           @Param("satSatOdd") Float satSatOdd,@Param("satEndOdd") Float satEndOdd,
+                                                           @Param("endSatOdd") Float endSatOdd,@Param("endEndOdd") Float endEndOdd);
+
+    List<AnalysisMatchDto> querySameHandicapsMatchByOddsAndChange(@Param("companyId")Integer companyId,@Param("matchType")Integer matchType,
+                                                           @Param("satGoal") Float satGoal,@Param("endGoal") Float endGoal,
+                                                                  @Param("changeOdds") List<Map<String,Double>> changeOdds,
+                                                           @Param("beginDate") String beginDate,@Param("changeTimes") Integer changeTimes,
+                                                           @Param("satSatOdd") Float satSatOdd,@Param("satEndOdd") Float satEndOdd,
+                                                           @Param("endSatOdd") Float endSatOdd,@Param("endEndOdd") Float endEndOdd);
 }

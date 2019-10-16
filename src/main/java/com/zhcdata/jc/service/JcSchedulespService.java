@@ -35,4 +35,6 @@ public interface JcSchedulespService {
 
     //按时间查询比赛完成的数据
     List<Map<String,String>> queryJczqListReuslt(String date) throws BaseException;;
+
+    int queryTodayMatchCount(String date) throws BaseException;;
 }

@@ -17,6 +17,22 @@
     <result column="Standoff_R" property="standoffR" jdbcType="REAL" />
     <result column="isStopLive" property="isstoplive" jdbcType="TINYINT" />
   </resultMap>
+  <resultMap id="SameBeginOddsResultMap" type="com.zhcdata.jc.dto.AnalysisDto">
+    <id column="oddsId" property="oddsId" jdbcType="INTEGER" />
+    <id column="hostName" property="hostName" jdbcType="VARCHAR" />
+    <id column="hostIcon" property="hostIcon" jdbcType="VARCHAR" />
+    <id column="guestName" property="guestName" jdbcType="VARCHAR" />
+    <id column="guestIcon" property="guestIcon" jdbcType="VARCHAR" />
+    <id column="matchDate" property="matchDate" jdbcType="TIMESTAMP" />
+    <id column="satWin" property="satWin" jdbcType="REAL" />
+    <id column="satLose" property="satLose" jdbcType="REAL" />
+    <id column="satFlat" property="satFlat" jdbcType="REAL" />
+    <collection property="list" select="com.zhcdata.db.mapper.EuropeOddsMapper.querySameOddsMatchByOdds"
+                ofType="com.zhcdata.jc.dto.AnalysisMatchDto" javaType="java.util.ArrayList"
+                column="{satWin=satWin,satLose=satLose,satFlat=satFlat,oddsId=oddsId,companyId=companyId,
+                matchType=matchType,satOdds=satOdds,endOdds=endOdds,beginDate=beginDate,
+                satWinMod=satWinMod,satLoseMod=satLoseMod,satFlatMod=satFlatMod}" />
+  </resultMap>
   <sql id="Base_Column_List" >
     OddsID, ScheduleID, CompanyID, FirstHomeWin, FirstStandoff, FirstGuestWin, RealHomeWin, 
     RealStandoff, RealGuestWin, ModifyTime, HomeWin_R, GuestWin_R, Standoff_R, isStopLive
@@ -35,9 +51,162 @@
     <select id="selectByMid" resultType="com.zhcdata.db.model.EuropeOdds">
       select * from europeodds where ScheduleID = #{mid}
     </select>
+  <select id="queryOddsByCompanyAndMatch" resultMap="SameBeginOddsResultMap">
+    SELECT
+      #{companyId} companyId,
+      #{matchType} matchType,
+      #{satOdds} satOdds,
+      #{endOdds} endOdds,
+      #{beginDate} beginDate,
+      o.OddsID oddsId,
+      t.name_j hostName,
+      t.flag hostIcon,
+      t2.name_j guestName,
+      t2.flag guestIcon,
+      s.matchTime matchDate,
+      o.FirstHomeWin satWin,
+      mod(o.FirstHomeWin,0.25) satWinMod,
+      o.FirstGuestWin satLose,
+      mod(o.FirstGuestWin,0.25) satLoseMod,
+      o.FirstStandoff satFlat,
+      mod(o.FirstStandoff,0.25) satFlatMod
+       FROM europeodds o
+    LEFT JOIN SCHEDULE s on o.ScheduleID = s.ScheduleID
+    LEFT JOIN team t ON s.hometeamid = t.teamid
+    LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+    where o.CompanyID = #{companyId} and o.ScheduleID = #{matchId}
+  </select>
+  <select id="querySameOddsMatchByOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
+    select * from (
+    select o.scheduleId,o.FirstHomeWin satWin,o.FirstStandoff satFlat,o.FirstGuestWin satLose,
+    format(ifnull(o.RealHomeWin,o.FirstHomeWin),2) endWin,
+    format(ifnull(o.RealStandoff,o.FirstStandoff),2) endFlat,
+    format(ifnull(o.RealGuestWin,o.FirstGuestWin),2) endLose,
+    sc.name_js matchName,
+    t.name_j homeName,
+    s.homescore homeScore,
+    t2.name_j guestName,
+    s.guestscore guestScore,
+    case when s.HomeScore > s.GuestScore then 3
+    when s.HomeScore = s.GuestScore then 1
+    else 0 end result,
+    case when o.FirstHomeWin - o.FirstGuestWin <![CDATA[>=]]> 0 THEN
+    (case when (abs(max(od.HomeWin) - o.FirstHomeWin) <![CDATA[<]]> abs(min(od.HomeWin) - o.FirstHomeWin)) then abs(min(od.HomeWin) - o.FirstHomeWin)
+    ELSE abs(max(od.HomeWin) - o.FirstHomeWin) END)
+    ELSE
+    (case when (abs(max(od.GuestWin) - o.FirstGuestWin) <![CDATA[<]]> abs(min(od.GuestWin) - o.FirstGuestWin)) then abs(min(od.GuestWin) - o.FirstGuestWin)
+    ELSE abs(max(od.GuestWin) - o.FirstGuestWin) END)
+    END odd
+    from europeodds o
+    LEFT JOIN `schedule` s  on o.ScheduleID = s.ScheduleID
+    LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
+    LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
+    LEFT JOIN team t ON s.hometeamid = t.teamid
+    LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+    LEFT JOIN europeoddsdetail od on od.OddsID = o.OddsID and od.ModifyTime <![CDATA[<]]> s.MatchTime
+    where o.CompanyID = #{companyId} and s.MatchState = -1
+
+    <if test="matchType != null and matchType != 1">
+      and sct.type = #{matchType}
+    </if>
+    AND o.FirstHomeWin
+    <if test="satWinMod == 0"> = </if>
+    <if test="satWinMod != 0"> like </if>
+    #{satWin}
+    AND o.FirstGuestWin
+    <if test="satLoseMod == 0"> = </if>
+    <if test="satLoseMod != 0"> like </if>
+    #{satLose}
+    AND o.FirstStandoff
+    <if test="satFlatMod == 0"> = </if>
+    <if test="satFlatMod != 0"> like </if>
+    #{satFlat}
+    and o.OddsID != #{oddsId}
+    <if test="beginDate != null">
+      and s.MatchTime >= #{beginDate}
+    </if>
+    group by o.scheduleId,s.MatchTime
+    order by s.MatchTime desc
+    ) _temp where 1=1
+    <if test="satOdds != null">
+      and odd >= #{satOdds}
+    </if>
+    <if test="endOdds != null">
+      and odd <![CDATA[<]]> #{endOdds}
+    </if>
+    limit 50
+  </select>
+  <select id="querySameOddsMatchByFlagAndOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
+    select * from (
+    select o.scheduleId,o.FirstHomeWin satWin,o.FirstStandoff satFlat,o.FirstGuestWin satLose,
+    format(ifnull(o.RealHomeWin,o.FirstHomeWin),2) endWin,
+    format(ifnull(o.RealStandoff,o.FirstStandoff),2) endFlat,
+    format(ifnull(o.RealGuestWin,o.FirstGuestWin),2) endLose,
+    sc.name_js matchName,
+    t.name_j homeName,
+    s.homescore homeScore,
+    t2.name_j guestName,
+    s.guestscore guestScore,
+    case when s.HomeScore > s.GuestScore then 3
+    when s.HomeScore = s.GuestScore then 1
+    else 0 end result,
+    case when o.FirstHomeWin - o.FirstGuestWin <![CDATA[>=]]> 0 THEN
+    (case when (abs(max(od.HomeWin) - o.FirstHomeWin) <![CDATA[<]]> abs(min(od.HomeWin) - o.FirstHomeWin)) then
+    abs(min(od.HomeWin) - o.FirstHomeWin)
+    ELSE abs(max(od.HomeWin) - o.FirstHomeWin) END)
+    ELSE
+    (case when (abs(max(od.GuestWin) - o.FirstGuestWin) <![CDATA[<]]> abs(min(od.GuestWin) - o.FirstGuestWin)) then
+    abs(min(od.GuestWin) - o.FirstGuestWin)
+    ELSE abs(max(od.GuestWin) - o.FirstGuestWin) END)
+    END odd
+    from europeodds o
+    LEFT JOIN `schedule` s on o.ScheduleID = s.ScheduleID
+    LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
+    LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
+    LEFT JOIN team t ON s.hometeamid = t.teamid
+    LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+    LEFT JOIN europeoddsdetail od on od.OddsID = o.OddsID
+    where o.CompanyID = #{companyId} and s.MatchState = -1
+    <if test="matchType != null and matchType != 1">
+      AND sct.type = #{matchType}
+    </if>
+    <if test="hgFlag == 1">
+      AND o.FirstHomeWin<if test="satOdd == 2 or satOdd == 1">=</if>
+      <if test="satOdd != 2 and satOdd != 1"> like </if>
+      #{satOdd}
+      AND o.RealHomeWin
+      <if test="endOdd == 2 or satOdd == 1"> = </if>
+      <if test="endOdd != 2 and satOdd != 1"> like </if>
+      #{endOdd}
+    </if>
+    <if test="hgFlag == 2">
+      AND o.FirstGuestWin
+      <if test="satOdd == 2 or satOdd == 1"> = </if>
+      =like
+      <if test="satOdd != 2 and satOdd != 1"> like </if>
+      #{satOdd}
+      AND o.RealGuestWin
+      <if test="endOdd == 2 or satOdd == 1"> =</if>
+      <if test="endOdd != 2 and satOdd != 1">like</if>
+      #{endOdd}
+    </if>
+    <if test="beginDate != null">
+      and s.MatchTime >= #{beginDate}
+    </if>
+    group by o.scheduleId,s.MatchTime
+    order by s.MatchTime desc
+    ) _temp where  1=1
+    <if test="satChange != null">
+    and odd >= #{satChange}
+    </if>
+    <if test="endChange != null">
+      and odd <![CDATA[<]]> #{endChange}
+    </if>
+    limit 50
+  </select>
 
 
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from europeodds
     where OddsID = #{oddsid,jdbcType=INTEGER}
   </delete>

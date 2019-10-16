@@ -3,16 +3,14 @@ package com.zhcdata.jc.service.impl;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
 import com.zhcdata.db.mapper.TbPlayerMapper;
 import com.zhcdata.db.model.TbJcPlan;
-import com.zhcdata.jc.dto.PlanResult1;
-import com.zhcdata.jc.dto.PlanResult2;
-import com.zhcdata.jc.dto.TbSPFInfo;
-import com.zhcdata.jc.dto.TbScoreResult;
+import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.service.TbPlanService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description TODO
@@ -72,5 +70,20 @@ public class TbPlanServiceImpl implements TbPlanService {
     public TbJcPlan queryPlanByPlanId(Long schemeId) {
 
         return tbJcPlanMapper.queryPlanByPlanId(schemeId);
+    }
+
+    @Override
+    public List<LatestPlanReminderDto> queryLatestPlanReminder() {
+        return tbJcPlanMapper.queryLatestPlanReminder();
+    }
+
+    @Override
+    public String queryExpertIdByPlanId(String id) {
+        return tbJcPlanMapper.queryExpertIdByPlanId(id);
+    }
+
+    @Override
+    public List<Map<String, Object>> queryPlanInfo(String id) {
+        return tbJcPlanMapper.queryPlanInfo(id);
     }
 }

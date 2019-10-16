@@ -1,5 +1,7 @@
 package com.zhcdata.jc.dto;
 
+import java.util.List;
+
 /**
  * @Description TODO
  * @Author cuishuai
@@ -24,6 +26,69 @@ public class PurchasedPlanDto {
     private String hostTeam;
     private String visitTeam;
     private String dateOfMatch;
+
+    private String winStatus;
+    private String buyTime;
+    private String planHit;
+    private String level;
+
+
+
+    private String planId;
+
+    private List<MatchPlanResult> list;
+
+
+    public List<MatchPlanResult> getList() {
+        return list;
+    }
+
+    public void setList(List<MatchPlanResult> list) {
+        this.list = list;
+    }
+
+    public PurchasedPlanDto() {
+    }
+
+    public String getPlanId() {
+        return planId;
+    }
+
+    public void setPlanId(String planId) {
+        this.planId = planId;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getWinStatus() {
+        return winStatus;
+    }
+
+    public void setWinStatus(String winStatus) {
+        this.winStatus = winStatus;
+    }
+
+    public String getBuyTime() {
+        return buyTime;
+    }
+
+    public void setBuyTime(String buyTime) {
+        this.buyTime = buyTime;
+    }
+
+    public String getPlanHit() {
+        return planHit;
+    }
+
+    public void setPlanHit(String planHit) {
+        this.planHit = planHit;
+    }
 
     public String getId() {
         return id;

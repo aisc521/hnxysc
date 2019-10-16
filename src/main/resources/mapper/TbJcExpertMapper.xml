@@ -70,17 +70,14 @@
     SELECT * from tb_jc_expert
   </select>
   <select id="queryExpertsByType" resultType="com.zhcdata.jc.dto.ExpertInfo">
-    SELECT * from (
     SELECT e.id,e.img,e.nick_name nickName,e.grade,e.lable,
-    e.fans,e.introduction,1 pushed,'' victory,v.lz_now lz,
-    v.z_Seven_Days zSevenDays,v.return_Seven_Days returnSevenDays from  tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
-    ) a
-
-    <if test="type==1">
-      ORDER BY lz desc
+    e.fans,e.introduction,1 pushed,v.lz_now victory,
+    v.z_Seven_Days zSevenDays,v.return_Seven_Days returnSevenDays ,(select count(*) from tb_jc_plan p where p.ascription_expert = e.id) pushed from  tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
+    <if test="type==2">
+      ORDER BY victory desc
     </if>
 
-    <if test="type==2">
+    <if test="type==1">
       ORDER BY zSevenDays desc
     </if>
 
@@ -96,5 +93,8 @@
     LEFT JOIN tb_jc_victory v on f.expert_Id=v.expert_id
     where f.user_Id=${userId}
     ) a
+  </select>
+  <select id="queryExpertDetailsById" resultType="com.zhcdata.db.model.TbJcExpert">
+    select * from tb_jc_expert e where e.id = #{id}
   </select>
 </mapper>
