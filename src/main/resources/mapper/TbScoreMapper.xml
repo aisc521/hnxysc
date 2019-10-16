@@ -145,6 +145,9 @@
       <if test="score != null">
         Score,
       </if>
+      <if test="totalOrder != null">
+        totalOrder,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -197,6 +200,9 @@
       </if>
       <if test="score != null">
         #{score,jdbcType=INTEGER},
+      </if>
+      <if test="totalOrder != null">
+        #{totalOrder,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -251,6 +257,9 @@
       </if>
       <if test="score != null">
         Score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="totalOrder != null">
+        totalOrder = #{totalOrder,jdbcType=INTEGER},
       </if>
     </set>
     where ID = #{id,jdbcType=INTEGER}
