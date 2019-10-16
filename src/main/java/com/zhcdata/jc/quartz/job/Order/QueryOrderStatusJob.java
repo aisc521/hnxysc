@@ -45,7 +45,12 @@ public class QueryOrderStatusJob implements Job {
                 Map<String, Object> result = payService.queryOrderStatus(String.valueOf(tbJcPurchaseDetailed.getBuyMoney()),String.valueOf(tbJcPurchaseDetailed.getPayType()),String.valueOf(tbJcPurchaseDetailed.getUserId()),
                         String.valueOf(tbJcPurchaseDetailed.getOrderId()),String.valueOf(tbJcPurchaseDetailed.getSrc()));
                 if("2".equals(result.get("status"))){//成功
-                    tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
+                    String first = tbJcPurchaseDetailed.getFirst();
+                    if("1".equals(first)){//首次
+                        tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
+                    }else{
+                        tbJcPurchaseDetailed.setPayStatus(Long.valueOf(1));
+                    }
                     tbJcPurchaseDetailed.setUpdateTime(new Date());
                     //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
                     tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("thirdAmount"))));

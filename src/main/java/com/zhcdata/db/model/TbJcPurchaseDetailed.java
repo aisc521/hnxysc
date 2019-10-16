@@ -178,6 +178,20 @@ public class TbJcPurchaseDetailed implements Serializable {
      */
     @Column(name = "plan_pay_type")
     private String planPayType;
+    /**
+     * 是否首次 1 是首次  0 不是首次
+     */
+    @Column(name = "first")
+    private String first;
+
+
+    public String getFirst() {
+        return first;
+    }
+
+    public void setFirst(String first) {
+        this.first = first;
+    }
 
     private static final long serialVersionUID = 1L;
 

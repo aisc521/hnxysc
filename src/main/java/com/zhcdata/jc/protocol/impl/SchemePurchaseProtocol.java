@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
+import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -97,8 +99,33 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             resultMap.put("message", ProtocolCodeMsg.IS_BUY_PLAN.getMsg());
             return resultMap;
         }
+
+        //判断是否是支付宝支付  判断是否在支付时间范围内
+        String payType = paramMap.get("payType");
+        Calendar instance = Calendar.getInstance();
+        int i = instance.get(Calendar.HOUR_OF_DAY);
+        if ("21".equals(payType) && i < 7) {
+            resultMap.put("resCode", ProtocolCodeMsg.USERMENUBUY_MENU_MONEY_ERROR.getCode());
+            resultMap.put("message", "支付宝支持的交易时间为7:00-24:00");
+            return resultMap;
+        }
+
+        //判断是否是首次购买
+        List<TbJcPurchaseDetailed> list = tbJcPurchaseDetailedService.queryIsFirstBuy(Long.valueOf(String.valueOf(paramMap.get("userId"))));
+        if("21".equals(payType) && list.size() <= 0){
+            resultMap.put("resCode", ProtocolCodeMsg.MONEY_ERROR.getCode());
+            resultMap.put("message", "支付宝支持的交易金额为大于10元");
+            return resultMap;
+        }
+        //判断首单 是都是点播卡支付
+        if(list.size() <= 0 && "99".equals(payType)){
+            resultMap.put("resCode", ProtocolCodeMsg.FIRST_BUY_ERROR.getCode());
+            resultMap.put("message", "首单不支持点播卡支付");
+            return resultMap;
+        }
+
         //生成订单信息 并且调用支付
-        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,tbJcUser,paramMap,payService);
+        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,tbJcUser,paramMap,payService,list);
         return resultMap;
     }
 }

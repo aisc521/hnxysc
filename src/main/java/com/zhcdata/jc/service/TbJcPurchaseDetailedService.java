@@ -14,7 +14,7 @@ import java.util.Map;
 public interface TbJcPurchaseDetailedService {
     PageInfo<PurchasedPlanDto> queryPurchasedPlanDtoByUserId(int pageNo, int pageAmount, long l);
 
-    Map<String, Object> schemePurchase(TbJcPlan tbJcPlan, TbJcUser tbJcUser, Map<String, String> paramMap,PayService payService) throws BaseException;
+    Map<String, Object> schemePurchase(TbJcPlan tbJcPlan, TbJcUser tbJcUser, Map<String, String> paramMap,PayService payService,List<TbJcPurchaseDetailed> list) throws BaseException;
 
     List<TbJcPurchaseDetailed> queryOrder();
 
@@ -23,4 +23,6 @@ public interface TbJcPurchaseDetailedService {
     TbJcPurchaseDetailed queryTbJcPurchaseDetailedByUserAndPlanId(Long userId, Long schemeId);
 
     TbJcPurchaseDetailed queryOrderByUserAndOrderId(Long userId, String orderId);
+
+    List<TbJcPurchaseDetailed> queryIsFirstBuy(Long userId);
 }
