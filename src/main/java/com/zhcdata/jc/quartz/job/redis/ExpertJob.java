@@ -55,8 +55,8 @@ public class ExpertJob implements Job {
                 hot.setNickName(list1.get(i).getNickName());
                 hot.setLz(list1.get(i).getLzNow());
                 hot.setPushed(getPlanCount(list1.get(i).getId()));
-                hot.setLabel(list1.get(i).getLable());
                 hot.setType("1");
+                hot.setLabel(list1.get(i).getLable());
                 list.add(hot);
                 expertId += "'" + list1.get(i).getId() + "',";
             }
@@ -131,7 +131,6 @@ public class ExpertJob implements Job {
 
                 hot.setType("2");
                 hot.setPushed(getPlanCount(list4.get(i).getId()));
-                hot.setLabel(list4.get(i).getLable());
                 list.add(hot);
                 expertId += "'" + list4.get(i).getId() + "',";
             }
@@ -172,8 +171,6 @@ public class ExpertJob implements Job {
                 hot.setNickName(list6.get(i).getNickName());
                 hot.setLz(list6.get(i).getLzNow());
                 hot.setPushed(getPlanCount(list6.get(i).getId()));
-                hot.setLabel(list6.get(i).getLable());
-                hot.setType("1");
                 list.add(hot);
                 expertId += "'" + list6.get(i).getId() + "',";
             }

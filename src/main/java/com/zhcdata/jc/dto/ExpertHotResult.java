@@ -26,18 +26,17 @@ public class ExpertHotResult {
      */
     private String pushed;
 
+    /**
+     * 连中或连红
+     */
+    private String type;
+
 
     /**
      * 标签
      * @return
      */
     private String label;
-
-    /**
-     * 几连中 几中几
-     * @return
-     */
-    private String type;
 
 
     public String getType() {

@@ -48,8 +48,8 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
     private String imgYuMing;
    @Value("${custom.qiutan.url.imageUrl}")
     private String imagUrl;
-    @Value("${custom.qiutan.url.locolUrl}")
-    private String locolUrl;
+    @Value("${custom.qiutan.url.localUrl}")
+    private String localUrl;
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -104,10 +104,10 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             }
             if (!teamId.contains(result.getHomeId())) {
                 String img = result.getHomeImg();                    //主队
-                locolUrl = locolUrl + img;
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", locolUrl);
+                localUrl = localUrl + img;
+                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl);
                 redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId + result.getHomeId() + ",");
-                resultMap.put("hostIcon",imgYuMing+ locolUrl);
+                resultMap.put("hostIcon",imgYuMing+ localUrl);
             }
 
 
@@ -120,11 +120,11 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             }
             if (!teamId1.contains(result.getGuestId())) {
                 String img = result.getGuestImg();                    //主队
-                locolUrl = locolUrl + img;
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", locolUrl);
+                localUrl = localUrl + img;
+                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl);
                 redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId1 + result.getGuestImg() + ",");
             }
-            resultMap.put("guestIcon",imgYuMing+ locolUrl);
+            resultMap.put("guestIcon",imgYuMing+ localUrl);
             resultMap.put("matchDate", result.getTime());
             //计算上下半场
             if("1".equals(mo.getMatchState())){

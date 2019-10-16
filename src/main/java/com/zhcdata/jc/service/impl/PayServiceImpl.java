@@ -4,9 +4,11 @@ import com.google.common.base.Strings;
 
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
+import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.PayService;
 import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.HttpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springside.modules.utils.mapper.JsonMapper;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,9 +30,9 @@ import java.util.Map;
  * @version 1.0
  * @Date 2019/8/22 16:32
  */
+@Slf4j
 @Service
 public class PayServiceImpl implements PayService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PayServiceImpl.class);
     @Resource
     private CommonUtils commonUtils;
 
@@ -37,7 +40,7 @@ public class PayServiceImpl implements PayService {
     private String accUrl;
 
     @Override
-    public Map<String, Object> wechatPay(String userId, String payMoney, String productName,String description, String payType, String orderId, String src, String ip) {
+    public Map<String, Object> wechatPay(String userId, String payMoney, String productName, String description, String payType, String orderId, String src, String ip) {
         Map<String, Object> returnMap = new HashMap<>(2);
         Map<String, Object> paramsMap = new HashMap<>(10);
         try {
@@ -54,7 +57,7 @@ public class PayServiceImpl implements PayService {
             }
             paramsMap.put("spbillCreateIp", ip);
             String transactionType = "10100116";
-            paramsMap.put("tradeType", commonUtils.getPayTradType(Integer.parseInt(payType),"O"));
+            paramsMap.put("tradeType", commonUtils.getPayTradType(Integer.parseInt(payType), "O"));
             if ("20".equals(payType)) {
                 paramsMap.put("type", "NATIVE");
             } else if ("22".equals(payType)) {
@@ -66,7 +69,7 @@ public class PayServiceImpl implements PayService {
             returnMap = handlePayJosn(returnStrJson);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("请求支付系统异常", e);
+            log.error("请求支付系统异常", e);
             returnMap.put("resCode", ProtocolCodeMsg.USER_BUY_FAIL.getCode());
             returnMap.put("message", ProtocolCodeMsg.USER_BUY_FAIL.getMsg());
         }
@@ -84,14 +87,14 @@ public class PayServiceImpl implements PayService {
             paramsMap.put("amount", payMoney);
             paramsMap.put("productName", "商品购买");
             paramsMap.put("description", description);
-            paramsMap.put("spbillCreateIp",ip);
+            paramsMap.put("spbillCreateIp", ip);
             paramsMap.put("tradeType", commonUtils.getPayTradType(Integer.parseInt(payType), "O"));
             String md5 = commonUtils.bodyMd5(paramsMap);
             String returnStrJson = HttpUtils.PayHttpPost(accUrl, paramsMap, "10100117", "UTF-8", src, md5);
             returnMap = handlePayJosn(returnStrJson);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("请求支付系统异常", e);
+            log.error("请求支付系统异常", e);
             returnMap.put("resCode", ProtocolCodeMsg.USER_BUY_FAIL.getCode());
             returnMap.put("message", ProtocolCodeMsg.USER_BUY_FAIL.getMsg());
         }
@@ -111,14 +114,14 @@ public class PayServiceImpl implements PayService {
             paramsMap.put("amount", payMoney);
             paramsMap.put("productName", productName);
             String md5 = commonUtils.bodyMd5(paramsMap);
-            String returnStrJson = HttpUtils.PayHttpPost(accUrl, paramsMap, "10100103", "UTF-8", src,md5);
+            String returnStrJson = HttpUtils.PayHttpPost(accUrl, paramsMap, "10100103", "UTF-8", src, md5);
             Map<String, Object> bodyMap = handlePayJosn(returnStrJson);
             if (bodyMap != null) {
                 returnMap.putAll(bodyMap);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("请求支付系统异常", e);
+            log.error("请求支付系统异常", e);
             returnMap.put("resCode", ProtocolCodeMsg.USER_BUY_FAIL.getCode());
             returnMap.put("message", ProtocolCodeMsg.USER_BUY_FAIL.getMsg());
         }
@@ -141,13 +144,13 @@ public class PayServiceImpl implements PayService {
             return handlePayJosn(returnStrJson);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("请求支付系统异常", e);
+            log.error("请求支付系统异常", e);
         }
         return null;
     }
 
     @Override
-    public Map<String, Object> discountRecommendUse(String userId,String orderId,String description,String src) {
+    public Map<String, Object> discountRecommendUse(String userId, String orderId, String description, String src) {
         Map<String, Object> returnMap = new HashMap<String, Object>(2);
         Map<String, Object> paramsMap = new HashMap<>(6);
         try {
@@ -163,11 +166,84 @@ public class PayServiceImpl implements PayService {
             return handlePayJosn(returnStrJson);
         } catch (Exception e) {
             e.printStackTrace();
-            LOGGER.error("请求支付系统异常", e);
+            log.error("请求支付系统异常", e);
             returnMap.put("resCode", ProtocolCodeMsg.USER_BUY_FAIL.getCode());
             returnMap.put("message", ProtocolCodeMsg.USER_BUY_FAIL.getMsg());
         }
         return returnMap;
+    }
+
+    @Override
+    public Map<String, Object> refundFrozenToMoney(Long userId, String orderId, BigDecimal amount, String remark, String src) {
+        Map<String, Object> bodyMap = new HashMap<>();
+        try {
+            Map<String, Object> paramsMap = new HashMap<>();
+            paramsMap.put("userId", userId);
+            paramsMap.put("orderId", orderId);
+            paramsMap.put("oprSys", "O");
+            paramsMap.put("tradeType", "PAY_O_TK_XJ");
+            paramsMap.put("amount", amount.toString());
+            paramsMap.put("remark", remark);
+            String returnStr = HttpUtils.httpPost(accUrl, paramsMap, "10100112", "UTF-8", src, null, "A");
+            bodyMap = handlePayJosn(returnStr);
+        } catch (BaseException e) {
+            log.error("账户中心退冻结款失败，订单号为" + orderId, e);
+        } catch (Exception e) {
+            log.error("账户中心退冻结款接口", e);
+        }
+        log.error("账户中心退冻结款成功，订单号为" + orderId);
+        return bodyMap;
+    }
+
+    @Override
+    public Map<String, Object> deductFrozen(Long userId, String orderId, BigDecimal amount, String remark, String src) {
+        //调用账户中心接口进行扣款处理
+        Map<String, Object> bodyMap = new HashMap<>();
+        try {
+            //根据支付id调用账户中心接口，判断订单是否支付完成
+            Map<String, Object> paramsMap = new HashMap<>();
+            paramsMap.put("userId", userId);
+            paramsMap.put("orderId", orderId);
+            paramsMap.put("oprSys", "O");
+            paramsMap.put("tradeType", "PAY_O_KDJ_XJ");
+            paramsMap.put("amount", amount.toString());
+            paramsMap.put("remark", remark);
+            String returnStr = HttpUtils.httpPost(accUrl, paramsMap, "10100111", "UTF-8", src, null, "A");
+            bodyMap = handlePayJosn(returnStr);
+        } catch (BaseException e) {
+            log.error("账户中心增加优惠次数更新或插入失败，订单号为" + orderId, e);
+        } catch (Exception e) {
+            log.error("账户中心增加优惠次数接口", e);
+        }
+        log.error("账户中心增加优惠次数，订单号为" + orderId);
+        return bodyMap;
+    }
+
+    @Override
+    public Map<String, Object> refundDiscount(Long userId, String orderId, String type, String productName, String src) {
+        Map<String, Object> bodyMap = new HashMap<>();
+        try {
+            //根据支付id调用账户中心接口，判断订单是否支付完成
+            Map<String, Object> paramsMap = new HashMap<>();
+            paramsMap.put("userId", userId);
+            paramsMap.put("orderId", orderId);
+            paramsMap.put("type", Strings.isNullOrEmpty(type) ? "1" : type);//1.无期限 2.有期限 9.有期限有次数限制
+            paramsMap.put("flag", "5");//标识：0 支出标识 1充值赠送 2 系统赠送 3大礼包 4购买 5 退回
+            paramsMap.put("lotteryName", "JCZ");
+            paramsMap.put("addTimes", 1);
+            paramsMap.put("validityTime", "0");
+            paramsMap.put("productName", productName);
+            paramsMap.put("buyType", "2");
+            String md5 = commonUtils.bodyMd5(paramsMap);
+            String returnStr = HttpUtils.httpPost(accUrl, paramsMap, "10100115", "UTF-8", src, md5, "A");
+            bodyMap = handlePayJosn(returnStr);
+        } catch (BaseException e) {
+            log.error("账户中心增加优惠次数更新或插入失败，订单号为" + orderId, e);
+        } catch (Exception e) {
+            log.error("账户中心增加优惠次数接口", e);
+        }
+        log.error("账户中心增加优惠次数，订单号为" + orderId);
+        return bodyMap;
     }
 
     /**

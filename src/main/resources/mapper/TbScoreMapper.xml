@@ -139,9 +139,6 @@
       <if test="redcard != null">
         RedCard,
       </if>
-      <if test="updatetime != null">
-        updateTime,
-      </if>
       <if test="orderby != null">
         orderBy,
       </if>
@@ -194,9 +191,6 @@
       </if>
       <if test="redcard != null">
         #{redcard,jdbcType=INTEGER},
-      </if>
-      <if test="updatetime != null">
-        #{updatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="orderby != null">
         #{orderby,jdbcType=INTEGER},
@@ -251,9 +245,6 @@
       </if>
       <if test="redcard != null">
         RedCard = #{redcard,jdbcType=INTEGER},
-      </if>
-      <if test="updatetime != null">
-        updateTime = #{updatetime,jdbcType=TIMESTAMP},
       </if>
       <if test="orderby != null">
         orderBy = #{orderby,jdbcType=INTEGER},
