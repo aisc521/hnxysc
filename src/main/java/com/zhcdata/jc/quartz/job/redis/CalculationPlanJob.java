@@ -57,8 +57,8 @@ public class CalculationPlanJob implements Job {
                             if (scoreResults != null && scoreResults.size() > 0) {
                                 if (scoreResults.get(0).getStatusType().equals("finished")) {
                                     //该赛事已结束，计算方案
-                                    int hScore = Integer.valueOf(scoreResults.get(0).getValue());
-                                    int vScore = Integer.valueOf(scoreResults.get(1).getValue());
+                                    Double hScore = Double.valueOf(scoreResults.get(0).getValue());
+                                    Double vScore = Double.valueOf(scoreResults.get(1).getValue());
                                     int z = 0; //胜平负和让球胜平负,有一个中了,就算中
 
                                     String spf = planInfo.split("\\|")[0];      //胜平负
@@ -87,7 +87,7 @@ public class CalculationPlanJob implements Job {
                                     } else {
                                         SPFListDto spfs = tbPlanService.querySPFList(matchPlanResults.get(k).getMatchId());
                                         if (spfs != null ) {
-                                            hScore = hScore + Integer.parseInt(spfs.getAwayTeamRangballs());
+                                            hScore = hScore + Double.parseDouble(spfs.getAwayTeamRangballs());
                                             if (!rqspf.split(",")[0].equals("0")) {
                                                 //买胜
                                                 if (hScore > vScore) {
