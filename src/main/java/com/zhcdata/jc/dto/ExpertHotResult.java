@@ -26,6 +26,11 @@ public class ExpertHotResult {
      */
     private String pushed;
 
+    /**
+     * 连中或连红
+     */
+    private String type;
+
     public int getId() {
         return id;
     }
@@ -64,5 +69,13 @@ public class ExpertHotResult {
 
     public void setPushed(String pushed) {
         this.pushed = pushed;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
