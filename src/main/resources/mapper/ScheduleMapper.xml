@@ -912,6 +912,10 @@
                  when pg.type = '2' then '3'
                  when pg.type = '3' then '2'
                  end as 'matchtype',
+            case when pg.type = '1' then 'JCZQ'
+                 when pg.type = '2' then 'BJDC'
+                 when pg.type = '3' then 'SF14'
+                 end as 'Matchty',
 			lottery.LOTTERY lotterType
             from schedule  sc
             LEFT JOIN sclass class ON sc.SclassID = class.sclassID
@@ -921,7 +925,7 @@
             LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
             LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id
             WHERE pg.status = '1' and pg.user_id = #{userId}
-            ORDER BY sc.MatchTime) as t where t.Matchtype = lotterType
+            ORDER BY sc.MatchTime) as t where t.Matchty = lotterType
     </select>
 
     <select id="selectMatchIdExceedNow" resultType="java.lang.Integer">
