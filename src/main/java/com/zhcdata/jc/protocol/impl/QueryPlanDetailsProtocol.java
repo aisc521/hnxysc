@@ -102,34 +102,40 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 resultMap.put("status", "");
             }
             List<Map<String,Object>> list = tbPlanService.queryPlanInfo(id);
-            StringBuilder firstMsg = new StringBuilder();
+            //Map<String,Object> list = tbPlanService.queryPlanInfoNextTime(id);
+
             List<Map<String, Object>> plan_info = new ArrayList<>();
+            long first = 9999999999999L;
             if (list!=null){
-                if (list.size()>0){
-                    Map<String, Object> firstInfo = list.get(0);
-                    firstMsg.append(firstInfo.get("Num").toString()).append("|");
-                    firstMsg.append(firstInfo.get("matchName").toString()).append("|");
-                    Date dateOfMatch = (Date)firstInfo.get("dateOfMatch");
-                    firstMsg.append(dateOfMatch.getTime()).append("|");
-                    firstMsg.append(firstInfo.get("homeTeamName").toString()).append("|");
-                    firstMsg.append(firstInfo.get("awayTeamName"));//toString()).append("|");
-                }
                 for (int i = 0; i < list.size(); i++) {
                     Map<String, Object> map = new HashMap<>();
-                    map.put("no_rang_num", "让0");
-                    map.put("no_rang_sheng", "胜"+list.get(i).get("homeTeamZhu"));
-                    map.put("no_rang_ping", "平"+list.get(i).get("homeTeamPing"));
-                    map.put("no_rang_fu", "负"+list.get(i).get("homeTeamKe"));
+                    Map<String, Object> firstInfo = list.get(i);
 
-                    map.put("rang_num", "让"+list.get(i).get("awayTeamRangballs"));
-                    map.put("rang_sheng", "胜"+list.get(i).get("awayTeamZhu"));
-                    map.put("rang_ping", "平"+list.get(i).get("awayTeamPing"));
-                    map.put("rang_fu", "负"+list.get(i).get("awayTeamKe"));
+                    map.put("num",firstInfo.get("Num").toString());
+                    map.put("matchName",firstInfo.get("matchName").toString());
+                    Date dateOfMatch = (Date)firstInfo.get("dateOfMatch");
+                    if (dateOfMatch.getTime()<first)
+                        first = dateOfMatch.getTime();
+                    map.put("time",dateOfMatch.getTime());
+                    map.put("homeTeamName",firstInfo.get("homeTeamName").toString());
+                    map.put("awayTeamName",firstInfo.get("awayTeamName").toString());
+
+                    map.put("no_rang_num", "0");
+                    map.put("no_rang_sheng", ""+list.get(i).get("homeTeamZhu"));
+                    map.put("no_rang_ping", ""+list.get(i).get("homeTeamPing"));
+                    map.put("no_rang_fu", ""+list.get(i).get("homeTeamKe"));
+
+                    map.put("rang_num", ""+list.get(i).get("awayTeamRangballs"));
+                    map.put("rang_sheng", ""+list.get(i).get("awayTeamZhu"));
+                    map.put("rang_ping", ""+list.get(i).get("awayTeamPing"));
+                    map.put("rang_fu", ""+list.get(i).get("awayTeamKe"));
+                    map.put("match_status", ""+list.get(i).get("status"));
+                    map.put("match_result", ""+list.get(i).get("matchResult"));
                     plan_info.add(map);
                 }
             }
-            resultMap.put("first_msg", firstMsg.toString());
             resultMap.put("plan_info", plan_info);
+            resultMap.put("first_time", first);
 
         } catch (Exception ex) {
             ex.printStackTrace();

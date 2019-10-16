@@ -152,7 +152,6 @@
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
-    LEFT JOIN tb_jc_victory v on e.id = v.expert_id
     where 1=1
     and p.id= #{id}
   </select>
@@ -182,6 +181,7 @@
     </select>
 
   <select id="queryPlanInfo" resultType="java.util.Map">
+select aaa.*,bbb.status,bbb.matchResult from (
         SELECT jc.*, sc.MatchState Status, sc.HomeScore homeBalls, sc.GuestScore awayballs, sc.MatchTime2 dateOfMatch2
         from (SELECT kk.*, p2.teamName awayName
         from (SELECT k.*, p1.teamName homeName
@@ -211,6 +211,8 @@
         LEFT JOIN tb_team_pet_name_info p1 on k.homeId = p1.teamId order by dateOfMatch) kk
         LEFT JOIN tb_team_pet_name_info p2 on kk.awayId = p2.teamId) jc
         LEFT JOIN `schedule` sc on jc.matchId = sc.ScheduleID
+        ) aaa
+        left join tb_jc_match bbb on aaa.matchId = bbb.match_id
     </select>
 
 </mapper>
