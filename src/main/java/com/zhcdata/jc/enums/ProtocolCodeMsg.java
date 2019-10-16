@@ -99,6 +99,7 @@ public enum ProtocolCodeMsg {
     ORDER_IS_NULL("101022", "无对应订单信息!"),
     IS_BUY_PLAN("101022", "此用户此方案已经购买，不能重复购买!"),
     STATUS_IS_NOT_EXIT("101023", "状态信息不合法!"),
+    ISSUENUM_IS_NOT_EXIT("101024", "期号不能为空!"),
     SF14_startIssue("090401","开始期次不能为空");
 
     ;
