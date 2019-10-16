@@ -33,7 +33,7 @@ public interface TbPlanService {
 
     List<TbScoreResult> queryScore(String matchId);
 
-    List<TbSPFInfo> querySPFList(String matchId);
+    SPFListDto querySPFList(String matchId);
 
     int updateStatus(String isRight, String planHit, String id);
 
