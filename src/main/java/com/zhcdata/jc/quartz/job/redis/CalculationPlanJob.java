@@ -86,7 +86,7 @@ public class CalculationPlanJob implements Job {
                                         }
                                     } else {
                                         SPFListDto spfs = tbPlanService.querySPFList(matchPlanResults.get(k).getMatchId());
-                                        if (spfs != null) {
+                                        if (spfs != null ) {
                                             hScore = hScore + Integer.parseInt(spfs.getAwayTeamRangballs());
                                             if (!rqspf.split(",")[0].equals("0")) {
                                                 //买胜
