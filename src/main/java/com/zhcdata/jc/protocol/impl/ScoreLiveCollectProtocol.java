@@ -46,7 +46,7 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
     private ScheduleService scheduleService;
     @Value("${custom.qiutan.url.yuMing}")
     private String imgYuMing;
-   // @Value("${custom.qiutan.url.imageUrl}")
+   @Value("${custom.qiutan.url.imageUrl}")
     private String imagUrl;
     @Value("${custom.qiutan.url.locolUrl}")
     private String locolUrl;
