@@ -54,7 +54,7 @@ public class HotPlanJob implements Job {
                 List<PlanResult1> result = new ArrayList<>();
 
                 for (int i = 0; i < ids.length; i++) {
-                    List<PlanResult1> planList = tbPlanService.queryPlanByExpertId(ids[i], null);
+                    List<PlanResult1> planList = tbPlanService.queryPlanByExpertId(ids[i], null,null);
 
                     for (int k = 0; k < planList.size(); k++) {
                         PlanResult1 result1 = planList.get(k);

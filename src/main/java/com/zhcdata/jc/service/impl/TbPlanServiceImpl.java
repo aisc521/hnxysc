@@ -27,8 +27,8 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public List<PlanResult1> queryPlanByExpertId(String id, String planId) {
-            return tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId);
+    public List<PlanResult1> queryPlanByExpertId(String id, String planId,String userId) {
+            return tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId,userId);
     }
 
     @Override

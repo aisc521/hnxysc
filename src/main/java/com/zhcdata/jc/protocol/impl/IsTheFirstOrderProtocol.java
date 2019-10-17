@@ -9,6 +9,7 @@ import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.Map;
  * * @Author cuishuai
  * @Date 2019/10/17 12:07
  */
+@Service("20200237")
 public class IsTheFirstOrderProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource

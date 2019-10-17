@@ -21,7 +21,7 @@ public interface TbPlanService {
      * @param o
      * @return
      */
-    List<PlanResult1> queryPlanByExpertId(String id, String planId);
+    List<PlanResult1> queryPlanByExpertId(String id, String planId,String userId);
 
     /**
      * 正在进行的方案

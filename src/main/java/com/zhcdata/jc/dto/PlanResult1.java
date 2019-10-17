@@ -22,6 +22,15 @@ public class PlanResult1 {
     private String planId;
     private String planType;
     private String planStatus;
+    private String buStatus;
+
+    public String getBuStatus() {
+        return buStatus;
+    }
+
+    public void setBuStatus(String buStatus) {
+        this.buStatus = buStatus;
+    }
 
     public String getPlanType() {
         return planType;

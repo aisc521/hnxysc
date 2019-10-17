@@ -46,10 +46,15 @@
     p.plan_Hit planHit,
     p.id planId,
     p.type planType,
-    p.status planStatus
+    p.status planStatus,
+    IFNULL(pd.id,'0') buStatus
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
+    LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
+      <if test="userId != null">
+          and pd.user_id = #{userId}
+      </if>
     where 1=1
     <if test="id != null">
       and e.id = ${id}
@@ -248,7 +253,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     and p.id= #{id}
   </select>
   <select id="queryPlanId" resultType="com.zhcdata.jc.dto.PlanResult1">
-    SELECT plan_id id from tb_jc_match where match_id in(SELECT match_id from tb_jc_match where plan_id=${planId})
+    SELECT plan_id id from tb_jc_match where match_id in(SELECT match_id from tb_jc_match where plan_id={planId})
   </select>
 
 
