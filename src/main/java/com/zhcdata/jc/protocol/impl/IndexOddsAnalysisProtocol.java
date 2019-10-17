@@ -94,7 +94,7 @@ public class IndexOddsAnalysisProtocol implements BaseProtocol {
         }
 
         //得到赔率公司id
-        Map<String, Object> map = handicapOddsService.queryMatchDataByOdds(Float.parseFloat(satSat), Float.parseFloat(endEnd), oddsCompany,
+        Map<String, Object> map = handicapOddsService.queryMatchDataByOdds(Double.parseDouble(satSat), Double.parseDouble(endEnd), oddsCompany,
                 matchType, startDate, pam, zkFlag);
         return map;
     }

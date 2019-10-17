@@ -53,7 +53,7 @@ public interface HandicapOddsService {
      * @param zkFlag        赔率查询主客队 1主 2客
      * @return
      */
-    Map<String,Object> queryMatchDataByOdds(Float satSat,Float endEnd, String oddsCompany, Integer matchType,String beginDate,String pam,String zkFlag);
+    Map<String,Object> queryMatchDataByOdds(Double satSat,Double endEnd, String oddsCompany, Integer matchType,String beginDate,String pam,String zkFlag);
 
     /**
      * 指数分析 - 根据盘口查询对应比赛
@@ -68,7 +68,7 @@ public interface HandicapOddsService {
      * @param changeTimes      变盘次数
      * @return
      */
-    Map<String,Object> queryMatchDataByHandicap(Float satGoal,Float endGoal, String oddsCompany, Integer matchType,
+    Map<String,Object> queryMatchDataByHandicap(Double satGoal,Double endGoal, String oddsCompany, Integer matchType,
                                                 String beginDate,String pam,String satOdds,String endOdds,Integer changeTimes);
 
 

@@ -31,14 +31,14 @@ public class AttentionExprtProtocol implements BaseProtocol {
         Map<String, Object> map = new HashMap<>();
         String userId = paramMap.get("userId");
         if (Strings.isNullOrEmpty(userId)) {
-            LOGGER.info("[" + ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg() + "]:matchTime---" + userId);
+            LOGGER.info("[" + ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg() + "]:userId---" + userId);
             map.put("resCode", ProtocolCodeMsg.TIME_NULL.getCode());
             map.put("message", ProtocolCodeMsg.TIME_NULL.getMsg());
             return map;
         }
         String expertId = paramMap.get("expertId");
         if (Strings.isNullOrEmpty(expertId)) {
-            LOGGER.info("[" + ProtocolCodeMsg.EXPERT_ID.getMsg() + "]:matchTime---" + expertId);
+            LOGGER.info("[" + ProtocolCodeMsg.EXPERT_ID.getMsg() + "]:expertId---" + expertId);
             map.put("resCode", ProtocolCodeMsg.TIME_NULL.getCode());
             map.put("message", ProtocolCodeMsg.TIME_NULL.getMsg());
             return map;

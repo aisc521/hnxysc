@@ -30,8 +30,7 @@
     <collection property="list" select="com.zhcdata.db.mapper.EuropeOddsMapper.querySameOddsMatchByOdds"
                 ofType="com.zhcdata.jc.dto.AnalysisMatchDto" javaType="java.util.ArrayList"
                 column="{satWin=satWin,satLose=satLose,satFlat=satFlat,oddsId=oddsId,companyId=companyId,
-                matchType=matchType,satOdds=satOdds,endOdds=endOdds,beginDate=beginDate,
-                satWinMod=satWinMod,satLoseMod=satLoseMod,satFlatMod=satFlatMod}" />
+                matchType=matchType,satOdds=satOdds,endOdds=endOdds,beginDate=beginDate}" />
   </resultMap>
   <sql id="Base_Column_List" >
     OddsID, ScheduleID, CompanyID, FirstHomeWin, FirstStandoff, FirstGuestWin, RealHomeWin, 
@@ -65,11 +64,8 @@
       t2.flag guestIcon,
       s.matchTime matchDate,
       o.FirstHomeWin satWin,
-      mod(o.FirstHomeWin,0.25) satWinMod,
       o.FirstGuestWin satLose,
-      mod(o.FirstGuestWin,0.25) satLoseMod,
-      o.FirstStandoff satFlat,
-      mod(o.FirstStandoff,0.25) satFlatMod
+      o.FirstStandoff satFlat
        FROM europeodds o
     LEFT JOIN SCHEDULE s on o.ScheduleID = s.ScheduleID
     LEFT JOIN team t ON s.hometeamid = t.teamid
@@ -78,10 +74,10 @@
   </select>
   <select id="querySameOddsMatchByOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
     select * from (
-    select o.scheduleId,o.FirstHomeWin satWin,o.FirstStandoff satFlat,o.FirstGuestWin satLose,
-    format(ifnull(o.RealHomeWin,o.FirstHomeWin),2) endWin,
-    format(ifnull(o.RealStandoff,o.FirstStandoff),2) endFlat,
-    format(ifnull(o.RealGuestWin,o.FirstGuestWin),2) endLose,
+    select o.OddsID,o.scheduleId,o.FirstHomeWin satWin,o.FirstStandoff satFlat,o.FirstGuestWin satLose,
+    ifnull(o.RealHomeWin,o.FirstHomeWin) endWin,
+    ifnull(o.RealStandoff,o.FirstStandoff) endFlat,
+    ifnull(o.RealGuestWin,o.FirstGuestWin) endLose,
     sc.name_js matchName,
     t.name_j homeName,
     s.homescore homeScore,
@@ -90,12 +86,10 @@
     case when s.HomeScore > s.GuestScore then 3
     when s.HomeScore = s.GuestScore then 1
     else 0 end result,
-    case when o.FirstHomeWin - o.FirstGuestWin <![CDATA[>=]]> 0 THEN
-    (case when (abs(max(od.HomeWin) - o.FirstHomeWin) <![CDATA[<]]> abs(min(od.HomeWin) - o.FirstHomeWin)) then abs(min(od.HomeWin) - o.FirstHomeWin)
-    ELSE abs(max(od.HomeWin) - o.FirstHomeWin) END)
+    case when o.FirstHomeWin - o.FirstGuestWin <![CDATA[<=]]> 0 THEN
+      abs(o.RealHomeWin - o.FirstHomeWin)
     ELSE
-    (case when (abs(max(od.GuestWin) - o.FirstGuestWin) <![CDATA[<]]> abs(min(od.GuestWin) - o.FirstGuestWin)) then abs(min(od.GuestWin) - o.FirstGuestWin)
-    ELSE abs(max(od.GuestWin) - o.FirstGuestWin) END)
+      abs(o.RealGuestWin - o.FirstGuestWin)
     END odd
     from europeodds o
     LEFT JOIN `schedule` s  on o.ScheduleID = s.ScheduleID
@@ -103,31 +97,20 @@
     LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
     LEFT JOIN team t ON s.hometeamid = t.teamid
     LEFT JOIN team t2 ON s.guestteamid = t2.teamid
-    LEFT JOIN europeoddsdetail od on od.OddsID = o.OddsID and od.ModifyTime <![CDATA[<]]> s.MatchTime
     where o.CompanyID = #{companyId} and s.MatchState = -1
-
     <if test="matchType != null and matchType != 1">
       and sct.type = #{matchType}
     </if>
-    AND o.FirstHomeWin
-    <if test="satWinMod == 0"> = </if>
-    <if test="satWinMod != 0"> like </if>
-    #{satWin}
-    AND o.FirstGuestWin
-    <if test="satLoseMod == 0"> = </if>
-    <if test="satLoseMod != 0"> like </if>
-    #{satLose}
-    AND o.FirstStandoff
-    <if test="satFlatMod == 0"> = </if>
-    <if test="satFlatMod != 0"> like </if>
-    #{satFlat}
-    and o.OddsID != #{oddsId}
+    AND o.FirstHomeWin = #{satWin}
+    AND o.FirstGuestWin = #{satLose}
+    AND o.FirstStandoff = #{satFlat}
     <if test="beginDate != null">
       and s.MatchTime >= #{beginDate}
     </if>
     group by o.scheduleId,s.MatchTime
     order by s.MatchTime desc
     ) _temp where 1=1
+    and OddsID != #{oddsId}
     <if test="satOdds != null">
       and odd >= #{satOdds}
     </if>
@@ -139,9 +122,9 @@
   <select id="querySameOddsMatchByFlagAndOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
     select * from (
     select o.scheduleId,o.FirstHomeWin satWin,o.FirstStandoff satFlat,o.FirstGuestWin satLose,
-    format(ifnull(o.RealHomeWin,o.FirstHomeWin),2) endWin,
-    format(ifnull(o.RealStandoff,o.FirstStandoff),2) endFlat,
-    format(ifnull(o.RealGuestWin,o.FirstGuestWin),2) endLose,
+    ifnull(o.RealHomeWin,o.FirstHomeWin) endWin,
+    ifnull(o.RealStandoff,o.FirstStandoff) endFlat,
+    ifnull(o.RealGuestWin,o.FirstGuestWin) endLose,
     sc.name_js matchName,
     t.name_j homeName,
     s.homescore homeScore,
@@ -150,14 +133,10 @@
     case when s.HomeScore > s.GuestScore then 3
     when s.HomeScore = s.GuestScore then 1
     else 0 end result,
-    case when o.FirstHomeWin - o.FirstGuestWin <![CDATA[>=]]> 0 THEN
-    (case when (abs(max(od.HomeWin) - o.FirstHomeWin) <![CDATA[<]]> abs(min(od.HomeWin) - o.FirstHomeWin)) then
-    abs(min(od.HomeWin) - o.FirstHomeWin)
-    ELSE abs(max(od.HomeWin) - o.FirstHomeWin) END)
+    case when o.FirstHomeWin - o.FirstGuestWin <![CDATA[<=]]> 0 THEN
+    abs(o.RealHomeWin - o.FirstHomeWin)
     ELSE
-    (case when (abs(max(od.GuestWin) - o.FirstGuestWin) <![CDATA[<]]> abs(min(od.GuestWin) - o.FirstGuestWin)) then
-    abs(min(od.GuestWin) - o.FirstGuestWin)
-    ELSE abs(max(od.GuestWin) - o.FirstGuestWin) END)
+    abs(o.RealGuestWin - o.FirstGuestWin)
     END odd
     from europeodds o
     LEFT JOIN `schedule` s on o.ScheduleID = s.ScheduleID
@@ -165,30 +144,17 @@
     LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
     LEFT JOIN team t ON s.hometeamid = t.teamid
     LEFT JOIN team t2 ON s.guestteamid = t2.teamid
-    LEFT JOIN europeoddsdetail od on od.OddsID = o.OddsID
     where o.CompanyID = #{companyId} and s.MatchState = -1
     <if test="matchType != null and matchType != 1">
       AND sct.type = #{matchType}
     </if>
     <if test="hgFlag == 1">
-      AND o.FirstHomeWin<if test="satOdd == 2 or satOdd == 1">=</if>
-      <if test="satOdd != 2 and satOdd != 1"> like </if>
-      #{satOdd}
-      AND o.RealHomeWin
-      <if test="endOdd == 2 or satOdd == 1"> = </if>
-      <if test="endOdd != 2 and satOdd != 1"> like </if>
-      #{endOdd}
+      AND o.FirstHomeWin = #{satOdd}
+      AND o.RealHomeWin = #{endOdd}
     </if>
     <if test="hgFlag == 2">
-      AND o.FirstGuestWin
-      <if test="satOdd == 2 or satOdd == 1"> = </if>
-      =like
-      <if test="satOdd != 2 and satOdd != 1"> like </if>
-      #{satOdd}
-      AND o.RealGuestWin
-      <if test="endOdd == 2 or satOdd == 1"> =</if>
-      <if test="endOdd != 2 and satOdd != 1">like</if>
-      #{endOdd}
+      AND o.FirstGuestWin = #{satOdd}
+      AND o.RealGuestWin = #{endOdd}
     </if>
     <if test="beginDate != null">
       and s.MatchTime >= #{beginDate}

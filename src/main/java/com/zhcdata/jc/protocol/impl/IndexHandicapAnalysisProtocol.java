@@ -123,7 +123,7 @@ public class IndexHandicapAnalysisProtocol implements BaseProtocol {
         }
         Integer changeTimes = Integer.parseInt(chgTimes);
         //得到赔率公司id
-        Map<String, Object> map = handicapOddsService.queryMatchDataByHandicap(Float.parseFloat(satPankou), Float.parseFloat(endPankou), oddsCompany,
+        Map<String, Object> map = handicapOddsService.queryMatchDataByHandicap(Double.parseDouble(satPankou), Double.parseDouble(endPankou), oddsCompany,
                 matchType, startDate, pam,satSat,endEnd,changeTimes);
         return map;
     }

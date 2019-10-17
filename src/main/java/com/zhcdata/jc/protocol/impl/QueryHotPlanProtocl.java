@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description 查询热门方案
+ * @Description 查询热门方案 不带userId
  * @Author cuishuai
  * @Date 2019/9/20 14:59
  */

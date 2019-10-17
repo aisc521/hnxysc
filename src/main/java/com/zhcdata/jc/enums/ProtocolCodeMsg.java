@@ -101,6 +101,7 @@ public enum ProtocolCodeMsg {
     PAY_TYPE("090402","支付方式不能为空"),
     USER_BUY_FAIL("101018", "购买失败，稍后重试!"),
     PLAN_IS_NULL("101019", "无对应的方案信息!"),
+    MATCH_IS_NULL("101028", "无对应的比赛信息!"),
     USER_IS_NULL("101020", "无对应的用户信息!"),
     MONEY_IS_NULL("101020", "金额不合法!"),
     PLAN_IS_END("101021", "方案已经结束!"),

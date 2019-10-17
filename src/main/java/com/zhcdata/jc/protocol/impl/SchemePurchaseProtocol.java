@@ -1,6 +1,7 @@
 package com.zhcdata.jc.protocol.impl;
 
 import com.google.common.base.Strings;
+import com.zhcdata.db.model.TbJcMatch;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.db.model.TbJcPurchaseDetailed;
 import com.zhcdata.db.model.TbJcUser;
@@ -8,20 +9,16 @@ import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
-import com.zhcdata.jc.service.PayService;
-import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
-import com.zhcdata.jc.service.TbJcUserService;
-import com.zhcdata.jc.service.TbPlanService;
+import com.zhcdata.jc.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @Description 方案购买
@@ -39,9 +36,13 @@ public class SchemePurchaseProtocol implements BaseProtocol {
     private TbJcUserService tbJcUserService;
 
     @Resource
+    private TbJcMatchService tbJcMatchService;
+    @Resource
     private PayService payService;
     @Resource
     private TbJcPurchaseDetailedService tbJcPurchaseDetailedService;
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -80,7 +81,24 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             resultMap.put("message", ProtocolCodeMsg.PLAN_IS_NULL.getMsg());
             return resultMap;
         }
+        //判断方案如果是已经结束的不能购买
         if("0".equals(tbJcPlan.getStatus())){
+            resultMap.put("resCode", ProtocolCodeMsg.PLAN_IS_END.getCode());
+            resultMap.put("message", ProtocolCodeMsg.PLAN_IS_END.getMsg());
+            return resultMap;
+        }
+        //判断最近一场比赛的的开始时间如果大于当前时间  此方案不能购买
+        TbJcMatch tbJcMatch = tbJcMatchService.queryJcMatchByPlanId(tbJcPlan.getId());
+        if(tbJcMatch == null){
+            resultMap.put("resCode", ProtocolCodeMsg.MATCH_IS_NULL.getCode());
+            resultMap.put("message", ProtocolCodeMsg.MATCH_IS_NULL.getMsg());
+            return resultMap;
+        }
+
+        String dateOfMatch = tbJcMatch.getDateOfMatch();
+        Date date = format.parse(dateOfMatch);
+        Date nowDate = new Date();
+        if(nowDate.compareTo(date) > 0){//当前时间大于比赛时间
             resultMap.put("resCode", ProtocolCodeMsg.PLAN_IS_END.getCode());
             resultMap.put("message", ProtocolCodeMsg.PLAN_IS_END.getMsg());
             return resultMap;

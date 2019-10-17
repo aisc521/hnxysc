@@ -34,13 +34,12 @@ public interface EuropeOddsMapper {
 
     List<AnalysisMatchDto> querySameOddsMatchByOdds(@Param("companyId")Integer companyId,@Param("matchType")Integer matchType,
                                                     @Param("satOdds") Double satOdds,@Param("endOdds") Double endOdds,
-                                                    @Param("beginDate") String beginDate,@Param("satWinMod") String satWinMod,
-                                                    @Param("satLoseMod") String satLoseMod,@Param("satFlatMod") String satFlatMod,
-                                                    @Param("satWin") Float satWin,@Param("satLose") Float satLose,
-                                                    @Param("satFlat") Float satFlat,@Param("oddsId") Integer oddsId);
+                                                    @Param("beginDate") String beginDate,
+                                                    @Param("satWin") Double satWin,@Param("satLose") Double satLose,
+                                                    @Param("satFlat") Double satFlat,@Param("oddsId") Integer oddsId);
 
     List<AnalysisMatchDto> querySameOddsMatchByFlagAndOdds(@Param("companyId")Integer companyId,@Param("matchType")Integer matchType,
                                                     @Param("satChange") Double satChange,@Param("endChange") Double endChange,
                                                     @Param("beginDate") String beginDate,@Param("hgFlag") String hgFlag,
-                                                    @Param("satOdd") Float satOdd,@Param("endOdd") Float endOdd);
+                                                    @Param("satOdd") Double satOdd,@Param("endOdd") Double endOdd);
 }

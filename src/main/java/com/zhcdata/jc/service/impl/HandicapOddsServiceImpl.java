@@ -141,17 +141,15 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
             List<Map<String, Double>> change = getSameHandicapChange(chgTimes, pam);
             result = letgoalMapper.queryHandicapsByCompanyAndMatch(matchId, companyId);
             if (result != null) {
-                Float satWin = result.getSatWin();
-                Float satLose = result.getSatLose();
-                float satWinMod = satWin % 0.25f;
-                float satLoseMod = satLose % 0.25f;
+                Double satWin = result.getSatWin();
+                Double satLose = result.getSatLose();
                 if (change == null || change.size() == 0) {
                     List<AnalysisMatchDto> list = letgoalMapper.querySameHandicapsMatchByOdds(companyId, matchType, beginDate, chgTimes, result.getOddsId()
-                            , satWin, satLose, result.getSatFlat(),satWinMod,satLoseMod);
+                            , satWin, satLose, result.getSatFlat());
                     result.setList(list);
                 } else {
                     List<AnalysisMatchDto> list = letgoalMapper.querySameHandicapsMatchByChangeOdds(companyId, matchType,change, beginDate, result.getOddsId()
-                            , satWin, satLose, result.getSatFlat(),satWinMod,satLoseMod);
+                            , satWin, satLose, result.getSatFlat());
                     result.setList(list);
                 }
             }
@@ -198,7 +196,7 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
     }
 
     @Override
-    public Map<String, Object> queryMatchDataByOdds(Float satSat, Float endEnd, String oddsCompany, Integer matchType, String beginDate, String pam,String zkFlag) {
+    public Map<String, Object> queryMatchDataByOdds(Double satSat, Double endEnd, String oddsCompany, Integer matchType, String beginDate, String pam,String zkFlag) {
         Map<String, Object> map = new HashMap<>(25);
         Integer companyId = changeCompanyIdByParamType("TPEI", oddsCompany);
         //同赔分析
@@ -242,16 +240,16 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
     }
 
     @Override
-    public Map<String, Object> queryMatchDataByHandicap(Float satGoal, Float endGoal, String oddsCompany, Integer matchType, String beginDate, String pam, String satOdds, String endOdds, Integer changeTimes) {
+    public Map<String, Object> queryMatchDataByHandicap(Double satGoal, Double endGoal, String oddsCompany, Integer matchType, String beginDate, String pam, String satOdds, String endOdds, Integer changeTimes) {
         Map<String, Object> map = new HashMap<>(25);
         Integer companyId = changeCompanyIdByParamType("TPAN", oddsCompany);
         //同盘分析
         //根据比赛id，查询亚盘对应公司的赔率（澳彩）
         List<Map<String, Double>> change = getSameHandicapChange(changeTimes, pam);
-        Float startSatOdds = getGoalWaterStartValue(satOdds);
-        Float endSatOdds = getGoalWaterEndValue(satOdds);
-        Float startEndOdds = getGoalWaterStartValue(endOdds);
-        Float endEndOdds = getGoalWaterEndValue(endOdds);
+        Double startSatOdds = getGoalWaterStartValue(satOdds);
+        Double endSatOdds = getGoalWaterEndValue(satOdds);
+        Double startEndOdds = getGoalWaterStartValue(endOdds);
+        Double endEndOdds = getGoalWaterEndValue(endOdds);
         List<AnalysisMatchDto> list = null;
         if (change == null || change.size() == 0) {
             list = letgoalMapper.querySameHandicapsMatchByOddsAndNoChange(companyId, matchType,satGoal,endGoal, beginDate, changeTimes,
@@ -389,26 +387,26 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
      * @param num
      * @return
      */
-    private Float getGoalWaterStartValue(String num) {
-        Float startChange = null;
+    private Double getGoalWaterStartValue(String num) {
+        Double startChange = null;
         switch (num) {
             case "2":
-                startChange = 0.73F;
+                startChange = 0.73d;
                 break;
             case "3":
-                startChange = 0.85F;
+                startChange = 0.85d;
                 break;
             case "4":
-                startChange = 0.91F;
+                startChange = 0.91d;
                 break;
             case "5":
-                startChange = 1.0F;
+                startChange = 1.0d;
                 break;
             case "6":
-                startChange = 1.06F;
+                startChange = 1.06d;
                 break;
             case "7":
-                startChange = 1.18F;
+                startChange = 1.18d;
                 break;
             default:
                 break;
@@ -429,26 +427,26 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
      * @param num
      * @return
      */
-    private Float getGoalWaterEndValue(String num) {
-        Float endChange = null;
+    private Double getGoalWaterEndValue(String num) {
+        Double endChange = null;
         switch (num) {
             case "1":
-                endChange = 0.73F;
+                endChange = 0.73d;
                 break;
             case "2":
-                endChange = 0.85F;
+                endChange = 0.85d;
                 break;
             case "3":
-                endChange = 0.91F;
+                endChange = 0.91d;
                 break;
             case "4":
-                endChange = 1.0F;
+                endChange = 1.0d;
                 break;
             case "5":
-                endChange = 1.06F;
+                endChange = 1.06d;
                 break;
             case "6":
-                endChange = 1.18F;
+                endChange = 1.18d;
                 break;
             default:
                 break;

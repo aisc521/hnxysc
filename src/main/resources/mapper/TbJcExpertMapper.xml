@@ -30,35 +30,35 @@
     </update>
     <select id="queryHotExperts" resultType="com.zhcdata.jc.dto.ExpertInfo">
     <if test="type==1">
-      SELECT e.id,e.nick_name nickName,CONCAT(v.lz_now,'连红') lzNow,'1' pushed from tb_jc_victory v
+      SELECT e.id,e.nick_name nickName,CONCAT(v.lz_now,'连红') lzNow,'1' pushed ,e.img from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=4
     </if>
     <if test="type==2">
-      SELECT e.id,e.nick_name nickName,'' lzNow,'1' pushed,v.five_z fiveZ,v.six_z sixZ,v.seven_z sevenZ,v.eight_z eightZ,v.nine_z nineZ,v.ten_z tenZ from tb_jc_victory v
+      SELECT e.id,e.nick_name nickName,'' lzNow,'1' pushed,v.five_z fiveZ,v.six_z sixZ,v.seven_z sevenZ,v.eight_z eightZ,v.nine_z nineZ,v.ten_z tenZ ,e.img from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.five_z=4 or v.six_z=5 or v.seven_z=6 or v.eight_z=7 or v.nine_z=8 or v.ten_z=9
     </if>
     <if test="type==3">
-      SELECT e.id,e.nick_name nickName,return_seven_days returnSevenDays,'1' pushed from tb_jc_victory v
+      SELECT e.id,e.nick_name nickName,return_seven_days returnSevenDays,'1' pushed ,e.img from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.return_seven_days>100
     </if>
     <if test="type==4">
-      SELECT e.id,e.nick_name nickName,'' lzNow,'1' pushed from tb_jc_victory v
+      SELECT e.id,e.nick_name nickName,'' lzNow,'1' pushed ,e.img from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.seven_z=5 or v.eight_z=6 or v.nine_z=7 or v.ten_z=8
     </if>
     <if test="type==5">
-      SELECT e.id,e.nick_name nickName,'' lzNow,'1' pushed from tb_jc_victory v
+      SELECT e.id,e.nick_name nickName,'' lzNow,'1' pushed ,e.img from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.ten_z=7 or v.ten_z=6 or v.ten_z=5
     </if>
     <if test="type==6">
-      SELECT e.id,e.nick_name nickName,CONCAT(v.lz_now,'连红') lz,'1' pushed from tb_jc_victory v
+      SELECT e.id,e.nick_name nickName,CONCAT(v.lz_now,'连红') lz,'1' pushed ,e.img from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=2
     </if>
     <if test="type==7">
-      SELECT e.id,e.nick_name nickName,'' lzNow,'1' pushed,v.three_z threeZ,v.four_z fourZ from tb_jc_victory v
+      SELECT e.id,e.nick_name nickName,'' lzNow,'1' pushed,v.three_z threeZ,v.four_z fourZ ,e.img from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.three_z=2 or v.four_z=3
     </if>
     <if test="type==8">
-      SELECT e.id,e.nick_name nickName,'' lzNow,'1' pushed,v.lz_big lzBig from tb_jc_victory v
+      SELECT e.id,e.nick_name nickName,'' lzNow,'1' pushed,v.lz_big lzBig ,e.img from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_big>=8
     </if>
   </select>

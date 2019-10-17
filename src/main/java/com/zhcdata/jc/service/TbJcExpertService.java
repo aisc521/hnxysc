@@ -2,6 +2,7 @@ package com.zhcdata.jc.service;
 
 import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -38,4 +39,6 @@ public interface TbJcExpertService {
     TbJcExpert queryExpertDetailsById(int id);
 
     void updatePopAddOne(int eid);
+
+    int updateByExample(TbJcExpert tbJcExpert, Example example1);
 }

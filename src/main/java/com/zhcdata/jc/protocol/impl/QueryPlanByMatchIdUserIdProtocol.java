@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description 相关方案  不带userId
+ * @Description 相关方案  带userId
  * @Author cuishuai
  * @Date 2019/9/20 15:08
  */
-@Service("20200221")
-public class QueryPlanByMatchIdProtocol implements BaseProtocol {
+@Service("20200236")
+public class QueryPlanByMatchIdUserIdProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource
@@ -41,6 +41,13 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
             LOGGER.info("[" + ProtocolCodeMsg.PLANID_NULL.getMsg() + "]:id---" + id);
             map.put("resCode", ProtocolCodeMsg.PLANID_NULL.getCode());
             map.put("message", ProtocolCodeMsg.PLANID_NULL.getMsg());
+            return map;
+        }
+        String userId = paramMap.get("userId");
+        if (Strings.isNullOrEmpty(userId)) {
+            LOGGER.info("[" + ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg() + "]:userId---" + userId);
+            map.put("resCode", ProtocolCodeMsg.USER_ID_NOT_EXIST.getCode());
+            map.put("message", ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg());
             return map;
         }
         return null;
@@ -64,7 +71,8 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
                     }
                 }
 
-                List<PlanResult1> planList = tbPlanService.queryPlanByExpertId(id, pIdList,null);
+                String userId = paramMap.get("userId");
+                List<PlanResult1> planList = tbPlanService.queryPlanByExpertId(id, pIdList,userId);
                 for (int i = 0; i < planList.size(); i++) {
                     PlanResult1 result1 = planList.get(i);
                     List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(i).getId());

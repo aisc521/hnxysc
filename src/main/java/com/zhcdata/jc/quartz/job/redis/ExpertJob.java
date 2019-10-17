@@ -57,6 +57,7 @@ public class ExpertJob implements Job {
                 hot.setPushed(getPlanCount(list1.get(i).getId()));
                 hot.setType("1");
                 hot.setLabel(list1.get(i).getLable());
+                hot.setImg(list1.get(i).getImg());
                 list.add(hot);
                 expertId += "'" + list1.get(i).getId() + "',";
             }
@@ -87,6 +88,7 @@ public class ExpertJob implements Job {
                 hot.setType("1");
                 hot.setPushed(getPlanCount(list2.get(i).getId()));
                 hot.setLabel(list2.get(i).getLable());
+                hot.setImg(list1.get(i).getImg());
                 list.add(hot);
                 expertId += "'" + list2.get(i).getId() + "',";
             }
@@ -104,6 +106,7 @@ public class ExpertJob implements Job {
                 hot.setLz(list3.get(i).getReturnSevenDays() + "%");
                 hot.setPushed(getPlanCount(list3.get(i).getId()));
                 hot.setLabel(list3.get(i).getLable());
+                hot.setImg(list1.get(i).getImg());
                 hot.setType("2");
                 list.add(hot);
                 expertId += "'" + list3.get(i).getId() + "',";
@@ -131,6 +134,7 @@ public class ExpertJob implements Job {
 
                 hot.setType("2");
                 hot.setPushed(getPlanCount(list4.get(i).getId()));
+                hot.setImg(list1.get(i).getImg());
                 list.add(hot);
                 expertId += "'" + list4.get(i).getId() + "',";
             }
@@ -155,6 +159,7 @@ public class ExpertJob implements Job {
                 hot.setType("2");
                 hot.setPushed(getPlanCount(list5.get(i).getId()));
                 hot.setLabel(list5.get(i).getLable());
+                hot.setImg(list1.get(i).getImg());
                 list.add(hot);
                 expertId += "'" + list5.get(i).getId() + "',";
             }
@@ -171,6 +176,7 @@ public class ExpertJob implements Job {
                 hot.setNickName(list6.get(i).getNickName());
                 hot.setLz(list6.get(i).getLzNow());
                 hot.setPushed(getPlanCount(list6.get(i).getId()));
+                hot.setImg(list1.get(i).getImg());
                 list.add(hot);
                 expertId += "'" + list6.get(i).getId() + "',";
             }
@@ -193,6 +199,7 @@ public class ExpertJob implements Job {
                 hot.setType("2");
                 hot.setPushed(getPlanCount(list7.get(i).getId()));
                 hot.setLabel(list7.get(i).getLable());
+                hot.setImg(list1.get(i).getImg());
                 list.add(hot);
                 expertId += "'" + list7.get(i).getId() + "',";
             }
@@ -210,6 +217,7 @@ public class ExpertJob implements Job {
                 hot.setLz("历史8连红");
                 hot.setPushed(getPlanCount(list8.get(i).getId()));
                 hot.setLabel(list8.get(i).getLable());
+                hot.setImg(list1.get(i).getImg());
                 hot.setType("1");
                 list.add(hot);
                 expertId += "'" + list8.get(i).getId() + "',";
