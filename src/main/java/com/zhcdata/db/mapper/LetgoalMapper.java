@@ -42,24 +42,23 @@ public interface LetgoalMapper {
 
     List<AnalysisMatchDto> querySameHandicapsMatchByOdds(@Param("companyId")Integer companyId, @Param("matchType")Integer matchType,
                                                     @Param("beginDate") String beginDate,@Param("changeTimes") Integer changeTimes,
-                                                     @Param("oddsId") Integer oddsId,@Param("satWin") Float satWin,
-                                                     @Param("satLose") Float satLose,@Param("satFlat") Float satFlat,
-                                                         @Param("satWinMod") Float satWinMod,@Param("satLoseMod") Float satLoseMod);
+                                                     @Param("oddsId") Integer oddsId,@Param("satWin") Double satWin,
+                                                     @Param("satLose") Double satLose,@Param("satFlat") Double satFlat);
     List<AnalysisMatchDto> querySameHandicapsMatchByChangeOdds(@Param("companyId")Integer companyId, @Param("matchType")Integer matchType,
                                                     @Param("changeOdds") List<Map<String,Double>> changeOdds,@Param("beginDate") String beginDate,
-                                                    @Param("oddsId") Integer oddsId,@Param("satWin") Float satWin, @Param("satLose") Float satLose,
-                                                    @Param("satFlat") Float satFlat,@Param("satWinMod") Float satWinMod,@Param("satLoseMod") Float satLoseMod);
+                                                    @Param("oddsId") Integer oddsId,@Param("satWin") Double satWin, @Param("satLose") Double satLose,
+                                                    @Param("satFlat") Double satFlat);
 
     List<AnalysisMatchDto> querySameHandicapsMatchByOddsAndNoChange(@Param("companyId")Integer companyId,@Param("matchType")Integer matchType,
-                                                           @Param("satGoal") Float satGoal,@Param("endGoal") Float endGoal,
+                                                           @Param("satGoal") Double satGoal,@Param("endGoal") Double endGoal,
                                                            @Param("beginDate") String beginDate,@Param("changeTimes") Integer changeTimes,
-                                                           @Param("satSatOdd") Float satSatOdd,@Param("satEndOdd") Float satEndOdd,
-                                                           @Param("endSatOdd") Float endSatOdd,@Param("endEndOdd") Float endEndOdd);
+                                                           @Param("satSatOdd") Double satSatOdd,@Param("satEndOdd") Double satEndOdd,
+                                                           @Param("endSatOdd") Double endSatOdd,@Param("endEndOdd") Double endEndOdd);
 
     List<AnalysisMatchDto> querySameHandicapsMatchByOddsAndChange(@Param("companyId")Integer companyId,@Param("matchType")Integer matchType,
-                                                           @Param("satGoal") Float satGoal,@Param("endGoal") Float endGoal,
+                                                           @Param("satGoal") Double satGoal,@Param("endGoal") Double endGoal,
                                                                   @Param("changeOdds") List<Map<String,Double>> changeOdds,
                                                            @Param("beginDate") String beginDate,@Param("changeTimes") Integer changeTimes,
-                                                           @Param("satSatOdd") Float satSatOdd,@Param("satEndOdd") Float satEndOdd,
-                                                           @Param("endSatOdd") Float endSatOdd,@Param("endEndOdd") Float endEndOdd);
+                                                           @Param("satSatOdd") Double satSatOdd,@Param("satEndOdd") Double satEndOdd,
+                                                           @Param("endSatOdd") Double endSatOdd,@Param("endEndOdd") Double endEndOdd);
 }
