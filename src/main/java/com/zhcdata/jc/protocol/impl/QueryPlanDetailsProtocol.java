@@ -40,7 +40,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
-        String id = paramMap.get("id");
+        String id = paramMap.get("planId");
         if (Strings.isNullOrEmpty(id)) {
             LOGGER.info("[" + ProtocolCodeMsg.PLANID_NULL.getMsg() + "]:id---" + id);
             map.put("resCode", ProtocolCodeMsg.PLANID_NULL.getCode());
@@ -52,95 +52,104 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
 
     @Override
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
-        String id = paramMap.get("id");
-
+        String id = paramMap.get("planId");
+        String uid = paramMap.get("uid");
+        Map<String,Integer> freeOrPay = tbPlanService.checkFreeOrPayByUidAndPlanId(uid,id);
         Map<String, Object> resultMap = new HashMap<>();
-
-        PlanResult2 planResult2 = new PlanResult2();
-        try {
-            List<PlanResult2> result = tbPlanService.queryPlanById(id);
-            if (result != null && result.size() > 0) {
-                planResult2 = result.get(0);
-                List<MatchPlanResult1> matchPlanResults = tbJcMatchService.queryList1(Long.valueOf(id));
-                if (matchPlanResults != null && matchPlanResults.size() > 0) {
-                    List<MatchPlanResult1> matchPlanResult2 = new ArrayList<>();
-                    for(int i = 0; i < matchPlanResults.size(); i++){
-                        MatchPlanResult1 matchPlanResult1 = matchPlanResults.get(i);
-                        String planInfo = JcLotteryUtils.OddsInfoChange(matchPlanResult1.getPlanInfo());
-                        matchPlanResult1.setPlanInfo(planInfo);
-                        matchPlanResult2.add(matchPlanResult1);
+        if (freeOrPay.get("type")==3||freeOrPay.get("pay")>0){
+            PlanResult2 planResult2 = new PlanResult2();
+            try {
+                List<PlanResult2> result = tbPlanService.queryPlanById(id);
+                if (result != null && result.size() > 0) {
+                    planResult2 = result.get(0);
+                    List<MatchPlanResult1> matchPlanResults = tbJcMatchService.queryList1(Long.valueOf(id));
+                    if (matchPlanResults != null && matchPlanResults.size() > 0) {
+                        List<MatchPlanResult1> matchPlanResult2 = new ArrayList<>();
+                        for(int i = 0; i < matchPlanResults.size(); i++){
+                            MatchPlanResult1 matchPlanResult1 = matchPlanResults.get(i);
+                            String planInfo = JcLotteryUtils.OddsInfoChange(matchPlanResult1.getPlanInfo());
+                            matchPlanResult1.setPlanInfo(planInfo);
+                            matchPlanResult2.add(matchPlanResult1);
+                        }
+                        planResult2.setList(matchPlanResults);
                     }
-                    planResult2.setList(matchPlanResults);
                 }
-            }
 
-            resultMap.put("list", result);
-            ExpertInfo info = tbJcExpertService.queryExpertDetails(tbPlanService.queryExpertIdByPlanId(id));
-            if (info != null) {
-                resultMap.put("eid", info.getId());
-                resultMap.put("nickName", info.getNickName());
-                resultMap.put("img", info.getImg());
-                resultMap.put("lable", info.getLable());
-                resultMap.put("introduction", info.getIntroduction());
-                resultMap.put("fans", info.getFans());
-                resultMap.put("trend", info.getTrend());
-                resultMap.put("lz", info.getLzNow());
-                resultMap.put("zSevenDays", info.getzSevenDays());
-                resultMap.put("returnSevenDays", info.getReturnSevenDays());
-                resultMap.put("status", info.getStatus());
-            } else {
-                resultMap.put("eid", "");
-                resultMap.put("nickName", "");
-                resultMap.put("img", "");
-                resultMap.put("lable", "");
-                resultMap.put("introduction", "");
-                resultMap.put("fans", "");
-                resultMap.put("trend", "");
-                resultMap.put("lz", "");
-                resultMap.put("zSevenDays", "");
-                resultMap.put("returnSevenDays", "");
-                resultMap.put("status", "");
-            }
-            List<Map<String,Object>> list = tbPlanService.queryPlanInfo(id);
-            //Map<String,Object> list = tbPlanService.queryPlanInfoNextTime(id);
-
-            List<Map<String, Object>> plan_info = new ArrayList<>();
-            long first = 9999999999999L;
-            if (list!=null){
-                for (int i = 0; i < list.size(); i++) {
-                    Map<String, Object> map = new HashMap<>();
-                    Map<String, Object> firstInfo = list.get(i);
-
-                    map.put("num",firstInfo.get("Num").toString());
-                    map.put("matchName",firstInfo.get("matchName").toString());
-                    Date dateOfMatch = (Date)firstInfo.get("dateOfMatch");
-                    if (dateOfMatch.getTime()<first)
-                        first = dateOfMatch.getTime();
-                    map.put("time",dateOfMatch.getTime());
-                    map.put("homeTeamName",firstInfo.get("homeTeamName").toString());
-                    map.put("awayTeamName",firstInfo.get("awayTeamName").toString());
-
-                    map.put("no_rang_num", "0");
-                    map.put("no_rang_sheng", ""+list.get(i).get("homeTeamZhu"));
-                    map.put("no_rang_ping", ""+list.get(i).get("homeTeamPing"));
-                    map.put("no_rang_fu", ""+list.get(i).get("homeTeamKe"));
-
-                    map.put("rang_num", ""+list.get(i).get("awayTeamRangballs"));
-                    map.put("rang_sheng", ""+list.get(i).get("awayTeamZhu"));
-                    map.put("rang_ping", ""+list.get(i).get("awayTeamPing"));
-                    map.put("rang_fu", ""+list.get(i).get("awayTeamKe"));
-                    map.put("match_status", ""+list.get(i).get("status"));
-                    map.put("match_result", ""+list.get(i).get("matchResult"));
-                    plan_info.add(map);
+                resultMap.put("list", result);
+                ExpertInfo info = tbJcExpertService.queryExpertDetails(tbPlanService.queryExpertIdByPlanId(id));
+                if (info != null) {
+                    //给专家人气加1
+                    tbJcExpertService.updatePopAddOne(info.getId());
+                    resultMap.put("eid", info.getId());
+                    resultMap.put("nickName", info.getNickName());
+                    resultMap.put("img", info.getImg());
+                    resultMap.put("lable", info.getLable());
+                    resultMap.put("introduction", info.getIntroduction());
+                    resultMap.put("fans", info.getFans());
+                    resultMap.put("trend", info.getTrend());
+                    resultMap.put("lz", info.getLzNow());
+                    resultMap.put("zSevenDays", info.getzSevenDays());
+                    resultMap.put("returnSevenDays", info.getReturnSevenDays());
+                    resultMap.put("status", info.getStatus());
+                } else {
+                    resultMap.put("eid", "");
+                    resultMap.put("nickName", "");
+                    resultMap.put("img", "");
+                    resultMap.put("lable", "");
+                    resultMap.put("introduction", "");
+                    resultMap.put("fans", "");
+                    resultMap.put("trend", "");
+                    resultMap.put("lz", "");
+                    resultMap.put("zSevenDays", "");
+                    resultMap.put("returnSevenDays", "");
+                    resultMap.put("status", "");
                 }
-            }
-            resultMap.put("plan_info", plan_info);
-            resultMap.put("first_time", first);
+                List<Map<String,Object>> list = tbPlanService.queryPlanInfo(id);
+                //Map<String,Object> list = tbPlanService.queryPlanInfoNextTime(id);
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            LOGGER.error("查询方案详情异常" + ex.toString());
+                List<Map<String, Object>> plan_info = new ArrayList<>();
+                long first = 9999999999999L;
+                if (list!=null){
+                    for (int i = 0; i < list.size(); i++) {
+                        Map<String, Object> map = new HashMap<>();
+                        Map<String, Object> firstInfo = list.get(i);
+
+                        map.put("num",firstInfo.get("Num").toString());
+                        map.put("matchName",firstInfo.get("matchName").toString());
+                        Date dateOfMatch = (Date)firstInfo.get("dateOfMatch");
+                        if (dateOfMatch.getTime()<first)
+                            first = dateOfMatch.getTime();
+                        map.put("time",dateOfMatch.getTime());
+                        map.put("homeTeamName",firstInfo.get("homeTeamName").toString());
+                        map.put("awayTeamName",firstInfo.get("awayTeamName").toString());
+
+                        map.put("no_rang_num", "0");
+                        map.put("no_rang_sheng", ""+list.get(i).get("homeTeamZhu"));
+                        map.put("no_rang_ping", ""+list.get(i).get("homeTeamPing"));
+                        map.put("no_rang_fu", ""+list.get(i).get("homeTeamKe"));
+
+                        map.put("rang_num", ""+list.get(i).get("awayTeamRangballs"));
+                        map.put("rang_sheng", ""+list.get(i).get("awayTeamZhu"));
+                        map.put("rang_ping", ""+list.get(i).get("awayTeamPing"));
+                        map.put("rang_fu", ""+list.get(i).get("awayTeamKe"));
+                        map.put("match_status", ""+list.get(i).get("status"));
+                        map.put("match_result", ""+list.get(i).get("matchResult"));
+                        plan_info.add(map);
+                    }
+                }
+                resultMap.put("plan_info", plan_info);
+                resultMap.put("first_time", first);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                LOGGER.error("查询方案详情异常" + ex.toString());
+            }
+            return resultMap;
+        }else {
+            resultMap.put("resCode","999999");
+            resultMap.put("message","方案尚未购买");
+            return resultMap;
         }
-        return resultMap;
+
     }
 }

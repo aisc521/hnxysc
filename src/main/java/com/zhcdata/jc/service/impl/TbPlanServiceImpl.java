@@ -86,4 +86,9 @@ public class TbPlanServiceImpl implements TbPlanService {
     public List<Map<String, Object>> queryPlanInfo(String id) {
         return tbJcPlanMapper.queryPlanInfo(id);
     }
+
+    @Override
+    public Map<String, Integer> checkFreeOrPayByUidAndPlanId(String uid, String pid) {
+        return tbJcPlanMapper.queryFreeOrPayByUidAndPid(uid,pid);
+    }
 }

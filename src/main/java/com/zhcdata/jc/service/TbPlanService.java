@@ -50,4 +50,6 @@ public interface TbPlanService {
     String queryExpertIdByPlanId(String id);
 
     List<Map<String, Object>> queryPlanInfo(String id);
+
+    Map<String, Integer> checkFreeOrPayByUidAndPlanId(String uid, String pid);
 }

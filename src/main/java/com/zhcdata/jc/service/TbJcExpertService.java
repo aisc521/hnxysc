@@ -36,4 +36,6 @@ public interface TbJcExpertService {
     List<ExpertInfo> query(String userId);
 
     TbJcExpert queryExpertDetailsById(int id);
+
+    void updatePopAddOne(int eid);
 }

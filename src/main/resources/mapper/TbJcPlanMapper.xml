@@ -305,4 +305,10 @@ select aaa.*,bbb.status,bbb.matchResult from (
         left join tb_jc_match bbb on aaa.matchId = bbb.match_id
     </select>
 
+    <select id="queryFreeOrPayByUidAndPid" resultType="java.util.Map">
+        select * from
+(select type from tb_jc_plan where id = #{pid}) as sss left join
+(select count(id) pay from tb_jc_purchase_detailed where scheme_id = #{pid} and user_id = #{uid}) mmm on 1 = 1
+    </select>
+
 </mapper>

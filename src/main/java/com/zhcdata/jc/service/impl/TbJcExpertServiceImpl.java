@@ -47,4 +47,9 @@ public class TbJcExpertServiceImpl implements TbJcExpertService {
     public TbJcExpert queryExpertDetailsById(int id) {
         return tbJcExpertMapper.queryExpertDetailsById(id);
     }
+
+    @Override
+    public void updatePopAddOne(int eid) {
+        tbJcExpertMapper.updatePopAddOneByEid(eid);
+    }
 }
