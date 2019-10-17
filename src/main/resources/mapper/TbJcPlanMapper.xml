@@ -47,7 +47,8 @@
     p.id planId,
     p.type planType,
     p.status planStatus,
-    IFNULL(pd.id,'0') buStatus
+    IFNULL(pd.id,'0') buStatus,
+    e.grade grade
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id

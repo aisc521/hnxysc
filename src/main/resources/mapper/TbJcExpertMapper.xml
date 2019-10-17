@@ -30,7 +30,7 @@
     </update>
     <select id="queryHotExperts" resultType="com.zhcdata.jc.dto.ExpertInfo">
     <if test="type==1">
-      SELECT e.id,e.nick_name nickName,CONCAT(v.lz_now,'连红') lzNow,'1' pushed ,e.img from tb_jc_victory v
+      SELECT e.id,e.nick_name nickName,CONCAT(v.lz_now,'连红') lzNow,'1' pushed ,e.img,e.grade grade from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=4
     </if>
     <if test="type==2">
@@ -64,7 +64,7 @@
   </select>
   <select id="queryExpertDetails" resultType="com.zhcdata.jc.dto.ExpertInfo">
     SELECT e.id,e.nick_name nickName,e.img,e.lable,e.introduction,e.fans,
-    v.trend,v.lz_now lz,z_seven_days zSevenDays,v.return_seven_days returnSevenDays,f.status
+    v.trend,v.lz_now lz,z_seven_days zSevenDays,v.return_seven_days returnSevenDays,f.status,e.grade
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     where e.id=${expertId} and e.is_upshelf = '1'

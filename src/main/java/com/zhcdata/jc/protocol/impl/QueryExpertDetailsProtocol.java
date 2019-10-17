@@ -57,6 +57,7 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
                 resultMap.put("zSevenDays", info.getzSevenDays());
                 resultMap.put("returnSevenDays", info.getReturnSevenDays());
                 resultMap.put("status", info.getStatus());
+                resultMap.put("grade", info.getGrade());
                 resultMap.put("message", "成功");
                 resultMap.put("resCode", "000000");
                 resultMap.put("busiCode", "");
@@ -72,6 +73,7 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
                 resultMap.put("zSevenDays", "");
                 resultMap.put("returnSevenDays", "");
                 resultMap.put("status", "");
+                resultMap.put("grade", "");
                 resultMap.put("message", "专家id不存在");
                 resultMap.put("resCode", "");
                 resultMap.put("busiCode", "");
