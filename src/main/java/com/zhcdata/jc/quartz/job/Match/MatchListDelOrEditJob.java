@@ -38,7 +38,7 @@ public class MatchListDelOrEditJob implements Job {
 
     private static List<String> cache = new ArrayList<>();
 
-    private static Map<String, String> editCache = new HashMap<>();
+    //private static Map<String, String> editCache = new HashMap<>();
 
 
     @Resource
@@ -125,8 +125,8 @@ public class MatchListDelOrEditJob implements Job {
         for (int i = 0; i < list.size(); i++) {
             //if (!cache.contains(list.get(i).getID())) {//如果缓存中没有这个id
             if (list.get(i).getType().equals("modify")) {//修改
-                if (editCache.get(list.get(i).getID()) != null && editCache.get(list.get(i).getID()).equals(list.get(i).getMatchtime()))
-                    continue;
+                //if (editCache.get(list.get(i).getID()) != null && editCache.get(list.get(i).getID()).equals(list.get(i).getMatchtime()))
+                //    continue;
                 Schedule schedule = new Schedule();
                 schedule.setScheduleid(Integer.parseInt(list.get(i).getID()));
                 try {
@@ -135,9 +135,9 @@ public class MatchListDelOrEditJob implements Job {
                     System.err.println("A7Y8S76SD85F7A65"+e.toString());
                 }
                 int i1 = scheduleMapper.updateByPrimaryKeySelective(schedule);
-                if (editCache.size() > 500)
-                    editCache.clear();
-                editCache.put(list.get(i).getID(), list.get(i).getMatchtime());
+                //if (editCache.size() > 500)
+                //    editCache.clear();
+                //editCache.put(list.get(i).getID(), list.get(i).getMatchtime());
                 if (i1 > 0)
                     update++;
 

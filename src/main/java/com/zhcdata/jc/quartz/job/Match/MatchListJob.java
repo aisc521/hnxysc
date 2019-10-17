@@ -71,7 +71,7 @@ public class MatchListJob implements Job{
                         toUpdate.setGuestscore(xml.getGuestscore());
                         toUpdate.setHomehalfscore(xml.getHomehalfscore());
                         toUpdate.setGuesthalfscore(xml.getGuesthalfscore());
-
+                        toUpdate.setMatchtime(xml.getMatchtime());
                         toUpdate.setHomeRed(xml.getHomeRed());
                         toUpdate.setHomeYellow(xml.getHomeYellow());
                         toUpdate.setGuestRed(xml.getGuestRed());
