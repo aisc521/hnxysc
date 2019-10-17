@@ -1,15 +1,19 @@
 package com.zhcdata.jc.protocol.impl;
 
 import com.google.common.base.Strings;
+import com.zhcdata.db.model.TbJcExpert;
+import com.zhcdata.db.model.TbJcPurchaseDetailed;
 import com.zhcdata.db.model.TbJcRecordFocus;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
+import com.zhcdata.jc.service.TbJcExpertService;
 import com.zhcdata.jc.service.TbJcRecordFocusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -26,6 +30,8 @@ public class AttentionExprtProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource
     private TbJcRecordFocusService tbJcRecordFocusService;
+    @Resource
+    private TbJcExpertService tbJcExpertService;
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -86,6 +92,37 @@ public class AttentionExprtProtocol implements BaseProtocol {
             tbJcRecordFocus.setStatus(Integer.valueOf(paramMap.get("status")));
             tbJcRecordFocusService.updateRecord(tbJcRecordFocus);
         }
+
+        //查询专家表
+        TbJcExpert tbJcExpert = tbJcExpertService.queryExpertDetailsById(Integer.valueOf(String.valueOf(paramMap.get("expertId"))));
+        if(tbJcExpert == null){
+            resultMap.put("resCode", ProtocolCodeMsg.EXPERT_ERROR.getCode());
+            resultMap.put("message", ProtocolCodeMsg.EXPERT_ERROR.getMsg());
+            return resultMap;
+        }
+        String status = paramMap.get("status");
+        if("0".equals(status)){//取消关注
+            Integer fans = Integer.valueOf(String.valueOf(tbJcExpert.getFans()));
+            if(fans == null){
+                fans = 0;
+            }
+            tbJcExpert.setFans(Long.valueOf(fans) + Long.valueOf(1));
+        }else{
+            Integer fans = Integer.valueOf(String.valueOf(tbJcExpert.getFans()));
+            if(fans == null){
+                fans = 0;
+            }
+            tbJcExpert.setFans(Long.valueOf(fans) - Long.valueOf(1));
+        }
+        Example example1 = new Example(TbJcPurchaseDetailed.class);
+        example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
+
+        int h = tbJcExpertService.updateByExample(tbJcExpert,example1);
+        if(h <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
+
         return null;
     }
 }
