@@ -72,6 +72,11 @@ public class MatchListJob implements Job{
                         toUpdate.setHomehalfscore(xml.getHomehalfscore());
                         toUpdate.setGuesthalfscore(xml.getGuesthalfscore());
                         toUpdate.setMatchtime(xml.getMatchtime());
+                        try {
+                            log.info("赛程赛果修改比赛时间:比赛"+toUpdate.getScheduleid()+"修改为:"+sdf.format(xml.getMatchtime()));
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         toUpdate.setHomeRed(xml.getHomeRed());
                         toUpdate.setHomeYellow(xml.getHomeYellow());
                         toUpdate.setGuestRed(xml.getGuestRed());
