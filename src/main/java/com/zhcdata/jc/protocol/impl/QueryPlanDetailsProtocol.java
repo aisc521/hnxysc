@@ -54,7 +54,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         String id = paramMap.get("planId");
         String uid = paramMap.get("uid");
-        Map<String,Integer> freeOrPay = tbPlanService.checkFreeOrPayByUidAndPlanId(uid,id);
+        Map<String,Long> freeOrPay = tbPlanService.checkFreeOrPayByUidAndPlanId(uid,id);
         Map<String, Object> resultMap = new HashMap<>();
         if (freeOrPay.get("type")==3||freeOrPay.get("pay")>0){
             PlanResult2 planResult2 = new PlanResult2();

@@ -88,7 +88,7 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public Map<String, Integer> checkFreeOrPayByUidAndPlanId(String uid, String pid) {
+    public Map<String, Long> checkFreeOrPayByUidAndPlanId(String uid, String pid) {
         return tbJcPlanMapper.queryFreeOrPayByUidAndPid(uid,pid);
     }
 }
