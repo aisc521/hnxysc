@@ -81,6 +81,8 @@ public class JcFootBallOddsJob implements Job {
                                 jcSchedulespvaryService.insertJcSchedulespvary(jcSchedule,jcFootBallOddsRsp,spId,jcSchedulesp,schedule);
                             }
                             //更新竞彩对阵表
+                            jcSchedule.setHometeam(jcFootBallOddsRspList.get(i).getHome());
+                            jcSchedule.setGuestteam(jcFootBallOddsRspList.get(i).getAway());
                             jcScheduleService.updateJcSchedule(jcSchedule,jcFootBallOddsRsp);
                         }else{
                             log.error("竞彩足球赔率定时任务查询赛程为空，Scheduleid：" + jcSchedule.getScheduleid());
