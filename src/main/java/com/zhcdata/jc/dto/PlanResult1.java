@@ -23,6 +23,15 @@ public class PlanResult1 {
     private String planType;
     private String planStatus;
     private String buStatus;
+    private String grade;
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
 
     public String getBuStatus() {
         return buStatus;

@@ -112,6 +112,7 @@ public enum ProtocolCodeMsg {
     USERMENUBUY_MENU_MONEY_ERROR("101025", "不在交易时间范围内!"),
     MONEY_ERROR("101026", "支付宝支付金额错误!"),
     FIRST_BUY_ERROR("101027", "首单不支持点播卡支付!"),
+    EXPERT_ERROR("101028", "专家信息为空!"),
     SF14_startIssue("090401","开始期次不能为空");
 
     ;

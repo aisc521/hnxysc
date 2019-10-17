@@ -20,6 +20,6 @@
     from
     tb_jc_record_focus f
     LEFT JOIN tb_jc_plan p ON f.expert_Id = p.ascription_expert
-    where f.user_Id = #{userId} and f.status = '1'
+    where f.user_Id = #{userId} and f.status = '1' and p.status = '1'
   </select>
 </mapper>

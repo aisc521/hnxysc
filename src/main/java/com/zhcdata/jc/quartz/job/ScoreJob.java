@@ -300,10 +300,6 @@ public class ScoreJob implements Job {
                     LOGGER.info("[球队积分排名]入库失败" + info.getTeamid());
                 }
             } else {
-                //if (!info.equals(existingTeam.get(0))) {
-                if(info.getTeamid()==2001){
-                    String sds="";
-                }
                 info.setId(existingTeam.get(0).getId());
                 if (tbScoreMapper.updateByPrimaryKeySelective(info) > 0) {
                     LOGGER.info("[球队积分排名]修改成功" + info.getTeamid());
