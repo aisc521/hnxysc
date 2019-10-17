@@ -44,7 +44,9 @@
     p.type,
     p.create_time,
     p.plan_Hit planHit,
-    p.id planId
+    p.id planId,
+    p.type planType,
+    p.status planStatus
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id

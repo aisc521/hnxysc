@@ -83,7 +83,7 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             resultMap.put("matchMakeTime", mo.getMakeTime());
             //比赛状态
             resultMap.put("matchState", mo.getMatchState());
-
+            resultMap.put("matchName",mo.getMatchName());
             //获取图标信息
 
             String team = (String) redisUtils.hget("SOCCER:HSET:SOCRELIVE"+"team" + paramMap.get("matchId"),"v");

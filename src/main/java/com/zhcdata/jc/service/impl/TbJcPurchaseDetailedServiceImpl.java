@@ -2,11 +2,9 @@ package com.zhcdata.jc.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zhcdata.db.mapper.TbJcExpertMapper;
 import com.zhcdata.db.mapper.TbJcPurchaseDetailedMapper;
-import com.zhcdata.db.model.JcMatchBjdcPl;
-import com.zhcdata.db.model.TbJcPlan;
-import com.zhcdata.db.model.TbJcPurchaseDetailed;
-import com.zhcdata.db.model.TbJcUser;
+import com.zhcdata.db.model.*;
 import com.zhcdata.jc.dto.PurchasedPlanDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -31,6 +29,8 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
     @Resource
     private TbJcPurchaseDetailedMapper tbJcPurchaseDetailedMapper;
 
+    @Resource
+    private TbJcExpertMapper tbJcExpertMapper;
     @Resource
     private CommonUtils commonUtils;
 
@@ -106,6 +106,9 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                     result.put("schemeName",tbJcPlan.getTitle());
                 }
             }
+
+
+
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -136,6 +139,11 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
     @Override
     public List<TbJcPurchaseDetailed> queryIsFirstBuy(Long userId) {
         return tbJcPurchaseDetailedMapper.queryIsFirstBuy(userId);
+    }
+
+    @Override
+    public List<TbJcPurchaseDetailed> queryTbJcPurchaseDetailedByPlanId(Long id) {
+        return tbJcPurchaseDetailedMapper.queryTbJcPurchaseDetailedByPlanId(id);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -251,6 +259,24 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
                     ProtocolCodeMsg.INSERT_FAILE.getMsg());
         }
+
+
+        //增加专家人气
+        TbJcExpert tbJcExpert = tbJcExpertMapper.queryExpertDetailsById(Integer.valueOf(String.valueOf(tbJcPlan.getAscriptionExpert())));
+        Integer pop = tbJcExpert.getPopularity();
+        if(pop == null){
+            pop = 0;
+        }
+        tbJcExpert.setPopularity(pop + 10);
+        Example example1 = new Example(TbJcPurchaseDetailed.class);
+        example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
+
+        int h = tbJcExpertMapper.updateByExample(tbJcExpert,example1);
+        if(h <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
+
     }
 
     public void insertOrder( TbJcPurchaseDetailed tbJcPurchaseDetailed) throws BaseException {

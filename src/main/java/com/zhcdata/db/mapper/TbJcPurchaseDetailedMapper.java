@@ -19,4 +19,6 @@ public interface TbJcPurchaseDetailedMapper extends Mapper<TbJcPurchaseDetailed>
     TbJcPurchaseDetailed queryOrderByUserAndOrderId(@Param("userId")Long userId, @Param("orderId")String orderId);
 
     List<TbJcPurchaseDetailed> queryIsFirstBuy(@Param("userId")Long userId);
+
+    List<TbJcPurchaseDetailed> queryTbJcPurchaseDetailedByPlanId(@Param("schemeId")Long id);
 }

@@ -20,6 +20,24 @@ public class PlanResult1 {
     private String createTime;
     private String planHit;
     private String planId;
+    private String planType;
+    private String planStatus;
+
+    public String getPlanType() {
+        return planType;
+    }
+
+    public void setPlanType(String planType) {
+        this.planType = planType;
+    }
+
+    public String getPlanStatus() {
+        return planStatus;
+    }
+
+    public void setPlanStatus(String planStatus) {
+        this.planStatus = planStatus;
+    }
 
     public String getPlanId() {
         return planId;

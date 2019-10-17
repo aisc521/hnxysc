@@ -35,6 +35,33 @@ public class PurchasedPlanDto {
 
 
     private String planId;
+    private String thirdMoney;
+    private String buyMoney;
+    private String firstone;
+
+    public String getThirdMoney() {
+        return thirdMoney;
+    }
+
+    public void setThirdMoney(String thirdMoney) {
+        this.thirdMoney = thirdMoney;
+    }
+
+    public String getBuyMoney() {
+        return buyMoney;
+    }
+
+    public void setBuyMoney(String buyMoney) {
+        this.buyMoney = buyMoney;
+    }
+
+    public String getFirstone() {
+        return firstone;
+    }
+
+    public void setFirstone(String firstone) {
+        this.firstone = firstone;
+    }
 
     private List<MatchPlanResult> list;
 
