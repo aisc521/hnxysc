@@ -1,9 +1,11 @@
 package com.zhcdata.jc.quartz.job.Order;
 
+import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.db.model.TbJcPurchaseDetailed;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.PayService;
+import com.zhcdata.jc.service.TbJcExpertService;
 import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
@@ -35,6 +37,9 @@ public class QueryOrderStatusJob implements Job {
     private TbJcPurchaseDetailedService tbJcPurchaseDetailedService;
     @Resource
     private PayService payService;
+    @Resource
+    private TbJcExpertService tbJcExpertService;
+
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         //查询状态是0(未支付) 1(冻结状态) /支付方式是（微信Native支付_20,支付宝支付_21,微信H5支付_22）的订单
@@ -82,6 +87,25 @@ public class QueryOrderStatusJob implements Job {
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
         }
+
+
+        //更新专家信息
+        TbJcExpert tbJcExpert = tbJcExpertService.queryExpertDetailsById(Integer.valueOf(String.valueOf(tbJcPurchaseDetailed.getExpertId())));
+        Integer pop = tbJcExpert.getPopularity();
+        if(pop == null){
+            pop = 0;
+        }
+        tbJcExpert.setPopularity(pop + 10);
+        Example example1 = new Example(TbJcPurchaseDetailed.class);
+        example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
+
+        int h = tbJcExpertService.updateByExample(tbJcExpert,example1);
+        if(h <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
+
+
     }
 
 }

@@ -27,8 +27,8 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public List<PlanResult1> queryPlanByExpertId(String id, String planId) {
-            return tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId);
+    public List<PlanResult1> queryPlanByExpertId(String id, String planId,String userId) {
+            return tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId,userId);
     }
 
     @Override
@@ -85,5 +85,10 @@ public class TbPlanServiceImpl implements TbPlanService {
     @Override
     public List<Map<String, Object>> queryPlanInfo(String id) {
         return tbJcPlanMapper.queryPlanInfo(id);
+    }
+
+    @Override
+    public Map<String, Long> checkFreeOrPayByUidAndPlanId(String uid, String pid) {
+        return tbJcPlanMapper.queryFreeOrPayByUidAndPid(uid,pid);
     }
 }

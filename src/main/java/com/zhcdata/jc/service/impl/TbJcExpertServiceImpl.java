@@ -5,6 +5,7 @@ import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
 import com.zhcdata.jc.service.TbJcExpertService;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -47,4 +48,16 @@ public class TbJcExpertServiceImpl implements TbJcExpertService {
     public TbJcExpert queryExpertDetailsById(int id) {
         return tbJcExpertMapper.queryExpertDetailsById(id);
     }
+
+    @Override
+    public void updatePopAddOne(int eid) {
+        tbJcExpertMapper.updatePopAddOneByEid(eid);
+    }
+
+    @Override
+    public int updateByExample(TbJcExpert tbJcExpert, Example example1) {
+        return 0;
+    }
+
+
 }

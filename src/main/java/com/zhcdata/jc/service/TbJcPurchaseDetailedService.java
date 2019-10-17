@@ -25,4 +25,6 @@ public interface TbJcPurchaseDetailedService {
     TbJcPurchaseDetailed queryOrderByUserAndOrderId(Long userId, String orderId);
 
     List<TbJcPurchaseDetailed> queryIsFirstBuy(Long userId);
+
+    List<TbJcPurchaseDetailed> queryTbJcPurchaseDetailedByPlanId(Long id);
 }

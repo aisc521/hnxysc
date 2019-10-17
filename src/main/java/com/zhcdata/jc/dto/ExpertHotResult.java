@@ -39,6 +39,16 @@ public class ExpertHotResult {
     private String label;
 
 
+    private String grade;
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
+
     public String getType() {
         return type;
     }

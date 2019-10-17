@@ -1,6 +1,7 @@
 package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.TbJcMatchMapper;
+import com.zhcdata.db.model.TbJcMatch;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.MatchPlanResult1;
 import com.zhcdata.jc.dto.MatchResult1;
@@ -43,5 +44,10 @@ public class TbJcMatchServiceImpl implements TbJcMatchService {
         MatchResult1 queryScore1 = tbJcMatchMapper.queryScore1(matchId);
 
         return queryScore1;
+    }
+
+    @Override
+    public TbJcMatch queryJcMatchByPlanId(Long id) {
+        return tbJcMatchMapper.queryJcMatchByPlanId(id);
     }
 }

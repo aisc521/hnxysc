@@ -11,7 +11,7 @@ import java.util.Map;
 public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     int queryPlanCountByExpertId(@Param("expertId")String expertId);
 
-    List<PlanResult1> queryPlanByExpertId(@Param("id") long expertId, @Param("planId")String planId);
+    List<PlanResult1> queryPlanByExpertId(@Param("id") long expertId, @Param("planId")String planId,@Param("userId")String userId);
 
     List<TbJcPlan> queryPlanList(@Param("expert") String expert, @Param("status") String status);
 
@@ -34,4 +34,6 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     String queryExpertIdByPlanId(String id);
 
     List<Map<String, Object>> queryPlanInfo(String pid);
+
+    Map<String, Long> queryFreeOrPayByUidAndPid(@Param("uid") String uid, @Param("pid") String pid);
 }

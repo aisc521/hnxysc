@@ -1,23 +1,30 @@
 package com.zhcdata.jc.quartz.job.redis;
 
+import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.db.model.TbJcPlan;
+import com.zhcdata.db.model.TbJcPurchaseDetailed;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.SPFListDto;
 import com.zhcdata.jc.dto.TbSPFInfo;
 import com.zhcdata.jc.dto.TbScoreResult;
-import com.zhcdata.jc.service.TbJcMatchService;
-import com.zhcdata.jc.service.TbPlanService;
+import com.zhcdata.jc.enums.ProtocolCodeMsg;
+import com.zhcdata.jc.exception.BaseException;
+import com.zhcdata.jc.service.*;
 import com.zhcdata.jc.tools.RedisUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description 计算方案 是否命中
@@ -35,6 +42,14 @@ public class CalculationPlanJob implements Job {
 
     @Resource
     private TbJcMatchService tbJcMatchService;
+    @Resource
+    private TbJcExpertService tbJcExpertService;
+
+    @Resource
+    private PayService payService;
+
+    @Resource
+    private TbJcPurchaseDetailedService purchaseDetailedService;
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -130,9 +145,17 @@ public class CalculationPlanJob implements Job {
                         if (result == 0) {
                             //未中
                             tbPlanService.updateStatus("0", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
+                            TbJcPlan tb = planResults.get(i);
+                            refundFrozenToMoney(tb);
                         } else {
                             //已中
                             tbPlanService.updateStatus("1", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
+
+                            TbJcPlan tb = planResults.get(i);//专家经验值+3
+                            UpdateExpert(tb);
+                            //扣款
+
+                            deductFrozen(tb);
                         }
                     }
                 }
@@ -141,6 +164,135 @@ public class CalculationPlanJob implements Job {
 
         } catch (Exception ex) {
             LOGGER.error("计算方案是否命中定时任务异常：" + ex);
+        }
+    }
+
+    /**
+     * 更新专家经验值
+     * @param
+     * @throws BaseException
+     */
+    public void UpdateExpert( TbJcPlan tb) throws BaseException {
+        //更新专家经验  + 3
+        TbJcExpert tbJcExpert = tbJcExpertService.queryExpertDetailsById(Integer.parseInt(String.valueOf(tb.getAscriptionExpert())));
+        Integer pop = tbJcExpert.getPopularity();
+        if(pop == null){
+            pop = 0;
+        }
+        tbJcExpert.setPopularity(pop + 10);
+        Example example1 = new Example(TbJcPurchaseDetailed.class);
+        example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
+
+        int h = tbJcExpertService.updateByExample(tbJcExpert,example1);
+        if(h <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
+    }
+
+    /**
+     * 退款
+     */
+    public void refundFrozenToMoney(TbJcPlan planResults) throws BaseException {
+        Map result = new HashMap();
+        List<TbJcPurchaseDetailed> tbJcPurchaseDetailedList = purchaseDetailedService.queryTbJcPurchaseDetailedByPlanId(planResults.getId());
+        if(tbJcPurchaseDetailedList.size() > 0){
+            for(int h = 0; h < tbJcPurchaseDetailedList.size(); h++){
+                TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedList.get(h);
+                //判断是否是冻结状态  以及订单号 是否是 冻结的订单号
+                String pay_status = String.valueOf(tbJcPurchaseDetailed.getPayStatus());
+                String order_id = tbJcPurchaseDetailed.getOrderId();
+                String[] order = order_id.split("-");
+                String payType = String.valueOf(tbJcPurchaseDetailed.getPayType());
+                String remark = "";
+                if("20".equals(payType)){
+                    remark = "微信支付-方案未中退款";
+                    if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                        result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+                    }
+                }
+                if("21".equals(payType)){
+                    remark = "支付宝支付-方案未中退款";
+                    if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                        result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+                    }
+                }
+                if("22".equals(payType)){
+                    remark = "微信支付-方案未中退款";
+                    if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                        result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+                    }
+                }
+                if("0".equals(payType)){
+                    remark = "余额支付-方案未中退款";
+                    if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                        result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+                    }
+                }
+                if("99".equals(payType)){
+                    remark = "点播卡支付-方案未中退款";
+                    if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                        result = payService.refundDiscount(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(),"1",remark,tbJcPurchaseDetailed.getSrc());
+                    }
+                }
+                String resCode = String.valueOf(result.get("resCode"));
+                if("000000".equals(resCode)){//退款成功
+                    //更新订单表信息
+                    tbJcPurchaseDetailed.setPayStatus(Long.valueOf(3));
+                    Example example = new Example(TbJcPurchaseDetailed.class);
+                    example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
+                    int j = purchaseDetailedService.updateByExampleSelective(tbJcPurchaseDetailed,example);
+                    if(j <= 0){
+                        throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                                ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+                    }
+                }
+
+            }
+        }
+    }
+
+    /**
+     * 扣款
+     */
+    public void deductFrozen(TbJcPlan tb) throws BaseException {
+        Map result = new HashMap();
+        List<TbJcPurchaseDetailed> tbJcPurchaseDetailedList = purchaseDetailedService.queryTbJcPurchaseDetailedByPlanId(tb.getId());
+        if(tbJcPurchaseDetailedList.size() > 0){
+            for(int h = 0; h < tbJcPurchaseDetailedList.size(); h++){
+                TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedList.get(h);
+                String remark = "";
+                String payType = String.valueOf(tbJcPurchaseDetailed.getPayType());
+                if("20".equals(payType)){
+                    remark = "微信支付-方案未中退款";
+                }
+                if("21".equals(payType)){
+                    remark = "支付宝支付-方案未中退款";
+                }
+                if("22".equals(payType)){
+                    remark = "微信支付-方案未中退款";
+                }
+                if("0".equals(payType)){
+                    remark = "余额支付-方案未中退款";
+                }
+                if("99".equals(payType)){
+                    remark = "点播卡支付-方案未中退款";
+                }
+                result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getThirdMoney()),remark,tbJcPurchaseDetailed.getSrc());
+                String resCode = String.valueOf(result.get("resCode"));
+                if("000000".equals(resCode)){
+                    //更新订单表 为支付成功的状态
+                    //更新订单表信息
+                    tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
+                    Example example = new Example(TbJcPurchaseDetailed.class);
+                    example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
+                    int j = purchaseDetailedService.updateByExampleSelective(tbJcPurchaseDetailed,example);
+                    if(j <= 0){
+                        throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                                ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+                    }
+                }
+            }
         }
     }
 }

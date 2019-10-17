@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
+import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.MATCH_START_TIME;
+
 /**
  * CopyRight (c)1999-2019 : zhcw.com
  * Project : jc-new-server
@@ -49,15 +51,18 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
-                log.error("21多盘口赔率变化: 欧赔（让球盘）接口数据:{}", item);
-                //if (item.length !=9) {
-                //    log.error("21多盘口赔率变化: 欧赔（让球盘）数据格式不合法 接口数据:{}", item);
-                //    continue;
-                //}
-
-                Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
-                if(schedule ==null || schedule.getMatchtime().getTime()<System.currentTimeMillis()){
-                    log.error("21多盘口赔率变化: 欧赔（让球盘）暂无此赛程或比赛已经开始，比赛ID:{}", item[0]);
+                Long time = MATCH_START_TIME.get(item[0]);
+                if (time==null || time<1){
+                    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
+                    if(schedule!=null){
+                        time = schedule.getMatchtime().getTime();
+                        MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
+                        if (MATCH_START_TIME.size()>500)
+                            MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
+                    }
+                }
+                if (time!=null && time < System.currentTimeMillis()){
+                    log.error("21多盘口赔率变化: 欧赔（让球盘）比赛已经开始，比赛ID:{}", item[0]);
                     continue;
                 }
                 singleHandicap(item);

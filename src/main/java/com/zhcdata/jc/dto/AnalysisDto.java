@@ -71,15 +71,15 @@ public class AnalysisDto {
     /**
      * 初胜
      */
-    private Float satWin;
+    private Double satWin;
     /**
      * 初平
      */
-    private Float satFlat;
+    private Double satFlat;
     /**
      * 初负
      */
-    private Float satLose;
+    private Double satLose;
     /**
      * 最近赛事
      */

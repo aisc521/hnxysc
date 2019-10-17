@@ -1,5 +1,6 @@
 package com.zhcdata.jc.service;
 
+import com.zhcdata.db.model.TbJcMatch;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.MatchPlanResult1;
 import com.zhcdata.jc.dto.MatchResult1;
@@ -15,4 +16,6 @@ public interface TbJcMatchService {
     List<MatchPlanResult1> queryList1(Long id);
 
     MatchResult1 queryScore(String matchId);
+
+    TbJcMatch queryJcMatchByPlanId(Long id);
 }

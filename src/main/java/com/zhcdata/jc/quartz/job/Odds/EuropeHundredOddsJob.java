@@ -32,6 +32,7 @@ import com.zhcdata.jc.tools.HttpUtils;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.EuropeHundredOddsRsp;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.H;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.json.XML;
 import org.quartz.Job;
@@ -99,28 +100,34 @@ public class EuropeHundredOddsJob implements Job {
         List<H> items = obj.getC().getH();
         for (H item : items) {
             try {
-                if(sdf_X.parse(item.getTime()).getTime()<System.currentTimeMillis())
+                if (sdf_X.parse(item.getTime()).getTime() < System.currentTimeMillis())
                     continue;
                 if (item.getOdds() == null || item.getOdds().getO() == null)
                     continue;
             } catch (ParseException e) {
-                log.error("百欧赔率表接口,比赛时间格式化失败，跳过比赛"+item.getId());
+                log.error("百欧赔率表接口,比赛时间格式化失败，跳过比赛" + item.getId());
                 continue;
                 //e.printStackTrace();
             }
             List<String> os = item.getOdds().getO();
             for (String o : os) {
-                if (!mc.contains(item.getId() + ":" + o.split(",")[0])) {
-                    //log.info("mc list中包含比赛:" + item.getId() + ",公司id:" + o.split(",")[0]);
-                //} else {//首次添加，检查europe有没有，往europe中添加数据
-                    if (europe_odds_mc.size() > 100000)//如果mc里面超过15w条，移除1条
-                        europe_odds_mc.remove(0);
-                    europe_odds_mc.add(item.getId() + ":" + o.split(",")[0]);//新增到mc
-                    EuropeOdds db = europeOddsMapper.selectByMidAndCpyAnd(item.getId(), o.split(",")[0]);
-                    if (db == null) {//新增
-                        db = BeanUtils.parseEuropeOdds(item.getId(), o.split(","));//parse
-                        europeOddsMapper.insertSelective(db);//没有新增到数据库
+                try {
+                    if (!mc.contains(item.getId() + ":" + o.split(",")[0])) {
+                        //log.info("mc list中包含比赛:" + item.getId() + ",公司id:" + o.split(",")[0]);
+                        //} else {//首次添加，检查europe有没有，往europe中添加数据
+                        if (europe_odds_mc.size() > 100000)//如果mc里面超过15w条，移除1条
+                            europe_odds_mc.remove(0);
+                        europe_odds_mc.add(item.getId() + ":" + o.split(",")[0]);//新增到mc
+                        if (StringUtils.isNotEmpty(item.getId()))
+                            continue;
+                        EuropeOdds db = europeOddsMapper.selectByMidAndCpyAnd(item.getId(), o.split(",")[0]);
+                        if (db == null) {//新增
+                            db = BeanUtils.parseEuropeOdds(item.getId(), o.split(","));//parse
+                            europeOddsMapper.insertSelective(db);//没有新增到数据库
+                        }
                     }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }
