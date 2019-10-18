@@ -54,6 +54,7 @@ public enum ProtocolCodeMsg {
     MATCH_ID_NOT_ASSIGNED("020801", "比赛Id不合法"),
     TYPE_NOT_ASSIGNED("020802", "状态值不合法"),
     TIME_ID_NOT_ASSIGNED("020803", "timeId不合法"),
+    SELECT_NOT_ASSIGNED("020804", "select不合法"),
     //2.1.9欧赔/亚盘/大小球详情
     OP_ID_NOT_ASSIGNED("020O901", "opId不合法"),
     //公共号相关参数提示

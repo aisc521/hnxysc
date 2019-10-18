@@ -149,12 +149,12 @@
       AND sct.type = #{matchType}
     </if>
     <if test="hgFlag == 1">
-      AND o.FirstHomeWin = #{satOdd}
-      AND o.RealHomeWin = #{endOdd}
+      <if test="satOdd != null">AND o.FirstHomeWin = #{satOdd}</if>
+      <if test="endOdd != null">AND o.RealHomeWin = #{endOdd}</if>
     </if>
     <if test="hgFlag == 2">
-      AND o.FirstGuestWin = #{satOdd}
-      AND o.RealGuestWin = #{endOdd}
+      <if test="satOdd != null">AND o.FirstGuestWin = #{satOdd}</if>
+      <if test="endOdd != null">AND o.RealGuestWin = #{endOdd}</if>
     </if>
     <if test="beginDate != null">
       and s.MatchTime >= #{beginDate}
