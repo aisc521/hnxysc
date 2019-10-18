@@ -815,6 +815,7 @@
     </update>
 
     <select id="queryMacthListForJob" resultType="com.zhcdata.jc.dto.MatchResult1">
+        SELECT * from(
         select
         class.Name_JS matchName,/*联赛名称*/
         sc.MatchTime matchTime,/*开始时间*/
@@ -875,6 +876,7 @@
         <if test="type == 3" >/*北单*/
              and lottery.LOTTERY = 'BJDC'
         </if>
+        ) a ORDER BY a.num asc
     </select>
 
 
