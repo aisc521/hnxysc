@@ -57,16 +57,13 @@ public class IndexOddsAnalysisProtocol implements BaseProtocol {
         if (!commonUtils.validParamExistOrNoNum(map, paramMap, "pam", ProtocolCodeMsg.PAM_NOT_ASSIGNED)) {
             return map;
         }
-        //初赔
-        if (!commonUtils.validParamExistOrNoNum(map, paramMap, "satSat", ProtocolCodeMsg.PAM_NOT_ASSIGNED)) {
-            return map;
-        }
-        //终赔
-        if (!commonUtils.validParamExistOrNoNum(map, paramMap, "endEnd", ProtocolCodeMsg.PAM_NOT_ASSIGNED)) {
+        //初赔 终赔
+        if (!commonUtils.validParamExistOrNoNum(map, paramMap, "satSat", ProtocolCodeMsg.ODDS_WATER_NOT_ASSIGNED)
+                && !commonUtils.validParamExistOrNoNum(map, paramMap, "endEnd", ProtocolCodeMsg.ODDS_WATER_NOT_ASSIGNED)) {
             return map;
         }
         //主客队
-        if (!commonUtils.validParamExistOrNoNum(map, paramMap, "zkFlag", ProtocolCodeMsg.PAM_NOT_ASSIGNED)) {
+        if (!commonUtils.validParamExistOrNoNum(map, paramMap, "zkFlag", ProtocolCodeMsg.ZK_FLAG_NOT_ASSIGNED)) {
             return map;
         }
         return null;
@@ -94,7 +91,16 @@ public class IndexOddsAnalysisProtocol implements BaseProtocol {
         }
 
         //得到赔率公司id
-        Map<String, Object> map = handicapOddsService.queryMatchDataByOdds(Double.parseDouble(satSat), Double.parseDouble(endEnd), oddsCompany,
+
+        Double sat = null;
+        if (!Strings.isNullOrEmpty(satSat)) {
+            sat = Double.parseDouble(satSat);
+        }
+        Double end = null;
+        if (!Strings.isNullOrEmpty(endEnd)) {
+            end = Double.parseDouble(endEnd);
+        }
+        Map<String, Object> map = handicapOddsService.queryMatchDataByOdds(sat, end, oddsCompany,
                 matchType, startDate, pam, zkFlag);
         return map;
     }

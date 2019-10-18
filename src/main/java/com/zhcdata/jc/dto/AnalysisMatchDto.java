@@ -37,6 +37,8 @@ public class AnalysisMatchDto {
     private String endFlat;
     //终负
     private String endLose;
+    //盘路
+    private String panlu;
     @JsonIgnore
     private Integer result;
 }

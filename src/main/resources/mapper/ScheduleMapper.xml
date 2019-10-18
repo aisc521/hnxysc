@@ -117,12 +117,14 @@
             t2.name_j guestName,
             s.guestscore guestScore,
             s.guesthalfscore guestHalfScore,
-            CASE WHEN s.hometeamid = #{teamId} THEN 1 ELSE 2 END panlu
+            CASE WHEN s.hometeamid = #{teamId} THEN 1 ELSE 2 END panlu,
+            ifnull(l.Goal_Real,0) goal
         FROM
             schedule s
         LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
         LEFT JOIN team t ON s.hometeamid = t.teamid
         LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+        LEFT JOIN letgoal l on s.scheduleID = l.scheduleid and l.companyid = 8
         WHERE
             matchState = -1
           AND matchtime <![CDATA[<]]> #{matchTime}
