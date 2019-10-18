@@ -3,11 +3,11 @@
 <mapper namespace="com.zhcdata.db.mapper.TbSubSclassMapper">
 
   <select id="querySubSclass" resultType="com.zhcdata.db.model.SubSclassInfo">
-    select * from SubSclass where subsclassID=${subsclassID}
+    select * from SubSclass where subsclassID=#{subsclassID}
   </select>
 
   <select id="querySubSclassID" resultType="com.zhcdata.db.model.SubSclassInfo">
-    select * from SubSclass where SclassID=${SclassID} and LOCATE(#{IncludeSeason},IncludeSeason)>0
+    select * from SubSclass where SclassID=#{SclassID} and LOCATE(#{IncludeSeason},IncludeSeason)>0
   </select>
 
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.SubSclassInfo" >

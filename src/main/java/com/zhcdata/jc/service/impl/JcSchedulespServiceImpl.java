@@ -1,5 +1,6 @@
 package com.zhcdata.jc.service.impl;
 
+import com.zhcdata.db.mapper.JcScheduleMapper;
 import com.zhcdata.db.mapper.JcSchedulespMapper;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.JcSchedulesp;
@@ -31,6 +32,10 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     @Resource
     private JcSchedulespMapper jcSchedulespMapper;
+
+    @Resource
+    private JcScheduleMapper jcScheduleMapper;
+
     @Override
     public JcSchedulesp queryJcSchedulespById(Integer scheduleId) {
         return jcSchedulespMapper.queryJcSchedulespByScId(scheduleId);
@@ -164,6 +169,53 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
         }
+
+
+        //更新 竞彩赛程表 是否单关标识
+        String danRq = jcFootBallOddsRsp.getDan_rq();//让球单关标识
+        String danBf = jcFootBallOddsRsp.getDan_bf();//比分单关标识
+        String danJq = jcFootBallOddsRsp.getDan_jq();//进球单关标识
+        String danBqc = jcFootBallOddsRsp.getDan_bqc();//半全场单关标识
+        String danSf = jcFootBallOddsRsp.getDan_sf();//胜平负单关标识
+
+        if("true".equals(danRq)){
+            jcSchedule.setSingle101(1);//让球
+        }else{
+            jcSchedule.setSingle101(0);//让球
+        }
+
+        if("true".equals(danBf)){
+            jcSchedule.setSingle102(1);//比分单关标识
+        }else{
+            jcSchedule.setSingle102(0);//比分单关标识
+        }
+
+        if("true".equals(danJq)){
+            jcSchedule.setSingle103(1);//进球单关标识
+        }else{
+            jcSchedule.setSingle103(0);//进球单关标识
+        }
+
+        if("true".equals(danBqc)){
+            jcSchedule.setSingle104(1);//半全场单关标识
+        }else{
+            jcSchedule.setSingle104(0);//半全场单关标识
+        }
+
+        if("true".equals(danSf)){
+            jcSchedule.setSingle105(1);//胜平负单关标识
+        }else{
+            jcSchedule.setSingle105(0);//胜平负单关标识
+        }
+
+        Example example1 = new Example(JcSchedule.class);
+        example1.createCriteria().andEqualTo("id",jcSchedule.getId());
+        int j = jcScheduleMapper.updateByExampleSelective(jcSchedule,example1);
+        if(j <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
+
     }
 
     @Override
@@ -301,6 +353,54 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
             throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
                     ProtocolCodeMsg.INSERT_FAILE.getMsg());
         }
+
+        //更新 竞彩赛程表 是否单关标识
+        String danRq = jcFootBallOddsRsp.getDan_rq();//让球单关标识
+        String danBf = jcFootBallOddsRsp.getDan_bf();//比分单关标识
+        String danJq = jcFootBallOddsRsp.getDan_jq();//进球单关标识
+        String danBqc = jcFootBallOddsRsp.getDan_bqc();//半全场单关标识
+        String danSf = jcFootBallOddsRsp.getDan_sf();//胜平负单关标识
+
+        if("true".equals(danRq)){
+            jcSchedule.setSingle101(1);//让球
+        }else{
+            jcSchedule.setSingle101(0);//让球
+        }
+
+        if("true".equals(danBf)){
+            jcSchedule.setSingle102(1);//比分单关标识
+        }else{
+            jcSchedule.setSingle102(0);//比分单关标识
+        }
+
+        if("true".equals(danJq)){
+            jcSchedule.setSingle103(1);//进球单关标识
+        }else{
+            jcSchedule.setSingle103(0);//进球单关标识
+        }
+
+        if("true".equals(danBqc)){
+            jcSchedule.setSingle104(1);//半全场单关标识
+        }else{
+            jcSchedule.setSingle104(0);//半全场单关标识
+        }
+
+        if("true".equals(danSf)){
+            jcSchedule.setSingle105(1);//胜平负单关标识
+        }else{
+            jcSchedule.setSingle105(0);//胜平负单关标识
+        }
+
+        Example example1 = new Example(JcSchedule.class);
+        example1.createCriteria().andEqualTo("id",jcSchedule.getId());
+        int j = jcScheduleMapper.updateByExampleSelective(jcSchedule,example1);
+        if(j <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
+
+
+
         return jcSchedulesp.getSpid();
     }
 

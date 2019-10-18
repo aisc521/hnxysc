@@ -77,7 +77,7 @@ public class SameOddsMatchListProtocol implements BaseProtocol {
             matchType = "0";
         }
         String item = matchType + "_" + type;
-        String key = RedisCodeMsg.SOCCER_ANALYSIS.getName() + ":" + time;
+        String key = RedisCodeMsg.SOCCER_SAME_ODDS_MATCH.getName() + ":" + time;
         String redisTimeId = (String) redisUtils.hget(key, item + "_TIME_ID");
         if (!Strings.isNullOrEmpty(redisTimeId) && redisTimeId.equals(timeId)) {
             map.put("timeId", redisTimeId);

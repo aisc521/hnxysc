@@ -3,7 +3,7 @@
 <mapper namespace="com.zhcdata.db.mapper.TbLiveMapper">
 
   <select id="queryLive" resultType="com.zhcdata.db.model.LiveInfo">
-    select * from jc_match_live where ID=${ID}
+    select * from jc_match_live where ID=#{ID}
   </select>
 
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.LiveInfo" >

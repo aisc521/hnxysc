@@ -12,7 +12,7 @@ import java.util.List;
 public interface TbJcMatchMapper extends Mapper<TbJcMatch> {
     List<MatchPlanResult> queryList(@Param("planId")String id);
 
-    int updateStatus(@Param("status") String status,@Param("score") String score);
+    int updateStatus(@Param("status") String status,@Param("score") String score,@Param("id") Long id);
 
     List<MatchPlanResult1> queryList1(@Param("planId") Long planId);
 

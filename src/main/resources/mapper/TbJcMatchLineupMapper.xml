@@ -17,7 +17,7 @@
   </resultMap>
 
   <select id="queryLineup" resultType="com.zhcdata.db.model.JcMatchLineupInfo">
-    select * from jc_match_lineup where id=${id}
+    select * from jc_match_lineup where id=#{id}
   </select>
 
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.JcMatchLineupInfo" >

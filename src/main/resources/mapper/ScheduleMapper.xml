@@ -188,7 +188,7 @@
         (case when o.FirstHomeWin <![CDATA[<]]> o.RealHomeWin then 1 else -1 end)
         else
         (case when o.FirstGuestWin <![CDATA[<]]> o.RealGuestWin then 1 else -1 end) end trend,
-        l.FirstGoal from (
+        l.FirstGoal firstGoal,l.FirstUpOdds firstUpOdds,l.FirstDownOdds firstDownOdds from (
         SELECT
         CASE l.lottery WHEN 'JCZQ' THEN '1' WHEN 'BJDC' THEN '2' WHEN 'SF14' THEN '3' ELSE '4' END lotteryType,
         l.issue_num issueNum,
@@ -215,9 +215,7 @@
         LEFT JOIN jc_match_lottery l ON s.scheduleid = l.ID_BET007
         WHERE
         1 = 1
-        AND s.matchtime >= concat(#{date},' 11:00:00') AND s.matchtime <![CDATA[<]]> concat(DATE_ADD(#{date},INTERVAL 2 DAY),' 11:00:00')
-        GROUP BY
-        scheduleid
+        AND s.matchtime >= concat(#{date},' 11:00:00') AND s.matchtime <![CDATA[<]]> concat(DATE_ADD(#{date},INTERVAL 1 DAY),' 11:00:00')
         ) t left join europeodds o on t.matchId = o.scheduleid and o.companyid = 281
         left join letgoal l on t.matchId = l.scheduleid and l.companyid = 8
         where 1=1
@@ -225,15 +223,26 @@
     </select>
     <select id="selectSameOddsStatistic" resultType="com.zhcdata.jc.dto.SameOddsStatisticDto">
         select
-        count(s.ScheduleID) total,
-        sum(case when s.HomeScore>s.GuestScore then 1 else 0 end) win,
-        sum(case when s.HomeScore=s.GuestScore then 1 else 0 end) flat,
-        sum(case when s.HomeScore<![CDATA[<]]>s.GuestScore then 1 else 0 end) lose,
-        sum(case when s.HomeScore-(#{firstGoal})>s.GuestScore then 1 else 0 end) winp,
-        sum(case when s.HomeScore-(#{firstGoal})=s.GuestScore then 1 else 0 end) flatp,
-        sum(case when s.HomeScore-(#{firstGoal})<![CDATA[<]]>s.GuestScore then 1 else 0 end) losep
-        from europeodds e left join SCHEDULE s on e.ScheduleID = s.ScheduleID where e.FirstHomeWin = #{winOdds}
-        and e.FirstGuestWin = #{loseOdds} and e.FirstStandoff = #{loseOdds}
+        count(ScheduleID) total,
+        sum(case when HomeScore>GuestScore then 1 else 0 end) winCount,
+        sum(case when HomeScore=GuestScore then 1 else 0 end) flatCount,
+        sum(case when HomeScore<![CDATA[<]]>GuestScore then 1 else 0 end) loseCount,
+        sum(case when HomeScore-(#{firstGoal})>GuestScore then 1 else 0 end) winPanCount,
+        sum(case when HomeScore-(#{firstGoal})=GuestScore then 1 else 0 end) flatPanCount,
+        sum(case when HomeScore-(#{firstGoal})<![CDATA[<]]>GuestScore then 1 else 0 end) losePanCount
+        from ( select e.OddsID,s.ScheduleID, s.HomeScore, s.GuestScore
+        from europeodds e left join SCHEDULE s on e.ScheduleID = s.ScheduleID
+        left join score sc on s.SclassID = sc.SclassID
+        <if test="flag == 0">
+            and sc.TeamID = s.HomeTeamID
+        </if>
+        <if test="flag == 1">
+            and sc.TeamID = s.GuestTeamID
+        </if>
+        where e.companyid = 281
+        and e.FirstHomeWin = #{tpeiWinHandicap}
+        and e.FirstGuestWin = #{tpeilLoseHandicap} and e.FirstStandoff = #{tpeiFlatHandicap}
+        and s.ScheduleID is not null
         <if test="flag == 0">
             <if test="trend == 1">
                 and e.RealHomeWin > e.FirstHomeWin
@@ -250,7 +259,9 @@
                 and e.FirstGuestWin > e.RealGuestWin
             </if>
         </if>
+        order by sc.Win_Score/(sc.Win_Score+sc.Flat_Score+sc.Fail_Score) desc
          limit 200
+        ) _temp
     </select>
 
 

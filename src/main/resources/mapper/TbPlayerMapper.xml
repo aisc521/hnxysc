@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhcdata.db.mapper.TbPlayerMapper">
   <select id="queryPlayer" resultType="com.zhcdata.db.model.PlayerInfo">
-    select * from player where PlayerID=${PlayerID}
+    select * from player where PlayerID=#{PlayerID}
   </select>
 
   <insert id="insertPlayer" parameterType="com.zhcdata.db.model.PlayerInfo">

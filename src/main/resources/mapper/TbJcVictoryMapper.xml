@@ -31,7 +31,7 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <select id="queryVictory" resultType="com.zhcdata.jc.dto.VictoryResult">
-    SELECT * from tb_jc_victory where expert_Id=${expertId}
+    SELECT * from tb_jc_victory where expert_Id=#{expertId}
   </select>
 
   <insert id="insertVictoryInfo" parameterType="com.zhcdata.jc.dto.VictoryInfo">

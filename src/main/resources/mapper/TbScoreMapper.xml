@@ -31,7 +31,7 @@
       and Homeorguest=#{homeorguest}
     </if>
     and TeamID=#{teamid}
-    and MatchSeason='${matchseason}'
+    and MatchSeason=#{matchseason}
   </select>
   <select id="queryIntegralRanking" resultType="com.zhcdata.jc.dto.IntegralRankingDto">
     select ifnull(rank,0) rank,
