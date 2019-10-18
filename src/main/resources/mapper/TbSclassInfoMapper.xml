@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhcdata.db.mapper.TbSclassInfoMapper">
   <select id="querySclassInfo" resultType="com.zhcdata.db.model.TbSclassInfo">
-    select * from SclassInfo where NameCN='${NameCN}'
+    select * from SclassInfo where NameCN=#{NameCN}
   </select>
 
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.TbSclassInfo">

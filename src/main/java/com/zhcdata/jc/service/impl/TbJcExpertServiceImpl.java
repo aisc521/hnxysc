@@ -56,7 +56,7 @@ public class TbJcExpertServiceImpl implements TbJcExpertService {
 
     @Override
     public int updateByExample(TbJcExpert tbJcExpert, Example example1) {
-        return 0;
+        return tbJcExpertMapper.updateByExample(tbJcExpert,example1);
     }
 
 

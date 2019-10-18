@@ -29,8 +29,8 @@ public class TbJcMatchServiceImpl implements TbJcMatchService {
     }
 
     @Override
-    public int updateStatus(String status,String score) {
-        return tbJcMatchMapper.updateStatus(status,score);
+    public int updateStatus(String status,String score,String id) {
+        return tbJcMatchMapper.updateStatus(status,score,Long.valueOf(id));
     }
 
     @Override

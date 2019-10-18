@@ -3,7 +3,7 @@
 <mapper namespace="com.zhcdata.db.mapper.TbSclassMapper">
 
   <select id="querySClass" resultType="com.zhcdata.db.model.SclassInfo">
-    select * from sclass where SClassID=${SClassID}
+    select * from sclass where SClassID=#{SClassID}
   </select>
 
   <select id="querySClassList" resultType="com.zhcdata.db.model.SclassInfo">

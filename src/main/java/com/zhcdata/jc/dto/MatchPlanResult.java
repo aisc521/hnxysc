@@ -9,6 +9,15 @@ public class MatchPlanResult {
     private String planInfo;
     private String dateOfMatch;
     private String isWin;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getIsWin() {
         return isWin;

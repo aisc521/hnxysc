@@ -11,7 +11,7 @@ import java.util.List;
 public interface TbJcMatchService {
     List<MatchPlanResult> queryList(String id);
 
-    int updateStatus(String s, String s1);
+    int updateStatus(String s, String s1,String id);
 
     List<MatchPlanResult1> queryList1(Long id);
 
