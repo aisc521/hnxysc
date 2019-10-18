@@ -63,7 +63,7 @@
     </select>
     <select id="querySameHandicapsMatchByOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
         select * from (
-        select o.OddsID,o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
+        select o.OddsID,o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstGoal panlu,o.FirstDownodds satLose,
         ifnull(o.UpOdds_Real,o.FirstUpodds) endWin,
         ifnull(o.Goal_Real,o.FirstGoal) endFlat,
         ifnull(o.DownOdds_Real,o.FirstDownodds) endLose,
@@ -114,9 +114,9 @@
         limit 50
     </select>
     <select id="querySameHandicapsMatchByChangeOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
-        select scheduleId,satWin,satFlat,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd from
+        select scheduleId,satWin,satFlat,panlu,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd from
           <foreach collection="changeOdds" item="odds" open="(" close=") temp" separator="union" >
-              (SELECT * from (select o.OddsID,o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
+              (SELECT * from (select o.OddsID,o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstGoal panlu,o.FirstDownodds satLose,
               ifnull(o.UpOdds_Real,o.FirstUpodds) endWin,
               ifnull(o.Goal_Real,o.FirstGoal) endFlat,
               ifnull(o.DownOdds_Real,o.FirstDownodds) endLose,
@@ -173,7 +173,7 @@
         limit 50
     </select>
     <select id="querySameHandicapsMatchByOddsAndNoChange" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
-        select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
+        select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstGoal panlu,o.FirstDownodds satLose,
         ifnull(o.UpOdds_Real,o.FirstUpodds) endWin,
         ifnull(o.Goal_Real,o.FirstGoal) endFlat,
         ifnull(o.DownOdds_Real,o.FirstDownodds) endLose,
@@ -229,9 +229,9 @@
         select scheduleId,satWin,satFlat,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd from
         <foreach collection="changeOdds" item="odds" open="(" close=") temp" separator="union" >
             (select
-            scheduleId,satWin,satFlat,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd
+            scheduleId,satWin,satFlat,panlu,satLose,endWin,endFlat,endLose,MatchTime,matchName,homeName,homeScore,guestName,guestScore,result,odd
             from
-            (select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstDownodds satLose,
+            (select o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstGoal panlu,o.FirstDownodds satLose,
             ifnull(o.UpOdds_Real,o.FirstUpodds) endWin,
             ifnull(o.Goal_Real,o.FirstGoal) endFlat,
             ifnull(o.DownOdds_Real,o.FirstDownodds) endLose,

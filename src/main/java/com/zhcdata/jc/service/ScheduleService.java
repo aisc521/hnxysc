@@ -36,7 +36,7 @@ public interface ScheduleService {
      * @param type NULL 全部分析并放入缓存 0默认数据, 战绩：1同主客,2同赛事,3没有选择条件,4是同主客+同赛事,  历史交锋：5主客相同，6没有选择条件
      * @return
      */
-    Map<String, Object> matchAnalysisByType(Integer matchId, String type);
+    Map<String, Object> matchAnalysisByType(Integer matchId, String type,String select);
 
     /**
      * 更新之前{before}天，之后{after}天的比赛分析数据
