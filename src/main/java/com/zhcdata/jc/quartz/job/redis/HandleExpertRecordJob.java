@@ -185,14 +185,14 @@ public class HandleExpertRecordJob implements Job {
 
                                             int a = 0;
                                             for (int p1 = 0; p1 < spfs.length; p1++) {
-                                                if (Integer.parseInt(spfs[p1]) > 0) {
+                                                if (Double.valueOf(spfs[p1]) > 0) {
                                                     a += 1;
                                                 }
                                             }
 
                                             int b = 0;
                                             for (int p2 = 0; p2 < rqspfs.length; p2++) {
-                                                if (Integer.parseInt(rqspfs[p2]) > 0) {
+                                                if (Double.valueOf(rqspfs[p2]) > 0) {
                                                     b += 1;
                                                 }
                                             }
