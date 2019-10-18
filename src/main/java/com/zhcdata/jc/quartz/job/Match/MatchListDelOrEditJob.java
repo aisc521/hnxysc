@@ -132,15 +132,16 @@ public class MatchListDelOrEditJob implements Job {
                 try {
                     schedule.setMatchtime(sdf.parse(BeanUtils.parseToFormat(list.get(i).getMatchtime())));
                 } catch (ParseException e) {
-                    System.err.println("A7Y8S76SD85F7A65"+e.toString());
+                    System.err.println("A7Y8S76SD85F7A65" + e.toString());
                 }
                 int i1 = scheduleMapper.updateByPrimaryKeySelective(schedule);
                 //if (editCache.size() > 500)
                 //    editCache.clear();
                 //editCache.put(list.get(i).getID(), list.get(i).getMatchtime());
-                if (i1 > 0)
+                if (i1 > 0) {
                     update++;
-
+                    log.info("比赛时间变更，id为" + list.get(i).getID() + "的比赛,开始时间已变更为" + list.get(i).getMatchtime());
+                }
             } else if (list.get(i).getType().equals("delete")) {//删除
                 if (scheduleMapper.deleteByPrimaryKey(Integer.parseInt(list.get(i).getID())) > 0) {
                     delete++;
