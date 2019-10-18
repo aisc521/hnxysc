@@ -81,19 +81,19 @@ public class JcSchedule implements Serializable {
     private String guestteamgov;
 
     @Column(name = "Single101")
-    private boolean single101;
+    private Integer single101;
 
     @Column(name = "Single102")
-    private boolean single102;
+    private Integer single102;
 
     @Column(name = "Single103")
-    private boolean single103;
+    private Integer single103;
 
     @Column(name = "Single104")
-    private boolean single104;
+    private Integer single104;
 
     @Column(name = "Single105")
-    private boolean single105;
+    private Integer single105;
 
     @Column(name = "AddTime")
     private Date addtime;
@@ -441,7 +441,7 @@ public class JcSchedule implements Serializable {
         this.guestteamgov = guestteamgov;
     }
 
-    public boolean isSingle101() {
+    /*public boolean isSingle101() {
         return single101;
     }
 
@@ -478,6 +478,47 @@ public class JcSchedule implements Serializable {
     }
 
     public void setSingle105(boolean single105) {
+        this.single105 = single105;
+    }*/
+
+
+    public Integer getSingle101() {
+        return single101;
+    }
+
+    public void setSingle101(Integer single101) {
+        this.single101 = single101;
+    }
+
+    public Integer getSingle102() {
+        return single102;
+    }
+
+    public void setSingle102(Integer single102) {
+        this.single102 = single102;
+    }
+
+    public Integer getSingle103() {
+        return single103;
+    }
+
+    public void setSingle103(Integer single103) {
+        this.single103 = single103;
+    }
+
+    public Integer getSingle104() {
+        return single104;
+    }
+
+    public void setSingle104(Integer single104) {
+        this.single104 = single104;
+    }
+
+    public Integer getSingle105() {
+        return single105;
+    }
+
+    public void setSingle105(Integer single105) {
         this.single105 = single105;
     }
 

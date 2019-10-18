@@ -179,36 +179,36 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
         String danSf = jcFootBallOddsRsp.getDan_sf();//胜平负单关标识
 
         if("true".equals(danRq)){
-            jcSchedule.setSingle101(true);//让球
+            jcSchedule.setSingle101(1);//让球
         }else{
-            jcSchedule.setSingle101(false);//让球
+            jcSchedule.setSingle101(0);//让球
         }
 
         if("true".equals(danBf)){
-            jcSchedule.setSingle102(true);//比分单关标识
+            jcSchedule.setSingle102(1);//比分单关标识
         }else{
-            jcSchedule.setSingle102(false);//比分单关标识
+            jcSchedule.setSingle102(0);//比分单关标识
         }
 
         if("true".equals(danJq)){
-            jcSchedule.setSingle103(true);//进球单关标识
+            jcSchedule.setSingle103(1);//进球单关标识
         }else{
-            jcSchedule.setSingle103(false);//进球单关标识
+            jcSchedule.setSingle103(0);//进球单关标识
         }
 
         if("true".equals(danBqc)){
-            jcSchedule.setSingle104(true);//半全场单关标识
+            jcSchedule.setSingle104(1);//半全场单关标识
         }else{
-            jcSchedule.setSingle104(false);//半全场单关标识
+            jcSchedule.setSingle104(0);//半全场单关标识
         }
 
         if("true".equals(danSf)){
-            jcSchedule.setSingle105(true);//胜平负单关标识
+            jcSchedule.setSingle105(1);//胜平负单关标识
         }else{
-            jcSchedule.setSingle105(false);//胜平负单关标识
+            jcSchedule.setSingle105(0);//胜平负单关标识
         }
 
-        Example example1 = new Example(JcSchedulesp.class);
+        Example example1 = new Example(JcSchedule.class);
         example1.createCriteria().andEqualTo("id",jcSchedule.getId());
         int j = jcScheduleMapper.updateByExampleSelective(jcSchedule,example1);
         if(j <= 0){
@@ -362,36 +362,36 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
         String danSf = jcFootBallOddsRsp.getDan_sf();//胜平负单关标识
 
         if("true".equals(danRq)){
-            jcSchedule.setSingle101(true);//让球
+            jcSchedule.setSingle101(1);//让球
         }else{
-            jcSchedule.setSingle101(false);//让球
+            jcSchedule.setSingle101(0);//让球
         }
 
         if("true".equals(danBf)){
-            jcSchedule.setSingle102(true);//比分单关标识
+            jcSchedule.setSingle102(1);//比分单关标识
         }else{
-            jcSchedule.setSingle102(false);//比分单关标识
+            jcSchedule.setSingle102(0);//比分单关标识
         }
 
         if("true".equals(danJq)){
-            jcSchedule.setSingle103(true);//进球单关标识
+            jcSchedule.setSingle103(1);//进球单关标识
         }else{
-            jcSchedule.setSingle103(false);//进球单关标识
+            jcSchedule.setSingle103(0);//进球单关标识
         }
 
         if("true".equals(danBqc)){
-            jcSchedule.setSingle104(true);//半全场单关标识
+            jcSchedule.setSingle104(1);//半全场单关标识
         }else{
-            jcSchedule.setSingle104(false);//半全场单关标识
+            jcSchedule.setSingle104(0);//半全场单关标识
         }
 
         if("true".equals(danSf)){
-            jcSchedule.setSingle105(true);//胜平负单关标识
+            jcSchedule.setSingle105(1);//胜平负单关标识
         }else{
-            jcSchedule.setSingle105(false);//胜平负单关标识
+            jcSchedule.setSingle105(0);//胜平负单关标识
         }
 
-        Example example1 = new Example(JcSchedulesp.class);
+        Example example1 = new Example(JcSchedule.class);
         example1.createCriteria().andEqualTo("id",jcSchedule.getId());
         int j = jcScheduleMapper.updateByExampleSelective(jcSchedule,example1);
         if(j <= 0){

@@ -3,6 +3,7 @@ package com.zhcdata.jc.service.impl;
 import com.zhcdata.db.mapper.JcScheduleMapper;
 import com.zhcdata.db.model.JcMatchLottery;
 import com.zhcdata.db.model.JcSchedule;
+import com.zhcdata.db.model.JcSchedulesp;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.JcScheduleService;
@@ -37,18 +38,51 @@ public class JcScheduleServiceImpl implements JcScheduleService {
         List<JcFootBallOddsRqRsp> rq = jcFootBallOddsRsp.getRq();
         JcFootBallOddsRqRsp jcFootBallOddsRqRsp = rq.get(0);
         jcSchedule.setPolygoal(Float.valueOf(jcFootBallOddsRqRsp.getGoal()));//单场让球
-        jcSchedule.setSingle101(Boolean.valueOf(jcFootBallOddsRsp.getDan_rq()));//是否开售让球胜平负单关
-        jcSchedule.setSingle102(Boolean.valueOf(jcFootBallOddsRsp.getDan_bf()));//是否开售比分单关
-        jcSchedule.setSingle103(Boolean.valueOf(jcFootBallOddsRsp.getDan_jq()));//是否开售进球数单关
-        jcSchedule.setSingle104(Boolean.valueOf(jcFootBallOddsRsp.getDan_bqc()));//是否开售半全场单关
-        jcSchedule.setSingle105(Boolean.valueOf(jcFootBallOddsRsp.getDan_sf()));//是否开售胜平负单关
-        Example example = new Example(JcMatchLottery.class);
-        example.createCriteria().andEqualTo("id",jcSchedule.getId());
-        int i = jcScheduleMapper.updateByExampleSelective(jcSchedule,example);
-        if(i <= 0){
+        //更新 竞彩赛程表 是否单关标识
+        String danRq = jcFootBallOddsRsp.getDan_rq();//让球单关标识
+        String danBf = jcFootBallOddsRsp.getDan_bf();//比分单关标识
+        String danJq = jcFootBallOddsRsp.getDan_jq();//进球单关标识
+        String danBqc = jcFootBallOddsRsp.getDan_bqc();//半全场单关标识
+        String danSf = jcFootBallOddsRsp.getDan_sf();//胜平负单关标识
+
+        if("True".equals(danRq)){
+            jcSchedule.setSingle101(1);//让球
+        }else{
+            jcSchedule.setSingle101(0);//让球
+        }
+
+        if("True".equals(danBf)){
+            jcSchedule.setSingle102(1);//比分单关标识
+        }else{
+            jcSchedule.setSingle102(0);//比分单关标识
+        }
+
+        if("True".equals(danJq)){
+            jcSchedule.setSingle103(1);//进球单关标识
+        }else{
+            jcSchedule.setSingle103(0);//进球单关标识
+        }
+
+        if("True".equals(danBqc)){
+            jcSchedule.setSingle104(1);//半全场单关标识
+        }else{
+            jcSchedule.setSingle104(0);//半全场单关标识
+        }
+
+        if("True".equals(danSf)){
+            jcSchedule.setSingle105(1);//胜平负单关标识
+        }else{
+            jcSchedule.setSingle105(0);//胜平负单关标识
+        }
+
+        Example example1 = new Example(JcSchedule.class);
+        example1.createCriteria().andEqualTo("id",jcSchedule.getId());
+        int j = jcScheduleMapper.updateByExampleSelective(jcSchedule,example1);
+        if(j <= 0){
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
         }
+
     }
 
     @Override
