@@ -98,7 +98,7 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
                 result = (IconAndTimeDto)net.sf.json.JSONObject.toBean(jsonObject1, IconAndTimeDto.class);
             }
             //主队
-            resultMap.put("hostIcon", result.getHomeImg());
+
             String teamId = (String) redisUtils.hget("SOCCER:HSET:IMG", "teamId");
             if (teamId == null) {
                 teamId = "";
@@ -115,13 +115,10 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
 
                 FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
                 redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId + result.getHomeId() + ",");
-                resultMap.put("hostIcon",imgYuMing+ localUrl1);
+
             }
 
-
-
             //客队
-            resultMap.put("guestIcon", result.getGuestImg());
             String teamId1 = (String) redisUtils.hget("SOCCER:HSET:IMG", "teamId");
             if (teamId1 == null) {
                 teamId1 = "";
@@ -137,7 +134,6 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
                 }
                 FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl2);
                 redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId1 + result.getGuestImg() + ",");
-                resultMap.put("guestIcon",imgYuMing+ localUrl2);
             }
 
             resultMap.put("matchDate", result.getTime());
@@ -156,6 +152,9 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             }else {
                 resultMap.put("matchType", 0);
             }
+
+            resultMap.put("guestIcon",imgYuMing+ result.getGuestImg());
+            resultMap.put("hostIcon",imgYuMing+ result.getHomeImg());
             resultMap.put("resCode", ProtocolCodeMsg.SUCCESS.getCode());
             resultMap.put("message", ProtocolCodeMsg.SUCCESS.getMsg());
             resultMap.put("timeId", String.valueOf(System.currentTimeMillis()));
