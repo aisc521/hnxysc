@@ -47,7 +47,7 @@ public class MatchListProtocol implements BaseProtocol {
             return map;
         }
 
-        if("3".equals(type)){
+        /*if("3".equals(type)){
             String issueNum = paramMap.get("issueNum");
             if (Strings.isNullOrEmpty(issueNum)) {
                 LOGGER.info("[" + ProtocolCodeMsg.ISSUENUM_IS_NOT_EXIT.getMsg() + "]:issueNum---" + issueNum);
@@ -55,7 +55,7 @@ public class MatchListProtocol implements BaseProtocol {
                 map.put("message", ProtocolCodeMsg.ISSUENUM_IS_NOT_EXIT.getMsg());
                 return map;
             }
-        }
+        }*/
 
         String matchTime = paramMap.get("matchTime");
         if (Strings.isNullOrEmpty(matchTime)) {
@@ -95,8 +95,8 @@ public class MatchListProtocol implements BaseProtocol {
             //北单按期号存的缓存
             time = scheduleService.queryBdNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
         }else if(type.equals("3")){
-            //time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
-            time = paramMap.get("issueNum");
+            time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
+            //time = paramMap.get("issueNum");
         }
         String re = (String) redisUtils.hget("SOCCER:HSET:AGAINSTLIST"+time + type, pageNo);
         if(!Strings.isNullOrEmpty(re)){
