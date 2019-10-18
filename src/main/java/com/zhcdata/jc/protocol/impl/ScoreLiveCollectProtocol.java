@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -90,7 +91,7 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             IconAndTimeDto result = new IconAndTimeDto();
             if (team == null || team .equals("") || team .equals("[]")) {
                 result = scheduleService.selectIconAndTime(Integer.valueOf(matchId));
-                redisUtils.hset("SOCCER:HSET:SOCRELIVE"+ "team" + matchId, JSONObject.toJSONString(result),"v");
+                redisUtils.hset("SOCCER:HSET:SOCRELIVE"+ "team" + matchId,"v",JSONObject.toJSONString(result));
                 redisUtils.expire("SOCCER:HSET:SOCRELIVE"+"team" + matchId, RedisCodeMsg.SAME_ODDS.getSeconds());
             }else{
                 net.sf.json.JSONObject jsonObject1 = net.sf.json.JSONObject.fromObject(team);
@@ -104,10 +105,17 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             }
             if (!teamId.contains(result.getHomeId())) {
                 String img = result.getHomeImg();                    //主队
-                localUrl = localUrl + img;
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl);
+                String localUrl1 = localUrl + img;
+                File file = new File(localUrl1);
+                String parentStr = file.getParent();
+                File parent = new File(parentStr);
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+
+                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
                 redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId + result.getHomeId() + ",");
-                resultMap.put("hostIcon",imgYuMing+ localUrl);
+                resultMap.put("hostIcon",imgYuMing+ localUrl1);
             }
 
 
@@ -120,11 +128,18 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             }
             if (!teamId1.contains(result.getGuestId())) {
                 String img = result.getGuestImg();                    //主队
-                localUrl = localUrl + img;
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl);
+                String localUrl2 = localUrl + img;
+                File file = new File(localUrl2);
+                String parentStr = file.getParent();
+                File parent = new File(parentStr);
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl2);
                 redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId1 + result.getGuestImg() + ",");
+                resultMap.put("guestIcon",imgYuMing+ localUrl2);
             }
-            resultMap.put("guestIcon",imgYuMing+ localUrl);
+
             resultMap.put("matchDate", result.getTime());
             //计算上下半场
             if("1".equals(mo.getMatchState())){
