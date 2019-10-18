@@ -12,6 +12,7 @@ public class HistoryMatchDto {
     private String guestHalfScore;//客队半场得分
     private String hostScore;//主队得分
     private String guestScore;//客队得分
-    private String panlu;//盘路
+    private String panlu;//主客队标注颜色（主队还是客队是当前队伍）
+    private String goal;//终盘
 
 }
