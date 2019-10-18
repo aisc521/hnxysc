@@ -567,10 +567,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         int count1 = 3;
         int count2 = 4;
         int count3 = 3;
+        int limit = 10;
         if (i == Calendar.SUNDAY || i == Calendar.SATURDAY) {
             count1 = 5;
             count2 = 6;
             count3 = 4;
+            limit = 15;
         }
         //循环判断比赛放入各部分list集合
         List<SameOddsDto> jcList = new ArrayList<>();
@@ -585,6 +587,17 @@ public class ScheduleServiceImpl implements ScheduleService {
         jcList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
         bdList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
         zcList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
+
+        //截取需要的比赛
+        if (limit < jcList.size()) {
+            jcList = jcList.subList(0, limit);
+        }
+        if (limit < bdList.size()) {
+            bdList = bdList.subList(0, limit);
+        }
+        if (limit < zcList.size()) {
+            zcList = zcList.subList(0, limit);
+        }
 
         //设置缓存
         String key = RedisCodeMsg.SOCCER_SAME_ODDS_MATCH.getName() + ":" + date;
@@ -664,7 +677,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             int count = 0;
             for (SameOddsDto sameOddsDto : sameOddsDtos) {
                 if (String.valueOf(i).equals(sameOddsDto.getLotteryType())) {
-                    String originalOdds;
+                    Double originalOdds;
                     //flag 为0，获取主队胜赔率否则获取主队负赔率
                     if (0 == sameOddsDto.getFlag()) {
                         originalOdds = sameOddsDto.getTpeiWinHandicap();
@@ -880,7 +893,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         BigDecimal loseOdds = BigDecimal.ONE.subtract(winOdds).subtract(flatOdds);
         sameOddsDto.setTpeilLoseOdds(loseOdds.toString());
         //减去让球后的胜、平、负 概率，保留2位小数
-        String goal = String.valueOf(sameOddsDto.getFirstGoal());
+        Double goal = sameOddsDto.getFirstGoal();
         sameOddsDto.setTpanWinHandicap(goal);
         BigDecimal winPanOdds = new BigDecimal(winPanCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_UP);
         sameOddsDto.setTpanWinOdds(winPanOdds.toString());
@@ -972,9 +985,9 @@ public class ScheduleServiceImpl implements ScheduleService {
      * 定时任务查询比赛列表
      * @param startDate
      * @param endDate
-     * @param s
-     * @param s1
-     * @param s2
+     * @param type
+     * @param userId
+     * @param state
      * @return
      */
     @Override
