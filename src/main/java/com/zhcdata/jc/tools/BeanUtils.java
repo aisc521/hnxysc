@@ -47,11 +47,11 @@ public class BeanUtils {
             inDb.setSclassid(Integer.parseInt(model.getC().split(",")[3]));
         if (model.getX() != null)//赛季
             inDb.setMatchseason(model.getX());
-        //if (StringUtils.isNotEmpty(model.getS()))//轮次
-        //    inDb.setRound(Short.valueOf(model.getS()));
+        if (StringUtils.isNotEmpty(model.getS()))//轮次
+            inDb.setGrouping(model.getS());
         // TODO: 2019/9/11 轮次
         if (model.getY() != null)//组
-            inDb.setGrouping(model.getY());
+            inDb.setGrouping2(model.getY());
         if (model.getH() != null) {
             inDb.setHometeamid(Integer.parseInt(model.getH().split(",")[3]));//主队id
             inDb.setHometeam(model.getH().split(",")[1]);//主队名
