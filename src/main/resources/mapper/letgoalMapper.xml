@@ -213,13 +213,13 @@
             AND o.Goal_Real = #{endGoal}
         </if>
         <if test="changeTimes != null and changeTimes != -1">
-            and lg.goal_count = #{changeTimes}
+            AND lg.goal_count = #{changeTimes}
         </if>
         <if test="matchType != null and matchType != 1">
-            sct.type = #{matchType}
+            AND sct.type = #{matchType}
         </if>
         <if test="beginDate != null">
-            and s.MatchTime >= #{beginDate}
+            AND s.MatchTime >= #{beginDate}
         </if>
         group by o.scheduleId,s.MatchTime
         order by s.MatchTime desc
