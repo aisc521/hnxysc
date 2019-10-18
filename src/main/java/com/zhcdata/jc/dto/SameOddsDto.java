@@ -43,21 +43,25 @@ public class SameOddsDto implements Serializable {
     private String weekNum;               //期数🌟🌟🌟🌟  竞彩使用 如周一001
     private String num;                   //北单、足彩使用 107
 
-    private String tpeiWinHandicap;        //	同赔胜赔率
+    private Double tpeiWinHandicap;        //	同赔胜赔率
     private String tpeiWinOdds;            //同赔胜几率
-    private String tpeiFlatHandicap;    //		同赔平赔率
+    private Double tpeiFlatHandicap;    //		同赔平赔率
     private String tpeiFlatOdds;        //	同赔平几率
-    private String tpeilLoseHandicap;    //		同赔负赔率
+    private Double tpeilLoseHandicap;    //		同赔负赔率
     private String tpeilLoseOdds;        //	同赔负几率
 
-    private String tpanWinHandicap;        //	同盘胜盘口
+    private Double tpanWinHandicap;        //	同盘胜盘口
     private String tpanWinOdds;            //同盘胜几率
-    private String tpanFlatHandicap;    //		同盘平盘口
+    private Double tpanFlatHandicap;    //		同盘平盘口
     private String tpanFlatOdds;        //	同盘平几率
-    private String tpanLoseHandicap;    //		同盘负盘口
+    private Double tpanLoseHandicap;    //		同盘负盘口
     private String tpanLoseOdds;        //	同盘负几率
     @JsonIgnore
-    private int firstGoal;  //盘口
+    private Double firstGoal;  //盘口
+    @JsonIgnore
+    private Double firstUpOdds;
+    @JsonIgnore
+    private Double firstDownOdds;
     @JsonIgnore
     private int flag; //0按主队赔率  1按客队赔率
     @JsonIgnore
