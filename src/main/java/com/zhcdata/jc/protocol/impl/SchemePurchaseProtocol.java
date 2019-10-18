@@ -103,13 +103,7 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             resultMap.put("message", ProtocolCodeMsg.PLAN_IS_END.getMsg());
             return resultMap;
         }
-        //查询用户信息
-        TbJcUser tbJcUser = tbJcUserService.queryTbJcUserById(Long.valueOf(String.valueOf(paramMap.get("userId"))));
-        if(tbJcUser == null){
-            resultMap.put("resCode", ProtocolCodeMsg.USER_IS_NULL.getCode());
-            resultMap.put("message", ProtocolCodeMsg.USER_IS_NULL.getMsg());
-            return resultMap;
-        }
+
         //查询用户是否已经购买过此方案
         TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedService.queryTbJcPurchaseDetailedByUserAndPlanId(Long.valueOf(String.valueOf(paramMap.get("userId"))),Long.valueOf(String.valueOf(paramMap.get("schemeId"))));
         if(tbJcPurchaseDetailed != null){
@@ -143,7 +137,7 @@ public class SchemePurchaseProtocol implements BaseProtocol {
         }
 
         //生成订单信息 并且调用支付
-        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,tbJcUser,paramMap,payService,list);
+        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,String.valueOf(paramMap.get("userId")),paramMap,payService,list);
         return resultMap;
     }
 }
