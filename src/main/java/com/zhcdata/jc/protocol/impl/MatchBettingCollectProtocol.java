@@ -68,7 +68,7 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
         if (StringUtils.isEmpty(timeId))
             timeId = "0";
         Map<String, Object> result = JSONArray.parseObject((String) redisUtils.hget("SOCCER:BETTING:FIVEMETHOD:" + matchId, "v"), Map.class);
-        if (result.get("timeId").toString().equals(timeId)) {
+        if (timeId.equals(result.get("timeId").toString())) {
             Map<String, Object> resultMap = new HashMap<>();
             //基础信息
             result.put("message", "success");
