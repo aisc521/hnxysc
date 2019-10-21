@@ -179,7 +179,7 @@ public class CalculationPlanJob implements Job {
         if(pop == null){
             pop = 0;
         }
-        tbJcExpert.setExperience(Long.valueOf(pop + 10));
+        tbJcExpert.setExperience(Long.valueOf(pop + 3));
         Example example1 = new Example(TbJcExpert.class);
         example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
 
