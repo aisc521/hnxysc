@@ -18,6 +18,7 @@ import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.utils.time.ClockUtil;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -38,8 +39,11 @@ public class MatchListDataJob implements Job {
 
     @Resource
     private RedisUtils redisUtils;
+
     @Resource
     private CommonUtils commonUtils;
+
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
     @Override
@@ -51,7 +55,7 @@ public class MatchListDataJob implements Job {
 
         List<MatchResult1> list2=new ArrayList<>();
 
-        List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(s, e, "3","","1");//北单 未开始
+        List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(s, e, "2","","1");//北单 未开始
         for(int a=0;a<list2_1.size();a++){
             list2.add(list2_1.get(a));
         }
@@ -78,17 +82,17 @@ public class MatchListDataJob implements Job {
         long zc_s = ClockUtil.currentTimeMillis();
         List<MatchResult1> list3=new ArrayList<>();
 
-        List<MatchResult1> list3_1= scheduleService.queryMacthListForJob(s, e, "2","","1");
+        List<MatchResult1> list3_1= scheduleService.queryMacthListForJob(s, e, "3","","1");
         for(int a=0;a<list3_1.size();a++){
             list3.add(list3_1.get(a));
         }
 
-        List<MatchResult1> list3_2= scheduleService.queryMacthListForJob(s, e, "2","","2");
+        List<MatchResult1> list3_2= scheduleService.queryMacthListForJob(s, e, "3","","2");
         for(int b=0;b<list3_2.size();b++){
             list3.add(list3_2.get(b));
         }
 
-        List<MatchResult1> list3_3= scheduleService.queryMacthListForJob(s, e, "2","","3");
+        List<MatchResult1> list3_3= scheduleService.queryMacthListForJob(s, e, "3","","3");
         for(int c=0;c<list3_3.size();c++){
             list3.add(list3_3.get(c));
         }
@@ -177,7 +181,30 @@ public class MatchListDataJob implements Job {
     }
 
 
-    public void deal(List<MatchResult1> result1s,String time,String type){
+    public void deal(List<MatchResult1> result1s_1,String time,String type){
+        List<MatchResult1> result1s=new ArrayList<>();
+        for(int v=0;v<result1s_1.size();v++){
+            MatchResult1 r1=result1s_1.get(v);
+            if(r1.getMatchState().equals("1")){
+                if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                    Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
+                    String len = getMinute(df.format(ts), df.format(new Date()));
+                    r1.setMatchState(len);
+                }
+            }else if(r1.getMatchState().equals("3")){
+                if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                    Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
+                    String len = getMinute(df.format(ts), df.format(new Date()));
+                    r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+" : String.valueOf(45 + Integer.valueOf(len)));
+                }
+            }
+
+            if(r1.getMatchState().equals("未")) {
+                r1.setStatusDescFK("1");
+            }
+            result1s.add(r1);
+        }
+
         List<MatchResult1> resultNew = new ArrayList<>();
         int p = 1;
         int pc=result1s.size()/20;
@@ -230,6 +257,28 @@ public class MatchListDataJob implements Job {
                 }
             }
         }
+    }
+
+    private String getMinute(String s, String e) {
+        String str = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d1 = sdf.parse(s);     //开始时间
+            Date d2 = sdf.parse(e);     //结束时间
+
+            long diff = d2.getTime() - d1.getTime();
+            long nd = 1000 * 24 * 60 * 60;
+            long nh = 1000 * 60 * 60;
+            long nm = 1000 * 60;
+
+            long day = diff / nd;
+            long hour1 = diff % nd / nh;
+            long min = diff % nd % nh / nm;
+            str = String.valueOf(min);
+        } catch (Exception ex) {
+            LOGGER.error("计算比赛时间异常" + "s:" + s + "e:" + e);
+        }
+        return str;
     }
 
 }
