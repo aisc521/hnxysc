@@ -11,6 +11,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,24 +74,24 @@ public class JczqMatchResultProtocol implements BaseProtocol {
 
         String reslutPl[] = matchReslutHandle("BQC",homeScore,guestScore,homeHalfScore,guestHalfScore);
         reMap.put("bqcKey",reslutPl[0]);//半全场
-        reMap.put("bqcVal",map.get(reslutPl[1]));
+        reMap.put("bqcVal",map.get(new BigDecimal(reslutPl[1]).setScale(2, BigDecimal.ROUND_DOWN).doubleValue()+""));
 
         reslutPl = matchReslutHandle("GOLF",homeScore,guestScore,homeHalfScore,guestHalfScore);
         reMap.put("goalKey",reslutPl[0]);//进球数
-        reMap.put("goalVal",map.get(reslutPl[1]));
+        reMap.put("goalVal",map.get(new BigDecimal(reslutPl[1]).setScale(2, BigDecimal.ROUND_DOWN).doubleValue()+""));
 
         int intHomeScore = Integer.parseInt(homeScore)+Integer.parseInt(polyGoal);
         reslutPl = matchReslutHandle("RQSPF",intHomeScore+"",guestScore,homeHalfScore,guestHalfScore);
         reMap.put("rqspfKey","("+polyGoal+")"+reslutPl[0]);//(-1)平 让球胜名负
-        reMap.put("rqspfVal",map.get(reslutPl[1]));
+        reMap.put("rqspfVal",map.get(new BigDecimal(reslutPl[1]).setScale(2, BigDecimal.ROUND_DOWN).doubleValue()+""));
 
         reslutPl = matchReslutHandle("BF",homeScore,guestScore,homeHalfScore,guestHalfScore);
         reMap.put("scoreKey",reslutPl[0]);//比分
-        reMap.put("scoreVal",map.get(reslutPl[1]));
+        reMap.put("scoreVal",map.get(new BigDecimal(reslutPl[1]).setScale(2, BigDecimal.ROUND_DOWN).doubleValue()+""));
 
         reslutPl = matchReslutHandle("SPF",homeScore,guestScore,homeHalfScore,guestHalfScore);
         reMap.put("spfKey",reslutPl[0]); //胜名负
-        reMap.put("spfVal",map.get(reslutPl[1]));
+        reMap.put("spfVal",map.get(new BigDecimal(reslutPl[1]).setScale(2, BigDecimal.ROUND_DOWN).doubleValue()+""));
         returnList.add(reMap);
       }catch (Exception e){
         log.error(map.get("issueNum")+" 数据异常",e);
