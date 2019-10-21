@@ -51,7 +51,7 @@ public class MatchListDataJob implements Job {
 
         List<MatchResult1> list2=new ArrayList<>();
 
-        List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(s, e, "3","","1");//北单 未开始
+        List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(s, e, "2","","1");//北单 未开始
         for(int a=0;a<list2_1.size();a++){
             list2.add(list2_1.get(a));
         }
@@ -78,17 +78,17 @@ public class MatchListDataJob implements Job {
         long zc_s = ClockUtil.currentTimeMillis();
         List<MatchResult1> list3=new ArrayList<>();
 
-        List<MatchResult1> list3_1= scheduleService.queryMacthListForJob(s, e, "2","","1");
+        List<MatchResult1> list3_1= scheduleService.queryMacthListForJob(s, e, "3","","1");
         for(int a=0;a<list3_1.size();a++){
             list3.add(list3_1.get(a));
         }
 
-        List<MatchResult1> list3_2= scheduleService.queryMacthListForJob(s, e, "2","","2");
+        List<MatchResult1> list3_2= scheduleService.queryMacthListForJob(s, e, "3","","2");
         for(int b=0;b<list3_2.size();b++){
             list3.add(list3_2.get(b));
         }
 
-        List<MatchResult1> list3_3= scheduleService.queryMacthListForJob(s, e, "2","","3");
+        List<MatchResult1> list3_3= scheduleService.queryMacthListForJob(s, e, "3","","3");
         for(int c=0;c<list3_3.size();c++){
             list3.add(list3_3.get(c));
         }
