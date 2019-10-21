@@ -188,6 +188,7 @@ public class CalculationPlanJob implements Job {
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
         }
+        LOGGER.error("专家 ：" + tbJcExpert.getNickName() + "=增加经验值3成功" );
     }
 
     /**
@@ -247,9 +248,11 @@ public class CalculationPlanJob implements Job {
                                 ProtocolCodeMsg.UPDATE_FAILE.getMsg());
                     }
                 }
-
+                LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "退款成功====退款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "退款类型:" + remark);
             }
         }
+
+
     }
 
     /**
@@ -292,6 +295,8 @@ public class CalculationPlanJob implements Job {
                                 ProtocolCodeMsg.UPDATE_FAILE.getMsg());
                     }
                 }
+
+                LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款成功====扣款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark);
             }
         }
     }
