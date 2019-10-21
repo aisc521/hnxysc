@@ -819,17 +819,16 @@
         select
         class.Name_JS matchName,/*联赛名称*/
         DATE_FORMAT(sc.MatchTime,'%H:%i') matchTime,/*开始时间*/
-        case when sc.MatchState = '0' then '未开始' /*未开始*/
-        when sc.MatchState in('1','3','4','5') then '正在进行' /*正在进行*/
-        when sc.MatchState = '2' then '中场' /*中场*/
-        when sc.MatchState = '-1' then '完结' /*完结*/
+        sc.MatchTime2 MatchTime2,
+        case when sc.MatchState = '0' then '未' /*未开始*/
+        when sc.MatchState in('4','5') then '(完)' /*正在进行*/
+        when sc.MatchState = '2' then '中' /*中场*/
+        when sc.MatchState = '-1' then '完' /*完结*/
         when sc.MatchState = '-14' then '推迟'/*推迟*/
         when sc.MatchState = '-12' then '腰斩'/*腰斩*/
+        when sc.MatchState = '1' then '1'
+        when sc.MatchState = '3' then '3'
         end as matchState,/*比赛状态*/
-        case when	 sc.MatchState in ('1','2') then TIMESTAMPDIFF(MINUTE ,sc.MatchTime2,now(3))
-        when sc.MatchState =  '3' then TIMESTAMPDIFF(MINUTE ,sc.MatchTime2,now(3)) + 45
-        else ''
-        end as makeTime,/*比赛进行分钟数*/
         goal.FirstGoal matchPankou,/*盘口*/
         sc.HomeHalfScore homeHalfScore,/*主队半场比分*/
         sc.GuestHalfScore guestHalfScore,/*客队半场比分*/

@@ -57,6 +57,8 @@ public class MatchResult1 {
 
     private String matchType;
 
+    private String matchTime2;
+
     public String getMatchType() {
         return matchType;
     }
@@ -327,5 +329,13 @@ public class MatchResult1 {
 
     public void setImgValue(String imgValue) {
         this.imgValue = imgValue;
+    }
+
+    public String getMatchTime2() {
+        return matchTime2;
+    }
+
+    public void setMatchTime2(String matchTime2) {
+        this.matchTime2 = matchTime2;
     }
 }
