@@ -175,11 +175,11 @@ public class CalculationPlanJob implements Job {
     public void UpdateExpert( TbJcPlan tb) throws BaseException {
         //更新专家经验  + 3
         TbJcExpert tbJcExpert = tbJcExpertService.queryExpertDetailsById(Integer.parseInt(String.valueOf(tb.getAscriptionExpert())));
-        Integer pop = tbJcExpert.getPopularity();
+        Integer pop = Integer.valueOf(String.valueOf(tbJcExpert.getExperience()));
         if(pop == null){
             pop = 0;
         }
-        tbJcExpert.setPopularity(pop + 10);
+        tbJcExpert.setExperience(Long.valueOf(pop + 10));
         Example example1 = new Example(TbJcExpert.class);
         example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
 
