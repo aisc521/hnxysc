@@ -137,6 +137,8 @@ public class CalculationPlanJob implements Job {
                                     //处理单场比赛结果、中奖状态
                                     tbJcMatchService.updateStatus(String.valueOf(z), hScore + ":" + vScore,matchPlanResults.get(k).getId());
 
+                                }else{
+                                    result = 2;
                                 }
                                 //未结束的不处理
                             }
@@ -147,7 +149,7 @@ public class CalculationPlanJob implements Job {
                             tbPlanService.updateStatus("0", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
                             TbJcPlan tb = planResults.get(i);
                             //refundFrozenToMoney(tb);
-                        } else {
+                        } else if(result == 1){
                             //已中
                             tbPlanService.updateStatus("1", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
 
