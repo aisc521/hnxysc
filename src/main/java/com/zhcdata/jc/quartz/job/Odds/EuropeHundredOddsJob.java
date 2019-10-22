@@ -80,7 +80,7 @@ public class EuropeHundredOddsJob implements Job {
             LOGGER.info("百欧赔率表解析开始");
             runs();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("百欧赔率表解析错误"+e);
             e.printStackTrace();
         } finally {
             europe_odds_flag = false;

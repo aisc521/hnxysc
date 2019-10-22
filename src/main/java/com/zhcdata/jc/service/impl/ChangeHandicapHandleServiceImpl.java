@@ -99,7 +99,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
             xml.setOddsid(letGoalDetail.getOddsid());
             int inch = letGoalDetailMapper.insertSelective(xml);
             letgoalMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getModifytime());
-            if (xml.getGoal().equals(letGoalDetail.getGoal())) {
+            if (!xml.getGoal().equals(letGoalDetail.getGoal())) {
                 //更盘口变化表，查询有没有此oddsid的变盘次数
                 int changed = letgoal_goalMapper.updateCountAddOne(letGoalDetail.getOddsid(), new Date());
                 if (changed == 0) {//没有更新 插入
