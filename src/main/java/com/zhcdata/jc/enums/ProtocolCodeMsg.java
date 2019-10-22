@@ -70,6 +70,7 @@ public enum ProtocolCodeMsg {
     CHG_TIMES_NOT_ASSIGNED("020305", "变盘次数不合法"),
     ODDS_WATER_NOT_ASSIGNED("020306", "赔率或水位不合法"),
     GOAL_NOT_ASSIGNED("020307", "盘口不合法"),
+    ZK_FLAG_NOT_ASSIGNED("020308", "主客队标识不合法"),
 
     SUCCESS("000000", "成功"),
     FAIL("444444", "失败"),

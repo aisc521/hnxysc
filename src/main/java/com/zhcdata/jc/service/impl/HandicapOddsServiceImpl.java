@@ -11,6 +11,7 @@ import com.zhcdata.jc.dto.HandicapOddsResult;
 import com.zhcdata.jc.enums.RedisCodeMsg;
 import com.zhcdata.jc.service.HandicapOddsService;
 import com.zhcdata.jc.tools.Const;
+import com.zhcdata.jc.tools.FileUtils;
 import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -21,6 +22,7 @@ import org.springside.modules.utils.time.ClockUtil;
 import org.springside.modules.utils.time.DateFormatUtil;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -48,6 +50,10 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
 
     @Value("${custom.qiutan.url.yuMing}")
     private String imagePrefix;
+    @Value("${custom.qiutan.url.imageUrl}")
+    private String imagUrl;
+    @Value("${custom.qiutan.url.localUrl}")
+    private String localUrl;
 
     private String[] types = {"1", "2", "3"};
     public static int[] OP_COM = {16, 80, 81, 82, 90, 104, 115, 158, 255, 281, 545, 1129};
@@ -155,6 +161,33 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
             }
         }
         if (result != null) {
+            if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getHomeId())) {
+                //主队图片
+                String img = result.getHostIcon();
+                String localUrl1 = localUrl + img;
+                File file = new File(localUrl1);
+                String parentStr = file.getParent();
+                File parent = new File(parentStr);
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
+                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getHomeId());
+            }
+
+            if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getGuestId())) {
+                //客队图片
+                String img = result.getGuestIcon();
+                String localUrl1 = localUrl + img;
+                File file = new File(localUrl1);
+                String parentStr = file.getParent();
+                File parent = new File(parentStr);
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
+                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getGuestId());
+            }
             map.put("hostIcon", Strings.isNotBlank(result.getHostIcon())?imagePrefix + "" + result.getHostIcon():"");
             map.put("guestIcon", Strings.isNotBlank(result.getGuestIcon())?imagePrefix + "" + result.getGuestIcon():"");
             map.put("hostName", result.getHostName());

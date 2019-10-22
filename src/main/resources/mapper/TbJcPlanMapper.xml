@@ -221,7 +221,9 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     v.z_five_days zFiveDays,
     v.z_seven_days zSevenDays,
     p.price price,
-    p.create_time createTime
+    p.create_time createTime,
+    e.grade grade,
+
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
@@ -254,7 +256,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     </select>
 
   <select id="queryPlanInfo" resultType="java.util.Map">
-select aaa.*,bbb.status,bbb.matchResult from (
+select aaa.*,bbb.status,bbb.matchResult,bbb.planInfo from (
         SELECT jc.*, sc.MatchState Status, sc.HomeScore homeBalls, sc.GuestScore awayballs, sc.MatchTime2 dateOfMatch2
         from (SELECT kk.*, p2.teamName awayName
         from (SELECT k.*, p1.teamName homeName
@@ -294,4 +296,32 @@ select aaa.*,bbb.status,bbb.matchResult from (
 (select count(id) pay from tb_jc_purchase_detailed where scheme_id = #{pid} and user_id = #{uid}) mmm on 1 = 1
     </select>
 
+
+
+    <select id="queryPlanByIdandUser" resultType="com.zhcdata.jc.dto.PlanResult2">
+        SELECT e.id,
+        e.nick_name nickName,
+        e.img,
+        e.lable,
+        e.fans,
+        e.popularity popularity,
+        e.introduction,
+        p.num_info numInfo,
+        p.title,
+        IFNULL(f.status,'0'),
+        p.plan_Hit planHit,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.price price,
+        p.create_time createTime,
+        e.grade grade,
+        p.introduction
+        from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
+        LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id and f.user_Id = #{uid}
+        LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
+        where 1=1
+        and p.id= #{id}
+    </select>
 </mapper>

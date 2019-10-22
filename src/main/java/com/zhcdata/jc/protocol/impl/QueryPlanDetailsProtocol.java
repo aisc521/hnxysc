@@ -59,7 +59,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
         if (freeOrPay.get("type")==3||freeOrPay.get("pay")>0){
             PlanResult2 planResult2 = new PlanResult2();
             try {
-                List<PlanResult2> result = tbPlanService.queryPlanById(id);
+                List<PlanResult2> result = tbPlanService.queryPlanByIdandUser(id,uid);
                 if (result != null && result.size() > 0) {
                     planResult2 = result.get(0);
                     List<MatchPlanResult1> matchPlanResults = tbJcMatchService.queryList1(Long.valueOf(id));
@@ -79,7 +79,11 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 ExpertInfo info = tbJcExpertService.queryExpertDetails(tbPlanService.queryExpertIdByPlanId(id));
                 if (info != null) {
                     //给专家人气加1
-                    tbJcExpertService.updatePopAddOne(info.getId());
+                    Integer pop = info.getPopularity();
+                    if(pop == null){
+                        pop = 0;
+                    }
+                    tbJcExpertService.updatePopAddOne(info.getId(),pop + 1);
                     resultMap.put("eid", info.getId());
                     resultMap.put("nickName", info.getNickName());
                     resultMap.put("img", info.getImg());
@@ -134,6 +138,36 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         map.put("rang_fu", ""+list.get(i).get("awayTeamKe"));
                         map.put("match_status", ""+list.get(i).get("status"));
                         map.put("match_result", ""+list.get(i).get("matchResult"));
+
+                        String matchResult = String.valueOf(list.get(i).get("matchResult"));
+                        String rang_num = String.valueOf(list.get(i).get("awayTeamRangballs"));
+                        //计算那个中了
+                        String[] matchResultArr = matchResult.split(":");
+                        Double matchResultDou1 = Double.valueOf(matchResultArr[0]);//住比分
+                        Double matchResultDou2 = Double.valueOf(matchResultArr[1]);//客比分
+                        //计算胜平负状态
+                        String winStatus = "0";
+                        String rwinStatus = "0";
+                        if(matchResultDou1 > matchResultDou2){//胜
+                            winStatus = "1";
+                        }
+                        if(matchResultDou1 == matchResultDou2){//平
+                            winStatus = "2";
+                        }
+                        if(matchResultDou1 < matchResultDou2){//负
+                            winStatus = "3";
+                        }
+                        if((matchResultDou1 + Double.valueOf(rang_num)) > matchResultDou2){//让胜
+                            rwinStatus = "1";
+                        }
+                        if((matchResultDou1 + Double.valueOf(rang_num)) == matchResultDou2){//让平
+                            rwinStatus = "2";
+                        }
+                        if((matchResultDou1 + Double.valueOf(rang_num)) < matchResultDou2){//让负
+                            rwinStatus = "3";
+                        }
+                        map.put("winStatus", ""+winStatus);
+                        map.put("rwinStatus", ""+rwinStatus);
                         plan_info.add(map);
                     }
                 }

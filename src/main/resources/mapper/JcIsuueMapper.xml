@@ -42,7 +42,7 @@
     order by cast(l.no_id as signed)
   </select>
   <select id="queryAwardNumByIssue" resultType="java.util.Map">
-     select issue issueNum,win_num content,'' time from JC_ISUUE i where i.lottery='SF14' and
+     select (case when LENGTH(issue)=7 then SUBSTR(issue,3,7) else issue end)  issueNum,win_num content,'' time from JC_ISUUE i where i.lottery='SF14' and
      <if test="startIssue == '-1'">
        i.issue = (select max(issue) from  JC_ISUUE where lottery='SF14')
      </if>

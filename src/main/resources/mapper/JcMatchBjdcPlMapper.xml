@@ -34,7 +34,7 @@
     and MatchState =-1
     ) a,jc_match_lottery l,JC_MATCH_BJDCRESLUT d where a.ScheduleID = l.ID_BET007  and a.ScheduleID = d.ID_BET007
     and l.LOTTERY = 'BJDC'
-    order by l.ISSUE_NUM desc ,matchTime
+    order by l.ISSUE_NUM desc ,l.NO_ID
     ) aa LEFT JOIN  team t on aa.HomeTeamID = t.teamid LEFT JOIN team tt on  aa.GuestTeamID = tt.teamid
   </select>
   <select id="queryTodayMatchCount" resultType="java.lang.Integer">

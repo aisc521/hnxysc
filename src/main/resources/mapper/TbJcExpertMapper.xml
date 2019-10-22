@@ -26,7 +26,7 @@
     <result column="grade" property="grade" jdbcType="BIGINT" />
   </resultMap>
     <update id="updatePopAddOneByEid">
-      update tb_jc_expert set popularity = popularity + 1 where id = #{eid}
+      update tb_jc_expert set popularity = #{pop} where id = #{uid}
     </update>
     <select id="queryHotExperts" resultType="com.zhcdata.jc.dto.ExpertInfo">
     <if test="type==1">
@@ -64,7 +64,7 @@
   </select>
   <select id="queryExpertDetails" resultType="com.zhcdata.jc.dto.ExpertInfo">
     SELECT e.id,e.nick_name nickName,e.img,e.lable,e.introduction,e.fans,
-    v.trend,v.lz_now lz,z_seven_days zSevenDays,v.return_seven_days returnSevenDays,f.status,e.grade
+    v.trend,v.lz_now lz,z_seven_days zSevenDays,v.return_seven_days returnSevenDays,f.status,e.grade,e.popularity
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
     where e.id=#{expertId} and e.is_upshelf = '1'

@@ -137,15 +137,15 @@ public class HandleExpertRecordJob implements Job {
                                     zs += 1;        //已发方案总数(按已发赛事数量算的)
 
                                     //三天
-                                    if (matchlist.get(k).getDateOfMatch().compareTo(timeThree) > 0) {
+                                    if (matchlist.get(m).getDateOfMatch().compareTo(timeThree) > 0) {
                                         three += 1;
-                                        if (matchlist.get(k).getStatus().equals("1")) {
+                                        if (matchlist.get(m).getStatus().equals("1")) {
                                             three_z += 1;
                                         }
                                     }
 
                                     //五天
-                                    if (matchlist.get(k).getDateOfMatch().compareTo(timeFive) > 0) {
+                                    if (matchlist.get(m).getDateOfMatch().compareTo(timeFive) > 0) {
                                         five += 1;
                                         if (planResults.get(k).getStatus().equals("1")) {
                                             five_z += 1;
@@ -154,7 +154,7 @@ public class HandleExpertRecordJob implements Job {
 
 
                                     //七天
-                                    if (matchlist.get(k).getDateOfMatch().compareTo(timeSeven) > 0) {
+                                    if (matchlist.get(m).getDateOfMatch().compareTo(timeSeven) > 0) {
                                         seven += 1;
                                         if (planResults.get(k).getStatus().equals("1")) {
                                             seven_z += 1;
@@ -174,7 +174,7 @@ public class HandleExpertRecordJob implements Job {
                                     }
 
                                     //回报率
-                                    if (matchlist.get(k).getDateOfMatch().compareTo(timeSeven) > 0) {
+                                    if (matchlist.get(m).getDateOfMatch().compareTo(timeSeven) > 0) {
                                         String planInfo = matchlist.get(m).getPlanInfo();
                                         if (planInfo.contains("|")) {
                                             String spf = planInfo.split("\\|")[0];
@@ -185,14 +185,14 @@ public class HandleExpertRecordJob implements Job {
 
                                             int a = 0;
                                             for (int p1 = 0; p1 < spfs.length; p1++) {
-                                                if (Integer.parseInt(spfs[p1]) > 0) {
+                                                if (Double.valueOf(spfs[p1]) > 0) {
                                                     a += 1;
                                                 }
                                             }
 
                                             int b = 0;
                                             for (int p2 = 0; p2 < rqspfs.length; p2++) {
-                                                if (Integer.parseInt(rqspfs[p2]) > 0) {
+                                                if (Double.valueOf(rqspfs[p2]) > 0) {
                                                     b += 1;
                                                 }
                                             }
@@ -308,7 +308,8 @@ public class HandleExpertRecordJob implements Job {
                 }
             }
         } catch (Exception ex) {
-            log.error("[处理专家战绩异常]" + ex);
+            log.error("[处理专家战绩异常]" + ex + ex.getMessage() + ex.getStackTrace());
+            ex.printStackTrace();
         }
         log.info("[处理专家战绩结束]" + df.format(new Date()));
     }

@@ -48,6 +48,9 @@ public class MatchAnalysisProtocol implements BaseProtocol {
         if (!commonUtils.validParamExistOrNoNum(map, paramMap, Const.TYPE, ProtocolCodeMsg.TYPE_NOT_ASSIGNED)) {
             return map;
         }
+        if (!commonUtils.validParamExistOrNoNum(map, paramMap, "select", ProtocolCodeMsg.SELECT_NOT_ASSIGNED)) {
+            return map;
+        }
         if (!commonUtils.validParamExistOrNoNum(map, paramMap, Const.TIME_ID, ProtocolCodeMsg.TIME_ID_NOT_ASSIGNED)) {
             return map;
         }
@@ -58,22 +61,23 @@ public class MatchAnalysisProtocol implements BaseProtocol {
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         String matchId = paramMap.get("matchId");
         String type = paramMap.get("type");
+        String select = paramMap.get("select");
         String timeId = paramMap.get("timeId");
         if (Strings.isNullOrEmpty(timeId)) {
             timeId = "-1";
         }
         Map<String, Object> map = new HashMap<>(2);
         String key = RedisCodeMsg.SOCCER_ANALYSIS.getName() + ":" + matchId;
-        String redisTimeId = (String) redisUtils.hget(key, type + "_TIME_ID");
+        String redisTimeId = (String) redisUtils.hget(key, type + "_" + select + "_TIME_ID");
         if (!Strings.isNullOrEmpty(redisTimeId) && redisTimeId.equals(timeId)) {
             map.put("timeId", redisTimeId);
             return map;
         }
-        String value = (String) redisUtils.hget(key, type);
+        String value = (String) redisUtils.hget(key, type + "_" + select);
         if (!Strings.isNullOrEmpty(value)) {
             map = JsonMapper.defaultMapper().fromJson(value, Map.class);
         } else {
-            map = scheduleService.matchAnalysisByType(Integer.parseInt(matchId), type);
+            map = scheduleService.matchAnalysisByType(Integer.parseInt(matchId), type,select);
         }
         return map;
     }

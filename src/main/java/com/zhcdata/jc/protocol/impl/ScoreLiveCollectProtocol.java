@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,45 +87,56 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             resultMap.put("matchName",mo.getMatchName());
             //获取图标信息
 
-            String team = (String) redisUtils.hget("SOCCER:HSET:SOCRELIVE"+"team" + paramMap.get("matchId"),"v");
+            String team = (String) redisUtils.get("SOCCER:HSET:SOCRELIVE:" + paramMap.get("matchId"));
             IconAndTimeDto result = new IconAndTimeDto();
             if (team == null || team .equals("") || team .equals("[]")) {
                 result = scheduleService.selectIconAndTime(Integer.valueOf(matchId));
-                redisUtils.hset("SOCCER:HSET:SOCRELIVE"+ "team" + matchId, JSONObject.toJSONString(result),"v");
-                redisUtils.expire("SOCCER:HSET:SOCRELIVE"+"team" + matchId, RedisCodeMsg.SAME_ODDS.getSeconds());
+                redisUtils.set("SOCCER:HSET:SOCRELIVE:" + matchId,JSONObject.toJSONString(result));
+                redisUtils.expire("SOCCER:HSET:SOCRELIVE:" + matchId, RedisCodeMsg.SAME_ODDS.getSeconds());
             }else{
                 net.sf.json.JSONObject jsonObject1 = net.sf.json.JSONObject.fromObject(team);
                 result = (IconAndTimeDto)net.sf.json.JSONObject.toBean(jsonObject1, IconAndTimeDto.class);
             }
             //主队
-            resultMap.put("hostIcon", result.getHomeImg());
-            String teamId = (String) redisUtils.hget("SOCCER:HSET:IMG", "teamId");
-            if (teamId == null) {
-                teamId = "";
-            }
-            if (!teamId.contains(result.getHomeId())) {
-                String img = result.getHomeImg();                    //主队
-                localUrl = localUrl + img;
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl);
-                redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId + result.getHomeId() + ",");
-                resultMap.put("hostIcon",imgYuMing+ localUrl);
-            }
 
-
+//            String teamId = (String) redisUtils.hget("SOCCER:HSET:IMG", "teamId");
+//            if (teamId == null) {
+//                teamId = "";
+//            }
+//            if (!teamId.contains(result.getHomeId())) {
+            if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getHomeId())) {
+                String img = result.getHomeImg();
+                String localUrl1 = localUrl + img;
+                File file = new File(localUrl1);
+                String parentStr = file.getParent();
+                File parent = new File(parentStr);
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
+                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getHomeId());
+            }
 
             //客队
-            resultMap.put("guestIcon", result.getGuestImg());
-            String teamId1 = (String) redisUtils.hget("SOCCER:HSET:IMG", "teamId");
-            if (teamId1 == null) {
-                teamId1 = "";
+//            String teamId1 = (String) redisUtils.hget("SOCCER:HSET:IMG", "teamId");
+//            if (teamId1 == null) {
+//                teamId1 = "";
+//            }
+//            if (!teamId1.contains(result.getGuestId())) {
+            if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getGuestId())) {
+                String img = result.getGuestImg();
+                String localUrl2 = localUrl + img;
+                File file = new File(localUrl2);
+                String parentStr = file.getParent();
+                File parent = new File(parentStr);
+                if (!parent.exists()) {
+                    parent.mkdirs();
+                }
+                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl2);
+//                redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId1 + result.getGuestImg() + ",");
+                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getGuestId());
             }
-            if (!teamId1.contains(result.getGuestId())) {
-                String img = result.getGuestImg();                    //主队
-                localUrl = localUrl + img;
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl);
-                redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId1 + result.getGuestImg() + ",");
-            }
-            resultMap.put("guestIcon",imgYuMing+ localUrl);
+
             resultMap.put("matchDate", result.getTime());
             //计算上下半场
             if("1".equals(mo.getMatchState())){
@@ -141,6 +153,9 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             }else {
                 resultMap.put("matchType", 0);
             }
+
+            resultMap.put("guestIcon",imgYuMing+ result.getGuestImg());
+            resultMap.put("hostIcon",imgYuMing+ result.getHomeImg());
             resultMap.put("resCode", ProtocolCodeMsg.SUCCESS.getCode());
             resultMap.put("message", ProtocolCodeMsg.SUCCESS.getMsg());
             resultMap.put("timeId", String.valueOf(System.currentTimeMillis()));

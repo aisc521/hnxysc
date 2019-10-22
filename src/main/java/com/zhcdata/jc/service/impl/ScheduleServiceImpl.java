@@ -153,12 +153,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Integer> matchIds = scheduleMapper.selectScheduleIdByTime(before, after);
         log.error("查询到的前后一天的比赛记录数为：{}", matchIds.size());
         for (Integer matchId : matchIds) {
-            matchAnalysisByType(matchId, null);
+            matchAnalysisByType(matchId, null, null);
         }
     }
 
     @Override
-    public Map<String, Object> matchAnalysisByType(Integer matchId, String type) {
+    public Map<String, Object> matchAnalysisByType(Integer matchId, String type,String select) {
         //获取比赛信息，包括主客队，赛事id，赛季
         Schedule schedule = scheduleMapper.selectByPrimaryKey(matchId);
         Map<String, Object> map = null;
@@ -166,20 +166,22 @@ public class ScheduleServiceImpl implements ScheduleService {
         if (Strings.isBlank(type)) {
             long l0 = ClockUtil.currentTimeMillis();
             matchAnalysisType0(schedule);
-            long l1 = ClockUtil.currentTimeMillis();
-            matchAnalysisType1(schedule);
-            long l2 = ClockUtil.currentTimeMillis();
-            matchAnalysisType2(schedule);
-            long l3 = ClockUtil.currentTimeMillis();
-            matchAnalysisType3(schedule);
-            long l4 = ClockUtil.currentTimeMillis();
-            matchAnalysisType4(schedule);
-            long l5 = ClockUtil.currentTimeMillis();
-            matchAnalysisType5(schedule);
-            long l6 = ClockUtil.currentTimeMillis();
-            matchAnalysisType6(schedule);
-            long l = ClockUtil.currentTimeMillis();
-            log.error("总计算耗时{}ms", l - l0);
+            for (int i = 0; i < 2; i++) {
+                long l1 = ClockUtil.currentTimeMillis();
+                matchAnalysisType1(schedule, i + "");
+                long l2 = ClockUtil.currentTimeMillis();
+                matchAnalysisType2(schedule, i + "");
+                long l3 = ClockUtil.currentTimeMillis();
+                matchAnalysisType3(schedule, i + "");
+                long l4 = ClockUtil.currentTimeMillis();
+                matchAnalysisType4(schedule, i + "");
+                long l5 = ClockUtil.currentTimeMillis();
+                matchAnalysisType5(schedule, i + "");
+                long l6 = ClockUtil.currentTimeMillis();
+                matchAnalysisType6(schedule, i + "");
+                long l = ClockUtil.currentTimeMillis();
+                log.error("总计算耗时{}ms", l - l0);
+            }
             return null;
         }
         switch (type) {
@@ -187,22 +189,22 @@ public class ScheduleServiceImpl implements ScheduleService {
                 map = matchAnalysisType0(schedule);
                 break;
             case "1":
-                map = matchAnalysisType1(schedule);
+                map = matchAnalysisType1(schedule,select);
                 break;
             case "2":
-                map = matchAnalysisType2(schedule);
+                map = matchAnalysisType2(schedule,select);
                 break;
             case "3":
-                map = matchAnalysisType3(schedule);
+                map = matchAnalysisType3(schedule,select);
                 break;
             case "4":
-                map = matchAnalysisType4(schedule);
+                map = matchAnalysisType4(schedule,select);
                 break;
             case "5":
-                map = matchAnalysisType5(schedule);
+                map = matchAnalysisType5(schedule,select);
                 break;
             case "6":
-                map = matchAnalysisType6(schedule);
+                map = matchAnalysisType6(schedule,select);
                 break;
             default:
                 break;
@@ -302,9 +304,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         resultMap.put("guestLately", guestLately);
         resultMap.put("Lately", lately);
         String key = RedisCodeMsg.SOCCER_ANALYSIS.getName() + ":" + schedule.getScheduleid();
-        redisUtils.hset(key, type, JsonMapper.defaultMapper().toJson(resultMap));
+        redisUtils.hset(key, type+"_0", JsonMapper.defaultMapper().toJson(resultMap));
         String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
-        redisUtils.hset(key, type + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
+        redisUtils.hset(key, type+"_0" + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
         resultMap.put("timeId", timeId);
         return resultMap;
     }
@@ -315,17 +317,21 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType1(Schedule schedule) {
+    private Map<String, Object> matchAnalysisType1(Schedule schedule,String select) {
         String type = "1";
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
         Integer guestteamid = schedule.getGuestteamid();
         Date matchtime = schedule.getMatchtime();
         //主队战绩
-        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, "1", null, matchtime, 10);
+        int count = 10;
+        if ("1".equals(select)) {
+            count = 20;
+        }
+        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, "1", null, matchtime, count);
         TeamHistoryStatisticDto homeLately = processingHistoryMatchData(homeHistory);
         //客队战绩
-        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, "2", null, matchtime, 10);
+        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, "2", null, matchtime, count);
         TeamHistoryStatisticDto guestLately = processingHistoryMatchData(guestHistory);
 
         //拼接数据
@@ -337,9 +343,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         resultMap.put("homeLately", homeLately);
         resultMap.put("guestLately", guestLately);
         String key = RedisCodeMsg.SOCCER_ANALYSIS.getName() + ":" + schedule.getScheduleid();
-        redisUtils.hset(key, type, JsonMapper.defaultMapper().toJson(resultMap));
+        redisUtils.hset(key, type + "_" + select, JsonMapper.defaultMapper().toJson(resultMap));
         String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
-        redisUtils.hset(key, type + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
+        redisUtils.hset(key, type + "_" + select + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
         resultMap.put("timeId", timeId);
         return resultMap;
     }
@@ -350,7 +356,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType2(Schedule schedule) {
+    private Map<String, Object> matchAnalysisType2(Schedule schedule,String select) {
         String type = "2";
         //子联赛id
         Integer sclassid = schedule.getSclassid();
@@ -358,10 +364,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         Integer guestteamid = schedule.getGuestteamid();
         Date matchtime = schedule.getMatchtime();
         //主队战绩
-        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, null, sclassid, matchtime, 10);
+        int count = 10;
+        if ("1".equals(select)) {
+            count = 20;
+        }
+        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, null, sclassid, matchtime, count);
         TeamHistoryStatisticDto homeLately = processingHistoryMatchData(homeHistory);
         //客队战绩
-        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, null, sclassid, matchtime, 10);
+        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, null, sclassid, matchtime, count);
         TeamHistoryStatisticDto guestLately = processingHistoryMatchData(guestHistory);
 
         //拼接数据
@@ -373,9 +383,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         resultMap.put("homeLately", homeLately);
         resultMap.put("guestLately", guestLately);
         String key = RedisCodeMsg.SOCCER_ANALYSIS.getName() + ":" + schedule.getScheduleid();
-        redisUtils.hset(key, type, JsonMapper.defaultMapper().toJson(resultMap));
+        redisUtils.hset(key, type + "_" + select, JsonMapper.defaultMapper().toJson(resultMap));
         String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
-        redisUtils.hset(key, type + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
+        redisUtils.hset(key, type + "_" + select + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
         resultMap.put("timeId", timeId);
         return resultMap;
     }
@@ -386,17 +396,21 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType3(Schedule schedule) {
+    private Map<String, Object> matchAnalysisType3(Schedule schedule,String select) {
         String type = "3";
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
         Integer guestteamid = schedule.getGuestteamid();
         Date matchtime = schedule.getMatchtime();
         //主队战绩
-        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, null, null, matchtime, 10);
+        int count = 10;
+        if ("1".equals(select)) {
+            count = 20;
+        }
+        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, null, null, matchtime, count);
         TeamHistoryStatisticDto homeLately = processingHistoryMatchData(homeHistory);
         //客队战绩
-        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, null, null, matchtime, 10);
+        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, null, null, matchtime, count);
         TeamHistoryStatisticDto guestLately = processingHistoryMatchData(guestHistory);
 
         //拼接数据
@@ -421,7 +435,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType4(Schedule schedule) {
+    private Map<String, Object> matchAnalysisType4(Schedule schedule,String select) {
         String type = "4";
         //子联赛id
         Integer sclassid = schedule.getSclassid();
@@ -429,10 +443,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         Integer guestteamid = schedule.getGuestteamid();
         Date matchtime = schedule.getMatchtime();
         //主队战绩
-        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, "1", sclassid, matchtime, 10);
+        int count = 10;
+        if ("1".equals(select)) {
+            count = 20;
+        }
+        List<HistoryMatchDto> homeHistory = scheduleMapper.selectHistoryMatchByTeam(hometeamid, "1", sclassid, matchtime, count);
         TeamHistoryStatisticDto homeLately = processingHistoryMatchData(homeHistory);
         //客队战绩
-        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, "2", sclassid, matchtime, 10);
+        List<HistoryMatchDto> guestHistory = scheduleMapper.selectHistoryMatchByTeam(guestteamid, "2", sclassid, matchtime, count);
         TeamHistoryStatisticDto guestLately = processingHistoryMatchData(guestHistory);
 
         //拼接数据
@@ -444,9 +462,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         resultMap.put("homeLately", homeLately);
         resultMap.put("guestLately", guestLately);
         String key = RedisCodeMsg.SOCCER_ANALYSIS.getName() + ":" + schedule.getScheduleid();
-        redisUtils.hset(key, type, JsonMapper.defaultMapper().toJson(resultMap));
+        redisUtils.hset(key, type + "_" + select, JsonMapper.defaultMapper().toJson(resultMap));
         String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
-        redisUtils.hset(key, type + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
+        redisUtils.hset(key, type + "_" + select + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
         resultMap.put("timeId", timeId);
         return resultMap;
     }
@@ -457,14 +475,18 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType5(Schedule schedule) {
+    private Map<String, Object> matchAnalysisType5(Schedule schedule,String select) {
         String type = "5";
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
         Integer guestteamid = schedule.getGuestteamid();
         Date matchtime = schedule.getMatchtime();
         //历史交锋
-        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, matchtime, "1", 5);
+        int count = 6;
+        if ("1".equals(select)) {
+            count = 12;
+        }
+        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, matchtime, "1", count);
         TeamHistoryStatisticDto lately = processingHistoryMatchData(historyMatchDtos);
 
         //拼接数据
@@ -473,9 +495,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         resultMap.put("latelyList", historyMatchDtos);
         resultMap.put("Lately", lately);
         String key = RedisCodeMsg.SOCCER_ANALYSIS.getName() + ":" + schedule.getScheduleid();
-        redisUtils.hset(key, type, JsonMapper.defaultMapper().toJson(resultMap));
+        redisUtils.hset(key, type + "_" + select, JsonMapper.defaultMapper().toJson(resultMap));
         String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
-        redisUtils.hset(key, type + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
+        redisUtils.hset(key, type + "_" + select + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
         resultMap.put("timeId", timeId);
         return resultMap;
     }
@@ -486,14 +508,18 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType6(Schedule schedule) {
+    private Map<String, Object> matchAnalysisType6(Schedule schedule,String select) {
         String type = "6";
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
         Integer guestteamid = schedule.getGuestteamid();
         Date matchtime = schedule.getMatchtime();
         //历史交锋
-        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, matchtime, null, 5);
+        int count = 6;
+        if ("1".equals(select)) {
+            count = 12;
+        }
+        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, matchtime, null, count);
         TeamHistoryStatisticDto lately = processingHistoryMatchData(historyMatchDtos);
         //拼接数据
         //放入缓存
@@ -501,9 +527,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         resultMap.put("latelyList", historyMatchDtos);
         resultMap.put("Lately", lately);
         String key = RedisCodeMsg.SOCCER_ANALYSIS.getName() + ":" + schedule.getScheduleid();
-        redisUtils.hset(key, type, JsonMapper.defaultMapper().toJson(resultMap));
+        redisUtils.hset(key, type + "_" + select, JsonMapper.defaultMapper().toJson(resultMap));
         String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
-        redisUtils.hset(key, type + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
+        redisUtils.hset(key, type + "_" + select + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
         resultMap.put("timeId", timeId);
         return resultMap;
     }

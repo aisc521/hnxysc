@@ -137,6 +137,8 @@ public class CalculationPlanJob implements Job {
                                     //处理单场比赛结果、中奖状态
                                     tbJcMatchService.updateStatus(String.valueOf(z), hScore + ":" + vScore,matchPlanResults.get(k).getId());
 
+                                }else{
+                                    result = 2;
                                 }
                                 //未结束的不处理
                             }
@@ -147,7 +149,7 @@ public class CalculationPlanJob implements Job {
                             tbPlanService.updateStatus("0", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
                             TbJcPlan tb = planResults.get(i);
                             //refundFrozenToMoney(tb);
-                        } else {
+                        } else if(result == 1){
                             //已中
                             tbPlanService.updateStatus("1", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
 
@@ -175,12 +177,12 @@ public class CalculationPlanJob implements Job {
     public void UpdateExpert( TbJcPlan tb) throws BaseException {
         //更新专家经验  + 3
         TbJcExpert tbJcExpert = tbJcExpertService.queryExpertDetailsById(Integer.parseInt(String.valueOf(tb.getAscriptionExpert())));
-        Integer pop = tbJcExpert.getPopularity();
+        Integer pop = Integer.valueOf(String.valueOf(tbJcExpert.getExperience()));
         if(pop == null){
             pop = 0;
         }
-        tbJcExpert.setPopularity(pop + 10);
-        Example example1 = new Example(TbJcPurchaseDetailed.class);
+        tbJcExpert.setExperience(Long.valueOf(pop + 3));
+        Example example1 = new Example(TbJcExpert.class);
         example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
 
         int h = tbJcExpertService.updateByExample(tbJcExpert,example1);
@@ -188,6 +190,7 @@ public class CalculationPlanJob implements Job {
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
         }
+        LOGGER.error("专家 ：" + tbJcExpert.getNickName() + "=增加经验值3成功" );
     }
 
     /**
@@ -247,9 +250,11 @@ public class CalculationPlanJob implements Job {
                                 ProtocolCodeMsg.UPDATE_FAILE.getMsg());
                     }
                 }
-
+                LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "退款成功====退款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "退款类型:" + remark);
             }
         }
+
+
     }
 
     /**
@@ -292,6 +297,8 @@ public class CalculationPlanJob implements Job {
                                 ProtocolCodeMsg.UPDATE_FAILE.getMsg());
                     }
                 }
+
+                LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款成功====扣款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark);
             }
         }
     }

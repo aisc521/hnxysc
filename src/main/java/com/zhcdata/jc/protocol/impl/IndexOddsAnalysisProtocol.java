@@ -63,7 +63,7 @@ public class IndexOddsAnalysisProtocol implements BaseProtocol {
             return map;
         }
         //主客队
-        if (!commonUtils.validParamExistOrNoNum(map, paramMap, "zkFlag", ProtocolCodeMsg.PAM_NOT_ASSIGNED)) {
+        if (!commonUtils.validParamExistOrNoNum(map, paramMap, "zkFlag", ProtocolCodeMsg.ZK_FLAG_NOT_ASSIGNED)) {
             return map;
         }
         return null;

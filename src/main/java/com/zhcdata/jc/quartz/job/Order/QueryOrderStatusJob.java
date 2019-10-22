@@ -96,7 +96,7 @@ public class QueryOrderStatusJob implements Job {
             pop = 0;
         }
         tbJcExpert.setPopularity(pop + 10);
-        Example example1 = new Example(TbJcPurchaseDetailed.class);
+        Example example1 = new Example(TbJcExpert.class);
         example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
 
         int h = tbJcExpertService.updateByExample(tbJcExpert,example1);
