@@ -38,4 +38,6 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     Map<String, Long> queryFreeOrPayByUidAndPid(@Param("uid") String uid, @Param("pid") String pid);
 
     List<PlanResult2> queryPlanByIdandUser(@Param("id")String id, @Param("uid")String uid);
+
+    void updateStatusPlanById(@Param("id") String id);
 }

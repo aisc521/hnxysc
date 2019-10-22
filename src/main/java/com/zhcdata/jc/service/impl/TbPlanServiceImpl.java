@@ -105,4 +105,9 @@ public class TbPlanServiceImpl implements TbPlanService {
     public List<PlanResult1> queryPlanByExpertIdNoPages(String id, String planId, String userId) {
         return tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId,userId);
     }
+
+    @Override
+    public void updateStatusPlanById(String id) {
+        tbJcPlanMapper.updateStatusPlanById(id);
+    }
 }
