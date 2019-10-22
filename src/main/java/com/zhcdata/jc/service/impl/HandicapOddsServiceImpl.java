@@ -161,7 +161,7 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
             }
         }
         if (result != null) {
-            if (!redisUtils.sHasKey("SOCCER:HSET:IMG",result.getHomeId())) {
+            if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getHomeId())) {
                 //主队图片
                 String img = result.getHostIcon();
                 String localUrl1 = localUrl + img;
@@ -172,10 +172,10 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
                     parent.mkdirs();
                 }
                 FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
-                redisUtils.set("SOCCER:HSET:IMG", result.getHomeId());
+                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getHomeId());
             }
 
-            if (!redisUtils.sHasKey("SOCCER:HSET:IMG",result.getGuestId())) {
+            if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getGuestId())) {
                 //客队图片
                 String img = result.getGuestIcon();
                 String localUrl1 = localUrl + img;
@@ -186,7 +186,7 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
                     parent.mkdirs();
                 }
                 FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
-                redisUtils.set("SOCCER:HSET:IMG", result.getGuestId());
+                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getGuestId());
             }
             map.put("hostIcon", Strings.isNotBlank(result.getHostIcon())?imagePrefix + "" + result.getHostIcon():"");
             map.put("guestIcon", Strings.isNotBlank(result.getGuestIcon())?imagePrefix + "" + result.getGuestIcon():"");
