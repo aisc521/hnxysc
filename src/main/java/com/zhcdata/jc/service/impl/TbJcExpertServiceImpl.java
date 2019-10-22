@@ -59,5 +59,10 @@ public class TbJcExpertServiceImpl implements TbJcExpertService {
         return tbJcExpertMapper.updateByExample(tbJcExpert,example1);
     }
 
+    @Override
+    public ExpertInfo queryExpertDetailsAndUser(String expertId, String userId) {
+        return tbJcExpertMapper.queryExpertDetailsAndUser(expertId,userId);
+    }
+
 
 }

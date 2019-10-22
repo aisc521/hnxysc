@@ -16,12 +16,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description 专家详情
+ * @Description 专家详情 带userId
  * @Author cuishuai
  * @Date 2019/9/20 14:03
  */
-@Service("20200217")
-public class QueryExpertDetailsProtocol implements BaseProtocol {
+@Service("20200238")
+public class QueryExpertDetailsUserProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource
@@ -36,15 +36,23 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.EXPERT_ID.getMsg());
             return map;
         }
+        String userId = paramMap.get("userId");
+        if (Strings.isNullOrEmpty(userId)) {
+            LOGGER.info("[" + ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg() + "]:userId---" + userId);
+            map.put("resCode", ProtocolCodeMsg.USER_ID_NOT_EXIST.getCode());
+            map.put("message", ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg());
+            return map;
+        }
         return null;
     }
 
     @Override
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         String expertId = paramMap.get("id");
+        String userId = paramMap.get("userId");
         Map<String, Object> resultMap = new HashMap<>();
         try{
-            ExpertInfo info = tbJcExpertService.queryExpertDetails(expertId);
+            ExpertInfo info = tbJcExpertService.queryExpertDetailsAndUser(expertId,userId);
             if (info != null) {
                 resultMap.put("id", info.getId());
                 resultMap.put("nickName", info.getNickName());
@@ -53,7 +61,6 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
                 resultMap.put("introduction", info.getIntroduction());
                 resultMap.put("fans", info.getFans());
                 resultMap.put("trend", info.getTrend());
-                //判断连中 连红
                 String lz = JsLz(info);
                 resultMap.put("lz", lz);
                 resultMap.put("zSevenDays", info.getzSevenDays());

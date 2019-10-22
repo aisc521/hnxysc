@@ -1,6 +1,7 @@
 package com.zhcdata.jc.protocol.impl;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.PlanResult1;
@@ -51,6 +52,13 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg());
             return map;
         }
+        String pageNo = paramMap.get("pageNo");
+        if (Strings.isNullOrEmpty(pageNo)) {
+            LOGGER.info("[" + ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg() + "]:pageNo---" + pageNo);
+            map.put("resCode", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getCode());
+            map.put("message", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg());
+            return map;
+        }
         return null;
     }
 
@@ -59,7 +67,7 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
         Map<String, Object> resultMap = new HashMap<>();
         List<PlanResult1> result = new ArrayList<>();
         List<PlanResult1> f_result = new ArrayList<>();
-
+        String pageNo = paramMap.get("pageNo");
         String type = paramMap.get("type");
         String userId = paramMap.get("userId");
         String re = (String)redisUtils.hget("SOCCER:HSET:EXPERT", "id");
@@ -69,7 +77,9 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
             String[] ids = re.split(",");
 
             for (int i = 0; i < ids.length; i++) {
-                List<PlanResult1> planList = tbPlanService.queryPlanByExpertId(ids[i], null,userId);
+
+                PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertId(ids[i],null,userId,Integer.valueOf(pageNo),20);
+                List<PlanResult1> planList = planList1.getList();
 
                 for (int k = 0; k < planList.size(); k++) {
                     PlanResult1 result1 = planList.get(k);

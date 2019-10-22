@@ -1,5 +1,6 @@
 package com.zhcdata.jc.protocol.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.PlanResult1;
@@ -57,7 +58,7 @@ public class QueryPlanByMatchIdUserIdProtocol implements BaseProtocol {
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         String id = paramMap.get("id");
-
+        String pageNo = paramMap.get("pageNo");
         List<PlanResult1> result = new ArrayList<>();
 
         try {
@@ -72,7 +73,9 @@ public class QueryPlanByMatchIdUserIdProtocol implements BaseProtocol {
                 }
 
                 String userId = paramMap.get("userId");
-                List<PlanResult1> planList = tbPlanService.queryPlanByExpertId(id, pIdList,userId);
+                PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertId(id,null,userId,Integer.valueOf(pageNo),20);
+                List<PlanResult1> planList = planList1.getList();
+
                 for (int i = 0; i < planList.size(); i++) {
                     PlanResult1 result1 = planList.get(i);
                     List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(i).getId());

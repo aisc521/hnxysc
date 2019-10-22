@@ -41,4 +41,6 @@ public interface TbJcExpertService {
     void updatePopAddOne(int eid,int pop);
 
     int updateByExample(TbJcExpert tbJcExpert, Example example1);
+
+    ExpertInfo queryExpertDetailsAndUser(String expertId, String userId);
 }
