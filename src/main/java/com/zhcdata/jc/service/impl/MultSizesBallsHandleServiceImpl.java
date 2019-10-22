@@ -84,6 +84,7 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
                 totalScoreDetail.setDownodds(xml.getFirstdownodds());
                 totalScoreDetail.setModifytime(xml.getModifytime());
                 totalScoreDetailMapper.insertSelective(totalScoreDetail);
+                log.error("大小单盘主表更新子表初赔:"+totalScoreDetail.toString());
             }
         } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
             if (sc==null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {

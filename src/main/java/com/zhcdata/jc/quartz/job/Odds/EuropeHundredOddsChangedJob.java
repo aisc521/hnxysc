@@ -110,7 +110,10 @@ public class EuropeHundredOddsChangedJob implements Job {
                     if (db==null){
                             //第一次添加
                             xml.setOddsid(dbl.getOddsid());
-                            if (detailMapper.insertSelective(xml)>0) insert++;
+                            if (detailMapper.insertSelective(xml)>0) {
+                                insert++;
+                                log.error("百欧详情表新增新增"+xml.toString());
+                            }
                             //变更主表
                             dbl.setRealstandoff(xml.getStandoff());
                             dbl.setRealhomewin(xml.getHomewin());
@@ -125,11 +128,14 @@ public class EuropeHundredOddsChangedJob implements Job {
                         else {
                             //赔率不相同 更新（同样插入一条记录）
                             db.setId(null);
+                            db.setModifytime(xml.getModifytime());
                             db.setGuestwin(xml.getGuestwin());
                             db.setStandoff(xml.getStandoff());
                             db.setHomewin(xml.getHomewin());
-                            if (detailMapper.insertSelective(db)>0)
+                            if (detailMapper.insertSelective(db)>0) {
                                 update++;
+                                log.error("百欧详情表新增更新"+db.toString());
+                            }
                             //变更主表
                             dbl.setRealstandoff(xml.getStandoff());
                             dbl.setRealhomewin(xml.getHomewin());
