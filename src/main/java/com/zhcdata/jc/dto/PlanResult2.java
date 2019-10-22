@@ -25,6 +25,15 @@ public class PlanResult2 {
     private String price;
     private String createTime;
     private String grade;
+    private String planStatus;
+
+    public String getPlanStatus() {
+        return planStatus;
+    }
+
+    public void setPlanStatus(String planStatus) {
+        this.planStatus = planStatus;
+    }
 
     public String getGrade() {
         return grade;

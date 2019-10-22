@@ -136,7 +136,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         map.put("rang_sheng", ""+list.get(i).get("awayTeamZhu"));
                         map.put("rang_ping", ""+list.get(i).get("awayTeamPing"));
                         map.put("rang_fu", ""+list.get(i).get("awayTeamKe"));
-                        map.put("match_status", ""+list.get(i).get("status"));
+                        map.put("match_status", ""+list.get(i).get("statusmatch"));
                         map.put("match_result", ""+list.get(i).get("matchResult"));
 
                         String matchResult = String.valueOf(list.get(i).get("matchResult"));
@@ -174,7 +174,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 }
                 resultMap.put("plan_info", plan_info);
                 resultMap.put("first_time", first);
-
+                resultMap.put("planStatus", planResult2.getPlanStatus());
             } catch (Exception ex) {
                 ex.printStackTrace();
                 LOGGER.error("查询方案详情异常" + ex.toString());

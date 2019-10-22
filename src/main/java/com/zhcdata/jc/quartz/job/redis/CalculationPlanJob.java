@@ -65,11 +65,17 @@ public class CalculationPlanJob implements Job {
                     int z_count = 0;      //已中方案数量 例如推3中1,推3中2
                     List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(String.valueOf(planResults.get(i).getId())); //该方案的赛事信息
                     if (matchPlanResults != null && matchPlanResults.size() > 0) {
+                        String flag = "0";// 0 结束  1开始
+
                         for (int k = 0; k < matchPlanResults.size(); k++) {
                             String planInfo = matchPlanResults.get(k).getPlanInfo();
 
                             List<TbScoreResult> scoreResults = tbPlanService.queryScore(matchPlanResults.get(k).getMatchId()); //该赛事得分信息
                             if (scoreResults != null && scoreResults.size() > 0) {
+                                if (!scoreResults.get(0).getStatusType().equals("finished") && !scoreResults.get(0).getStatusType().equals("notstarted")) {
+                                    flag = "1";
+                                }
+
                                 if (scoreResults.get(0).getStatusType().equals("finished")) {
                                     //该赛事已结束，计算方案
                                     Double hScore = Double.valueOf(scoreResults.get(0).getValue());
@@ -142,6 +148,10 @@ public class CalculationPlanJob implements Job {
                                 }
                                 //未结束的不处理
                             }
+                        }
+
+                        if("1".equals(flag)){
+                            tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()));
                         }
 
                         if (result == 0) {
