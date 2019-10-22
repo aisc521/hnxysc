@@ -826,6 +826,7 @@
         when sc.MatchState = '-1' then '完' /*完结*/
         when sc.MatchState = '-14' then '推迟'/*推迟*/
         when sc.MatchState = '-12' then '腰斩'/*腰斩*/
+        WHEN sc.MatchState = '-10' THEN '取消' /*取消*/
         when sc.MatchState = '1' then '1'
         when sc.MatchState = '3' then '3'
         end as matchState,/*比赛状态*/
