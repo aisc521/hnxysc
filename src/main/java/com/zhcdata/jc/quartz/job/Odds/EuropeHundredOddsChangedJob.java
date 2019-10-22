@@ -108,9 +108,6 @@ public class EuropeHundredOddsChangedJob implements Job {
                     EuropeOddsDetail db = detailMapper.selectByOddsNewest(dbl.getOddsid());
                     EuropeOddsDetail xml = BeanUtils.parseEuropeOddsDetail(mo);
                     if (db==null){
-                        if (xml.isFirst()){
-
-                        }else {
                             //第一次添加
                             xml.setOddsid(dbl.getOddsid());
                             if (detailMapper.insertSelective(xml)>0) insert++;
@@ -122,8 +119,6 @@ public class EuropeHundredOddsChangedJob implements Job {
                             dbl.setHomewinR(xml.getHomewin());
                             dbl.setGuestwinR(xml.getGuestwin());
                             europeOddsMapper.updateByPrimaryKeySelective(dbl);
-                        }
-
                     }else {
                         if (db.oddsEquals(xml))
                             jumped++;//相同时间 相同赔率 跳过
