@@ -50,8 +50,8 @@ public class TbJcExpertServiceImpl implements TbJcExpertService {
     }
 
     @Override
-    public void updatePopAddOne(int eid) {
-        tbJcExpertMapper.updatePopAddOneByEid(eid);
+    public void updatePopAddOne(int eid,int pop) {
+        tbJcExpertMapper.updatePopAddOneByEid(eid,pop);
     }
 
     @Override

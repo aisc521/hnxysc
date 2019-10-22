@@ -36,4 +36,6 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     List<Map<String, Object>> queryPlanInfo(String pid);
 
     Map<String, Long> queryFreeOrPayByUidAndPid(@Param("uid") String uid, @Param("pid") String pid);
+
+    List<PlanResult2> queryPlanByIdandUser(@Param("id")String id, @Param("uid")String uid);
 }

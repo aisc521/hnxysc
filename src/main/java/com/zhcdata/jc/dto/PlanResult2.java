@@ -24,6 +24,15 @@ public class PlanResult2 {
     private String zSevenDays;
     private String price;
     private String createTime;
+    private String grade;
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
 
     public String getLz() {
         return lz;

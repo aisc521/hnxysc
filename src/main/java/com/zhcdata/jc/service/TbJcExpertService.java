@@ -38,7 +38,7 @@ public interface TbJcExpertService {
 
     TbJcExpert queryExpertDetailsById(int id);
 
-    void updatePopAddOne(int eid);
+    void updatePopAddOne(int eid,int pop);
 
     int updateByExample(TbJcExpert tbJcExpert, Example example1);
 }

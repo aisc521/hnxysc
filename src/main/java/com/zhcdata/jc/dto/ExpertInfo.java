@@ -70,8 +70,16 @@ public class ExpertInfo {
 
     private String status;
 
+    private Integer popularity;
 
 
+    public Integer getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Integer popularity) {
+        this.popularity = popularity;
+    }
 
     public int getId() {
         return id;

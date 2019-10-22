@@ -20,5 +20,5 @@ public interface TbJcExpertMapper extends Mapper<TbJcExpert> {
 
     TbJcExpert queryExpertDetailsById(@Param("id")int id);
 
-    void updatePopAddOneByEid(int eid);
+    void updatePopAddOneByEid(@Param("uid") int eid,@Param("pop") int pop);
 }
