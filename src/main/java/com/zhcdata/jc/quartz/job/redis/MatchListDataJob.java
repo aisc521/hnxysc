@@ -55,17 +55,17 @@ public class MatchListDataJob implements Job {
 
         List<MatchResult1> list2=new ArrayList<>();
 
-        List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(s, e, "2","","1");//北单 未开始
+        List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(s, e, "2","","1");//北单 正在进行
         for(int a=0;a<list2_1.size();a++){
             list2.add(list2_1.get(a));
         }
 
-        List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(s, e, "2","","2");//北单 正在进行
+        List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(s, e, "2","","2");//北单 未开始
         for(int b=0;b<list2_2.size();b++){
             list2.add(list2_2.get(b));
         }
 
-        List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(s, e, "2","","3");//北单 已经结束
+        List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(s, e, "2","","3");//北单 已结束
         for(int c=0;c<list2_3.size();c++) {
             list2.add(list2_3.get(c));
         }
