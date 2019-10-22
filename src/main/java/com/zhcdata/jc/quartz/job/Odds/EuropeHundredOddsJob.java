@@ -23,9 +23,11 @@
  */
 package com.zhcdata.jc.quartz.job.Odds;
 
+import com.zhcdata.db.mapper.EuropeOddsDetailMapper;
 import com.zhcdata.db.mapper.EuropeOddsMapper;
 import com.zhcdata.db.mapper.EuropeoddstotalMapper;
 import com.zhcdata.db.model.EuropeOdds;
+import com.zhcdata.db.model.EuropeOddsDetail;
 import com.zhcdata.db.model.Europeoddstotal;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.tools.HttpUtils;
@@ -71,6 +73,9 @@ public class EuropeHundredOddsJob implements Job {
     //@Resource
     //private EuropeoddstotalMapper europeoddstotalMapper;
 
+    @Resource
+    private EuropeOddsDetailMapper europeOddsDetailMapper;
+
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         if (europe_odds_flag)
@@ -80,7 +85,7 @@ public class EuropeHundredOddsJob implements Job {
             LOGGER.info("百欧赔率表解析开始");
             runs();
         } catch (Exception e) {
-            log.error("百欧赔率表解析错误"+e);
+            log.error("百欧赔率表解析错误" + e);
             e.printStackTrace();
         } finally {
             europe_odds_flag = false;
@@ -123,7 +128,23 @@ public class EuropeHundredOddsJob implements Job {
                         EuropeOdds db = europeOddsMapper.selectByMidAndCpyAnd(item.getId(), o.split(",")[0]);
                         if (db == null) {//新增
                             db = BeanUtils.parseEuropeOdds(item.getId(), o.split(","));//parse
-                            europeOddsMapper.insertSelective(db);//没有 新增到数据库
+                            if (europeOddsMapper.insertSelective(db) > 0) {
+                                try {
+                                    EuropeOdds afterInsert = europeOddsMapper.selectByMidAndCpyAnd(item.getId(), o.split(",")[0]);
+                                    //子表新增初赔信息
+                                    EuropeOddsDetail detail = new EuropeOddsDetail();
+                                    detail.setHomewin(db.getFirsthomewin());
+                                    detail.setStandoff(db.getFirststandoff());
+                                    detail.setGuestwin(db.getFirstguestwin());
+                                    detail.setModifytime(db.getModifytime());
+                                    detail.setOddsid(afterInsert.getOddsid());
+                                    if (europeOddsDetailMapper.insertSelective(detail) > 0) {
+                                        log.error("百欧主表新增百欧详情表" + detail.toString());
+                                    }
+                                } catch (Exception e) {
+                                    log.error("百欧主表新增百欧详情表错误"+e);
+                                }
+                            }
                         }
                     }
                 } catch (Exception e) {
