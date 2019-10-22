@@ -18,5 +18,5 @@ public interface TbJcMatchMapper extends Mapper<TbJcMatch> {
 
     MatchResult1 queryScore1(@Param("matchId") String matchId);
 
-    TbJcMatch queryJcMatchByPlanId(Long id);
+    TbJcMatch queryJcMatchByPlanId(@Param("planId") Long id);
 }

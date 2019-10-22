@@ -95,7 +95,7 @@
 
 
     <select id="queryJcMatchByPlanId" resultType="com.zhcdata.db.model.TbJcMatch">
-        select * from  tb_jc_match m where m.plan_id = '40' ORDER BY m.date_of_match asc limit 0,1
+        select * from  tb_jc_match m where m.plan_id = #{planId} ORDER BY m.date_of_match asc limit 0,1
     </select>
 
 </mapper>
