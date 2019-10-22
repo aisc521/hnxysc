@@ -72,21 +72,21 @@
             select ModifyTime oddTime,HomeWin oddWin,Standoff oddFlat,GuestWin oddLose from europeoddsdetail l WHERE
             l.oddsid = (select oddsid from europeodds where
             ScheduleID = #{matchId}
-            AND CompanyID = #{companyId}) ORDER BY oddTime desc
+            AND CompanyID = #{companyId}) ORDER BY oddTime asc
         </if>
         <if test="type == 2">
             /* 亚盘 */
             select ModifyTime oddTime,upOdds oddWin,Goal oddFlat,downOdds oddLose from letgoaldetail l WHERE
             l.oddsid = (select oddsid from letgoal where
             ScheduleID = #{matchId}
-            AND CompanyID = #{companyId}) ORDER BY oddTime desc
+            AND CompanyID = #{companyId}) ORDER BY oddTime asc
         </if>
         <if test="type == 3">
             /* 大小球 */
             select ModifyTime oddTime,upOdds oddWin,Goal oddFlat,downOdds oddLose from totalscoredetail l WHERE
             l.oddsid = (select oddsid from TotalScore where
             ScheduleID = #{matchId}
-            AND CompanyID = #{companyId}) ORDER BY oddTime desc
+            AND CompanyID = #{companyId}) ORDER BY oddTime asc
         </if>
     </select>
     <select id="selectNearlyMatchData" resultType="com.zhcdata.jc.dto.IntegralRankingDto">
@@ -895,8 +895,11 @@
              and lottery.LOTTERY = 'BJDC'
         </if>
         ) a ORDER BY
-        <if test="type == 1 or type == 2" >
+        <if test="type == 1" >
             a.num
+        </if>
+        <if test="type == 2" >
+            abs(a.num)
         </if>
         <if test="type == 4" >
             a.matchTime
@@ -1024,6 +1027,6 @@
         where sc.ScheduleID = #{matchId}
     </select>
     <select id="selectStatusChangedToday" resultType="com.zhcdata.db.model.Schedule">
-        select * from schedule where MatchTime > #{sat} and MatchTime &lt; #{end} and MatchState in (1,2,3,4)
+        SELECT * from `schedule` where MatchTime >= #{sat} and MatchTime &lt;= #{end} and MATCHstate in(0,1,2,3,4,5) and matchTime &lt;#{now}
     </select>
 </mapper>
