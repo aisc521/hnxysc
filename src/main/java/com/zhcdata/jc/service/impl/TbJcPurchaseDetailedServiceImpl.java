@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcExpertMapper;
 import com.zhcdata.db.mapper.TbJcPurchaseDetailedMapper;
 import com.zhcdata.db.model.*;
+import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.dto.PurchasedPlanDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -53,13 +54,13 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Map<String, Object> schemePurchase(TbJcPlan tbJcPlan, String userId, Map<String, String> paramMap,PayService payService,List<TbJcPurchaseDetailed> list) throws BaseException {
+    public Map<String, Object> schemePurchase(TbJcPlan tbJcPlan, String userId, Map<String, String> paramMap,PayService payService,List<TbJcPurchaseDetailed> list,ProtocolParamDto.HeadBean headBean) throws BaseException {
         Map<String, Object> result = new HashMap<>();
         try{
-            TbJcPurchaseDetailed tbJcPurchaseDetailed = generatedObject(tbJcPlan,userId,paramMap,list);
+            TbJcPurchaseDetailed tbJcPurchaseDetailed = generatedObject(tbJcPlan,userId,paramMap,list,headBean);
 
             if("20".equals(paramMap.get("payType"))){//微信native
-                result = payService.wechatPay(userId,String.valueOf(tbJcPlan.getPrice()),productName,description,"20",tbJcPurchaseDetailed.getOrderId(),paramMap.get("src"),paramMap.get("ip"));
+                result = payService.wechatPay(userId,String.valueOf(tbJcPlan.getPrice()),productName,description,"20",tbJcPurchaseDetailed.getOrderId(),headBean.getSrc(),paramMap.get("ip"));
                 if("000000".equals(result.get("resCode"))){
                     insertOrder(tbJcPurchaseDetailed);
                     result.put("orderId",tbJcPurchaseDetailed.getOrderId());
@@ -69,7 +70,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
 
             }
             if("21".equals(paramMap.get("payType"))){//支付宝支付
-                result = payService.aliPay(userId,String.valueOf(tbJcPlan.getPrice()),description,"21",tbJcPurchaseDetailed.getOrderId(),"0003000001|0401003430","192.168.64.140");
+                result = payService.aliPay(userId,String.valueOf(tbJcPlan.getPrice()),description,"21",tbJcPurchaseDetailed.getOrderId(),headBean.getSrc(),"192.168.64.140");
                 if("000000".equals(result.get("resCode"))){
                     insertOrder(tbJcPurchaseDetailed);
                     result.put("orderId",tbJcPurchaseDetailed.getOrderId());
@@ -78,7 +79,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 }
             }
             if("22".equals(paramMap.get("payType"))){//微信H5
-                result = payService.wechatPay(userId,String.valueOf(tbJcPlan.getPrice()),productName,description,"22",tbJcPurchaseDetailed.getOrderId(),"0003000001|0401003430","192.168.64.140");
+                result = payService.wechatPay(userId,String.valueOf(tbJcPlan.getPrice()),productName,description,"22",tbJcPurchaseDetailed.getOrderId(),headBean.getSrc(),"192.168.64.140");
                 if("000000".equals(result.get("resCode"))){
                     insertOrder(tbJcPurchaseDetailed);
                     result.put("orderId",tbJcPurchaseDetailed.getOrderId());
@@ -87,7 +88,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 }
             }
             if("0".equals(paramMap.get("payType"))){//余额支付
-                result = payService.moneyPay(String.valueOf(tbJcPlan.getPrice()), "0", userId, tbJcPurchaseDetailed.getOrderId(), paramMap.get("src"), productName);
+                result = payService.moneyPay(String.valueOf(tbJcPlan.getPrice()), "0", userId, tbJcPurchaseDetailed.getOrderId(), headBean.getSrc(), productName);
                 if("000000".equals(result.get("resCode"))){
                     //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
                     modifyOrderStatus(result,tbJcPlan,tbJcPurchaseDetailed,list);
@@ -97,7 +98,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 }
             }
             if("1".equals(paramMap.get("payType"))){//点播
-                result = payService.discountRecommendUse(userId, tbJcPurchaseDetailed.getOrderId(), description, paramMap.get("src"));
+                result = payService.discountRecommendUse(userId, tbJcPurchaseDetailed.getOrderId(), description, headBean.getSrc());
                 if("000000".equals(result.get("resCode"))){
                     //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
                     modifyOrderStatus(result,tbJcPlan,tbJcPurchaseDetailed,list);
@@ -147,7 +148,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public TbJcPurchaseDetailed generatedObject(TbJcPlan tbJcPlan, String userId,Map<String, String> paramMap,List<TbJcPurchaseDetailed> list){
+    public TbJcPurchaseDetailed generatedObject(TbJcPlan tbJcPlan, String userId,Map<String, String> paramMap,List<TbJcPurchaseDetailed> list,ProtocolParamDto.HeadBean headBean){
         TbJcPurchaseDetailed tbJcPurchaseDetailed = new TbJcPurchaseDetailed();
         Calendar cal = Calendar.getInstance();
         int day = cal.get(Calendar.DATE);
@@ -223,7 +224,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         }
         tbJcPurchaseDetailed.setExpertId(tbJcPlan.getAscriptionExpert());//专家id
         tbJcPurchaseDetailed.setPlanType(String.valueOf(tbJcPlan.getType()));//方案类型
-        tbJcPurchaseDetailed.setSrc(paramMap.get("src"));
+        tbJcPurchaseDetailed.setSrc(headBean.getSrc());
 
         //是否首次
         if(list.size() <= 0){
