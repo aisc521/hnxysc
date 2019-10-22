@@ -65,7 +65,9 @@
       s.matchTime matchDate,
       o.FirstHomeWin satWin,
       o.FirstGuestWin satLose,
-      o.FirstStandoff satFlat
+      o.FirstStandoff satFlat,
+      s.HomeTeamID homeId,
+      s.GuestTeamID guestId
        FROM europeodds o
     LEFT JOIN SCHEDULE s on o.ScheduleID = s.ScheduleID
     LEFT JOIN team t ON s.hometeamid = t.teamid

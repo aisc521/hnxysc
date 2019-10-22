@@ -24,6 +24,8 @@ public class AnalysisDto {
      * 主队头像
      */
     private String hostIcon;
+    @JsonIgnore
+    private String homeId;
     /**
      * 主队名称
      */
@@ -36,6 +38,9 @@ public class AnalysisDto {
      * 客队名称
      */
     private String guestName;
+    @JsonIgnore
+    private String guestId;
+
     /**
      * 比赛时间
      */

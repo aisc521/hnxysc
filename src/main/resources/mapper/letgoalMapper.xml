@@ -55,7 +55,9 @@
         s.matchTime matchDate,
         o.FirstGoal satFlat,
         o.FirstUpodds satWin,
-        o.FirstDownodds satLose from letgoal o
+        o.FirstDownodds satLose,
+      s.HomeTeamID homeId,
+      s.GuestTeamID guestId from letgoal o
       LEFT JOIN SCHEDULE s on o.ScheduleID = s.ScheduleID
       LEFT JOIN team t ON s.hometeamid = t.teamid
       LEFT JOIN team t2 ON s.guestteamid = t2.teamid
