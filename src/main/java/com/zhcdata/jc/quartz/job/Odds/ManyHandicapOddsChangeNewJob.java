@@ -44,6 +44,7 @@ public class ManyHandicapOddsChangeNewJob implements Job {
         log.error("21.多盘口赔率：30秒内变化赔率接口开始");
         long start = System.currentTimeMillis();
         ManyHandicapOddsChangeService array[] = {changeHandicapHandleServiceImpl,changeOddsHandleServiceImpl,changeSizesBallsHandleServiceImpl,changeHalfHandicapHandleServiceImpl,changeHalfSizesBallsHandleServiceImpl};
+        //ManyHandicapOddsChangeService array[] = {changeHandicapHandleServiceImpl};
 
         String url = "http://interface.win007.com/zq/ch_odds_m.xml?"+System.currentTimeMillis();
         MoreHandicapOddsLisAlltRsp rsp  = (MoreHandicapOddsLisAlltRsp) new QiuTanXmlComm().handleMothodHttpGet(url,MoreHandicapOddsLisAlltRsp.class,List.class,MoreHandicapOddsARsp.class);
