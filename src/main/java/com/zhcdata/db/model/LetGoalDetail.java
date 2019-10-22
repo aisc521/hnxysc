@@ -1,7 +1,10 @@
 package com.zhcdata.db.model;
 
+import lombok.ToString;
+
 import java.util.Date;
 
+@ToString
 public class LetGoalDetail {
     private Integer id;
 

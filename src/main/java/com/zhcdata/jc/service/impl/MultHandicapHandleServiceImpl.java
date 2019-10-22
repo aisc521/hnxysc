@@ -95,6 +95,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                     first.setDownodds(xml.getFirstdownodds());
                     first.setModifytime(xml.getModifytime());
                     letGoalDetailMapper.insertSelective(first);
+                    log.error("亚赔单盘主表更新子表初赔:"+first.toString());
                     //log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
                     //letgoal_goalMapper.selectByPrimaryKey()
                     //往详情表插入一条
