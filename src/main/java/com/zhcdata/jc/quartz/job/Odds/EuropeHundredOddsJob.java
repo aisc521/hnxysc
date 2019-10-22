@@ -117,13 +117,18 @@ public class EuropeHundredOddsJob implements Job {
             List<String> os = item.getOdds().getO();
             for (String o : os) {
                 try {
+                    if ((item.getId() + ":" + o.split(",")[0]).equals("1727683:1129")){
+                        System.out.println("--------------");
+                        System.out.println(mc.contains(item.getId() + ":" + o.split(",")[0]));
+                        System.out.println("sdf");
+                    }
                     if (!mc.contains(item.getId() + ":" + o.split(",")[0])) {
                         //log.info("mc list中包含比赛:" + item.getId() + ",公司id:" + o.split(",")[0]);
                         //} else {//首次添加，检查europe有没有，往europe中添加数据
                         if (europe_odds_mc.size() > 100000)//如果mc里面超过15w条，移除1条
                             europe_odds_mc.remove(0);
                         europe_odds_mc.add(item.getId() + ":" + o.split(",")[0]);//新增到mc
-                        if (StringUtils.isNotEmpty(item.getId()))
+                        if (StringUtils.isEmpty(item.getId()))
                             continue;
                         EuropeOdds db = europeOddsMapper.selectByMidAndCpyAnd(item.getId(), o.split(",")[0]);
                         if (db == null) {//新增
@@ -131,6 +136,7 @@ public class EuropeHundredOddsJob implements Job {
                             if (europeOddsMapper.insertSelective(db) > 0) {
                                 try {
                                     EuropeOdds afterInsert = europeOddsMapper.selectByMidAndCpyAnd(item.getId(), o.split(",")[0]);
+
                                     //子表新增初赔信息
                                     EuropeOddsDetail detail = new EuropeOddsDetail();
                                     detail.setHomewin(db.getFirsthomewin());
@@ -146,6 +152,8 @@ public class EuropeHundredOddsJob implements Job {
                                 }
                             }
                         }
+                    }else {
+                        System.out.println(mc.indexOf("1727683:1129"));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
