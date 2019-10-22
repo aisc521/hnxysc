@@ -37,10 +37,13 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
     private MultiLetgoalMapper multiLetgoalMapper;
 
     @Resource
+    private MultiLetGoalDetailMapper multiLetGoalDetailMapper;
+
+    @Resource
     private ScheduleMapper scheduleMapper;
 
     @Resource
-    private Letgoal_goalMapper letgoal_goalMapper;
+    private LetGoalDetailMapper letGoalDetailMapper;
 
     @Async
     @Override
@@ -83,9 +86,22 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
             try {
                 int insert_id = letgoalMapper.insertSelective(xml);
                 if (insert_id>0) {
-                    //log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
                     multi_yp_add(flag);
+                    Letgoal dbAfterInsert = letgoalMapper.selectByMatchIdAndCompany(info[0], info[1]);
+                    LetGoalDetail first = new LetGoalDetail();
+                    first.setOddsid(dbAfterInsert.getOddsid());
+                    first.setUpodds(xml.getFirstupodds());
+                    first.setGoal(xml.getFirstgoal());
+                    first.setDownodds(xml.getFirstdownodds());
+                    first.setModifytime(xml.getModifytime());
+                    letGoalDetailMapper.insertSelective(first);
+                    //log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
                     //letgoal_goalMapper.selectByPrimaryKey()
+                    //往详情表插入一条
+                    //LetGoalDetail detail = letGoalDetailMapper.selectByMatchAndCpyOrderByTimeAscLimit1(xml.getScheduleid(), xml.getCompanyid());
+                    //if ((!detail.getUpodds().equals(xml.getFirstupodds()))||(!detail.getGoal().equals(xml.getFirstgoal()))||(!detail.getDownodds().equals(xml.getFirstdownodds()))){
+                        //证明这不是初赔
+                    //}
                 }
             } catch (Exception e) {
                 log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库异常", item);
@@ -123,6 +139,14 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                 if (multiLetgoalMapper.insertSelective(xml) > 0) {
                     multi_yp_add(flag);
                     //log.info("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库成功"+msg, item);
+                    MultiLetgoal afterInsert = multiLetgoalMapper.selectByMatchIdAndCompanyAndHandicapNum(info[0], info[1], Short.parseShort(info[10]));
+                    MultiLetGoalDetail detail = new MultiLetGoalDetail();
+                    detail.setOddsid(afterInsert.getOddsid());
+                    detail.setDownodds(xml.getFirstdownodds());
+                    detail.setGoal(xml.getFirstgoal());
+                    detail.setUpodds(xml.getFirstupodds());
+                    detail.setAddtime(xml.getModifytime());
+                    multiLetGoalDetailMapper.insertSelective(detail);
                 }
             } catch (Exception e) {
                 log.error("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库异常", item);

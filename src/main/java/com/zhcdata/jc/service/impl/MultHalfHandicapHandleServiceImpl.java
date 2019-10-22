@@ -36,6 +36,12 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
     @Resource
     private ScheduleMapper scheduleMapper;
 
+    @Resource
+    private LetGoalhalfDetailMapper letGoalhalfDetailMapper;
+
+    @Resource
+    private MultiLetGoalhalfDetailMapper multiLetGoalhalfDetailMapper;
+
     @Async
     @Override
     public void changeHandle(String[] items) {
@@ -69,6 +75,14 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
             //插入
             if (letGoalhalfMapper.insertSelective(xml) > 0){
                 multi_hyp_add(flag);
+                LetGoalhalf afterInsert = letGoalhalfMapper.selectByMatchIdAndCmp(Integer.parseInt(info[0]), Integer.parseInt(info[1]));
+                LetGoalhalfDetail letGoalhalfDetail = new LetGoalhalfDetail();
+                letGoalhalfDetail.setOddsid(afterInsert.getOddsid());
+                letGoalhalfDetail.setUpodds(afterInsert.getFirstupodds());
+                letGoalhalfDetail.setGoal(afterInsert.getFirstgoal());
+                letGoalhalfDetail.setDownodds(afterInsert.getFirstdownodds());
+                letGoalhalfDetail.setModifytime(afterInsert.getModifytime());
+                letGoalhalfDetailMapper.insertSelective(letGoalhalfDetail);
                 //log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
             }
         } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
@@ -103,6 +117,14 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
             if (multiLetGoalhalfMapper.insertSelective(xml) > 0){
                 multi_hyp_add(flag);
                 //log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+                MultiLetGoalhalf afterInsert = multiLetGoalhalfMapper.selectByMatchIdAndCmpAndNum(info[0], info[1], info[9]);
+                MultiLetGoalhalfDetail letGoalhalfDetail = new MultiLetGoalhalfDetail();
+                letGoalhalfDetail.setOddsid(afterInsert.getOddsid());
+                letGoalhalfDetail.setUpodds(afterInsert.getFirstupodds());
+                letGoalhalfDetail.setGoal(afterInsert.getFirstgoal());
+                letGoalhalfDetail.setDownodds(afterInsert.getFirstdownodds());
+                letGoalhalfDetail.setAddtime(afterInsert.getModifytime());
+                multiLetGoalhalfDetailMapper.insertSelective(letGoalhalfDetail);
             }
         } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
             if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
