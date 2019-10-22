@@ -137,7 +137,7 @@ public class SchemePurchaseProtocol implements BaseProtocol {
         }
 
         //生成订单信息 并且调用支付
-        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,String.valueOf(paramMap.get("userId")),paramMap,payService,list);
+        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,String.valueOf(paramMap.get("userId")),paramMap,payService,list,headBean);
         return resultMap;
     }
 }
