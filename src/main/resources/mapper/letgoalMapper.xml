@@ -99,7 +99,7 @@
             and lg.goal_count = #{changeTimes}
         </if>
         <if test="matchType != null and matchType != 1">
-            sct.type = #{matchType}
+            and sct.type = #{matchType}
         </if>
         <if test="beginDate != null">
             and s.MatchTime >= #{beginDate}
@@ -280,7 +280,7 @@
             </if>
             and lg.goal_count = 0
             <if test="matchType != null and matchType != 1">
-                sct.type = #{matchType}
+                and sct.type = #{matchType}
             </if>
             <if test="beginDate != null">
                 and s.MatchTime >= #{beginDate}
