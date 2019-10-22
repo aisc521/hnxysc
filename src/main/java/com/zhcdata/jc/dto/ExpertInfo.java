@@ -73,6 +73,9 @@ public class ExpertInfo {
     private Integer popularity;
 
 
+
+
+
     public Integer getPopularity() {
         return popularity;
     }

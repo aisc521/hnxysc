@@ -37,7 +37,7 @@
 
     <select id="selectScheduleIdByTime" resultType="java.lang.Integer">
     select ScheduleID from schedule WHERE
-    matchState = 0
+    1=1
     and matchTime <![CDATA[>= ]]>date_sub(now() ,interval #{before} day)
     and matchTime <![CDATA[<=]]> date_add(now() ,interval #{after} day)
   </select>
@@ -853,6 +853,7 @@
         </if>
         <if test="type == 3" >
             concat(substring(lottery.ISSUE_NUM, 3),'期',NO_ID) num,
+            lottery.ISSUE_NUM num1,
             lottery.NO_ID num2,
         </if>
         CASE WHEN lottery.LOTTERY = 'JCZQ' then '1'
@@ -895,14 +896,17 @@
              and lottery.LOTTERY = 'BJDC'
         </if>
         ) a ORDER BY
-        <if test="type == 1 or type == 2" >
+        <if test="type == 1" >
             a.num
+        </if>
+        <if test="type == 2" >
+            a.num1,abs(a.num)
         </if>
         <if test="type == 4" >
             a.matchTime
         </if>
         <if test="type == 3" >
-            abs(a.num2)
+            a.num1,abs(a.num2)
         </if>
         asc
     </select>
@@ -1024,6 +1028,6 @@
         where sc.ScheduleID = #{matchId}
     </select>
     <select id="selectStatusChangedToday" resultType="com.zhcdata.db.model.Schedule">
-        select * from schedule where MatchTime > #{sat} and MatchTime &lt; #{end} and MatchState in (1,2,3,4)
+        SELECT * from `schedule` where MatchTime >= #{sat} and MatchTime &lt;= #{end} and MATCHstate in(0,1,2,3,4,5) and matchTime &lt;#{now}
     </select>
 </mapper>

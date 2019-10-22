@@ -1,5 +1,6 @@
 package com.zhcdata.jc.service;
 
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
 import org.apache.ibatis.annotations.Param;
@@ -21,7 +22,7 @@ public interface TbPlanService {
      * @param o
      * @return
      */
-    List<PlanResult1> queryPlanByExpertId(String id, String planId,String userId);
+    PageInfo<PlanResult1> queryPlanByExpertId(String id, String planId, String userId,Integer pageNo,Integer pageAmount);
 
     /**
      * 正在进行的方案
@@ -54,4 +55,6 @@ public interface TbPlanService {
     Map<String, Long> checkFreeOrPayByUidAndPlanId(String uid, String pid);
 
     List<PlanResult2> queryPlanByIdandUser(String id, String uid);
+
+    List<PlanResult1> queryPlanByExpertIdNoPages(String id, String planId, String userId);
 }

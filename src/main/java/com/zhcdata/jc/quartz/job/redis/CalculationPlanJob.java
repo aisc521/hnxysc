@@ -135,7 +135,7 @@ public class CalculationPlanJob implements Job {
                                     }
 
                                     //处理单场比赛结果、中奖状态
-                                    tbJcMatchService.updateStatus(String.valueOf(z), hScore + ":" + vScore,matchPlanResults.get(k).getId());
+                                    tbJcMatchService.updateStatus(String.valueOf(z), hScore + ":" + vScore,matchPlanResults.get(k).getMatchId());
 
                                 }else{
                                     result = 2;

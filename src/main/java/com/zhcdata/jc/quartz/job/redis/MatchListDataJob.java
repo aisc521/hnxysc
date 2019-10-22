@@ -55,17 +55,17 @@ public class MatchListDataJob implements Job {
 
         List<MatchResult1> list2=new ArrayList<>();
 
-        List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(s, e, "2","","1");//北单 未开始
+        List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(s, e, "2","","1");//北单 正在进行
         for(int a=0;a<list2_1.size();a++){
             list2.add(list2_1.get(a));
         }
 
-        List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(s, e, "2","","2");//北单 正在进行
+        List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(s, e, "2","","2");//北单 未开始
         for(int b=0;b<list2_2.size();b++){
             list2.add(list2_2.get(b));
         }
 
-        List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(s, e, "2","","3");//北单 已经结束
+        List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(s, e, "2","","3");//北单 已结束
         for(int c=0;c<list2_3.size();c++) {
             list2.add(list2_3.get(c));
         }
@@ -155,19 +155,28 @@ public class MatchListDataJob implements Job {
                 deal(list1,time,"1");
 
 
-
+                String str="";
                 List<MatchResult1> list5=new ArrayList<>();
                 List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1");
                 for(int a=0;a<list5_1.size();a++){
-                    list5.add(list5_1.get(a));
+                    if(!str.contains(list5_1.get(a).getMatchId())) {
+                        list5.add(list5_1.get(a));
+                        str+=list5_1.get(a).getMatchId()+",";
+                    }
                 }
                 List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2");
                 for(int b=0;b<list5_2.size();b++){
-                    list5.add(list5_2.get(b));
+                    if(!str.contains(list5_2.get(b).getMatchId())) {
+                        list5.add(list5_2.get(b));
+                        str+=list5_2.get(b).getMatchId()+",";
+                    }
                 }
                 List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3");
                 for(int c=0;c<list5_3.size();c++){
-                    list5.add(list5_3.get(c));
+                    if(!str.contains(list5_3.get(c).getMatchId())) {
+                        list5.add(list5_3.get(c));
+                        str+=list5_3.get(c).getMatchId()+",";
+                    }
                 }
                 deal(list5,time,"5");
                 long end = ClockUtil.currentTimeMillis();

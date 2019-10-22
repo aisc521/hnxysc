@@ -1,5 +1,6 @@
 package com.zhcdata.jc.protocol.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.PlanResult1;
@@ -51,6 +52,13 @@ public class QueryPlanByExpertIdUserProtocol implements BaseProtocol{
             map.put("message", ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg());
             return map;
         }
+        String pageNo = paramMap.get("pageNo");
+        if (Strings.isNullOrEmpty(id)) {
+            LOGGER.info("[" + ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg() + "]:pageNo---" + pageNo);
+            map.put("resCode", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getCode());
+            map.put("message", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg());
+            return map;
+        }
         return null;
     }
 
@@ -60,10 +68,11 @@ public class QueryPlanByExpertIdUserProtocol implements BaseProtocol{
 
         String id = paramMap.get("id");
         String userId = paramMap.get("userId");
-
+        String pageNo = paramMap.get("pageNo");
         List<PlanResult1> result = new ArrayList<>();
         try{
-            List<PlanResult1> planList = tbPlanService.queryPlanByExpertId(id,null,userId);
+            PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertId(id,null,userId,Integer.valueOf(pageNo),20);
+            List<PlanResult1> planList = planList1.getList();
             for (int i = 0; i < planList.size(); i++) {
                 PlanResult1 result1 = planList.get(i);
                 List<MatchPlanResult> matchPlanResults = TbJcMatchService.queryList(planList.get(i).getId());

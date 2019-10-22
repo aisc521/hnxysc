@@ -66,22 +66,41 @@ public class GetMatchInfoByIdListJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         LOGGER.info("id查询比赛信息定时任务启动");
-        long s = System.currentTimeMillis();
-        int update = 0;
-        QiuTanXmlComm parse = new QiuTanXmlComm();
-        String today = day.format(new Date());
-        List<Schedule> models = scheduleMapper.selectStatusChangedToday(today + " 00:00:00", today + " 23:59:59");
+        try {
+            long s = System.currentTimeMillis();
+            int update = 0;
+            QiuTanXmlComm parse = new QiuTanXmlComm();
+            String today = day.format(new Date());
 
-        StringBuilder sb = new StringBuilder().append("?id=");
-        for (Schedule model : models)
-            sb.append(model.getScheduleid()).append(",");
-        sb.deleteCharAt(sb.length() - 1);
-        List<MatchListRsp> xml = parse.handleMothodList("http://interface.win007.com/zq/BF_XMLByID.aspx" + sb, MatchListRsp.class);
-        if (xml != null)
-            for (Schedule model : models)
-                if (scheduleMapper.updateByPrimaryKeySelective(model) > 0)
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            String startDate=sdf.format(calendar.getTime()).substring(0, 10);
+            List<Schedule> models = scheduleMapper.selectStatusChangedToday(startDate + " 00:00:00", today + " 23:59:59",sdf.format(new Date()));
+            //List<Schedule> models = scheduleMapper.selectStatusChangedToday("2019-10-21 00:00:00", "2019-10-21 23:59:59",sdf.format(new Date()));
+
+            StringBuilder sb = new StringBuilder().append("?id=");
+            for (Schedule model : models) {
+                sb.append(model.getScheduleid()).append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1);
+            List<MatchListRsp> xml = parse.handleMothodList("http://interface.win007.com/zq/BF_XMLByID.aspx" + sb, MatchListRsp.class);
+            if (xml != null){
+                for (MatchListRsp rsp : xml) {
+                    Schedule model = new Schedule();
+                    model.setScheduleid(Integer.valueOf(rsp.getA())); //赛事ID
+                    model.setMatchstate((short)rsp.getF());           //状态
+                    model.setMatchtime(sdf.parse(rsp.getD().replaceAll("/","-")));        //时间
+                    if (scheduleMapper.updateByPrimaryKeySelective(model) > 0){
+                        LOGGER.error("更新成功"+model.getScheduleid());
+                    }
                     update++;
-        LOGGER.info("即时变化的比分数据(5分钟),共有比赛" + models.size() + ",更新:" + update + "条,耗时：" + (System.currentTimeMillis() - s) + "毫秒");
+                }
+            }
+            LOGGER.info("即时变化的比分数据(5分钟),共有比赛" + models.size() + ",更新:" + update + "条,耗时：" + (System.currentTimeMillis() - s) + "毫秒");
+        }catch (Exception ex){
+            LOGGER.error("[按赛程ID查比赛的数据]异常"+ex.toString());
+        }
     }
 }
 

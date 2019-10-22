@@ -41,6 +41,13 @@ public class QueryHotPlanProtocl implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.PLAN_TYPE.getMsg());
             return map;
         }
+        String pageNo = paramMap.get("pageNo");
+        if (Strings.isNullOrEmpty(pageNo)) {
+            LOGGER.info("[" + ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg() + "]:pageNo---" + pageNo);
+            map.put("resCode", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getCode());
+            map.put("message", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg());
+            return map;
+        }
         return null;
     }
 
@@ -48,12 +55,15 @@ public class QueryHotPlanProtocl implements BaseProtocol {
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
         String type = paramMap.get("type");
+        String pageNo = paramMap.get("pageNo");
 
         List<PlanResult1> f_result = new ArrayList<>();
 
 
         try {
-            String re = (String) redisUtils.hget("SOCCER:HSET:PLAN", "hot");
+            //String re = (String) redisUtils.hget("SOCCER:HSET:PLAN", "hot");
+
+            String re = (String) redisUtils.hget("SOCCER:HSET:PLANHOT", pageNo);
             JsonMapper jsonMapper = JsonMapper.defaultMapper();
             JavaType javaType = jsonMapper.buildCollectionType(List.class, PlanResult1.class);
             List<PlanResult1> result = jsonMapper.fromJson(re, javaType);

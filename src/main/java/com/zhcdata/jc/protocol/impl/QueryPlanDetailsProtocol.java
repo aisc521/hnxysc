@@ -168,6 +168,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         }
                         map.put("winStatus", ""+winStatus);
                         map.put("rwinStatus", ""+rwinStatus);
+                        map.put("planInfo", ""+list.get(i).get("planInfo"));
                         plan_info.add(map);
                     }
                 }

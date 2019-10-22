@@ -1,5 +1,7 @@
 package com.zhcdata.jc.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
 import com.zhcdata.db.mapper.TbPlayerMapper;
 import com.zhcdata.db.model.TbJcPlan;
@@ -27,8 +29,10 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public List<PlanResult1> queryPlanByExpertId(String id, String planId,String userId) {
-            return tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId,userId);
+    public PageInfo<PlanResult1> queryPlanByExpertId(String id, String planId, String userId,Integer pageNo,Integer pageAmount) {
+        PageHelper.startPage(pageNo, pageAmount);
+
+        return new PageInfo<>(tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId,userId));
     }
 
     @Override
@@ -95,5 +99,10 @@ public class TbPlanServiceImpl implements TbPlanService {
     @Override
     public List<PlanResult2> queryPlanByIdandUser(String id, String uid) {
         return tbJcPlanMapper.queryPlanByIdandUser(id,uid);
+    }
+
+    @Override
+    public List<PlanResult1> queryPlanByExpertIdNoPages(String id, String planId, String userId) {
+        return tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId,userId);
     }
 }
