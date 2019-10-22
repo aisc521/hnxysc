@@ -1,13 +1,7 @@
 package com.zhcdata.jc.service.impl;
 
-import com.zhcdata.db.mapper.MultiTotalScoreMapper;
-import com.zhcdata.db.mapper.ScheduleMapper;
-import com.zhcdata.db.mapper.StandardMapper;
-import com.zhcdata.db.mapper.TotalScoreMapper;
-import com.zhcdata.db.model.MultiTotalScore;
-import com.zhcdata.db.model.Schedule;
-import com.zhcdata.db.model.Standard;
-import com.zhcdata.db.model.TotalScore;
+import com.zhcdata.db.mapper.*;
+import com.zhcdata.db.model.*;
 import com.zhcdata.jc.service.MultHandicapOddsService;
 import com.zhcdata.jc.tools.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +35,13 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
     private MultiTotalScoreMapper multiTotalScoreMapper;
 
     @Resource
+    private MultiTotalScoreDetailMapper multiTotalScoreDetailMapper;
+
+    @Resource
     private ScheduleMapper scheduleMapper;
+
+    @Resource
+    private TotalScoreDetailMapper totalScoreDetailMapper;
 
     @Override
     @Async
@@ -76,6 +76,14 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
             if (totalScoreMapper.insertSelective(xml)>0){
                 multi_dx_add(flag);
                 //log.info("20多盘口赔率: 大小球即时数据 单盘口 接口数据:{} 入库成功", item);
+                TotalScoreDetail totalScoreDetail = new TotalScoreDetail();
+                TotalScore afterInsert = totalScoreMapper.selectTotalScoreByMatchAndCpy(Integer.parseInt(info[0]), Integer.parseInt(info[1]));
+                totalScoreDetail.setOddsid(afterInsert.getOddsid());
+                totalScoreDetail.setGoal(xml.getFirstgoal());
+                totalScoreDetail.setUpodds(xml.getFirstupodds());
+                totalScoreDetail.setDownodds(xml.getFirstdownodds());
+                totalScoreDetail.setModifytime(xml.getModifytime());
+                totalScoreDetailMapper.insertSelective(totalScoreDetail);
             }
         } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
             if (sc==null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
@@ -113,6 +121,14 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
             if (multiTotalScoreMapper.insertSelective(xml)>0){
                 multi_dx_add(flag);
                 //log.info("20多盘口赔率: 大小球即时数据 多盘口 接口数据:{} 入库成功", item);
+                MultiTotalScore afterInsert = multiTotalScoreMapper.selectTotalScoreByMatchAndCpyAndNum(Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[8]));
+                MultiTotalScoreDetail detail = new MultiTotalScoreDetail();
+                detail.setOddsid(afterInsert.getOddsid());
+                detail.setAddtime(xml.getModifytime());
+                detail.setUpodds(xml.getFirstupodds());
+                detail.setGoal(xml.getFirstgoal());
+                detail.setDownodds(xml.getFirstdownodds());
+                multiTotalScoreDetailMapper.insertSelective(detail);
             }
         }else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
             if (sc==null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {

@@ -146,7 +146,6 @@ public class EuropeHundredOddsChangedJob implements Job {
                         }
                     }
                 }
-
             }
         }
         LOGGER.info("百欧赔率变化解析完成,新增:"+insert+",跳过:"+jumped+",更新:"+update+",next:"+nexted+"耗时:"+(System.currentTimeMillis()-sat));

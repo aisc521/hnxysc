@@ -26,6 +26,12 @@
         l.ScheduleID =  #{id} and l.CompanyID = #{cpy}  order by ld.ModifyTime desc limit 1
   </select>
 
+    <select id="selectByMatchAndCpyOrderByTimeAscLimit1" resultType="com.zhcdata.db.model.LetGoalDetail">
+        SELECT l.oddsid,ld.*  from letgoal l LEFT JOIN letgoaldetail ld on  l.OddsID = ld.OddsID
+        where
+        l.ScheduleID =  #{id} and l.CompanyID = #{cpy}  order by ld.ModifyTime asc limit 1
+  </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from letgoaldetail
     where ID = #{id,jdbcType=INTEGER}

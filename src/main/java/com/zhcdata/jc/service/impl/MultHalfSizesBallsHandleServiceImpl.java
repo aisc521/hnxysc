@@ -1,13 +1,7 @@
 package com.zhcdata.jc.service.impl;
 
-import com.zhcdata.db.mapper.MultiTotalScorehalfMapper;
-import com.zhcdata.db.mapper.ScheduleMapper;
-import com.zhcdata.db.mapper.StandardMapper;
-import com.zhcdata.db.mapper.TotalScorehalfMapper;
-import com.zhcdata.db.model.MultiTotalScorehalf;
-import com.zhcdata.db.model.Schedule;
-import com.zhcdata.db.model.Standard;
-import com.zhcdata.db.model.TotalScorehalf;
+import com.zhcdata.db.mapper.*;
+import com.zhcdata.db.model.*;
 import com.zhcdata.jc.service.MultHandicapOddsService;
 import com.zhcdata.jc.tools.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +36,12 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
 
     @Resource
     private ScheduleMapper scheduleMapper;
+
+    @Resource
+    private TotalScorehalfDetailMapper totalScorehalfDetailMapper;
+
+    @Resource
+    private MultiTotalScorehalfDetailMapper multiTotalScorehalfDetailMapper;
 
     @Override
     @Async
@@ -82,7 +82,16 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
                     xml.setOddsid(db.getOddsid());
                     int inch = totalScorehalfMapper.updateByPrimaryKeySelective(xml);
                     if (inch > 0) {
-                        log.error("20多盘口赔率: 单盘即时半场大小球 接口数据:{} 更新成功", item);
+                        //log.error("20多盘口赔率: 单盘即时半场大小球 接口数据:{} 更新成功", item);
+                        TotalScorehalf afterInsert = totalScorehalfMapper.selectByMidAndCpy(info[0], info[1]);
+                        TotalScorehalfDetail totalScorehalfDetail = new TotalScorehalfDetail();
+                        totalScorehalfDetail.setOddsid(afterInsert.getOddsid());
+                        totalScorehalfDetail.setUpodds(xml.getFirstupodds());
+                        totalScorehalfDetail.setGoal(xml.getFirstgoal());
+                        totalScorehalfDetail.setDownodds(xml.getFirstdownodds());
+                        totalScorehalfDetail.setModifytime(xml.getModifytime());
+                        totalScorehalfDetailMapper.insertSelective(totalScorehalfDetail);
+
                     }
                 }
             }
@@ -109,6 +118,14 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
             if (multiTotalScorehalfMapper.insertSelective(xml)>0){
                 multi_hdx_add(flag);
                 //log.info("20多盘口赔率: 即时多盘半场大小球 接口数据:{} 入库成功", item);
+                MultiTotalScorehalf afterInsert = multiTotalScorehalfMapper.selectByMidAndCpyAndNum(info[0], info[1],info[8]);
+                MultiTotalScorehalfDetail detail = new MultiTotalScorehalfDetail();
+                detail.setOddsid(afterInsert.getOddsid());
+                detail.setAddtime(xml.getModifytime());
+                detail.setUpodds(xml.getFirstupodds());
+                detail.setGoal(xml.getFirstgoal());
+                detail.setDownodds(xml.getFirstdownodds());
+                multiTotalScorehalfDetailMapper.insertSelective(detail);
             }
         }else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
             if (sc==null || sc.getMatchtime().getTime()>xml.getModifytime().getTime()) {

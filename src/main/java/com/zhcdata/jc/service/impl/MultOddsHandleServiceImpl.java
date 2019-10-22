@@ -1,9 +1,11 @@
 package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.ScheduleMapper;
+import com.zhcdata.db.mapper.StandardDetailMapper;
 import com.zhcdata.db.mapper.StandardMapper;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.db.model.Standard;
+import com.zhcdata.db.model.StandardDetail;
 import com.zhcdata.jc.service.MultHandicapOddsService;
 import com.zhcdata.jc.tools.BeanUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,9 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
     @Resource
     private ScheduleMapper scheduleMapper;
 
+    @Resource
+    private StandardDetailMapper standardDetailMapper;
+
     @Override
     @Async
     public void changeHandle(String[] items) {
@@ -66,6 +71,15 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
                 //数据库没有 要插入
                 if (standardMapper.insertSelective(xml)>0) {
                     //log.info("20多盘口赔率: 欧赔（胜平负） 接口数据:{} 入库成功", item);
+                    //插入一条详情表
+                    Standard afterInsert = standardMapper.selectByMidAndCpy(item[0], item[1]);
+                    StandardDetail detail = new StandardDetail();
+                    detail.setOddsid(afterInsert.getOddsid());
+                    detail.setHomewin(Float.parseFloat(afterInsert.getFirsthomewin()));
+                    detail.setGuestwin(Float.parseFloat(afterInsert.getFirstguestwin()));
+                    detail.setStandoff(Float.parseFloat(afterInsert.getFirststandoff()));
+                    detail.setModifytime(xml.getModifytime());
+                    standardDetailMapper.insertSelective(detail);
                 }
             } else if (!db.same(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
                 if (sc==null || sc.getMatchtime().getTime()>xml.getModifytime().getTime()) {
