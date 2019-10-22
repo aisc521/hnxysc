@@ -166,14 +166,14 @@ public class MatchListDataJob implements Job {
                 }
                 List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2");
                 for(int b=0;b<list5_2.size();b++){
-                    if(!str.contains(list5_1.get(b).getMatchId())) {
+                    if(!str.contains(list5_2.get(b).getMatchId())) {
                         list5.add(list5_2.get(b));
                         str+=list5_2.get(b).getMatchId()+",";
                     }
                 }
                 List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3");
                 for(int c=0;c<list5_3.size();c++){
-                    if(!str.contains(list5_1.get(c).getMatchId())) {
+                    if(!str.contains(list5_3.get(c).getMatchId())) {
                         list5.add(list5_3.get(c));
                         str+=list5_3.get(c).getMatchId()+",";
                     }
