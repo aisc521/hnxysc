@@ -28,6 +28,14 @@ public class JcSchedulespvaryServiceImpl implements JcSchedulespvaryService {
     private JcSchedulespvaryMapper jcSchedulespvaryMapper;
     @Override
     public void insertJcSchedulespvary(JcSchedule jcSchedule, JcFootBallOddsRsp jcFootBallOddsRsp,Integer spId,JcSchedulesp jcSchedulesp1,Schedule schedule) throws BaseException {
+        /**
+         * TypeID	LotteryName
+         101	竞彩让球胜平负
+         102	竞彩比分
+         103	竞彩总进球数
+         104	竞彩半全场
+         105	竞彩胜平负
+         */
         //让球胜平负
         JcSchedulespvary rqsp = new JcSchedulespvary();
         rqsp.setSpid(spId);
