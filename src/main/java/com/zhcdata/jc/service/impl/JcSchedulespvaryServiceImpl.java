@@ -42,7 +42,7 @@ public class JcSchedulespvaryServiceImpl implements JcSchedulespvaryService {
         //比分
         JcSchedulespvary bfsp = new JcSchedulespvary();
         bfsp.setSpid(spId);
-        bfsp.setTypeid(Short.parseShort("101"));
+        bfsp.setTypeid(Short.parseShort("102"));
         bfsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp1,"102",schedule));
         bfsp.setChangetime(new Date());
         int j = jcSchedulespvaryMapper.insertSelective(bfsp);
@@ -53,7 +53,7 @@ public class JcSchedulespvaryServiceImpl implements JcSchedulespvaryService {
         //总进球
         JcSchedulespvary jqsp = new JcSchedulespvary();
         jqsp.setSpid(spId);
-        jqsp.setTypeid(Short.parseShort("101"));
+        jqsp.setTypeid(Short.parseShort("103"));
         jqsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp1,"103",schedule));
         jqsp.setChangetime(new Date());
         int k = jcSchedulespvaryMapper.insertSelective(jqsp);
@@ -64,7 +64,7 @@ public class JcSchedulespvaryServiceImpl implements JcSchedulespvaryService {
         //半全场
         JcSchedulespvary bqcsp = new JcSchedulespvary();
         bqcsp.setSpid(spId);
-        bqcsp.setTypeid(Short.parseShort("101"));
+        bqcsp.setTypeid(Short.parseShort("104"));
         bqcsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp1,"104",schedule));
         bqcsp.setChangetime(new Date());
         int l = jcSchedulespvaryMapper.insertSelective(bqcsp);
@@ -75,7 +75,7 @@ public class JcSchedulespvaryServiceImpl implements JcSchedulespvaryService {
         //胜平负
         JcSchedulespvary spfcsp = new JcSchedulespvary();
         spfcsp.setSpid(spId);
-        spfcsp.setTypeid(Short.parseShort("101"));
+        spfcsp.setTypeid(Short.parseShort("105"));
         spfcsp.setSp(JcLotteryUtils.jcSpChange(jcFootBallOddsRsp,jcSchedulesp1,"105",schedule));
         spfcsp.setChangetime(new Date());
         int m = jcSchedulespvaryMapper.insertSelective(spfcsp);
