@@ -913,7 +913,7 @@
     </select>
 
 
-    <select id="queryZcNum" resultType="String">
+    <select id="queryZcNum" resultType="String">F
        SELECT max(lottery.ISSUE_NUM) from schedule  sc
        LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007 and lottery.LOTTERY = 'SF14'
        where sc.MatchTime >= #{startDate}
@@ -928,7 +928,8 @@
 
  select * from (select
             class.Name_JS matchName,/*联赛名称*/
-            sc.MatchTime matchTime,/*开始时间*/
+            DATE_FORMAT(sc.MatchTime,'%H:%i') matchTime,
+            sc.MatchTime2 MatchTime2,
             case when sc.MatchState = '0' then '未' /*未开始*/
                  when sc.MatchState in('4','5') then '(完)' /*正在进行*/
                  when sc.MatchState = '2' then '中' /*中场*/

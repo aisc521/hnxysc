@@ -34,7 +34,8 @@
   <select id="queryScore1" resultType="com.zhcdata.jc.dto.MatchResult1">
           SELECT
           class.Name_JS matchName, /*联赛名称*/
-          sc.MatchTime matchTime,/*开始时间*/
+          DATE_FORMAT(sc.MatchTime,'%H:%i') matchTime,
+          sc.MatchTime2 MatchTime2,
           t.Name_J homeName,/*主队名称*/
           t2.Name_J guestName,/*客队名称*/
           IFNULL(sc.HomeScore,'0') homeScore,/*主队比分*/

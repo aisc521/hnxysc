@@ -21,7 +21,9 @@ import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -86,6 +88,24 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             resultMap.put("matchState", mo.getMatchState());
             resultMap.put("matchName",mo.getMatchName());
             //获取图标信息
+
+            if(mo.getMatchState().equals("未")){
+                resultMap.put("matchMakeTime","未");
+            }else {
+                if(mo.getMatchState().equals("1")){
+                    if(!mo.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                        Timestamp ts = Timestamp.valueOf(mo.getMatchTime2());
+                        String len = getMinute(df.format(ts), df.format(new Date()));
+                        resultMap.put("matchMakeTime",len);
+                    }
+                }else if(mo.getMatchState().equals("3")){
+                    if(!mo.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                        Timestamp ts = Timestamp.valueOf(mo.getMatchTime2());
+                        String len = getMinute(df.format(ts), df.format(new Date()));
+                        resultMap.put("matchMakeTime",(45 + Integer.valueOf(len)) > 90 ? "90+" : String.valueOf(45 + Integer.valueOf(len)));
+                    }
+                }
+            }
 
             String team = (String) redisUtils.get("SOCCER:HSET:SOCRELIVE:" + paramMap.get("matchId"));
             IconAndTimeDto result = new IconAndTimeDto();
@@ -162,5 +182,27 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             return resultMap;
         }
         return null;
+    }
+
+    private String getMinute(String s, String e) {
+        String str = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d1 = sdf.parse(s);     //开始时间
+            Date d2 = sdf.parse(e);     //结束时间
+
+            long diff = d2.getTime() - d1.getTime();
+            long nd = 1000 * 24 * 60 * 60;
+            long nh = 1000 * 60 * 60;
+            long nm = 1000 * 60;
+
+            long day = diff / nd;
+            long hour1 = diff % nd / nh;
+            long min = diff % nd % nh / nm;
+            str = String.valueOf(min);
+        } catch (Exception ex) {
+            LOGGER.error("计算比赛时间异常" + "s:" + s + "e:" + e);
+        }
+        return str;
     }
 }
