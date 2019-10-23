@@ -5,6 +5,7 @@ import com.zhcdata.jc.service.ScheduleService;
 import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -194,6 +195,8 @@ public class MatchListDataJob implements Job {
         List<MatchResult1> result1s=new ArrayList<>();
         for(int v=0;v<result1s_1.size();v++){
             MatchResult1 r1=result1s_1.get(v);
+            //处理盘口
+            r1.setMatchPankou(getPanKou(r1.getMatchPankou()));
             if(r1.getMatchState().equals("1")){
                 if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
@@ -290,4 +293,13 @@ public class MatchListDataJob implements Job {
         return str;
     }
 
+    public String getPanKou(String value){
+        String oneArray[] = {"-5", "-4.75", "-4.5", "-4.25", "-4", "-3.75", "-3.5", "-3.25", "-3", "-2.75", "-2.5", "-2.25", "-2", "-1.75", "-1.5", "-1.25", "-1", "-0.75", "-0.5", "-0.25", "0", "0.25", "0.5", "0.75", "1", "1.25", "1.5", "1.75", "2", "2.25", "2.5", "2.75", "3", "3.25", "3.5", "3.75", "4", "4.25", "4.5", "4.75", "5"};
+        String twoArray[] = {"-5/5", "-4.5/5", "-4.5/4.5", "-4/4.5", "-4/4.5", "-3.5/4", "-3.5/3.5", "-3/3.5", "-3/3", "-2.5/3", "-2.5/2.5", "-2/2.5", "-2/2", "-1.5/2", "-1.5/1.5", "-1/1.5", "-1/1", "-0.5/1", "-0.5/0.5", "-0/0.5", "0/0", "0/0.5", "0.5/0.5", "0.5/1", "1/1", "1/1.5", "1.5/1.5", "1.5/2", "2/2", "2/2.5", "2.5/2.5", "2.5/3", "3/3", "3/3.5", "3.5/3.5", "3.5/4", "4/4", "4/4.5", "4.5/4.5", "4.5/5", "5/5"};
+        int index = ArrayUtils.indexOf(oneArray, value);
+        if(index==-1){
+            return value;
+        }
+        return twoArray[index];
+    }
 }
