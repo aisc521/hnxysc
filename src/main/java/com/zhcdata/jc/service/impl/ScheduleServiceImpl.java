@@ -814,6 +814,15 @@ public class ScheduleServiceImpl implements ScheduleService {
             matchState = String.valueOf(schedule.getMatchstate());
             matchTime1 = dto.getMatchTime1();
             matchTime2 = dto.getMatchTime2();
+
+            dto.setHomeHalfScore(schedule.getHomehalfscore() == null?null:String.valueOf(schedule.getHomehalfscore()));
+            dto.setGuestHalfScore(schedule.getGuesthalfscore() == null?null:String.valueOf(schedule.getGuesthalfscore()));
+            dto.setHomeRedCard(schedule.getHomeRed() == null?null:String.valueOf(schedule.getHomeRed()));
+            dto.setGuestRedCard(schedule.getGuestRed() == null?null:String.valueOf(schedule.getGuestRed()));
+            dto.setHomeYlwCard(schedule.getHomeYellow() == null?null:String.valueOf(schedule.getHomeYellow()));
+            dto.setGuestYlwCard(schedule.getGuestYellow() == null?null:String.valueOf(schedule.getGuestYellow()));
+            dto.setHomeScore(schedule.getHomescore() == null?null:String.valueOf(schedule.getHomescore()));
+            dto.setGuestScore(schedule.getGuestscore() == null?null:String.valueOf(schedule.getGuestscore()));
         }
         //格式化比赛时间
         String matchTime = DateFormatUtil.formatDate("HH:mm", matchTime1);
