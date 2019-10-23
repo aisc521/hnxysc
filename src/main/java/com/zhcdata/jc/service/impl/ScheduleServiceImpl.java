@@ -828,10 +828,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         String matchTime = DateFormatUtil.formatDate("HH:mm", matchTime1);
         if ("0".equals(matchState)) {
             //未开场
-            matchState = "1";
+            matchState = "0";
         } else if ("1".equals(matchState)) {
             //上半场
-            matchState = "2";
+            matchState = "1";
             if (matchTime2 != null) {
                 //计算上半场进行的时长 matchTime2为半场开始时间
                 long l = ClockUtil.currentTimeMillis();
