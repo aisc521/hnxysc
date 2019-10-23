@@ -50,10 +50,14 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
         synchronized (this) {
             if (items.length > 0) {
                 for (String item : items) {
-                    if (StringUtils.isNotEmpty(item) /*&& item.split(",").length == 10 */&& item.split(",")[8].equals("1"))
-                        singleHandicap(item);
-                    else if (StringUtils.isNotEmpty(item) /*&& item.split(",").length == 10*/)
-                        manyHandicap(item);
+                    try {
+                        if (StringUtils.isNotEmpty(item) && item.split(",")[8].equals("1"))
+                            singleHandicap(item);
+                        else if (StringUtils.isNotEmpty(item))
+                            manyHandicap(item);
+                    } catch (Exception e) {
+                        log.error("半场大小球即时数据解析错误"+item);
+                    }
                 }
             }
             log.error("半场大小球即时数据解析完成");
@@ -65,7 +69,7 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
         String[] info = item.split(",");
         //当前转化为对象
         TotalScorehalf xml = BeanUtils.parseTotalScorehalf(item);
-        String flag = xml.getScheduleid()+":"+xml.getCompanyid()+":"+item.split(",")[8];
+        String flag = xml.getScheduleid() + ":" + xml.getCompanyid() + ":" + item.split(",")[8];
         if (multi_hdx.contains(flag))
             return;
         //查询比赛信息
@@ -73,11 +77,11 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
         //查询最新一条数据
         TotalScorehalf db = totalScorehalfMapper.selectByMidAndCpy(info[0], info[1]);
         try {
-            if (db == null){
-                if (totalScorehalfMapper.insertSelective(xml)>0)
+            if (db == null) {
+                if (totalScorehalfMapper.insertSelective(xml) > 0)
                     log.info("20多盘口赔率: 单盘即时半场大小球 接口数据:{} 入库成功", item);
-            }else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
-                if (sc==null || sc.getMatchtime().getTime()>xml.getModifytime().getTime()) {
+            } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+                if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                     //入数据库
                     xml.setOddsid(db.getOddsid());
                     int inch = totalScorehalfMapper.updateByPrimaryKeySelective(xml);
@@ -95,7 +99,7 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -107,18 +111,18 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
         String[] info = item.split(",");
         //当前转化为对象
         MultiTotalScorehalf xml = BeanUtils.parseMultiTotalScorehalf(item);
-        String flag = xml.getScheduleid()+":"+xml.getCompanyid()+":"+item.split(",")[8];
+        String flag = xml.getScheduleid() + ":" + xml.getCompanyid() + ":" + item.split(",")[8];
         if (multi_hdx.contains(flag))
             return;
         //查询比赛信息
         Schedule sc = scheduleMapper.selectByPrimaryKey(xml.getScheduleid());
         //查询最新一条数据
-        MultiTotalScorehalf db = multiTotalScorehalfMapper.selectByMidAndCpyAndNum(info[0], info[1],info[8]);
-        if (db == null){
-            if (multiTotalScorehalfMapper.insertSelective(xml)>0){
+        MultiTotalScorehalf db = multiTotalScorehalfMapper.selectByMidAndCpyAndNum(info[0], info[1], info[8]);
+        if (db == null) {
+            if (multiTotalScorehalfMapper.insertSelective(xml) > 0) {
                 multi_hdx_add(flag);
                 //log.info("20多盘口赔率: 即时多盘半场大小球 接口数据:{} 入库成功", item);
-                MultiTotalScorehalf afterInsert = multiTotalScorehalfMapper.selectByMidAndCpyAndNum(info[0], info[1],info[8]);
+                MultiTotalScorehalf afterInsert = multiTotalScorehalfMapper.selectByMidAndCpyAndNum(info[0], info[1], info[8]);
                 MultiTotalScorehalfDetail detail = new MultiTotalScorehalfDetail();
                 detail.setOddsid(afterInsert.getOddsid());
                 detail.setAddtime(xml.getModifytime());
@@ -127,15 +131,15 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
                 detail.setDownodds(xml.getFirstdownodds());
                 multiTotalScorehalfDetailMapper.insertSelective(detail);
             }
-        }else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
-            if (sc==null || sc.getMatchtime().getTime()>xml.getModifytime().getTime()) {
+        } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+            if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                 //入数据库
                 xml.setOddsid(db.getOddsid());
                 int inch = multiTotalScorehalfMapper.updateByPrimaryKeySelective(xml);
                 if (inch > 0) {
                     multi_hdx_add(flag);
                     //log.info("20多盘口赔率: 即时多盘半场大小球 接口数据:{} 更新成功", item);
-                }else multi_hdx_add(flag);
+                } else multi_hdx_add(flag);
             }
         }
     }
