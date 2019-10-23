@@ -162,6 +162,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         //获取比赛信息，包括主客队，赛事id，赛季
         Schedule schedule = scheduleMapper.selectByPrimaryKey(matchId);
         Map<String, Object> map = null;
+        if (schedule == null) {
+            return null;
+        }
         //type 为空，更新缓存
         if (Strings.isBlank(type)) {
             long l0 = ClockUtil.currentTimeMillis();

@@ -68,11 +68,11 @@
       o.FirstStandoff satFlat,
       s.HomeTeamID homeId,
       s.GuestTeamID guestId
-       FROM europeodds o
-    LEFT JOIN SCHEDULE s on o.ScheduleID = s.ScheduleID
+       FROM SCHEDULE s
+    LEFT JOIN europeodds o on o.CompanyID = #{companyId} and o.ScheduleID = s.ScheduleID
     LEFT JOIN team t ON s.hometeamid = t.teamid
     LEFT JOIN team t2 ON s.guestteamid = t2.teamid
-    where o.CompanyID = #{companyId} and o.ScheduleID = #{matchId}
+    where  s.ScheduleID = #{matchId}
   </select>
   <select id="querySameOddsMatchByOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
     select * from (

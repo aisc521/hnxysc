@@ -154,39 +154,45 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
                             , satWin, satLose, result.getSatFlat());
                     result.setList(list);
                 } else {
-                    List<AnalysisMatchDto> list = letgoalMapper.querySameHandicapsMatchByChangeOdds(companyId, matchType,change, beginDate, result.getOddsId()
+                    List<AnalysisMatchDto> list = letgoalMapper.querySameHandicapsMatchByChangeOdds(companyId, matchType, change, beginDate, result.getOddsId()
                             , satWin, satLose, result.getSatFlat());
                     result.setList(list);
                 }
+            } else {
+                result = letgoalMapper.queryHandicapsBySchedule(matchId);
             }
         }
         if (result != null) {
             if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getHomeId())) {
                 //主队图片
                 String img = result.getHostIcon();
-                String localUrl1 = localUrl + img;
-                File file = new File(localUrl1);
-                String parentStr = file.getParent();
-                File parent = new File(parentStr);
-                if (!parent.exists()) {
-                    parent.mkdirs();
+                if (Strings.isNotBlank(img)) {
+                    String localUrl1 = localUrl + img;
+                    File file = new File(localUrl1);
+                    String parentStr = file.getParent();
+                    File parent = new File(parentStr);
+                    if (!parent.exists()) {
+                        parent.mkdirs();
+                    }
+                    FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
+                    redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getHomeId());
                 }
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
-                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getHomeId());
             }
 
             if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getGuestId())) {
                 //客队图片
                 String img = result.getGuestIcon();
-                String localUrl1 = localUrl + img;
-                File file = new File(localUrl1);
-                String parentStr = file.getParent();
-                File parent = new File(parentStr);
-                if (!parent.exists()) {
-                    parent.mkdirs();
+                if (Strings.isNotBlank(img)) {
+                    String localUrl1 = localUrl + img;
+                    File file = new File(localUrl1);
+                    String parentStr = file.getParent();
+                    File parent = new File(parentStr);
+                    if (!parent.exists()) {
+                        parent.mkdirs();
+                    }
+                    FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
+                    redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getGuestId());
                 }
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
-                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getGuestId());
             }
             map.put("hostIcon", Strings.isNotBlank(result.getHostIcon())?imagePrefix + "" + result.getHostIcon():"");
             map.put("guestIcon", Strings.isNotBlank(result.getGuestIcon())?imagePrefix + "" + result.getGuestIcon():"");
@@ -194,9 +200,9 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
             map.put("guestName", result.getGuestName());
             map.put("matchDate", result.getMatchDate());
             if ("TPEI".equalsIgnoreCase(type)) {
-                map.put("satWin", result.getSatWin());
-                map.put("satLose", result.getSatLose());
-                map.put("satFlat", result.getSatFlat());
+                map.put("satWin", result.getSatWin() == null? "0":result.getSatWin());
+                map.put("satLose", result.getSatLose() == null? "0":result.getSatLose());
+                map.put("satFlat", result.getSatFlat() == null? "0":result.getSatFlat());
             }
             List<AnalysisMatchDto> list = result.getList();
             map.put("totalCount", list == null ? 0 : list.size());
