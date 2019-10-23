@@ -96,13 +96,13 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
                     if(!mo.getMatchTime2().contains("0000-00-00 00:00:00")) {
                         Timestamp ts = Timestamp.valueOf(mo.getMatchTime2());
                         String len = getMinute(df.format(ts), df.format(new Date()));
-                        resultMap.put("matchMakeTime",len);
+                        resultMap.put("matchMakeTime",len+"'");
                     }
                 }else if(mo.getMatchState().equals("3")){
                     if(!mo.getMatchTime2().contains("0000-00-00 00:00:00")) {
                         Timestamp ts = Timestamp.valueOf(mo.getMatchTime2());
                         String len = getMinute(df.format(ts), df.format(new Date()));
-                        resultMap.put("matchMakeTime",(45 + Integer.valueOf(len)) > 90 ? "90+" : String.valueOf(45 + Integer.valueOf(len)));
+                        resultMap.put("matchMakeTime",(45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");
                     }
                 }
             }
