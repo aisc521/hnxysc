@@ -55,6 +55,9 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
+                if (item[1].equals("3")){
+                    log.error("大小球变化-皇冠数据:"+cah.get(i));
+                }
                 Long time = MATCH_START_TIME.get(item[0]);
                 if (time==null || time<1){
                     Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
@@ -102,7 +105,8 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
                 //System.out.println("-----------");
             }
             if (inch > 0) {
-                log.error("21多盘口赔率变化: 大小球 单盘口 接口数据:{} 入库成功", item);
+                String msg = "比赛id:"+item[0]+",公司ID:"+item[1];
+                log.error("21多盘口赔率变化: 大小球 单盘口 接口数据:{} 入库成功", msg);
             }
         }
     }
