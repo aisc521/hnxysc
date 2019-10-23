@@ -837,8 +837,8 @@
         sc.Guest_Red guestReadCard,/*客队红牌*/
         sc.Home_Yellow homeYlwCard,/*主队黄牌*/
         sc.Guest_Yellow guestYlwCard,/*客队黄牌*/
-        t.Name_J homeName,/*主队名称*/
-        t2.Name_J guestName,/*客队名称*/
+        case when t.Name_J='' then sc.HomeTeam else t.Name_J end as homeName,
+        case when t2.Name_J='' then sc.guestTeam else t2.Name_J end as guestName,
         sc.HomeScore homeScore,/*主队比分*/
         sc.GuestScore guestScore,/*客队比分*/
         sc.ScheduleID matchId,/*比赛id*/
@@ -913,7 +913,7 @@
     </select>
 
 
-    <select id="queryZcNum" resultType="String">F
+    <select id="queryZcNum" resultType="String">
        SELECT max(lottery.ISSUE_NUM) from schedule  sc
        LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007 and lottery.LOTTERY = 'SF14'
        where sc.MatchTime >= #{startDate}
