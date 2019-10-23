@@ -30,7 +30,7 @@
 
     <select id="selectScheduleIdByDate" resultType="java.lang.Integer">
     select ScheduleID from schedule WHERE
-    matchState = 0
+    1 = 1
     and matchTime <![CDATA[>= ]]>date(date_sub(now() ,interval #{before} day))
     and matchTime <![CDATA[<=]]> date(date_add(now() ,interval #{after} day))
   </select>
