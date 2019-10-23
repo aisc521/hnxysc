@@ -58,22 +58,31 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
+                if (item[1].equals("3")) {
+                    log.error("亚盘变化-皇冠数据:" + cah.get(i));
+                }
                 Long time = MATCH_START_TIME.get(item[0]);
-                if (time==null || time<1){
+                if (time == null || time < 1) {
                     Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
-                    if(schedule!=null){
+                    if (schedule != null) {
                         time = schedule.getMatchtime().getTime();
                         MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
-                        if (MATCH_START_TIME.size()>500)
+                        if (MATCH_START_TIME.size() > 500)
                             MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
                     }
                 }
-                if (time!=null && time < System.currentTimeMillis()){
-                    log.error("21多盘口赔率变化: 亚赔（让球盘）比赛已经开始 比赛ID:{}", item[0]);
+                if (time != null && time < System.currentTimeMillis()) {
+                    String msg = "比赛id:" + item[0] + ",公司ID:" + item[1];
+                    log.error("21多盘口赔率变化: 亚赔（让球盘）比赛已经开始 比赛ID:{}", msg);
                     continue;
+                } else {
+                    String msg = "比赛id:" + item[0] + ",公司ID:" + item[1];
+                    if (item[1].equals("3"))
+                        msg = "皇冠亚赔-" + msg;
+                    log.error("21多盘口赔率变化: 亚赔（让球盘）开始入库 比赛ID:{}", msg);
                 }
                 //如果第七位等于1 是 单盘口 相当于标准盘  6 个参数代表不是走地我们入库
-                if ("1".equals(item[7]) && "False".equals(item[6])) {//单盘口
+                if ("1".equals(item[7])/* && "False".equals(item[6])*/) {//单盘口
                     singleHandicap(item);
                 } else {//存到多盘口
                     manyHandicap(item);
@@ -98,7 +107,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
             //入数据库
             xml.setOddsid(letGoalDetail.getOddsid());
             int inch = letGoalDetailMapper.insertSelective(xml);
-            letgoalMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getModifytime());
+            letgoalMapper.updateOddsByOddsId(xml.getOddsid(), xml.getUpodds(), xml.getGoal(), xml.getDownodds(), xml.getModifytime());
             if (!xml.getGoal().equals(letGoalDetail.getGoal())) {
                 //更盘口变化表，查询有没有此oddsid的变盘次数
                 int changed = letgoal_goalMapper.updateCountAddOne(letGoalDetail.getOddsid(), new Date());
@@ -128,7 +137,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
         if (!multiLetGoalDetail.oddsEquals(xml)) {
             xml.setOddsid(multiLetGoalDetail.getOddsid());
             int inch = multiLetGoalDetailMapper.insertSelective(xml);
-            multiLetgoalMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getAddtime());
+            multiLetgoalMapper.updateOddsByOddsId(xml.getOddsid(), xml.getUpodds(), xml.getGoal(), xml.getDownodds(), xml.getAddtime());
             if (inch > 0) {
                 log.error("21多盘口赔率变化: 亚赔（让球盘）多盘口 接口数据:{} 入库成功", item);
             }

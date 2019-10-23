@@ -55,9 +55,6 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
-                if (item[1].equals("3")){
-                    log.error("大小球变化-皇冠数据:"+cah.get(i));
-                }
                 Long time = MATCH_START_TIME.get(item[0]);
                 if (time==null || time<1){
                     Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
