@@ -57,6 +57,7 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
                             manyHandicap(item);
                     } catch (Exception e) {
                         log.error("半场大小球即时数据解析错误"+item);
+                        e.printStackTrace();
                     }
                 }
             }

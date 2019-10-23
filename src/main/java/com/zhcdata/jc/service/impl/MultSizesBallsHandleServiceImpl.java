@@ -57,6 +57,7 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
                             manyHandicap(item);
                     }catch (Exception e){
                         log.error("大小球即时数据解析错误"+item);
+                        e.printStackTrace();
                     }
                 }
             }
