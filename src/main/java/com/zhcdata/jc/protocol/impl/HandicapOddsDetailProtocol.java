@@ -1,10 +1,10 @@
 package com.zhcdata.jc.protocol.impl;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+import com.zhcdata.db.mapper.ScheduleMapper;
+import com.zhcdata.jc.dto.HandicapOddsDetailsResult;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
-import com.zhcdata.jc.enums.RedisCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.tools.CommonUtils;
@@ -12,7 +12,6 @@ import com.zhcdata.jc.tools.Const;
 import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springside.modules.utils.mapper.JsonMapper;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -36,6 +35,9 @@ public class HandicapOddsDetailProtocol implements BaseProtocol {
     private CommonUtils commonUtils;
     @Resource
     private RedisUtils redisUtils;
+
+    @Resource
+    private ScheduleMapper scheduleMapper;
 
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
@@ -65,26 +67,27 @@ public class HandicapOddsDetailProtocol implements BaseProtocol {
             timeId = "-1";
         }
         Map<String, Object> map = new HashMap<>(2);
-        String key = RedisCodeMsg.SOCCER_ODDS_DETAIL.getName() + ":" + matchId;
-        //查询指定盘口类型
-        String item = type + ":" + opId;
-        String redisTimeId = (String) redisUtils.hget(key, item + "_TIME_ID");
-        //对比timeId是否一致，如果一致，则不返回有效数据
-        if (!Strings.isNullOrEmpty(redisTimeId) && redisTimeId.equals(timeId)) {
-            map.put("list", Lists.newArrayList());
-            map.put("timeId", redisTimeId);
-            return map;
-        }
-        //如果不一致，则查询redis数据
-        String value = (String) redisUtils.hget(key, item);
-        if (!Strings.isNullOrEmpty(value)) {
-            List list = JsonMapper.defaultMapper().fromJson(value, List.class);
-            map.put("list", list);
-        } else {
-            map.put("list", Lists.newArrayList());
-        }
-        map.putIfAbsent("list", Lists.newArrayList());
-        map.put("timeId", redisTimeId);
+//        String key = RedisCodeMsg.SOCCER_ODDS_DETAIL.getName() + ":" + matchId;
+//        //查询指定盘口类型
+//        String item = type + ":" + opId;
+//        String redisTimeId = (String) redisUtils.hget(key, item + "_TIME_ID");
+//        //对比timeId是否一致，如果一致，则不返回有效数据
+//        if (!Strings.isNullOrEmpty(redisTimeId) && redisTimeId.equals(timeId)) {
+//            map.put("list", Lists.newArrayList());
+//            map.put("timeId", redisTimeId);
+//            return map;
+//        }
+//        //如果不一致，则查询redis数据
+//        String value = (String) redisUtils.hget(key, item);
+//        if (!Strings.isNullOrEmpty(value)) {
+//            List list = JsonMapper.defaultMapper().fromJson(value, List.class);
+//            map.put("list", list);
+//        } else {
+//            map.put("list", Lists.newArrayList());
+//        }
+        List<HandicapOddsDetailsResult> results = scheduleMapper.selectOddsResultDetailByMatchId(Integer.parseInt(matchId), Integer.parseInt(opId), type);
+        map.putIfAbsent("list", results);
+        map.put("timeId", "-1");
         return map;
     }
 

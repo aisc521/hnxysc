@@ -126,15 +126,17 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
 //            if (!teamId.contains(result.getHomeId())) {
             if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getHomeId())) {
                 String img = result.getHomeImg();
-                String localUrl1 = localUrl + img;
-                File file = new File(localUrl1);
-                String parentStr = file.getParent();
-                File parent = new File(parentStr);
-                if (!parent.exists()) {
-                    parent.mkdirs();
+                if (!Strings.isNullOrEmpty(img)) {
+                    String localUrl1 = localUrl + img;
+                    File file = new File(localUrl1);
+                    String parentStr = file.getParent();
+                    File parent = new File(parentStr);
+                    if (!parent.exists()) {
+                        parent.mkdirs();
+                    }
+                    FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
+                    redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getHomeId());
                 }
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
-                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getHomeId());
             }
 
             //客队
@@ -145,16 +147,18 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
 //            if (!teamId1.contains(result.getGuestId())) {
             if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getGuestId())) {
                 String img = result.getGuestImg();
-                String localUrl2 = localUrl + img;
-                File file = new File(localUrl2);
-                String parentStr = file.getParent();
-                File parent = new File(parentStr);
-                if (!parent.exists()) {
-                    parent.mkdirs();
-                }
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl2);
+                if (!Strings.isNullOrEmpty(img)) {
+                    String localUrl2 = localUrl + img;
+                    File file = new File(localUrl2);
+                    String parentStr = file.getParent();
+                    File parent = new File(parentStr);
+                    if (!parent.exists()) {
+                        parent.mkdirs();
+                    }
+                    FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl2);
 //                redisUtils.hset("SOCCER:HSET:IMG", "teamId", teamId1 + result.getGuestImg() + ",");
-                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getGuestId());
+                    redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getGuestId());
+                }
             }
 
             resultMap.put("matchDate", result.getTime());

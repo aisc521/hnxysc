@@ -95,7 +95,13 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
     public void updateHandicapOddsDetailData(int count) {
         //根据条件查询比赛id
         List<Integer> list = scheduleMapper.selectScheduleIdByDate(count,5);
+        log.error("查询{}天前的比赛数量为{}", count, list.size());
+        log.error("开始遍历比赛，查询明细数据");
+        long l = ClockUtil.currentTimeMillis();
+        int i = 0;
         for (Integer matchId : list) {
+            i++;
+            log.error("开始第{}场比赛，还剩{}场,比赛id：{}", i, list.size() - 1, matchId);
             //遍历比赛
             String key = RedisCodeMsg.SOCCER_ODDS_DETAIL.getName() + ":" + matchId;
             for (String type : types) {
@@ -108,13 +114,21 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
                     coms = OTHER_COM;
                 }
                 for (int comId : coms) {
-                    //获取对应赔率
-                    List<HandicapOddsDetailsResult> results = scheduleMapper.selectOddsResultDetailByMatchId(matchId, comId, type);
-                    //更新redis
-                    updateRedis(key, type + ":" + comId, results, RedisCodeMsg.SOCCER_ODDS_DETAIL.getSeconds());
+                    try {
+                        //获取对应赔率
+                        List<HandicapOddsDetailsResult> results = scheduleMapper.selectOddsResultDetailByMatchId(matchId, comId, type);
+                        //更新redis
+                        updateRedis(key, type + ":" + comId, results, RedisCodeMsg.SOCCER_ODDS_DETAIL.getSeconds());
+                    } catch (Exception e) {
+                        log.error("比赛id：{},赔率公司：{},赔率类型：{}", matchId, comId, type);
+                        e.printStackTrace();
+                    }
                 }
             }
         }
+        long e = ClockUtil.currentTimeMillis();
+        log.error("比赛数据计算完毕，总耗时为：{}ms", e - l);
+
     }
 
     /**
@@ -154,39 +168,45 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
                             , satWin, satLose, result.getSatFlat());
                     result.setList(list);
                 } else {
-                    List<AnalysisMatchDto> list = letgoalMapper.querySameHandicapsMatchByChangeOdds(companyId, matchType,change, beginDate, result.getOddsId()
+                    List<AnalysisMatchDto> list = letgoalMapper.querySameHandicapsMatchByChangeOdds(companyId, matchType, change, beginDate, result.getOddsId()
                             , satWin, satLose, result.getSatFlat());
                     result.setList(list);
                 }
+            } else {
+                result = letgoalMapper.queryHandicapsBySchedule(matchId);
             }
         }
         if (result != null) {
             if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getHomeId())) {
                 //主队图片
                 String img = result.getHostIcon();
-                String localUrl1 = localUrl + img;
-                File file = new File(localUrl1);
-                String parentStr = file.getParent();
-                File parent = new File(parentStr);
-                if (!parent.exists()) {
-                    parent.mkdirs();
+                if (Strings.isNotBlank(img)) {
+                    String localUrl1 = localUrl + img;
+                    File file = new File(localUrl1);
+                    String parentStr = file.getParent();
+                    File parent = new File(parentStr);
+                    if (!parent.exists()) {
+                        parent.mkdirs();
+                    }
+                    FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
+                    redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getHomeId());
                 }
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
-                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getHomeId());
             }
 
             if (!redisUtils.sHasKey("SOCCER:TEAM_IMAGE",result.getGuestId())) {
                 //客队图片
                 String img = result.getGuestIcon();
-                String localUrl1 = localUrl + img;
-                File file = new File(localUrl1);
-                String parentStr = file.getParent();
-                File parent = new File(parentStr);
-                if (!parent.exists()) {
-                    parent.mkdirs();
+                if (Strings.isNotBlank(img)) {
+                    String localUrl1 = localUrl + img;
+                    File file = new File(localUrl1);
+                    String parentStr = file.getParent();
+                    File parent = new File(parentStr);
+                    if (!parent.exists()) {
+                        parent.mkdirs();
+                    }
+                    FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
+                    redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getGuestId());
                 }
-                FileUtils.downloadPicture(imagUrl + img + "?win007=sell", localUrl1);
-                redisUtils.sAdd("SOCCER:TEAM_IMAGE", result.getGuestId());
             }
             map.put("hostIcon", Strings.isNotBlank(result.getHostIcon())?imagePrefix + "" + result.getHostIcon():"");
             map.put("guestIcon", Strings.isNotBlank(result.getGuestIcon())?imagePrefix + "" + result.getGuestIcon():"");
@@ -194,9 +214,9 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
             map.put("guestName", result.getGuestName());
             map.put("matchDate", result.getMatchDate());
             if ("TPEI".equalsIgnoreCase(type)) {
-                map.put("satWin", result.getSatWin());
-                map.put("satLose", result.getSatLose());
-                map.put("satFlat", result.getSatFlat());
+                map.put("satWin", result.getSatWin() == null? "0":result.getSatWin());
+                map.put("satLose", result.getSatLose() == null? "0":result.getSatLose());
+                map.put("satFlat", result.getSatFlat() == null? "0":result.getSatFlat());
             }
             List<AnalysisMatchDto> list = result.getList();
             map.put("totalCount", list == null ? 0 : list.size());
@@ -301,8 +321,8 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
         Integer flatCount = getMatchCountByResult(list, 1);
         Integer loseCount = getMatchCountByResult(list, 0);
         map.put("mwin", winMap);
-        map.put("mlose", flatMap);
-        map.put("mflat", loseMap);
+        map.put("mlose", loseMap);
+        map.put("mflat", flatMap);
         winMap.put("mcount", winCount);
         flatMap.put("mcount", flatCount);
         loseMap.put("mcount", loseCount);

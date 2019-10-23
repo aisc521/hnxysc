@@ -30,7 +30,7 @@
 
     <select id="selectScheduleIdByDate" resultType="java.lang.Integer">
     select ScheduleID from schedule WHERE
-    matchState = 0
+    1 = 1
     and matchTime <![CDATA[>= ]]>date(date_sub(now() ,interval #{before} day))
     and matchTime <![CDATA[<=]]> date(date_add(now() ,interval #{after} day))
   </select>
@@ -72,21 +72,21 @@
             select ModifyTime oddTime,HomeWin oddWin,Standoff oddFlat,GuestWin oddLose from europeoddsdetail l WHERE
             l.oddsid = (select oddsid from europeodds where
             ScheduleID = #{matchId}
-            AND CompanyID = #{companyId}) ORDER BY oddTime asc
+            AND CompanyID = #{companyId}) ORDER BY oddTime desc
         </if>
         <if test="type == 2">
             /* 亚盘 */
             select ModifyTime oddTime,upOdds oddWin,Goal oddFlat,downOdds oddLose from letgoaldetail l WHERE
             l.oddsid = (select oddsid from letgoal where
             ScheduleID = #{matchId}
-            AND CompanyID = #{companyId}) ORDER BY oddTime asc
+            AND CompanyID = #{companyId}) ORDER BY oddTime desc
         </if>
         <if test="type == 3">
             /* 大小球 */
             select ModifyTime oddTime,upOdds oddWin,Goal oddFlat,downOdds oddLose from totalscoredetail l WHERE
             l.oddsid = (select oddsid from TotalScore where
             ScheduleID = #{matchId}
-            AND CompanyID = #{companyId}) ORDER BY oddTime asc
+            AND CompanyID = #{companyId}) ORDER BY oddTime desc
         </if>
     </select>
     <select id="selectNearlyMatchData" resultType="com.zhcdata.jc.dto.IntegralRankingDto">
@@ -837,8 +837,8 @@
         sc.Guest_Red guestReadCard,/*客队红牌*/
         sc.Home_Yellow homeYlwCard,/*主队黄牌*/
         sc.Guest_Yellow guestYlwCard,/*客队黄牌*/
-        t.Name_J homeName,/*主队名称*/
-        t2.Name_J guestName,/*客队名称*/
+        case when t.Name_J is null then sc.HomeTeam else t.Name_J end as homeName,
+        case when t2.Name_J is null then sc.guestTeam else t2.Name_J end as guestName,
         sc.HomeScore homeScore,/*主队比分*/
         sc.GuestScore guestScore,/*客队比分*/
         sc.ScheduleID matchId,/*比赛id*/
@@ -913,7 +913,7 @@
     </select>
 
 
-    <select id="queryZcNum" resultType="String">F
+    <select id="queryZcNum" resultType="String">
        SELECT max(lottery.ISSUE_NUM) from schedule  sc
        LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007 and lottery.LOTTERY = 'SF14'
        where sc.MatchTime >= #{startDate}

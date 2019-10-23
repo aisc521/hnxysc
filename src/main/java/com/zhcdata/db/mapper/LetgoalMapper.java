@@ -40,6 +40,8 @@ public interface LetgoalMapper {
 
     AnalysisDto queryHandicapsByCompanyAndMatch(@Param("matchId") Integer matchId, @Param("companyId") Integer companyId);
 
+    AnalysisDto queryHandicapsBySchedule(@Param("matchId") Integer matchId);
+
     List<AnalysisMatchDto> querySameHandicapsMatchByOdds(@Param("companyId")Integer companyId, @Param("matchType")Integer matchType,
                                                     @Param("beginDate") String beginDate,@Param("changeTimes") Integer changeTimes,
                                                      @Param("oddsId") Integer oddsId,@Param("satWin") Double satWin,
