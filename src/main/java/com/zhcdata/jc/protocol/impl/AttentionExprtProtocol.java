@@ -66,11 +66,11 @@ public class AttentionExprtProtocol implements BaseProtocol {
         TbJcRecordFocus tbJcRecordFocus = tbJcRecordFocusService.queryRecordFocus(Long.valueOf(String.valueOf(paramMap.get("userId"))),Long.valueOf(String.valueOf(paramMap.get("expertId"))));
         if(tbJcRecordFocus == null){//新增数据
             String status = paramMap.get("status");
-            if(status.equals(tbJcRecordFocus.getStatus())){//状态相同 提示 不能进行相同操作
+           /* if(status.equals(tbJcRecordFocus.getStatus())){//状态相同 提示 不能进行相同操作
                 resultMap.put("resCode", ProtocolCodeMsg.STATUS_IS_NOT_EXIT.getCode());
                 resultMap.put("message", ProtocolCodeMsg.STATUS_IS_NOT_EXIT.getMsg());
                 return resultMap;
-            }
+            }*/
             //新增数据
             if("0".equals(paramMap.get("status"))){
                 resultMap.put("resCode", ProtocolCodeMsg.STATUS_IS_NOT_EXIT.getCode());
