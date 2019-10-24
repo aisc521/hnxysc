@@ -196,14 +196,18 @@ public class MatchListDataJob implements Job {
         for(int v=0;v<result1s_1.size();v++){
             MatchResult1 r1=result1s_1.get(v);
             //处理盘口
-            r1.setMatchPankou(getPanKou(r1.getMatchPankou()));
+            r1.setMatchPankou(getPanKou1(r1.getMatchPankou()));
             if(r1.getMatchState().equals("1")){
+                r1.setStatusDescFK("2");
+                r1.setStatusescFK("2");
                 if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
                     r1.setMatchState(len+"'");
                 }
             }else if(r1.getMatchState().equals("3")){
+                r1.setStatusDescFK("3");
+                r1.setStatusescFK("3");
                 if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
@@ -292,7 +296,24 @@ public class MatchListDataJob implements Job {
         }
         return str;
     }
-
+    public String getPanKou1(String value){
+        if(value!=null) {
+            if (value.equals("0.0")) {
+                value = "0";
+            } else if (value.equals("1.0")) {
+                value = "1";
+            } else if (value.equals("2.0")) {
+                value = "2";
+            } else if (value.equals("3.0")) {
+                value = "3";
+            } else if (value.equals("4.0")) {
+                value = "4";
+            } else if (value.equals("5.0")) {
+                value = "5";
+            }
+        }
+        return value;
+    }
     public String getPanKou(String value){
         if(value!=null) {
             if (value.equals("0.0")) {
