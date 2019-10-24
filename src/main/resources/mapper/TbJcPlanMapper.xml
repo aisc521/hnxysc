@@ -242,7 +242,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     and p.id= #{id}
   </select>
   <select id="queryPlanId" resultType="com.zhcdata.jc.dto.PlanResult1">
-    SELECT plan_id id from tb_jc_match where match_id in(SELECT match_id from tb_jc_match where plan_id={planId})
+    SELECT plan_id id from tb_jc_match where match_id in(SELECT match_id from tb_jc_match where plan_id=#{planId})
   </select>
 
 
@@ -339,4 +339,31 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
     <update id="updateStatusPlanById">
         update tb_jc_plan set status='2' where id = #{id}
     </update>
+
+
+
+    <select id="queryPlanByExpertIdForXg" resultType="com.zhcdata.jc.dto.PlanResult1">
+        SELECT p.id,
+        e.nick_name nickName,
+        e.img,
+        e.lable,
+        e.fans,
+        e.popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.title_show_type,
+        p.price,
+        p.is_right isRight,
+        p.type,
+        p.create_time
+        from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
+        LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
+        LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
+        where 1=1
+        <if test="id != null">
+            and p.id in(#{id})
+        </if>
+    </select>
 </mapper>
