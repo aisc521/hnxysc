@@ -104,6 +104,16 @@
     ORDER BY create_time asc
   </select>
 
+
+    <select id="queryPlanListJxAndZs" resultType="com.zhcdata.db.model.TbJcPlan">
+        select * from tb_jc_plan where 1=1
+
+            and status in('1','2')
+
+        ORDER BY create_time asc
+    </select>
+
+
   <select id="queryScore" resultType="com.zhcdata.jc.dto.TbScoreResult">
 
 
