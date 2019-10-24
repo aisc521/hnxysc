@@ -177,9 +177,9 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 resultMap.put("first_time", first);
                 resultMap.put("planStatus", planResult2.getPlanStatus());
                 if(freeOrPay.get("type")==3){//免费
-                    resultMap.put("payStaus", "0");
+                    resultMap.put("payStaus", "3");
                 }else{
-                    resultMap.put("payStaus", "1");//付费
+                    resultMap.put("payStaus", "2");//付费
                 }
                 if(freeOrPay.get("pay")>0){//已购买
                     resultMap.put("buyStatus", "0");
