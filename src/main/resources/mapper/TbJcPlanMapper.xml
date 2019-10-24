@@ -319,7 +319,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.introduction,
         p.num_info numInfo,
         p.title,
-        IFNULL(f.status,'0'),
+        IFNULL(f.status,'0') status,
         p.plan_Hit planHit,
         v.lz_now lz,
         v.z_three_days zThreeDays,
