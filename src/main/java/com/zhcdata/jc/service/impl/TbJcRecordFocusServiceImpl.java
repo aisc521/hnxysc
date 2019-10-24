@@ -1,11 +1,13 @@
 package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.TbJcRecordFocusMapper;
+import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.db.model.TbJcRecordFocus;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.TbJcRecordFocusService;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 
@@ -36,7 +38,10 @@ public class TbJcRecordFocusServiceImpl implements TbJcRecordFocusService {
 
     @Override
     public void updateRecord(TbJcRecordFocus tbJcRecordFocus) throws BaseException {
-        int i = recordFocusMapper.updateByPrimaryKey(tbJcRecordFocus);
+        Example example1 = new Example(TbJcRecordFocus.class);
+        example1.createCriteria().andEqualTo("id",tbJcRecordFocus.getId());
+
+        int i = recordFocusMapper.updateByExample(tbJcRecordFocus,example1);
         if(i <= 0){
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
