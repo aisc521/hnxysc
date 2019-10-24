@@ -114,7 +114,7 @@ public class AttentionExprtProtocol implements BaseProtocol {
             }
             tbJcExpert.setFans(Long.valueOf(fans) - Long.valueOf(1));
         }
-        Example example1 = new Example(TbJcPurchaseDetailed.class);
+        Example example1 = new Example(TbJcExpert.class);
         example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
 
         int h = tbJcExpertService.updateByExample(tbJcExpert,example1);
