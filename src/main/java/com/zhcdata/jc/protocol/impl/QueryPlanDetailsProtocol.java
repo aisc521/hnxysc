@@ -56,7 +56,8 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
         String uid = paramMap.get("uid");
         Map<String,Long> freeOrPay = tbPlanService.checkFreeOrPayByUidAndPlanId(uid,id);
         Map<String, Object> resultMap = new HashMap<>();
-        if (freeOrPay.get("type")==3||freeOrPay.get("pay")>0){
+        /*if (freeOrPay.get("type")==3||freeOrPay.get("pay")>0){*/
+
             PlanResult2 planResult2 = new PlanResult2();
             try {
                 List<PlanResult2> result = tbPlanService.queryPlanByIdandUser(id,uid);
@@ -175,16 +176,27 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 resultMap.put("plan_info", plan_info);
                 resultMap.put("first_time", first);
                 resultMap.put("planStatus", planResult2.getPlanStatus());
+                if(freeOrPay.get("type")==3){//免费
+                    resultMap.put("payStaus", "0");
+                }else{
+                    resultMap.put("payStaus", "1");//付费
+                }
+                if(freeOrPay.get("pay")>0){//已购买
+                    resultMap.put("buyStatus", "0");
+                }else{
+                    resultMap.put("buyStatus", "1");//未购买
+                }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
                 LOGGER.error("查询方案详情异常" + ex.toString());
             }
             return resultMap;
-        }else {
+       /* }else {
             resultMap.put("resCode","999999");
             resultMap.put("message","方案尚未购买");
             return resultMap;
-        }
+        }*/
 
     }
 }
