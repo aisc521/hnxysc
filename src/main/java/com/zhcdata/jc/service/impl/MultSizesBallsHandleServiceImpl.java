@@ -50,10 +50,14 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
             //比赛ID,公司ID,初盘盘口,初盘大球赔率,初盘小球赔率,即时盘盘口,即时盘大球赔率,即时盘小球赔率,盘口序号,变盘时间,是否封盘2
             if (items.length > 0) {
                 for (String item : items) {
-                    if (StringUtils.isNotEmpty(item) && /*item.split(",").length == 11 &&*/ item.split(",")[8].equals("1"))
-                        singleHandicap(item);
-                    else if (StringUtils.isNotEmpty(item) /*&& item.split(",").length == 11*/)
-                        manyHandicap(item);
+                    try {
+                        if (StringUtils.isNotEmpty(item) && item.split(",")[8].equals("1"))
+                            singleHandicap(item);
+                        else if (StringUtils.isNotEmpty(item))
+                            manyHandicap(item);
+                    }catch (Exception e){
+                        log.error("大小球即时数据解析错误"+item);
+                    }
                 }
             }
             log.error("大小球即时数据解析完成");
@@ -65,7 +69,7 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
         String[] info = item.split(",");
         //当前转化为对象
         TotalScore xml = BeanUtils.parseTotalScore(item);
-        String flag = xml.getScheduleid()+":"+xml.getCompanyid()+":"+item.split(",")[8];
+        String flag = xml.getScheduleid() + ":" + xml.getCompanyid() + ":" + item.split(",")[8];
         if (multi_dx.contains(flag))
             return;
         //查询比赛信息
@@ -73,7 +77,7 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
         //查询最新一条数据
         TotalScore db = totalScoreMapper.selectTotalScoreByMatchAndCpy(Integer.parseInt(info[0]), Integer.parseInt(info[1]));
         if (db == null) {
-            if (totalScoreMapper.insertSelective(xml)>0){
+            if (totalScoreMapper.insertSelective(xml) > 0) {
                 multi_dx_add(flag);
                 //log.info("20多盘口赔率: 大小球即时数据 单盘口 接口数据:{} 入库成功", item);
                 TotalScoreDetail totalScoreDetail = new TotalScoreDetail();
@@ -84,10 +88,10 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
                 totalScoreDetail.setDownodds(xml.getFirstdownodds());
                 totalScoreDetail.setModifytime(xml.getModifytime());
                 totalScoreDetailMapper.insertSelective(totalScoreDetail);
-                log.error("大小单盘主表更新子表初赔:"+totalScoreDetail.toString());
+                log.error("大小单盘主表更新子表初赔:" + totalScoreDetail.toString());
             }
         } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
-            if (sc==null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
+            if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                 //入数据库
                 xml.setOddsid(db.getOddsid());
                 if (totalScoreMapper.updateByPrimaryKeySelective(xml) > 0) {
@@ -95,7 +99,7 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
                     //log.info("20多盘口赔率: 大小球即时数据 单盘口 接口数据:{} 更新成功", item);
                 }
             }
-        }else if (db.oddsEquals(xml))xml.setOddsid(db.getOddsid());
+        } else if (db.oddsEquals(xml)) xml.setOddsid(db.getOddsid());
     }
 
 
@@ -104,7 +108,7 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
         String[] info = item.split(",");
         //当前转化为对象
         MultiTotalScore xml = BeanUtils.parseMultiTotalScore(item);
-        String flag = xml.getScheduleid()+":"+xml.getCompanyid()+":"+item.split(",")[8];
+        String flag = xml.getScheduleid() + ":" + xml.getCompanyid() + ":" + item.split(",")[8];
         if (multi_dx.contains(flag))
             return;
         //查询比赛信息
@@ -112,14 +116,14 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
         //查询最新一条数据
         MultiTotalScore db = null;
         try {
-             db = multiTotalScoreMapper.selectTotalScoreByMatchAndCpyAndNum(Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[8]));
-        }catch (TooManyResultsException e){
-            System.out.println(Integer.parseInt(info[0])+" ---- "+ Integer.parseInt(info[1]));
+            db = multiTotalScoreMapper.selectTotalScoreByMatchAndCpyAndNum(Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[8]));
+        } catch (TooManyResultsException e) {
+            System.out.println(Integer.parseInt(info[0]) + " ---- " + Integer.parseInt(info[1]));
             e.printStackTrace();
         }
-        if (db == null){
+        if (db == null) {
             //直接插入
-            if (multiTotalScoreMapper.insertSelective(xml)>0){
+            if (multiTotalScoreMapper.insertSelective(xml) > 0) {
                 multi_dx_add(flag);
                 //log.info("20多盘口赔率: 大小球即时数据 多盘口 接口数据:{} 入库成功", item);
                 MultiTotalScore afterInsert = multiTotalScoreMapper.selectTotalScoreByMatchAndCpyAndNum(Integer.parseInt(info[0]), Integer.parseInt(info[1]), Integer.parseInt(info[8]));
@@ -131,8 +135,8 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
                 detail.setDownodds(xml.getFirstdownodds());
                 multiTotalScoreDetailMapper.insertSelective(detail);
             }
-        }else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
-            if (sc==null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
+        } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+            if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                 //入数据库
                 xml.setOddsid(db.getOddsid());
                 int inch = multiTotalScoreMapper.updateByPrimaryKeySelective(xml);
@@ -141,7 +145,7 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
                     log.info("20多盘口赔率: 大小球即时数据 多盘口 接口数据:{} 更新成功", item);
                 }
             }
-        }else multi_dx_add(flag);
+        } else multi_dx_add(flag);
     }
 
     private void multi_dx_add(String str) {

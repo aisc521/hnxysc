@@ -59,4 +59,6 @@ public interface TbPlanService {
     List<PlanResult1> queryPlanByExpertIdNoPages(String id, String planId, String userId);
 
     void updateStatusPlanById(String s);
+
+    List<TbJcPlan> queryPlanListJxAndZs();
 }

@@ -2,9 +2,7 @@ package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.LetGoalhalfDetail;
-import com.zhcdata.db.model.MultiLetGoalhalf;
 import com.zhcdata.db.model.MultiLetGoalhalfDetail;
-import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.service.ManyHandicapOddsChangeService;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.xml.rsp.MoreHandicapOddsLisAlltRsp;
@@ -14,7 +12,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.MATCH_START_TIME;
+//import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.MATCH_START_TIME;
 
 /**
  * CopyRight (c)1999-2019 : zhcw.com
@@ -59,26 +57,29 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
             try {
                 String[] item = cah.get(i).split(",");
                 log.error("21多盘口赔率变化: 半场亚赔（让球盘）接口数据:{}", cah.get(i));
-                Long time = MATCH_START_TIME.get(item[0]);
-                if (time==null || time<1){
-                    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
-                    if(schedule!=null){
-                        time = schedule.getMatchtime().getTime();
-                        MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
-                        if (MATCH_START_TIME.size()>800)
-                            MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
+                //Long time = MATCH_START_TIME.get(item[0]);
+                //if (time==null || time<1){
+                //    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
+                //    if(schedule!=null){
+                //        time = schedule.getMatchtime().getTime();
+                //        MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
+                //        if (MATCH_START_TIME.size()>800)
+                //            MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
+                //    }
+                //}
+                //if (time!=null && time < System.currentTimeMillis()){
+                //    log.error("21多盘口赔率变化: 半场亚赔（让球盘）比赛已经开始，比赛ID:{}", cah.get(i));
+                //    continue;
+                //}
+                //如果第七位等于1 是 单盘口 相当于标准盘  6 个参数代表不是走地我们入库
+                if (!item[8].equals("3")){
+                    if ("1".equals(item[6])) {//单盘口
+                        singleHandicap(item);
+                    } else {//存到多盘口
+                        manyHandicap(item);
                     }
                 }
-                if (time!=null && time < System.currentTimeMillis()){
-                    log.error("21多盘口赔率变化: 半场亚赔（让球盘）比赛已经开始，比赛ID:{}", cah.get(i));
-                    continue;
-                }
-                //如果第七位等于1 是 单盘口 相当于标准盘  6 个参数代表不是走地我们入库
-                if ("1".equals(item[6])) {//单盘口
-                    singleHandicap(item);
-                } else {//存到多盘口
-                    manyHandicap(item);
-                }
+
             } catch (Exception e) {
                 log.error("半场亚赔赔率异常:", e);
             }

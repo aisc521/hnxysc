@@ -203,7 +203,7 @@ public class MatchListDataJob implements Job {
                 if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
-                    r1.setMatchState(len);
+                    r1.setMatchState(len+"'");
                 }
             }else if(r1.getMatchState().equals("3")){
                 r1.setStatusDescFK("3");
@@ -211,7 +211,7 @@ public class MatchListDataJob implements Job {
                 if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
-                    r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+" : String.valueOf(45 + Integer.valueOf(len)));
+                    r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");
                 }
             }
 

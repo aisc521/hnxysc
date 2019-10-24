@@ -47,8 +47,12 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
         synchronized (this) {
             if (items.length > 0) {
                 for (String item : items) {
-                    if (StringUtils.isNotEmpty(item) /*&& item.split(",").length == 11 */&& item.split(",")[8].equals("1"))
-                        singleHandicap(item.split(","));
+                    try {
+                        if (StringUtils.isNotEmpty(item) && item.split(",")[8].equals("1"))
+                            singleHandicap(item.split(","));
+                    } catch (Exception e) {
+                        log.error("欧赔（胜平负）即时数据解析失败" + item);
+                    }
                 }
             }
             log.error("欧赔（胜平负）即时数据解析完成");
@@ -67,9 +71,9 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
         //查询最新一条数据
         Standard db = standardMapper.selectByMidAndCpy(item[0], item[1]);
         try {
-            if (db == null){
+            if (db == null) {
                 //数据库没有 要插入
-                if (standardMapper.insertSelective(xml)>0) {
+                if (standardMapper.insertSelective(xml) > 0) {
                     //log.info("20多盘口赔率: 欧赔（胜平负） 接口数据:{} 入库成功", item);
                     //插入一条详情表
                     Standard afterInsert = standardMapper.selectByMidAndCpy(item[0], item[1]);
@@ -80,10 +84,10 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
                     detail.setStandoff(Float.parseFloat(afterInsert.getFirststandoff()));
                     detail.setModifytime(xml.getModifytime());
                     standardDetailMapper.insertSelective(detail);
-                    log.error("欧赔单盘主表更新子表初赔:"+detail.toString());
+                    log.error("欧赔单盘主表更新子表初赔:" + detail.toString());
                 }
             } else if (!db.same(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
-                if (sc==null || sc.getMatchtime().getTime()>xml.getModifytime().getTime()) {
+                if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                     //入数据库
                     xml.setOddsid(db.getOddsid());
                     if (standardMapper.updateByPrimaryKeySelective(xml) > 0) {
@@ -93,7 +97,7 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
                 }
             }
             multi_ou_add(flag);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

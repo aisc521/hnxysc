@@ -57,7 +57,8 @@ public class CalculationPlanJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
             LOGGER.info("[计算方案是否命中定时任务开启]" + df.format(new Date()));
-            List<TbJcPlan> planResults = tbPlanService.queryPlanList(null, "1"); //正在进行的方案列表
+            //List<TbJcPlan> planResults = tbPlanService.queryPlanList(null, "1"); //正在进行的方案列表 和在售的
+            List<TbJcPlan> planResults = tbPlanService.queryPlanListJxAndZs(); //正在进行的方案列表 和在售的
             if (planResults != null && planResults.size() > 0) {
                 for (int i = 0; i < planResults.size(); i++) {
 

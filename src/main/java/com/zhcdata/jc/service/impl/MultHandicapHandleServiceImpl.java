@@ -50,18 +50,14 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
     public void changeHandle(String[] items) {
         synchronized (this) {
             if (items.length > 0) {
-
                 for (int i = 0; i < items.length; i++) {
-                    if (StringUtils.isNotEmpty(items[i]) /*&& items[i].split(",").length == 14*/ && items[i].split(",")[10].equals("1"))
-                        singleHandicap(items[i], "共" + items.length + ",当前" + i);
-                    else if (StringUtils.isNotEmpty(items[i]) /*&& items[i].split(",").length == 14*/)
-                        manyHandicap(items[i], "共" + items.length + ",当前" + i);
-                    else {
-                        boolean notEmpty = StringUtils.isNotEmpty(items[i]);
-                        boolean b = items[i].split(",").length == 14;
-                        boolean b1 = items[i].split(",")[10].equals("1");
-                        System.out.println("------------" + notEmpty + " " + b + " " + b1);
-                        System.err.println(items[i]);
+                    try {
+                        if (StringUtils.isNotEmpty(items[i]) && items[i].split(",")[10].equals("1"))
+                            singleHandicap(items[i], "共" + items.length + ",当前" + i);
+                        else if (StringUtils.isNotEmpty(items[i]))
+                            manyHandicap(items[i], "共" + items.length + ",当前" + i);
+                    } catch (Exception e) {
+                        log.error("亚赔（让球盘）即时数据解析出错"+items[i]);
                     }
                 }
             }
@@ -85,7 +81,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
         if (db == null) {
             try {
                 int insert_id = letgoalMapper.insertSelective(xml);
-                if (insert_id>0) {
+                if (insert_id > 0) {
                     multi_yp_add(flag);
                     Letgoal dbAfterInsert = letgoalMapper.selectByMatchIdAndCompany(info[0], info[1]);
                     LetGoalDetail first = new LetGoalDetail();
@@ -95,13 +91,13 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                     first.setDownodds(xml.getFirstdownodds());
                     first.setModifytime(xml.getModifytime());
                     letGoalDetailMapper.insertSelective(first);
-                    log.error("亚赔单盘主表更新子表初赔:"+first.toString());
+                    log.error("亚赔单盘主表更新子表初赔:" + first.toString());
                     //log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
                     //letgoal_goalMapper.selectByPrimaryKey()
                     //往详情表插入一条
                     //LetGoalDetail detail = letGoalDetailMapper.selectByMatchAndCpyOrderByTimeAscLimit1(xml.getScheduleid(), xml.getCompanyid());
                     //if ((!detail.getUpodds().equals(xml.getFirstupodds()))||(!detail.getGoal().equals(xml.getFirstgoal()))||(!detail.getDownodds().equals(xml.getFirstdownodds()))){
-                        //证明这不是初赔
+                    //证明这不是初赔
                     //}
                 }
             } catch (Exception e) {

@@ -110,4 +110,9 @@ public class TbPlanServiceImpl implements TbPlanService {
     public void updateStatusPlanById(String id) {
         tbJcPlanMapper.updateStatusPlanById(id);
     }
+
+    @Override
+    public List<TbJcPlan> queryPlanListJxAndZs() {
+        return tbJcPlanMapper.queryPlanListJxAndZs();
+    }
 }
