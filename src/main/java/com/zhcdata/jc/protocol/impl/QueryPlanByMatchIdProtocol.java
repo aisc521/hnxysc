@@ -82,7 +82,7 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
 
                 for (int i = 0; i < planList.size(); i++) {
                     PlanResult1 result1 = planList.get(i);
-                    List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(i).getId());
+                    List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(i).getPlanId());
                     if (matchPlanResults != null && matchPlanResults.size() > 0) {
                         result1.setList(matchPlanResults);
                     }

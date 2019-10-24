@@ -122,4 +122,10 @@ public class TbPlanServiceImpl implements TbPlanService {
         PageHelper.startPage(pageNo, pageAmount);
         return new PageInfo<PlanResult1>(tbJcPlanMapper.queryPlanByExpertIdForXg(pIdList));
     }
+
+    @Override
+    public PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer pageNo, int pageAmount) {
+        PageHelper.startPage(pageNo, pageAmount);
+        return new PageInfo<PlanResult1>(tbJcPlanMapper.queryPlanByExpertIdForXgAndUser(pIdList,userId));
+    }
 }

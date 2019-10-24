@@ -63,4 +63,6 @@ public interface TbPlanService {
     List<TbJcPlan> queryPlanListJxAndZs();
 
     PageInfo<PlanResult1> queryPlanByExpertIdForXg(String pIdList, Integer integer, int i);
+
+    PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer integer, int i);
 }
