@@ -50,6 +50,15 @@ public class PurchasedPlanDto {
 
     private String lzBig;
 
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getTenZ() {
         return tenZ;
