@@ -2,13 +2,17 @@ package com.zhcdata.jc.protocol.impl;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.google.common.base.Strings;
+import com.google.gson.Gson;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.PlanResult1;
+import com.zhcdata.jc.dto.PlanResult3;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.tools.RedisUtils;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -64,13 +68,28 @@ public class QueryHotPlanProtocl implements BaseProtocol {
             //String re = (String) redisUtils.hget("SOCCER:HSET:PLAN", "hot");
 
             String re = (String) redisUtils.hget("SOCCER:HSET:PLANHOT", pageNo);
-            JsonMapper jsonMapper = JsonMapper.defaultMapper();
+
+            JSONObject jsonObject = JSONObject.fromObject(re);
+
+            System.out.println(jsonObject);
+
+
+           /* JsonMapper jsonMapper = JsonMapper.defaultMapper();
             JavaType javaType = jsonMapper.buildCollectionType(List.class, PlanResult1.class);
             List<PlanResult1> result = jsonMapper.fromJson(re, javaType);
+*/
+            //List<PlanResult1> result = (List<PlanResult1>) jsonObject.get("list");
+
+
+            PlanResult3 planResult3 = com.alibaba.fastjson.JSONObject.parseObject(re,PlanResult3.class);
+
+            List<PlanResult1> result = planResult3.getList();
+
 
             for (int j = 0; j < result.size(); j++) {
                 if (type.equals("1")) {
                     //单场
+
                     List<MatchPlanResult> matchPlanResults = result.get(j).getList();
                     if (matchPlanResults != null && matchPlanResults.size() == 1) {
                         f_result.add(result.get(j));
@@ -83,12 +102,12 @@ public class QueryHotPlanProtocl implements BaseProtocol {
                     }
                 } else if (type.equals("3")) {
                     //不中退
-                    if (result.get(j).getType() == "3") {
+                    if (result.get(j).getPlanType() == "3") {
                         f_result.add(result.get(j));
                     }
                 } else if (type.equals("4")) {
                     //免费
-                    if (result.get(j).getType() == "4") {
+                    if (result.get(j).getPlanType() == "4") {
                         f_result.add(result.get(j));
                     }
                 } else if (type.equals("-1")) {
@@ -101,11 +120,15 @@ public class QueryHotPlanProtocl implements BaseProtocol {
                 resultMap.put("message", "成功");
                 resultMap.put("resCode", "000000");
                 resultMap.put("busiCode", "");
+                resultMap.put("pageNo", jsonObject.get("pageNo"));
+                resultMap.put("pageTotal", jsonObject.get("pageTotal"));
             } else {
                 resultMap.put("list", "");
                 resultMap.put("message", "查询结果无数据");
                 resultMap.put("resCode", "");
                 resultMap.put("busiCode", "");
+                resultMap.put("pageNo","");
+                resultMap.put("pageTotal", "");
             }
         } catch (Exception ex) {
             LOGGER.error("查询热门方案异常:" + ex);

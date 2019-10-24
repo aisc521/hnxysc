@@ -42,7 +42,6 @@
       p.title title_show_type,
       p.price,
       p.is_right isRight,
-      p.type,
       p.create_time,
       p.plan_Hit planHit,
       p.id planId,
