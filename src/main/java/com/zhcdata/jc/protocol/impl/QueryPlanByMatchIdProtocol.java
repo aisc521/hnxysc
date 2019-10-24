@@ -37,11 +37,11 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
-        String id = paramMap.get("id");
+        String id = paramMap.get("matchId");
         if (Strings.isNullOrEmpty(id)) {
-            LOGGER.info("[" + ProtocolCodeMsg.PLANID_NULL.getMsg() + "]:id---" + id);
-            map.put("resCode", ProtocolCodeMsg.PLANID_NULL.getCode());
-            map.put("message", ProtocolCodeMsg.PLANID_NULL.getMsg());
+            LOGGER.info("[" + ProtocolCodeMsg.LINEUP_MATCHID.getMsg() + "]:matchId---" + id);
+            map.put("resCode", ProtocolCodeMsg.LINEUP_MATCHID.getCode());
+            map.put("message", ProtocolCodeMsg.LINEUP_MATCHID.getMsg());
             return map;
         }
         String pageNo = paramMap.get("pageNo");
@@ -57,7 +57,7 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-        String id = paramMap.get("id");
+        String id = paramMap.get("matchId");
         String pageNo = paramMap.get("pageNo");
         List<PlanResult1> result = new ArrayList<>();
 
