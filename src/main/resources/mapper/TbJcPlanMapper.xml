@@ -343,7 +343,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
 
 
     <select id="queryPlanByExpertIdForXg" resultType="com.zhcdata.jc.dto.PlanResult1">
-        e.id,
+       SELECT e.id,
         e.nick_name nickName,
         e.img,
         e.lable,
@@ -361,13 +361,11 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         p.id planId,
         p.type planType,
         p.status planStatus,
-        IFNULL(pd.id,'0') buStatus,
         e.grade grade
         from tb_jc_plan  p
         LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
         LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
         LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
-        LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
 
         where 1=1
         <if test="id != null">
