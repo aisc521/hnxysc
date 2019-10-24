@@ -78,8 +78,8 @@ public class HotPlanJob implements Job {
                         map.put("busiCode","20010201");
                         map.put("resCode","000000");
                         map.put("message","成功");
-                        map.put("pageNo","1");
                         map.put("pageTotal","1");
+                        map.put("totalNum","1");
                         map.put("list",result1s);
                         redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(1),JsonMapper.defaultMapper().toJson(result1s));
                         break;
@@ -93,8 +93,8 @@ public class HotPlanJob implements Job {
                                 map.put("busiCode", "20010201");
                                 map.put("resCode", "000000");
                                 map.put("message", "成功");
-                                map.put("pageNo", p);
-                                map.put("pageTotal", pc);
+                                map.put("pageTotal", p);
+                                map.put("totalNum", pc);
                                 map.put("list", resultNew);
                                 redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(p),JsonMapper.defaultMapper().toJson(result1s));
                             }
@@ -105,8 +105,8 @@ public class HotPlanJob implements Job {
                             map.put("busiCode", "20010201");
                             map.put("resCode", "000000");
                             map.put("message", "成功");
-                            map.put("pageNo", p);
-                            map.put("pageTotal", pc);
+                            map.put("pageTotal", p);
+                            map.put("totalNum", pc);
                             map.put("list", resultNew);
                             redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(p),JsonMapper.defaultMapper().toJson(result1s));
                             p++;
