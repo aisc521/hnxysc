@@ -13,10 +13,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springside.modules.utils.time.DateFormatUtil;
 
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -66,8 +69,16 @@ public class Change2Job implements Job {
                 if (strings.length > 6 && strings[7].length() > 0) {
                     info.setGuestRed(Short.valueOf(strings[7]));        //客队红牌7
                 }
-                if (strings.length > 8 && strings[9].length() > 0) {
-                    info.setMatchtime2(strings[9]);           //开场时间9
+                String string = strings[9];
+                if (strings.length > 8 && string.length() > 0) {
+                    if (!"0,0,0,0,0,0".equals(string)) {
+                        Date date = DateFormatUtil.pareDate("yyyy,MM,dd,HH,mm,ss", string);
+                        Calendar instance = Calendar.getInstance();
+                        instance.setTime(date);
+                        instance.add(Calendar.MONTH, 1);
+                        string = DateFormatUtil.formatDate("yyyy,M,d,HH,mm,ss", instance.getTime());
+                    }
+                    info.setMatchtime2(string);           //开场时间9
                 }
                 if (strings.length > 10 && strings[11].length() > 0) {
                     info.setVisitor(Integer.valueOf(strings[11]));      //是否有阵容11
