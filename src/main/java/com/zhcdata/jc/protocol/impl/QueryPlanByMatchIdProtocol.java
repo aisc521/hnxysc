@@ -85,8 +85,12 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
                     }
                     result.add(result1);
                 }
+                resultMap.put("pageTotal",planList1.getTotal());
             }
             resultMap.put("list",result);
+            resultMap.put("pageNo",pageNo);
+
+
         }catch (Exception ex){
             LOGGER.error("类似方案异常:"+ex);
         }

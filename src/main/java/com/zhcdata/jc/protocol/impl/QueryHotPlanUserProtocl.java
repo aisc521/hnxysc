@@ -121,7 +121,7 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
             }
         }
         resultMap.put("list",f_result);
-        resultMap.put("pageTotal",pageNo);
+        resultMap.put("pageNo",pageNo);
 
         return resultMap;
 

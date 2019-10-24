@@ -59,7 +59,16 @@
     plan.id planId,
     pd.third_money thirdMoney,/*支付金额*/
     pd.buy_money buyMoney ,
-    pd.first firstone
+    pd.first firstone,
+    victory.ten_z tenZ,
+    victory.nine_z nineZ,
+    victory.eight_z eightZ,
+    victory.seven_z sevenZ,
+    victory.six_z sixZ,
+    victory.five_z fiveZ,
+    victory.four_z fourZ,
+    victory.three_z threeZ,
+    victory.lz_big lzBig
     from tb_jc_purchase_detailed pd
     LEFT JOIN tb_jc_expert expert ON pd.expert_id = expert.id
     LEFT JOIN tb_jc_victory  victory ON pd.expert_id = victory.expert_id

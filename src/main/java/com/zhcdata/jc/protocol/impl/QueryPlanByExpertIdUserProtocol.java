@@ -88,7 +88,8 @@ public class QueryPlanByExpertIdUserProtocol implements BaseProtocol{
                 }
                 result.add(result1);
             }
-            resultMap.put("pageTotal", planList1.getPages());
+            resultMap.put("pageNo",pageNo);
+            resultMap.put("pageTotal",planList1.getPages());
             resultMap.put("totalNum", planList1.getTotal());
         }catch (Exception e){
             e.printStackTrace();
