@@ -80,7 +80,7 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
 
                 PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertId(ids[i],null,userId,Integer.valueOf(pageNo),20);
                 List<PlanResult1> planList = planList1.getList();
-
+                resultMap.put("totalNum", planList1.getTotal());
                 for (int k = 0; k < planList.size(); k++) {
                     PlanResult1 result1 = planList.get(k);
                     List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(k).getId());
@@ -121,6 +121,8 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
             }
         }
         resultMap.put("list",f_result);
+        resultMap.put("pageTotal",pageNo);
+
         return resultMap;
 
     }

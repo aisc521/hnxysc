@@ -107,76 +107,76 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
         if(jcScheduleSp != null && jcSchedule != null){
             //胜平负
             StringBuilder spfStr = new StringBuilder();
-            spfStr.append("win").append("|").append(jcScheduleSp.getSf3()).append(",");
-            spfStr.append("level").append("|").append(jcScheduleSp.getSf1()).append(",");
-            spfStr.append("lose").append("|").append(jcScheduleSp.getSf0()).append(",");
-            spfStr.append("concedenum").append("|").append("0");
+            spfStr.append("胜").append("|").append(jcScheduleSp.getSf3()).append(",");
+            spfStr.append("平").append("|").append(jcScheduleSp.getSf1()).append(",");
+            spfStr.append("负").append("|").append(jcScheduleSp.getSf0()).append(",");
+            spfStr.append("让球").append("|").append("0");
 
             //让球胜平负
             StringBuilder rqSpfStr = new StringBuilder();
-            rqSpfStr.append("win").append("|").append(jcScheduleSp.getWl3()).append(",");
-            rqSpfStr.append("level").append("|").append(jcScheduleSp.getWl1()).append(",");
-            rqSpfStr.append("lose").append("|").append(jcScheduleSp.getWl0()).append(",");
-            rqSpfStr.append("concedenum").append("|").append(jcSchedule.getPolygoal());
+            rqSpfStr.append("让胜").append("|").append(jcScheduleSp.getWl3()).append(",");
+            rqSpfStr.append("让平").append("|").append(jcScheduleSp.getWl1()).append(",");
+            rqSpfStr.append("让负").append("|").append(jcScheduleSp.getWl0()).append(",");
+            rqSpfStr.append("让球数").append("|").append(jcSchedule.getPolygoal());
 
             StringBuilder bfStr = new StringBuilder();
-            bfStr.append("onetozero").append("|").append(jcScheduleSp.getSw10()).append(",");
-            bfStr.append("twotozero").append("|").append(jcScheduleSp.getSw20()).append(",");
-            bfStr.append("twotoone").append("|").append(jcScheduleSp.getSw21()).append(",");
-            bfStr.append("threetozero").append("|").append(jcScheduleSp.getSw30()).append(",");
-            bfStr.append("threetoone").append("|").append(jcScheduleSp.getSw31()).append(",");
-            bfStr.append("threetotwo").append("|").append(jcScheduleSp.getSw32()).append(",");
-            bfStr.append("fourtozero").append("|").append(jcScheduleSp.getSw40()).append(",");
-            bfStr.append("fourtoone").append("|").append(jcScheduleSp.getSw41()).append(",");
-            bfStr.append("fourtotwo").append("|").append(jcScheduleSp.getSw42()).append(",");
-            bfStr.append("fivetozero").append("|").append(jcScheduleSp.getSw50()).append(",");
-            bfStr.append("fivetoone").append("|").append(jcScheduleSp.getSw51()).append(",");
-            bfStr.append("fivetotwo").append("|").append(jcScheduleSp.getSw52()).append(",");
-            bfStr.append("winother").append("|").append(jcScheduleSp.getSw5()).append(",");
-            bfStr.append("zerotozero").append("|").append(jcScheduleSp.getSd00()).append(",");
-            bfStr.append("onetoone").append("|").append(jcScheduleSp.getSd11()).append(",");
-            bfStr.append("twototwo").append("|").append(jcScheduleSp.getSd22()).append(",");
-            bfStr.append("threetothree").append("|").append(jcScheduleSp.getSd33()).append(",");
-            bfStr.append("levelother").append("|").append(jcScheduleSp.getSd4()).append(",");
-            bfStr.append("zerotoone").append("|").append(jcScheduleSp.getSl01()).append(",");
-            bfStr.append("zerototwo").append("|").append(jcScheduleSp.getSl02()).append(",");
-            bfStr.append("onetotwo").append("|").append(jcScheduleSp.getSl12()).append(",");
-            bfStr.append("zerotothree").append("|").append(jcScheduleSp.getSl03()).append(",");
-            bfStr.append("onetothree").append("|").append(jcScheduleSp.getSl13()).append(",");
-            bfStr.append("twotothree").append("|").append(jcScheduleSp.getSl23()).append(",");
-            bfStr.append("zerotofour").append("|").append(jcScheduleSp.getSl04()).append(",");
-            bfStr.append("onetofour").append("|").append(jcScheduleSp.getSl14()).append(",");
-            bfStr.append("twotofour").append("|").append(jcScheduleSp.getSl24()).append(",");
-            bfStr.append("zerotofive").append("|").append(jcScheduleSp.getSl05()).append(",");
-            bfStr.append("onetofive").append("|").append(jcScheduleSp.getSl15()).append(",");
-            bfStr.append("twotofive").append("|").append(jcScheduleSp.getSl25()).append(",");
-            bfStr.append("lostother").append("|").append(jcScheduleSp.getSl5()).append(",");
-            bfStr.append("concedenum").append("|").append("0");
+            bfStr.append("1:0").append("|").append(jcScheduleSp.getSw10()).append(",");
+            bfStr.append("2:0").append("|").append(jcScheduleSp.getSw20()).append(",");
+            bfStr.append("2:1").append("|").append(jcScheduleSp.getSw21()).append(",");
+            bfStr.append("3:0").append("|").append(jcScheduleSp.getSw30()).append(",");
+            bfStr.append("3:1").append("|").append(jcScheduleSp.getSw31()).append(",");
+            bfStr.append("3:2").append("|").append(jcScheduleSp.getSw32()).append(",");
+            bfStr.append("4:0").append("|").append(jcScheduleSp.getSw40()).append(",");
+            bfStr.append("4:1").append("|").append(jcScheduleSp.getSw41()).append(",");
+            bfStr.append("4:2").append("|").append(jcScheduleSp.getSw42()).append(",");
+            bfStr.append("5:0").append("|").append(jcScheduleSp.getSw50()).append(",");
+            bfStr.append("5:1").append("|").append(jcScheduleSp.getSw51()).append(",");
+            bfStr.append("5:2").append("|").append(jcScheduleSp.getSw52()).append(",");
+            bfStr.append("胜其他").append("|").append(jcScheduleSp.getSw5()).append(",");
+            bfStr.append("0:0").append("|").append(jcScheduleSp.getSd00()).append(",");
+            bfStr.append("1:1").append("|").append(jcScheduleSp.getSd11()).append(",");
+            bfStr.append("2:2").append("|").append(jcScheduleSp.getSd22()).append(",");
+            bfStr.append("3:3").append("|").append(jcScheduleSp.getSd33()).append(",");
+            bfStr.append("平其他").append("|").append(jcScheduleSp.getSd4()).append(",");
+            bfStr.append("0:1").append("|").append(jcScheduleSp.getSl01()).append(",");
+            bfStr.append("0:2").append("|").append(jcScheduleSp.getSl02()).append(",");
+            bfStr.append("1:2").append("|").append(jcScheduleSp.getSl12()).append(",");
+            bfStr.append("0:3").append("|").append(jcScheduleSp.getSl03()).append(",");
+            bfStr.append("1:3").append("|").append(jcScheduleSp.getSl13()).append(",");
+            bfStr.append("2:3").append("|").append(jcScheduleSp.getSl23()).append(",");
+            bfStr.append("0:4").append("|").append(jcScheduleSp.getSl04()).append(",");
+            bfStr.append("1:4").append("|").append(jcScheduleSp.getSl14()).append(",");
+            bfStr.append("2:4").append("|").append(jcScheduleSp.getSl24()).append(",");
+            bfStr.append("0:5").append("|").append(jcScheduleSp.getSl05()).append(",");
+            bfStr.append("1:5").append("|").append(jcScheduleSp.getSl15()).append(",");
+            bfStr.append("2:5").append("|").append(jcScheduleSp.getSl25()).append(",");
+            bfStr.append("负其他").append("|").append(jcScheduleSp.getSl5()).append(",");
+            bfStr.append("让球数").append("|").append("0");
 
 
             //总进球
             StringBuilder zjqStr = new StringBuilder();
-            zjqStr.append("totalgoal0rate").append("|").append(jcScheduleSp.getT0()).append(",");
-            zjqStr.append("totalgoal1rate").append("|").append(jcScheduleSp.getT1()).append(",");
-            zjqStr.append("totalgoal2rate").append("|").append(jcScheduleSp.getT2()).append(",");
-            zjqStr.append("totalgoal3rate").append("|").append(jcScheduleSp.getT3()).append(",");
-            zjqStr.append("totalgoal4rate").append("|").append(jcScheduleSp.getT4()).append(",");
-            zjqStr.append("totalgoal5rate").append("|").append(jcScheduleSp.getT5()).append(",");
-            zjqStr.append("totalgoal6rate").append("|").append(jcScheduleSp.getT6()).append(",");
-            zjqStr.append("totalgoal7rate").append("|").append(jcScheduleSp.getT7());
+            zjqStr.append("0").append("|").append(jcScheduleSp.getT0()).append(",");
+            zjqStr.append("1").append("|").append(jcScheduleSp.getT1()).append(",");
+            zjqStr.append("2").append("|").append(jcScheduleSp.getT2()).append(",");
+            zjqStr.append("3").append("|").append(jcScheduleSp.getT3()).append(",");
+            zjqStr.append("4").append("|").append(jcScheduleSp.getT4()).append(",");
+            zjqStr.append("5").append("|").append(jcScheduleSp.getT5()).append(",");
+            zjqStr.append("6").append("|").append(jcScheduleSp.getT6()).append(",");
+            zjqStr.append("7").append("|").append(jcScheduleSp.getT7());
 
 
             //半全场
             StringBuilder bqcSpfStr = new StringBuilder();
-            bqcSpfStr.append("winwinrate").append("|").append(jcScheduleSp.getHt33()).append(","); //胜胜
-            bqcSpfStr.append("winlevelrate").append("|").append(jcScheduleSp.getHt31()).append(",");//胜平
-            bqcSpfStr.append("winloserate").append("|").append(jcScheduleSp.getHt30()).append(",");//胜负
-            bqcSpfStr.append("levelwinrate").append("|").append(jcScheduleSp.getHt13()).append(",");//平胜
-            bqcSpfStr.append("levellevelrate").append("|").append(jcScheduleSp.getHt11()).append(",");//平平
-            bqcSpfStr.append("levelloserate").append("|").append(jcScheduleSp.getHt10()).append(",");//平负
-            bqcSpfStr.append("losewinrate").append("|").append(jcScheduleSp.getHt03()).append(",");//负胜
-            bqcSpfStr.append("loselevelrate").append("|").append(jcScheduleSp.getHt01()).append(",");//负平
-            bqcSpfStr.append("loseloserate").append("|").append(jcScheduleSp.getHt00());//负负
+            bqcSpfStr.append("胜胜").append("|").append(jcScheduleSp.getHt33()).append(","); //胜胜
+            bqcSpfStr.append("胜平").append("|").append(jcScheduleSp.getHt31()).append(",");//胜平
+            bqcSpfStr.append("胜负").append("|").append(jcScheduleSp.getHt30()).append(",");//胜负
+            bqcSpfStr.append("平胜").append("|").append(jcScheduleSp.getHt13()).append(",");//平胜
+            bqcSpfStr.append("平平").append("|").append(jcScheduleSp.getHt11()).append(",");//平平
+            bqcSpfStr.append("平负").append("|").append(jcScheduleSp.getHt10()).append(",");//平负
+            bqcSpfStr.append("负胜").append("|").append(jcScheduleSp.getHt03()).append(",");//负胜
+            bqcSpfStr.append("负平").append("|").append(jcScheduleSp.getHt01()).append(",");//负平
+            bqcSpfStr.append("负负").append("|").append(jcScheduleSp.getHt00());//负负
             //基础信息
             result.put("message", "success");
             result.put("gameid", jcSchedule.getScheduleid());
