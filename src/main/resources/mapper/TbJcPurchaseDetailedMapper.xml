@@ -57,6 +57,7 @@
     pd.create_time buyTime,/*购买时间*/
     expert.grade level,/*专家等级*/
     plan.id planId,
+    plan.status status,
     pd.third_money thirdMoney,/*支付金额*/
     pd.buy_money buyMoney ,
     pd.first firstone,
