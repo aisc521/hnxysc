@@ -1,6 +1,8 @@
 package com.zhcdata.jc.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.zhcdata.jc.tools.DoubleFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -76,14 +78,17 @@ public class AnalysisDto {
     /**
      * 初胜
      */
+    @JsonSerialize(using = DoubleFormat.class)
     private Double satWin;
     /**
      * 初平
      */
+    @JsonSerialize(using = DoubleFormat.class)
     private Double satFlat;
     /**
      * 初负
      */
+    @JsonSerialize(using = DoubleFormat.class)
     private Double satLose;
     /**
      * 最近赛事

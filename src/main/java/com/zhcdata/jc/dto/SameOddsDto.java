@@ -1,5 +1,7 @@
 package com.zhcdata.jc.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.zhcdata.jc.tools.DoubleFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -42,18 +44,22 @@ public class SameOddsDto implements Serializable {
     private String issueZC;               //期数🌟🌟🌟🌟  足彩期次 19127期
     private String weekNum;               //期数🌟🌟🌟🌟  竞彩使用 如周一001
     private String num;                   //北单、足彩使用 107
-
+    @JsonSerialize(using = DoubleFormat.class)
     private Double tpeiWinHandicap;        //	同赔胜赔率
     private String tpeiWinOdds;            //同赔胜几率
+    @JsonSerialize(using = DoubleFormat.class)
     private Double tpeiFlatHandicap;    //		同赔平赔率
     private String tpeiFlatOdds;        //	同赔平几率
+    @JsonSerialize(using = DoubleFormat.class)
     private Double tpeilLoseHandicap;    //		同赔负赔率
     private String tpeilLoseOdds;        //	同赔负几率
-
+    @JsonSerialize(using = DoubleFormat.class)
     private Double tpanWinHandicap;        //	同盘胜盘口
     private String tpanWinOdds;            //同盘胜几率
+    @JsonSerialize(using = DoubleFormat.class)
     private Double tpanFlatHandicap;    //		同盘平盘口
     private String tpanFlatOdds;        //	同盘平几率
+    @JsonSerialize(using = DoubleFormat.class)
     private Double tpanLoseHandicap;    //		同盘负盘口
     private String tpanLoseOdds;        //	同盘负几率
     @JsonIgnore

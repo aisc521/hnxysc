@@ -1,6 +1,8 @@
 package com.zhcdata.jc.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.zhcdata.jc.tools.DoubleFormat;
 import lombok.Data;
 
 /**
@@ -26,17 +28,23 @@ public class AnalysisMatchDto {
     //客队比分
     private Integer guestScore;
     //初胜
-    private String satWin;
+    @JsonSerialize(using = DoubleFormat.class)
+    private Double satWin;
     //初平
-    private String satFlat;
+    @JsonSerialize(using = DoubleFormat.class)
+    private Double satFlat;
     //初负
-    private String satLose;
+    @JsonSerialize(using = DoubleFormat.class)
+    private Double satLose;
     //终胜
-    private String endWin;
+    @JsonSerialize(using = DoubleFormat.class)
+    private Double endWin;
     //终平
-    private String endFlat;
+    @JsonSerialize(using = DoubleFormat.class)
+    private Double endFlat;
     //终负
-    private String endLose;
+    @JsonSerialize(using = DoubleFormat.class)
+    private Double endLose;
     //盘路
     private String panlu;
     @JsonIgnore
