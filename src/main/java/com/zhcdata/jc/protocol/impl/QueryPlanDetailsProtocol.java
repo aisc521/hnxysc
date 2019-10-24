@@ -12,6 +12,7 @@ import com.zhcdata.jc.service.TbJcExpertService;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
 import com.zhcdata.jc.tools.JcLotteryUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -143,32 +144,38 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         String matchResult = String.valueOf(list.get(i).get("matchResult"));
                         String rang_num = String.valueOf(list.get(i).get("awayTeamRangballs"));
                         //计算那个中了
-                        String[] matchResultArr = matchResult.split(":");
-                        Double matchResultDou1 = Double.valueOf(matchResultArr[0]);//住比分
-                        Double matchResultDou2 = Double.valueOf(matchResultArr[1]);//客比分
-                        //计算胜平负状态
-                        String winStatus = "0";
-                        String rwinStatus = "0";
-                        if(matchResultDou1 > matchResultDou2){//胜
-                            winStatus = "1";
+                        if(StringUtils.isNotBlank(matchResult)){
+                            String[] matchResultArr = matchResult.split(":");
+                            Double matchResultDou1 = Double.valueOf(matchResultArr[0]);//住比分
+                            Double matchResultDou2 = Double.valueOf(matchResultArr[1]);//客比分
+                            //计算胜平负状态
+                            String winStatus = "0";
+                            String rwinStatus = "0";
+                            if(matchResultDou1 > matchResultDou2){//胜
+                                winStatus = "1";
+                            }
+                            if(matchResultDou1 == matchResultDou2){//平
+                                winStatus = "2";
+                            }
+                            if(matchResultDou1 < matchResultDou2){//负
+                                winStatus = "3";
+                            }
+                            if((matchResultDou1 + Double.valueOf(rang_num)) > matchResultDou2){//让胜
+                                rwinStatus = "1";
+                            }
+                            if((matchResultDou1 + Double.valueOf(rang_num)) == matchResultDou2){//让平
+                                rwinStatus = "2";
+                            }
+                            if((matchResultDou1 + Double.valueOf(rang_num)) < matchResultDou2){//让负
+                                rwinStatus = "3";
+                            }
+                            map.put("winStatus", ""+winStatus);
+                            map.put("rwinStatus", ""+rwinStatus);
+                        }else{
+                            map.put("winStatus", "4");//没有赛果
+                            map.put("rwinStatus", "4");
                         }
-                        if(matchResultDou1 == matchResultDou2){//平
-                            winStatus = "2";
-                        }
-                        if(matchResultDou1 < matchResultDou2){//负
-                            winStatus = "3";
-                        }
-                        if((matchResultDou1 + Double.valueOf(rang_num)) > matchResultDou2){//让胜
-                            rwinStatus = "1";
-                        }
-                        if((matchResultDou1 + Double.valueOf(rang_num)) == matchResultDou2){//让平
-                            rwinStatus = "2";
-                        }
-                        if((matchResultDou1 + Double.valueOf(rang_num)) < matchResultDou2){//让负
-                            rwinStatus = "3";
-                        }
-                        map.put("winStatus", ""+winStatus);
-                        map.put("rwinStatus", ""+rwinStatus);
+
                         map.put("planInfo", ""+list.get(i).get("planInfo"));
                         plan_info.add(map);
                     }
