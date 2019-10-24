@@ -144,7 +144,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         String matchResult = String.valueOf(list.get(i).get("matchResult"));
                         String rang_num = String.valueOf(list.get(i).get("awayTeamRangballs"));
                         //计算那个中了
-                        if(StringUtils.isNotBlank(matchResult)){
+                        if(StringUtils.isNotBlank(matchResult) && !"null".equals(matchResult)){
                             String[] matchResultArr = matchResult.split(":");
                             Double matchResultDou1 = Double.valueOf(matchResultArr[0]);//住比分
                             Double matchResultDou2 = Double.valueOf(matchResultArr[1]);//客比分
