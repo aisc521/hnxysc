@@ -97,7 +97,7 @@ logging:
     com:
       zhcdata:
         db:
-          mapper: debug
+          mapper: info
 
 # 自定义属性
 custom:

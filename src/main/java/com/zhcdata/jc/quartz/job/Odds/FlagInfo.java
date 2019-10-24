@@ -44,6 +44,6 @@ public class FlagInfo {
 
     public static List<String> multi_hdx = new ArrayList<>();//存的是 比赛id:公司id:盘口号 半场大小球
 
-    public static Map<String,Long> MATCH_START_TIME = new LinkedHashMap<>();//存的是 比赛id，开始时间毫秒数
+    //public static Map<String,Long> MATCH_START_TIME = new LinkedHashMap<>();//存的是 比赛id，开始时间毫秒数
 
 }

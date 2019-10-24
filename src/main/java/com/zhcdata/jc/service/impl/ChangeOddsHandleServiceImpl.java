@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.MATCH_START_TIME;
+//import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.MATCH_START_TIME;
 
 /**
  * CopyRight (c)1999-2019 : zhcw.com
@@ -51,21 +51,23 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
-                Long time = MATCH_START_TIME.get(item[0]);
-                if (time==null || time<1){
-                    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
-                    if(schedule!=null){
-                        time = schedule.getMatchtime().getTime();
-                        MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
-                        if (MATCH_START_TIME.size()>500)
-                            MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
-                    }
+                //Long time = MATCH_START_TIME.get(item[0]);
+                //if (time==null || time<1){
+                //    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
+                //    if(schedule!=null){
+                //        time = schedule.getMatchtime().getTime();
+                //        MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
+                //        if (MATCH_START_TIME.size()>500)
+                //            MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
+                //    }
+                //}
+                //if (time!=null && time < System.currentTimeMillis()){
+                //    log.error("21多盘口赔率变化: 欧赔（让球盘）比赛已经开始，比赛ID:{}", item[0]);
+                //    continue;
+                //}
+                if (!item[8].equals("3")){
+                    singleHandicap(item);
                 }
-                if (time!=null && time < System.currentTimeMillis()){
-                    log.error("21多盘口赔率变化: 欧赔（让球盘）比赛已经开始，比赛ID:{}", item[0]);
-                    continue;
-                }
-                singleHandicap(item);
             } catch (Exception e) {
                 log.error("亚盘赔率异常:", e);
             }

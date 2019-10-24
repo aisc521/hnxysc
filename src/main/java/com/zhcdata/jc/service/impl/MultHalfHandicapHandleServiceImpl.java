@@ -49,12 +49,17 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
             //比赛ID,公司ID,初盘盘口,主队初盘赔率,客队初盘赔率,即时盘口,主队即时赔率,客队即时赔率,是否走地,盘口序号,变盘时间
             if (items.length > 0) {
                 for (String item : items) {
-                    if (StringUtils.isNotEmpty(item) && /*item.split(",").length == 11 &&*/ item.split(",")[9].equals("1"))
-                        singleHandicap(item);
-                    else if (StringUtils.isNotEmpty(item) /*&& item.split(",").length == 11*/)
-                        manyHandicap(item);
+                    try {
+                        if (StringUtils.isNotEmpty(item) && item.split(",")[9].equals("1"))
+                            singleHandicap(item);
+                        else if (StringUtils.isNotEmpty(item))
+                            manyHandicap(item);
+                    } catch (Exception e) {
+                        log.error("半场亚赔（让球盘）即时数据解析出错" + item);
+                    }
                 }
             }
+
             log.error("半场亚赔（让球盘）即时数据解析完成");
         }
     }
@@ -64,7 +69,7 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
         String[] info = item.split(",");
         //当前转化为对象
         LetGoalhalf xml = BeanUtils.parseHalfLetGoal(item);
-        String flag = xml.getScheduleid()+":"+xml.getCompanyid()+":"+item.split(",")[9];
+        String flag = xml.getScheduleid() + ":" + xml.getCompanyid() + ":" + item.split(",")[9];
         if (multi_hyp.contains(flag))
             return;
         //查询比赛信息
@@ -73,7 +78,7 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
         LetGoalhalf db = letGoalhalfMapper.selectByMatchIdAndCmp(Integer.parseInt(info[0]), Integer.parseInt(info[1]));
         if (db == null) {
             //插入
-            if (letGoalhalfMapper.insertSelective(xml) > 0){
+            if (letGoalhalfMapper.insertSelective(xml) > 0) {
                 multi_hyp_add(flag);
                 LetGoalhalf afterInsert = letGoalhalfMapper.selectByMatchIdAndCmp(Integer.parseInt(info[0]), Integer.parseInt(info[1]));
                 LetGoalhalfDetail letGoalhalfDetail = new LetGoalhalfDetail();
@@ -97,7 +102,7 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
                 } catch (Exception e) {
                     log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新异常", item);
                 }
-            }else multi_hyp_add(flag);
+            } else multi_hyp_add(flag);
         }
     }
 
@@ -106,7 +111,7 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
         String[] info = item.split(",");
         //当前转化为对象
         MultiLetGoalhalf xml = BeanUtils.parseMultiLetGoalhalf(item);
-        String flag = xml.getScheduleid()+":"+xml.getCompanyid()+":"+item.split(",")[9];
+        String flag = xml.getScheduleid() + ":" + xml.getCompanyid() + ":" + item.split(",")[9];
         if (multi_hyp.contains(flag))
             return;
         //查询比赛信息
@@ -114,7 +119,7 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
         //查询最新一条数据
         MultiLetGoalhalf db = multiLetGoalhalfMapper.selectByMatchIdAndCmpAndNum(info[0], info[1], info[9]);
         if (db == null) {
-            if (multiLetGoalhalfMapper.insertSelective(xml) > 0){
+            if (multiLetGoalhalfMapper.insertSelective(xml) > 0) {
                 multi_hyp_add(flag);
                 //log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
                 MultiLetGoalhalf afterInsert = multiLetGoalhalfMapper.selectByMatchIdAndCmpAndNum(info[0], info[1], info[9]);
@@ -138,6 +143,7 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
             } else multi_hyp_add(flag);
         }
     }
+
     private void multi_hyp_add(String str) {
         if (multi_hyp.size() > 30000)
             multi_hyp.remove(0);

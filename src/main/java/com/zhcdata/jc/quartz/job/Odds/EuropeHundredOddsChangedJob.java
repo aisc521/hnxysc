@@ -108,20 +108,20 @@ public class EuropeHundredOddsChangedJob implements Job {
                     EuropeOddsDetail db = detailMapper.selectByOddsNewest(dbl.getOddsid());
                     EuropeOddsDetail xml = BeanUtils.parseEuropeOddsDetail(mo);
                     if (db==null){
-                            //第一次添加
-                            xml.setOddsid(dbl.getOddsid());
-                            if (detailMapper.insertSelective(xml)>0) {
-                                insert++;
-                                log.error("百欧详情表新增新增"+xml.toString());
-                            }
-                            //变更主表
-                            dbl.setRealstandoff(xml.getStandoff());
-                            dbl.setRealhomewin(xml.getHomewin());
-                            dbl.setRealguestwin(xml.getGuestwin());
-                            dbl.setStandoffR(xml.getStandoff());
-                            dbl.setHomewinR(xml.getHomewin());
-                            dbl.setGuestwinR(xml.getGuestwin());
-                            europeOddsMapper.updateByPrimaryKeySelective(dbl);
+                            ////第一次添加
+                            //xml.setOddsid(dbl.getOddsid());
+                            //if (detailMapper.insertSelective(xml)>0) {
+                            //    insert++;
+                            //    log.error("百欧详情表新增新增"+xml.toString());
+                            //}
+                            ////变更主表
+                            //dbl.setRealstandoff(xml.getStandoff());
+                            //dbl.setRealhomewin(xml.getHomewin());
+                            //dbl.setRealguestwin(xml.getGuestwin());
+                            //dbl.setStandoffR(xml.getStandoff());
+                            //dbl.setHomewinR(xml.getHomewin());
+                            //dbl.setGuestwinR(xml.getGuestwin());
+                            //europeOddsMapper.updateByPrimaryKeySelective(dbl);
                     }else {
                         if (db.oddsEquals(xml))
                             jumped++;//相同时间 相同赔率 跳过

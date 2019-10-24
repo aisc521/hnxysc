@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
-import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.MATCH_START_TIME;
+//import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.MATCH_START_TIME;
 
 /**
  * CopyRight (c)1999-2019 : zhcw.com
@@ -56,26 +56,29 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
-                Long time = MATCH_START_TIME.get(item[0]);
-                if (time==null || time<1){
-                    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
-                    if(schedule!=null){
-                        time = schedule.getMatchtime().getTime();
-                        MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
-                        if (MATCH_START_TIME.size()>500)
-                            MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
+                //Long time = MATCH_START_TIME.get(item[0]);
+                //if (time == null || time < 1) {
+                //    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
+                //    if (schedule != null) {
+                //        time = schedule.getMatchtime().getTime();
+                //        MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
+                //        if (MATCH_START_TIME.size() > 500)
+                //            MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
+                //    }
+                //}
+                //if (time != null && time < System.currentTimeMillis()) {
+                //    log.error("21多盘口赔率变化: 半场大小球 比赛已经开始，比赛ID:{}", item[0]);
+                //    continue;
+                //}
+
+                if (!item[7].equals("3")) {
+                    if ("1".equals(item[5])) {//单盘口
+                        singleHandicap(item);
+                    } else {//存到多盘口
+                        manyHandicap(item);
                     }
                 }
-                if (time!=null && time < System.currentTimeMillis()){
-                    log.error("21多盘口赔率变化: 半场大小球 比赛已经开始，比赛ID:{}", item[0]);
-                    continue;
-                }
 
-                if ("1".equals(item[5])) {//单盘口
-                    singleHandicap(item);
-                } else {//存到多盘口
-                    manyHandicap(item);
-                }
             } catch (Exception e) {
                 log.error("亚盘赔率异常:", e);
             }
@@ -88,14 +91,14 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
         TotalScorehalfDetail xml = BeanUtils.parseTotalScorehalfDetail(item);
         //比赛id，公司ID获取数据库最新一条
         TotalScorehalfDetail totalScorehalfDetail = totalScorehalfDetailMapper.selectByMidAndCpy(item[0], item[1]);
-        if (totalScorehalfDetail == null || totalScorehalfDetail.getOddsid()==null) {
+        if (totalScorehalfDetail == null || totalScorehalfDetail.getOddsid() == null) {
             return;
         }
-        if (totalScorehalfDetail.getId()==null || !totalScorehalfDetail.oddsEquals(xml) && xml.getModifytime().getTime() > totalScorehalfDetail.getModifytime().getTime()) {
+        if (totalScorehalfDetail.getId() == null || !totalScorehalfDetail.oddsEquals(xml) && xml.getModifytime().getTime() > totalScorehalfDetail.getModifytime().getTime()) {
             //入数据库\
             xml.setOddsid(totalScorehalfDetail.getOddsid());
             int inch = totalScorehalfDetailMapper.insertSelective(xml);
-            totalScorehalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getDownodds(),xml.getModifytime(),xml.getGoal());
+            totalScorehalfMapper.updateOddsByOddsId(xml.getOddsid(), xml.getUpodds(), xml.getDownodds(), xml.getModifytime(), xml.getGoal());
             if (inch > 0) {
                 log.error("21多盘口赔率变化: 半场大小球  单盘口 接口数据:{} 入库成功", item);
             }
@@ -112,7 +115,7 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
         if (!multiTotalScorehalfDetail.oddsEquals(xml)) {
             xml.setOddsid(multiTotalScorehalfDetail.getOddsid());
             int inch = multiTotalScorehalfDetailMapper.insertSelective(xml);
-            multiTotalScorehalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getGoal(),xml.getUpodds(),xml.getDownodds(),xml.getAddtime());
+            multiTotalScorehalfMapper.updateOddsByOddsId(xml.getOddsid(), xml.getGoal(), xml.getUpodds(), xml.getDownodds(), xml.getAddtime());
             if (inch > 0) {
                 log.error("21多盘口赔率变化: 半场大小球  多盘口 接口数据:{} 入库成功", item);
             }

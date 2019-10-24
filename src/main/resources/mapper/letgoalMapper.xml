@@ -63,6 +63,20 @@
       LEFT JOIN team t2 ON s.guestteamid = t2.teamid
       where o.CompanyID = #{companyId} and o.ScheduleID = #{matchId}
     </select>
+    <select id="queryHandicapsBySchedule" resultType="com.zhcdata.jc.dto.AnalysisDto">
+      select
+        t.name_j hostName,
+        t.flag hostIcon,
+        t2.name_j guestName,
+        t2.flag guestIcon,
+        s.matchTime matchDate,
+        s.HomeTeamID homeId,
+        s.GuestTeamID guestId from  SCHEDULE s
+      LEFT JOIN team t ON s.hometeamid = t.teamid
+      LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+      where s.ScheduleID = #{matchId}
+    </select>
+
     <select id="querySameHandicapsMatchByOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
         select * from (
         select o.OddsID,o.scheduleId,o.FirstUpodds satWin,o.FirstGoal satFlat,o.FirstGoal panlu,o.FirstDownodds satLose,
@@ -302,7 +316,6 @@
         order by temp.MatchTime desc
         limit 50
     </select>
-
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from letgoal
