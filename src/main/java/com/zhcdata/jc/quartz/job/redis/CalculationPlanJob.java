@@ -139,6 +139,7 @@ public class CalculationPlanJob implements Job {
                                     } else {
                                         //推荐比赛，中一场+1
                                         z_count += 1;
+                                        result = 1;
                                     }
 
                                     //处理单场比赛结果、中奖状态
