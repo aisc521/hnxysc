@@ -41,7 +41,7 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public List<TbScoreResult> queryScore(String matchId) {
+    public ScoreDto queryScore(String matchId) {
         return tbJcPlanMapper.queryScore(Long.parseLong(matchId));
     }
 

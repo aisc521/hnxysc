@@ -115,8 +115,9 @@
     </select>
 
 
-  <select id="queryScore" resultType="com.zhcdata.jc.dto.TbScoreResult">
+  <select id="queryScore" resultType="com.zhcdata.jc.dto.ScoreDto">
 
+/*
 
       SELECT
           *
@@ -132,20 +133,36 @@
           lo.NO_ID num,
           CASE
                 WHEN sc.MatchState = '0' THEN
-                'notstarted' /*未开始*/
+                'notstarted' */
+/*未开始*//*
+
                 WHEN sc.MatchState IN ( '1', '3', '4', '5' ) THEN
-                'inprogress' /*正在进行*/
+                'inprogress' */
+/*正在进行*//*
+
                 WHEN sc.MatchState = '2' THEN
-                'inprogress' /*中场*/
+                'inprogress' */
+/*中场*//*
+
                 WHEN sc.MatchState = '-1' THEN
-                'finished' /*完结*/
+                'finished' */
+/*完结*//*
+
                 WHEN sc.MatchState = '-14' THEN
-                'notstarted' /*推迟*/
+                'notstarted' */
+/*推迟*//*
+
                 WHEN sc.MatchState = '-12' THEN
-                'cancelled' /*腰斩*/
+                'cancelled' */
+/*腰斩*//*
+
                 WHEN sc.MatchState = '-10' THEN
-                'cancelledcancelled' /*取消*/
-                END AS statusType,/*比赛大状态*/
+                'cancelledcancelled' */
+/*取消*//*
+
+                END AS statusType,*/
+/*比赛大状态*//*
+
                   sc.ScheduleID id,
                   sc.MatchState statusescFK
 
@@ -165,20 +182,36 @@
           lo.NO_ID num,
           CASE
                 WHEN sc1.MatchState = '0' THEN
-                'notstarted' /*未开始*/
+                'notstarted' */
+/*未开始*//*
+
                 WHEN sc1.MatchState IN ( '1', '3', '4', '5' ) THEN
-                'inprogress' /*正在进行*/
+                'inprogress' */
+/*正在进行*//*
+
                 WHEN sc1.MatchState = '2' THEN
-                'inprogress' /*中场*/
+                'inprogress' */
+/*中场*//*
+
                 WHEN sc1.MatchState = '-1' THEN
-                'finished' /*完结*/
+                'finished' */
+/*完结*//*
+
                 WHEN sc1.MatchState = '-14' THEN
-                'notstarted' /*推迟*/
+                'notstarted' */
+/*推迟*//*
+
                 WHEN sc1.MatchState = '-12' THEN
-                'cancelled' /*腰斩*/
+                'cancelled' */
+/*腰斩*//*
+
                 WHEN sc1.MatchState = '-10' THEN
-                'cancelledcancelled' /*取消*/
-                END AS statusType,/*比赛大状态*/
+                'cancelledcancelled' */
+/*取消*//*
+
+                END AS statusType,*/
+/*比赛大状态*//*
+
           sc1.ScheduleID id,
         sc1.MatchState statusescFK
 
@@ -189,8 +222,32 @@
           sc1.ScheduleID = #{matchId}
           ) a order by a.dateOfMatch asc , a.num asc , a.number asc
 
+*/
 
+SELECT
+sc.HomeScore homeScore,
+	sc.GuestScore guestScore,
+CASE WHEN
+	sc.MatchState = '0' THEN
+	'notstarted'
+	WHEN sc.MatchState IN ( '1', '3', '4', '5' ) THEN
+	'inprogress'
+	WHEN sc.MatchState = '2' THEN
+	'inprogress'
+	WHEN sc.MatchState = '-1' THEN
+	'finished'
+	WHEN sc.MatchState = '-14' THEN
+	'notstarted'
+	WHEN sc.MatchState = '-12' THEN
+	'cancelled'
+	WHEN sc.MatchState = '-10' THEN
+	'cancelledcancelled'
+	END AS statusType
 
+FROM
+	schedule sc
+WHERE
+	sc.scheduleID = '1788100'
 
 
   </select>

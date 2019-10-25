@@ -14,7 +14,6 @@ public class TbScoreResult {
     private String statusescFK;
     private String teamId;
     private String ut;
-
     public String getName() {
         return name;
     }
