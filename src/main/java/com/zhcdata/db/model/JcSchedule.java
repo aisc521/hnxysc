@@ -72,7 +72,7 @@ public class JcSchedule implements Serializable {
     private Byte isaudit;
 
     @Column(name = "MatchTime2")
-    private Date matchtime2;
+    private String matchtime2;
 
     @Column(name = "HomeTeamGov")
     private String hometeamgov;
@@ -402,14 +402,14 @@ public class JcSchedule implements Serializable {
     /**
      * @return MatchTime2
      */
-    public Date getMatchtime2() {
+    public String getMatchtime2() {
         return matchtime2;
     }
 
     /**
      * @param matchtime2
      */
-    public void setMatchtime2(Date matchtime2) {
+    public void setMatchtime2(String matchtime2) {
         this.matchtime2 = matchtime2;
     }
 
