@@ -87,7 +87,7 @@ public class EuropeHundredOddsTotal implements Job {
                     odds++;
                     String[] mo = value.split(",");
                     //博彩公司ID,博彩公司英文名,初盘主胜,初盘平局,初盘客胜,主胜,平局,客胜,变化时间,博彩公司简体名
-                    EuropeOdds xml = BeanUtils.parseEuropeOdds(item.getId(), mo);
+                    EuropeOdds xml = new BeanUtils().parseEuropeOdds(item.getId(), mo);
                     if (xml.getRealhomewin() != null && xml.getRealstandoff() != null && xml.getRealguestwin() != null) {
                         avg_win += xml.getRealhomewin();
                         avg_and += xml.getRealstandoff();

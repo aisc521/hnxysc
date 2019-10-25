@@ -128,7 +128,7 @@ public class EuropeHundredOddsJob implements Job {
                             continue;
                         EuropeOdds db = europeOddsMapper.selectByMidAndCpyAnd(item.getId(), o.split(",")[0]);
                         if (db == null) {//新增
-                            db = BeanUtils.parseEuropeOdds(item.getId(), o.split(","));//parse
+                            db = new BeanUtils().parseEuropeOdds(item.getId(), o.split(","));//parse
                             if (europeOddsMapper.insertSelective(db) > 0) {
                                 try {
                                     EuropeOdds afterInsert = europeOddsMapper.selectByMidAndCpyAnd(item.getId(), o.split(",")[0]);
