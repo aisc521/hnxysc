@@ -355,7 +355,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         LEFT JOIN tb_team_pet_name_info p2 on kk.awayId = p2.teamId) jc
         LEFT JOIN `schedule` sc on jc.matchId = sc.ScheduleID
         ) aaa
-        left join tb_jc_match bbb on aaa.matchId = bbb.match_id
+        left join tb_jc_match bbb on aaa.matchId = bbb.match_id and plan_id = #{pid}
     </select>
 
     <select id="queryFreeOrPayByUidAndPid" resultType="java.util.Map">

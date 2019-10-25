@@ -70,7 +70,7 @@ public class EuropeHundredOddsTotal implements Job {
         EuropeHundredOddsRsp obj = com.alibaba.fastjson.JSONObject.parseObject(s, EuropeHundredOddsRsp.class);
 
         List<H> items = obj.getC().getH();
-        int insert = 0 ;
+        int insert = 0;
         int update = 0;
         for (H item : items) {
             float avg_win = 0;
@@ -99,7 +99,7 @@ public class EuropeHundredOddsTotal implements Job {
                 Europeoddstotal total = new Europeoddstotal();
                 Europeoddstotal db = europeoddstotalMapper.selectByPrimaryKey(Integer.parseInt(item.getId()));
                 if (db == null) {
-                    if (avg_win!=0 && avg_and!=0&&avg_win!=0){
+                    if (avg_win != 0 && avg_and != 0 && avg_win != 0) {
                         total.setScheduleid(Integer.parseInt(item.getId()));
                         total.setFirsthomewin(avg_win / cpy_num);
                         total.setFirststandoff(avg_and / cpy_num);
@@ -108,19 +108,21 @@ public class EuropeHundredOddsTotal implements Job {
                         total.setRealstandoff(avg_and / cpy_num);
                         total.setRealguestwin(avg_lose / cpy_num);
                         total.setNum(cpy_num);
-                        if (europeoddstotalMapper.insertSelective(total)>0)
+                        if (europeoddstotalMapper.insertSelective(total) > 0)
                             insert++;
                     }
                 } else {
-                    db.setRealhomewin(avg_win / cpy_num);
-                    db.setRealstandoff(avg_and / cpy_num);
-                    db.setRealguestwin(avg_lose / cpy_num);
-                    db.setNum(cpy_num);
-                    if (europeoddstotalMapper.updateByPrimaryKeySelective(db)>0)
-                        update++;
+                    if (avg_win != 0 && avg_and != 0 && avg_win != 0) {
+                        db.setRealhomewin(avg_win / cpy_num);
+                        db.setRealstandoff(avg_and / cpy_num);
+                        db.setRealguestwin(avg_lose / cpy_num);
+                        db.setNum(cpy_num);
+                        if (europeoddstotalMapper.updateByPrimaryKeySelective(db) > 0)
+                            update++;
+                    }
                 }
             }
         }
-        LOGGER.info("百欧赔率total表,总:" + odds +",新增:"+insert+ ",更新:"+update+",耗时:" + (System.currentTimeMillis() - sat));
+        LOGGER.info("百欧赔率total表,总:" + odds + ",新增:" + insert + ",更新:" + update + ",耗时:" + (System.currentTimeMillis() - sat));
     }
 }

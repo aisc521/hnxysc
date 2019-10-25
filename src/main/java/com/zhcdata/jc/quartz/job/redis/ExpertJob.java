@@ -183,6 +183,7 @@ public class ExpertJob implements Job {
                 hot.setPushed(getPlanCount(list6.get(i).getId()));
                 hot.setImg(list6.get(i).getImg());
                 hot.setGrade(list6.get(i).getGrade());
+                hot.setType("1");
                 list.add(hot);
                 expertId += "'" + list6.get(i).getId() + "',";
             }
