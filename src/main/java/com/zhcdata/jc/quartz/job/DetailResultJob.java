@@ -106,6 +106,7 @@ public class DetailResultJob implements Job {
             }
         } catch (Exception ex) {
             log.error("[比赛详细事件]接口处理异常:" + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

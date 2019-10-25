@@ -118,7 +118,8 @@ public class PlayerJob implements Job {
                 }
             }
         } catch (Exception ex) {
-            System.out.println("[球员资料]异常信息：" + ex.getMessage());
+            LOGGER.error("[球员资料]异常信息：" + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

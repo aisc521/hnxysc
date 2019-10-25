@@ -53,6 +53,7 @@ public class CornerJob implements Job {
             String asdf = "";
         } catch (Exception ex) {
             log.error("[角球事件接口异常]" + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

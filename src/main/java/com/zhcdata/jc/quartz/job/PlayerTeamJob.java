@@ -68,7 +68,8 @@ public class PlayerTeamJob implements Job {
                 }
             }
         }catch (Exception ex){
-            System.out.println("球员所属球队异常：" + ex.getMessage());
+            log.error("球员所属球队异常：" + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }
