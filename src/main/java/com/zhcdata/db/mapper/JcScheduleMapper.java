@@ -8,4 +8,6 @@ public interface JcScheduleMapper extends Mapper<JcSchedule> {
     JcSchedule queryJcScheduleByBet007(@Param("bet007Id") long bet007);
 
     JcSchedule queryJcScheduleByMatchID(@Param("matchid") String id,@Param("startTime") String startTime,@Param("endTime") String endTime);
+
+    int updateByPrimaryKeySelective(JcSchedule jcSchedule);
 }

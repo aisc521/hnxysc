@@ -1,6 +1,8 @@
 package com.zhcdata.jc.quartz.job;
 
+import com.zhcdata.db.mapper.JcScheduleMapper;
 import com.zhcdata.db.mapper.ScheduleMapper;
+import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.tools.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +31,9 @@ public class Change2Job implements Job {
     @Resource
     ScheduleMapper scheduleMapper;
 
+    @Resource
+    JcScheduleMapper jcScheduleMapper;
+
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         String url = "http://interface.win007.com/zq/change2.xml";
@@ -46,22 +51,28 @@ public class Change2Job implements Job {
             for (org.dom4j.Element one : childElements) {
                 String[] strings = one.getText().split("\\^");
                 Schedule info = new Schedule();
+                JcSchedule jcInfo=new JcSchedule();  //竞彩赛程
 
                 info.setScheduleid(Integer.valueOf(strings[0]));    //比赛ID0
                 if (strings.length > 0 && strings[1].length() > 0) {
                     info.setMatchstate(Short.valueOf(strings[1]));      //比赛状态1
+                    jcInfo.setMatchstate(Short.valueOf(strings[1]));      //比赛状态1
                 }
                 if (strings.length > 1 && strings[2].length() > 0) {
                     info.setHomescore(Short.valueOf(strings[2]));       //主队比分2
+                    jcInfo.setHomescore(Short.valueOf(strings[2]));       //主队比分2
                 }
                 if (strings.length > 2 && strings[3].length() > 0) {
                     info.setGuestscore(Short.valueOf(strings[3]));      //客队比分3
+                    jcInfo.setGuestscore(Short.valueOf(strings[3]));      //客队比分3
                 }
                 if (strings.length > 3 && strings[4].length() > 0) {
                     info.setHomehalfscore(Short.valueOf(strings[4]));   //主队上半场比分4
+                    jcInfo.setHomehalfscore(Short.valueOf(strings[4]));   //主队上半场比分4
                 }
                 if (strings.length > 4 && strings[5].length() > 0) {
                     info.setGuesthalfscore(Short.valueOf(strings[5]));  //客队上半场比分5
+                    jcInfo.setGuesthalfscore(Short.valueOf(strings[5]));  //客队上半场比分5
                 }
                 if (strings.length > 5 && strings[6].length() > 0) {
                     info.setHomeRed(Short.valueOf(strings[6]));         //主队红牌6
@@ -79,6 +90,7 @@ public class Change2Job implements Job {
                         string = DateFormatUtil.formatDate("yyyy,M,d,HH,mm,ss", instance.getTime());
                     }
                     info.setMatchtime2(string);           //开场时间9
+                    jcInfo.setMatchtime2(string);                     //开场时间9
                 }
                 if (strings.length > 10 && strings[11].length() > 0) {
                     info.setVisitor(Integer.valueOf(strings[11]));      //是否有阵容11
@@ -96,14 +108,20 @@ public class Change2Job implements Job {
                     info.setGuestcorner(Integer.valueOf(strings[17]));  //客队角球17
                 }
 
+                if(jcScheduleMapper.updateByPrimaryKeySelective(jcInfo)>0){
+                    log.info("[即时变化的比分数据（150秒）]：(竞彩)更新成功");
+                }else {
+                    log.info("[即时变化的比分数据（150秒）]：(竞彩)不需要更新");
+                }
+
                 if (scheduleMapper.updateByPrimaryKeySelective(info) > 0) {
-                    log.error("[即时变化的比分数据（20秒）]：更新成功");
+                    log.error("[即时变化的比分数据（150秒）]：更新成功");
                 } else {
-                    log.error("[即时变化的比分数据（20秒）]：更新失败");
+                    log.error("[即时变化的比分数据（150秒）]：不需要更新");
                 }
             }
         } catch (Exception ex) {
-            log.error("[即时变化的比分数据（20秒）]" + ex.getMessage());
+            log.error("[即时变化的比分数据（120秒）]" + ex.getMessage());
             ex.printStackTrace();
         }
     }

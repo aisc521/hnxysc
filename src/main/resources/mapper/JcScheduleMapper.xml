@@ -45,4 +45,101 @@
   <select id="queryJcScheduleByMatchID" resultType="com.zhcdata.db.model.JcSchedule">
     select * from jc_schedule jc where jc.MatchID = #{matchid} and jc.MatchTime between #{startTime} and #{endTime}
   </select>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.JcSchedule" >
+    update jc_schedule
+    <set >
+      <if test="matchid != null" >
+        MatchID = #{matchid,jdbcType=VARCHAR},
+      </if>
+      <if test="matchtime != null" >
+        MatchTime = #{matchtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sellouttime != null" >
+        SelloutTime = #{sellouttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sclass != null" >
+        Sclass = #{sclass,jdbcType=VARCHAR},
+      </if>
+      <if test="hometeam != null" >
+        HomeTeam = #{hometeam,jdbcType=VARCHAR},
+      </if>
+      <if test="hometeamid != null" >
+        HomeTeamID = #{hometeamid,jdbcType=INTEGER},
+      </if>
+      <if test="guestteam != null" >
+        GuestTeam = #{guestteam,jdbcType=VARCHAR},
+      </if>
+      <if test="guestteamid != null" >
+        GuestTeamID = #{guestteamid,jdbcType=INTEGER},
+      </if>
+      <if test="matchstate != null" >
+        MatchState = #{matchstate,jdbcType=SMALLINT},
+      </if>
+      <if test="homescore != null" >
+        HomeScore = #{homescore,jdbcType=SMALLINT},
+      </if>
+      <if test="guestscore != null" >
+        GuestScore = #{guestscore,jdbcType=SMALLINT},
+      </if>
+      <if test="homehalfscore != null" >
+        HomeHalfScore = #{homehalfscore,jdbcType=SMALLINT},
+      </if>
+      <if test="guesthalfscore != null" >
+        GuestHalfScore = #{guesthalfscore,jdbcType=SMALLINT},
+      </if>
+      <if test="polygoal != null" >
+        PolyGoal = #{polygoal,jdbcType=REAL},
+      </if>
+      <if test="isend != null" >
+        IsEnd = #{isend,jdbcType=BIT},
+      </if>
+      <if test="isturned != null" >
+        IsTurned = #{isturned,jdbcType=BIT},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=SMALLINT},
+      </if>
+      <if test="hometeamf != null" >
+        HomeTeamF = #{hometeamf,jdbcType=VARCHAR},
+      </if>
+      <if test="guestteamf != null" >
+        GuestTeamF = #{guestteamf,jdbcType=VARCHAR},
+      </if>
+      <if test="isaudit != null" >
+        IsAudit = #{isaudit,jdbcType=TINYINT},
+      </if>
+      <if test="matchtime2 != null" >
+        MatchTime2 = #{matchtime2,jdbcType=DATE},
+      </if>
+      <if test="hometeamgov != null" >
+        HomeTeamGov = #{hometeamgov,jdbcType=VARCHAR},
+      </if>
+      <if test="guestteamgov != null" >
+        GuestTeamGov = #{guestteamgov,jdbcType=VARCHAR},
+      </if>
+      <if test="single101 != null" >
+        Single101 = #{single101,jdbcType=BIT},
+      </if>
+      <if test="single102 != null" >
+        Single102 = #{single102,jdbcType=BIT},
+      </if>
+      <if test="single103 != null" >
+        Single103 = #{single103,jdbcType=BIT},
+      </if>
+      <if test="single104 != null" >
+        Single104 = #{single104,jdbcType=BIT},
+      </if>
+      <if test="single105 != null" >
+        Single105 = #{single105,jdbcType=BIT},
+      </if>
+      <if test="addtime != null" >
+        AddTime = #{addtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sellouttimegov != null" >
+        SelloutTimeGov = #{sellouttimegov,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ScheduleID = #{scheduleid,jdbcType=INTEGER}
+  </update>
 </mapper>
