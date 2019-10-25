@@ -1,8 +1,11 @@
 package com.zhcdata.jc.protocol.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import com.zhcdata.jc.dto.ExpertInfo;
+import com.zhcdata.jc.dto.ExpertInfoBdDto;
 import com.zhcdata.jc.dto.ProtocolParamDto;
+import com.zhcdata.jc.dto.PurchasedPlanDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
@@ -37,18 +40,29 @@ public class QueryExpertListProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.TYPE_NULL.getMsg());
             return map;
         }
+        String pageNo = paramMap.get("pageNo");
+        if (Strings.isNullOrEmpty(pageNo)) {
+            LOGGER.info("[" + ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg() + "]:pageNo---" + pageNo);
+            map.put("resCode", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getCode());
+            map.put("message", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg());
+            return map;
+        }
         return null;
     }
 
     @Override
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         String type = paramMap.get("type");
-
+        String pageNo = paramMap.get("pageNo");
         Map<String, Object> resultMap = new HashMap<>();
 
         try {
-            List<ExpertInfo> list = tbJcExpertService.queryExpertsByType(type);
+
+            PageInfo<ExpertInfoBdDto> expertInfoPageInfo = tbJcExpertService.queryExpertsByType(type,Integer.valueOf(pageNo),20);
+            List<ExpertInfoBdDto> list = expertInfoPageInfo.getList();
             resultMap.put("list", list);
+            resultMap.put("pageNo", pageNo);
+            resultMap.put("pageNum", expertInfoPageInfo.getTotal());
         } catch (Exception ex) {
             LOGGER.error(ex.toString());
         }

@@ -82,10 +82,23 @@
   <select id="queryExperts" resultType="com.zhcdata.jc.dto.ExpertInfo">
     SELECT * from tb_jc_expert
   </select>
-  <select id="queryExpertsByType" resultType="com.zhcdata.jc.dto.ExpertInfo">
-    SELECT e.id,e.img,e.nick_name nickName,e.grade,e.lable,
-    e.fans,e.introduction,1 pushed,v.lz_now victory,
-    v.z_Seven_Days zSevenDays,v.return_Seven_Days returnSevenDays ,(select count(*) from tb_jc_plan p where p.ascription_expert = e.id) pushed from  tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
+  <select id="queryExpertsByType" resultType="com.zhcdata.jc.dto.ExpertInfoBdDto">
+    SELECT
+    e.id,
+    e.img,
+    e.nick_name nickName,
+    e.grade,
+    e.lable,
+    e.fans,
+    e.introduction,
+    v.lz_now victory,
+    v.z_Seven_Days zSevenDays,
+    v.return_Seven_Days returnSevenDays,
+    (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id ) pushed,
+    e.popularity popularity
+    FROM
+    tb_jc_expert e
+    LEFT JOIN tb_jc_victory v ON e.id = v.expert_id
     <if test="type==2">
       ORDER BY victory desc
     </if>
