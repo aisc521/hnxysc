@@ -184,8 +184,8 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
 //                resultMap.put("matchType", 0);
 //            }
 
-            resultMap.put("guestIcon",imgYuMing+ result.getGuestImg());
-            resultMap.put("hostIcon",imgYuMing+ result.getHomeImg());
+            resultMap.put("guestIcon", Strings.isNullOrEmpty(result.getGuestImg()) ? null : imgYuMing + result.getGuestImg());
+            resultMap.put("hostIcon",Strings.isNullOrEmpty(result.getHomeImg()) ? null : imgYuMing+ result.getHomeImg());
             resultMap.put("resCode", ProtocolCodeMsg.SUCCESS.getCode());
             resultMap.put("message", ProtocolCodeMsg.SUCCESS.getMsg());
             resultMap.put("timeId", String.valueOf(System.currentTimeMillis()));

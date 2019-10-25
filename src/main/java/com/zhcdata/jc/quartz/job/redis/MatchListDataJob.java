@@ -310,6 +310,16 @@ public class MatchListDataJob implements Job {
                 value = "4";
             } else if (value.equals("5.0")) {
                 value = "5";
+            } else if (value.equals("-1.0")) {
+                value = "-1";
+            } else if (value.equals("-2.0")) {
+                value = "-2";
+            } else if (value.equals("-3.0")) {
+                value = "-3";
+            } else if (value.equals("-4.0")) {
+                value = "-4";
+            } else if (value.equals("-5.0")) {
+                value = "-5";
             }
         }
         return value;
@@ -328,6 +338,16 @@ public class MatchListDataJob implements Job {
                 return "4";
             } else if (value.equals("5.0")) {
                 return "5";
+            } else if (value.equals("-1.0")) {
+                return "-1";
+            } else if (value.equals("-2.0")) {
+                return "-2";
+            } else if (value.equals("-3.0")) {
+               return  "-3";
+            } else if (value.equals("-4.0")) {
+               return  "-4";
+            } else if (value.equals("-5.0")) {
+               return  "-5";
             }
             String oneArray[] = {"-5", "-4.75", "-4.5", "-4.25", "-4", "-3.75", "-3.5", "-3.25", "-3", "-2.75", "-2.5", "-2.25", "-2", "-1.75", "-1.5", "-1.25", "-1", "-0.75", "-0.5", "-0.25", "0", "0.25", "0.5", "0.75", "1", "1.25", "1.5", "1.75", "2", "2.25", "2.5", "2.75", "3", "3.25", "3.5", "3.75", "4", "4.25", "4.5", "4.75", "5"};
             String twoArray[] = {"-5/5", "-4.5/5", "-4.5/4.5", "-4/4.5", "-4/4.5", "-3.5/4", "-3.5/3.5", "-3/3.5", "-3/3", "-2.5/3", "-2.5/2.5", "-2/2.5", "-2/2", "-1.5/2", "-1.5/1.5", "-1/1.5", "-1/1", "-0.5/1", "-0.5/0.5", "-0/0.5", "0/0", "0/0.5", "0.5/0.5", "0.5/1", "1/1", "1/1.5", "1.5/1.5", "1.5/2", "2/2", "2/2.5", "2.5/2.5", "2.5/3", "3/3", "3/3.5", "3.5/3.5", "3.5/4", "4/4", "4/4.5", "4.5/4.5", "4.5/5", "5/5"};

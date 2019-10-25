@@ -814,7 +814,10 @@ public class ScheduleServiceImpl implements ScheduleService {
             matchState = String.valueOf(schedule.getMatchstate());
             matchTime1 = schedule.getMatchtime();
             try {
-                matchTime2 = DateFormatUtil.pareDate("yyyy-MM-dd HH:mm:ss",schedule.getMatchtime2());
+                String matchtime2 = schedule.getMatchtime2();
+                if (Strings.isNotBlank(matchtime2)) {
+                    matchTime2 = DateFormatUtil.pareDate("yyyy-MM-dd HH:mm:ss", matchtime2);
+                }
             } catch (ParseException e) {
                 log.error("半场比赛时间转换错误");
                 e.printStackTrace();
