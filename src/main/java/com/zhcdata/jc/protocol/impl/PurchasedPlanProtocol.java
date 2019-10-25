@@ -10,6 +10,7 @@ import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
+import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.Const;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -33,6 +34,8 @@ public class PurchasedPlanProtocol implements BaseProtocol {
     @Resource
     private TbJcPurchaseDetailedService tbJcPurchaseDetailedService;
 
+    @Resource
+    private CommonUtils commonUtils;
     @Resource
     private TbJcMatchService tbJcMatchService;
 
@@ -70,6 +73,8 @@ public class PurchasedPlanProtocol implements BaseProtocol {
         if(list.size() > 0){
             for(int i = 0 ; i < list.size(); i++){
                 PurchasedPlanDto purchasedPlanDto = list.get(i);
+                String lz = commonUtils.JsLz1(purchasedPlanDto);
+                purchasedPlanDto.setLz(lz);
                 String planId = purchasedPlanDto.getPlanId();
                 List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planId);
                 purchasedPlanDto.setList(matchPlanResults);

@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.MatchResult1;
 import com.zhcdata.jc.dto.PlanResult1;
+import com.zhcdata.jc.dto.PlanResult3;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
 import com.zhcdata.jc.tools.RedisUtils;
@@ -75,13 +76,15 @@ public class HotPlanJob implements Job {
                     if (result1s.size() < 20) {
                         //小于20，直接存
                         Map<String, Object> map = new HashMap<String, Object>();
-                        map.put("busiCode","20010201");
-                        map.put("resCode","000000");
-                        map.put("message","成功");
-                        map.put("pageNo","1");
-                        map.put("pageTotal","1");
-                        map.put("list",result1s);
-                        redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(1),JsonMapper.defaultMapper().toJson(result1s));
+                        PlanResult3 planResult3 = new PlanResult3();
+                        planResult3.setBusiCode("20010201");
+                        planResult3.setResCode("000000");
+                        planResult3.setMessage("成功");
+                        planResult3.setPageNo("1");
+                        planResult3.setPageTotal("1");
+                        planResult3.setList(result1s);
+
+                        redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(1),JsonMapper.defaultMapper().toJson(planResult3));
                         break;
                     } else {
                         if ((j + 1) % 20 > 0) {
@@ -90,25 +93,43 @@ public class HotPlanJob implements Job {
                             //最后一页，不满20条也要存
                             if (j == result1s.size() - 1) {
                                 Map<String, Object> map = new HashMap<String, Object>();
-                                map.put("busiCode", "20010201");
+                            /*    map.put("busiCode", "20010201");
                                 map.put("resCode", "000000");
                                 map.put("message", "成功");
                                 map.put("pageNo", p);
                                 map.put("pageTotal", pc);
                                 map.put("list", resultNew);
-                                redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(p),JsonMapper.defaultMapper().toJson(result1s));
+*/
+                                PlanResult3 planResult3 = new PlanResult3();
+                                planResult3.setBusiCode("20010201");
+                                planResult3.setResCode("000000");
+                                planResult3.setMessage("成功");
+                                planResult3.setPageNo(String.valueOf(p));
+                                planResult3.setPageTotal(String.valueOf(pc));
+                                planResult3.setList(resultNew);
+
+                                redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(p),JsonMapper.defaultMapper().toJson(planResult3));
                             }
                         } else {
                             //20条
                             resultNew.add(result1s.get(j));
-                            Map<String, Object> map = new HashMap<String, Object>();
+                            /*Map<String, Object> map = new HashMap<String, Object>();
                             map.put("busiCode", "20010201");
                             map.put("resCode", "000000");
                             map.put("message", "成功");
                             map.put("pageNo", p);
                             map.put("pageTotal", pc);
-                            map.put("list", resultNew);
-                            redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(p),JsonMapper.defaultMapper().toJson(result1s));
+                            map.put("list", resultNew);*/
+
+                            PlanResult3 planResult3 = new PlanResult3();
+                            planResult3.setBusiCode("20010201");
+                            planResult3.setResCode("000000");
+                            planResult3.setMessage("成功");
+                            planResult3.setPageNo(String.valueOf(p));
+                            planResult3.setPageTotal(String.valueOf(pc));
+                            planResult3.setList(resultNew);
+
+                            redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(p),JsonMapper.defaultMapper().toJson(planResult3));
                             p++;
                             resultNew = new ArrayList<>();
                         }

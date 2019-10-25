@@ -16,7 +16,6 @@ public class PlanResult1 {
     private String zSevenDays;
     private String titleShowType;
     private String price;
-    private String type;
     private String createTime;
     private String planHit;
     private String planId;
@@ -187,11 +186,4 @@ public class PlanResult1 {
         this.list = list;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 }

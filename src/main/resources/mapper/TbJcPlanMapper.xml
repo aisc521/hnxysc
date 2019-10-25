@@ -28,31 +28,32 @@
     SELECT count(*) from tb_jc_plan where status=1 and ascription_expert=#{expertId}
   </select>
   <select id="queryPlanByExpertId" resultType="com.zhcdata.jc.dto.PlanResult1">
-    SELECT p.id,
-    e.nick_name nickName,
-    e.img,
-    e.lable,
-    e.fans,
-    e.popularity,
-    v.lz_now lz,
-    v.z_three_days zThreeDays,
-    v.z_five_days zFiveDays,
-    v.z_seven_days zSevenDays,
-    p.title title_show_type,
-    p.price,
-    p.is_right isRight,
-    p.type,
-    p.create_time,
-    p.plan_Hit planHit,
-    p.id planId,
-    p.type planType,
-    p.status planStatus,
-    IFNULL(pd.id,'0') buStatus,
-    e.grade grade
-    from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
-    LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
-    LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
-    LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
+      SELECT
+      e.id,
+      e.nick_name nickName,
+      e.img,
+      e.lable,
+      e.fans,
+      e.popularity,
+      v.lz_now lz,
+      v.z_three_days zThreeDays,
+      v.z_five_days zFiveDays,
+      v.z_seven_days zSevenDays,
+      p.title title_show_type,
+      p.price,
+      p.is_right isRight,
+      p.create_time,
+      p.plan_Hit planHit,
+      p.id planId,
+      p.type planType,
+      p.status planStatus,
+      IF(pd.id IS NOT NULL,1,0) buStatus,
+      e.grade grade
+      from tb_jc_plan  p
+      LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
+      LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
+      LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
+      LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
       <if test="userId != null">
           and pd.user_id = #{userId}
       </if>
@@ -104,8 +105,19 @@
     ORDER BY create_time asc
   </select>
 
-  <select id="queryScore" resultType="com.zhcdata.jc.dto.TbScoreResult">
 
+    <select id="queryPlanListJxAndZs" resultType="com.zhcdata.db.model.TbJcPlan">
+        select * from tb_jc_plan where 1=1
+
+            and status in('1','2')
+
+        ORDER BY create_time asc
+    </select>
+
+
+  <select id="queryScore" resultType="com.zhcdata.jc.dto.ScoreDto">
+
+/*
 
       SELECT
           *
@@ -121,20 +133,36 @@
           lo.NO_ID num,
           CASE
                 WHEN sc.MatchState = '0' THEN
-                'notstarted' /*未开始*/
+                'notstarted' */
+/*未开始*//*
+
                 WHEN sc.MatchState IN ( '1', '3', '4', '5' ) THEN
-                'inprogress' /*正在进行*/
+                'inprogress' */
+/*正在进行*//*
+
                 WHEN sc.MatchState = '2' THEN
-                'inprogress' /*中场*/
+                'inprogress' */
+/*中场*//*
+
                 WHEN sc.MatchState = '-1' THEN
-                'finished' /*完结*/
+                'finished' */
+/*完结*//*
+
                 WHEN sc.MatchState = '-14' THEN
-                'notstarted' /*推迟*/
+                'notstarted' */
+/*推迟*//*
+
                 WHEN sc.MatchState = '-12' THEN
-                'cancelled' /*腰斩*/
+                'cancelled' */
+/*腰斩*//*
+
                 WHEN sc.MatchState = '-10' THEN
-                'cancelledcancelled' /*取消*/
-                END AS statusType,/*比赛大状态*/
+                'cancelledcancelled' */
+/*取消*//*
+
+                END AS statusType,*/
+/*比赛大状态*//*
+
                   sc.ScheduleID id,
                   sc.MatchState statusescFK
 
@@ -154,20 +182,36 @@
           lo.NO_ID num,
           CASE
                 WHEN sc1.MatchState = '0' THEN
-                'notstarted' /*未开始*/
+                'notstarted' */
+/*未开始*//*
+
                 WHEN sc1.MatchState IN ( '1', '3', '4', '5' ) THEN
-                'inprogress' /*正在进行*/
+                'inprogress' */
+/*正在进行*//*
+
                 WHEN sc1.MatchState = '2' THEN
-                'inprogress' /*中场*/
+                'inprogress' */
+/*中场*//*
+
                 WHEN sc1.MatchState = '-1' THEN
-                'finished' /*完结*/
+                'finished' */
+/*完结*//*
+
                 WHEN sc1.MatchState = '-14' THEN
-                'notstarted' /*推迟*/
+                'notstarted' */
+/*推迟*//*
+
                 WHEN sc1.MatchState = '-12' THEN
-                'cancelled' /*腰斩*/
+                'cancelled' */
+/*腰斩*//*
+
                 WHEN sc1.MatchState = '-10' THEN
-                'cancelledcancelled' /*取消*/
-                END AS statusType,/*比赛大状态*/
+                'cancelledcancelled' */
+/*取消*//*
+
+                END AS statusType,*/
+/*比赛大状态*//*
+
           sc1.ScheduleID id,
         sc1.MatchState statusescFK
 
@@ -178,8 +222,32 @@
           sc1.ScheduleID = #{matchId}
           ) a order by a.dateOfMatch asc , a.num asc , a.number asc
 
+*/
 
+SELECT
+sc.HomeScore homeScore,
+	sc.GuestScore guestScore,
+CASE WHEN
+	sc.MatchState = '0' THEN
+	'notstarted'
+	WHEN sc.MatchState IN ( '1', '3', '4', '5' ) THEN
+	'inprogress'
+	WHEN sc.MatchState = '2' THEN
+	'inprogress'
+	WHEN sc.MatchState = '-1' THEN
+	'finished'
+	WHEN sc.MatchState = '-14' THEN
+	'notstarted'
+	WHEN sc.MatchState = '-12' THEN
+	'cancelled'
+	WHEN sc.MatchState = '-10' THEN
+	'cancelledcancelled'
+	END AS statusType
 
+FROM
+	schedule sc
+WHERE
+	sc.scheduleID = '1788100'
 
 
   </select>
@@ -231,7 +299,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     and p.id= #{id}
   </select>
   <select id="queryPlanId" resultType="com.zhcdata.jc.dto.PlanResult1">
-    SELECT plan_id id from tb_jc_match where match_id in(SELECT match_id from tb_jc_match where plan_id={planId})
+    SELECT plan_id id from tb_jc_match where match_id in(SELECT match_id from tb_jc_match where plan_id=#{planId})
   </select>
 
 
@@ -308,7 +376,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.introduction,
         p.num_info numInfo,
         p.title,
-        IFNULL(f.status,'0'),
+        IFNULL(f.status,'0') status,
         p.plan_Hit planHit,
         v.lz_now lz,
         v.z_three_days zThreeDays,
@@ -328,4 +396,79 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
     <update id="updateStatusPlanById">
         update tb_jc_plan set status='2' where id = #{id}
     </update>
+
+
+
+    <select id="queryPlanByExpertIdForXg" resultType="com.zhcdata.jc.dto.PlanResult1">
+       SELECT e.id,
+        e.nick_name nickName,
+        e.img,
+        e.lable,
+        e.fans,
+        e.popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.title title_show_type,
+        p.price,
+        p.is_right isRight,
+        p.create_time,
+        p.plan_Hit planHit,
+        p.id planId,
+        p.type planType,
+        p.status planStatus,
+        e.grade grade
+        from tb_jc_plan  p
+        LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
+        LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
+        LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
+
+        where 1=1
+        <if test="id != null">
+            and p.id in(#{id})
+        </if>
+    </select>
+
+
+
+    <select id="queryPlanByExpertIdForXgAndUser" resultType="com.zhcdata.jc.dto.PlanResult1">
+
+        SELECT
+        e.id,
+        e.nick_name nickName,
+        e.img,
+        e.lable,
+        e.fans,
+        e.popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.title title_show_type,
+        p.price,
+        p.is_right isRight,
+        p.create_time,
+        p.plan_Hit planHit,
+        p.id planId,
+        p.type planType,
+        p.status planStatus,
+        IF(pd.id IS NOT NULL,1,0) buStatus,
+        e.grade grade
+        from tb_jc_plan  p
+        LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
+        LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
+        LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
+        LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
+        <if test="userId != null">
+            and pd.user_id = #{userId}
+        </if>
+        where 1=1
+        <if test="id != null">
+            and p.id in(#{id})
+        </if>
+
+
+
+    </select>
 </mapper>

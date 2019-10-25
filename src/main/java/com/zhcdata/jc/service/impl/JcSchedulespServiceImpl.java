@@ -118,27 +118,27 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
         jcSchedulesp.setUpdatetime(sdf.format(new Date()));
         //让球胜平负是否停售
         if("true".equals(jcFootBallOddsRqRsp.getStop())){
-            jcSchedulesp.setWlstop("true");
+            jcSchedulesp.setWlstop("1");
         }else{
-            jcSchedulesp.setWlstop("false");
+            jcSchedulesp.setWlstop("0");
         }
         //进球数是否停售
         if("true".equals(jcFootBallOddsJqRsp.getStop())){
-            jcSchedulesp.setTstop("true");
+            jcSchedulesp.setTstop("1");
         }else{
-            jcSchedulesp.setTstop("false");
+            jcSchedulesp.setTstop("0");
         }
         //比分是否停售
         if("true".equals(jcFootBallOddsBfRsp.getStop())){
-            jcSchedulesp.setSstop("true");
+            jcSchedulesp.setSstop("1");
         }else{
-            jcSchedulesp.setSstop("false");
+            jcSchedulesp.setSstop("0");
         }
         //半全场是否停售
         if("true".equals(jcFootBallOddsBqcRsp.getStop())){
-            jcSchedulesp.setHtstop("true");
+            jcSchedulesp.setHtstop("1");
         }else{
-            jcSchedulesp.setHtstop("false");
+            jcSchedulesp.setHtstop("0");
         }
         //胜平负即时sp
         List<JcFootBallOddsSfRsp> sf = jcFootBallOddsRsp.getSf();
@@ -148,9 +148,9 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
         jcSchedulesp.setSf0(jcFootBallOddsSfRsp.getSf0());
         //胜平负是否停售
         if("true".equals(jcFootBallOddsSfRsp.getStop())){
-            jcSchedulesp.setSfstop("true");
+            jcSchedulesp.setSfstop("1");
         }else{
-            jcSchedulesp.setSfstop("false");
+            jcSchedulesp.setSfstop("0");
         }
 
         //判断是否完场
@@ -295,27 +295,27 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
         jcSchedulesp.setUpdatetime(sdf.format(new Date()));
         //让球胜平负是否停售
         if("true".equals(jcFootBallOddsRqRsp.getStop())){
-            jcSchedulesp.setWlstop("true");
+            jcSchedulesp.setWlstop("1");
         }else{
-            jcSchedulesp.setWlstop("false");
+            jcSchedulesp.setWlstop("0");
         }
         //进球数是否停售
         if("true".equals(jcFootBallOddsJqRsp.getStop())){
-            jcSchedulesp.setTstop("true");
+            jcSchedulesp.setTstop("1");
         }else{
-            jcSchedulesp.setTstop("false");
+            jcSchedulesp.setTstop("0");
         }
         //比分是否停售
         if("true".equals(jcFootBallOddsBfRsp.getStop())){
-            jcSchedulesp.setSstop("true");
+            jcSchedulesp.setSstop("1");
         }else{
-            jcSchedulesp.setSstop("false");
+            jcSchedulesp.setSstop("0");
         }
         //半全场是否停售
         if("true".equals(jcFootBallOddsBqcRsp.getStop())){
-            jcSchedulesp.setHtstop("true");
+            jcSchedulesp.setHtstop("1");
         }else{
-            jcSchedulesp.setHtstop("false");
+            jcSchedulesp.setHtstop("0");
         }
         //胜平负即时sp
         List<JcFootBallOddsSfRsp> sf = jcFootBallOddsRsp.getSf();
@@ -325,9 +325,9 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
         jcSchedulesp.setSf0(jcFootBallOddsSfRsp.getSf0());
         //胜平负是否停售
         if("true".equals(jcFootBallOddsSfRsp.getStop())){
-            jcSchedulesp.setSfstop("true");
+            jcSchedulesp.setSfstop("1");
         }else{
-            jcSchedulesp.setSfstop("false");
+            jcSchedulesp.setSfstop("0");
         }
 
         //判断是否完场

@@ -3,10 +3,7 @@ package com.zhcdata.jc.quartz.job.redis;
 import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.db.model.TbJcPurchaseDetailed;
-import com.zhcdata.jc.dto.MatchPlanResult;
-import com.zhcdata.jc.dto.SPFListDto;
-import com.zhcdata.jc.dto.TbSPFInfo;
-import com.zhcdata.jc.dto.TbScoreResult;
+import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.*;
@@ -57,7 +54,8 @@ public class CalculationPlanJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
             LOGGER.info("[计算方案是否命中定时任务开启]" + df.format(new Date()));
-            List<TbJcPlan> planResults = tbPlanService.queryPlanList(null, "1"); //正在进行的方案列表
+            //List<TbJcPlan> planResults = tbPlanService.queryPlanList(null, "1"); //正在进行的方案列表 和在售的
+            List<TbJcPlan> planResults = tbPlanService.queryPlanListJxAndZs(); //正在进行的方案列表 和在售的
             if (planResults != null && planResults.size() > 0) {
                 for (int i = 0; i < planResults.size(); i++) {
 
@@ -70,16 +68,16 @@ public class CalculationPlanJob implements Job {
                         for (int k = 0; k < matchPlanResults.size(); k++) {
                             String planInfo = matchPlanResults.get(k).getPlanInfo();
 
-                            List<TbScoreResult> scoreResults = tbPlanService.queryScore(matchPlanResults.get(k).getMatchId()); //该赛事得分信息
-                            if (scoreResults != null && scoreResults.size() > 0) {
-                                if (!scoreResults.get(0).getStatusType().equals("finished") && !scoreResults.get(0).getStatusType().equals("notstarted")) {
+                            ScoreDto scoreDto = tbPlanService.queryScore(matchPlanResults.get(k).getMatchId()); //该赛事得分信息
+                            if (scoreDto != null) {
+                                if (!scoreDto.getStatusType().equals("finished") && !scoreDto.getStatusType().equals("notstarted")) {
                                     flag = "1";
                                 }
 
-                                if (scoreResults.get(0).getStatusType().equals("finished")) {
+                                if (scoreDto.getStatusType().equals("finished")) {
                                     //该赛事已结束，计算方案
-                                    Double hScore = Double.valueOf(scoreResults.get(0).getValue());
-                                    Double vScore = Double.valueOf(scoreResults.get(1).getValue());
+                                    Double hScore = Double.valueOf(scoreDto.getHomeScore());
+                                    Double vScore = Double.valueOf(scoreDto.getGuestScore());
                                     int z = 0; //胜平负和让球胜平负,有一个中了,就算中
 
                                     String spf = planInfo.split("\\|")[0];      //胜平负
@@ -138,10 +136,11 @@ public class CalculationPlanJob implements Job {
                                     } else {
                                         //推荐比赛，中一场+1
                                         z_count += 1;
+                                        result = 1;
                                     }
 
                                     //处理单场比赛结果、中奖状态
-                                    tbJcMatchService.updateStatus(String.valueOf(z), hScore + ":" + vScore,matchPlanResults.get(k).getMatchId());
+                                    tbJcMatchService.updateStatus(String.valueOf(z), hScore + ":" + vScore,matchPlanResults.get(k).getId());
 
                                 }else{
                                     result = 2;

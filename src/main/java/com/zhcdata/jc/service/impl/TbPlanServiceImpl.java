@@ -41,7 +41,7 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public List<TbScoreResult> queryScore(String matchId) {
+    public ScoreDto queryScore(String matchId) {
         return tbJcPlanMapper.queryScore(Long.parseLong(matchId));
     }
 
@@ -109,5 +109,23 @@ public class TbPlanServiceImpl implements TbPlanService {
     @Override
     public void updateStatusPlanById(String id) {
         tbJcPlanMapper.updateStatusPlanById(id);
+    }
+
+    @Override
+    public List<TbJcPlan> queryPlanListJxAndZs() {
+        return tbJcPlanMapper.queryPlanListJxAndZs();
+    }
+
+    @Override
+    public PageInfo<PlanResult1> queryPlanByExpertIdForXg(String pIdList, Integer pageNo, int pageAmount) {
+
+        PageHelper.startPage(pageNo, pageAmount);
+        return new PageInfo<PlanResult1>(tbJcPlanMapper.queryPlanByExpertIdForXg(pIdList));
+    }
+
+    @Override
+    public PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer pageNo, int pageAmount) {
+        PageHelper.startPage(pageNo, pageAmount);
+        return new PageInfo<PlanResult1>(tbJcPlanMapper.queryPlanByExpertIdForXgAndUser(pIdList,userId));
     }
 }

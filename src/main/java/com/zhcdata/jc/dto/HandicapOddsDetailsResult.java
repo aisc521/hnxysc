@@ -1,5 +1,7 @@
 package com.zhcdata.jc.dto;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.zhcdata.jc.tools.DoubleFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -19,10 +21,13 @@ public class HandicapOddsDetailsResult implements Serializable {
     //赔率出现时间
     private String oddTime;
     //胜
-    private String oddWin;
+    @JsonSerialize(using = DoubleFormat.class)
+    private Double oddWin;
     //平
-    private String oddFlat;
+    @JsonSerialize(using = DoubleFormat.class)
+    private Double oddFlat;
     //负
-    private String oddLose;
+    @JsonSerialize(using = DoubleFormat.class)
+    private Double oddLose;
 
 }

@@ -12,6 +12,7 @@ import com.zhcdata.jc.service.TbJcExpertService;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
 import com.zhcdata.jc.tools.JcLotteryUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -56,26 +57,36 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
         String uid = paramMap.get("uid");
         Map<String,Long> freeOrPay = tbPlanService.checkFreeOrPayByUidAndPlanId(uid,id);
         Map<String, Object> resultMap = new HashMap<>();
-        if (freeOrPay.get("type")==3||freeOrPay.get("pay")>0){
+        /*if (freeOrPay.get("type")==3||freeOrPay.get("pay")>0){*/
+
+        String matchId = "";
+        String grade = "";
+        String price = "";
             PlanResult2 planResult2 = new PlanResult2();
             try {
                 List<PlanResult2> result = tbPlanService.queryPlanByIdandUser(id,uid);
                 if (result != null && result.size() > 0) {
                     planResult2 = result.get(0);
+                    grade = planResult2.getGrade();
+                    price = planResult2.getPrice();
                     List<MatchPlanResult1> matchPlanResults = tbJcMatchService.queryList1(Long.valueOf(id));
                     if (matchPlanResults != null && matchPlanResults.size() > 0) {
                         List<MatchPlanResult1> matchPlanResult2 = new ArrayList<>();
                         for(int i = 0; i < matchPlanResults.size(); i++){
                             MatchPlanResult1 matchPlanResult1 = matchPlanResults.get(i);
+                           /* MatchPlanResult1 matchPlanResult1 = matchPlanResults.get(i);
                             String planInfo = JcLotteryUtils.OddsInfoChange(matchPlanResult1.getPlanInfo());
                             matchPlanResult1.setPlanInfo(planInfo);
-                            matchPlanResult2.add(matchPlanResult1);
+                            matchPlanResult2.add(matchPlanResult1);*/
+                            matchId += matchPlanResult1.getMatchId() + ",";
                         }
-                        planResult2.setList(matchPlanResults);
+                       /* planResult2.setList(matchPlanResults);*/
                     }
                 }
 
-                resultMap.put("list", result);
+                resultMap.put("matchId", matchId);
+                resultMap.put("grade", grade);
+                resultMap.put("price", price);
                 ExpertInfo info = tbJcExpertService.queryExpertDetails(tbPlanService.queryExpertIdByPlanId(id));
                 if (info != null) {
                     //给专家人气加1
@@ -142,49 +153,66 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         String matchResult = String.valueOf(list.get(i).get("matchResult"));
                         String rang_num = String.valueOf(list.get(i).get("awayTeamRangballs"));
                         //计算那个中了
-                        String[] matchResultArr = matchResult.split(":");
-                        Double matchResultDou1 = Double.valueOf(matchResultArr[0]);//住比分
-                        Double matchResultDou2 = Double.valueOf(matchResultArr[1]);//客比分
-                        //计算胜平负状态
-                        String winStatus = "0";
-                        String rwinStatus = "0";
-                        if(matchResultDou1 > matchResultDou2){//胜
-                            winStatus = "1";
+                        if(StringUtils.isNotBlank(matchResult) && !"null".equals(matchResult)){
+                            String[] matchResultArr = matchResult.split(":");
+                            Double matchResultDou1 = Double.valueOf(matchResultArr[0]);//住比分
+                            Double matchResultDou2 = Double.valueOf(matchResultArr[1]);//客比分
+                            //计算胜平负状态
+                            String winStatus = "0";
+                            String rwinStatus = "0";
+                            if(matchResultDou1 > matchResultDou2){//胜
+                                winStatus = "1";
+                            }
+                            if(matchResultDou1 == matchResultDou2){//平
+                                winStatus = "2";
+                            }
+                            if(matchResultDou1 < matchResultDou2){//负
+                                winStatus = "3";
+                            }
+                            if((matchResultDou1 + Double.valueOf(rang_num)) > matchResultDou2){//让胜
+                                rwinStatus = "1";
+                            }
+                            if((matchResultDou1 + Double.valueOf(rang_num)) == matchResultDou2){//让平
+                                rwinStatus = "2";
+                            }
+                            if((matchResultDou1 + Double.valueOf(rang_num)) < matchResultDou2){//让负
+                                rwinStatus = "3";
+                            }
+                            map.put("winStatus", ""+winStatus);
+                            map.put("rwinStatus", ""+rwinStatus);
+                        }else{
+                            map.put("winStatus", "4");//没有赛果
+                            map.put("rwinStatus", "4");
                         }
-                        if(matchResultDou1 == matchResultDou2){//平
-                            winStatus = "2";
-                        }
-                        if(matchResultDou1 < matchResultDou2){//负
-                            winStatus = "3";
-                        }
-                        if((matchResultDou1 + Double.valueOf(rang_num)) > matchResultDou2){//让胜
-                            rwinStatus = "1";
-                        }
-                        if((matchResultDou1 + Double.valueOf(rang_num)) == matchResultDou2){//让平
-                            rwinStatus = "2";
-                        }
-                        if((matchResultDou1 + Double.valueOf(rang_num)) < matchResultDou2){//让负
-                            rwinStatus = "3";
-                        }
-                        map.put("winStatus", ""+winStatus);
-                        map.put("rwinStatus", ""+rwinStatus);
+
                         map.put("planInfo", ""+list.get(i).get("planInfo"));
                         plan_info.add(map);
                     }
                 }
                 resultMap.put("plan_info", plan_info);
                 resultMap.put("first_time", first);
-                resultMap.put("planStatus", planResult2.getPlanStatus());
+
+                if(freeOrPay.get("type")==3){//免费
+                    resultMap.put("payStaus", "3");
+                }else{
+                    resultMap.put("payStaus", "2");//付费
+                }
+                if(freeOrPay.get("pay")>0){//已购买
+                    resultMap.put("buyStatus", "0");
+                }else{
+                    resultMap.put("buyStatus", "1");//未购买
+                }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
                 LOGGER.error("查询方案详情异常" + ex.toString());
             }
             return resultMap;
-        }else {
+       /* }else {
             resultMap.put("resCode","999999");
             resultMap.put("message","方案尚未购买");
             return resultMap;
-        }
+        }*/
 
     }
 }

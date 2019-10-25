@@ -10,6 +10,7 @@ import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.Const;
 import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -131,4 +132,9 @@ public class HandicapOddsProtocol implements BaseProtocol {
         return map;
     }
 
+    public static void main(String[] args) {
+
+        double d = 2.00;
+        System.out.println(d);
+    }
 }

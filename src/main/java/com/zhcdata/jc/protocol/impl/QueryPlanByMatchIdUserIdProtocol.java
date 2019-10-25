@@ -73,19 +73,24 @@ public class QueryPlanByMatchIdUserIdProtocol implements BaseProtocol {
                 }
 
                 String userId = paramMap.get("userId");
-                PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertId(id,null,userId,Integer.valueOf(pageNo),20);
+
+                PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertIdForXgAndUser(pIdList,userId,Integer.valueOf(pageNo),20);
+
+
                 List<PlanResult1> planList = planList1.getList();
 
                 for (int i = 0; i < planList.size(); i++) {
                     PlanResult1 result1 = planList.get(i);
-                    List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(i).getId());
+                    List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(i).getPlanId());
                     if (matchPlanResults != null && matchPlanResults.size() > 0) {
                         result1.setList(matchPlanResults);
                     }
                     result.add(result1);
                 }
+                resultMap.put("pageTotal",planList1.getTotal());
             }
             resultMap.put("list",result);
+            resultMap.put("pageNo",pageNo);
         }catch (Exception ex){
             LOGGER.error("类似方案异常:"+ex);
         }

@@ -32,7 +32,7 @@ public interface TbPlanService {
      */
     List<TbJcPlan> queryPlanList(String expert, String status);
 
-    List<TbScoreResult> queryScore(String matchId);
+    ScoreDto queryScore(String matchId);
 
     SPFListDto querySPFList(String matchId);
 
@@ -59,4 +59,10 @@ public interface TbPlanService {
     List<PlanResult1> queryPlanByExpertIdNoPages(String id, String planId, String userId);
 
     void updateStatusPlanById(String s);
+
+    List<TbJcPlan> queryPlanListJxAndZs();
+
+    PageInfo<PlanResult1> queryPlanByExpertIdForXg(String pIdList, Integer integer, int i);
+
+    PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer integer, int i);
 }

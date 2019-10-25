@@ -15,7 +15,7 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     List<TbJcPlan> queryPlanList(@Param("expert") String expert, @Param("status") String status);
 
-    List<TbScoreResult> queryScore(@Param("matchId") long matchId);
+    ScoreDto queryScore(@Param("matchId") long matchId);
 
     SPFListDto querySPFList(@Param("MatchId") long MatchId);
 
@@ -40,4 +40,10 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     List<PlanResult2> queryPlanByIdandUser(@Param("id")String id, @Param("uid")String uid);
 
     void updateStatusPlanById(@Param("id") String id);
+
+    List<TbJcPlan> queryPlanListJxAndZs();
+
+    List<PlanResult1> queryPlanByExpertIdForXg(@Param("id")String pIdList);
+
+    List<PlanResult1> queryPlanByExpertIdForXgAndUser(@Param("id")String pIdList, @Param("userId")String userId);
 }

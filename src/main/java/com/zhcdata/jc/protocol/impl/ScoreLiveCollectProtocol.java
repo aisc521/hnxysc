@@ -91,18 +91,24 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
 
             if(mo.getMatchState().equals("未")){
                 resultMap.put("matchMakeTime","未");
+            }else if(mo.getMatchState().equals("完")){
+                resultMap.put("matchType","3");
+                resultMap.put("matchMakeTime","完");
+            }else if(mo.getMatchState().equals("中")){
+                resultMap.put("matchMakeTime","中");
             }else {
                 if(mo.getMatchState().equals("1")){
                     if(!mo.getMatchTime2().contains("0000-00-00 00:00:00")) {
                         Timestamp ts = Timestamp.valueOf(mo.getMatchTime2());
                         String len = getMinute(df.format(ts), df.format(new Date()));
-                        resultMap.put("matchMakeTime",len);
+                        resultMap.put("matchMakeTime",len+"'");
                     }
                 }else if(mo.getMatchState().equals("3")){
+                    resultMap.put("matchType","2");
                     if(!mo.getMatchTime2().contains("0000-00-00 00:00:00")) {
                         Timestamp ts = Timestamp.valueOf(mo.getMatchTime2());
                         String len = getMinute(df.format(ts), df.format(new Date()));
-                        resultMap.put("matchMakeTime",(45 + Integer.valueOf(len)) > 90 ? "90+" : String.valueOf(45 + Integer.valueOf(len)));
+                        resultMap.put("matchMakeTime",(45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");
                     }
                 }
             }
@@ -163,20 +169,20 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
 
             resultMap.put("matchDate", result.getTime());
             //计算上下半场
-            if("1".equals(mo.getMatchState())){
-                resultMap.put("matchType", 1);
-            }
-            if("3".equals(mo.getMatchState())){
-                resultMap.put("matchType", 2);
-            }
-            if("0".equals(mo.getMatchState())){
-                resultMap.put("matchType", 0);
-            }
-            if("-1".equals(mo.getMatchState())){
-                resultMap.put("matchType", 3);
-            }else {
-                resultMap.put("matchType", 0);
-            }
+//            if("1".equals(mo.getMatchState())){
+//                resultMap.put("matchType", 1);
+//            }
+//            if("3".equals(mo.getMatchState())){
+//                resultMap.put("matchType", 2);
+//            }
+//            if("0".equals(mo.getMatchState())){
+//                resultMap.put("matchType", 0);
+//            }
+//            if("-1".equals(mo.getMatchState())){
+//                resultMap.put("matchType", 3);
+//            }else {
+//                resultMap.put("matchType", 0);
+//            }
 
             resultMap.put("guestIcon",imgYuMing+ result.getGuestImg());
             resultMap.put("hostIcon",imgYuMing+ result.getHomeImg());

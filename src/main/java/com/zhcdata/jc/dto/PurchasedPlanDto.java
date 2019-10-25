@@ -39,6 +39,91 @@ public class PurchasedPlanDto {
     private String buyMoney;
     private String firstone;
 
+    private String tenZ;
+    private String nineZ;
+    private String eightZ;
+    private String sevenZ;
+    private String sixZ;
+    private String fiveZ;
+    private String fourZ;
+    private String threeZ;
+
+    private String lzBig;
+
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTenZ() {
+        return tenZ;
+    }
+
+    public void setTenZ(String tenZ) {
+        this.tenZ = tenZ;
+    }
+
+    public String getNineZ() {
+        return nineZ;
+    }
+
+    public void setNineZ(String nineZ) {
+        this.nineZ = nineZ;
+    }
+
+    public String getEightZ() {
+        return eightZ;
+    }
+
+    public void setEightZ(String eightZ) {
+        this.eightZ = eightZ;
+    }
+
+    public String getSevenZ() {
+        return sevenZ;
+    }
+
+    public void setSevenZ(String sevenZ) {
+        this.sevenZ = sevenZ;
+    }
+
+    public String getSixZ() {
+        return sixZ;
+    }
+
+    public void setSixZ(String sixZ) {
+        this.sixZ = sixZ;
+    }
+
+    public String getFiveZ() {
+        return fiveZ;
+    }
+
+    public void setFiveZ(String fiveZ) {
+        this.fiveZ = fiveZ;
+    }
+
+    public String getFourZ() {
+        return fourZ;
+    }
+
+    public void setFourZ(String fourZ) {
+        this.fourZ = fourZ;
+    }
+
+    public String getThreeZ() {
+        return threeZ;
+    }
+
+    public void setThreeZ(String threeZ) {
+        this.threeZ = threeZ;
+    }
+
     public String getThirdMoney() {
         return thirdMoney;
     }
@@ -251,5 +336,13 @@ public class PurchasedPlanDto {
 
     public void setDateOfMatch(String dateOfMatch) {
         this.dateOfMatch = dateOfMatch;
+    }
+
+    public String getLzBig() {
+        return lzBig;
+    }
+
+    public void setLzBig(String lzBig) {
+        this.lzBig = lzBig;
     }
 }

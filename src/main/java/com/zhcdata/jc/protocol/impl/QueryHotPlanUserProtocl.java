@@ -80,7 +80,7 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
 
                 PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertId(ids[i],null,userId,Integer.valueOf(pageNo),20);
                 List<PlanResult1> planList = planList1.getList();
-
+                resultMap.put("totalNum", planList1.getTotal());
                 for (int k = 0; k < planList.size(); k++) {
                     PlanResult1 result1 = planList.get(k);
                     List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(k).getId());
@@ -108,12 +108,12 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
                 }
             } else if (type.equals("3")) {
                 //不中退
-                if (result.get(j).getType() == "3") {
+                if (result.get(j).getPlanType() == "3") {
                     f_result.add(result.get(j));
                 }
             } else if (type.equals("4")) {
                 //免费
-                if (result.get(j).getType() == "4") {
+                if (result.get(j).getPlanType() == "4") {
                     f_result.add(result.get(j));
                 }
             } else if (type.equals("-1")) {
@@ -121,6 +121,8 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
             }
         }
         resultMap.put("list",f_result);
+        resultMap.put("pageNo",pageNo);
+
         return resultMap;
 
     }

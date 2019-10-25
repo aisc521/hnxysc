@@ -81,7 +81,7 @@
     <result column="first_sf0" jdbcType="VARCHAR" property="firstSf0" />
   </resultMap>
   <select id="queryJcSchedulespByScId" resultType="com.zhcdata.db.model.JcSchedulesp">
-    select * from jc_schedulesp where ID=#{bet007Id}
+    select * from jc_schedulesp where ID=#{bet007Id} and kind = '2'
   </select>
   <select id="queryJczqListReuslt" resultType="java.util.Map">
     select s.scheduleId,s.MatchState ,s.sclass matchName,s.matchId issueNum,s.HomeTeam hostname,s.GuestTeam  guestName,s. matchTime,
