@@ -32,7 +32,7 @@ public interface TbPlanService {
      */
     List<TbJcPlan> queryPlanList(String expert, String status);
 
-    List<TbScoreResult> queryScore(String matchId);
+    ScoreDto queryScore(String matchId);
 
     SPFListDto querySPFList(String matchId);
 

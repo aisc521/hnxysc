@@ -15,7 +15,7 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     List<TbJcPlan> queryPlanList(@Param("expert") String expert, @Param("status") String status);
 
-    List<TbScoreResult> queryScore(@Param("matchId") long matchId);
+    ScoreDto queryScore(@Param("matchId") long matchId);
 
     SPFListDto querySPFList(@Param("MatchId") long MatchId);
 
