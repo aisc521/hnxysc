@@ -247,7 +247,7 @@ CASE WHEN
 FROM
 	schedule sc
 WHERE
-	sc.scheduleID = '1788100'
+	sc.scheduleID = #{matchId}
 
 
   </select>
