@@ -51,12 +51,16 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
             if (items.length > 0) {
                 for (String item : items) {
                     try {
-                        if (StringUtils.isNotEmpty(item) && item.split(",")[8].equals("1"))
-                            singleHandicap(item);
-                        else if (StringUtils.isNotEmpty(item))
-                            manyHandicap(item);
+                        if (StringUtils.isNotEmpty(item)) {
+                            if (item.split(",")[8].equals("1"))
+                                singleHandicap(item);
+                            else
+                                manyHandicap(item);
+                        }
+
                     } catch (Exception e) {
-                        log.error("半场大小球即时数据解析错误"+item);
+                        log.error("半场大小球即时数据解析错误" + item);
+                        e.printStackTrace();
                     }
                 }
             }

@@ -1,7 +1,9 @@
 package com.zhcdata.jc.service;
 
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
+import com.zhcdata.jc.dto.ExpertInfoBdDto;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public interface TbJcExpertService {
      * @param type
      * @return
      */
-    List<ExpertInfo> queryExpertsByType(String type);
+    PageInfo<ExpertInfoBdDto> queryExpertsByType(String type, Integer pageNo, Integer pageAmouont);
 
     List<ExpertInfo> query(String userId);
 

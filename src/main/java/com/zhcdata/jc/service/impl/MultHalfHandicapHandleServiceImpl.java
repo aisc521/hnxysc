@@ -50,12 +50,15 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
             if (items.length > 0) {
                 for (String item : items) {
                     try {
-                        if (StringUtils.isNotEmpty(item) && item.split(",")[9].equals("1"))
-                            singleHandicap(item);
-                        else if (StringUtils.isNotEmpty(item))
-                            manyHandicap(item);
+                        if (StringUtils.isNotEmpty(item)) {
+                            if (item.split(",")[9].equals("1"))
+                                singleHandicap(item);
+                            else
+                                manyHandicap(item);
+                        }
                     } catch (Exception e) {
-                        log.error("半场亚赔（让球盘）即时数据解析出错" + item);
+                        log.error("半场亚赔（让球盘）即时数据解析错误" + item);
+                        e.printStackTrace();
                     }
                 }
             }

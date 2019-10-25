@@ -64,7 +64,7 @@ public class BeanUtils {
             inDb.setNeutrality(model.getZ().startsWith("T"));//是否中立场'
         if (model.getD() != null) {
             try {
-                inDb.setMatchtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(parseToFormat(model.getD())));//开始时间
+                inDb.setMatchtime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(new TimeFormatUtils().parseToFormat(model.getD())));//开始时间
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -124,28 +124,6 @@ public class BeanUtils {
         return s1.equals(s2);
     }
 
-    public static String parseToFormat(String str) {
-        //e:2019/9/9 0:0:0
-        String temp = "0";
-        String[] date = str.split(" ")[0].split("/");
-        String[] time = str.split(" ")[1].split(":");
-
-        String y = date[0];
-        if (y.length() == 1) y = temp + y;
-        String m = date[1];
-        if (m.length() == 1) m = temp + m;
-        String d = date[2];
-        if (d.length() == 1) d = temp + d;
-
-        String h = time[0];
-        if (h.length() == 1) h = temp + h;
-        String f = time[1];
-        if (f.length() == 1) f = temp + f;
-        String s = time[2];
-        if (s.length() == 1) s = temp + s;
-
-        return y + "-" + m + "-" + d + " " + h + ":" + f + ":" + s;
-    }
 
     public static Letgoal parseLetgoal(String str) {
         String[] info = str.split(",");
@@ -651,7 +629,7 @@ public class BeanUtils {
             mo.setGuestwinR(Float.parseFloat(str[7]));//即时主胜
 
             try {
-                mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(parseToFormat(str[8])));//修改时间
+                mo.setModifytime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(new TimeFormatUtils().parseToFormat(str[8])));//修改时间
             } catch (Exception e) {
                 System.err.println("parseStandardHalf,dateFormatException,变化时间转换失败 : " + str[8]);
                 e.printStackTrace();
@@ -697,11 +675,10 @@ public class BeanUtils {
             mo.setRealguestwin(Float.parseFloat(mos[7]));
 
         try {
-            mo.setModifytime(sdf.parse(parseToFormat(mos[8])));//修改时间
+            mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
         } catch (Exception e) {
-            System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : " + parseToFormat(mos[8]));
-            System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : " + parseToFormat(mos[8]));
-            //e.printStackTrace();
+            System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : " + new TimeFormatUtils().parseToFormat(mos[8]));
+            e.printStackTrace();
         }
         return mo;
     }
@@ -723,8 +700,8 @@ public class BeanUtils {
         try {
             mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
         } catch (Exception e) {
-            System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : " + mos[8]);
-            //e.printStackTrace();
+            System.err.println("parseEuropeOddsDetail,dateFormatException,变化时间转换失败 : " + mos[8]);
+            e.printStackTrace();
         }
         return mo;
     }

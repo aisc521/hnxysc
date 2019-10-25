@@ -1,14 +1,18 @@
 package com.zhcdata.jc.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcExpertMapper;
 import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
+import com.zhcdata.jc.dto.ExpertInfoBdDto;
 import com.zhcdata.jc.service.TbJcExpertService;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description TODO
@@ -35,8 +39,13 @@ public class TbJcExpertServiceImpl implements TbJcExpertService {
     }
 
     @Override
-    public List<ExpertInfo> queryExpertsByType(String type) {
-        return tbJcExpertMapper.queryExpertsByType(type);
+    public PageInfo<ExpertInfoBdDto> queryExpertsByType(String type, Integer pageNo, Integer pageAmount) {
+
+        PageHelper.startPage(pageNo, pageAmount);
+
+        List<ExpertInfoBdDto> list = tbJcExpertMapper.queryExpertsByType(type);
+        return new PageInfo<>(list);
+
     }
 
     @Override
