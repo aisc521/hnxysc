@@ -657,7 +657,7 @@ public class BeanUtils {
         return new Date();
     }
 
-    public static EuropeOdds parseEuropeOdds(String id, String[] mos) {
+    public EuropeOdds parseEuropeOdds(String id, String[] mos) {
         //博彩公司ID,博彩公司英文名,初盘主胜,初盘平局,初盘客胜,主胜,平局,客胜,变化时间,博彩公司简体名
         EuropeOdds mo = new EuropeOdds();
         mo.setScheduleid(Integer.parseInt(id));
@@ -677,7 +677,7 @@ public class BeanUtils {
         try {
             mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
         } catch (Exception e) {
-            System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : " + new TimeFormatUtils().parseToFormat(mos[8]));
+            System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : " + mos[8]);
             e.printStackTrace();
         }
         return mo;
