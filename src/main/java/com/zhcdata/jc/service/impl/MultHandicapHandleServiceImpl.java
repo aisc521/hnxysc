@@ -52,12 +52,15 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
             if (items.length > 0) {
                 for (int i = 0; i < items.length; i++) {
                     try {
-                        if (StringUtils.isNotEmpty(items[i]) && items[i].split(",")[10].equals("1"))
-                            singleHandicap(items[i], "共" + items.length + ",当前" + i);
-                        else if (StringUtils.isNotEmpty(items[i]))
-                            manyHandicap(items[i], "共" + items.length + ",当前" + i);
+                        if (StringUtils.isNotEmpty(items[i])) {
+                            if (StringUtils.isNotEmpty(items[i]) && items[i].split(",")[10].equals("1"))
+                                singleHandicap(items[i], "共" + items.length + ",当前" + i);
+                            else
+                                manyHandicap(items[i], "共" + items.length + ",当前" + i);
+                        }
                     } catch (Exception e) {
-                        log.error("亚赔（让球盘）即时数据解析出错"+items[i]);
+                        log.error("亚赔（让球盘）即时数据解析错误" + items[i]);
+                        e.printStackTrace();
                     }
                 }
             }

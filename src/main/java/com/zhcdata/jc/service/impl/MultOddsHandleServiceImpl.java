@@ -51,7 +51,8 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
                         if (StringUtils.isNotEmpty(item) && item.split(",")[8].equals("1"))
                             singleHandicap(item.split(","));
                     } catch (Exception e) {
-                        log.error("欧赔（胜平负）即时数据解析失败" + item);
+                        log.error("欧赔（胜平负）即时数据解析错误" + item);
+                        e.printStackTrace();
                     }
                 }
             }

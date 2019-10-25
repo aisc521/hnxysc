@@ -3,6 +3,7 @@ package com.zhcdata.jc.quartz.job.Match;
 import com.zhcdata.db.mapper.*;
 import com.zhcdata.db.model.*;
 import com.zhcdata.jc.tools.BeanUtils;
+import com.zhcdata.jc.tools.TimeFormatUtils;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.MatchDelOrEditRsp;
 import com.zhcdata.jc.xml.rsp.MatchListRsp;
@@ -130,9 +131,10 @@ public class MatchListDelOrEditJob implements Job {
                 Schedule schedule = new Schedule();
                 schedule.setScheduleid(Integer.parseInt(list.get(i).getID()));
                 try {
-                    schedule.setMatchtime(sdf.parse(BeanUtils.parseToFormat(list.get(i).getMatchtime())));
+                    schedule.setMatchtime(sdf.parse(new TimeFormatUtils().parseToFormat(list.get(i).getMatchtime())));
                 } catch (ParseException e) {
                     System.err.println("A7Y8S76SD85F7A65" + e.toString());
+                    e.printStackTrace();
                 }
                 int i1 = scheduleMapper.updateByPrimaryKeySelective(schedule);
                 //if (editCache.size() > 500)
