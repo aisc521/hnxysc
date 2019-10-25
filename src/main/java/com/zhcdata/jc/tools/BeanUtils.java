@@ -675,7 +675,7 @@ public class BeanUtils {
             mo.setRealguestwin(Float.parseFloat(mos[7]));
 
         try {
-            mo.setModifytime(sdf_X.parse(new TimeFormatUtils().parseToFormat(mos[8])));//修改时间
+            mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
         } catch (Exception e) {
             System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : " + new TimeFormatUtils().parseToFormat(mos[8]));
             e.printStackTrace();
