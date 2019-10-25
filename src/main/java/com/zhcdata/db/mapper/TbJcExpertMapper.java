@@ -2,6 +2,7 @@ package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
+import com.zhcdata.jc.dto.ExpertInfoBdDto;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -14,7 +15,7 @@ public interface TbJcExpertMapper extends Mapper<TbJcExpert> {
 
     List<ExpertInfo> queryExperts();
 
-    List<ExpertInfo> queryExpertsByType(@Param("type") String type);
+    List<ExpertInfoBdDto> queryExpertsByType(@Param("type") String type);
 
     List<ExpertInfo> query(@Param("userId")String userId);
 
