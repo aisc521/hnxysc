@@ -812,8 +812,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         String text = "未";
         if (null != schedule) {
             matchState = String.valueOf(schedule.getMatchstate());
-            matchTime1 = dto.getMatchTime1();
-            matchTime2 = dto.getMatchTime2();
+            matchTime1 = schedule.getMatchtime();
+            try {
+                matchTime2 = DateFormatUtil.pareDate("yyyy-MM-dd HH:mm:ss",schedule.getMatchtime2());
+            } catch (ParseException e) {
+                log.error("半场比赛时间转换错误");
+                e.printStackTrace();
+            }
 
             dto.setHomeHalfScore(schedule.getHomehalfscore() == null?null:String.valueOf(schedule.getHomehalfscore()));
             dto.setGuestHalfScore(schedule.getGuesthalfscore() == null?null:String.valueOf(schedule.getGuesthalfscore()));
