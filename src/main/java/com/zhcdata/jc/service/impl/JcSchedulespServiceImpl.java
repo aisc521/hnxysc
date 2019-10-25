@@ -163,7 +163,10 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
             jcSchedulesp.setSfend(JcLotteryUtils.JcKjSp(jcFootBallOddsRsp,schedule,jcSchedule,"15"));//胜平负开奖sp
         }
         Example example = new Example(JcSchedulesp.class);
-        example.createCriteria().andEqualTo("id",jcSchedulesp.getId());
+        example.createCriteria()
+                .andEqualTo("id",jcSchedulesp.getId())
+                .andEqualTo("kind",jcSchedulesp.getKind())
+        ;
         int i = jcSchedulespMapper.updateByExampleSelective(jcSchedulesp,example);
         if(i <= 0){
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
