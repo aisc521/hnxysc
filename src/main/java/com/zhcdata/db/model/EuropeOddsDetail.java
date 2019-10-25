@@ -88,9 +88,16 @@ public class EuropeOddsDetail {
 
     public boolean oddsEquals(EuropeOddsDetail xml) {
         try {
-            return xml.getGuestwin().equals(guestwin) && xml.getStandoff().equals(standoff) && xml.getHomewin().equals(homewin) && xml.getModifytime().getTime() == modifytime.getTime();
-        }catch (Exception e){
-            System.err.println("89UASFU89HAKJN"+e.toString());
+            if (modifytime == null && xml.getModifytime() == null)
+                return true;//两个都没有变化时间，认为他们没变
+            if (modifytime == null && xml.getModifytime() != null)
+                return false;
+            if (modifytime != null && xml.getModifytime() == null)
+                return false;
+            else
+                return xml.getGuestwin().equals(guestwin) && xml.getStandoff().equals(standoff) && xml.getHomewin().equals(homewin) && xml.getModifytime().getTime() == modifytime.getTime();
+        } catch (Exception e) {
+            System.err.println("89UASFU89HAKJN" + e.toString());
             return false;
         }
     }
