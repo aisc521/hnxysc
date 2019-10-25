@@ -62,6 +62,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
         String matchId = "";
         String grade = "";
         String price = "";
+        String planStatus = "";
             PlanResult2 planResult2 = new PlanResult2();
             try {
                 List<PlanResult2> result = tbPlanService.queryPlanByIdandUser(id,uid);
@@ -69,6 +70,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                     planResult2 = result.get(0);
                     grade = planResult2.getGrade();
                     price = planResult2.getPrice();
+                    planStatus = planResult2.getPlanStatus();
                     List<MatchPlanResult1> matchPlanResults = tbJcMatchService.queryList1(Long.valueOf(id));
                     if (matchPlanResults != null && matchPlanResults.size() > 0) {
                         List<MatchPlanResult1> matchPlanResult2 = new ArrayList<>();
@@ -83,7 +85,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                        /* planResult2.setList(matchPlanResults);*/
                     }
                 }
-
+                resultMap.put("planStatus", planStatus);
                 resultMap.put("matchId", matchId);
                 resultMap.put("grade", grade);
                 resultMap.put("price", price);

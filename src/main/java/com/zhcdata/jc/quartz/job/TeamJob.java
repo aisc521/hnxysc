@@ -104,6 +104,7 @@ public class TeamJob implements Job {
             }
         } catch (Exception ex) {
             log.error("[球队资料]处理异常" + ex.toString());
+            ex.printStackTrace();
         }
         log.error("Instance detail: " + key + " trigger:" + jobKey + "执行完成");
         long end = System.currentTimeMillis();

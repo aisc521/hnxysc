@@ -67,6 +67,7 @@ public class SubSclassJob implements Job {
             }
         } catch (Exception ex) {
             LOGGER.error("[子联赛]资料异常" + ex);
+            ex.printStackTrace();
         }
 
     }

@@ -176,7 +176,8 @@ public class TTSJob implements Job {
                 }
             }
         } catch (Exception ex) {
-            log.info("球队技术统计处理异常" + ex.getMessage());
+            log.error("球队技术统计处理异常" + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

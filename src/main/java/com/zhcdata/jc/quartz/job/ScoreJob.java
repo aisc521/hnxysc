@@ -72,7 +72,8 @@ public class ScoreJob implements Job {
                 }
             }
         } catch (Exception ex) {
-            LOGGER.info("[球队积分排名]异常" + ex);
+            LOGGER.error("[球队积分排名]异常" + ex);
+            ex.printStackTrace();
         }
 
         String sd = "";
@@ -203,7 +204,8 @@ public class ScoreJob implements Job {
                 }
             }
         } catch (Exception ex) {
-            LOGGER.info("[球队积分排名]异常" + ex);
+            LOGGER.error("[球队积分排名]异常" + ex);
+            ex.printStackTrace();
         }
     }
 
@@ -286,7 +288,8 @@ public class ScoreJob implements Job {
             //String tips = re.split(";")[1];                 //字段说明
             //String GroupName = re.split(";")[3];            //分组说明
         } catch (Exception ex) {
-            LOGGER.info("[球队积分排名]异常" + ex);
+            LOGGER.error("[球队积分排名]异常" + ex);
+            ex.printStackTrace();
         }
     }
 
@@ -308,7 +311,8 @@ public class ScoreJob implements Job {
                 }
             }
         } catch (Exception ex) {
-            LOGGER.info("[球队积分排名]异常" + ex);
+            LOGGER.error("[球队积分排名]异常" + ex);
+            ex.printStackTrace();
         }
     }
 
