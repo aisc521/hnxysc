@@ -52,6 +52,7 @@ public class LiveJob implements Job {
             }
         } catch (Exception ex) {
             log.error("文字直播接口处理异常：" + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

@@ -104,6 +104,7 @@ public class ChangeJob implements Job {
             }
         } catch (Exception ex) {
             log.error("[即时变化的比分数据（20秒）]" + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

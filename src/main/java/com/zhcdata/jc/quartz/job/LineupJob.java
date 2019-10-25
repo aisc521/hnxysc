@@ -64,7 +64,8 @@ public class LineupJob implements Job {
             }
             String sds = "";
         } catch (Exception ex) {
-            LOGGER.info("[出场阵容]定时任务异常：" + ex);
+            LOGGER.error("[出场阵容]定时任务异常：" + ex);
+            ex.printStackTrace();
         }
     }
 }

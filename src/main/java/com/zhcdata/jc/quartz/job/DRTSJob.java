@@ -274,7 +274,8 @@ public class DRTSJob implements Job {
                 }
             }
         } catch (Exception ex) {
-            System.out.println("当天比赛的详细事件&技术统计异常" + ex.getMessage());
+            log.error("当天比赛的详细事件&技术统计异常" + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

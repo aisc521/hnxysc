@@ -60,6 +60,7 @@ public class SclassInfoJob implements Job {
             }
         } catch (Exception ex) {
             LOGGER.error("[杯赛联赛资料]" + ex.toString());
+            ex.printStackTrace();
         }
     }
 }

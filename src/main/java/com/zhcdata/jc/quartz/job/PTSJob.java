@@ -112,6 +112,7 @@ public class PTSJob implements Job {
             }
         } catch (Exception ex) {
             LOGGER.error("球员技术统计表处理异常" + ex);
+            ex.printStackTrace();
         }
     }
 }

@@ -111,6 +111,7 @@ public class SclassJob implements Job {
             }
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }
