@@ -47,7 +47,7 @@
       p.id planId,
       p.type planType,
       p.status planStatus,
-      IFNULL(pd.id,'0') buStatus,
+      IF(pd.id IS NOT NULL,1,0) buStatus,
       e.grade grade
       from tb_jc_plan  p
       LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
@@ -396,7 +396,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         p.id planId,
         p.type planType,
         p.status planStatus,
-        IFNULL(pd.id,'0') buStatus,
+        IF(pd.id IS NOT NULL,1,0) buStatus,
         e.grade grade
         from tb_jc_plan  p
         LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
