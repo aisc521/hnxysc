@@ -105,6 +105,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                 }
             } catch (Exception e) {
                 log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库异常", item);
+                e.printStackTrace();
             }
         } else if (!db.nowOddsSame(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
             try {
@@ -150,6 +151,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                 }
             } catch (Exception e) {
                 log.error("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库异常", item);
+                e.printStackTrace();
             }
 
         } else if (!db.nowOddsSame(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
