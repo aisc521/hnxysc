@@ -137,9 +137,9 @@ public class JczqMatchResultProtocol implements BaseProtocol {
                                 "0:0","1:1","2:2","3:3","平其他",
                                 "0:1","0:2","1:2","0:3","1:3","2:3","0:4","1:4","2:4","0:5","1:5","2:5","负其他"
                                 };
-  private String BFARLTPL[] = {"sw10","sw20","sw21","sw30","sw31","sw32","sw40","sw41","sw42","Sw50","Sw51","Sw52","Sw5",
+  private String BFARLTPL[] = {"sw10","sw20","sw21","sw30","sw31","sw32","sw40","sw41","sw42","sw50","sw51","sw52","sw5",
                                 "sd00","sd11","sd22","sd33","sd4",
-                                "sl01","sl02","sl12","sl03","sl13","sl23","sl04","sl14","sl24","Sl05","Sl15","Sl25","Sl5"};
+                                "sl01","sl02","sl12","sl03","sl13","sl23","sl04","sl14","sl24","sl05","sl15","sl25","sl5"};
   //总进球
   private String GOLFARLT [] = {"0","1","2","3","4","5","6","7+"};
   private String GOLFARLTPL [] = {"t0","t1","t2","t3","t4","t5","t6","t7"};
