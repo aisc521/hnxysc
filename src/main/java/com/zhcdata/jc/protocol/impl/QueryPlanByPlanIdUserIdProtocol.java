@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description 相关方案  带userId
+ * @Description 相关方案根据planId查询  带userId
  * @Author cuishuai
  * @Date 2019/9/20 15:08
  */
 @Service("20200236")
-public class QueryPlanByMatchIdUserIdProtocol implements BaseProtocol {
+public class QueryPlanByPlanIdUserIdProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource
@@ -37,7 +37,7 @@ public class QueryPlanByMatchIdUserIdProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
-        String id = paramMap.get("id");
+        String id = paramMap.get("planId");
         if (Strings.isNullOrEmpty(id)) {
             LOGGER.info("[" + ProtocolCodeMsg.PLANID_NULL.getMsg() + "]:id---" + id);
             map.put("resCode", ProtocolCodeMsg.PLANID_NULL.getCode());
@@ -57,7 +57,7 @@ public class QueryPlanByMatchIdUserIdProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-        String id = paramMap.get("id");
+        String id = paramMap.get("planId");
         String pageNo = paramMap.get("pageNo");
         List<PlanResult1> result = new ArrayList<>();
 

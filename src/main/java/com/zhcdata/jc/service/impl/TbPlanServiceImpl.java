@@ -31,8 +31,8 @@ public class TbPlanServiceImpl implements TbPlanService {
     @Override
     public PageInfo<PlanResult1> queryPlanByExpertId(String id, String planId, String userId,Integer pageNo,Integer pageAmount) {
         PageHelper.startPage(pageNo, pageAmount);
-
-        return new PageInfo<>(tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId,userId));
+        List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertId(Long.parseLong(id),planId,userId);
+        return new PageInfo<>(list);
     }
 
     @Override
@@ -120,12 +120,34 @@ public class TbPlanServiceImpl implements TbPlanService {
     public PageInfo<PlanResult1> queryPlanByExpertIdForXg(String pIdList, Integer pageNo, int pageAmount) {
 
         PageHelper.startPage(pageNo, pageAmount);
-        return new PageInfo<PlanResult1>(tbJcPlanMapper.queryPlanByExpertIdForXg(pIdList));
+        List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertIdForXg(pIdList);
+        return new PageInfo<>(list);
     }
 
     @Override
     public PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer pageNo, int pageAmount) {
         PageHelper.startPage(pageNo, pageAmount);
-        return new PageInfo<PlanResult1>(tbJcPlanMapper.queryPlanByExpertIdForXgAndUser(pIdList,userId));
+        List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertIdForXgAndUser(pIdList,userId);
+        return new PageInfo<>(list);
     }
+
+    @Override
+    public  PageInfo<PlanIdDto> selectPlanIdByMatchId(String matchId,Integer pageNo,Integer pageAmount) {
+
+        PageHelper.startPage(pageNo, pageAmount);
+        List<PlanIdDto> list = tbJcPlanMapper.selectPlanIdByMatchId(matchId);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public QueryPlanByMatchIdDto queryPlanInfoByPlanId(String planId) {
+        return tbJcPlanMapper.queryPlanInfoByPlanId(planId);
+    }
+
+    @Override
+    public QueryPlanByMatchIdDto queryPlanInfoByPlanIdandUserId(String planId, String userId) {
+        return tbJcPlanMapper.queryPlanInfoByPlanIdandUserId(planId,userId);
+    }
+
+
 }

@@ -107,7 +107,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                 log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库异常", item);
                 e.printStackTrace();
             }
-        } else if (!db.nowOddsSame(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+        } else if (!db.nowOddsSame(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
             try {
                 if ((sc == null) || (sc.getMatchtime().getTime() > xml.getModifytime().getTime())) {
                     //入数据库
@@ -154,7 +154,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                 e.printStackTrace();
             }
 
-        } else if (!db.nowOddsSame(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+        } else if (!db.nowOddsSame(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
             if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                 //入数据库
                 xml.setOddsid(db.getOddsid());

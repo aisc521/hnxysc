@@ -93,7 +93,7 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
                 letGoalhalfDetailMapper.insertSelective(letGoalhalfDetail);
                 //log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
             }
-        } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+        } else if (!db.oddsEquals(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
             if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                 //入数据库
                 xml.setOddsid(db.getOddsid());
@@ -134,7 +134,7 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
                 letGoalhalfDetail.setAddtime(afterInsert.getModifytime());
                 multiLetGoalhalfDetailMapper.insertSelective(letGoalhalfDetail);
             }
-        } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+        } else if (!db.oddsEquals(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
             if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                 //入数据库
                 xml.setOddsid(db.getOddsid());

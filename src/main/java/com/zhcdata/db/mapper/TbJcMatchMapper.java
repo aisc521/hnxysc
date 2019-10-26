@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.TbJcMatch;
+import com.zhcdata.jc.dto.MatchInfoDto;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.MatchPlanResult1;
 import com.zhcdata.jc.dto.MatchResult1;
@@ -19,4 +20,6 @@ public interface TbJcMatchMapper extends Mapper<TbJcMatch> {
     MatchResult1 queryScore1(@Param("matchId") String matchId);
 
     TbJcMatch queryJcMatchByPlanId(@Param("planId") Long id);
+
+    List<MatchInfoDto> queryMatchInfoDtoByPlanId(@Param("planId")String planId);
 }

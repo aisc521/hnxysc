@@ -7,6 +7,7 @@ import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.*;
+import com.zhcdata.jc.tools.ExpertLevelUtils;
 import com.zhcdata.jc.tools.RedisUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -42,6 +43,8 @@ public class CalculationPlanJob implements Job {
     @Resource
     private PayService payService;
 
+    @Resource
+    ExpertLevelUtils expertLevelUtils;
     @Resource
     private TbJcPurchaseDetailedService purchaseDetailedService;
 
@@ -188,6 +191,9 @@ public class CalculationPlanJob implements Job {
         if(pop == null){
             pop = 0;
         }
+        Integer pop1 = Integer.valueOf(String.valueOf(tbJcExpert.getStartExperience()));
+        String dj = expertLevelUtils.expertLeve(pop + 3 + pop1);
+        tbJcExpert.setGrade(Long.valueOf(dj));
         tbJcExpert.setExperience(Long.valueOf(pop + 3));
         Example example1 = new Example(TbJcExpert.class);
         example1.createCriteria().andEqualTo("id",tbJcExpert.getId());

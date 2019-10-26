@@ -69,13 +69,21 @@
     victory.five_z fiveZ,
     victory.four_z fourZ,
     victory.three_z threeZ,
-    victory.lz_big lzBig
+    victory.lz_big lzBig,
+    case when pd.pay_type = '0' then '余额支付'
+    when pd.pay_type = '20' then '微信支付'
+    when pd.pay_type = '21' then '支付宝支付'
+    when pd.pay_type = '22' then '微信支付'
+    when pd.pay_type = '1' then '点播卡支付'
+    end AS paytype,
+    pd.order_id orderId
     from tb_jc_purchase_detailed pd
     LEFT JOIN tb_jc_expert expert ON pd.expert_id = expert.id
     LEFT JOIN tb_jc_victory  victory ON pd.expert_id = victory.expert_id
     LEFT JOIN tb_jc_plan plan ON pd.scheme_id = plan.id
     LEFT JOIN tb_jc_match match1 ON  pd.scheme_id = match1.plan_id
     where pd.user_id = #{userId}
+    order by pd.create_time
   </select>
 
 

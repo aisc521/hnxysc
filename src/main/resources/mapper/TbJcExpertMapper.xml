@@ -132,4 +132,22 @@
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id and f.user_id = #{userId}
     where e.id=#{expertId} and e.is_upshelf = '1'
   </select>
+
+  <select id="queryExpertInfo" resultType="com.zhcdata.jc.dto.ExpertInfoDto">
+    SELECT DISTINCT * FROM(
+    SELECT
+    e.id expertId,
+    e.nick_name expertName,
+    e.lable expertType,
+    e.fans expertFans,
+    e.img expertIcon,
+    e.grade expertLevel,
+    v.lz_now expertHitNum,
+    (SELECT count(*) from tb_jc_plan where ascription_expert=f.expert_Id) expertReleaseCount
+    from tb_jc_record_focus f LEFT JOIN tb_jc_expert e on f.expert_Id=e.id
+    LEFT JOIN tb_jc_victory v on f.expert_Id=v.expert_id
+    where f.user_Id=#{userId}
+    ) a
+  </select>
+
 </mapper>
