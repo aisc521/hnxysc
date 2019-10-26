@@ -87,7 +87,7 @@ public class MultOddsHandleServiceImpl implements MultHandicapOddsService {
                     standardDetailMapper.insertSelective(detail);
                     log.error("欧赔单盘主表更新子表初赔:" + detail.toString());
                 }
-            } else if (!db.same(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+            } else if (!db.same(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
                 if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                     //入数据库
                     xml.setOddsid(db.getOddsid());

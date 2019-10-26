@@ -22,13 +22,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description 相关方案  根据matchId查询 不带userId
+ * @Description TODO
  * @Author cuishuai
- * @Date 2019/10/26 11:07
+ * @Date 2019/10/26 12:08
  */
-@Service("20200239")
-public class QueryPlanByMatchIdProtocol implements BaseProtocol {
+@Service("20200240")
+public class QueryPlanByMatchIdAndUserProtocol implements BaseProtocol {
+
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
     @Resource
     private TbPlanService tbPlanService;
     @Resource
@@ -36,9 +38,9 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
-        String machId = paramMap.get("machId");
-        if (Strings.isNullOrEmpty(machId)) {
-            LOGGER.info("[" + ProtocolCodeMsg.MATCH_ID_NOT_ASSIGNED.getMsg() + "]:machId---" + machId);
+        String macchId = paramMap.get("machId");
+        if (Strings.isNullOrEmpty(macchId)) {
+            LOGGER.info("[" + ProtocolCodeMsg.MATCH_ID_NOT_ASSIGNED.getMsg() + "]:machId---" + macchId);
             map.put("resCode", ProtocolCodeMsg.MATCH_ID_NOT_ASSIGNED.getCode());
             map.put("message", ProtocolCodeMsg.MATCH_ID_NOT_ASSIGNED.getMsg());
             return map;
@@ -50,22 +52,30 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg());
             return map;
         }
+        String userId = paramMap.get("userId");
+        if (Strings.isNullOrEmpty(userId)) {
+            LOGGER.info("[" + ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg() + "]:userId---" + userId);
+            map.put("resCode", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getCode());
+            map.put("message", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg());
+            return map;
+        }
         return null;
     }
 
     @Override
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
-        //根据matchId 查询相关的方案id
+
         Map<String, Object> resultMap = new HashMap<>();
         String matchId = paramMap.get("machId");
         String pageNo = paramMap.get("pageNo");
+        String userId = paramMap.get("userId");
         PageInfo<PlanIdDto> planIdDtos = tbPlanService.selectPlanIdByMatchId(matchId,Integer.valueOf(pageNo),20);
         List<PlanIdDto> planIdDtoList = planIdDtos.getList();
         List list = new ArrayList();
         if(planIdDtoList.size() > 0){
             for(int i = 0; i < planIdDtoList.size(); i++){
                 //根据planId 查询 方案信息
-                QueryPlanByMatchIdDto queryPlanByMatchIdDto = tbPlanService.queryPlanInfoByPlanId(planIdDtoList.get(i).getPlanId());
+                QueryPlanByMatchIdDto queryPlanByMatchIdDto = tbPlanService.queryPlanInfoByPlanIdandUserId(planIdDtoList.get(i).getPlanId(),userId);
                 if(queryPlanByMatchIdDto != null){
                     List<MatchInfoDto> matchInfoDtos = tbJcMatchService.queryMatchInfoDtoByPlanId(planIdDtoList.get(i).getPlanId());
                     queryPlanByMatchIdDto.setList(matchInfoDtos);

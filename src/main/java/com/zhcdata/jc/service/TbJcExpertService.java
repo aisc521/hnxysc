@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
 import com.zhcdata.jc.dto.ExpertInfoBdDto;
+import com.zhcdata.jc.dto.ExpertInfoDto;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -45,4 +46,6 @@ public interface TbJcExpertService {
     int updateByExample(TbJcExpert tbJcExpert, Example example1);
 
     ExpertInfo queryExpertDetailsAndUser(String expertId, String userId);
+
+    List<ExpertInfoDto> queryExpertInfo(String userId);
 }
