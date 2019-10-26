@@ -18,10 +18,7 @@ import tk.mybatis.mapper.entity.Example;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description 计算方案 是否命中
@@ -73,7 +70,8 @@ public class CalculationPlanJob implements Job {
                                 if (!scoreDto.getStatusType().equals("finished") && !scoreDto.getStatusType().equals("notstarted")) {
                                     flag = "1";
                                 }
-
+                                Double hScore1 = Double.valueOf(scoreDto.getHomeScore());
+                                Double vScore1 = Double.valueOf(scoreDto.getGuestScore());
                                 if (scoreDto.getStatusType().equals("finished")) {
                                     //该赛事已结束，计算方案
                                     Double hScore = Double.valueOf(scoreDto.getHomeScore());
@@ -92,7 +90,7 @@ public class CalculationPlanJob implements Job {
 
                                         if (!spf.split(",")[1].equals("0")) {
                                             //买平
-                                            if (hScore == vScore) {
+                                            if (Objects.equals(hScore, vScore)) {
                                                 z = 1;
                                             }
                                         }
@@ -116,7 +114,7 @@ public class CalculationPlanJob implements Job {
 
                                             if (!rqspf.split(",")[1].equals("0")) {
                                                 //买平
-                                                if (hScore == vScore) {
+                                                if (Objects.equals(hScore, vScore)) {
                                                     z = 1;
                                                 }
                                             }
@@ -140,7 +138,7 @@ public class CalculationPlanJob implements Job {
                                     }
 
                                     //处理单场比赛结果、中奖状态
-                                    tbJcMatchService.updateStatus(String.valueOf(z), hScore + ":" + vScore,matchPlanResults.get(k).getId());
+                                    tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1,matchPlanResults.get(k).getId());
 
                                 }else{
                                     result = 2;
