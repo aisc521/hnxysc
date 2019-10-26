@@ -52,6 +52,26 @@ public class PurchasedPlanDto {
 
     private String status;
 
+    private String paytype;
+
+    private String orderId;
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getPaytype() {
+        return paytype;
+    }
+
+    public void setPaytype(String paytype) {
+        this.paytype = paytype;
+    }
+
     public String getStatus() {
         return status;
     }
