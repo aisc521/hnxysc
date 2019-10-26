@@ -84,7 +84,7 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
             if (db == null) {
                 if (totalScorehalfMapper.insertSelective(xml) > 0)
                     log.info("20多盘口赔率: 单盘即时半场大小球 接口数据:{} 入库成功", item);
-            } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+            } else if (!db.oddsEquals(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
                 if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                     //入数据库
                     xml.setOddsid(db.getOddsid());
@@ -135,7 +135,7 @@ public class MultHalfSizesBallsHandleServiceImpl implements MultHandicapOddsServ
                 detail.setDownodds(xml.getFirstdownodds());
                 multiTotalScorehalfDetailMapper.insertSelective(detail);
             }
-        } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+        } else if (!db.oddsEquals(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
             if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                 //入数据库
                 xml.setOddsid(db.getOddsid());

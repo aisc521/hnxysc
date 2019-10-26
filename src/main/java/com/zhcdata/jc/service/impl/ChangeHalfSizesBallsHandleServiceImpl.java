@@ -46,7 +46,8 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
 
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
-
+        if (rsp==null || rsp.getDh()==null || rsp.getDh().getH()==null || rsp.getDh().getH().size()==0)
+            return;
         List<String> cah = rsp.getDh().getH();
         if (cah == null || cah.size() < 1) {
             log.error("21多盘口赔率变化: 半场大小球 变化数据总条数:{}", " 没有可更新的数据");

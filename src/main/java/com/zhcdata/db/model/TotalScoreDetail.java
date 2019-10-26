@@ -77,6 +77,6 @@ public class TotalScoreDetail {
     }
 
     public boolean oddsEquals(TotalScoreDetail xml) {
-        return xml.goal.equals(goal) && xml.getUpodds().equals(upodds) && xml.downodds.equals(downodds);
+        return xml.goal-goal==0 && xml.getUpodds()-upodds==0 && xml.downodds-downodds==0;
     }
 }

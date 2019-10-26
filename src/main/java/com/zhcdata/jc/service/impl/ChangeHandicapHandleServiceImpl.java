@@ -49,6 +49,8 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
         //亚赔（让球盘）变化数据:比赛ID,公司ID,即时盘口,主队即时赔率,客队即时赔率,是否封盘1,是否走地,盘口序号,变盘时间,是否封盘2
+        if (rsp==null || rsp.getA()==null || rsp.getA().getH()==null || rsp.getA().getH().size()==0)
+            return;
         List<String> cah = rsp.getA().getH();
         if (cah == null || cah.size() < 1) {
             log.error("21多盘口赔率变化: 亚赔（让球盘）变化数据总条数:{}", " 没有可更新的数据");
