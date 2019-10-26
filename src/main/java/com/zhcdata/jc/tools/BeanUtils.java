@@ -36,8 +36,8 @@ import java.util.List;
 
 public class BeanUtils {
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    private static final SimpleDateFormat sdf_X = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    //private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    //private static final SimpleDateFormat sdf_X = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 
     public static Schedule parseSchedule(MatchListRsp model) {
@@ -650,7 +650,7 @@ public class BeanUtils {
 
     public static Date parseTime(String time) {
         try {
-            return sdf_X.parse(time);
+            return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(time);
         } catch (Exception e) {
             System.err.println("BeanUtils.parseTime exception,time:" + time);
         }
@@ -675,7 +675,7 @@ public class BeanUtils {
             mo.setRealguestwin(Float.parseFloat(mos[7]));
 
         try {
-            mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
+            mo.setModifytime(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(mos[8]));//修改时间
         } catch (Exception e) {
             System.err.println("parseEuropeOdds,dateFormatException,变化时间转换失败 : " + mos[8]);
             e.printStackTrace();
@@ -698,7 +698,10 @@ public class BeanUtils {
         }
 
         try {
-            mo.setModifytime(sdf_X.parse(mos[8]));//修改时间
+            if (mos[8]==null || mos[8].equals("")){
+                System.err.println("parseEuropeOddsDetail,mos[8]是nulllllllll" + mos[8]);
+            }
+            mo.setModifytime(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(mos[8]));//修改时间
         } catch (Exception e) {
             System.err.println("parseEuropeOddsDetail,dateFormatException,变化时间转换失败 : " + mos[8]);
             e.printStackTrace();
