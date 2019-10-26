@@ -93,7 +93,7 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
                 totalScoreDetailMapper.insertSelective(totalScoreDetail);
                 log.error("大小单盘主表更新子表初赔:" + totalScoreDetail.toString());
             }
-        } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+        } else if (!db.oddsEquals(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
             if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                 //入数据库
                 xml.setOddsid(db.getOddsid());
@@ -138,7 +138,7 @@ public class MultSizesBallsHandleServiceImpl implements MultHandicapOddsService 
                 detail.setDownodds(xml.getFirstdownodds());
                 multiTotalScoreDetailMapper.insertSelective(detail);
             }
-        } else if (!db.oddsEquals(xml) && xml.getModifytime().getTime() > db.getModifytime().getTime()) {
+        } else if (!db.oddsEquals(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
             if (sc == null || sc.getMatchtime().getTime() > xml.getModifytime().getTime()) {
                 //入数据库
                 xml.setOddsid(db.getOddsid());
