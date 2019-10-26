@@ -2,6 +2,7 @@ package com.zhcdata.jc.protocol.impl;
 
 import com.google.common.base.Strings;
 import com.zhcdata.jc.dto.ExpertInfo;
+import com.zhcdata.jc.dto.ExpertInfoDto;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -45,7 +46,7 @@ public class QueryExpertGzProtocol implements BaseProtocol {
         Map<String, Object> resultMap = new HashMap<>();
         String userId = paramMap.get("userId");
         try {
-            List<ExpertInfo> list = tbJcExpertService.query(userId);
+            List<ExpertInfoDto> list = tbJcExpertService.queryExpertInfo(userId);
             resultMap.put("list",list);
         } catch (Exception ex) {
             LOGGER.error("已关注专家列表" + ex.getMessage());

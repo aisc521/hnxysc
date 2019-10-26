@@ -93,5 +93,14 @@
     <select id="queryJcMatchByPlanId" resultType="com.zhcdata.db.model.TbJcMatch">
         select * from  tb_jc_match m where m.plan_id = #{planId} ORDER BY m.date_of_match asc limit 0,1
     </select>
+    <select id="queryMatchInfoDtoByPlanId" resultType="com.zhcdata.jc.dto.MatchInfoDto">
 
+      SELECT
+      m.match_name matchName,
+      m.home_team hostTeam,
+      m.visiting_team visitTeam,
+      m.date_of_match dateOfMatch
+      from tb_jc_match m
+      where m.plan_id = #{planId}
+    </select>
 </mapper>

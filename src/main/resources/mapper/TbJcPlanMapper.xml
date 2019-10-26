@@ -471,4 +471,58 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
 
 
     </select>
+
+
+    <select id="selectPlanIdByMatchId" resultType="com.zhcdata.jc.dto.PlanIdDto">
+        SELECT plan_id planId from tb_jc_match where match_id in(#{matchId})
+    </select>
+    <select id="queryPlanInfoByPlanId" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
+        select
+        e.id id,
+        e.nick_name nickName,
+        e.img img,
+        e.lable lable,
+        e.fans fans,
+        e.popularity popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.title titleShowType,
+        p.price price,
+        p.create_time createTime,
+        0 buStatus,
+        e.grade grade,
+        p.status planStatus
+        from tb_jc_plan p
+        left join tb_jc_expert e on p.ascription_expert = e.id
+        left join tb_jc_victory v on e.id = v.expert_id
+        where p.id = #{planId}
+    </select>
+
+    <select id="queryPlanInfoByPlanIdandUserId" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
+        select
+        e.id id,
+        e.nick_name nickName,
+        e.img img,
+        e.lable lable,
+        e.fans fans,
+        e.popularity popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.title titleShowType,
+        p.price price,
+        p.create_time createTime,
+        IF(pd.id IS NOT NULL,1,0) buStatus,
+        e.grade grade,
+        p.status planStatus
+        from tb_jc_plan p
+        left join tb_jc_expert e on p.ascription_expert = e.id
+        left join tb_jc_victory v on e.id = v.expert_id
+        left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId}
+        where p.id = #{planId}
+    </select>
+
 </mapper>
