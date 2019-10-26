@@ -51,4 +51,8 @@
     order by l.ISSUE_NUM desc ,matchTime
     ) aa LEFT JOIN  team t on aa.HomeTeamID = t.teamid LEFT JOIN team tt on  aa.GuestTeamID = tt.teamid
   </select>
+
+  <select id="queryBjdcByMatchId" resultType="com.zhcdata.db.model.JcMatchBjdcPl">
+    select * from jc_match_bjdc_pl p where p.ID_BET007 = #{matchId}
+  </select>
 </mapper>

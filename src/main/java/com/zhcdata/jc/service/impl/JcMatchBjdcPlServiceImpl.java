@@ -261,4 +261,9 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
     String endvDate = date+" 23:59:59";
     return jcMatchBjdcPlMapper.queryTodayMatchCount(startDate,endvDate);
   }
+
+    @Override
+    public List<JcMatchBjdcPl> queryBjdcByMatchId(Integer matchId) {
+        return jcMatchBjdcPlMapper.queryBjdcByMatchId(matchId);
+    }
 }
