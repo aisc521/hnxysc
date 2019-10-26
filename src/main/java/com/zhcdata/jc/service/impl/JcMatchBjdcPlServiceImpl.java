@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -261,9 +264,25 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
     String endvDate = date+" 23:59:59";
     return jcMatchBjdcPlMapper.queryTodayMatchCount(startDate,endvDate);
   }
+  @Override
+  public List<JcMatchBjdcPl> queryBjdcByMatchId(Integer matchId) {
+    return jcMatchBjdcPlMapper.queryBjdcByMatchId(matchId);
+  }
+  //增加一天
+  public String getEndDay(String startDay){
 
-    @Override
-    public List<JcMatchBjdcPl> queryBjdcByMatchId(Integer matchId) {
-        return jcMatchBjdcPlMapper.queryBjdcByMatchId(matchId);
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    Calendar c = Calendar.getInstance();
+    try {
+      c.setTime(sdf.parse(startDay));
+    } catch (ParseException e) {
+      e.printStackTrace();
     }
+    c.add(Calendar.DAY_OF_MONTH, 1);
+    Date sDate = c.getTime();
+    return sdf.format(sDate);
+  }
+  public static void main(String args[]){
+    //System.out.println(getEndDay("2019-10-26 10:00:00"));
+  }
 }
