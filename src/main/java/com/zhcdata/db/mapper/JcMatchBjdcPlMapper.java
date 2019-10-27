@@ -15,4 +15,6 @@ public interface JcMatchBjdcPlMapper extends Mapper<JcMatchBjdcPl> {
   int queryTodayMatchCount(@Param("startDate") String startDate,@Param("endvDate") String endDate);
 
     List<JcMatchBjdcPl> queryBjdcByMatchId(@Param("matchId") Integer matchId);
+
+    List<JcMatchBjdcPl> queryJcMatchBdPlByLottery();
 }

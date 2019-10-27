@@ -21,4 +21,9 @@ public interface JcMatchBjdcPlService {
     int queryTodayMatchCount(String date);
 
     List<JcMatchBjdcPl> queryBjdcByMatchId(Integer matchId);
+
+    List<JcMatchBjdcPl> queryJcMatchBdPlByLottery();
+
+
+    int upMatchBdRate(JcMatchBjdcPl jcMatchBjdcPl);
 }
