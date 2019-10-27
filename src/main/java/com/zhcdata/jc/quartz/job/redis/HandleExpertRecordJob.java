@@ -306,32 +306,39 @@ public class HandleExpertRecordJob implements Job {
                             }
                         }
                     }else{
-                        VictoryInfo info = new VictoryInfo();
-                        info.setLzNow(String.valueOf(0));                                  //当前连中
-                        info.setF(String.valueOf(0));                                      //已发方案总数
-                        info.setZ(String.valueOf(0));                                 //方案命中数
-                        info.setzThreeDays("0");  //三天命中率
-                        info.setzFiveDays("0");     //五天命中率
-                        info.setzSevenDays("0");  //七天命中率
-                        info.setTrend("0");                                               //趋势
-                        info.setzAll("0");           //全部命中率
-                        info.setLzBig(String.valueOf(0));                          //历史最高连红
-                        info.setTen_z(String.valueOf(0));                              //近10中几
-                        info.setNine_z(String.valueOf(0));                              //近9中几
-                        info.setEight_z(String.valueOf(0));                             //近8中几
-                        info.setSeven_z(String.valueOf(0));                             //近7中几
-                        info.setNine_z(String.valueOf(0));                              //近6中几
-                        info.setFive_z(String.valueOf(0));                              //近5中几
-                        info.setFour_z(String.valueOf(0));                              //近4中几
-                        info.setThree_z(String.valueOf(0));                             //近3中几
-                        info.setReturnSevenDays("0");                                       //七天回报率/七天盈利率
-                        info.setReturnAll("0");                                             //全部回报率
-                        info.setExpertId(String.valueOf(expertResults.get(p).getId()));
-                        info.setYlSevenDays("0");
-                        info.setSix_z("0");
-                        int r = tbJcVictoryService.insert(info);
-                        if (r > 0) {
-                            log.info("新专家趋势插入成功");
+                        VictoryResult Victory = tbJcVictoryService.queryVictory(String.valueOf(expertResults.get(p).getId()));
+
+                        if (Victory == null) {
+                            VictoryInfo info = new VictoryInfo();
+                            info.setLzNow(String.valueOf(0));                                  //当前连中
+                            info.setF(String.valueOf(0));                                      //已发方案总数
+                            info.setZ(String.valueOf(0));                                 //方案命中数
+                            info.setzThreeDays("0");  //三天命中率
+                            info.setzFiveDays("0");     //五天命中率
+                            info.setzSevenDays("0");  //七天命中率
+                            info.setTrend("0");                                               //趋势
+                            info.setzAll("0");           //全部命中率
+                            info.setLzBig(String.valueOf(0));                          //历史最高连红
+                            info.setTen_z(String.valueOf(0));                              //近10中几
+                            info.setNine_z(String.valueOf(0));                              //近9中几
+                            info.setEight_z(String.valueOf(0));                             //近8中几
+                            info.setSeven_z(String.valueOf(0));                             //近7中几
+                            info.setNine_z(String.valueOf(0));                              //近6中几
+                            info.setFive_z(String.valueOf(0));                              //近5中几
+                            info.setFour_z(String.valueOf(0));                              //近4中几
+                            info.setThree_z(String.valueOf(0));                             //近3中几
+                            info.setReturnSevenDays("0");                                       //七天回报率/七天盈利率
+                            info.setReturnAll("0");                                             //全部回报率
+                            info.setExpertId(String.valueOf(expertResults.get(p).getId()));
+                            info.setYlSevenDays("0");
+                            info.setSix_z("0");
+
+
+                            //不存在，则添加
+                            int r = tbJcVictoryService.insert(info);
+                            if (r > 0) {
+                                log.info("新专家趋势插入成功");
+                            }
                         }
                     }
                 }

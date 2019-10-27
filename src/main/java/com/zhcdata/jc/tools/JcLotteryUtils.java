@@ -112,7 +112,7 @@ public class JcLotteryUtils {
                          "主胜:" + "30:" + bdrealimeSpBfRsp.getSw30() + "|" +
                          "主胜:" + "31:" + bdrealimeSpBfRsp.getSw31() + "|" +
                          "主胜:" + "32:" + bdrealimeSpBfRsp.getSw32() + "|" +
-                         "平：" + "33:" + bdrealimeSpBfRsp.getSd33() + "|" +
+                         "平:" + "33:" + bdrealimeSpBfRsp.getSd33() + "|" +
                          "主胜:" + "40:" + bdrealimeSpBfRsp.getSw40() + "|" +
                          "主胜:" + "41:" + bdrealimeSpBfRsp.getSw41() + "|" +
                          "主胜:" + "42:" + bdrealimeSpBfRsp.getSw42() + "|" +
@@ -155,7 +155,7 @@ public class JcLotteryUtils {
             BdrealimeSpBfRsp bdrealimeSpBfRsp = bfList.get(0);
             resultInfo = "让球胜平负:" + "3:" + bdrealimeSpBqcRsp.getSf3() + "|" +
                          "让球胜平负:" + "1:" + bdrealimeSpBqcRsp.getSf1() + "|" +
-                         "让球胜平负:" + "0:" + bdrealimeSpBqcRsp.getSf0() + "" +
+                         "让球胜平负:" + "0:" + bdrealimeSpBqcRsp.getSf0() + "|" +
                          "胜其他:" + "4:" + bdrealimeSpBfRsp.getSw4() + "|" +
                          "平其他:" + "4:" + bdrealimeSpBfRsp.getSd4() + "|" +
                          "负其他:" + "4:" + bdrealimeSpBfRsp.getSl4();
