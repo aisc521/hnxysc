@@ -20,5 +20,7 @@ public interface JcMatchBjdcPlService {
 
     int queryTodayMatchCount(String date);
 
+    String queryTOdayMatchIssue(String date);
+
     List<JcMatchBjdcPl> queryBjdcByMatchId(Integer matchId);
 }

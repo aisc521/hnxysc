@@ -25,31 +25,25 @@ package com.zhcdata.jc.quartz.job.Odds;
 
 import com.zhcdata.db.mapper.EuropeOddsDetailMapper;
 import com.zhcdata.db.mapper.EuropeOddsMapper;
-import com.zhcdata.db.mapper.EuropeoddstotalMapper;
 import com.zhcdata.db.model.EuropeOdds;
 import com.zhcdata.db.model.EuropeOddsDetail;
-import com.zhcdata.db.model.Europeoddstotal;
 import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.tools.HttpUtils;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.EuropeHundredOddsRsp;
 import com.zhcdata.jc.xml.rsp.EuropeHundredOddsRsp.H;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONObject;
 import org.json.XML;
 import org.quartz.Job;
-import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.europe_odds_flag;
@@ -99,7 +93,7 @@ public class EuropeHundredOddsJob implements Job {
             //str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx?day=3", null);
             str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx", null);
         } catch (Exception e) {
-            log.error("百欧赔率表接口获取失败" + e.toString());
+            log.error("百欧赔率表接口获取失败" + e);
         }
         EuropeHundredOddsRsp obj = com.alibaba.fastjson.JSONObject.parseObject(XML.toJSONObject(str).toString(), EuropeHundredOddsRsp.class);
         List<H> items = obj.getC().getH();
@@ -110,7 +104,7 @@ public class EuropeHundredOddsJob implements Job {
                 if (item.getOdds() == null || item.getOdds().getO() == null)
                     continue;
             } catch (ParseException e) {
-                log.error("百欧赔率表接口,比赛时间格式化失败，跳过比赛" + item.getId());
+                log.error("百欧赔率表接口,比赛时间格式化失败，跳过比赛" + item.getId(),e);
                 continue;
                 //e.printStackTrace();
             }
