@@ -203,6 +203,7 @@ public class ScoreJob implements Job {
                             info.setSubsclassid(Integer.valueOf(SubSclassID));
                         }
                         info.setMatchseason(Season);
+                        info.setUpdateTime(new Date());
                         dealTable(info);
                     }
                     String end = "";
