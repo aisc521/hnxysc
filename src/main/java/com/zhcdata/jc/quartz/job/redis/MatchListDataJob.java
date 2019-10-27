@@ -171,6 +171,7 @@ public class MatchListDataJob implements Job {
             }
         } catch (Exception ex) {
             LOGGER.error("定时任务后5天故障");
+
             ex.printStackTrace();
         }
     }
