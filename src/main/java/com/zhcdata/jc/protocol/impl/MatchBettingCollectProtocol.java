@@ -366,9 +366,9 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
                 }
                 if("16".equals(jcMatchBjdcPl.getLotteryPlay())){//上下单双  //上下单双  11 上单  10 上双 01 下单 00 下双
 
-                    sxds.append("上单").append("|").append(ratArr[0].split(":")[2]);//
-                    sxds.append("上双").append("|").append(ratArr[1].split(":")[2]);//
-                    sxds.append("下单").append("|").append(ratArr[2].split(":")[2]);//
+                    sxds.append("上单").append("|").append(ratArr[0].split(":")[2]).append(",");//
+                    sxds.append("上双").append("|").append(ratArr[1].split(":")[2]).append(",");//
+                    sxds.append("下单").append("|").append(ratArr[2].split(":")[2]).append(",");//
                     sxds.append("下双").append("|").append(ratArr[3].split(":")[2]);//
                     result.put("sxds", sxds);//比分
                 }
