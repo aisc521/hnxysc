@@ -252,7 +252,6 @@ public class QuartzController {
     @GetMapping("/looking")
     @ResponseBody
     public String looking() {
-
         return "0000";
     }
 }
