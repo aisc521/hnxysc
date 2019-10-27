@@ -56,4 +56,7 @@
   <select id="queryBjdcByMatchId" resultType="com.zhcdata.db.model.JcMatchBjdcPl">
     select * from jc_match_bjdc_pl p where p.ID_BET007 = #{matchId}
   </select>
+  <select id="queryJcMatchBdPlByLottery" resultType="com.zhcdata.db.model.JcMatchBjdcPl">
+    select * from jc_match_bjdc_pl p where p.LOTTERY_PLAY in ('15','12');
+  </select>
 </mapper>

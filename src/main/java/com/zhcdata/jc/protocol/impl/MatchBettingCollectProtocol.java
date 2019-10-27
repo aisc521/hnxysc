@@ -300,16 +300,18 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
                 JcMatchBjdcPl jcMatchBjdcPl = list.get(i);
                 String rat = jcMatchBjdcPl.getRateResult();
                 String[] ratArr = rat.split("\\|");
-                if("15".equals(jcMatchBjdcPl.getLotteryPlay())){//胜平负
-                    rspfStr.append("胜").append("|").append(ratArr[0].split(":")[2]).append(",");
-                    rspfStr.append("平").append("|").append(ratArr[1].split(":")[2]).append(",");
-                    rspfStr.append("负").append("|").append(ratArr[3].split(":")[2]).append(",");
 
-                    rspfStr.append("胜其他").append("|").append(ratArr[4].split(":")[2]).append(",");
-                    rspfStr.append("平其他").append("|").append(ratArr[5].split(":")[2]).append(",");
-                    rspfStr.append("负其他").append("|").append(ratArr[6].split(":")[2]).append(",");
-                    rspfStr.append("让球").append("|").append("0");
-                    result.put("rqspf", rspfStr);//让球胜平负
+                if("15".equals(jcMatchBjdcPl.getLotteryPlay())){//胜平负
+
+                        rspfStr.append("胜").append("|").append(ratArr[0].split(":")[2]).append(",");
+                        rspfStr.append("平").append("|").append(ratArr[1].split(":")[2]).append(",");
+                        rspfStr.append("负").append("|").append(ratArr[2].split(":")[2]).append(",");
+
+                        rspfStr.append("胜其他").append("|").append(ratArr[3].split(":")[2]).append(",");
+                        rspfStr.append("平其他").append("|").append(ratArr[4].split(":")[2]).append(",");
+                        rspfStr.append("负其他").append("|").append(ratArr[5].split(":")[2]).append(",");
+                        rspfStr.append("让球").append("|").append("0");
+                        result.put("rqspf", rspfStr);//让球胜平负
 
                 }
                 if("12".equals(jcMatchBjdcPl.getLotteryPlay())){//比分
