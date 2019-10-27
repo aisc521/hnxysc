@@ -144,4 +144,8 @@ public interface ScheduleMapper {
     IconAndTimeDto selectIconAndTime(@Param("matchId")Integer matchId);
 
     List<Schedule> selectStatusChangedToday(@Param("sat")String sat,@Param("end")String end,@Param("now")String now);
+
+   /* List<Integer> selectMatchIdExceedNowBd();
+*/
+    MatchInfoForBdDto quertMatchInfo(@Param("matchId")Integer matchId);
 }

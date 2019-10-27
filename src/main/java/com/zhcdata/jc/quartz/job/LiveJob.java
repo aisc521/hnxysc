@@ -34,7 +34,7 @@ public class LiveJob implements Job {
             for (LiveRsp a : result_list) {
                 List<LiveDetailRsp> result_Detail = new QiuTanXmlComm().handleMothodList(url + "?id=" + a.getID(), LiveDetailRsp.class);
                 for (LiveDetailRsp b : result_Detail) {
-                    List<LiveInfo> list = tbLiveMapper.queryLive(a.getID());
+                    List<LiveInfo> list = tbLiveMapper.queryLive(b.getID());
                     if (list == null || list.size() == 0) {
                         LiveInfo info = new LiveInfo();
                         info.setId(Long.valueOf(b.getID()));

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.dto.DrawNoResult;
 import com.zhcdata.jc.dto.IconAndTimeDto;
+import com.zhcdata.jc.dto.MatchInfoForBdDto;
 import com.zhcdata.jc.dto.MatchResult1;
 import org.apache.ibatis.annotations.Param;
 
@@ -86,4 +87,8 @@ public interface ScheduleService {
     List<DrawNoResult> queryList(String s);
 
     IconAndTimeDto selectIconAndTime(Integer matchId);
+
+   /* List<Integer> selectMatchIdExceedNowBd();*/
+
+    MatchInfoForBdDto quertMatchInfo(Integer matchId);
 }

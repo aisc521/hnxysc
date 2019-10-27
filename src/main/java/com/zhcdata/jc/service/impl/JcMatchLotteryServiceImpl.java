@@ -6,6 +6,7 @@ import com.zhcdata.jc.service.JcMatchLotteryService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description TODO
@@ -19,5 +20,10 @@ public class JcMatchLotteryServiceImpl implements JcMatchLotteryService {
     @Override
     public JcMatchLottery queryJcMatchLotteryByIssueNumAndNoId(String issueNum, String noId) {
         return jcMatchLotteryMapper.queryJcMatchLotteryByIssueNumAndNoId(issueNum,noId);
+    }
+
+    @Override
+    public List<JcMatchLottery> queryJcMatchLotteryByMatchIdAndType(Integer matchId) {
+        return jcMatchLotteryMapper.queryJcMatchLotteryByMatchIdAndType(matchId);
     }
 }
