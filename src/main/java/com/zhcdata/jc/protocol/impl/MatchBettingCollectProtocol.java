@@ -303,12 +303,11 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
                 if("15".equals(jcMatchBjdcPl.getLotteryPlay())){//胜平负
                     rspfStr.append("胜").append("|").append(ratArr[0].split(":")[2]).append(",");
                     rspfStr.append("平").append("|").append(ratArr[1].split(":")[2]).append(",");
-                    rspfStr.append("负").append("|").append(ratArr[2].split(":")[2].replaceAll("胜其他","")).append(",");
-                    String str1 = ratArr[2].split(":")[4].substring(0,ratArr[2].split(":")[4].length() -1);
+                    rspfStr.append("负").append("|").append(ratArr[3].split(":")[2]).append(",");
 
-                    rspfStr.append("胜其他").append("|").append(str1).append(",");
-                    rspfStr.append("平其他").append("|").append(ratArr[3].split(":")[2]).append(",");
-                    rspfStr.append("负其他").append("|").append(ratArr[4].split(":")[2]).append(",");
+                    rspfStr.append("胜其他").append("|").append(ratArr[4].split(":")[2]).append(",");
+                    rspfStr.append("平其他").append("|").append(ratArr[5].split(":")[2]).append(",");
+                    rspfStr.append("负其他").append("|").append(ratArr[6].split(":")[2]).append(",");
                     rspfStr.append("让球").append("|").append("0");
                     result.put("rqspf", rspfStr);//让球胜平负
 
@@ -329,9 +328,7 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
                     bfStr.append("3:0").append("|").append(ratArr[11].split(":")[2]).append(",");
                     bfStr.append("3:1").append("|").append(ratArr[12].split(":")[2]).append(",");
                     bfStr.append("3:2").append("|").append(ratArr[13].split(":")[2]).append(",");
-                    String str1=ratArr[14].substring(0, ratArr[14].indexOf("："));
-                    String str2=ratArr[14].substring(str1.length()+1, ratArr[14].length());
-                    bfStr.append("3:3").append("|").append(str2.split(":")[1]).append(",");
+                    bfStr.append("3:3").append("|").append(ratArr[14].split(":")[2]).append(",");
                     bfStr.append("4:0").append("|").append(ratArr[15].split(":")[2]).append(",");
                     bfStr.append("4:1").append("|").append(ratArr[16].split(":")[2]).append(",");
                     bfStr.append("4:2").append("|").append(ratArr[17].split(":")[2]).append(",");
