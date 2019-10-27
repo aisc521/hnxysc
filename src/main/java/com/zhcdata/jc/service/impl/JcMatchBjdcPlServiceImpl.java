@@ -279,7 +279,20 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
   public List<JcMatchBjdcPl> queryBjdcByMatchId(Integer matchId) {
     return jcMatchBjdcPlMapper.queryBjdcByMatchId(matchId);
   }
-  //增加一天
+
+    @Override
+    public List<JcMatchBjdcPl> queryJcMatchBdPlByLottery() {
+        return jcMatchBjdcPlMapper.queryJcMatchBdPlByLottery();
+    }
+
+    @Override
+    public int upMatchBdRate(JcMatchBjdcPl jcMatchBjdcPl) {
+        Example example = new Example(JcMatchBjdcPl.class);
+        example.createCriteria().andEqualTo("id",jcMatchBjdcPl.getId());
+        return jcMatchBjdcPlMapper.updateByExampleSelective(jcMatchBjdcPl,example);
+    }
+
+    //增加一天
   public String getEndDay(String startDay){
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
