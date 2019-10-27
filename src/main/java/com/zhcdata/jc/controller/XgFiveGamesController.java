@@ -53,7 +53,7 @@ public class XgFiveGamesController {
                 if("12".equals(jcMatchBjdcPl.getLotteryPlay())){
                     String rate = jcMatchBjdcPl.getRateResult();
                     String[] rateArr = rate.split("\\|");
-                    if(rateArr.length == 19){
+                    if(rateArr.length == 21){
                         String rateStr = rateArr[14].replaceAll("：",":");
                         System.out.println(rateStr);
                         String result = rateArr[0] + "|" +
