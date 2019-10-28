@@ -201,9 +201,9 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                     resultMap.put("payStaus", "2");//付费
                 }
                 if(freeOrPay.get("pay")>0){//已购买
-                    resultMap.put("buyStatus", "0");
+                    resultMap.put("buStatus", "1");
                 }else{
-                    resultMap.put("buyStatus", "1");//未购买
+                    resultMap.put("buStatus", "0");//未购买
                 }
 
             } catch (Exception ex) {
