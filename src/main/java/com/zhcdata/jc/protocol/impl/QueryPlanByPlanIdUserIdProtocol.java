@@ -92,7 +92,7 @@ public class QueryPlanByPlanIdUserIdProtocol implements BaseProtocol {
             resultMap.put("list",result);
             resultMap.put("pageNo",pageNo);
         }catch (Exception ex){
-            LOGGER.error("类似方案异常:"+ex);
+            LOGGER.error("类似方案异常:",ex);
         }
         return resultMap;
     }

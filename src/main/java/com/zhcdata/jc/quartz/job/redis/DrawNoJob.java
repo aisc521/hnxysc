@@ -48,7 +48,7 @@ public class DrawNoJob implements Job {
                 redisUtils.hset("SOCCER:HSET:DRAWNO", "zc", drawNo);
             }
         }catch (Exception e){
-            log.error("定时任务_更新足彩期号_"+e);
+            log.error("定时任务_更新足彩期号_",e);
         }
 
     }

@@ -104,8 +104,8 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                     //}
                 }
             } catch (Exception e) {
-                log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库异常", item);
-                e.printStackTrace();
+                log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 入库异常", item,e);
+                //e.printStackTrace();
             }
         } else if (!db.nowOddsSame(xml) && (xml.getModifytime().getTime() > db.getModifytime().getTime())) {
             try {
@@ -118,7 +118,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                     }
                 }
             } catch (Exception e) {
-                log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新异常", item);
+                log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新异常", item,e);
             }
         }
     }
@@ -150,7 +150,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                     multiLetGoalDetailMapper.insertSelective(detail);
                 }
             } catch (Exception e) {
-                log.error("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库异常", item);
+                log.error("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 入库异常", item,e);
                 e.printStackTrace();
             }
 
@@ -164,7 +164,7 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
                         //log.info("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 更新成功", item);
                     }
                 } catch (Exception e) {
-                    log.error("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 更新异常", item);
+                    log.error("20多盘口赔率: 亚赔（让球盘）多盘口 接口数据:{} 更新异常", item,e);
                 }
             }
         }

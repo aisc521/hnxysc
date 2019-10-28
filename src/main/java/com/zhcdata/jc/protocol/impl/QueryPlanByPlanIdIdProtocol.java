@@ -95,7 +95,7 @@ public class QueryPlanByPlanIdIdProtocol implements BaseProtocol {
 
 
         }catch (Exception ex){
-            LOGGER.error("类似方案异常:"+ex);
+            LOGGER.error("类似方案异常:",ex);
         }
         return resultMap;
     }

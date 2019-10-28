@@ -1,25 +1,5 @@
-/**
- * 　　　　　　　　┏┓　　　┏┓+ +
- * 　　　　　　　┏┛┻━━━┛┻┓ + +
- * 　　　　　　　┃　　　　　　　┃
- * 　　　　　　　┃　　　━　　　┃ ++ + + +
- * 　　　　　　 ████━████ ┃+
- * 　　　　　　　┃　　　　　　　┃ +
- * 　　　　　　　┃　　　┻　　　┃
- * 　　　　　　　┃　　　　　　　┃ + +
- * 　　　　　　　┗━┓　　　┏━┛
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃ + + + +
- * 　　　　　　　　　┃　　　┃　　　　create by xuan on 2019/9/11
- * 　　　　　　　　　┃　　　┃ + 　　　　神兽保佑,代码无bug
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃　　+
- * 　　　　　　　　　┃　 　　┗━━━┓ + +
- * 　　　　　　　　　┃ 　　　　　　　┣┓
- * 　　　　　　　　　┃ 　　　　　　　┏┛
- * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
- * 　　　　　　　　　　┃┫┫　┃┫┫
- * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
+/*create by xuan on 2019/9/11
+
  */
 package com.zhcdata.jc.quartz.job.Odds;
 
@@ -157,7 +137,7 @@ public class ImmediateManyHandicapJob {
                             } else europeJump++;
                         } else if (standardMapper.insertSelective(xml) > 0) europeInsert++;//没有 插入 打日志
                     } catch (Exception e) {
-                        LOGGER.error("欧赔数据解析错误,数据体:" + Europe[i] + ",error:" + e.getMessage());
+                        LOGGER.error("欧赔数据解析错误,数据体:" + Europe[i] + ",error:" , e);
                         e.printStackTrace();
                     }
                 }
@@ -209,7 +189,7 @@ public class ImmediateManyHandicapJob {
                             }
                         }
                     } catch (Exception e) {
-                        LOGGER.error("亚盘数据解析错误,数据体:" + s + ",error:" + e.getMessage());
+                        LOGGER.error("亚盘数据解析错误,数据体:" + s + ",error:" , e);
                         e.printStackTrace();
                     }
 

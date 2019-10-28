@@ -85,7 +85,7 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
             }
         }catch (Exception e){
             e.printStackTrace();
-            LOGGER.error("查询专家详情异常" + e.toString());
+            LOGGER.error("查询专家详情异常" ,e);
         }
         return resultMap;
     }

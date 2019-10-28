@@ -252,18 +252,29 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
   @Override
   public PageInfo<Map<String, String>> queryBjdcListReuslt(int pageNo, int pageAmount, String date) {
     PageHelper.startPage(pageNo, pageAmount);
-    String startDate = date+" 00:00:01";
-    String endvDate = date+" 23:59:59";
+    String startDate = date+" 10:00:00";
+    //String endvDate = date+" 23:59:59";
+    String endvDate = getEndDay(startDate);
     List<Map<String, String>> list = jcMatchBjdcPlMapper.queryBjdcListReuslt(startDate,endvDate);
     return new PageInfo<>(list);
   }
 
   @Override
   public int queryTodayMatchCount(String date) {
-    String startDate = date+" 00:00:01";
-    String endvDate = date+" 23:59:59";
+    String startDate = date+" 10:00:00";
+    //String endvDate = date+" 23:59:59";
+    String endvDate = getEndDay(startDate);
     return jcMatchBjdcPlMapper.queryTodayMatchCount(startDate,endvDate);
   }
+
+  @Override
+  public String queryTOdayMatchIssue(String date) {
+    String startDate = date+" 10:00:00";
+    //String endvDate = date+" 23:59:59";
+    String endvDate = getEndDay(startDate);
+    return jcMatchBjdcPlMapper.queryTOdayMatchIssue(startDate,endvDate);
+  }
+
   @Override
   public List<JcMatchBjdcPl> queryBjdcByMatchId(Integer matchId) {
     return jcMatchBjdcPlMapper.queryBjdcByMatchId(matchId);
@@ -292,6 +303,7 @@ public class JcMatchBjdcPlServiceImpl implements JcMatchBjdcPlService {
       e.printStackTrace();
     }
     c.add(Calendar.DAY_OF_MONTH, 1);
+    c.add(Calendar.SECOND, -1);
     Date sDate = c.getTime();
     return sdf.format(sDate);
   }
