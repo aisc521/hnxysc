@@ -96,15 +96,23 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
         if (letGoalhalfDetail == null || letGoalhalfDetail.getOddsid()==null) {
             return;
         }
-        if (!letGoalhalfDetail.oddsEquals(xml) && xml.getModifytime().getTime() > letGoalhalfDetail.getModifytime().getTime()) {
-            //入数据库\
-            xml.setOddsid(letGoalhalfDetail.getOddsid());
-            int inch = letGoalhalfDetailMapper.insertSelective(xml);
-            letGoalhalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getModifytime());
-            if (inch > 0) {
-                log.error("21多盘口赔率变化: 半场亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+        try {
+            if (!letGoalhalfDetail.oddsEquals(xml) && xml.getModifytime().getTime() > letGoalhalfDetail.getModifytime().getTime()) {
+                //入数据库\
+                xml.setOddsid(letGoalhalfDetail.getOddsid());
+                int inch = letGoalhalfDetailMapper.insertSelective(xml);
+                letGoalhalfMapper.updateOddsByOddsId(xml.getOddsid(),xml.getUpodds(),xml.getGoal(),xml.getDownodds(),xml.getModifytime());
+                if (inch > 0) {
+                    log.error("21多盘口赔率变化: 半场亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+                }
             }
+        }catch (Exception e){
+            log.error("21多盘口赔率变化: 半场亚赔（让球盘）单盘口 接口数据:{} 入库异常");
+            System.out.println(xml.toString());
+            System.out.println(letGoalhalfDetail.toString());
+            e.printStackTrace();
         }
+
     }
 
     //多盘口操作
