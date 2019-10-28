@@ -95,7 +95,7 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
         if (totalScorehalfDetail == null || totalScorehalfDetail.getOddsid() == null) {
             return;
         }
-        if (totalScorehalfDetail.getId() == null || !totalScorehalfDetail.oddsEquals(xml) && xml.getModifytime().getTime() > totalScorehalfDetail.getModifytime().getTime()) {
+        if (!totalScorehalfDetail.oddsEquals(xml) && xml.getModifytime().getTime() > totalScorehalfDetail.getModifytime().getTime()) {
             //入数据库\
             xml.setOddsid(totalScorehalfDetail.getOddsid());
             int inch = totalScorehalfDetailMapper.insertSelective(xml);

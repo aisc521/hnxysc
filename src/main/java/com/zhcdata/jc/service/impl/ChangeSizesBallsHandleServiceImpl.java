@@ -79,7 +79,7 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
         TotalScoreDetail totalScoreDetail = totalScoreDetailMapper.selectByMidAndCpy(item[0], item[1]);
         if (totalScoreDetail == null || totalScoreDetail.getOddsid() == null)
             return;
-        if (totalScoreDetail.getId() == null || (!totalScoreDetail.oddsEquals(xml) && xml.getModifytime().getTime() > totalScoreDetail.getModifytime().getTime())) {
+        if (!totalScoreDetail.oddsEquals(xml) && xml.getModifytime().getTime() > totalScoreDetail.getModifytime().getTime()) {
             //入数据库\
             xml.setOddsid(totalScoreDetail.getOddsid());
             int inch = totalScoreDetailMapper.insertSelective(xml);
@@ -102,7 +102,7 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
         if (multiTotalScoreDetail == null || multiTotalScoreDetail.getOddsid() == null) { // 需要odds 没有就不入库
             return;
         }
-        if (multiTotalScoreDetail.getId() == null || !multiTotalScoreDetail.oddsEquals(xml)) {
+        if (!multiTotalScoreDetail.oddsEquals(xml)) {
             xml.setOddsid(multiTotalScoreDetail.getOddsid());
             int inch = multiTotalScoreDetailMapper.insertSelective(xml);
             multiTotalScoreMapper.updateOddsByOddsId(xml.getOddsid(), xml.getAddtime(), xml.getUpodds(), xml.getGoal(), xml.getDownodds());
