@@ -7,6 +7,7 @@ import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcExpertService;
+import com.zhcdata.jc.tools.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,9 @@ public class QueryExpertDetailsUserProtocol implements BaseProtocol {
 
     @Resource
     private TbJcExpertService tbJcExpertService;
+    @Resource
+    private CommonUtils commonUtils;
+
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -61,7 +65,7 @@ public class QueryExpertDetailsUserProtocol implements BaseProtocol {
                 resultMap.put("introduction", info.getIntroduction());
                 resultMap.put("fans", info.getFans());
                 resultMap.put("trend", info.getTrend());
-                String lz = JsLz(info);
+                String lz = commonUtils.JsLz(info);
                 resultMap.put("lz", lz);
                 resultMap.put("zSevenDays", info.getzSevenDays());
                 resultMap.put("returnSevenDays", info.getReturnSevenDays());
