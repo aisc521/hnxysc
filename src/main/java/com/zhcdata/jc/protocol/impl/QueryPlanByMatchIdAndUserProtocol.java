@@ -38,7 +38,7 @@ public class QueryPlanByMatchIdAndUserProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
-        String macchId = paramMap.get("machId");
+        String macchId = paramMap.get("matchId");
         if (Strings.isNullOrEmpty(macchId)) {
             LOGGER.info("[" + ProtocolCodeMsg.MATCH_ID_NOT_ASSIGNED.getMsg() + "]:machId---" + macchId);
             map.put("resCode", ProtocolCodeMsg.MATCH_ID_NOT_ASSIGNED.getCode());
@@ -66,7 +66,7 @@ public class QueryPlanByMatchIdAndUserProtocol implements BaseProtocol {
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
 
         Map<String, Object> resultMap = new HashMap<>();
-        String matchId = paramMap.get("machId");
+        String matchId = paramMap.get("matchId");
         String pageNo = paramMap.get("pageNo");
         String userId = paramMap.get("userId");
         PageInfo<PlanIdDto> planIdDtos = tbPlanService.selectPlanIdByMatchId(matchId,Integer.valueOf(pageNo),20);
