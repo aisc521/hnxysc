@@ -5,24 +5,21 @@ package com.zhcdata.jc.quartz.job.Match;
 
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.model.Schedule;
-import com.zhcdata.jc.tools.BeanUtils;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.MatchListRsp;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 //接口4
 @SuppressWarnings("SpringJavaAutowiringInspection")
@@ -79,7 +76,7 @@ public class GetMatchInfoByIdListJob implements Job {
             }
             LOGGER.info("即时变化的比分数据(5分钟),共有比赛" + models.size() + ",更新:" + update + "条,耗时：" + (System.currentTimeMillis() - s) + "毫秒");
         }catch (Exception ex){
-            LOGGER.error("[按赛程ID查比赛的数据]异常"+ex.toString());
+            LOGGER.error("[按赛程ID查比赛的数据]异常",ex);
         }
     }
 }

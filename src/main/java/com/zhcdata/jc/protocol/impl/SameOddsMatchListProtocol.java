@@ -54,6 +54,7 @@ public class SameOddsMatchListProtocol implements BaseProtocol {
         try {
             DateFormatUtil.pareDate(Const.YYYY_MM_DD, paramMap.get("time"));
         } catch (ParseException e) {
+          log.error("时间转换错误",e);
             commonUtils.errorMessageToMap(map,ProtocolCodeMsg.DATE_NOT_ASSIGNED);
             return map;
         }

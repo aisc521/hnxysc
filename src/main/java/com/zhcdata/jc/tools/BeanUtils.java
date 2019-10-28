@@ -633,6 +633,7 @@ public class BeanUtils {
             return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(time);
         } catch (Exception e) {
             System.err.println("BeanUtils.parseTime exception,time:" + time);
+            e.printStackTrace();
         }
         return new Date();
     }
