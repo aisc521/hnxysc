@@ -83,7 +83,7 @@
     LEFT JOIN tb_jc_plan plan ON pd.scheme_id = plan.id
     LEFT JOIN tb_jc_match match1 ON  pd.scheme_id = match1.plan_id
     where pd.user_id = #{userId}
-    order by pd.create_time
+    order by pd.create_time desc
   </select>
 
 

@@ -60,7 +60,7 @@ public class EuropeHundredOddsChangedJob implements Job {
             }
 
         } catch (Exception e) {
-            LOGGER.error("百欧赔率变化解析获取变化失败"+e.toString());
+            LOGGER.error("百欧赔率变化解析获取变化失败",e);
             return;
         }
         EuropeHundredOddsRsp obj = com.alibaba.fastjson.JSONObject.parseObject(XML.toJSONObject(str).toString(), EuropeHundredOddsRsp.class);

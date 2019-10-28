@@ -36,7 +36,7 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
-        String machId = paramMap.get("machId");
+        String machId = paramMap.get("matchId");
         if (Strings.isNullOrEmpty(machId)) {
             LOGGER.info("[" + ProtocolCodeMsg.MATCH_ID_NOT_ASSIGNED.getMsg() + "]:machId---" + machId);
             map.put("resCode", ProtocolCodeMsg.MATCH_ID_NOT_ASSIGNED.getCode());
@@ -57,7 +57,7 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         //根据matchId 查询相关的方案id
         Map<String, Object> resultMap = new HashMap<>();
-        String matchId = paramMap.get("machId");
+        String matchId = paramMap.get("matchId");
         String pageNo = paramMap.get("pageNo");
         PageInfo<PlanIdDto> planIdDtos = tbPlanService.selectPlanIdByMatchId(matchId,Integer.valueOf(pageNo),20);
         List<PlanIdDto> planIdDtoList = planIdDtos.getList();
@@ -73,6 +73,8 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
                 }
             }
         }
+        resultMap.put("pageTotal",planIdDtos.getPages());
+        resultMap.put("totalNum", planIdDtos.getTotal());
         resultMap.put("list",list);
         return resultMap;
     }

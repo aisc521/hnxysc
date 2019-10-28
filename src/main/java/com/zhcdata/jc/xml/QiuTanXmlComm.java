@@ -91,6 +91,7 @@ public class QiuTanXmlComm<T>  {
       return list;
     }catch (Exception ex){
       String sd=ex.getMessage();
+      ex.printStackTrace();
     }
     return null;
   }
@@ -113,6 +114,7 @@ public class QiuTanXmlComm<T>  {
       return list;
     }catch (Exception ex){
       String sd=ex.getMessage();
+      ex.printStackTrace();
     }
     return null;
   }

@@ -85,29 +85,36 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
             timeId = "0";
         if("1".equals(type)){//竞彩
             Map<String, Object> result = JSONArray.parseObject((String) redisUtils.hget("SOCCER:BETTING:FIVEMETHOD:" + matchId, "v"), Map.class);
-            if (timeId.equals(result.get("timeId").toString())) {
-                Map<String, Object> resultMap = new HashMap<>();
-                //基础信息
-                result.put("message", "success");
-                result.put("timeId", timeId);
-                return resultMap;
-            } else{
+            if(result != null){
+                if (timeId.equals(result.get("timeId").toString())) {
+                    Map<String, Object> resultMap = new HashMap<>();
+                    //基础信息
+                    result.put("message", "success");
+                    result.put("timeId", timeId);
+                    return resultMap;
+                } else{
+                    return result;
+                }
+            }else{
                 return result;
             }
         }else{//北单
             Map<String, Object> result = JSONArray.parseObject((String) redisUtils.hget("SOCCER:BETTING:FIVEMETHODBJDC:" + matchId, "v"), Map.class);
-            if (timeId.equals(result.get("timeId").toString())) {
-                Map<String, Object> resultMap = new HashMap<>();
-                //基础信息
-                result.put("message", "success");
-                result.put("timeId", timeId);
-                return resultMap;
-            } else{
+            if(result != null){
+                if (timeId.equals(result.get("timeId").toString())) {
+                    Map<String, Object> resultMap = new HashMap<>();
+                    //基础信息
+                    result.put("message", "success");
+                    result.put("timeId", timeId);
+                    return resultMap;
+                } else{
+                    return result;
+                }
+            }else{
                 return result;
             }
+
         }
-
-
     }
 
     public void autoWork() {
@@ -157,7 +164,7 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
             resultList.add(jcresult);
         }else if(jcMatchLotteries.size() == 1){//是北单或者竞彩
             if("BJDC".equals(jcMatchLotteries.get(0).getLottery())){//北单
-
+                System.out.println(matchId);
                 bdresult = generateBjdcFive(matchId);
                 resultList.add(bdresult);
             }else{
@@ -381,8 +388,9 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
                 result.put("home_team", matchInfoForBdDtos.getHomeTeam());
                 result.put("visit_team", matchInfoForBdDtos.getGuestTeam());
                 result.put("match_date", matchInfoForBdDtos.getDateOfMatch());
-            }
 
+            }
+        result.put("timeId", String.valueOf(System.currentTimeMillis()));
         result.put("type","BJDC");
         return result;
     }
