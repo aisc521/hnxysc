@@ -388,8 +388,9 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
                 result.put("home_team", matchInfoForBdDtos.getHomeTeam());
                 result.put("visit_team", matchInfoForBdDtos.getGuestTeam());
                 result.put("match_date", matchInfoForBdDtos.getDateOfMatch());
-            }
 
+            }
+        result.put("timeId", String.valueOf(System.currentTimeMillis()));
         result.put("type","BJDC");
         return result;
     }
