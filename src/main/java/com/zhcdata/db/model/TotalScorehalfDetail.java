@@ -1,7 +1,10 @@
 package com.zhcdata.db.model;
 
+import lombok.ToString;
+
 import java.util.Date;
 
+@ToString
 public class TotalScorehalfDetail {
     private Integer id;
 
@@ -75,10 +78,17 @@ public class TotalScorehalfDetail {
 
 
     public boolean oddsEquals(TotalScorehalfDetail db) {
-        boolean time = true;
-        if (db.modifytime!=null && modifytime!=null)
-            if (db.getModifytime().getTime()!=modifytime.getTime())
-                time = false;
-        return time && db.upodds.equals(upodds) && downodds.equals(db.downodds) && goal.equals(db.getGoal());
+        try {
+            boolean time = true;
+            if (db.modifytime!=null && modifytime!=null)
+                if (db.getModifytime().getTime()!=modifytime.getTime())
+                    time = false;
+            return time && db.upodds.equals(upodds) && downodds.equals(db.downodds) && goal.equals(db.getGoal());
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(db.toString());
+            System.out.println(this.toString());
+            return false;
+        }
     }
 }
