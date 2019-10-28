@@ -33,7 +33,7 @@
       e.nick_name nickName,
       e.img,
       e.lable,
-      e.fans,
+      (e.fans + e.start_fans) fans,,
       e.popularity,
       v.lz_now lz,
       v.z_three_days zThreeDays,
@@ -62,7 +62,7 @@
       and e.id = #{id}
     </if>
     <if test="planId != null">
-      and e.id in(#{planId})
+      and p.id in(#{planId})
     </if>
   </select>
 
@@ -71,7 +71,7 @@
     e.nick_name nickName,
     e.img,
     e.lable,
-    e.fans,
+      (e.fans + e.start_fans) fans,
     e.popularity,
     v.lz_now lz,
     v.z_three_days zThreeDays,
@@ -90,7 +90,7 @@
       and e.id = #{id}
     </if>
     <if test="planId != null">
-      and e.id in(#{planId})
+      and p.id in(#{planId})
     </if>
   </select>
 
@@ -277,7 +277,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     e.nick_name nickName,
     e.img,
     e.lable,
-    e.fans,
+    (e.fans + e.start_fans) fans,
     e.popularity popularity,
     e.introduction,
     p.num_info numInfo,
@@ -371,7 +371,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.nick_name nickName,
         e.img,
         e.lable,
-        e.fans,
+        (e.fans + e.start_fans) fans,
         e.popularity popularity,
         e.introduction,
         p.num_info numInfo,
@@ -404,7 +404,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.nick_name nickName,
         e.img,
         e.lable,
-        e.fans,
+        (e.fans + e.start_fans) fans,
         e.popularity,
         v.lz_now lz,
         v.z_three_days zThreeDays,
@@ -439,7 +439,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.nick_name nickName,
         e.img,
         e.lable,
-        e.fans,
+        (e.fans + e.start_fans) fans,
         e.popularity,
         v.lz_now lz,
         v.z_three_days zThreeDays,
@@ -482,7 +482,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.nick_name nickName,
         e.img img,
         e.lable lable,
-        e.fans fans,
+        (e.fans + e.start_fans)  fans,
         e.popularity popularity,
         v.lz_now lz,
         v.z_three_days zThreeDays,
@@ -506,7 +506,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.nick_name nickName,
         e.img img,
         e.lable lable,
-        e.fans fans,
+       (e.fans + e.start_fans) fans,
         e.popularity popularity,
         v.lz_now lz,
         v.z_three_days zThreeDays,
