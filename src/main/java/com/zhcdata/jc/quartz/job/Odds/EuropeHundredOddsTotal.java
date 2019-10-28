@@ -36,7 +36,8 @@ public class EuropeHundredOddsTotal implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        LOGGER.info("百欧赔率total表解析开始");
+        LOGGER.info("百欧赔率total表解析开始,已合并到EuropeHundredOddsJob");
+        if (true)return;
         long sat = System.currentTimeMillis();
         int odds = 0;
         String str = null;
