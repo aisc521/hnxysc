@@ -140,7 +140,7 @@
     e.id expertId,
     e.nick_name expertName,
     e.lable expertType,
-   (e.fans + e.start_fans) fans,
+   (e.fans + e.start_fans) expertFans,
     e.img expertIcon,
     e.grade expertLevel,
     v.lz_now expertHitNum,
