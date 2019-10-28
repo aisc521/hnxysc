@@ -1,25 +1,5 @@
-/**
- * 　　　　　　　　┏┓　　　┏┓+ +
- * 　　　　　　　┏┛┻━━━┛┻┓ + +
- * 　　　　　　　┃　　　　　　　┃
- * 　　　　　　　┃　　　━　　　┃ ++ + + +
- * 　　　　　　 ████━████ ┃+
- * 　　　　　　　┃　　　　　　　┃ +
- * 　　　　　　　┃　　　┻　　　┃
- * 　　　　　　　┃　　　　　　　┃ + +
- * 　　　　　　　┗━┓　　　┏━┛
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃ + + + +
- * 　　　　　　　　　┃　　　┃　　　　create by xuan on 2019/9/11
- * 　　　　　　　　　┃　　　┃ + 　　　　神兽保佑,代码无bug
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃　　+
- * 　　　　　　　　　┃　 　　┗━━━┓ + +
- * 　　　　　　　　　┃ 　　　　　　　┣┓
- * 　　　　　　　　　┃ 　　　　　　　┏┛
- * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
- * 　　　　　　　　　　┃┫┫　┃┫┫
- * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
+/*create by xuan on 2019/9/11
+
  */
 package com.zhcdata.jc.quartz.job.Odds;
 
@@ -73,7 +53,7 @@ public class EuropeHundredOddsChangedJob implements Job {
         int nexted = 0;
         String str = null;
         try {
-            str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx?min=3", null);
+            str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx?min=4", null);
             if (str.contains("访问频率超出限制")){
                 log.error("百欧赔率变化解析完成,访问频率超出限制");
                 return;
