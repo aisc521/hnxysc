@@ -1,4 +1,5 @@
 package com.zhcdata.jc.service.impl;
+
 import java.util.Date;
 
 import com.fasterxml.jackson.databind.JavaType;
@@ -149,7 +150,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 
     @Override
-    public void updateMatchAnalysis(int before, int after){
+    public void updateMatchAnalysis(int before, int after) {
         List<Integer> matchIds = scheduleMapper.selectScheduleIdByTime(before, after);
         log.error("查询到的前后一天的比赛记录数为：{}", matchIds.size());
         for (Integer matchId : matchIds) {
@@ -158,7 +159,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public Map<String, Object> matchAnalysisByType(Integer matchId, String type,String select) {
+    public Map<String, Object> matchAnalysisByType(Integer matchId, String type, String select) {
         //获取比赛信息，包括主客队，赛事id，赛季
         Schedule schedule = scheduleMapper.selectByPrimaryKey(matchId);
         Map<String, Object> map = null;
@@ -192,22 +193,22 @@ public class ScheduleServiceImpl implements ScheduleService {
                 map = matchAnalysisType0(schedule);
                 break;
             case "1":
-                map = matchAnalysisType1(schedule,select);
+                map = matchAnalysisType1(schedule, select);
                 break;
             case "2":
-                map = matchAnalysisType2(schedule,select);
+                map = matchAnalysisType2(schedule, select);
                 break;
             case "3":
-                map = matchAnalysisType3(schedule,select);
+                map = matchAnalysisType3(schedule, select);
                 break;
             case "4":
-                map = matchAnalysisType4(schedule,select);
+                map = matchAnalysisType4(schedule, select);
                 break;
             case "5":
-                map = matchAnalysisType5(schedule,select);
+                map = matchAnalysisType5(schedule, select);
                 break;
             case "6":
-                map = matchAnalysisType6(schedule,select);
+                map = matchAnalysisType6(schedule, select);
                 break;
             default:
                 break;
@@ -290,7 +291,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         TeamHistoryStatisticDto guestLately = processingHistoryMatchData(guestHistory);
 
         //历史交锋
-        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, matchtime,null, 6);
+        List<HistoryMatchDto> historyMatchDtos = scheduleMapper.selectHistoryMatchByTwoTeam(hometeamid, guestteamid, matchtime, null, 6);
         TeamHistoryStatisticDto lately = processingHistoryMatchData(historyMatchDtos);
 
         //拼接数据
@@ -307,9 +308,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         resultMap.put("guestLately", guestLately);
         resultMap.put("Lately", lately);
         String key = RedisCodeMsg.SOCCER_ANALYSIS.getName() + ":" + schedule.getScheduleid();
-        redisUtils.hset(key, type+"_0", JsonMapper.defaultMapper().toJson(resultMap));
+        redisUtils.hset(key, type + "_0", JsonMapper.defaultMapper().toJson(resultMap));
         String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
-        redisUtils.hset(key, type+"_0" + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
+        redisUtils.hset(key, type + "_0" + "_TIME_ID", timeId, RedisCodeMsg.SOCCER_ANALYSIS.getSeconds());
         resultMap.put("timeId", timeId);
         return resultMap;
     }
@@ -320,7 +321,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType1(Schedule schedule,String select) {
+    private Map<String, Object> matchAnalysisType1(Schedule schedule, String select) {
         String type = "1";
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
@@ -359,7 +360,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType2(Schedule schedule,String select) {
+    private Map<String, Object> matchAnalysisType2(Schedule schedule, String select) {
         String type = "2";
         //子联赛id
         Integer sclassid = schedule.getSclassid();
@@ -399,7 +400,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType3(Schedule schedule,String select) {
+    private Map<String, Object> matchAnalysisType3(Schedule schedule, String select) {
         String type = "3";
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
@@ -438,7 +439,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType4(Schedule schedule,String select) {
+    private Map<String, Object> matchAnalysisType4(Schedule schedule, String select) {
         String type = "4";
         //子联赛id
         Integer sclassid = schedule.getSclassid();
@@ -478,7 +479,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType5(Schedule schedule,String select) {
+    private Map<String, Object> matchAnalysisType5(Schedule schedule, String select) {
         String type = "5";
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
@@ -511,7 +512,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @param schedule 赛事对象
      * @return
      */
-    private Map<String, Object> matchAnalysisType6(Schedule schedule,String select) {
+    private Map<String, Object> matchAnalysisType6(Schedule schedule, String select) {
         String type = "6";
         //子联赛id
         Integer hometeamid = schedule.getHometeamid();
@@ -628,6 +629,8 @@ public class ScheduleServiceImpl implements ScheduleService {
             zcList = zcList.subList(0, limit);
         }
 
+        log.error("【生成同赔精选】日期{}生成同赔精选，竞彩列表比赛数：{},北单列表比赛数：{},足彩列表比赛数：{},全部列表比赛数：{}",
+                date, jcList.size(), bdList.size(), zcList.size(), allList.size());
         //设置缓存
         String key = RedisCodeMsg.SOCCER_SAME_ODDS_MATCH.getName() + ":" + date;
         String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
@@ -656,7 +659,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
 
     @Override
-    public void updateSameOddsMatchData(String date){
+    public void updateSameOddsMatchData(String date) {
         String key = RedisCodeMsg.SOCCER_SAME_ODDS_MATCH.getName() + ":" + date;
         JsonMapper jsonMapper = JsonMapper.defaultMapper();
         JavaType javaType = jsonMapper.buildCollectionType(List.class, SameOddsDto.class);
@@ -682,21 +685,21 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
 
-
     /**
      * 筛选同赔精选比赛
-     * @param maxCount 本类需要记录数
-     * @param startOdds 本类开始赔率
-     * @param endOdds   本类结束赔率
+     *
+     * @param maxCount     本类需要记录数
+     * @param startOdds    本类开始赔率
+     * @param endOdds      本类结束赔率
      * @param sameOddsDtos 未筛选的同赔比赛记录
-     * @param jcList    筛选后的竞彩同赔记录
-     * @param bdList    筛选后的北单同赔记录
-     * @param zcList    筛选后的足彩同赔记录
-     * @param allList   筛选后的全部同赔记录
+     * @param jcList       筛选后的竞彩同赔记录
+     * @param bdList       筛选后的北单同赔记录
+     * @param zcList       筛选后的足彩同赔记录
+     * @param allList      筛选后的全部同赔记录
      */
-    private void processingSameOddsDtoGroup(int maxCount,String startOdds,String endOdds,
-                                            List<SameOddsDto> sameOddsDtos,List<SameOddsDto> jcList,
-                                            List<SameOddsDto> bdList,List<SameOddsDto> zcList,List<SameOddsDto> allList){
+    private void processingSameOddsDtoGroup(int maxCount, String startOdds, String endOdds,
+                                            List<SameOddsDto> sameOddsDtos, List<SameOddsDto> jcList,
+                                            List<SameOddsDto> bdList, List<SameOddsDto> zcList, List<SameOddsDto> allList) {
         //记录全部list已存放记录数
         int allCount = 0;
         //是否需要向全部list中放数据
@@ -725,7 +728,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                                 count++;
                             }
                             //如果类型为2 为北单
-                        } else if(i == 2) {
+                        } else if (i == 2) {
                             //设置期次文字
                             sameOddsDto.setIssueBD(sameOddsDto.getIssueNum());
                             sameOddsDto.setNum(sameOddsDto.getNoId());
@@ -776,6 +779,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     /**
      * 计算几率，返回同配数据不够15条的记录
+     *
      * @param list
      * @return
      */
@@ -823,14 +827,14 @@ public class ScheduleServiceImpl implements ScheduleService {
                 e.printStackTrace();
             }
 
-            dto.setHomeHalfScore(schedule.getHomehalfscore() == null?null:String.valueOf(schedule.getHomehalfscore()));
-            dto.setGuestHalfScore(schedule.getGuesthalfscore() == null?null:String.valueOf(schedule.getGuesthalfscore()));
-            dto.setHomeRedCard(schedule.getHomeRed() == null?null:String.valueOf(schedule.getHomeRed()));
-            dto.setGuestRedCard(schedule.getGuestRed() == null?null:String.valueOf(schedule.getGuestRed()));
-            dto.setHomeYlwCard(schedule.getHomeYellow() == null?null:String.valueOf(schedule.getHomeYellow()));
-            dto.setGuestYlwCard(schedule.getGuestYellow() == null?null:String.valueOf(schedule.getGuestYellow()));
-            dto.setHomeScore(schedule.getHomescore() == null?null:String.valueOf(schedule.getHomescore()));
-            dto.setGuestScore(schedule.getGuestscore() == null?null:String.valueOf(schedule.getGuestscore()));
+            dto.setHomeHalfScore(schedule.getHomehalfscore() == null ? null : String.valueOf(schedule.getHomehalfscore()));
+            dto.setGuestHalfScore(schedule.getGuesthalfscore() == null ? null : String.valueOf(schedule.getGuesthalfscore()));
+            dto.setHomeRedCard(schedule.getHomeRed() == null ? null : String.valueOf(schedule.getHomeRed()));
+            dto.setGuestRedCard(schedule.getGuestRed() == null ? null : String.valueOf(schedule.getGuestRed()));
+            dto.setHomeYlwCard(schedule.getHomeYellow() == null ? null : String.valueOf(schedule.getHomeYellow()));
+            dto.setGuestYlwCard(schedule.getGuestYellow() == null ? null : String.valueOf(schedule.getGuestYellow()));
+            dto.setHomeScore(schedule.getHomescore() == null ? null : String.valueOf(schedule.getHomescore()));
+            dto.setGuestScore(schedule.getGuestscore() == null ? null : String.valueOf(schedule.getGuestscore()));
         }
         //格式化比赛时间
         String matchTime = DateFormatUtil.formatDate("HH:mm", matchTime1);
@@ -854,7 +858,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         } else if ("2".equals(matchState)) {
             //中场
             matchState = "2";
-            text =  "中";
+            text = "中";
         } else if ("3".equals(matchState)) {
             //下半场
             matchState = "2";
@@ -912,6 +916,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     /**
      * 根据查询到的胜平负数据，计算概率，设置火焰值（同赔精选热度火焰  0无  2中  3大）
+     *
      * @param sameOddsDto
      * @param statisticDto
      */
@@ -954,57 +959,55 @@ public class ScheduleServiceImpl implements ScheduleService {
         //若单项选择超过70%，则给这个打上标签。标签是长火
         if (winOdds.compareTo(new BigDecimal("0.7")) >= 0) {
             sameOddsDto.setFireFlagWin(3);
-        }else
-        if (flatOdds.compareTo(new BigDecimal("0.7")) >= 0) {
+        } else if (flatOdds.compareTo(new BigDecimal("0.7")) >= 0) {
             sameOddsDto.setFireFlagFlat(3);
-        }else
-        if (loseOdds.compareTo(new BigDecimal("0.7")) >= 0) {
+        } else if (loseOdds.compareTo(new BigDecimal("0.7")) >= 0) {
             sameOddsDto.setFireFlagLose(3);
-        }else
-        //若双项（胜平，胜负，平负）取max大于80%，则给这两个打上标签，其中几率较高的是长火，较低的短火.再做个判断如果几率都小于50%，则都是小火
-        if (winOdds.add(flatOdds).compareTo(new BigDecimal("0.8")) >= 0) {
-            if (winOdds.compareTo(flatOdds) >= 0) {
-                sameOddsDto.setFireFlagWin(3);
-                sameOddsDto.setFireFlagFlat(2);
-            } else {
-                sameOddsDto.setFireFlagWin(2);
-                sameOddsDto.setFireFlagFlat(3);
+        } else
+            //若双项（胜平，胜负，平负）取max大于80%，则给这两个打上标签，其中几率较高的是长火，较低的短火.再做个判断如果几率都小于50%，则都是小火
+            if (winOdds.add(flatOdds).compareTo(new BigDecimal("0.8")) >= 0) {
+                if (winOdds.compareTo(flatOdds) >= 0) {
+                    sameOddsDto.setFireFlagWin(3);
+                    sameOddsDto.setFireFlagFlat(2);
+                } else {
+                    sameOddsDto.setFireFlagWin(2);
+                    sameOddsDto.setFireFlagFlat(3);
+                }
+                if (winOdds.compareTo(new BigDecimal("0.5")) < 0 && flatOdds.compareTo(new BigDecimal("0.5")) < 0) {
+                    sameOddsDto.setFireFlagWin(2);
+                    sameOddsDto.setFireFlagFlat(2);
+                }
+            } else if (loseOdds.add(winOdds).compareTo(new BigDecimal("0.8")) >= 0) {
+                if (winOdds.compareTo(loseOdds) >= 0) {
+                    sameOddsDto.setFireFlagWin(3);
+                    sameOddsDto.setFireFlagLose(2);
+                } else {
+                    sameOddsDto.setFireFlagWin(2);
+                    sameOddsDto.setFireFlagLose(3);
+                }
+                if (winOdds.compareTo(new BigDecimal("0.5")) < 0 && loseOdds.compareTo(new BigDecimal("0.5")) < 0) {
+                    sameOddsDto.setFireFlagWin(2);
+                    sameOddsDto.setFireFlagLose(2);
+                }
+            } else if (loseOdds.add(flatOdds).compareTo(new BigDecimal("0.8")) >= 0) {
+                if (flatOdds.compareTo(loseOdds) >= 0) {
+                    sameOddsDto.setFireFlagFlat(3);
+                    sameOddsDto.setFireFlagLose(2);
+                } else {
+                    sameOddsDto.setFireFlagFlat(2);
+                    sameOddsDto.setFireFlagLose(3);
+                }
+                if (flatOdds.compareTo(new BigDecimal("0.5")) < 0 && loseOdds.compareTo(new BigDecimal("0.5")) < 0) {
+                    sameOddsDto.setFireFlagFlat(2);
+                    sameOddsDto.setFireFlagLose(2);
+                }
             }
-            if (winOdds.compareTo(new BigDecimal("0.5")) < 0 && flatOdds.compareTo(new BigDecimal("0.5")) < 0) {
-                sameOddsDto.setFireFlagWin(2);
-                sameOddsDto.setFireFlagFlat(2);
-            }
-        }else if (loseOdds.add(winOdds).compareTo(new BigDecimal("0.8")) >= 0) {
-            if (winOdds.compareTo(loseOdds) >= 0) {
-                sameOddsDto.setFireFlagWin(3);
-                sameOddsDto.setFireFlagLose(2);
-            } else {
-                sameOddsDto.setFireFlagWin(2);
-                sameOddsDto.setFireFlagLose(3);
-            }
-            if (winOdds.compareTo(new BigDecimal("0.5")) < 0 && loseOdds.compareTo(new BigDecimal("0.5")) < 0) {
-                sameOddsDto.setFireFlagWin(2);
-                sameOddsDto.setFireFlagLose(2);
-            }
-        }else if (loseOdds.add(flatOdds).compareTo(new BigDecimal("0.8")) >= 0) {
-            if (flatOdds.compareTo(loseOdds) >= 0) {
-                sameOddsDto.setFireFlagFlat(3);
-                sameOddsDto.setFireFlagLose(2);
-            } else {
-                sameOddsDto.setFireFlagFlat(2);
-                sameOddsDto.setFireFlagLose(3);
-            }
-            if (flatOdds.compareTo(new BigDecimal("0.5")) < 0 && loseOdds.compareTo(new BigDecimal("0.5")) < 0) {
-                sameOddsDto.setFireFlagFlat(2);
-                sameOddsDto.setFireFlagLose(2);
-            }
-        }
         //不满足以上条件的就不打标签
 
     }
 
     @Override
-    public String processingSameOddsTypeToLottery(String type){
+    public String processingSameOddsTypeToLottery(String type) {
         String lottery;
         if (Strings.isBlank(type)) {
             lottery = "all";
@@ -1029,6 +1032,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     /**
      * 定时任务查询比赛列表
+     *
      * @param startDate
      * @param endDate
      * @param type
@@ -1038,17 +1042,17 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     public List<MatchResult1> queryMacthListForJob(String startDate, String endDate, String type, String userId, String state) {
-        return scheduleMapper.queryMacthListForJob(startDate,endDate,type,userId,state);
+        return scheduleMapper.queryMacthListForJob(startDate, endDate, type, userId, state);
     }
 
     @Override
     public String queryZcNum(String startDate, String endDate) {
-        return scheduleMapper.queryZcNum(startDate,endDate);
+        return scheduleMapper.queryZcNum(startDate, endDate);
     }
 
     @Override
     public String queryBdNum(String startDate, String endDate) {
-        return scheduleMapper.queryBdNum(startDate,endDate);
+        return scheduleMapper.queryBdNum(startDate, endDate);
     }
 
     @Override
