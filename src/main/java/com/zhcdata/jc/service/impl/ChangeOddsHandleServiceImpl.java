@@ -82,11 +82,11 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
 
         //查询此比赛最新的一条赔率
         StandardDetail standardDetail = standardDetailMapper.selectByMidAndCpy(item[0], item[1]);
-        if (standardDetail == null || standardDetail.getOddsid() == null) {
+        if (standardDetail == null || standardDetail.getOddsid() == null)
             return;
-        }
-        if (standardDetail.getId()==null || !standardDetail.oddsEquals(xml) && xml.getModifytime().getTime() > standardDetail.getModifytime().getTime()) {
-            //入数据库\
+
+        if (!standardDetail.oddsEquals(xml) && xml.getModifytime().getTime() > standardDetail.getModifytime().getTime()){
+            //入数据库
             xml.setOddsid(standardDetail.getOddsid());
             int inch = standardDetailMapper.insertSelective(xml);
             standardMapper.updateOddsByOddsId(xml.getOddsid(),xml.getHomewin(),xml.getStandoff(),xml.getGuestwin(),xml.getModifytime());
