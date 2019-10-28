@@ -33,7 +33,7 @@
       e.nick_name nickName,
       e.img,
       e.lable,
-      (e.fans + e.start_fans) fans,,
+      (e.fans + e.start_fans) fans,
       e.popularity,
       v.lz_now lz,
       v.z_three_days zThreeDays,
