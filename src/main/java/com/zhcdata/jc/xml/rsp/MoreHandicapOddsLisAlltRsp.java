@@ -3,6 +3,7 @@ package com.zhcdata.jc.xml.rsp;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * CopyRight (c)1999-2019 : zhcw.com
@@ -17,6 +18,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @XStreamAlias("c")
+@ToString
 public class MoreHandicapOddsLisAlltRsp {
 
     //@XStreamImplicit(itemFieldName="a")

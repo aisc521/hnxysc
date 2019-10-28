@@ -243,4 +243,15 @@ public class QuartzController {
         quartzManager.triggerJob(id);
         return JsonResult.successMsg("触发成功");
     }
+
+
+    /**
+     * 检查tomcat是否在运行
+     * @return
+     */
+    @GetMapping("/looking")
+    @ResponseBody
+    public String looking() {
+        return "0000";
+    }
 }

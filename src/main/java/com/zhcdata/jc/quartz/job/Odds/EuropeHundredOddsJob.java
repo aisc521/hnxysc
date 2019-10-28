@@ -1,26 +1,4 @@
-/**
- * 　　　　　　　　┏┓　　　┏┓+ +
- * 　　　　　　　┏┛┻━━━┛┻┓ + +
- * 　　　　　　　┃　　　　　　　┃
- * 　　　　　　　┃　　　━　　　┃ ++ + + +
- * 　　　　　　 ████━████ ┃+
- * 　　　　　　　┃　　　　　　　┃ +
- * 　　　　　　　┃　　　┻　　　┃
- * 　　　　　　　┃　　　　　　　┃ + +
- * 　　　　　　　┗━┓　　　┏━┛
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃ + + + +
- * 　　　　　　　　　┃　　　┃　　　　create by xuan on 2019/9/11
- * 　　　　　　　　　┃　　　┃ + 　　　　神兽保佑,代码无bug
- * 　　　　　　　　　┃　　　┃
- * 　　　　　　　　　┃　　　┃　　+
- * 　　　　　　　　　┃　 　　┗━━━┓ + +
- * 　　　　　　　　　┃ 　　　　　　　┣┓
- * 　　　　　　　　　┃ 　　　　　　　┏┛
- * 　　　　　　　　　┗┓┓┏━┳┓┏┛ + + + +
- * 　　　　　　　　　　┃┫┫　┃┫┫
- * 　　　　　　　　　　┗┻┛　┗┻┛+ + + +
- */
+/*create by xuan on 2019/9/11*/
 package com.zhcdata.jc.quartz.job.Odds;
 
 import com.zhcdata.db.mapper.EuropeOddsDetailMapper;
@@ -92,6 +70,7 @@ public class EuropeHundredOddsJob implements Job {
         try {
             //str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx?day=3", null);
             str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx", null);
+            log.error("百欧赔率表接口获取完成" + str.length());
         } catch (Exception e) {
             log.error("百欧赔率表接口获取失败" + e);
         }
