@@ -97,7 +97,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                     result.put("schemeName",tbJcPlan.getTitle());
                 }
             }
-            if("1".equals(paramMap.get("payType"))){//点播
+            if("99".equals(paramMap.get("payType"))){//点播
                 result = payService.discountRecommendUse(userId, tbJcPurchaseDetailed.getOrderId(), description, headBean.getSrc());
                 if("000000".equals(result.get("resCode"))){
                     //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
@@ -203,10 +203,10 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             }
             tbJcPurchaseDetailed.setPlanPayType("2");//支付类型
         }
-        if("1".equals(paramMap.get("payType"))){
+        if("99".equals(paramMap.get("payType"))){
             tbJcPurchaseDetailed.setPayInfo("点播支付");
             tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(dbPricd));//支付金额
-            tbJcPurchaseDetailed.setPlanPayType("1");//支付类型
+            tbJcPurchaseDetailed.setPlanPayType("99");//支付类型
         }
         if("2".equals(tbJcPlan.getType())){//不中全退
             if(list.size() <= 0){
