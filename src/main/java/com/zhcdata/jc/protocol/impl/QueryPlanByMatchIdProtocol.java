@@ -74,7 +74,7 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
             }
         }
         resultMap.put("pageTotal",planIdDtos.getPages());
-        resultMap.put("totalNum", planIdDtos.getTotal());
+        resultMap.put("pageNo", pageNo);
         resultMap.put("list",list);
         return resultMap;
     }
