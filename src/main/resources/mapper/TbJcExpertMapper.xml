@@ -64,7 +64,7 @@
   </select>
   <select id="queryExpertDetails" resultType="com.zhcdata.jc.dto.ExpertInfo">
     SELECT e.id,e.nick_name nickName,e.img,e.lable,e.introduction,(e.fans + e.start_fans) fans,
-    v.trend,v.lz_now lzNow,z_seven_days zSevenDays,v.return_seven_days returnSevenDays,f.status,e.grade,e.popularity,
+    v.trend,v.lz_now lzNow,z_seven_days zSevenDays,v.return_seven_days returnSevenDays,0 status,e.grade,e.popularity,
     v.ten_z tenZ,
     v.nine_z nineZ,
     v.eight_z eightZ,
