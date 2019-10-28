@@ -57,7 +57,7 @@ public class EuropeHundredOddsJob implements Job {
             LOGGER.info("百欧赔率表解析开始");
             runs();
         } catch (Exception e) {
-            log.error("百欧赔率表解析错误" + e);
+            log.error("百欧赔率表解析错误", e);
             e.printStackTrace();
         } finally {
             europe_odds_flag = false;
@@ -72,7 +72,7 @@ public class EuropeHundredOddsJob implements Job {
             str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx", null);
             log.error("百欧赔率表接口获取完成" + str.length());
         } catch (Exception e) {
-            log.error("百欧赔率表接口获取失败" + e);
+            log.error("百欧赔率表接口获取失败" , e);
         }
         EuropeHundredOddsRsp obj = com.alibaba.fastjson.JSONObject.parseObject(XML.toJSONObject(str).toString(), EuropeHundredOddsRsp.class);
         List<H> items = obj.getC().getH();
