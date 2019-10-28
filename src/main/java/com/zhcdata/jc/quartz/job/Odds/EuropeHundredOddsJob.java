@@ -117,7 +117,7 @@ public class EuropeHundredOddsJob implements Job {
                                         log.error("百欧主表新增百欧详情表" + detail.toString());
                                     }
                                 } catch (Exception e) {
-                                    log.error("百欧主表新增百欧详情表错误"+e);
+                                    log.error("百欧主表新增百欧详情表错误",e);
                                 }
                             }
                         }

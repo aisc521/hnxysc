@@ -56,7 +56,7 @@ public class QueryExpertHotProtocol implements BaseProtocol {
                 resultMap.put("busiCode", "");
             }
         } catch (Exception ex) {
-            LOGGER.error("查询热门专家异常："+ex.toString());
+            LOGGER.error("查询热门专家异常：",ex);
         }
         return resultMap;
     }

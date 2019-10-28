@@ -211,7 +211,7 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             long min = diff % nd % nh / nm;
             str = String.valueOf(min);
         } catch (Exception ex) {
-            LOGGER.error("计算比赛时间异常" + "s:" + s + "e:" , e);
+            LOGGER.error("计算比赛时间异常" + "s:" + s + "e:" , ex);
         }
         return str;
     }
