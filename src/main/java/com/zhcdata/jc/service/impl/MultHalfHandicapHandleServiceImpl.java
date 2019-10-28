@@ -57,7 +57,7 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
                                 manyHandicap(item);
                         }
                     } catch (Exception e) {
-                        log.error("半场亚赔（让球盘）即时数据解析错误" + item);
+                        log.error("半场亚赔（让球盘）即时数据解析错误" + item,e);
                         e.printStackTrace();
                     }
                 }
@@ -103,7 +103,7 @@ public class MultHalfHandicapHandleServiceImpl implements MultHandicapOddsServic
                         //log.info("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新成功", item);
                     }
                 } catch (Exception e) {
-                    log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新异常", item);
+                    log.error("20多盘口赔率: 亚赔（让球盘）单盘口 接口数据:{} 更新异常", item,e);
                 }
             } else multi_hyp_add(flag);
         }

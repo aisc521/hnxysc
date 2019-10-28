@@ -94,7 +94,7 @@ public class QueryPlanByExpertIdUserProtocol implements BaseProtocol{
         }catch (Exception e){
             e.printStackTrace();
 
-            LOGGER.error("查询该专家已发方案异常:" + e);
+            LOGGER.error("查询该专家已发方案异常:" , e);
         }
         resultMap.put("list", result);
         return resultMap;

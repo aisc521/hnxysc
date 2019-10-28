@@ -43,7 +43,7 @@ public class EuropeHundredOddsTotal implements Job {
         try {
             str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx?day=3", null);
         } catch (Exception e) {
-            log.error("百欧赔率表接口获取失败" + e.toString());
+            log.error("百欧赔率表接口获取失败" , e);
         }
         JSONObject jsonObject = XML.toJSONObject(str);
         String s = jsonObject.toString();

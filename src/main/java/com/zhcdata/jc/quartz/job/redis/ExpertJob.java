@@ -245,7 +245,7 @@ public class ExpertJob implements Job {
             redisUtils.hset("SOCCER:HSET:EXPERT", "hot", JsonMapper.defaultMapper().toJson(list));
         } catch (Exception ex) {
             System.out.println(ex);
-            LOGGER.error("热门专家定时任务异常：" + ex);
+            LOGGER.error("热门专家定时任务异常：" , ex);
         }
     }
 

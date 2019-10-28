@@ -55,7 +55,7 @@ public class MultHandicapOddsNewJob implements Job {
         try {
             str = HttpUtils.httpGet("http://interface.win007.com/zq/Odds_Mult.aspx", null);
         } catch (Exception e) {
-            log.error("获取多盘口即时赔率失败");
+            log.error("获取多盘口即时赔率失败",e);
             return;
         }
         String[] oddsCollection = str.split("\\u0024");
