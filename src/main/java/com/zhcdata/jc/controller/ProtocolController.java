@@ -15,6 +15,7 @@ import com.zhcdata.jc.tools.Const;
 import com.zhcdata.jc.tools.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,6 +51,9 @@ public class ProtocolController {
 
     @Resource
     private RedisUtils redisUtils;
+
+    @Autowired
+    private ProtocolFactory protocolFactory;
 
     /**
      * 调度中心
@@ -105,8 +109,10 @@ public class ProtocolController {
             head.setTimeStamp(head.getTimeStamp() + "|"
                     + DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate()));
 
-            BaseProtocol baseProtocol = ProtocolFactory.getProtocolInstance(transactionType);
-
+            BaseProtocol baseProtocol = protocolFactory.getProtocolInstance(transactionType);
+            if (baseProtocol == null) {
+                throw new ProtocolNotExistException();
+            }
             //noinspection unchecked
             final Map<String, Object> validParams = baseProtocol.validParam(reqBody);
 
