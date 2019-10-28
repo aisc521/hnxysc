@@ -69,32 +69,25 @@ public class MatchListDataAllJob  implements Job {
 
                 List<MatchResult1> list1=new ArrayList<>();
                 List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "1", "","1"); //竞彩 正在进行
-                for(int a=0;a<list1_1.size();a++){
-                    list1.add(list1_1.get(a));
-                }
+                list1.addAll(list1_1);
+
                 List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","2"); //竞彩 未开始
-                for(int b=0;b<list1_2.size();b++){
-                    list1.add(list1_2.get(b));
-                }
+                list1.addAll(list1_2);
+
                 List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","3"); //竞彩 已经结束
-                for(int c=0;c<list1_3.size();c++) {
-                    list1.add(list1_3.get(c));
-                }
+                list1.addAll(list1_3);
+
                 deal(list1, time, "1");
 
                 List<MatchResult1> list5 = new ArrayList<>();
                 List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1");//全部 正在进行
-                for(int a=0;a<list5_1.size();a++){
-                    list5.add(list5_1.get(a));
-                }
+                list5.addAll(list5_1);
+
                 List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2");//全部 未开始
-                for(int b=0;b<list5_2.size();b++){
-                    list5.add(list5_2.get(b));
-                }
+                list5.addAll(list5_2);
+
                 List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3");//全部 已经结束
-                for(int c=0;c<list5_3.size();c++){
-                    list5.add(list5_3.get(c));
-                }
+                list5.addAll(list5_3);
 
                 deal(list5, time, "5");
 
@@ -114,7 +107,7 @@ public class MatchListDataAllJob  implements Job {
         for(int v=0;v<result1s_1.size();v++){
             MatchResult1 r1=result1s_1.get(v);
             if(r1.getMatchState().equals("1")){
-                if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
                     r1.setMatchState(len);
@@ -122,7 +115,7 @@ public class MatchListDataAllJob  implements Job {
                     r1.setMatchState("'完'");
                 }
             }else if(r1.getMatchState().equals("3")){
-                if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
                     r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+" : String.valueOf(45 + Integer.valueOf(len)));

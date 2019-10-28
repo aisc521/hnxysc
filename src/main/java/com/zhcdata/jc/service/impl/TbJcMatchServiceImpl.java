@@ -2,10 +2,7 @@ package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.TbJcMatchMapper;
 import com.zhcdata.db.model.TbJcMatch;
-import com.zhcdata.jc.dto.MatchPlanResult;
-import com.zhcdata.jc.dto.MatchPlanResult1;
-import com.zhcdata.jc.dto.MatchResult1;
-import com.zhcdata.jc.dto.TbScoreInfo;
+import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.service.TbJcMatchService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
@@ -49,5 +46,10 @@ public class TbJcMatchServiceImpl implements TbJcMatchService {
     @Override
     public TbJcMatch queryJcMatchByPlanId(Long id) {
         return tbJcMatchMapper.queryJcMatchByPlanId(id);
+    }
+
+    @Override
+    public List<MatchInfoDto> queryMatchInfoDtoByPlanId(String planId) {
+        return tbJcMatchMapper.queryMatchInfoDtoByPlanId(planId);
     }
 }

@@ -24,7 +24,7 @@
   </select>
   <select id="queryBjdcListReuslt" resultType="java.util.Map">
     select t.Name_J hostname,tt.Name_J guestName,aa.* from (
-    select l.ID_BET007,l.ISSUE_NUM,a.*,l.lottery,l.LOTTERY_NAME,d.MATCH_RESULT,IFNULL(d.conced_num,"0") concedNum from (
+    select l.ID_BET007,l.ISSUE_NUM,l.NO_ID,a.*,l.lottery,l.LOTTERY_NAME,d.MATCH_RESULT,IFNULL(d.conced_num,"0") concedNum from (
     SELECT m.ScheduleID,M.HomeTeam hostname,m.GuestTeam guestName,m.MatchTime matchTime,s.Name_JS matchName,m.MatchState
     ,m.HomeScore,m.GuestScore,m.HomeHalfScore,m.GuestHalfScore,m.HomeTeamID,m.GuestTeamID
     from schedule m LEFT JOIN Sclass s on s.sclassID = m.SclassID
@@ -34,8 +34,9 @@
     and MatchState =-1
     ) a,jc_match_lottery l,JC_MATCH_BJDCRESLUT d where a.ScheduleID = l.ID_BET007  and a.ScheduleID = d.ID_BET007
     and l.LOTTERY = 'BJDC'
-    order by l.ISSUE_NUM desc ,l.NO_ID
+
     ) aa LEFT JOIN  team t on aa.HomeTeamID = t.teamid LEFT JOIN team tt on  aa.GuestTeamID = tt.teamid
+    order by aa.ISSUE_NUM desc ,CAST(aa.NO_ID AS SIGNED)
   </select>
   <select id="queryTodayMatchCount" resultType="java.lang.Integer">
     select count(*) from (
@@ -50,5 +51,12 @@
     and l.LOTTERY = 'BJDC'
     order by l.ISSUE_NUM desc ,matchTime
     ) aa LEFT JOIN  team t on aa.HomeTeamID = t.teamid LEFT JOIN team tt on  aa.GuestTeamID = tt.teamid
+  </select>
+
+  <select id="queryBjdcByMatchId" resultType="com.zhcdata.db.model.JcMatchBjdcPl">
+    select * from jc_match_bjdc_pl p where p.ID_BET007 = #{matchId}
+  </select>
+  <select id="queryJcMatchBdPlByLottery" resultType="com.zhcdata.db.model.JcMatchBjdcPl">
+    select * from jc_match_bjdc_pl p where p.LOTTERY_PLAY in ('15','12');
   </select>
 </mapper>

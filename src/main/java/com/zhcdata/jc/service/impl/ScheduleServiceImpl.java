@@ -1073,4 +1073,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleMapper.selectIconAndTime(matchId);
     }
 
+    /*@Override
+    public List<Integer> selectMatchIdExceedNowBd() {
+        return scheduleMapper.selectMatchIdExceedNowBd();
+    }*/
+
+    @Override
+    public MatchInfoForBdDto quertMatchInfo(Integer matchId) {
+        return scheduleMapper.quertMatchInfo(matchId);
+    }
+
 }

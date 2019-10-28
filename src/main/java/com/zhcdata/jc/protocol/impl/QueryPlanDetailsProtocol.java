@@ -89,7 +89,8 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 resultMap.put("matchId", matchId);
                 resultMap.put("grade", grade);
                 resultMap.put("price", price);
-                ExpertInfo info = tbJcExpertService.queryExpertDetails(tbPlanService.queryExpertIdByPlanId(id));
+                //ExpertInfo info = tbJcExpertService.queryExpertDetails(tbPlanService.queryExpertIdByPlanId(id));
+                ExpertInfo info = tbJcExpertService.queryExpertDetailsAndUser(tbPlanService.queryExpertIdByPlanId(id),uid);
                 if (info != null) {
                     //给专家人气加1
                     Integer pop = info.getPopularity();

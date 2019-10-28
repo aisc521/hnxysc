@@ -19,4 +19,11 @@ public interface JcMatchBjdcPlService {
     PageInfo<Map<String, String>> queryBjdcListReuslt(int pageNo, int pageAmount, String date);
 
     int queryTodayMatchCount(String date);
+
+    List<JcMatchBjdcPl> queryBjdcByMatchId(Integer matchId);
+
+    List<JcMatchBjdcPl> queryJcMatchBdPlByLottery();
+
+
+    int upMatchBdRate(JcMatchBjdcPl jcMatchBjdcPl);
 }

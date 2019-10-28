@@ -65,4 +65,11 @@ public interface TbPlanService {
     PageInfo<PlanResult1> queryPlanByExpertIdForXg(String pIdList, Integer integer, int i);
 
     PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer integer, int i);
+
+    PageInfo<PlanIdDto> selectPlanIdByMatchId(String matchId,Integer pageNo,Integer pageAmount);
+
+    QueryPlanByMatchIdDto queryPlanInfoByPlanId(String planId);
+
+
+    QueryPlanByMatchIdDto queryPlanInfoByPlanIdandUserId(String planId, String userId);
 }

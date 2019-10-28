@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 @Table(name = "score")
@@ -57,6 +58,8 @@ public class ScoreInfo implements Serializable {
     private Integer score;
 
     private Integer totalOrder;
+
+    private Date updateTime;
 
 
     public Integer getId() {
@@ -201,6 +204,14 @@ public class ScoreInfo implements Serializable {
 
     public void setTotalOrder(Integer totalOrder) {
         this.totalOrder = totalOrder;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override

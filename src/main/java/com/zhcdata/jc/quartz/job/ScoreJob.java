@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.annotation.Resource;
-import javax.sql.rowset.spi.SyncResolver;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -197,7 +196,14 @@ public class ScoreJob implements Job {
                         //System.out.println(Season);
                         //System.out.println(Season.length());
                         ScoreInfo info = list.get(p);
+                        if(SclassID!=null) {
+                            info.setSclassid(Integer.valueOf(SclassID));
+                        }
+                        if(SubSclassID!=null) {
+                            info.setSubsclassid(Integer.valueOf(SubSclassID));
+                        }
                         info.setMatchseason(Season);
+                        info.setUpdateTime(new Date());
                         dealTable(info);
                     }
                     String end = "";

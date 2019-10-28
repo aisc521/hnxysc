@@ -1035,4 +1035,18 @@
     <select id="selectStatusChangedToday" resultType="com.zhcdata.db.model.Schedule">
         SELECT * from `schedule` where MatchTime >= #{sat} and MatchTime &lt;= #{end} and MATCHstate in(0,1,2,3,4,5) and matchTime &lt;#{now}
     </select>
+    <select id="quertMatchInfo" resultType="com.zhcdata.jc.dto.MatchInfoForBdDto">
+        SELECT
+        sc.HomeTeam homeTeam,
+        sc.GuestTeam guestTeam,
+        l.ISSUE_NUM issueNum,
+        s.Name_JS className,
+        sc.MatchTime dateOfMatch
+        from `schedule` sc
+        LEFT JOIN jc_match_lottery l on sc.ScheduleID = l.ID_BET007 and l.LOTTERY = 'BJDC'
+        LEFT JOIN sclass s on sc.SclassID = s.sclassID
+        where sc.ScheduleID = #{matchId}
+    </select>
+
+
 </mapper>

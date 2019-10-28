@@ -57,19 +57,13 @@ public class MatchListDataJob implements Job {
         List<MatchResult1> list2=new ArrayList<>();
 
         List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(s, e, "2","","1");//北单 正在进行
-        for(int a=0;a<list2_1.size();a++){
-            list2.add(list2_1.get(a));
-        }
+        list2.addAll(list2_1);
 
         List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(s, e, "2","","2");//北单 未开始
-        for(int b=0;b<list2_2.size();b++){
-            list2.add(list2_2.get(b));
-        }
+        list2.addAll(list2_2);
 
         List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(s, e, "2","","3");//北单 已结束
-        for(int c=0;c<list2_3.size();c++) {
-            list2.add(list2_3.get(c));
-        }
+        list2.addAll(list2_3);
 
         if(list2!=null&&list2.size()>0) {
             deal(list2, list2.get(0).getNum1(), "2");
@@ -84,19 +78,13 @@ public class MatchListDataJob implements Job {
         List<MatchResult1> list3=new ArrayList<>();
 
         List<MatchResult1> list3_1= scheduleService.queryMacthListForJob(s, e, "3","","1");
-        for(int a=0;a<list3_1.size();a++){
-            list3.add(list3_1.get(a));
-        }
+        list3.addAll(list3_1);
 
         List<MatchResult1> list3_2= scheduleService.queryMacthListForJob(s, e, "3","","2");
-        for(int b=0;b<list3_2.size();b++){
-            list3.add(list3_2.get(b));
-        }
+        list3.addAll(list3_2);
 
         List<MatchResult1> list3_3= scheduleService.queryMacthListForJob(s, e, "3","","3");
-        for(int c=0;c<list3_3.size();c++){
-            list3.add(list3_3.get(c));
-        }
+        list3.addAll(list3_3);
 
         if(list3!=null&&list3.size()>0){
             String time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
@@ -142,17 +130,14 @@ public class MatchListDataJob implements Job {
                 List<MatchResult1> list1=new ArrayList<>();
 
                 List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","1"); //竞彩
-                for(int a=0;a<list1_1.size();a++){
-                    list1.add(list1_1.get(a));
-                }
+                list1.addAll(list1_1);
+
                 List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","2"); //竞彩
-                for(int b=0;b<list1_2.size();b++){
-                    list1.add(list1_2.get(b));
-                }
+                list1.addAll(list1_2);
+
                 List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","3"); //竞彩
-                for(int c=0;c<list1_3.size();c++) {
-                    list1.add(list1_3.get(c));
-                }
+                list1.addAll(list1_3);
+
                 deal(list1,time,"1");
 
 
@@ -186,7 +171,8 @@ public class MatchListDataJob implements Job {
             }
         } catch (Exception ex) {
             LOGGER.error("定时任务后5天故障");
-            LOGGER.error(ex.getMessage());
+
+            ex.printStackTrace();
         }
     }
 
@@ -200,7 +186,7 @@ public class MatchListDataJob implements Job {
             if(r1.getMatchState().equals("1")){
                 r1.setStatusDescFK("2");
                 r1.setStatusescFK("2");
-                if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
                     r1.setMatchState(len+"'");
@@ -208,7 +194,7 @@ public class MatchListDataJob implements Job {
             }else if(r1.getMatchState().equals("3")){
                 r1.setStatusDescFK("3");
                 r1.setStatusescFK("3");
-                if(!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
                     r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");

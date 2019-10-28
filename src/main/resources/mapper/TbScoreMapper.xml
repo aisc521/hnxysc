@@ -261,6 +261,9 @@
       <if test="totalOrder != null">
         totalOrder = #{totalOrder,jdbcType=INTEGER},
       </if>
+      <if test="updateTime != null">
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where ID = #{id,jdbcType=INTEGER}
   </update>
