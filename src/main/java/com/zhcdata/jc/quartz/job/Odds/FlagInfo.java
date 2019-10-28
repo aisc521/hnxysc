@@ -26,4 +26,6 @@ public class FlagInfo {
 
     //public static Map<String,Long> MATCH_START_TIME = new LinkedHashMap<>();//存的是 比赛id，开始时间毫秒数
 
+    public static boolean EuropeTotalRun = true;
+
 }

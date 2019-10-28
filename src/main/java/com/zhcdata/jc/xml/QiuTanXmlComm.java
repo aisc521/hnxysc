@@ -50,11 +50,6 @@ public class QiuTanXmlComm<T>  {
       xml = new String(buf);
     }*/
 
-    System.err.println(xml);
-    System.out.println("");
-    System.out.println("");
-    System.out.println("");
-    System.out.println("");
     return xStream.fromXML(xml);
   }
   public Object handleMothod(String url, Class ...clas){
