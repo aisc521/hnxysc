@@ -59,7 +59,7 @@ public class JcFootBallOddsJob implements Job {
                     JcFootBallOddsBfRsp.class,JcFootBallOddsJqRsp.class,JcFootBallOddsBqcRsp.class,JcFootBallOddsSfRsp.class);
             //查询竞彩足球彩种库  查询比赛id 入库
             List<JcFootBallOddsRsp> jcFootBallOddsRspList = object.getList();
-            if(jcFootBallOddsRspList.size() > 0){
+            if(jcFootBallOddsRspList != null && jcFootBallOddsRspList.size() > 0){
                 for(int i = 0; i < jcFootBallOddsRspList.size(); i++){
                     JcFootBallOddsRsp jcFootBallOddsRsp = jcFootBallOddsRspList.get(i);
                     String [] timeArr =  jcFootBallOddsRsp.getMatchTime().split("\\s+");
