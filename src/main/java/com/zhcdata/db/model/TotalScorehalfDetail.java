@@ -79,6 +79,14 @@ public class TotalScorehalfDetail {
 
     public boolean oddsEquals(TotalScorehalfDetail db) {
         try {
+            if (this.getGoal()==null && db.getGoal()!=null)
+                return false;
+            if (this.getUpodds()==null && db.getUpodds()!=null)
+                return false;
+            if (this.getGoal()!=null && db.getGoal()==null)
+                return false;
+            if (this.getUpodds()!=null && db.getUpodds()==null)
+                return false;
             boolean time = true;
             if (db.modifytime!=null && modifytime!=null)
                 if (db.getModifytime().getTime()!=modifytime.getTime())

@@ -84,7 +84,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
         if (letGoalDetail == null || letGoalDetail.getOddsid() == null) {
             return;
         }
-        if (!letGoalDetail.oddsEquals(xml) && xml.getModifytime().getTime() > letGoalDetail.getModifytime().getTime()) {
+        if (!letGoalDetail.oddsEquals(xml)) {
             //入数据库
             xml.setOddsid(letGoalDetail.getOddsid());
             int inch = letGoalDetailMapper.insertSelective(xml);

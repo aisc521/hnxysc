@@ -77,6 +77,16 @@ public class LetGoalhalfDetail {
     }
 
     public boolean oddsEquals(LetGoalhalfDetail xml) {
-        return xml.upodds.equals(upodds) && xml.getGoal().equals(goal) && xml.getDownodds().equals(downodds) && xml.getModifytime().getTime() == modifytime.getTime();
+        if (this.getGoal()==null && xml.getGoal()!=null)
+            return false;
+        if (this.getUpodds()==null && xml.getUpodds()!=null)
+            return false;
+        if (this.getGoal()!=null && xml.getGoal()==null)
+            return false;
+        if (this.getUpodds()!=null && xml.getUpodds()==null)
+            return false;
+        if (!this.getModifytime().equals(xml.getModifytime()))
+            return false;
+        return xml.upodds.equals(upodds) && xml.getGoal().equals(goal) && xml.getDownodds().equals(downodds);
     }
 }

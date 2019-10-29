@@ -79,7 +79,7 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
         TotalScoreDetail totalScoreDetail = totalScoreDetailMapper.selectByMidAndCpy(item[0], item[1]);
         if (totalScoreDetail == null || totalScoreDetail.getOddsid() == null)
             return;
-        if (!totalScoreDetail.oddsEquals(xml) && xml.getModifytime().getTime() > totalScoreDetail.getModifytime().getTime()) {
+        if (!totalScoreDetail.oddsEquals(xml)) {
             //入数据库\
             xml.setOddsid(totalScoreDetail.getOddsid());
             int inch = totalScoreDetailMapper.insertSelective(xml);
