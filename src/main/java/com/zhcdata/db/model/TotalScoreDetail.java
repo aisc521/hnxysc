@@ -78,6 +78,9 @@ public class TotalScoreDetail {
 
     public boolean oddsEquals(TotalScoreDetail xml) {
         try {
+            if (this.getModifytime()!=null&&xml.getModifytime()!=null)
+                if (!this.getModifytime().equals(xml.getModifytime()))
+                    return false;
             if (this.getGoal()==null && xml.getGoal()!=null)
                 return false;
             if (this.getDownodds()==null && xml.getDownodds()!=null)

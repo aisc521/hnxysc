@@ -86,7 +86,9 @@ public class LetGoalDetail {
                 return false;
             if (this.getUpodds()!=null && db.getUpodds()==null)
                 return false;
-
+            if (this.getModifytime()!=null||db.getModifytime()!=null)
+                if (!this.getModifytime().equals(db.getModifytime()))
+                    return false;
             return db.goal.equals(goal) && db.upodds.equals(upodds) && db.getDownodds().equals(downodds);
         }catch (Exception e){
             e.printStackTrace();

@@ -82,7 +82,7 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
             return;
         }
         try {
-            if (!letGoalhalfDetail.oddsEquals(xml) && xml.getModifytime().getTime() > letGoalhalfDetail.getModifytime().getTime()) {
+            if (!letGoalhalfDetail.oddsEquals(xml)) {
                 //入数据库\
                 xml.setOddsid(letGoalhalfDetail.getOddsid());
                 int inch = letGoalhalfDetailMapper.insertSelective(xml);
