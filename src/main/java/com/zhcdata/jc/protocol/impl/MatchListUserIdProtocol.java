@@ -103,6 +103,7 @@ public class MatchListUserIdProtocol implements BaseProtocol {
         String type = paramMap.get("type");
         String time = paramMap.get("matchTime");
         String pageNo = paramMap.get("pageNo");
+        String userId = paramMap.get("userId");
         if(type.equals("all")){
             type="5";
         }else if(type.equals("2")) {
@@ -128,13 +129,17 @@ public class MatchListUserIdProtocol implements BaseProtocol {
                 for(int i = 0; i < newList.size(); i++){
                     MatchResult1 matchResult1 = newList.get(i);
                     String matchId = matchResult1.getMatchId();
-                    String userId = paramMap.get("userId");
+
                     TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId),Long.valueOf(matchId));
                     if(tbPgUCollect != null){
                         matchResult1.setIscollect("1");
                     }
                     result.add(matchResult1);
                 }
+                TbPgUCollect query = new TbPgUCollect();
+                query.setUserId(Long.valueOf(userId));
+                Integer followNum = tbPgUCollectService.queryUserCollectCount(query);
+                map.put("followNum",followNum);//已关数量
                 map.put("list",result);
             }
         }

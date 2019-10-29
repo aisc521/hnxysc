@@ -96,8 +96,8 @@ public class MatchListProtocol implements BaseProtocol {
             //北单按期号存的缓存
             time = scheduleService.queryBdNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
         }else if(type.equals("3")){
-            time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
-            //time = paramMap.get("issueNum");
+            //time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
+            time = paramMap.get("issueNum");
         }
         if(StringUtils.isBlank(time)){
             map.put("list","");
@@ -111,6 +111,7 @@ public class MatchListProtocol implements BaseProtocol {
                 JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
                 List<MatchResult1> newList=jsonMapper.fromJson(s, javaType1);
                 map.put("list",newList);
+                map.put("followNum","0");//已关数量
             }
         }
         return map;

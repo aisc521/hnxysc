@@ -10,6 +10,7 @@ import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.ScheduleService;
 import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.Const;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,9 @@ public class AttentionListProtocol implements BaseProtocol {
         String userId = paramMap.get(Const.USER_ID);
         String pageNo = paramMap.get("pageNo");
         String pageAmount = paramMap.get("pageAmount");
+        if(StringUtils.isBlank(pageAmount)){
+            pageAmount = "20";
+        }
         PageInfo<MatchResult1> list = scheduleService.queryAttentionList(userId, pageNo, pageAmount);
         resultMap.put("busiCode", "10200201");
         resultMap.put("resCode", "000000");
