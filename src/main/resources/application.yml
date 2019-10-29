@@ -115,7 +115,7 @@ custom:
       bdLotterQueryUrl: http://interface.win007.com/zq/BdOdds.aspx?type=result
       lotterScoreUrl: http://interface.win007.com/zq/cp/CP_BF.aspx
       imageUrl: http://zq.win007.com/Image/team/
-      localUrl: F:/qiutai/
+      localUrl: /local/webapp/image/jc/
       yuMing: http://csjch5.xhjingling.com/
   dbPricd: 20
   description: 购买方案
