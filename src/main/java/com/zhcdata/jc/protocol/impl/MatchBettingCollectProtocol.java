@@ -152,26 +152,20 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
 
 
     public List getOneMatch(Integer matchId) {
-        Map<String, Object> bdresult = new HashMap<>();
-        Map<String, Object> jcresult = new HashMap<>();
+
         List resultList = new ArrayList();
         //判断是竞彩还是北单比赛
         List<JcMatchLottery> jcMatchLotteries = jcMatchLotteryService.queryJcMatchLotteryByMatchIdAndType(matchId);
-        if(jcMatchLotteries.size() == 2){//既是北单又是竞彩
-            bdresult = generateBjdcFive(matchId);
-            jcresult = generateJcFive(matchId);
-            resultList.add(bdresult);
-            resultList.add(jcresult);
-        }else if(jcMatchLotteries.size() == 1){//是北单或者竞彩
-            if("BJDC".equals(jcMatchLotteries.get(0).getLottery())){//北单
-                System.out.println(matchId);
-                bdresult = generateBjdcFive(matchId);
-                resultList.add(bdresult);
-            }else{
-                jcresult = generateJcFive(matchId);
-                resultList.add(jcresult);
+        for(int i = 0 ; i< jcMatchLotteries.size(); i++){
+            Map<String, Object> result = new HashMap<>();
+            JcMatchLottery jcMatchLottery = jcMatchLotteries.get(i);
+            if(jcMatchLottery.getLottery().equals("BJDC")){
+                result = generateBjdcFive(matchId);
             }
-
+            if(jcMatchLottery.getLottery().equals("SF14")){
+                result = generateJcFive(matchId);
+            }
+            resultList.add(result);
         }
         return resultList;
     }
