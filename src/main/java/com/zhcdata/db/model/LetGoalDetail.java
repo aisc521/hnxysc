@@ -77,6 +77,20 @@ public class LetGoalDetail {
     }
 
     public boolean oddsEquals(LetGoalDetail db) {
-        return db.goal.equals(goal) && db.upodds.equals(upodds) && db.getDownodds().equals(downodds);
+        try {
+            if (this.getGoal()==null && db.getGoal()!=null)
+                return false;
+            if (this.getUpodds()==null && db.getUpodds()!=null)
+                return false;
+            if (this.getGoal()!=null && db.getGoal()==null)
+                return false;
+            if (this.getUpodds()!=null && db.getUpodds()==null)
+                return false;
+
+            return db.goal.equals(goal) && db.upodds.equals(upodds) && db.getDownodds().equals(downodds);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }
