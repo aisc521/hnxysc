@@ -177,14 +177,13 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
         JcSchedule jcSchedule = jcScheduleService.queryJcScheduleByBet007(matchId);
 
         if(jcScheduleSp != null && jcSchedule != null){
-            System.out.println(matchId);
             //胜平负
             StringBuilder spfStr = new StringBuilder();
             spfStr.append("胜").append("|").append(jcScheduleSp.getSf3()).append(",");
             spfStr.append("平").append("|").append(jcScheduleSp.getSf1()).append(",");
             spfStr.append("负").append("|").append(jcScheduleSp.getSf0()).append(",");
             spfStr.append("让球").append("|").append("0").append(",");
-            spfStr.append("单关").append("|").append(jcScheduleSp.getSpfdg());
+            spfStr.append("单关").append("|").append(jcScheduleSp.getRspfdg());
 
             //让球胜平负
             StringBuilder rqSpfStr = new StringBuilder();
@@ -192,7 +191,7 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
             rqSpfStr.append("让平").append("|").append(jcScheduleSp.getWl1()).append(",");
             rqSpfStr.append("让负").append("|").append(jcScheduleSp.getWl0()).append(",");
             rqSpfStr.append("让球数").append("|").append(jcSchedule.getPolygoal()).append(",");
-            rqSpfStr.append("单关").append("|").append(jcScheduleSp.getRspfdg());
+            rqSpfStr.append("单关").append("|").append(jcScheduleSp.getSpfdg());
 
             StringBuilder bfStr = new StringBuilder();
             bfStr.append("1:0").append("|").append(jcScheduleSp.getSw10()).append(",");
