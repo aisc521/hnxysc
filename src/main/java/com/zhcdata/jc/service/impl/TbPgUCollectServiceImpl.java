@@ -40,4 +40,9 @@ public class TbPgUCollectServiceImpl implements TbPgUCollectService {
     public int insertTbPgUCollect(TbPgUCollect tbPgUCollect) {
         return tbPgUCollectMapper.insertSelective(tbPgUCollect);
     }
+
+    @Override
+    public Integer queryCount(Long aLong) {
+        return tbPgUCollectMapper.queryCount(aLong);
+    }
 }

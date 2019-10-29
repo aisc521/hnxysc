@@ -7,6 +7,7 @@ import com.zhcdata.db.mapper.JcSchedulespMapper;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.JcSchedulesp;
 import com.zhcdata.db.model.Schedule;
+import com.zhcdata.jc.dto.QueryFiveGameDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.JcSchedulespService;
@@ -443,6 +444,11 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
         String week = DateTimeUtils.getIs(d) ;
 
         return jcSchedulespMapper.queryTodayMatchCount(sat,end,week);
+    }
+
+    @Override
+    public QueryFiveGameDto queryJcSchedulespByIdFive(Integer matchId) {
+        return jcSchedulespMapper.queryJcSchedulespByIdFive(matchId);
     }
 
 

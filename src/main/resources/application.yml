@@ -26,9 +26,15 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://192.168.65.198:3306/datas?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=round
+
       username: yanyongchao
       password: zhcw@123
+      url: jdbc:mysql://192.168.65.198/datas?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
+
+      #username: yanyongchao
+      #password: yanyongchao@123
+      #url: jdbc:mysql://rm-2ze6g467l84c2j59xco.mysql.rds.aliyuncs.com:3306/new_datas?useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
+
       initial-size: 1                     #连接池初始大小
       max-active: 20                      #连接池中最大的活跃连接数
       min-idle: 1                         #连接池中最小的活跃连接数
