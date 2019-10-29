@@ -2,6 +2,11 @@ package com.zhcdata.jc.protocol;
 
 import com.zhcdata.jc.tools.SpringUtil;
 import com.zhcdata.jc.xml.BaseXmlProtocol;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Title:
@@ -13,9 +18,13 @@ import com.zhcdata.jc.xml.BaseXmlProtocol;
  * @version 1.0
  * @Date 2019/3/20 10:27
  */
+@Component
 public class ProtocolFactory {
-    public static BaseProtocol getProtocolInstance(String protocolCode) {
-        return SpringUtil.getBean(protocolCode, BaseProtocol.class);
+    @Autowired
+    private final Map<String, BaseProtocol> strategyMap = new ConcurrentHashMap<>(25);
+
+    public BaseProtocol getProtocolInstance(String protocolCode) {
+        return strategyMap.get(protocolCode);
     }
     public static BaseXmlProtocol getQiuTanProtocolInstance(String protocolCode) {
         return SpringUtil.getBean(protocolCode, BaseXmlProtocol.class);

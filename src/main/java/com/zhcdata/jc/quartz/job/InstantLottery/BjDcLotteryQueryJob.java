@@ -57,7 +57,7 @@ public class BjDcLotteryQueryJob implements Job {
         try {
             BjDcLotteryQueryFirstRsp object  = (BjDcLotteryQueryFirstRsp) new QiuTanXmlComm().handleMothod(requestUrl,BjDcLotteryQueryFirstRsp.class,BjDcLotteryQueryRsp.class);
             List<BjDcLotteryQueryRsp> match = object.getMatch();
-            if(match.size() > 0){
+            if(match != null && match.size() > 0){
                 for(int i = 0; i < match.size(); i++){
                     BjDcLotteryQueryRsp bjDcLotteryQueryRsp = match.get(i);
                     //根据期号和场次查询lottery表查询 bet007 字段信息

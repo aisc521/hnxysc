@@ -41,9 +41,6 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
     @Resource
     MultiTotalScorehalfMapper multiTotalScorehalfMapper;
 
-    @Resource
-    ScheduleMapper scheduleMapper;
-
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
         if (rsp==null || rsp.getDh()==null || rsp.getDh().getH()==null || rsp.getDh().getH().size()==0)
@@ -57,21 +54,6 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
-                //Long time = MATCH_START_TIME.get(item[0]);
-                //if (time == null || time < 1) {
-                //    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
-                //    if (schedule != null) {
-                //        time = schedule.getMatchtime().getTime();
-                //        MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
-                //        if (MATCH_START_TIME.size() > 500)
-                //            MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
-                //    }
-                //}
-                //if (time != null && time < System.currentTimeMillis()) {
-                //    log.error("21多盘口赔率变化: 半场大小球 比赛已经开始，比赛ID:{}", item[0]);
-                //    continue;
-                //}
-
                 if (!item[7].equals("3")) {
                     if ("1".equals(item[5])) {//单盘口
                         singleHandicap(item);
@@ -81,6 +63,7 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
                 }
 
             } catch (Exception e) {
+                log.error("亚盘赔率异常:"+cah.get(i));
                 log.error("亚盘赔率异常:", e);
             }
         }
@@ -95,7 +78,7 @@ public class ChangeHalfSizesBallsHandleServiceImpl implements ManyHandicapOddsCh
         if (totalScorehalfDetail == null || totalScorehalfDetail.getOddsid() == null) {
             return;
         }
-        if (totalScorehalfDetail.getId() == null || !totalScorehalfDetail.oddsEquals(xml) && xml.getModifytime().getTime() > totalScorehalfDetail.getModifytime().getTime()) {
+        if (!totalScorehalfDetail.oddsEquals(xml)){
             //入数据库\
             xml.setOddsid(totalScorehalfDetail.getOddsid());
             int inch = totalScorehalfDetailMapper.insertSelective(xml);

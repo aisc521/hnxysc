@@ -77,6 +77,12 @@ public class StandardDetail {
     }
 
     public boolean oddsEquals(StandardDetail db) {
+        if (db == null) return false;
+        if (db.getModifytime() != null && modifytime != null)
+            if (db.getModifytime().getTime() > modifytime.getTime())
+                return true;
+        if ((db.getModifytime() == null || modifytime == null) && (db.getModifytime() != null || modifytime != null))
+            return false;
         return db.getHomewin().equals(homewin) && db.getGuestwin().equals(guestwin) && db.getStandoff().equals(standoff);
     }
 }

@@ -25,6 +25,6 @@
     select * from jc_match_lottery jc where jc.ID_BET007=#{bet007Id} and jc.LOTTERY = #{gameType}
   </select>
   <select id="queryJcMatchLotteryByMatchIdAndType" resultType="com.zhcdata.db.model.JcMatchLottery">
-    select * from jc_match_lottery jc where jc.ID_BET007=#{matchId} and jc.LOTTERY in('SF14','BJDC')
+    select * from jc_match_lottery jc where jc.ID_BET007=#{matchId} and jc.LOTTERY in('JCZQ','BJDC')
   </select>
 </mapper>

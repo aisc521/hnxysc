@@ -78,7 +78,7 @@ public class BjdcMatchResultProtocol implements BaseProtocol {
     returnMap.put("pageTotal", pageInfo.getPages());
     returnMap.put("openNum", pageInfo.getTotal());
     returnMap.put("openNumTatol", openNumTatol+"");//需要的开奖场次
-    returnMap.put("pageNo", pageInfo.getPageNum());
+    returnMap.put("pageNo", pageNo);
     returnMap.put("issue", issue);
 
     returnMap.put("content",pageInfo.getList());

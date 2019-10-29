@@ -75,7 +75,7 @@ public class QueryPlanByExpertIdUserProtocol implements BaseProtocol{
             List<PlanResult1> planList = planList1.getList();
             for (int i = 0; i < planList.size(); i++) {
                 PlanResult1 result1 = planList.get(i);
-                List<MatchPlanResult> matchPlanResults = TbJcMatchService.queryList(planList.get(i).getId());
+                List<MatchPlanResult> matchPlanResults = TbJcMatchService.queryList(planList.get(i).getPlanId());
                 if (matchPlanResults != null && matchPlanResults.size() > 0) {
                     List<MatchPlanResult> matchPlanResults1 = new ArrayList<>();
                     for(int j = 0; j < matchPlanResults.size(); j++){

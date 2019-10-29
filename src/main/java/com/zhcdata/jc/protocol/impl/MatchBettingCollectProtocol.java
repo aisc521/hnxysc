@@ -85,29 +85,36 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
             timeId = "0";
         if("1".equals(type)){//竞彩
             Map<String, Object> result = JSONArray.parseObject((String) redisUtils.hget("SOCCER:BETTING:FIVEMETHOD:" + matchId, "v"), Map.class);
-            if (timeId.equals(result.get("timeId").toString())) {
-                Map<String, Object> resultMap = new HashMap<>();
-                //基础信息
-                result.put("message", "success");
-                result.put("timeId", timeId);
-                return resultMap;
-            } else{
+            if(result != null){
+                if (timeId.equals(result.get("timeId").toString())) {
+                    Map<String, Object> resultMap = new HashMap<>();
+                    //基础信息
+                    result.put("message", "success");
+                    result.put("timeId", timeId);
+                    return resultMap;
+                } else{
+                    return result;
+                }
+            }else{
                 return result;
             }
         }else{//北单
             Map<String, Object> result = JSONArray.parseObject((String) redisUtils.hget("SOCCER:BETTING:FIVEMETHODBJDC:" + matchId, "v"), Map.class);
-            if (timeId.equals(result.get("timeId").toString())) {
-                Map<String, Object> resultMap = new HashMap<>();
-                //基础信息
-                result.put("message", "success");
-                result.put("timeId", timeId);
-                return resultMap;
-            } else{
+            if(result != null){
+                if (timeId.equals(result.get("timeId").toString())) {
+                    Map<String, Object> resultMap = new HashMap<>();
+                    //基础信息
+                    result.put("message", "success");
+                    result.put("timeId", timeId);
+                    return resultMap;
+                } else{
+                    return result;
+                }
+            }else{
                 return result;
             }
+
         }
-
-
     }
 
     public void autoWork() {
@@ -145,26 +152,22 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
 
 
     public List getOneMatch(Integer matchId) {
-        Map<String, Object> bdresult = new HashMap<>();
-        Map<String, Object> jcresult = new HashMap<>();
+
         List resultList = new ArrayList();
         //判断是竞彩还是北单比赛
         List<JcMatchLottery> jcMatchLotteries = jcMatchLotteryService.queryJcMatchLotteryByMatchIdAndType(matchId);
-        if(jcMatchLotteries.size() == 2){//既是北单又是竞彩
-            bdresult = generateBjdcFive(matchId);
-            jcresult = generateJcFive(matchId);
-            resultList.add(bdresult);
-            resultList.add(jcresult);
-        }else if(jcMatchLotteries.size() == 1){//是北单或者竞彩
-            if("BJDC".equals(jcMatchLotteries.get(0).getLottery())){//北单
-
-                bdresult = generateBjdcFive(matchId);
-                resultList.add(bdresult);
-            }else{
-                jcresult = generateJcFive(matchId);
-                resultList.add(jcresult);
+        for(int i = 0 ; i< jcMatchLotteries.size(); i++){
+            Map<String, Object> result = new HashMap<>();
+            JcMatchLottery jcMatchLottery = jcMatchLotteries.get(i);
+            if(jcMatchLottery.getLottery().equals("BJDC")){
+                System.out.println("北单:" + matchId);
+                result = generateBjdcFive(matchId);
             }
-
+            if(jcMatchLottery.getLottery().equals("JCZQ")){
+                System.out.println("竞彩:" + matchId);
+                result = generateJcFive(matchId);
+            }
+            resultList.add(result);
         }
         return resultList;
     }
@@ -381,8 +384,9 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
                 result.put("home_team", matchInfoForBdDtos.getHomeTeam());
                 result.put("visit_team", matchInfoForBdDtos.getGuestTeam());
                 result.put("match_date", matchInfoForBdDtos.getDateOfMatch());
-            }
 
+            }
+        result.put("timeId", String.valueOf(System.currentTimeMillis()));
         result.put("type","BJDC");
         return result;
     }

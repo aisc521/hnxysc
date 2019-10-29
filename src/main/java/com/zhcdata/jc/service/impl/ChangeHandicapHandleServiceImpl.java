@@ -49,7 +49,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
     @Override
     public void changeHandle(MoreHandicapOddsLisAlltRsp rsp) {
         //亚赔（让球盘）变化数据:比赛ID,公司ID,即时盘口,主队即时赔率,客队即时赔率,是否封盘1,是否走地,盘口序号,变盘时间,是否封盘2
-        if (rsp==null || rsp.getA()==null || rsp.getA().getH()==null || rsp.getA().getH().size()==0)
+        if (rsp == null || rsp.getA() == null || rsp.getA().getH() == null || rsp.getA().getH().size() == 0)
             return;
         List<String> cah = rsp.getA().getH();
         if (cah == null || cah.size() < 1) {
@@ -60,40 +60,16 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
         for (int i = 0; i < cah.size(); i++) {
             try {
                 String[] item = cah.get(i).split(",");
-                if (item[1].equals("3")) {
-                    log.error("亚盘变化-皇冠数据:" + cah.get(i));
-                }
-                //Long time = MATCH_START_TIME.get(item[0]);
-                //if (time == null || time < 1) {
-                //    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
-                //    if (schedule != null) {
-                //        time = schedule.getMatchtime().getTime();
-                //        MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
-                //        if (MATCH_START_TIME.size() > 500)
-                //            MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
-                //    }
-                //}
-                //if (time != null && time < System.currentTimeMillis()) {
-                //    String msg = "比赛id:" + item[0] + ",公司ID:" + item[1];
-                //    log.error("21多盘口赔率变化: 亚赔（让球盘）比赛已经开始 比赛ID:{}", msg);
-                //    continue;
-                //} else {
-                //    String msg = "比赛id:" + item[0] + ",公司ID:" + item[1];
-                //    if (item[1].equals("3"))
-                //        msg = "皇冠亚赔-" + msg;
-                //    log.error("21多盘口赔率变化: 亚赔（让球盘）开始入库 比赛ID:{}", msg);
-                //}
-                //如果第七位等于1 是 单盘口 相当于标准盘  6 个参数代表不是走地我们入库
                 if (!item[10].equals("3")) {
-                    if ("1".equals(item[7])/* && "False".equals(item[6])*/) {//单盘口
+                    if ("1".equals(item[7])) {//单盘口
                         singleHandicap(item);
                     } else {//存到多盘口
                         manyHandicap(item);
                     }
                 }
-
             } catch (Exception e) {
-                log.error("亚盘赔率异常:", e);
+                log.error("ChangeHandicapHandleServiceImpl亚盘赔率异常:"+cah.get(i), e);
+                e.printStackTrace();
             }
         }
     }
@@ -108,7 +84,7 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
         if (letGoalDetail == null || letGoalDetail.getOddsid() == null) {
             return;
         }
-        if ((letGoalDetail.getId() == null) || (!letGoalDetail.oddsEquals(xml) && xml.getModifytime().getTime() > letGoalDetail.getModifytime().getTime())) {
+        if (!letGoalDetail.oddsEquals(xml) && xml.getModifytime().getTime() > letGoalDetail.getModifytime().getTime()) {
             //入数据库
             xml.setOddsid(letGoalDetail.getOddsid());
             int inch = letGoalDetailMapper.insertSelective(xml);
@@ -125,9 +101,8 @@ public class ChangeHandicapHandleServiceImpl implements ManyHandicapOddsChangeSe
                 }
             }
 
-            if (inch > 0) {
+            if (inch > 0)
                 log.error("21多盘口赔率变化: 亚赔（让球盘）单盘口 接口数据:{} 入库成功", item);
-            }
         }
 
     }

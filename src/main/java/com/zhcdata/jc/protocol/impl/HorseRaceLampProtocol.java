@@ -79,7 +79,7 @@ public class HorseRaceLampProtocol implements BaseProtocol {
                 resultMap.put("busiCode", "");
             }
         } catch (Exception ex) {
-            LOGGER.error("跑马灯数据查询异常："+ex.toString());
+            LOGGER.error("跑马灯数据查询异常：",ex);
         }
         return resultMap;
     }

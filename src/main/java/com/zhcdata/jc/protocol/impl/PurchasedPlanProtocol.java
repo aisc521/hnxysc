@@ -84,7 +84,7 @@ public class PurchasedPlanProtocol implements BaseProtocol {
         resultMap.put("list",list1);
         resultMap.put("pageTotal", pageInfo.getPages());
         resultMap.put("totalNum", pageInfo.getTotal());
-        resultMap.put("pageNo", pageInfo.getPageNum());
+        resultMap.put("pageNo", pageNo);
         return resultMap;
     }
 }

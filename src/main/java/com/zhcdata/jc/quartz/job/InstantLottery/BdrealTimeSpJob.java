@@ -53,7 +53,7 @@ public class BdrealTimeSpJob implements Job {
                     BdrealimeSpBfRsp.class,BdrealimeSpBqcRsp.class,BdrealimeSpSxdsRsp.class);
 
             List<BdrealimeSpRsp> list = object.getList();
-            if(list.size() > 0){
+            if(list != null && list.size() > 0){
                 for(int i = 0; i < list.size(); i++){
                     BdrealimeSpRsp bdrealimeSpRsp = list.get(i);
                     String issueNum = bdrealimeSpRsp.getIssueNum();

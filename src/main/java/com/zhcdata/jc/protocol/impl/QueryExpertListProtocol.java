@@ -62,7 +62,7 @@ public class QueryExpertListProtocol implements BaseProtocol {
             List<ExpertInfoBdDto> list = expertInfoPageInfo.getList();
             resultMap.put("list", list);
             resultMap.put("pageNo", pageNo);
-            resultMap.put("pageNum", expertInfoPageInfo.getTotal());
+            resultMap.put("pageTotal", expertInfoPageInfo.getPages());
         } catch (Exception ex) {
             LOGGER.error(ex.toString());
         }

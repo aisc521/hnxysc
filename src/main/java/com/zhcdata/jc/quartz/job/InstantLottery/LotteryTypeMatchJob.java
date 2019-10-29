@@ -55,7 +55,7 @@ public class LotteryTypeMatchJob implements Job {
         try {
             LotteryTypeMatchFristRsp object  = (LotteryTypeMatchFristRsp) new QiuTanXmlComm().handleMothod(requestUrl,LotteryTypeMatchFristRsp.class,LotteryTypeMatchRsp.class);
             List<LotteryTypeMatchRsp> lotteryTypeMatchRspList = object.getList();
-            if(lotteryTypeMatchRspList.size() > 0){
+            if(lotteryTypeMatchRspList != null && lotteryTypeMatchRspList.size() > 0){
                 for(int i = 0; i < lotteryTypeMatchRspList.size(); i++){
                     LotteryTypeMatchRsp lotteryTypeMatchRsp = lotteryTypeMatchRspList.get(i);
                     //全部入lottery表数据

@@ -1048,5 +1048,9 @@
         where sc.ScheduleID = #{matchId}
     </select>
 
+    <select id="selectByStatusInTime" resultType="com.zhcdata.db.model.Schedule">
+        select * from schedule where MatchState = #{status} and MatchTime > #{sat} and MatchTime &lt; #{end}
+    </select>
+
 
 </mapper>

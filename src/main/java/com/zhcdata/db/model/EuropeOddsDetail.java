@@ -98,6 +98,7 @@ public class EuropeOddsDetail {
                 return xml.getGuestwin().equals(guestwin) && xml.getStandoff().equals(standoff) && xml.getHomewin().equals(homewin) && xml.getModifytime().getTime() == modifytime.getTime();
         } catch (Exception e) {
             System.err.println("89UASFU89HAKJN" + e.toString());
+            e.printStackTrace();
             return false;
         }
     }

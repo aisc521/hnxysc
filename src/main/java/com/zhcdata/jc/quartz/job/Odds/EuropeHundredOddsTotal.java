@@ -36,12 +36,17 @@ public class EuropeHundredOddsTotal implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        LOGGER.info("百欧赔率total表解析开始");
+        LOGGER.info("百欧赔率total表解析开始,已合并到EuropeHundredOddsJob");
+        if (true)return;
         long sat = System.currentTimeMillis();
         int odds = 0;
         String str = null;
         try {
             str = HttpUtils.httpGet("http://interface.win007.com/zq/1x2.aspx?day=3", null);
+            if (str.contains("访问频率超出限制")){
+                log.error("百欧赔率total表接口访问超出限制");
+                return;
+            }
         } catch (Exception e) {
             log.error("百欧赔率表接口获取失败" , e);
         }
@@ -49,6 +54,8 @@ public class EuropeHundredOddsTotal implements Job {
         String s = jsonObject.toString();
         EuropeHundredOddsRsp obj = com.alibaba.fastjson.JSONObject.parseObject(s, EuropeHundredOddsRsp.class);
 
+        if (obj==null||obj.getC()==null||obj.getC().getH()==null||obj.getC().getH().size()==0)
+            return;
         List<H> items = obj.getC().getH();
         int insert = 0;
         int update = 0;
