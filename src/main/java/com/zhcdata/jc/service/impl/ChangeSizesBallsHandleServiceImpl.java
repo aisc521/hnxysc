@@ -66,7 +66,7 @@ public class ChangeSizesBallsHandleServiceImpl implements ManyHandicapOddsChange
                 }
 
             } catch (Exception e) {
-                log.error("亚盘赔率异常:", e);
+                log.error("ChangeSizesBallsHandleServiceImpl亚盘赔率异常:"+cah.get(i), e);
             }
         }
     }
