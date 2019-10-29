@@ -8,6 +8,7 @@ import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.JcSchedulesp;
 import com.zhcdata.jc.dto.MatchInfoForBdDto;
 import com.zhcdata.jc.dto.ProtocolParamDto;
+import com.zhcdata.jc.dto.QueryFiveGameDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.enums.RedisCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -172,23 +173,26 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
 
     public Map<String, Object> generateJcFive(Integer matchId){
         Map<String, Object> result = new HashMap<>();
-        JcSchedulesp jcScheduleSp = jcSchedulespService.queryJcSchedulespById(matchId);
+        QueryFiveGameDto jcScheduleSp = jcSchedulespService.queryJcSchedulespByIdFive(matchId);
         JcSchedule jcSchedule = jcScheduleService.queryJcScheduleByBet007(matchId);
 
         if(jcScheduleSp != null && jcSchedule != null){
+            System.out.println(matchId);
             //胜平负
             StringBuilder spfStr = new StringBuilder();
             spfStr.append("胜").append("|").append(jcScheduleSp.getSf3()).append(",");
             spfStr.append("平").append("|").append(jcScheduleSp.getSf1()).append(",");
             spfStr.append("负").append("|").append(jcScheduleSp.getSf0()).append(",");
-            spfStr.append("让球").append("|").append("0");
+            spfStr.append("让球").append("|").append("0").append(",");
+            spfStr.append("单关").append("|").append(jcScheduleSp.getSpfdg());
 
             //让球胜平负
             StringBuilder rqSpfStr = new StringBuilder();
             rqSpfStr.append("让胜").append("|").append(jcScheduleSp.getWl3()).append(",");
             rqSpfStr.append("让平").append("|").append(jcScheduleSp.getWl1()).append(",");
             rqSpfStr.append("让负").append("|").append(jcScheduleSp.getWl0()).append(",");
-            rqSpfStr.append("让球数").append("|").append(jcSchedule.getPolygoal());
+            rqSpfStr.append("让球数").append("|").append(jcSchedule.getPolygoal()).append(",");
+            rqSpfStr.append("单关").append("|").append(jcScheduleSp.getRspfdg());
 
             StringBuilder bfStr = new StringBuilder();
             bfStr.append("1:0").append("|").append(jcScheduleSp.getSw10()).append(",");

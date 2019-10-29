@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.JcSchedulesp;
 import com.zhcdata.db.model.Schedule;
+import com.zhcdata.jc.dto.QueryFiveGameDto;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.JcFootBallOddsRsp;
 
@@ -37,4 +38,6 @@ public interface JcSchedulespService {
     PageInfo<Map<String, String>> queryJczqListReuslt(int pageNo, int pageAmount, String date) throws BaseException;;
 
     int queryTodayMatchCount(String date) throws BaseException;;
+
+    QueryFiveGameDto queryJcSchedulespByIdFive(Integer matchId);
 }
