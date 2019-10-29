@@ -14,4 +14,6 @@ public interface TbPgUCollectMapper extends Mapper<TbPgUCollect> {
     int updateStatusByUserId(TbPgUCollect tbPgUCollect);
 
     TbPgUCollect queryUserCollectByUserIdAndMacthId(@Param("userId") long userId, @Param("macthId") long macthId);
+
+    Integer queryCount(@Param("userId")Long userId);
 }

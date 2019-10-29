@@ -975,7 +975,7 @@
             LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
             LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
             LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id
-            WHERE pg.status = '1' and pg.user_id = #{userId}     and MatchTime2 >=  now()
+            WHERE pg.status = '1' and pg.user_id = #{userId}
             ORDER BY sc.MatchTime) as t where t.Matchty = lotterType
     </select>
 

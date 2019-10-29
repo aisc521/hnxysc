@@ -17,4 +17,6 @@ public interface TbPgUCollectService {
     TbPgUCollect queryUserCollectByUserIdAndMacthId(long l, long l1);
 
     int insertTbPgUCollect(TbPgUCollect tbPgUCollect);
+
+    Integer queryCount(Long aLong);
 }
