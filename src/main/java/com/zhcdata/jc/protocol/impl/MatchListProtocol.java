@@ -10,6 +10,7 @@ import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.ScheduleService;
 import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.RedisUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -98,15 +99,19 @@ public class MatchListProtocol implements BaseProtocol {
             time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
             //time = paramMap.get("issueNum");
         }
-        String re = (String) redisUtils.hget("SOCCER:HSET:AGAINSTLIST"+time + type, pageNo);
-        if(!Strings.isNullOrEmpty(re)){
-            JavaType javaType = JsonMapper.defaultMapper().buildMapType(Map.class,String.class,Object.class);
-            map = JsonMapper.defaultMapper().fromJson(re, javaType);
-            String s=JsonMapper.defaultMapper().toJson(map.get("list"));
-            JsonMapper jsonMapper = JsonMapper.defaultMapper();
-            JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
-            List<MatchResult1> newList=jsonMapper.fromJson(s, javaType1);
-            map.put("list",newList);
+        if(StringUtils.isBlank(time)){
+            map.put("list","");
+        }else{
+            String re = (String) redisUtils.hget("SOCCER:HSET:AGAINSTLIST"+time + type, pageNo);
+            if(!Strings.isNullOrEmpty(re)){
+                JavaType javaType = JsonMapper.defaultMapper().buildMapType(Map.class,String.class,Object.class);
+                map = JsonMapper.defaultMapper().fromJson(re, javaType);
+                String s=JsonMapper.defaultMapper().toJson(map.get("list"));
+                JsonMapper jsonMapper = JsonMapper.defaultMapper();
+                JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
+                List<MatchResult1> newList=jsonMapper.fromJson(s, javaType1);
+                map.put("list",newList);
+            }
         }
         return map;
     }
