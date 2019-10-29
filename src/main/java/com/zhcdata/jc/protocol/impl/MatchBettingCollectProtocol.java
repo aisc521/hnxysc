@@ -152,7 +152,6 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
 
 
     public List getOneMatch(Integer matchId) {
-
         List resultList = new ArrayList();
         //判断是竞彩还是北单比赛
         List<JcMatchLottery> jcMatchLotteries = jcMatchLotteryService.queryJcMatchLotteryByMatchIdAndType(matchId);
@@ -160,11 +159,9 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
             Map<String, Object> result = new HashMap<>();
             JcMatchLottery jcMatchLottery = jcMatchLotteries.get(i);
             if(jcMatchLottery.getLottery().equals("BJDC")){
-                System.out.println("北单:" + matchId);
                 result = generateBjdcFive(matchId);
             }
             if(jcMatchLottery.getLottery().equals("JCZQ")){
-                System.out.println("竞彩:" + matchId);
                 result = generateJcFive(matchId);
             }
             resultList.add(result);

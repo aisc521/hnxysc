@@ -98,27 +98,27 @@ public class JcLotteryUtils {
         if("12".equals(type)){//比分
             List<BdrealimeSpBfRsp> bfList =  bdrealimeSpRsp.getBf();
             BdrealimeSpBfRsp bdrealimeSpBfRsp = bfList.get(0);
-            resultInfo = "平:" + "00:" + bdrealimeSpBfRsp.getSd00() + "|" +
-                         "主负:" + "01:" + bdrealimeSpBfRsp.getSl01() + "|" +
-                         "主负:" + "02:" + bdrealimeSpBfRsp.getSl02() + "|" +
-                         "主负:" + "03:" + bdrealimeSpBfRsp.getSl03() + "|" +
-                         "平:" + "11:" + bdrealimeSpBfRsp.getSd11() + "|" +
-                         "主负:" + "12:" + bdrealimeSpBfRsp.getSl12() + "|" +
-                         "主负:" + "13:" + bdrealimeSpBfRsp.getSl13() + "|" +
-                         "主胜:" + "20:" + bdrealimeSpBfRsp.getSw20() + "|" +
-                         "主胜:" + "21:" + bdrealimeSpBfRsp.getSw21() + "|" +
-                         "平:" + "22:" + bdrealimeSpBfRsp.getSd22() + "|" +
-                         "主负:" + "23:" + bdrealimeSpBfRsp.getSl23() + "|" +
-                         "主胜:" + "30:" + bdrealimeSpBfRsp.getSw30() + "|" +
-                         "主胜:" + "31:" + bdrealimeSpBfRsp.getSw31() + "|" +
-                         "主胜:" + "32:" + bdrealimeSpBfRsp.getSw32() + "|" +
-                         "平:" + "33:" + bdrealimeSpBfRsp.getSd33() + "|" +
-                         "主胜:" + "40:" + bdrealimeSpBfRsp.getSw40() + "|" +
-                         "主胜:" + "41:" + bdrealimeSpBfRsp.getSw41() + "|" +
-                         "主胜:" + "42:" + bdrealimeSpBfRsp.getSw42() + "|" +
-                         "主负:" + "04:" + bdrealimeSpBfRsp.getSl04() + "|" +
-                         "主负:" + "14:" + bdrealimeSpBfRsp.getSl14() + "|" +
-                         "主负:" + "24:" + bdrealimeSpBfRsp.getSl24();
+            resultInfo = "平:" + "00:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSd00()) + "|" +
+                         "主负:" + "01:" +judgeWhetherItIsEmptyForString( bdrealimeSpBfRsp.getSl01()) + "|" +
+                         "主负:" + "02:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSl02()) + "|" +
+                         "主负:" + "03:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSl03()) + "|" +
+                         "平:" + "11:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSd11()) + "|" +
+                         "主负:" + "12:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSl12()) + "|" +
+                         "主负:" + "13:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSl13()) + "|" +
+                         "主胜:" + "20:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSw20()) + "|" +
+                         "主胜:" + "21:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSw21()) + "|" +
+                         "平:" + "22:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSd22()) + "|" +
+                         "主负:" + "23:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSl23()) + "|" +
+                         "主胜:" + "30:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSw30()) + "|" +
+                         "主胜:" + "31:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSw31()) + "|" +
+                         "主胜:" + "32:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSw32()) + "|" +
+                         "平:" + "33:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSd33()) + "|" +
+                         "主胜:" + "40:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSw40()) + "|" +
+                         "主胜:" + "41:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSw41()) + "|" +
+                         "主胜:" + "42:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSw42()) + "|" +
+                         "主负:" + "04:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSl04()) + "|" +
+                         "主负:" + "14:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSl14()) + "|" +
+                         "主负:" + "24:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSl24());
 
 
 
@@ -126,47 +126,47 @@ public class JcLotteryUtils {
         if("13".equals(type)){//总进球
             List<BdrealimeSpJqRsp> jqList =  bdrealimeSpRsp.getJq();
             BdrealimeSpJqRsp bdrealimeSpJqRsp = jqList.get(0);
-            resultInfo = "进球:" + "0:" + bdrealimeSpJqRsp.getT0() + "|" +
-                         "进球:" + "1:" + bdrealimeSpJqRsp.getT0() + "|" +
-                         "进球:" + "2:" + bdrealimeSpJqRsp.getT0() + "|" +
-                         "进球:" + "3:" + bdrealimeSpJqRsp.getT0() + "|" +
-                         "进球:" + "4:" + bdrealimeSpJqRsp.getT0() + "|" +
-                         "进球:" + "5:" + bdrealimeSpJqRsp.getT0() + "|" +
-                         "进球:" + "6:" + bdrealimeSpJqRsp.getT0() + "|" +
-                         "进球:" + "7:" + bdrealimeSpJqRsp.getT0();
+            resultInfo = "进球:" + "0:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
+                         "进球:" + "1:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
+                         "进球:" + "2:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
+                         "进球:" + "3:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
+                         "进球:" + "4:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
+                         "进球:" + "5:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
+                         "进球:" + "6:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
+                         "进球:" + "7:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0());
         }
         if("14".equals(type)){//半全场 3表示胜利，1表示平，0表示负，前面的数字表示全场，后面的数字表示半场。例：<33>表示全场胜半场胜赔率。
             List<BdrealimeSpBqcRsp> bqcList =  bdrealimeSpRsp.getBqc();
             BdrealimeSpBqcRsp bdrealimeSpBqcRsp = bqcList.get(0);
-            resultInfo = "半全场:" + "33:" + bdrealimeSpBqcRsp.getHt33() + "|" +
-                         "半全场:" + "31:" + bdrealimeSpBqcRsp.getHt31() + "|" +
-                         "半全场:" + "30:" + bdrealimeSpBqcRsp.getHt30() + "|" +
-                         "半全场:" + "13:" + bdrealimeSpBqcRsp.getHt13() + "|" +
-                         "半全场:" + "11:" + bdrealimeSpBqcRsp.getHt11() + "|" +
-                         "半全场:" + "10:" + bdrealimeSpBqcRsp.getHt10() + "|" +
-                         "半全场:" + "03:" + bdrealimeSpBqcRsp.getHt03() + "|" +
-                         "半全场:" + "01:" + bdrealimeSpBqcRsp.getHt01() + "|" +
-                         "半全场:" + "00:" + bdrealimeSpBqcRsp.getHt00();
+            resultInfo = "半全场:" + "33:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getHt33()) + "|" +
+                         "半全场:" + "31:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getHt31()) + "|" +
+                         "半全场:" + "30:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getHt30()) + "|" +
+                         "半全场:" + "13:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getHt13()) + "|" +
+                         "半全场:" + "11:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getHt11()) + "|" +
+                         "半全场:" + "10:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getHt10()) + "|" +
+                         "半全场:" + "03:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getHt03()) + "|" +
+                         "半全场:" + "01:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getHt01()) + "|" +
+                         "半全场:" + "00:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getHt00());
         }
         if("15".equals(type)){//让球胜平负 3表示主胜，1表示平，0表示主负
             List<BdrealimeSpSpfRsp> spfList =  bdrealimeSpRsp.getSpf();
             BdrealimeSpSpfRsp bdrealimeSpBqcRsp = spfList.get(0);
             List<BdrealimeSpBfRsp> bfList =  bdrealimeSpRsp.getBf();
             BdrealimeSpBfRsp bdrealimeSpBfRsp = bfList.get(0);
-            resultInfo = "让球胜平负:" + "3:" + bdrealimeSpBqcRsp.getSf3() + "|" +
-                         "让球胜平负:" + "1:" + bdrealimeSpBqcRsp.getSf1() + "|" +
-                         "让球胜平负:" + "0:" + bdrealimeSpBqcRsp.getSf0() + "|" +
-                         "胜其他:" + "4:" + bdrealimeSpBfRsp.getSw4() + "|" +
-                         "平其他:" + "4:" + bdrealimeSpBfRsp.getSd4() + "|" +
-                         "负其他:" + "4:" + bdrealimeSpBfRsp.getSl4();
+            resultInfo = "让球胜平负:" + "3:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getSf3()) + "|" +
+                         "让球胜平负:" + "1:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getSf1()) + "|" +
+                         "让球胜平负:" + "0:" + judgeWhetherItIsEmptyForString(bdrealimeSpBqcRsp.getSf0()) + "|" +
+                         "胜其他:" + "4:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSw4()) + "|" +
+                         "平其他:" + "4:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSd4()) + "|" +
+                         "负其他:" + "4:" + judgeWhetherItIsEmptyForString(bdrealimeSpBfRsp.getSl4());
         }
         if("16".equals(type)){//上下单双  11 上单  10 上双 01 下单 00 下双
             List<BdrealimeSpSxdsRsp> sxds = bdrealimeSpRsp.getSxds();
             BdrealimeSpSxdsRsp bdrealimeSpSxdsRsp = sxds.get(0);
-            resultInfo = "上下单双:" + "11:" + bdrealimeSpSxdsRsp.getDs11() + "|" +
-                         "上下单双:" + "10:" + bdrealimeSpSxdsRsp.getDs10() + "|" +
-                         "上下单双:" + "01:" + bdrealimeSpSxdsRsp.getDs01() + "|" +
-                         "上下单双:" + "00:" + bdrealimeSpSxdsRsp.getDs00();
+            resultInfo = "上下单双:" + "11:" + judgeWhetherItIsEmptyForString(bdrealimeSpSxdsRsp.getDs11()) + "|" +
+                         "上下单双:" + "10:" + judgeWhetherItIsEmptyForString(bdrealimeSpSxdsRsp.getDs10()) + "|" +
+                         "上下单双:" + "01:" + judgeWhetherItIsEmptyForString(bdrealimeSpSxdsRsp.getDs01()) + "|" +
+                         "上下单双:" + "00:" + judgeWhetherItIsEmptyForString(bdrealimeSpSxdsRsp.getDs00());
         }
         return resultInfo;
     }
@@ -1125,5 +1125,13 @@ public class JcLotteryUtils {
             d = Double.parseDouble(pl);
         }
         return d;
+    }
+
+    private static String judgeWhetherItIsEmptyForString(String pl){
+        String result = "-";
+        if(StringUtils.isNotBlank(pl)){
+            result = pl;
+        }
+        return result;
     }
 }
