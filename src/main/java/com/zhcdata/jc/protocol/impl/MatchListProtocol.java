@@ -90,6 +90,7 @@ public class MatchListProtocol implements BaseProtocol {
         String type = paramMap.get("type");
         String time = paramMap.get("matchTime");
         String pageNo = paramMap.get("pageNo");
+        String issueNum=paramMap.get("issueNum");
         if(type.equals("all")){
             type="5";
         }else if(type.equals("2")) {
@@ -98,6 +99,8 @@ public class MatchListProtocol implements BaseProtocol {
         }else if(type.equals("3")){
             time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
             //time = paramMap.get("issueNum");
+        }else if(type.equals("6")){
+            time=issueNum;
         }
         if(StringUtils.isBlank(time)){
             map.put("list","");

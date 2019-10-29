@@ -1,5 +1,7 @@
 package com.zhcdata.jc.quartz.job.redis;
 
+import com.zhcdata.db.mapper.ScheduleMapper;
+import com.zhcdata.db.model.JcMatchLottery;
 import com.zhcdata.jc.dto.MatchResult1;
 import com.zhcdata.jc.service.ScheduleService;
 import com.zhcdata.jc.tools.RedisUtils;
@@ -33,6 +35,9 @@ public class MatchListDataAllJob  implements Job {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource
+    private ScheduleMapper scheduleMapper;
+
+    @Resource
     private ScheduleService scheduleService;
 
     @Resource
@@ -42,6 +47,40 @@ public class MatchListDataAllJob  implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        try {
+            //处理足彩
+
+            String issueNum = null;
+            List<JcMatchLottery> nextNum = scheduleMapper.selectNextIssueNum();           //后N
+            if (nextNum != null && nextNum.size() > 0) {
+                issueNum = nextNum.get(0).getIssueNum();
+            }
+
+            List<JcMatchLottery> lastNum = scheduleMapper.selectLastIssueNum(issueNum);   //前10
+            lastNum.addAll(nextNum);
+
+
+            for (int a = 0; a < lastNum.size(); a++) {
+                long start = ClockUtil.currentTimeMillis();
+                List<MatchResult1> list1 = new ArrayList<>();
+                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(null, null, "3", "", "1", lastNum.get(a).getIssueNum()); //竞彩 正在进行
+                list1.addAll(list1_1);
+
+                List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(null, null, "3", "", "2", lastNum.get(a).getIssueNum()); //竞彩 未开始
+                list1.addAll(list1_2);
+
+                List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(null, null, "3", "", "3", lastNum.get(a).getIssueNum()); //竞彩 已经结束
+                list1.addAll(list1_3);
+
+                deal(list1, lastNum.get(a).getIssueNum(), "6"); //目前存6
+                long end = ClockUtil.currentTimeMillis();
+                LOGGER.info("更新足彩赛事列表成功 期号:" + lastNum.get(a).getIssueNum() + " 耗时:" + (end - start));
+            }
+        }catch (Exception ex){
+            LOGGER.error("异常信息");
+            ex.printStackTrace();
+        }
+
         String startDate = "";
         String endDate = "";
         try{
@@ -68,29 +107,28 @@ public class MatchListDataAllJob  implements Job {
                 time = startDate.substring(0, 10);
 
                 List<MatchResult1> list1=new ArrayList<>();
-                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "1", "","1"); //竞彩 正在进行
+                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "1", "","1",null); //竞彩 正在进行
                 list1.addAll(list1_1);
 
-                List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","2"); //竞彩 未开始
+                List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","2",null); //竞彩 未开始
                 list1.addAll(list1_2);
 
-                List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","3"); //竞彩 已经结束
+                List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","3",null); //竞彩 已经结束
                 list1.addAll(list1_3);
 
                 deal(list1, time, "1");
 
                 List<MatchResult1> list5 = new ArrayList<>();
-                List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1");//全部 正在进行
+                List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null);//全部 正在进行
                 list5.addAll(list5_1);
 
-                List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2");//全部 未开始
+                List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2",null);//全部 未开始
                 list5.addAll(list5_2);
 
-                List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3");//全部 已经结束
+                List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3",null);//全部 已经结束
                 list5.addAll(list5_3);
 
                 deal(list5, time, "5");
-
                 long end = ClockUtil.currentTimeMillis();
                 System.out.println(time);
                 LOGGER.info("更新" + time + "赛事列表成功 竞彩:" + list1.size() + "场 耗时:" + (end - start));
