@@ -77,6 +77,22 @@ public class TotalScoreDetail {
     }
 
     public boolean oddsEquals(TotalScoreDetail xml) {
-        return xml.goal-goal==0 && xml.getUpodds()-upodds==0 && xml.downodds-downodds==0;
+        try {
+            if (this.getModifytime()!=null&&xml.getModifytime()!=null)
+                if (!this.getModifytime().equals(xml.getModifytime()))
+                    return false;
+            if (this.getGoal()==null && xml.getGoal()!=null)
+                return false;
+            if (this.getDownodds()==null && xml.getDownodds()!=null)
+                return false;
+            if (this.getGoal()!=null && xml.getGoal()==null)
+                return false;
+            if (this.getDownodds()!=null && xml.getDownodds()==null)
+                return false;
+            return xml.goal-goal==0 && xml.getUpodds()-upodds==0 && xml.downodds-downodds==0;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }
