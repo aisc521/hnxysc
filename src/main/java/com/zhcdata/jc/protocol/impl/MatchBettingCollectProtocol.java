@@ -162,7 +162,7 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
             if(jcMatchLottery.getLottery().equals("BJDC")){
                 result = generateBjdcFive(matchId);
             }
-            if(jcMatchLottery.getLottery().equals("SF14")){
+            if(jcMatchLottery.getLottery().equals("JCZQ")){
                 result = generateJcFive(matchId);
             }
             resultList.add(result);
