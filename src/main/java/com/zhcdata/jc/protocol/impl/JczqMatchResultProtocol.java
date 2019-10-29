@@ -1,5 +1,6 @@
 package com.zhcdata.jc.protocol.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -52,12 +53,23 @@ public class JczqMatchResultProtocol implements BaseProtocol {
   @Override
   public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
 
+
+    String pageNo = String.valueOf(paramMap.get("pageNo"));
+    String pageAmount = String.valueOf(paramMap.get("pageAmount"));
+    if(StringUtils.isBlank(pageNo)||"null".equals(pageNo)){
+      pageNo = "1";
+    }
+    if(StringUtils.isBlank(pageAmount)||"null".equals(pageAmount)){
+      pageAmount = "20";
+    }
     String date = paramMap.get("date");
     //查询竟彩的数据
-    List<Map<String, String>> list =  JcSchedulespService.queryJczqListReuslt(date);
+    //List<Map<String, String>> list =  JcSchedulespService.queryJczqListReuslt(date);
+    PageInfo<Map<String, String>> pageInfo =  JcSchedulespService.queryJczqListReuslt(Integer.parseInt(pageNo),Integer.parseInt(pageAmount),date);
     //需要对数据做处理给第三国彩公众号用
     List<Map<String,String>> returnList = new ArrayList<>();
     int openNumTatol = 0 ;
+    List<Map<String, String>> list = pageInfo.getList();
     for(Map<String, String> map :list){
       try{
         Map<String,String> reMap = new HashMap<>();
@@ -101,14 +113,13 @@ public class JczqMatchResultProtocol implements BaseProtocol {
 
     }
     openNumTatol =  JcSchedulespService.queryTodayMatchCount(date);
-
     Map<String, Object>  returnMap = new HashMap<String,Object>();
-
-    returnMap.put("pageTotal", "1");
-    returnMap.put("openNum", list.size());//已开奖的场次
-
+    returnMap.put("pageTotal", pageInfo.getPages());
+    returnMap.put("openNum", pageInfo.getTotal());
     returnMap.put("openNumTatol", openNumTatol+"");//需要的开奖场次
-    returnMap.put("pageNo", "1");
+/*    returnMap.put("openNum", list.size());//已开奖的场次
+    returnMap.put("openNumTatol", openNumTatol+"");//需要的开奖场次*/
+    returnMap.put("pageNo", pageInfo.getPageNum());
     returnMap.put("content",returnList);
     returnMap.put("dates",date);
     return returnMap;

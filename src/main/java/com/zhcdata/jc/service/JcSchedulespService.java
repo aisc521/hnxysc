@@ -1,12 +1,12 @@
 package com.zhcdata.jc.service;
 
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.JcSchedulesp;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.Odds.JcFootBallOddsRsp;
 
-import java.util.List;
 import java.util.Map;
 
 public interface JcSchedulespService {
@@ -34,7 +34,7 @@ public interface JcSchedulespService {
 
 
     //按时间查询比赛完成的数据
-    List<Map<String,String>> queryJczqListReuslt(String date) throws BaseException;;
+    PageInfo<Map<String, String>> queryJczqListReuslt(int pageNo, int pageAmount, String date) throws BaseException;;
 
     int queryTodayMatchCount(String date) throws BaseException;;
 }

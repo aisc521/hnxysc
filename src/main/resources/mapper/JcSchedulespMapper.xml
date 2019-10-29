@@ -99,7 +99,7 @@
         select count(*)
       from jc_schedule s LEFT JOIN jc_schedulesp p on s.scheduleId = p.id
     LEFT JOIN  schedule sa on sa.scheduleId = s.scheduleId
-    where 1=1
+    where 1=1 and p.kind =2
     and  s.MatchTime >= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
     and s.MatchTime <![CDATA[ <= ]]>  str_to_date(#{endvDate}, '%Y-%m-%d %H:%i:%s')
     and  s.matchId like #{week}"%"

@@ -1,5 +1,7 @@
 package com.zhcdata.jc.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.JcScheduleMapper;
 import com.zhcdata.db.mapper.JcSchedulespMapper;
 import com.zhcdata.db.model.JcSchedule;
@@ -408,7 +410,7 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
     }
 
     @Override
-    public List<Map<String, String>> queryJczqListReuslt(String date) throws BaseException {
+    public PageInfo<Map<String, String>>  queryJczqListReuslt(int pageNo, int pageAmount, String date) throws BaseException {
 
         Date d = null;
         try {
@@ -421,8 +423,9 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
         String sat = new SimpleDateFormat("yyyy-MM-dd").format(satDate)+" 00:00:01";;
         String end = new SimpleDateFormat("yyyy-MM-dd").format(endDate)+" 23:59:59";
         String week = DateTimeUtils.getIs(d) ;
-
-        return jcSchedulespMapper.queryJczqListReuslt(sat,end,week);
+        PageHelper.startPage(pageNo, pageAmount);
+        List<Map<String,String>> list = jcSchedulespMapper.queryJczqListReuslt(sat,end,week);
+        return new PageInfo<>(list);
     }
 
     @Override
