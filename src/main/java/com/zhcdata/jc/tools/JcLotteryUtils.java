@@ -127,13 +127,13 @@ public class JcLotteryUtils {
             List<BdrealimeSpJqRsp> jqList =  bdrealimeSpRsp.getJq();
             BdrealimeSpJqRsp bdrealimeSpJqRsp = jqList.get(0);
             resultInfo = "进球:" + "0:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
-                         "进球:" + "1:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
-                         "进球:" + "2:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
-                         "进球:" + "3:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
-                         "进球:" + "4:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
-                         "进球:" + "5:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
-                         "进球:" + "6:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0()) + "|" +
-                         "进球:" + "7:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT0());
+                         "进球:" + "1:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT1()) + "|" +
+                         "进球:" + "2:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT2()) + "|" +
+                         "进球:" + "3:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT3()) + "|" +
+                         "进球:" + "4:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT4()) + "|" +
+                         "进球:" + "5:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT5()) + "|" +
+                         "进球:" + "6:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT6()) + "|" +
+                         "进球:" + "7:" + judgeWhetherItIsEmptyForString(bdrealimeSpJqRsp.getT7());
         }
         if("14".equals(type)){//半全场 3表示胜利，1表示平，0表示负，前面的数字表示全场，后面的数字表示半场。例：<33>表示全场胜半场胜赔率。
             List<BdrealimeSpBqcRsp> bqcList =  bdrealimeSpRsp.getBqc();
