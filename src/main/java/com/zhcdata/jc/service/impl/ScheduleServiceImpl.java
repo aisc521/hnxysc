@@ -936,20 +936,31 @@ public class ScheduleServiceImpl implements ScheduleService {
         //计算让球盘口后的负场数
         int losePanCount = statisticDto.getLosePanCount();
         //胜、平、负 概率，保留2位小数
+        // 胜 >= 5 进一
         BigDecimal winOdds = new BigDecimal(winCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_UP);
         sameOddsDto.setTpeiWinOdds(winOdds.toString());
-        BigDecimal flatOdds = new BigDecimal(flatCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_UP);
+        //平 >5 进一
+        BigDecimal flatOdds = new BigDecimal(flatCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_DOWN);
         sameOddsDto.setTpeiFlatOdds(flatOdds.toString());
         //最后一个概率用1-胜概率-平概率
         BigDecimal loseOdds = BigDecimal.ONE.subtract(winOdds).subtract(flatOdds);
         sameOddsDto.setTpeilLoseOdds(loseOdds.toString());
+//        //如果负概率减出来小于0，则概率为0，并且将胜、平中概率小的刨去负数概率
+//        if (loseOdds.compareTo(BigDecimal.ZERO) < 0) {
+//            sameOddsDto.setTpeilLoseOdds(BigDecimal.ZERO.toString());
+//            if (winOdds.compareTo(flatOdds) < 0) {
+//                winOdds = winOdds.add(loseOdds);
+//            } else {
+//                flatOdds = flatOdds.add(loseOdds);
+//            }
+//        }
         //减去让球后的胜、平、负 概率，保留2位小数
         Double goal = sameOddsDto.getFirstGoal();
         sameOddsDto.setTpanWinHandicap(goal);
         BigDecimal winPanOdds = new BigDecimal(winPanCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_UP);
         sameOddsDto.setTpanWinOdds(winPanOdds.toString());
         sameOddsDto.setTpanFlatHandicap(goal);
-        BigDecimal flatPanOdds = new BigDecimal(flatPanCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal flatPanOdds = new BigDecimal(flatPanCount).divide(new BigDecimal(total), 2, BigDecimal.ROUND_HALF_DOWN);
         sameOddsDto.setTpanFlatOdds(flatPanOdds.toString());
         sameOddsDto.setTpanLoseHandicap(goal);
         //最后一个概率用1-胜概率-平概率
@@ -1085,6 +1096,18 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public MatchInfoForBdDto quertMatchInfo(Integer matchId) {
         return scheduleMapper.quertMatchInfo(matchId);
+    }
+
+
+    public static void main(String[] args) {
+        BigDecimal flatOdds1 = new BigDecimal("6").divide(new BigDecimal("1000"), 2, BigDecimal.ROUND_HALF_DOWN);
+        BigDecimal flatOdds2 = new BigDecimal("5").divide(new BigDecimal("1000"), 2, BigDecimal.ROUND_HALF_DOWN);
+        BigDecimal flatOdds3 = new BigDecimal("6").divide(new BigDecimal("1000"), 2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal flatOdds4 = new BigDecimal("5").divide(new BigDecimal("1000"), 2, BigDecimal.ROUND_HALF_UP);
+        System.out.println("ROUND_HALF_DOWN："+flatOdds1.toString());
+        System.out.println("ROUND_HALF_DOWN："+flatOdds2.toString());
+        System.out.println("ROUND_HALF_UP："+flatOdds3.toString());
+        System.out.println("ROUND_HALF_UP："+flatOdds4.toString());
     }
 
 }

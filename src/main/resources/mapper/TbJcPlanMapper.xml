@@ -385,7 +385,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         p.price price,
         p.create_time createTime,
         e.grade grade,
-        p.introduction,p.status planStatus
+        p.introduction pintroduction,p.status planStatus
         from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
         LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id and f.user_Id = #{uid}
         LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id

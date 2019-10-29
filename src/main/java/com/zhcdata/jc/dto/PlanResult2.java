@@ -26,6 +26,15 @@ public class PlanResult2 {
     private String createTime;
     private String grade;
     private String planStatus;
+    private String pintroduction;
+
+    public String getPintroduction() {
+        return pintroduction;
+    }
+
+    public void setPintroduction(String pintroduction) {
+        this.pintroduction = pintroduction;
+    }
 
     public String getPlanStatus() {
         return planStatus;
