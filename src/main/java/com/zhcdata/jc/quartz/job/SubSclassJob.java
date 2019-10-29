@@ -35,9 +35,9 @@ public class SubSclassJob implements Job {
             for (SubSclassRsp a : result_list) {
 
                 SubSclassInfo info = new SubSclassInfo();
-                info.setSubsclassid(Integer.valueOf(a.getId()));                    //ID 号
-                info.setSclassid(Integer.valueOf(a.getSubID()));                    //联赛 ID
-                info.setIshavescore(Boolean.valueOf(a.getIsHaveScore()));           //1 有，0 无。在统计积分中，只统计有积分的子联赛
+                info.setSubsclassid(Integer.valueOf(a.getSubID()));                    //ID 号
+                info.setSclassid(Integer.valueOf(a.getId()));                          //联赛 ID
+                info.setIshavescore(Boolean.valueOf(a.getIsHaveScore()));               //1 有，0 无。在统计积分中，只统计有积分的子联赛
                 if(a.getCurr_round().length()>0) {
                     info.setCurrRound(Integer.valueOf(a.getCurr_round()));          //当前轮数
                 }
@@ -55,13 +55,13 @@ public class SubSclassJob implements Job {
                     if(tbSubSclassMapper.updateByPrimaryKeySelective(info)>0){
                         LOGGER.info(a.getSubID() + "[子联赛]修改数据库成功");
                     }else {
-                        LOGGER.info(a.getSubID() + "[子联赛]修改数据库失败");
+                        LOGGER.info(a.getSubID() + "[子联赛]修改数据库失败(无需修改)");
                     }
                 } else {
                     if (tbSubSclassMapper.insertSelective(info) > 0) {
                         LOGGER.info(a.getSubID() + "[子联赛]记录数据库成功");
                     } else {
-                        LOGGER.info(a.getSubID() + "[子联赛]记录数据库失败");
+                        LOGGER.info(a.getSubID() + "[子联赛]记录数据库失败(无需修改)");
                     }
                 }
             }
