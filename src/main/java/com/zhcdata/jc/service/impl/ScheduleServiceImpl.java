@@ -943,6 +943,15 @@ public class ScheduleServiceImpl implements ScheduleService {
         //最后一个概率用1-胜概率-平概率
         BigDecimal loseOdds = BigDecimal.ONE.subtract(winOdds).subtract(flatOdds);
         sameOddsDto.setTpeilLoseOdds(loseOdds.toString());
+        //如果负概率减出来小于0，则概率为0，并且将胜、平中概率小的刨去负数概率
+        if (loseOdds.compareTo(BigDecimal.ZERO) < 0) {
+            sameOddsDto.setTpeilLoseOdds(BigDecimal.ZERO.toString());
+            if (winOdds.compareTo(flatOdds) < 0) {
+                winOdds = winOdds.add(loseOdds);
+            } else {
+                flatOdds = flatOdds.add(loseOdds);
+            }
+        }
         //减去让球后的胜、平、负 概率，保留2位小数
         Double goal = sameOddsDto.getFirstGoal();
         sameOddsDto.setTpanWinHandicap(goal);

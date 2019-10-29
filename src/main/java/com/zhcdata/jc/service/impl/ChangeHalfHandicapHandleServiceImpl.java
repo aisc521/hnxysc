@@ -59,21 +59,6 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
             try {
                 String[] item = cah.get(i).split(",");
                 log.error("21多盘口赔率变化: 半场亚赔（让球盘）接口数据:{}", cah.get(i));
-                //Long time = MATCH_START_TIME.get(item[0]);
-                //if (time==null || time<1){
-                //    Schedule schedule = scheduleMapper.selectByPrimaryKey(Integer.parseInt(item[0]));
-                //    if(schedule!=null){
-                //        time = schedule.getMatchtime().getTime();
-                //        MATCH_START_TIME.put(schedule.getScheduleid().toString(), schedule.getMatchtime().getTime());
-                //        if (MATCH_START_TIME.size()>800)
-                //            MATCH_START_TIME.remove(MATCH_START_TIME.entrySet().iterator().next().getKey());
-                //    }
-                //}
-                //if (time!=null && time < System.currentTimeMillis()){
-                //    log.error("21多盘口赔率变化: 半场亚赔（让球盘）比赛已经开始，比赛ID:{}", cah.get(i));
-                //    continue;
-                //}
-                //如果第七位等于1 是 单盘口 相当于标准盘  6 个参数代表不是走地我们入库
                 if (!item[8].equals("3")){
                     if ("1".equals(item[6])) {//单盘口
                         singleHandicap(item);
@@ -83,7 +68,7 @@ public class ChangeHalfHandicapHandleServiceImpl implements ManyHandicapOddsChan
                 }
 
             } catch (Exception e) {
-                log.error("半场亚赔赔率异常:", e);
+                log.error("ChangeHalfHandicapHandleServiceImpl半场亚赔赔率异常:"+cah.get(i), e);
             }
         }
     }
