@@ -98,6 +98,7 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
         }catch (Exception e){
             log.error("qqqqqqqqqqqqqqq------------1"+xml.toString());
             log.error("qqqqqqqqqqqqqqq------------2"+standardDetail.toString());
+            e.printStackTrace();
         }
     }
 }
