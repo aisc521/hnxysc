@@ -85,14 +85,19 @@ public class ChangeOddsHandleServiceImpl implements ManyHandicapOddsChangeServic
         if (standardDetail == null || standardDetail.getOddsid() == null)
             return;
 
-        if (!standardDetail.oddsEquals(xml) && xml.getModifytime().getTime() > standardDetail.getModifytime().getTime()){
-            //入数据库
-            xml.setOddsid(standardDetail.getOddsid());
-            int inch = standardDetailMapper.insertSelective(xml);
-            standardMapper.updateOddsByOddsId(xml.getOddsid(),xml.getHomewin(),xml.getStandoff(),xml.getGuestwin(),xml.getModifytime());
-            if (inch > 0) {
-                log.error("21多盘口赔率变化: 欧赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+        try {
+            if (!standardDetail.oddsEquals(xml)){
+                //入数据库
+                xml.setOddsid(standardDetail.getOddsid());
+                int inch = standardDetailMapper.insertSelective(xml);
+                standardMapper.updateOddsByOddsId(xml.getOddsid(),xml.getHomewin(),xml.getStandoff(),xml.getGuestwin(),xml.getModifytime());
+                if (inch > 0) {
+                    log.error("21多盘口赔率变化: 欧赔（让球盘）单盘口 接口数据:{} 入库成功", item);
+                }
             }
+        }catch (Exception e){
+            log.error(xml.toString());
+            log.error(standardDetail.toString());
         }
     }
 }

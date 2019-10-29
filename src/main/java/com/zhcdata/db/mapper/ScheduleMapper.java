@@ -148,4 +148,6 @@ public interface ScheduleMapper {
    /* List<Integer> selectMatchIdExceedNowBd();
 */
     MatchInfoForBdDto quertMatchInfo(@Param("matchId")Integer matchId);
+
+    List<Schedule> selectByStatusInTime(@Param("status") int status, @Param("sat") Date sat, @Param("end") Date end);
 }
