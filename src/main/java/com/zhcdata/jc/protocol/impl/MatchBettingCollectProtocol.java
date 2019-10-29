@@ -310,7 +310,7 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
                         rspfStr.append("胜其他").append("|").append(ratArr[3].split(":")[2]).append(",");
                         rspfStr.append("平其他").append("|").append(ratArr[4].split(":")[2]).append(",");
                         rspfStr.append("负其他").append("|").append(ratArr[5].split(":")[2]).append(",");
-                        rspfStr.append("让球").append("|").append("0");
+                        rspfStr.append("让球").append("|").append(jcMatchBjdcPl.getConCedNum());
                         result.put("rqspf", rspfStr);//让球胜平负
 
                 }
