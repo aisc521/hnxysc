@@ -63,6 +63,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
         String grade = "";
         String price = "";
         String planStatus = "";
+        String pintroduction = "";
             PlanResult2 planResult2 = new PlanResult2();
             try {
                 List<PlanResult2> result = tbPlanService.queryPlanByIdandUser(id,uid);
@@ -71,6 +72,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                     grade = planResult2.getGrade();
                     price = planResult2.getPrice();
                     planStatus = planResult2.getPlanStatus();
+                    pintroduction = planResult2.getPintroduction();
                     List<MatchPlanResult1> matchPlanResults = tbJcMatchService.queryList1(Long.valueOf(id));
                     if (matchPlanResults != null && matchPlanResults.size() > 0) {
                         List<MatchPlanResult1> matchPlanResult2 = new ArrayList<>();
@@ -89,6 +91,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 resultMap.put("matchId", matchId);
                 resultMap.put("grade", grade);
                 resultMap.put("price", price);
+                resultMap.put("pintroduction", pintroduction);
                 //ExpertInfo info = tbJcExpertService.queryExpertDetails(tbPlanService.queryExpertIdByPlanId(id));
                 ExpertInfo info = tbJcExpertService.queryExpertDetailsAndUser(tbPlanService.queryExpertIdByPlanId(id),uid);
                 if (info != null) {
