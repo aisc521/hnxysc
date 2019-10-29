@@ -90,6 +90,7 @@ public class MatchListProtocol implements BaseProtocol {
         String type = paramMap.get("type");
         String time = paramMap.get("matchTime");
         String pageNo = paramMap.get("pageNo");
+        String issueNum=paramMap.get("issueNum");
         if(type.equals("all")){
             type="5";
         }else if(type.equals("2")) {
