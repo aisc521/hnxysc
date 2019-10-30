@@ -65,13 +65,6 @@ public class MatchListProtocol implements BaseProtocol {
             }
         }*/
 
-        String userId = paramMap.get("userId");
-        if (Strings.isNullOrEmpty(userId)) {
-            LOGGER.info("[" + ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg() + "]:userId---" + userId);
-            map.put("resCode", ProtocolCodeMsg.USER_ID_NOT_EXIST.getCode());
-            map.put("message", ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg());
-            return map;
-        }
 
 
         String matchTime = paramMap.get("matchTime");
@@ -131,16 +124,19 @@ public class MatchListProtocol implements BaseProtocol {
                 JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
                 List<MatchResult1> newList=jsonMapper.fromJson(s, javaType1);
                 //根据userId  和比赛id查询此产比赛此用户是否关注
-                List<MatchResult1> result = new ArrayList<>();
-                for(int i = 0; i < newList.size(); i++){
-                    MatchResult1 matchResult1 = newList.get(i);
-                    String matchId = matchResult1.getMatchId();
+                if(StringUtils.isNotBlank(userId)){
+                    List<MatchResult1> result = new ArrayList<>();
+                    for(int i = 0; i < newList.size(); i++){
+                        MatchResult1 matchResult1 = newList.get(i);
+                        String matchId = matchResult1.getMatchId();
 
-                    TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId),Long.valueOf(matchId));
-                    if(tbPgUCollect != null){
-                        matchResult1.setIscollect("1");
+
+                        TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId),Long.valueOf(matchId));
+                        if(tbPgUCollect != null){
+                            matchResult1.setIscollect("1");
+                        }
+                        result.add(matchResult1);
                     }
-                    result.add(matchResult1);
                 }
                 Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
                 map.put("followNum",followNum);//已关数量
