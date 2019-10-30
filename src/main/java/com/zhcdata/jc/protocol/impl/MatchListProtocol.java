@@ -137,9 +137,12 @@ public class MatchListProtocol implements BaseProtocol {
                         }
                         result.add(matchResult1);
                     }
+                    Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+                    map.put("followNum",followNum);//已关数量
+                }else{
+                    map.put("followNum","0");//已关数量
                 }
-                Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
-                map.put("followNum",followNum);//已关数量
+
                 map.put("list",newList);
             }
         }
