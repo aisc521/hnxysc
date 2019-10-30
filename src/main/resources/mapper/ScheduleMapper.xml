@@ -1106,4 +1106,8 @@
         where  lottery.LOTTERY = 'SF14' and sc.MatchTime&lt;now() GROUP BY num
         ) a ORDER BY num DESC LIMIT 1
     </select>
+
+    <select id="queryMatchByStatus" resultType="com.zhcdata.db.model.Schedule">
+        select * from schedule sc where sc.MatchState in ('1','2','3','4','5')
+    </select>
 </mapper>

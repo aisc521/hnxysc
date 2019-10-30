@@ -1098,6 +1098,11 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleMapper.quertMatchInfo(matchId);
     }
 
+    @Override
+    public List<Schedule> queryMatchByStatus() {
+        return scheduleMapper.queryMatchByStatus();
+    }
+
 
     public static void main(String[] args) {
         BigDecimal flatOdds1 = new BigDecimal("6").divide(new BigDecimal("1000"), 2, BigDecimal.ROUND_HALF_DOWN);

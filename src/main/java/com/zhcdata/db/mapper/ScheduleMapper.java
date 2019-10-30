@@ -160,4 +160,5 @@ public interface ScheduleMapper {
 
     List<MatchResult1> selectNowIssueNum();
 
+    List<Schedule> queryMatchByStatus();
 }

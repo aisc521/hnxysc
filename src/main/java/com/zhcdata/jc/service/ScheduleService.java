@@ -91,4 +91,6 @@ public interface ScheduleService {
    /* List<Integer> selectMatchIdExceedNowBd();*/
 
     MatchInfoForBdDto quertMatchInfo(Integer matchId);
+
+    List<Schedule> queryMatchByStatus();
 }
