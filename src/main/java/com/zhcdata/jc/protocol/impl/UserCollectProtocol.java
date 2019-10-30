@@ -190,7 +190,7 @@ public class UserCollectProtocol implements BaseProtocol {
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 5);//让日期加5
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 2);//让日期加5
         return calendar.getTime();
     }
 }
