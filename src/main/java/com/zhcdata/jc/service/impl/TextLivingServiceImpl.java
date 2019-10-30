@@ -51,7 +51,7 @@ public class TextLivingServiceImpl implements TextLivingService {
 
         List<TextLiving> textLivings = jcMatchLiveMapper.queryTextLivingList(matchId);
         LOGGER.error("赛事" + matchId + "文字直播数量为：" + textLivings.size());
-        if(textLivings != null && textLivings.size() > 0 && map != null){
+        if((textLivings != null && textLivings.size() > 0) || map != null){
             map.put("list", textLivings == null?new ArrayList<>():textLivings);
 
             String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, new Date());
