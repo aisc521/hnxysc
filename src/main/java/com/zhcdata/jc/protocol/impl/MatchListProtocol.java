@@ -65,6 +65,15 @@ public class MatchListProtocol implements BaseProtocol {
             }
         }*/
 
+        String userId = paramMap.get("userId");
+        if (Strings.isNullOrEmpty(userId)) {
+            LOGGER.info("[" + ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg() + "]:userId---" + userId);
+            map.put("resCode", ProtocolCodeMsg.USER_ID_NOT_EXIST.getCode());
+            map.put("message", ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg());
+            return map;
+        }
+
+
         String matchTime = paramMap.get("matchTime");
         if (Strings.isNullOrEmpty(matchTime)) {
             LOGGER.info("[" + ProtocolCodeMsg.TIME_NULL.getMsg() + "]:matchTime---" + matchTime);
