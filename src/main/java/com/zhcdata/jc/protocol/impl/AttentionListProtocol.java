@@ -89,7 +89,7 @@ public class AttentionListProtocol implements BaseProtocol {
         resultMap.put("resCode", "000000");
         resultMap.put("message", "");
         resultMap.put("pageNo", pageNo);
-        resultMap.put("pageTotal", list.getTotal());
+        resultMap.put("pageTotal", list.getPages());
         resultMap.put("list", list.getList());
         return resultMap;
     }
