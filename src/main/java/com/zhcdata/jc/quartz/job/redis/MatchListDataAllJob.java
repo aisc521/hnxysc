@@ -118,6 +118,18 @@ public class MatchListDataAllJob  implements Job {
 
                 deal(list1, time, "1");
 
+                List<MatchResult1> list2=new ArrayList<>();
+                List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(startDate, endDate, "2", "","1",null); //北单 正在进行
+                list2.addAll(list2_1);
+
+                List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(startDate, endDate, "2","","2",null); //北单 未开始
+                list2.addAll(list2_2);
+
+                List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(startDate, endDate, "2","","3",null); //北单 已经结束
+                list2.addAll(list2_3);
+
+                deal(list2, time, "2");
+
                 List<MatchResult1> list5 = new ArrayList<>();
                 List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null);//全部 正在进行
                 list5.addAll(list5_1);

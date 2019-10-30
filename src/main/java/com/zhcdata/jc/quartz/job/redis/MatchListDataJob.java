@@ -106,7 +106,7 @@ public class MatchListDataJob implements Job {
         }
 
         if(list2!=null&&list2.size()>0) {
-            deal(list2, list2.get(0).getNum1(), "2");
+            deal(list2, s.split(" ")[0], "2");
             long bd_e = ClockUtil.currentTimeMillis();
             LOGGER.info("更新北单赛事列表成功 期号:" + list2.get(0).getNum1() + "共" + list2.size() + "条(不等同于场次) 耗时:" + (bd_e - bd_s));
         }else {

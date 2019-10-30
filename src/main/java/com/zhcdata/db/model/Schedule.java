@@ -850,7 +850,7 @@ public class Schedule implements Serializable {
 
     public boolean matchEquals(Schedule xml) {
         try {
-            return xml.getGuestscore().equals(guestscore)&&xml.getHomescore().equals(homescore)&&xml.matchstate.equals(matchstate)&&xml.matchtime.getTime()==matchtime.getTime()&&homehalfscore.equals(xml.getHomehalfscore())&&xml.getGuesthalfscore().equals(guesthalfscore)&&xml.getHomeRed().equals(homeRed)&&guestRed.equals(xml.getGuestRed())&&xml.getHomeYellow().equals(homeYellow)&&xml.getGuestYellow().equals(guestYellow);
+            return xml.getGuestscore().equals(guestscore)&&xml.getHomescore().equals(homescore)&&xml.matchstate.equals(matchstate)&&xml.matchtime.getTime()==matchtime.getTime()&&homehalfscore.equals(xml.getHomehalfscore())&&xml.getGuesthalfscore().equals(guesthalfscore)&&xml.getHomeRed().equals(homeRed)&&guestRed.equals(xml.getGuestRed())&&xml.getHomeYellow().equals(homeYellow)&&xml.getGuestYellow().equals(guestYellow)&&xml.getSclassid().equals(sclassid);
         }catch (Exception e){
             return false;
         }
