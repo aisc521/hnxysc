@@ -13,4 +13,6 @@ public interface TbJcMatchLineupMapper extends CustomInterfaceMapper<JcMatchLine
 
     int insertSelective(JcMatchLineupInfo jcMatchLineupInfo);
 
+    int updateByPrimaryKeySelective(JcMatchLineupInfo jcMatchLineupInfo);
+
 }
