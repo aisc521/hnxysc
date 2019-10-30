@@ -140,9 +140,7 @@ public class UserCollectProtocol implements BaseProtocol {
             }
 
             if(lottery == null && lottery2 == null && lottery1 == null){
-                resultMap.put("resCode", ProtocolCodeMsg.NO_GANE_TYPE.getCode());
-                resultMap.put("message", ProtocolCodeMsg.NO_GANE_TYPE.getMsg());
-                return resultMap;
+                tbPgUCollect.setType(4);//其他
             }
 
             int insert = tbPgUCollectService.insertTbPgUCollect(tbPgUCollect);
