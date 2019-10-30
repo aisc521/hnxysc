@@ -92,7 +92,9 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
     @Transactional(rollbackFor = Exception.class)
     public void insertJcMatchLottery(LotteryTypeMatchRsp lotteryTypeMatchRsp) throws BaseException {
         JcMatchLottery jcMatchLottery = new JcMatchLottery();
-        jcMatchLottery.setUpdateTime(new Date());
+        Date date = new Date();
+        jcMatchLottery.setUpdateTime(date);
+        jcMatchLottery.setCreateTime(date);
         jcMatchLottery.setLotteryName(lotteryTypeMatchRsp.getLotteryName());
         /**
          * 彩种标识

@@ -51,15 +51,19 @@ public class TextLivingServiceImpl implements TextLivingService {
 
         List<TextLiving> textLivings = jcMatchLiveMapper.queryTextLivingList(matchId);
         LOGGER.error("赛事" + matchId + "文字直播数量为：" + textLivings.size());
-        map.put("list", textLivings == null?new ArrayList<>():textLivings);
+        if(textLivings != null && textLivings.size() > 0 && map != null){
+            map.put("list", textLivings == null?new ArrayList<>():textLivings);
 
-        String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, new Date());
-        redisUtils.set(RedisCodeMsg.PMS_TEXT_LIVE.getName() + matchId + ":TIME_ID",
-                timeId,RedisCodeMsg.PMS_TEXT_LIVE.getSeconds());
-        redisUtils.set(RedisCodeMsg.PMS_TEXT_LIVE.getName() + matchId,
-                 JsonMapper.defaultMapper().toJson(map),RedisCodeMsg.PMS_TEXT_LIVE.getSeconds());
-        map.put("timeId", timeId);
+            String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, new Date());
+            redisUtils.set(RedisCodeMsg.PMS_TEXT_LIVE.getName() + matchId + ":TIME_ID",
+                    timeId,RedisCodeMsg.PMS_TEXT_LIVE.getSeconds());
+            redisUtils.set(RedisCodeMsg.PMS_TEXT_LIVE.getName() + matchId,
+                    JsonMapper.defaultMapper().toJson(map),RedisCodeMsg.PMS_TEXT_LIVE.getSeconds());
+            map.put("timeId", timeId);
+            return map;
+        }
         return map;
+
     }
     /**
      * 根据比赛id查询内容统计

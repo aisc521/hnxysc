@@ -67,6 +67,7 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
                 //根据planId 查询 方案信息
                 QueryPlanByMatchIdDto queryPlanByMatchIdDto = tbPlanService.queryPlanInfoByPlanId(planIdDtoList.get(i).getPlanId());
                 if(queryPlanByMatchIdDto != null){
+                    queryPlanByMatchIdDto.setPlanId(planIdDtoList.get(i).getPlanId());
                     List<MatchInfoDto> matchInfoDtos = tbJcMatchService.queryMatchInfoDtoByPlanId(planIdDtoList.get(i).getPlanId());
                     queryPlanByMatchIdDto.setList(matchInfoDtos);
                     list.add(queryPlanByMatchIdDto);
