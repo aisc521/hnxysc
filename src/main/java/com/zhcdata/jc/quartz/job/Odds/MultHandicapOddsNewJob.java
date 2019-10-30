@@ -9,6 +9,7 @@ import org.quartz.JobExecutionException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.*;
@@ -51,7 +52,7 @@ public class MultHandicapOddsNewJob implements Job {
         System.err.println("半场大小list条目："+multi_hdx.size());
         log.info("多盘即时赔率解析开始");
 
-        String str = null;
+        String str = "";
         try {
             str = HttpUtils.httpGet("http://interface.win007.com/zq/Odds_Mult.aspx", null);
         } catch (Exception e) {
@@ -59,13 +60,17 @@ public class MultHandicapOddsNewJob implements Job {
             return;
         }
         String[] oddsCollection = str.split("\\u0024");
-        MultHandicapOddsService array[] = {multHandicapHandleServiceImpl, multOddsHandleServiceImpl, multSizesBallsHandleServiceImpl, multHalfHandicapHandleServiceImpl, multHalfSizesBallsHandleServiceImpl};
+        MultHandicapOddsService[] array = {multHandicapHandleServiceImpl, multOddsHandleServiceImpl, multSizesBallsHandleServiceImpl, multHalfHandicapHandleServiceImpl, multHalfSizesBallsHandleServiceImpl};
         for (int i = 0; i < array.length; i++) {
-            if (oddsCollection.length!=5){
-                log.error("多盘即时赔率解析,数据长度异常");
+            try {
+                array[i].changeHandle(oddsCollection[i].split(";"));
+            }catch (ArrayIndexOutOfBoundsException e){
+                log.error("获取多盘口即时赔率数组角标越界");
                 log.error(str);
+                log.error(Arrays.toString(array));
+                log.error(Arrays.toString(oddsCollection));
+                e.printStackTrace();
             }
-            array[i].changeHandle(oddsCollection[i].split(";"));
         }
         log.info("多盘即时赔率解析结束");
     }
