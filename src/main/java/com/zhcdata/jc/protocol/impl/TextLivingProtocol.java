@@ -10,6 +10,7 @@ import com.zhcdata.jc.service.TextLivingService;
 import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.Const;
 import com.zhcdata.jc.tools.RedisUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -67,7 +68,7 @@ public class TextLivingProtocol implements BaseProtocol {
         }else{
             LOGGER.error("[10200210]文字直播：获取matchId：" + matchId + "数据");
             String value = (String)redisUtils.get(RedisCodeMsg.PMS_TEXT_LIVE.getName() + matchId);
-            if (!Strings.isNullOrEmpty(value)) {
+            if (StringUtils.isNotBlank(value)) {
                 LOGGER.error("[10200210]文字直播：matchId：" + matchId + "数据已获取");
                 result = JsonMapper.defaultMapper().fromJson(value, Map.class);
                 result.put("timeId", Strings.isNullOrEmpty(s) ? timeId : s);
