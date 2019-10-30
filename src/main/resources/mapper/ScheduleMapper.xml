@@ -981,7 +981,8 @@
             LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
             LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id
             WHERE pg.status = '1' and pg.user_id = #{userId} and pg.over_time <![CDATA[>=]]> now()
-            ORDER BY sc.MatchTime GROUP BY sc.ScheduleID
+            GROUP BY sc.ScheduleID
+            ORDER BY sc.MatchTime
     </select>
 
     <select id="selectMatchIdExceedNow" resultType="java.lang.Integer">
