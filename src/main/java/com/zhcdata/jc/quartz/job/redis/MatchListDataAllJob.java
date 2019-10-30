@@ -99,7 +99,7 @@ public class MatchListDataAllJob  implements Job {
             endDate=df.format(calendar1.getTime()).substring(0, 10) + " 11:00:00";
 
             String time="";
-            for(int i=0;i<24;i++) {
+            for(int i=0;i<30;i++) {
                 long start = ClockUtil.currentTimeMillis();
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
                 startDate = df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
