@@ -105,7 +105,7 @@ public class MatchListProtocol implements BaseProtocol {
             type="5";
         }else if(type.equals("2")) {
             //北单按期号存的缓存
-            time = scheduleService.queryBdNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
+            //time = scheduleService.queryBdNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
         }else if(type.equals("3")){
             time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
             //time = paramMap.get("issueNum");

@@ -115,7 +115,6 @@ public class MatchListDataAllJob  implements Job {
 
                 List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","3",null); //竞彩 已经结束
                 list1.addAll(list1_3);
-
                 deal(list1, time, "1");
 
                 List<MatchResult1> list2=new ArrayList<>();
@@ -127,8 +126,9 @@ public class MatchListDataAllJob  implements Job {
 
                 List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(startDate, endDate, "2","","3",null); //北单 已经结束
                 list2.addAll(list2_3);
-
                 deal(list2, time, "2");
+                System.out.println(time);
+                LOGGER.info("更新" + time + "赛事列表成功 北单:" + list2.size() + "场");
 
                 List<MatchResult1> list5 = new ArrayList<>();
                 List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null);//全部 正在进行

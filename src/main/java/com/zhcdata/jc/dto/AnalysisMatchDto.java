@@ -46,7 +46,8 @@ public class AnalysisMatchDto {
     @JsonSerialize(using = DoubleFormat.class)
     private Double endLose;
     //盘路
-    private String panlu;
+    @JsonSerialize(using = DoubleFormat.class)
+    private Double panlu;
     @JsonIgnore
     private Integer result;
 }

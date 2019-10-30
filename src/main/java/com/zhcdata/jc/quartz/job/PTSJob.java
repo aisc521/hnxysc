@@ -35,6 +35,7 @@ public class PTSJob implements Job {
             List<PTSMatchRsp> match_list = new QiuTanXmlComm().handleMothodList(url, PTSMatchRsp.class);
             if (match_list != null && match_list.size() > 0) {
                 for (int i = 0; i < match_list.size(); i++) {
+                    Thread.sleep(15000);
                     List<PTSRsp> result_list = new QiuTanXmlComm().handleMothodList(url + "?ID=" + match_list.get(i).getScheduleID(), PTSRsp.class);
                     if (result_list != null && result_list.size() > 0) {
                         for (int p = 0; p < result_list.size(); p++) {
