@@ -88,15 +88,19 @@ public class MatchListDataJob implements Job {
         String s=commonUtils.getSE().split(",")[0];
         String e=commonUtils.getSE().split(",")[1];
 
+        String sBd=commonUtils.getSEBd().split(",")[0];
+        String eBd=commonUtils.getSEBd().split(",")[1];
+
+
         List<MatchResult1> list2=new ArrayList<>();
 
-        List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(s, e, "2","","1",null);//北单 正在进行
+        List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(sBd, eBd, "2","","1",null);//北单 正在进行
         list2.addAll(list2_1);
 
-        List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(s, e, "2","","2",null);//北单 未开始
+        List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(sBd, eBd, "2","","2",null);//北单 未开始
         list2.addAll(list2_2);
 
-        List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(s, e, "2","","3",null);//北单 已结束
+        List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(sBd, eBd, "2","","3",null);//北单 已结束
         list2.addAll(list2_3);
 
 

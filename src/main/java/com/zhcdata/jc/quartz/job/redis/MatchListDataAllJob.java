@@ -82,7 +82,10 @@ public class MatchListDataAllJob  implements Job {
         }
 
         String startDate = "";
+        String startDateBd = "";
         String endDate = "";
+        String endDateBd = "";
+
         try{
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
@@ -100,9 +103,11 @@ public class MatchListDataAllJob  implements Job {
                 long start = ClockUtil.currentTimeMillis();
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
                 startDate = df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
+                startDateBd= df.format(calendar.getTime()).substring(0, 10) + " 09:59:59";
 
                 calendar1.add(Calendar.DAY_OF_MONTH, 1);
                 endDate = df.format(calendar1.getTime()).substring(0, 10) + " 11:00:00";
+                endDateBd= df.format(calendar1.getTime()).substring(0, 10) + " 09:59:59";
 
                 time = startDate.substring(0, 10);
 
@@ -118,13 +123,13 @@ public class MatchListDataAllJob  implements Job {
                 deal(list1, time, "1");
 
                 List<MatchResult1> list2=new ArrayList<>();
-                List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(startDate, endDate, "2", "","1",null); //北单 正在进行
+                List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2", "","1",null); //北单 正在进行
                 list2.addAll(list2_1);
 
-                List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(startDate, endDate, "2","","2",null); //北单 未开始
+                List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2","","2",null); //北单 未开始
                 list2.addAll(list2_2);
 
-                List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(startDate, endDate, "2","","3",null); //北单 已经结束
+                List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2","","3",null); //北单 已经结束
                 list2.addAll(list2_3);
                 deal(list2, time, "2");
                 System.out.println(time);
