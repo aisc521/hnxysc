@@ -88,7 +88,7 @@ public class QueryPlanByPlanIdIdProtocol implements BaseProtocol {
                     }
                     result.add(result1);
                 }
-                resultMap.put("pageTotal",planList1.getTotal());
+                resultMap.put("pageTotal",planList1.getPages());
             }
             resultMap.put("list",result);
             resultMap.put("pageNo",pageNo);

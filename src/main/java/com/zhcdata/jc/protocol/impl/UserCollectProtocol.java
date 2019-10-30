@@ -107,6 +107,8 @@ public class UserCollectProtocol implements BaseProtocol {
                 tbPgUCollect.setMatchId(Long.parseLong(matchId));
                 int update = tbPgUCollectService.updateStatusByUserId(tbPgUCollect);
                 if(update > 0){
+                    Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+                    resultMap.put("followNum",followNum);//已关数量
                     return resultMap;
                 }
                 else{
@@ -138,13 +140,14 @@ public class UserCollectProtocol implements BaseProtocol {
             }
 
             if(lottery == null && lottery2 == null && lottery1 == null){
-                resultMap.put("resCode", ProtocolCodeMsg.NO_GANE_TYPE.getCode());
-                resultMap.put("message", ProtocolCodeMsg.NO_GANE_TYPE.getMsg());
-                return resultMap;
+                tbPgUCollect.setType(4);//其他
             }
 
             int insert = tbPgUCollectService.insertTbPgUCollect(tbPgUCollect);
             if(insert > 0){
+                //收藏成功
+                Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+                resultMap.put("followNum",followNum);//已关数量
                 return resultMap;
             }else{
                 resultMap.put("resCode", ProtocolCodeMsg.COLLECT_DB_FAIL.getCode());
@@ -159,6 +162,8 @@ public class UserCollectProtocol implements BaseProtocol {
             tbPgUCollect.setStatus(0);//取消收藏
             int update = tbPgUCollectService.updateStatusByUserId(tbPgUCollect);
             if(update > 0){
+                Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+                resultMap.put("followNum",followNum);//已关数量
                 return resultMap;
             }
             else{
@@ -183,7 +188,7 @@ public class UserCollectProtocol implements BaseProtocol {
         }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 5);//让日期加5
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 2);//让日期加5
         return calendar.getTime();
     }
 }

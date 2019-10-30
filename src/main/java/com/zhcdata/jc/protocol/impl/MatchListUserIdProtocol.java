@@ -26,12 +26,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description 比赛列表
+ * @Description 比赛列表  带userId
  * @Author cuishuai
- * @Date 2019/9/20 10:29
+ * @Date 2019/10/29 15:49
  */
-@Service("20200201")
-public class MatchListProtocol implements BaseProtocol {
+@Service("20200241")
+public class MatchListUserIdProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Resource
     private RedisUtils redisUtils;
@@ -40,10 +40,8 @@ public class MatchListProtocol implements BaseProtocol {
 
     @Resource
     private CommonUtils commonUtils;
-
     @Resource
     private TbPgUCollectService tbPgUCollectService;
-
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -65,13 +63,19 @@ public class MatchListProtocol implements BaseProtocol {
             }
         }*/
 
-
-
         String matchTime = paramMap.get("matchTime");
         if (Strings.isNullOrEmpty(matchTime)) {
             LOGGER.info("[" + ProtocolCodeMsg.TIME_NULL.getMsg() + "]:matchTime---" + matchTime);
             map.put("resCode", ProtocolCodeMsg.TIME_NULL.getCode());
             map.put("message", ProtocolCodeMsg.TIME_NULL.getMsg());
+            return map;
+        }
+
+        String userId = paramMap.get("userId");
+        if (Strings.isNullOrEmpty(userId)) {
+            LOGGER.info("[" + ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg() + "]:userId---" + userId);
+            map.put("resCode", ProtocolCodeMsg.USER_ID_NOT_EXIST.getCode());
+            map.put("message", ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg());
             return map;
         }
 
@@ -124,26 +128,20 @@ public class MatchListProtocol implements BaseProtocol {
                 JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
                 List<MatchResult1> newList=jsonMapper.fromJson(s, javaType1);
                 //根据userId  和比赛id查询此产比赛此用户是否关注
-                if(StringUtils.isNotBlank(userId)){
-                    List<MatchResult1> result = new ArrayList<>();
-                    for(int i = 0; i < newList.size(); i++){
-                        MatchResult1 matchResult1 = newList.get(i);
-                        String matchId = matchResult1.getMatchId();
+                List<MatchResult1> result = new ArrayList<>();
+                for(int i = 0; i < newList.size(); i++){
+                    MatchResult1 matchResult1 = newList.get(i);
+                    String matchId = matchResult1.getMatchId();
 
-
-                        TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId),Long.valueOf(matchId));
-                        if(tbPgUCollect != null){
-                            matchResult1.setIscollect("1");
-                        }
-                        result.add(matchResult1);
+                    TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId),Long.valueOf(matchId));
+                    if(tbPgUCollect != null){
+                        matchResult1.setIscollect("1");
                     }
-                    Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
-                    map.put("followNum",followNum);//已关数量
-                }else{
-                    map.put("followNum","0");//已关数量
+                    result.add(matchResult1);
                 }
-
-                map.put("list",newList);
+                Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+                map.put("followNum",followNum);//已关数量
+                map.put("list",result);
             }
         }
         return map;

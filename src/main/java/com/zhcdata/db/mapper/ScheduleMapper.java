@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 
+import com.zhcdata.db.model.JcMatchLottery;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.tools.CustomInterfaceMapper;
@@ -129,7 +130,7 @@ public interface ScheduleMapper {
                            @Param("guestCornerHalf") String guestCornerHalf,
                            @Param("ScheduleID") String ScheduleID
                            );
-    List<MatchResult1> queryMacthListForJob(@Param("startTime") String startDate, @Param("endTime")String endDate, @Param("type")String type, @Param("userId") String userId, @Param("state")String state);
+    List<MatchResult1> queryMacthListForJob(@Param("startTime") String startDate, @Param("endTime")String endDate, @Param("type")String type, @Param("userId") String userId, @Param("state")String state,@Param("issueNum")String issueNum);
 
     String queryZcNum(@Param("startDate")String startDate, @Param("endTime")String endDate);
 
@@ -150,4 +151,14 @@ public interface ScheduleMapper {
     MatchInfoForBdDto quertMatchInfo(@Param("matchId")Integer matchId);
 
     List<Schedule> selectByStatusInTime(@Param("status") int status, @Param("sat") Date sat, @Param("end") Date end);
+
+    List<JcMatchLottery> selectNextIssueNum();
+
+    List<JcMatchLottery> selectLastIssueNum(@Param("issueNum")String issueNum);
+
+    List<MatchResult1> selectNoFinishMatch();
+
+    List<MatchResult1> selectNowIssueNum();
+
+    List<Schedule> queryMatchByStatus();
 }

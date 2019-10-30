@@ -869,10 +869,15 @@
         LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
         LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id and pg.user_id = #{userId}
         <if test="type == 3" >
-            where lottery. ISSUE_NUM in(
-            SELECT lottery.ISSUE_NUM from jc_match_lottery lottery
-            LEFT JOIN `schedule` sch on lottery.ID_BET007=sch.scheduleID where lottery.lottery='SF14' and sch.matchTime>= #{startTime}
-            GROUP BY ISSUE_NUM)
+            <if test="issueNum !=null ">
+                where lottery.ISSUE_NUM =#{issueNum}
+            </if>
+            <if test="issueNum ==null ">
+                where lottery. ISSUE_NUM in(
+                SELECT lottery.ISSUE_NUM from jc_match_lottery lottery
+                LEFT JOIN `schedule` sch on lottery.ID_BET007=sch.scheduleID where lottery.lottery='SF14' and sch.matchTime>= #{startTime}
+                GROUP BY ISSUE_NUM)
+            </if>
         </if>
         <if test="type == 1 or type == 2 or type == 4" >
             where sc.MatchTime >= #{startTime} and sc.MatchTime  <![CDATA[ <= ]]> #{endTime}
@@ -975,7 +980,7 @@
             LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
             LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
             LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id
-            WHERE pg.status = '1' and pg.user_id = #{userId}
+            WHERE pg.status = '1' and pg.user_id = #{userId} and pg.over_time <![CDATA[>=]]> now()
             ORDER BY sc.MatchTime) as t where t.Matchty = lotterType
     </select>
 
@@ -1052,5 +1057,57 @@
         select * from schedule where MatchState = #{status} and MatchTime > #{sat} and MatchTime &lt; #{end}
     </select>
 
+    <!--后N期足彩-->
+    <select id="selectNextIssueNum" resultType="com.zhcdata.db.model.JcMatchLottery">
+        (SELECT * from (
+        SELECT  lottery.ISSUE_NUM issueNum from  jc_match_lottery lottery
+        LEFT JOIN `schedule` sc on lottery.ID_BET007=sc.scheduleID
+        where  lottery.LOTTERY = 'SF14' and sc.MatchTime>now() GROUP BY issue_num
+        ) a ORDER BY issueNum asc)
+    </select>
 
+    <!--前10期足彩-->
+    <select id="selectLastIssueNum" resultType="com.zhcdata.db.model.JcMatchLottery">
+        <if test="issueNum!=null ">
+            SELECT * from (
+            SELECT * from (
+            SELECT lottery.ISSUE_NUM issueNum from  jc_match_lottery lottery
+            LEFT JOIN `schedule` sc on lottery.ID_BET007=sc.scheduleID
+            where  lottery.LOTTERY = 'SF14' and lottery.ISSUE_NUM&lt;#{issueNum} GROUP BY issue_num
+            ) a ORDER BY issueNum desc LIMIT 10
+            ) b ORDER BY issueNum asc
+        </if>
+        <if test="issueNum==null ">
+            SELECT * from (
+            SELECT * from (
+            SELECT lottery.ISSUE_NUM issueNum from  jc_match_lottery lottery
+            LEFT JOIN `schedule` sc on lottery.ID_BET007=sc.scheduleID
+            where  lottery.LOTTERY = 'SF14' and sc.MatchTime&lt;now() GROUP BY issue_num
+            ) a ORDER BY issueNum DESC LIMIT 10
+            ) b ORDER BY issueNum asc
+        </if>
+    </select>
+
+    <!--查当前时间之前的足彩期次，是否有未结束的-->
+    <select id="selectNoFinishMatch" resultType="com.zhcdata.jc.dto.MatchResult1">
+        SELECT scheduleID matchId from `schedule` where scheduleID in(
+        SELECT ID_BET007 from jc_match_lottery  where issue_num=
+        (SELECT * from (
+        SELECT lottery.ISSUE_NUM issueNum from  jc_match_lottery lottery
+        LEFT JOIN `schedule` sc on lottery.ID_BET007=sc.scheduleID
+        where  lottery.LOTTERY = 'SF14' and sc.MatchTime&lt;now() GROUP BY issue_num
+        ) a ORDER BY issueNum DESC LIMIT 1) and lottery='SF14') and MatchState!=-1
+    </select>
+
+    <select id="selectNowIssueNum" resultType="com.zhcdata.jc.dto.MatchResult1">
+        SELECT * from (
+        SELECT lottery.ISSUE_NUM num from  jc_match_lottery lottery
+        LEFT JOIN `schedule` sc on lottery.ID_BET007=sc.scheduleID
+        where  lottery.LOTTERY = 'SF14' and sc.MatchTime&lt;now() GROUP BY num
+        ) a ORDER BY num DESC LIMIT 1
+    </select>
+
+    <select id="queryMatchByStatus" resultType="com.zhcdata.db.model.Schedule">
+        select * from schedule sc where sc.MatchState in ('1','2','3','4','5')
+    </select>
 </mapper>

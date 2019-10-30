@@ -74,7 +74,7 @@ public interface ScheduleService {
      * @param s2
      * @return
      */
-    List<MatchResult1> queryMacthListForJob( String startDate, String endDate, String s, String s1, String s2);
+    List<MatchResult1> queryMacthListForJob( String startDate, String endDate, String s, String s1, String s2,String issueNum);
 
     String queryZcNum( String startDate,  String endDate);
 
@@ -91,4 +91,6 @@ public interface ScheduleService {
    /* List<Integer> selectMatchIdExceedNowBd();*/
 
     MatchInfoForBdDto quertMatchInfo(Integer matchId);
+
+    List<Schedule> queryMatchByStatus();
 }

@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.JcSchedulesp;
+import com.zhcdata.jc.dto.QueryFiveGameDto;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -15,4 +16,6 @@ public interface JcSchedulespMapper extends Mapper<JcSchedulesp> {
 
     //查询当日开奖的比赛
     int queryTodayMatchCount(@Param("startDate") String startDate, @Param("endvDate") String endDate,@Param("week") String week);
+
+    QueryFiveGameDto queryJcSchedulespByIdFive(@Param("bet007Id")Integer matchId);
 }

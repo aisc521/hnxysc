@@ -85,44 +85,47 @@ public class HandleExpertRecordJob implements Job {
                     //近5中几
                     //近4中几
                     //近3中几
+                    int lz = 0;         //当前连中
+                    int zs = 0;         //已发方案总数
 
+                    int three = 0;      //三天总数
+                    int three_z = 0;    //三天命中
 
-                    List<TbJcPlan> planResults = tbPlanService.queryPlanList(String.valueOf(expertResults.get(p).getId()), "0"); //已经结束的方案
+                    int five = 0;       //五天总数
+                    int five_z = 0;     //五天命中
+
+                    int seven = 0;      //七天总数
+                    int seven_z = 0;    //七天命中
+
+                    String trend = "";  //趋势
+
+                    int z_count = 0;    //命中总数
+
+                    int lh_history = 0; //历史最高连红
+
+                    int jin10z = 0;       //近10中几
+                    int jin9z = 0;        //近 9中几
+                    int jin8z = 0;        //近 8中几
+                    int jin7z = 0;        //近 7中几
+                    int jin6z = 0;        //近 6中几
+                    int jin5z = 0;        //近 5中几
+                    int jin4z = 0;        //近 4中几
+                    int jin3z = 0;        //近 3中几
+
+                    int price=0;          //投入金额
+                    int dou=0;            //记录双选个数
+                    BigDecimal money=new BigDecimal(0); //奖金
+
+                    BigDecimal lastSevenDayPayMoney=new BigDecimal(0);      //近七天投入
+                    BigDecimal lastSevenDayReturnMoney=new BigDecimal(0);   //近七天回报
+
+                    BigDecimal lastDayPayMoney=new BigDecimal(0);           //历史投入
+                    BigDecimal lastDayReturnMoney=new BigDecimal(0);        //历史回报
+
+                    List<TbJcPlan> planResults = tbPlanService.queryPlanList(String.valueOf(expertResults.get(p).getId()), "0"); //已结束方案
                     if (planResults != null && planResults.size() > 0) {
-
-                        int lz = 0;         //当前连中
-                        int zs = 0;         //已发方案总数
-
-                        int three = 0;      //三天总数
-                        int three_z = 0;    //三天命中
-
-                        int five = 0;       //五天总数
-                        int five_z = 0;     //五天命中
-
-                        int seven = 0;      //七天总数
-                        int seven_z = 0;    //七天命中
-
-                        String trend = "";  //趋势
-
-                        int z_count = 0;    //命中总数
-
-                        int lh_history = 0; //历史最高连红
-
-                        int jin10z = 0;       //近10中几
-                        int jin9z = 0;        //近 9中几
-                        int jin8z = 0;        //近 8中几
-                        int jin7z = 0;        //近 7中几
-                        int jin6z = 0;        //近 6中几
-                        int jin5z = 0;        //近 5中几
-                        int jin4z = 0;        //近 4中几
-                        int jin3z = 0;        //近 3中几
-
-                        int price=0;          //投入金额
-                        int dou=0;            //记录双选个数
-                        BigDecimal money=new BigDecimal(0); //奖金
-
                         for (int k = 0; k < planResults.size(); k++) {
-                            List<MatchPlanResult1> matchlist = tbJcMatchService.queryList1(planResults.get(k).getId());
+                            List<MatchPlanResult1> matchlist = tbJcMatchService.queryList1(planResults.get(k).getId());   //当前方案的比赛
                             if (matchlist != null && matchlist.size() > 0) {
                                 for (int m = 0; m < matchlist.size(); m++) {
                                     if (matchlist.get(m).getStatus().equals("1")) {
@@ -269,25 +272,26 @@ public class HandleExpertRecordJob implements Job {
                         }
 
                         VictoryInfo info = new VictoryInfo();
-                        info.setLzNow(String.valueOf(lz));                                  //当前连中
-                        info.setF(String.valueOf(zs));                                      //已发方案总数
-                        info.setZ(String.valueOf(z_count));                                 //方案命中数
-                        info.setzThreeDays(three==0?"0":dfLv.format((float) three_z / three));  //三天命中率
-                        info.setzFiveDays(three==0?"0":dfLv.format((float) five_z / five));     //五天命中率
-                        info.setzSevenDays(three==0?"0":dfLv.format((float) seven_z / seven));  //七天命中率
-                        info.setTrend(trend);                                               //趋势
-                        info.setzAll(dfLv.format((float) z_count / zs));           //全部命中率
-                        info.setLzBig(String.valueOf(lh_history));                          //历史最高连红
-                        info.setTen_z(String.valueOf(jin10z));                              //近10中几
-                        info.setNine_z(String.valueOf(jin9z));                              //近9中几
-                        info.setEight_z(String.valueOf(jin8z));                             //近8中几
-                        info.setSeven_z(String.valueOf(jin7z));                             //近7中几
-                        info.setNine_z(String.valueOf(jin6z));                              //近6中几
-                        info.setFive_z(String.valueOf(jin5z));                              //近5中几
-                        info.setFour_z(String.valueOf(jin4z));                              //近4中几
-                        info.setThree_z(String.valueOf(jin3z));                             //近3中几
-                        info.setReturnSevenDays("0");                                       //七天回报率/七天盈利率
-                        info.setReturnAll("0");                                             //全部回报率
+                        info.setLzNow(String.valueOf(lz));                                              //当前连中
+                        info.setF(String.valueOf(zs));                                                  //已发方案总数
+                        info.setZ(String.valueOf(z_count));                                             //方案命中数
+                        info.setzThreeDays(three==0?"0":dfLv.format((float) three_z / three)); //三天命中率
+                        info.setzFiveDays(three==0?"0":dfLv.format((float) five_z / five));    //五天命中率
+                        info.setzSevenDays(three==0?"0":dfLv.format((float) seven_z / seven)); //七天命中率
+                        info.setTrend(trend);                                                           //趋势
+                        info.setzAll(dfLv.format((float) z_count / zs));                       //全部命中率
+                        info.setLzBig(String.valueOf(lh_history));                                      //历史最高连红
+                        info.setTen_z(String.valueOf(jin10z));                                          //近10中几
+                        info.setNine_z(String.valueOf(jin9z));                                          //近9中几
+                        info.setEight_z(String.valueOf(jin8z));                                         //近8中几
+                        info.setSeven_z(String.valueOf(jin7z));                                         //近7中几
+                        info.setNine_z(String.valueOf(jin6z));                                          //近6中几
+                        info.setFive_z(String.valueOf(jin5z));                                          //近5中几
+                        info.setFour_z(String.valueOf(jin4z));                                          //近4中几
+                        info.setThree_z(String.valueOf(jin3z));                                         //近3中几
+                        info.setReturnSevenDays("0");                                                   //七天回报率
+                        info.setYlSevenDays("0");                                                       //七天盈利率
+                        info.setReturnAll("0");                                                         //全部回报率
                         info.setExpertId(String.valueOf(expertResults.get(p).getId()));
 
                         //这里修改入库
@@ -312,27 +316,26 @@ public class HandleExpertRecordJob implements Job {
                             VictoryInfo info = new VictoryInfo();
                             info.setLzNow(String.valueOf(0));                                  //当前连中
                             info.setF(String.valueOf(0));                                      //已发方案总数
-                            info.setZ(String.valueOf(0));                                 //方案命中数
-                            info.setzThreeDays("0");  //三天命中率
-                            info.setzFiveDays("0");     //五天命中率
-                            info.setzSevenDays("0");  //七天命中率
-                            info.setTrend("0");                                               //趋势
-                            info.setzAll("0");           //全部命中率
-                            info.setLzBig(String.valueOf(0));                          //历史最高连红
-                            info.setTen_z(String.valueOf(0));                              //近10中几
-                            info.setNine_z(String.valueOf(0));                              //近9中几
-                            info.setEight_z(String.valueOf(0));                             //近8中几
-                            info.setSeven_z(String.valueOf(0));                             //近7中几
-                            info.setNine_z(String.valueOf(0));                              //近6中几
-                            info.setFive_z(String.valueOf(0));                              //近5中几
-                            info.setFour_z(String.valueOf(0));                              //近4中几
-                            info.setThree_z(String.valueOf(0));                             //近3中几
+                            info.setZ(String.valueOf(0));                                       //方案命中数
+                            info.setzThreeDays("0");                                            //三天命中率
+                            info.setzFiveDays("0");                                             //五天命中率
+                            info.setzSevenDays("0");                                            //七天命中率
+                            info.setTrend("0");                                                 //趋势
+                            info.setzAll("0");                                                  //全部命中率
+                            info.setLzBig(String.valueOf(0));                                   //历史最高连红
+                            info.setTen_z(String.valueOf(0));                                   //近10中几
+                            info.setNine_z(String.valueOf(0));                                  //近9中几
+                            info.setEight_z(String.valueOf(0));                                 //近8中几
+                            info.setSeven_z(String.valueOf(0));                                 //近7中几
+                            info.setNine_z(String.valueOf(0));                                  //近6中几
+                            info.setFive_z(String.valueOf(0));                                  //近5中几
+                            info.setFour_z(String.valueOf(0));                                  //近4中几
+                            info.setThree_z(String.valueOf(0));                                 //近3中几
                             info.setReturnSevenDays("0");                                       //七天回报率/七天盈利率
                             info.setReturnAll("0");                                             //全部回报率
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
                             info.setYlSevenDays("0");
                             info.setSix_z("0");
-
 
                             //不存在，则添加
                             int r = tbJcVictoryService.insert(info);

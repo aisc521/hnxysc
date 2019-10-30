@@ -30,4 +30,5 @@ public class QueryPlanByMatchIdDto {
     private String grade;
     private String planStatus;
     private List<MatchInfoDto> list;
+    private String planId;
 }

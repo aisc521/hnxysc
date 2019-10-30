@@ -223,7 +223,7 @@ public class ExpertJob implements Job {
                 ExpertHotResult hot = new ExpertHotResult();
                 hot.setId(list8.get(i).getId());
                 hot.setNickName(list8.get(i).getNickName());
-                hot.setLz("历史8连红");
+                hot.setLz("8");
                 hot.setPushed(getPlanCount(list8.get(i).getId()));
                 hot.setLabel(list8.get(i).getLable());
                 hot.setImg(list8.get(i).getImg());

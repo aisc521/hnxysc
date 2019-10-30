@@ -184,7 +184,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 long l6 = ClockUtil.currentTimeMillis();
                 matchAnalysisType6(schedule, i + "");
                 long l = ClockUtil.currentTimeMillis();
-                log.error("总计算耗时{}ms", l - l0);
+                log.error("赛事{}分析数据总计算耗时{}ms", matchId, l - l0);
             }
             return null;
         }
@@ -618,6 +618,8 @@ public class ScheduleServiceImpl implements ScheduleService {
         bdList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
         zcList.sort((o1, o2) -> new BigDecimal(o2.getTpeiWinOdds()).compareTo(new BigDecimal(o1.getTpeiWinOdds())));
 
+        log.error("【生成同赔精选】日期{}生成同赔精选，目前同赔记录不小于15条的竞彩列表比赛数：{},北单列表比赛数：{},足彩列表比赛数：{},全部列表比赛数：{},今日截取比赛数为：{}",
+                date, jcList.size(), bdList.size(), zcList.size(), allList.size(), limit);
         //截取需要的比赛
         if (limit < jcList.size()) {
             jcList = jcList.subList(0, limit);
@@ -629,8 +631,6 @@ public class ScheduleServiceImpl implements ScheduleService {
             zcList = zcList.subList(0, limit);
         }
 
-        log.error("【生成同赔精选】日期{}生成同赔精选，竞彩列表比赛数：{},北单列表比赛数：{},足彩列表比赛数：{},全部列表比赛数：{}",
-                date, jcList.size(), bdList.size(), zcList.size(), allList.size());
         //设置缓存
         String key = RedisCodeMsg.SOCCER_SAME_ODDS_MATCH.getName() + ":" + date;
         String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, ClockUtil.currentDate());
@@ -1052,8 +1052,8 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return
      */
     @Override
-    public List<MatchResult1> queryMacthListForJob(String startDate, String endDate, String type, String userId, String state) {
-        return scheduleMapper.queryMacthListForJob(startDate, endDate, type, userId, state);
+    public List<MatchResult1> queryMacthListForJob(String startDate, String endDate, String type, String userId, String state,String issueNum) {
+        return scheduleMapper.queryMacthListForJob(startDate, endDate, type, userId, state,issueNum);
     }
 
     @Override
@@ -1096,6 +1096,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public MatchInfoForBdDto quertMatchInfo(Integer matchId) {
         return scheduleMapper.quertMatchInfo(matchId);
+    }
+
+    @Override
+    public List<Schedule> queryMatchByStatus() {
+        return scheduleMapper.queryMatchByStatus();
     }
 
 
