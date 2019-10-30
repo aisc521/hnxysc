@@ -61,6 +61,10 @@ public class MultHandicapOddsNewJob implements Job {
         String[] oddsCollection = str.split("\\u0024");
         MultHandicapOddsService array[] = {multHandicapHandleServiceImpl, multOddsHandleServiceImpl, multSizesBallsHandleServiceImpl, multHalfHandicapHandleServiceImpl, multHalfSizesBallsHandleServiceImpl};
         for (int i = 0; i < array.length; i++) {
+            if (oddsCollection.length!=5){
+                log.error("多盘即时赔率解析,数据长度异常");
+                log.error(str);
+            }
             array[i].changeHandle(oddsCollection[i].split(";"));
         }
         log.info("多盘即时赔率解析结束");
