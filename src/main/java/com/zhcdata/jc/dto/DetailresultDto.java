@@ -27,5 +27,5 @@ public class DetailresultDto {
     private String playernameJ;
     private Integer playeridIn;
     private String teamname;
-
+    private String pname;
 }

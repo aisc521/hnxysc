@@ -30,9 +30,11 @@
    d.playername_e playernameE,
    d.playername_j playernameJ,
    d.PlayerID_in playeridIn,
-   t.Name_J teamname
+   t.Name_J teamname,
+   p.Name_J pname
    from detailresult d
    LEFT JOIN team t ON d.TeamID = t.TeamID
+   LEFT JOIN player p ON d.PlayerID = p.PlayerID
    where d.ScheduleID = #{matchId}
   </select>
 
