@@ -10,8 +10,6 @@ import org.quartz.JobExecutionException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
 
 import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.*;
 
@@ -60,8 +58,8 @@ public class MultHandicapOddsNewJob implements Job {
             log.error("获取多盘口即时赔率失败", e);
             return;
         }
-        if (StringUtils.isEmpty(str)||!str.contains("\\u0024")){
-            log.error("获取多盘口即时赔率数据异常,获取到的数据:"+str);
+        if (StringUtils.isBlank(str)){
+            log.error("获取多盘口即时获取到的数据="+str+"   不进行处理");
             return;
         }
         String[] oddsCollection = str.split("\\u0024");
