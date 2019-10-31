@@ -34,7 +34,7 @@ public class QiuTanXmlComm<T>  {
       xml = xml.replaceAll("\uFEFF", "");
       obj = xStream.fromXML(xml);
     } catch (Exception e) {
-      LOGGER.error("解析异常 url"+url+"="+xml,e);
+      LOGGER.error("解析异常 返回长度="+xml.length()+" url"+url+"="+xml,e);
       e.printStackTrace();
     }
     return obj;
@@ -52,7 +52,7 @@ public class QiuTanXmlComm<T>  {
       //List<T> list = (List<T>) xStream.fromXML(xml);
       obj = xStream.fromXML(xml);
     } catch (Exception e) {
-      LOGGER.error("解析异常 url"+url+"="+xml,e);
+      LOGGER.error("解析异常 返回长度="+xml.length()+" url"+url+"="+xml,e);
     }
     return obj;
   }
@@ -69,7 +69,7 @@ public class QiuTanXmlComm<T>  {
         xStream.processAnnotations(clas);
         list = (List<T>) xStream.fromXML(xml);
       } catch (Exception e) {
-        LOGGER.error("解析异常 url"+url+"="+xml,e);
+        LOGGER.error("解析异常 返回长度="+xml.length()+" url"+url+"="+xml,e);
       }
       return list;
     }catch (Exception ex){
@@ -91,7 +91,7 @@ public class QiuTanXmlComm<T>  {
         xStream.processAnnotations(clas);
         list = (List<T>) xStream.fromXML(xml);
       } catch (Exception e) {
-        LOGGER.error("解析异常 url"+url+"="+xml,e);
+        LOGGER.error("解析异常 返回长度="+xml.length()+" url"+url+"="+xml,e);
       }
       return list;
   }
