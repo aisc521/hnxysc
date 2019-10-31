@@ -47,9 +47,11 @@ public class MatchListDataAllJob  implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        String jc=""; //竞彩ID串
+        String bd=""; //北单ID串
+        String zc=""; //足彩ID串
         try {
             //处理足彩
-
             String issueNum = null;
             List<JcMatchLottery> nextNum = scheduleMapper.selectNextIssueNum();           //后N
             if (nextNum != null && nextNum.size() > 0) {
@@ -61,6 +63,7 @@ public class MatchListDataAllJob  implements Job {
 
 
             for (int a = 0; a < lastNum.size(); a++) {
+
                 long start = ClockUtil.currentTimeMillis();
                 List<MatchResult1> list1 = new ArrayList<>();
                 List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(null, null, "3", "", "1", lastNum.get(a).getIssueNum()); //竞彩 正在进行
@@ -71,6 +74,10 @@ public class MatchListDataAllJob  implements Job {
 
                 List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(null, null, "3", "", "3", lastNum.get(a).getIssueNum()); //竞彩 已经结束
                 list1.addAll(list1_3);
+
+                for (int b = 0; b < list1.size(); b++) {
+                    zc += list1.get(b).getMatchId() + ",";
+                }
 
                 deal(list1, lastNum.get(a).getIssueNum(), "6"); //目前存6
                 long end = ClockUtil.currentTimeMillis();
@@ -113,6 +120,7 @@ public class MatchListDataAllJob  implements Job {
 
                 time = startDate.substring(0, 10);
 
+                //竞彩
                 List<MatchResult1> list1=new ArrayList<>();
                 List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "1", "","1",null); //竞彩 正在进行
                 list1.addAll(list1_1);
@@ -122,8 +130,12 @@ public class MatchListDataAllJob  implements Job {
 
                 List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","3",null); //竞彩 已经结束
                 list1.addAll(list1_3);
+                for(int c=0;c<list1.size();c++) {
+                    jc += list1.get(c).getMatchId() + ",";
+                }
                 deal(list1, time, "1");
 
+                //北单
                 List<MatchResult1> list2=new ArrayList<>();
                 List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2", "","1",null); //北单 正在进行
                 list2.addAll(list2_1);
@@ -133,19 +145,70 @@ public class MatchListDataAllJob  implements Job {
 
                 List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2","","3",null); //北单 已经结束
                 list2.addAll(list2_3);
+
+                //北单赛事ID串
+                for(int a=0;a<list2.size();a++){
+                    bd+=list2.get(a).getMatchId()+",";
+                }
                 deal(list2, time, "2");
                 System.out.println(time);
                 LOGGER.info("更新" + time + "赛事列表成功 北单:" + list2.size() + "场");
 
+                String str="";
                 List<MatchResult1> list5 = new ArrayList<>();
                 List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null);//全部 正在进行
-                list5.addAll(list5_1);
+                for(int a=0;a<list5_1.size();a++){
+                    if(!str.contains(list5_1.get(a).getMatchId())) {
+                        MatchResult1 r1=list5_1.get(a);
+                        if(jc.contains(r1.getMatchId()+",")) {
+                            r1.setMatchType("1");
+                        }else if(bd.contains(r1.getMatchId()+",")){
+                            r1.setMatchType("2");
+                        }else if(zc.contains(r1.getMatchId()+",")){
+                            r1.setMatchType("3");
+                        }else {
+                            r1.setMatchType("5");
+                        }
+                        list5.add(r1);
+                        str+=list5_1.get(a).getMatchId()+",";
+                    }
+                }
 
                 List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2",null);//全部 未开始
-                list5.addAll(list5_2);
+                for(int b=0;b<list5_2.size();b++){
+                    if(!str.contains(list5_2.get(b).getMatchId())) {
+                        MatchResult1 r2=list5_2.get(b);
+                        if(jc.contains(r2.getMatchId()+",")) {
+                            r2.setMatchType("1");
+                        }else if(bd.contains(r2.getMatchId()+",")){
+                            r2.setMatchType("2");
+                        }else if(zc.contains(r2.getMatchId()+",")){
+                            r2.setMatchType("3");
+                        }else {
+                            r2.setMatchType("5");
+                        }
+                        list5.add(r2);
+                        str+=list5_2.get(b).getMatchId()+",";
+                    }
+                }
 
                 List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3",null);//全部 已经结束
-                list5.addAll(list5_3);
+                for(int c=0;c<list5_3.size();c++) {
+                    if (!str.contains(list5_3.get(c).getMatchId())) {
+                        MatchResult1 r3 = list5_3.get(c);
+                        if (jc.contains(r3.getMatchId() + ",")) {
+                            r3.setMatchType("1");
+                        } else if (bd.contains(r3.getMatchId() + ",")) {
+                            r3.setMatchType("2");
+                        } else if (zc.contains(r3.getMatchId() + ",")) {
+                            r3.setMatchType("3");
+                        } else {
+                            r3.setMatchType("5");
+                        }
+                        list5.add(r3);
+                        str += list5_3.get(c).getMatchId() + ",";
+                    }
+                }
 
                 deal(list5, time, "5");
                 long end = ClockUtil.currentTimeMillis();
@@ -167,7 +230,7 @@ public class MatchListDataAllJob  implements Job {
                 if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
-                    r1.setMatchState(len);
+                    r1.setMatchState(len+"'");
                 }else {
                     r1.setMatchState("'完'");
                 }
@@ -175,7 +238,7 @@ public class MatchListDataAllJob  implements Job {
                 if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
-                    r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+" : String.valueOf(45 + Integer.valueOf(len)));
+                    r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");
                 }else {
                     r1.setMatchState("'完'");
                 }

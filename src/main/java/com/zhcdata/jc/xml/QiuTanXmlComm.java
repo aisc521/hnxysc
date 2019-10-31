@@ -3,8 +3,10 @@ package com.zhcdata.jc.xml;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.zhcdata.jc.tools.HttpUtils;
-import com.zhcdata.jc.xml.rsp.MoreHandicapOddsLisAlltRsp;
 import com.zhcdata.jc.xml.rsp.MoreHandicapOddsARsp;
+import com.zhcdata.jc.xml.rsp.MoreHandicapOddsLisAlltRsp;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -19,70 +21,56 @@ import java.util.List;
  * @version : 0.0.1
  */
 public class QiuTanXmlComm<T>  {
-
+  private final Logger LOGGER = LoggerFactory.getLogger(getClass());
   public Object handleMothodHttpGet(String url, Class ...clas){
     String xml = "";
+    Object obj = null;
     try {
       xml = HttpUtils.httpGet(url,"UTF-8");
+      XStream xStream = new XStream(new DomDriver());
+      XStream.setupDefaultSecurity(xStream);
+      xStream.allowTypes(clas);
+      xStream.processAnnotations(clas);
+      xml = xml.replaceAll("\uFEFF", "");
+      obj = xStream.fromXML(xml);
     } catch (Exception e) {
+      LOGGER.error("解析异常 返回长度="+xml.length()+" url"+url+"="+xml,e);
       e.printStackTrace();
     }
-    XStream xStream = new XStream(new DomDriver());
-    XStream.setupDefaultSecurity(xStream);
-    //xStream.allowTypes(new Class[]{List.class,clas});
-    xStream.allowTypes(clas);
-    xStream.processAnnotations(clas);
-    //List<T> list = (List<T>) xStream.fromXML(xml);
-    xml = xml.replaceAll("\uFEFF", "");
-   /* byte[] buf = new byte[0];
-    try {
-      buf = xml.getBytes("UTF-8");
-    } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-    }
-    if (buf.length > 3 && (byte) 0XEF == buf[0] && (byte) 0XBB == buf[1] && (byte) 0XBF == buf[2]) {
-      try {
-        xml = new String(buf, 3, buf.length - 3, "UTF-8");
-      } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
-      }
-    } else {
-      xml = new String(buf);
-    }*/
-
-    return xStream.fromXML(xml);
+    return obj;
   }
   public Object handleMothod(String url, Class ...clas){
     String xml = "";
+    Object obj = null;
     try {
       xml = HttpUtils.httpPost(url,"UTF-8");
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-    XStream xStream = new XStream(new DomDriver());
-    XStream.setupDefaultSecurity(xStream);
-    //xStream.allowTypes(new Class[]{List.class,clas});
-    xStream.allowTypes(clas);
-    xStream.processAnnotations(clas);
-    //List<T> list = (List<T>) xStream.fromXML(xml);
-
-    return xStream.fromXML(xml);
-  }
-  public List<T> handleMothodList(String url, Class ...clas){
-    try {
-      String xml = "";
-      try {
-        xml = HttpUtils.httpPost(url, "UTF-8");
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
       XStream xStream = new XStream(new DomDriver());
       XStream.setupDefaultSecurity(xStream);
       //xStream.allowTypes(new Class[]{List.class,clas});
       xStream.allowTypes(clas);
       xStream.processAnnotations(clas);
-      List<T> list = (List<T>) xStream.fromXML(xml);
-
+      //List<T> list = (List<T>) xStream.fromXML(xml);
+      obj = xStream.fromXML(xml);
+    } catch (Exception e) {
+      LOGGER.error("解析异常 返回长度="+xml.length()+" url"+url+"="+xml,e);
+    }
+    return obj;
+  }
+  public List<T> handleMothodList(String url, Class ...clas){
+    try {
+      String xml = "";
+      List<T> list = null;
+      try {
+        xml = HttpUtils.httpPost(url, "UTF-8");
+        XStream xStream = new XStream(new DomDriver());
+        XStream.setupDefaultSecurity(xStream);
+        //xStream.allowTypes(new Class[]{List.class,clas});
+        xStream.allowTypes(clas);
+        xStream.processAnnotations(clas);
+        list = (List<T>) xStream.fromXML(xml);
+      } catch (Exception e) {
+        LOGGER.error("解析异常 返回长度="+xml.length()+" url"+url+"="+xml,e);
+      }
       return list;
     }catch (Exception ex){
       String sd=ex.getMessage();
@@ -92,26 +80,20 @@ public class QiuTanXmlComm<T>  {
   }
 
   public List<T> handleMothodTeamList(String url, Class ...clas){
-    try {
       String xml = "";
+      List<T> list = null;
       try {
         xml = HttpUtils.getHtmlResult(url);
+        XStream xStream = new XStream(new DomDriver());
+        XStream.setupDefaultSecurity(xStream);
+        //xStream.allowTypes(new Class[]{List.class,clas});
+        xStream.allowTypes(clas);
+        xStream.processAnnotations(clas);
+        list = (List<T>) xStream.fromXML(xml);
       } catch (Exception e) {
-        e.printStackTrace();
+        LOGGER.error("解析异常 返回长度="+xml.length()+" url"+url+"="+xml,e);
       }
-      XStream xStream = new XStream(new DomDriver());
-      XStream.setupDefaultSecurity(xStream);
-      //xStream.allowTypes(new Class[]{List.class,clas});
-      xStream.allowTypes(clas);
-      xStream.processAnnotations(clas);
-      List<T> list = (List<T>) xStream.fromXML(xml);
-
       return list;
-    }catch (Exception ex){
-      String sd=ex.getMessage();
-      ex.printStackTrace();
-    }
-    return null;
   }
 
   public static void main(String argsp[]){

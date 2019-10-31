@@ -30,10 +30,10 @@ public class HttpUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpUtils.class);
 
     /* HTTP访问连接超时时间（毫秒） */
-    private static final int CONNECT_TIMEOUT = 60000;
+    private static final int CONNECT_TIMEOUT = 60000*5;
 
     /* HTTP访问读取超时时间（毫秒） */
-    private static final int READ_TIMEOUT = 60000;
+    private static final int READ_TIMEOUT = 60000*5;
 
     /* 缓存大小 */
     private static final int BUFFER_SIZE = 4096;
