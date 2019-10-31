@@ -81,4 +81,34 @@
       </if>
     </trim>
   </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.JcMatchLineupInfo" >
+    update jc_match_lineup
+    <set >
+      <if test="homeArray != null" >
+        HOME_ARRAY = #{homeArray,jdbcType=VARCHAR},
+      </if>
+      <if test="awayArray != null" >
+        AWAY_ARRAY = #{awayArray,jdbcType=VARCHAR},
+      </if>
+      <if test="homeLineup != null" >
+        HOME_LINEUP = #{homeLineup,jdbcType=VARCHAR},
+      </if>
+      <if test="awayLineup != null" >
+        AWAY_LINEUP = #{awayLineup,jdbcType=VARCHAR},
+      </if>
+      <if test="homeBackup != null" >
+        HOME_BACKUP = #{homeBackup,jdbcType=VARCHAR},
+      </if>
+      <if test="awayBackup != null" >
+        AWAY_BACKUP = #{awayBackup,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
 </mapper>

@@ -47,9 +47,7 @@ public class LineupJob implements Job {
 
                 List<JcMatchLineupInfo> list = tbJcMatchLineupMapper.queryLineup(result_list.get(i).getID());
                 if (list != null && list.size() > 0) {
-                    //暂不确定，是否有变化，如果有，则修改
-                    //LOGGER.info("阵容信息已存在，暂时不保存");
-                    if(!info.equals(list.get(0))){
+                    if(tbJcMatchLineupMapper.updateByPrimaryKeySelective(info)>0){
                         log.info("[出场阵容]信息修改成功");
                     }else {
                         log.info("[出场阵容]信息修改失败");
@@ -62,7 +60,6 @@ public class LineupJob implements Job {
                     }
                 }
             }
-            String sds = "";
         } catch (Exception ex) {
             LOGGER.error("[出场阵容]定时任务异常：" + ex);
             ex.printStackTrace();

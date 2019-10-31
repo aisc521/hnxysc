@@ -71,9 +71,9 @@ public class DRTSJob implements Job {
                         System.out.println(two.getText());
                         String[] values = two.getText().split("\\^");
 
-                        if (values[0].contains("1673766")) {
-                            String sdfa = "";
-                        }
+                        //if (values[0].contains("1673766")) {
+                        //    String sdfa = "";
+                        //}
 
                         //赛程ID^主客队标志^事件类型^时间^球员名字^球名ID^简体球员名^记录ID(不重复）^助攻球员ID
                         //     0         1        2    3       4      5         6              7          8

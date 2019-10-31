@@ -501,6 +501,34 @@ public class CommonUtils {
         return startDate + "," + endDate;
     }
 
+    public String getSEBd() {
+        String startDate = "";
+        String endDate = "";
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dt = df.format(new Date());
+        String hour = dt.substring(11, 13);
+        if (Integer.parseInt(hour) > 9) {
+            Date date = new Date();//获取当前时间
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            startDate = df.format(calendar.getTime()).substring(0, 10) + " 09:59:59";
+
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            endDate = df.format(calendar.getTime()).substring(0, 10) + " 09:59:59";
+
+            //过11点,过了11:00点则不显示昨天的赛果只显示今天的对阵
+        } else {
+            Date date = new Date();//获取当前时间
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            endDate = df.format(calendar.getTime()).substring(0, 10) + " 09:59:59";
+
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            startDate = df.format(calendar.getTime()).substring(0, 10) + " 09:59:59";
+            //未过11点,每天中午11:00前都显示昨日比赛结果
+        }
+        return startDate + "," + endDate;
+    }
 
     /**
      * 与支付系统的tradeType转换
