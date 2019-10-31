@@ -57,6 +57,7 @@ public class TextLivingServiceImpl implements TextLivingService {
         List<TextLiving> textLivings = jcMatchLiveMapper.queryTextLivingList(matchId);
         List<Detailresult> detailresultList = detailresultMapper.queryDetailresultListByMatchId(matchId);
         LOGGER.error("赛事" + matchId + "文字直播数量为：" + textLivings.size());
+        LOGGER.error("赛事" + matchId + "事件直播数量为：" + detailresultList.size());
         if((textLivings != null && textLivings.size() > 0) || map != null || (detailresultList != null && detailresultList.size() > 0)){
             map.put("list", textLivings == null?new ArrayList<>():textLivings);
             map.put("eventlist", detailresultList == null?new ArrayList<>():detailresultList);
