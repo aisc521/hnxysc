@@ -83,11 +83,17 @@ public class Change2Job implements Job {
                 String string = strings[9];
                 if (strings.length > 8 && string.length() > 0) {
                     if (!"0,0,0,0,0,0".equals(string)) {
-                        Date date = DateFormatUtil.pareDate("yyyy,MM,dd,HH,mm,ss", string);
-                        Calendar instance = Calendar.getInstance();
-                        instance.setTime(date);
-                        instance.add(Calendar.MONTH, 1);
-                        string = DateFormatUtil.formatDate("yyyy,M,d,HH,mm,ss", instance.getTime());
+                        String[] dates=string.split(",");
+                        if(dates.length==6) {
+                            string = dates[0] + "," + (Integer.valueOf(dates[1]) + 1) + "," + dates[2] + "," + dates[3] + "," + dates[4] + "," + dates[5];
+                        }
+                        //String m=string.split(",")[1];
+                        //string=String
+                        //Date date = DateFormatUtil.pareDate("yyyy,MM,dd,HH,mm,ss", string);
+                        //Calendar instance = Calendar.getInstance();
+                        //instance.setTime(date);
+                        //instance.add(Calendar.MONTH, 1);
+                        //string = DateFormatUtil.formatDate("yyyy,M,d,HH,mm,ss", instance.getTime());
                     }
                     info.setMatchtime2(string);           //开场时间9
                     jcInfo.setMatchtime2(string);                     //开场时间9
