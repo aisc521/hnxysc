@@ -34,7 +34,7 @@
     <table tableName="jc_schedulespvary"/>-->
     <!--<table tableName="jc_schedulesp"/>-->
    <!-- <table tableName="tb_pg_u_collect"/>-->
-    <table tableName="tb_jc_dictionary"/>
+    <!--<table tableName="tb_jc_dictionary"/>
     <table tableName="tb_jc_expert"/>
     <table tableName="tb_jc_expert_settlement"/>
     <table tableName="tb_jc_fans"/>
@@ -45,6 +45,7 @@
     <table tableName="tb_jc_record_focus"/>
     <table tableName="tb_jc_static"/>
     <table tableName="tb_jc_user"/>
-    <table tableName="tb_jc_victory"/>
+    <table tableName="tb_jc_victory"/>-->
+    <table tableName="detailresult"/>
   </context>
 </generatorConfiguration>

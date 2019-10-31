@@ -1,8 +1,11 @@
 package com.zhcdata.jc.service.impl;
 
 import com.google.common.base.Strings;
+import com.zhcdata.db.mapper.DetailresultMapper;
 import com.zhcdata.db.mapper.JcMatchLiveMapper;
 import com.zhcdata.db.mapper.TbTeamTechStatisticsMapper;
+import com.zhcdata.db.model.DetailResultInfo;
+import com.zhcdata.db.model.Detailresult;
 import com.zhcdata.jc.dto.EventStandDataSum;
 import com.zhcdata.jc.dto.TextLiving;
 import com.zhcdata.jc.enums.RedisCodeMsg;
@@ -34,6 +37,8 @@ public class TextLivingServiceImpl implements TextLivingService {
     private RedisUtils redisUtils;
     @Resource
     private JcMatchLiveMapper jcMatchLiveMapper;
+    @Resource
+    private DetailresultMapper detailresultMapper;
     @Override
     public Map<String, Object> updateTextLiveRedisDataSelective(int matchId) {
         boolean redisUpdateFlag1 = true;
@@ -50,10 +55,11 @@ public class TextLivingServiceImpl implements TextLivingService {
         Map<String, Object> map = queryEventStandDataSum(matchId);
 
         List<TextLiving> textLivings = jcMatchLiveMapper.queryTextLivingList(matchId);
+        List<Detailresult> detailresultList = detailresultMapper.queryDetailresultListByMatchId(matchId);
         LOGGER.error("赛事" + matchId + "文字直播数量为：" + textLivings.size());
-        if((textLivings != null && textLivings.size() > 0) || map != null){
+        if((textLivings != null && textLivings.size() > 0) || map != null || (detailresultList != null && detailresultList.size() > 0)){
             map.put("list", textLivings == null?new ArrayList<>():textLivings);
-
+            map.put("eventlist", detailresultList == null?new ArrayList<>():detailresultList);
             String timeId = DateFormatUtil.formatDate(Const.YYYYMMDDHHMMSSSSS, new Date());
             redisUtils.set(RedisCodeMsg.PMS_TEXT_LIVE.getName() + matchId + ":TIME_ID",
                     timeId,RedisCodeMsg.PMS_TEXT_LIVE.getSeconds());
