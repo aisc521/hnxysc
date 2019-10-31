@@ -7,6 +7,7 @@ import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
+import com.zhcdata.jc.quartz.job.redis.MatchListDataJob;
 import com.zhcdata.jc.service.ScheduleService;
 import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.Const;
@@ -17,9 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @Description < 关注比赛列表(10200228)>
@@ -34,6 +35,8 @@ public class AttentionListProtocol implements BaseProtocol {
 
     @Resource
     private ScheduleService scheduleService;
+
+    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
@@ -85,12 +88,64 @@ public class AttentionListProtocol implements BaseProtocol {
             pageAmount = "20";
         }
         PageInfo<MatchResult1> list = scheduleService.queryAttentionList(userId, pageNo, pageAmount);
+
+        List<MatchResult1> result1s=new ArrayList<>();
+        for(int v=0;v<list.getList().size();v++){
+            MatchResult1 r1=list.getList().get(v);
+            //处理盘口
+            //r1.setMatchPankou(getPanKou1(r1.getMatchPankou()));
+            if(r1.getMatchState().equals("1")){
+                r1.setStatusDescFK("2");
+                r1.setStatusescFK("2");
+                if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                    Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
+                    String len = getMinute(df.format(ts), df.format(new Date()));
+                    r1.setMatchState(len+"'");
+                }
+            }else if(r1.getMatchState().equals("3")){
+                r1.setStatusDescFK("3");
+                r1.setStatusescFK("3");
+                if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                    Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
+                    String len = getMinute(df.format(ts), df.format(new Date()));
+                    r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");
+                }
+            }
+
+            if(r1.getMatchState().equals("未")) {
+                r1.setStatusDescFK("1");
+            }
+            result1s.add(r1);
+        }
+
         resultMap.put("busiCode", "10200201");
         resultMap.put("resCode", "000000");
         resultMap.put("message", "");
         resultMap.put("pageNo", pageNo);
         resultMap.put("pageTotal", list.getPages());
-        resultMap.put("list", list.getList());
+        resultMap.put("list", result1s);
         return resultMap;
+    }
+
+    private String getMinute(String s, String e) {
+        String str = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d1 = sdf.parse(s);     //开始时间
+            Date d2 = sdf.parse(e);     //结束时间
+
+            long diff = d2.getTime() - d1.getTime();
+            long nd = 1000 * 24 * 60 * 60;
+            long nh = 1000 * 60 * 60;
+            long nm = 1000 * 60;
+
+            long day = diff / nd;
+            long hour1 = diff % nd / nh;
+            long min = diff % nd % nh / nm;
+            str = String.valueOf(min);
+        } catch (Exception ex) {
+            LOGGER.error("计算比赛时间异常" + "s:" + s + "e:" , ex);
+        }
+        return str;
     }
 }
