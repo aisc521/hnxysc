@@ -930,11 +930,14 @@
     </select>
 
     <select id="queryAttentionList" resultType="com.zhcdata.jc.dto.MatchResult1">
-
- select
+            SELECT *from(
+            select
             class.Name_JS matchName,/*联赛名称*/
             DATE_FORMAT(sc.MatchTime,'%H:%i') matchTime,
             sc.MatchTime2 MatchTime2,
+            case when sc.MatchState in('0','-10','-11','-12','-13','-14') then '0'
+				  when sc.MatchState in('1','2','3') then '3'
+				  when sc.MatchState in('4','5','-1') then '5' end as ord,
             case when sc.MatchState = '0' then '未' /*未开始*/
                  when sc.MatchState in('4','5') then '(完)' /*正在进行*/
                  when sc.MatchState = '2' then '中' /*中场*/
@@ -983,6 +986,7 @@
             WHERE pg.status = '1' and pg.user_id = #{userId} and pg.over_time <![CDATA[>=]]> now()
             GROUP BY sc.ScheduleID
             ORDER BY sc.MatchTime
+            ) b ORDER BY abs(b.ord) asc,b.MatchTime asc
     </select>
 
     <select id="selectMatchIdExceedNow" resultType="java.lang.Integer">
