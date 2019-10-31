@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.DetailresultMapper">
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.Detailresult">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="ID" jdbcType="INTEGER" property="id" />
+    <result column="ScheduleID" jdbcType="INTEGER" property="scheduleid" />
+    <result column="HappenTime" jdbcType="SMALLINT" property="happentime" />
+    <result column="TeamID" jdbcType="INTEGER" property="teamid" />
+    <result column="playername" jdbcType="VARCHAR" property="playername" />
+    <result column="PlayerID" jdbcType="INTEGER" property="playerid" />
+    <result column="Kind" jdbcType="SMALLINT" property="kind" />
+    <result column="modifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="playername_e" jdbcType="VARCHAR" property="playernameE" />
+    <result column="playername_j" jdbcType="VARCHAR" property="playernameJ" />
+    <result column="PlayerID_in" jdbcType="INTEGER" property="playeridIn" />
+  </resultMap>
+  <select id="queryDetailresultListByMatchId" resultType="com.zhcdata.jc.dto.DetailresultDto">
+   select
+   d.ID id,
+   d.ScheduleID scheduleid,
+   d.HappenTime happentime,
+   d.TeamID teamid,
+   d.playername playername,
+   d.PlayerID playerid,
+   d.Kind kind,
+   d.modifyTime modifytime,
+   d.playername_e playernameE,
+   d.playername_j playernameJ,
+   d.PlayerID_in playeridIn,
+   t.Name_J teamname
+   from detailresult d
+   LEFT JOIN team t ON d.TeamID = t.TeamID
+   where d.ScheduleID = #{matchId}
+  </select>
+
+</mapper>
