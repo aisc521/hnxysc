@@ -3,14 +3,13 @@ package com.zhcdata.jc.quartz.job.Odds;
 import com.zhcdata.jc.service.MultHandicapOddsService;
 import com.zhcdata.jc.tools.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
 
 import static com.zhcdata.jc.quartz.job.Odds.FlagInfo.*;
 
@@ -45,32 +44,28 @@ public class MultHandicapOddsNewJob implements Job {
     MultHandicapOddsService multHalfSizesBallsHandleServiceImpl;
 
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        System.err.println("亚盘list条目："+multi_yp.size());
-        System.err.println("欧赔list条目："+multi_ou.size());
-        System.err.println("大小list条目："+multi_dx.size());
-        System.err.println("半场亚盘list条目："+multi_hyp.size());
-        System.err.println("半场大小list条目："+multi_hdx.size());
+        System.err.println("亚盘list条目：" + multi_yp.size());
+        System.err.println("欧赔list条目：" + multi_ou.size());
+        System.err.println("大小list条目：" + multi_dx.size());
+        System.err.println("半场亚盘list条目：" + multi_hyp.size());
+        System.err.println("半场大小list条目：" + multi_hdx.size());
         log.info("多盘即时赔率解析开始");
 
         String str = "";
         try {
             str = HttpUtils.httpGet("http://interface.win007.com/zq/Odds_Mult.aspx", null);
         } catch (Exception e) {
-            log.error("获取多盘口即时赔率失败",e);
+            log.error("获取多盘口即时赔率失败", e);
+            return;
+        }
+        if (StringUtils.isBlank(str)){
+            log.error("获取多盘口即时获取到的数据="+str+"   不进行处理");
             return;
         }
         String[] oddsCollection = str.split("\\u0024");
         MultHandicapOddsService[] array = {multHandicapHandleServiceImpl, multOddsHandleServiceImpl, multSizesBallsHandleServiceImpl, multHalfHandicapHandleServiceImpl, multHalfSizesBallsHandleServiceImpl};
         for (int i = 0; i < array.length; i++) {
-            try {
-                array[i].changeHandle(oddsCollection[i].split(";"));
-            }catch (ArrayIndexOutOfBoundsException e){
-                log.error("获取多盘口即时赔率数组角标越界");
-                log.error(str);
-                log.error(Arrays.toString(array));
-                log.error(Arrays.toString(oddsCollection));
-                e.printStackTrace();
-            }
+            array[i].changeHandle(oddsCollection[i].split(";"));
         }
         log.info("多盘即时赔率解析结束");
     }
