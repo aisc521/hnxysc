@@ -34,7 +34,7 @@
   <select id="queryScore1" resultType="com.zhcdata.jc.dto.MatchResult1">
           SELECT
           class.Name_JS matchName, /*联赛名称*/
-          DATE_FORMAT(sc.MatchTime,'%H:%i') matchTime,
+          sc.MatchTime matchTime,
           sc.MatchTime2 MatchTime2,
           case when t.Name_J is null then sc.HomeTeam else t.Name_J end as homeName,/*主队名称*/
           case when t2.Name_J is null then sc.guestTeam else t2.Name_J end as guestName,/*客队名称*/

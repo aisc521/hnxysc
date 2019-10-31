@@ -89,6 +89,8 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
             resultMap.put("matchName",mo.getMatchName());
             //获取图标信息
 
+            resultMap.put("matchDate", mo.getMatchTime());
+
             if(mo.getMatchState().equals("未")){
                 resultMap.put("matchMakeTime","未");
             }else if(mo.getMatchState().equals("完")){
@@ -167,7 +169,6 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
                 }
             }
 
-            resultMap.put("matchDate", result.getTime());
             //计算上下半场
 //            if("1".equals(mo.getMatchState())){
 //                resultMap.put("matchType", 1);
