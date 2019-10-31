@@ -36,8 +36,8 @@
           class.Name_JS matchName, /*联赛名称*/
           DATE_FORMAT(sc.MatchTime,'%H:%i') matchTime,
           sc.MatchTime2 MatchTime2,
-          t.Name_J homeName,/*主队名称*/
-          t2.Name_J guestName,/*客队名称*/
+          case when t.Name_J is null then sc.HomeTeam else t.Name_J end as homeName,/*主队名称*/
+          case when t2.Name_J is null then sc.guestTeam else t2.Name_J end as guestName,/*客队名称*/
           IFNULL(sc.HomeScore,'0') homeScore,/*主队比分*/
           IFNULL(sc.GuestScore,'0') guestScore,/*客队比分*/
           IFNULL(sc.HomeHalfScore,'0')homeHalfScore,/*主队半场比分*/
