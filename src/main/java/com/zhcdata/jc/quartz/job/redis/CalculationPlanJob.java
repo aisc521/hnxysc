@@ -66,87 +66,92 @@ public class CalculationPlanJob implements Job {
                         String flag = "0";// 0 结束  1开始
 
                         for (int k = 0; k < matchPlanResults.size(); k++) {
-                            String planInfo = matchPlanResults.get(k).getPlanInfo();
+                            try {
 
-                            ScoreDto scoreDto = tbPlanService.queryScore(matchPlanResults.get(k).getMatchId()); //该赛事得分信息
-                            if (scoreDto != null) {
-                                if (!scoreDto.getStatusType().equals("finished") && !scoreDto.getStatusType().equals("notstarted")) {
-                                    flag = "1";
-                                }
-                                Double hScore1 = Double.valueOf(scoreDto.getHomeScore());
-                                Double vScore1 = Double.valueOf(scoreDto.getGuestScore());
-                                if (scoreDto.getStatusType().equals("finished")) {
-                                    //该赛事已结束，计算方案
-                                    Double hScore = Double.valueOf(scoreDto.getHomeScore());
-                                    Double vScore = Double.valueOf(scoreDto.getGuestScore());
-                                    int z = 0; //胜平负和让球胜平负,有一个中了,就算中
+                                String planInfo = matchPlanResults.get(k).getPlanInfo();
 
-                                    String spf = planInfo.split("\\|")[0];      //胜平负
-                                    String rqspf = planInfo.split("\\|")[1];    //让球胜平负
-                                    if (!spf.equals("0,0,0")) {
-                                        if (!spf.split(",")[0].equals("0")) {
-                                            //买胜
-                                            if (hScore > vScore) {
-                                                z = 1;
-                                            }
-                                        }
+                                ScoreDto scoreDto = tbPlanService.queryScore(matchPlanResults.get(k).getMatchId()); //该赛事得分信息
+                                if (scoreDto != null) {
+                                    if (!scoreDto.getStatusType().equals("finished") && !scoreDto.getStatusType().equals("notstarted")) {
+                                        flag = "1";
+                                    }
+                                    Double hScore1 = Double.valueOf(scoreDto.getHomeScore());
+                                    Double vScore1 = Double.valueOf(scoreDto.getGuestScore());
+                                    if (scoreDto.getStatusType().equals("finished")) {
+                                        //该赛事已结束，计算方案
+                                        Double hScore = Double.valueOf(scoreDto.getHomeScore());
+                                        Double vScore = Double.valueOf(scoreDto.getGuestScore());
+                                        int z = 0; //胜平负和让球胜平负,有一个中了,就算中
 
-                                        if (!spf.split(",")[1].equals("0")) {
-                                            //买平
-                                            if (Objects.equals(hScore, vScore)) {
-                                                z = 1;
-                                            }
-                                        }
-
-                                        if (!spf.split(",")[2].equals("0")) {
-                                            //买负
-                                            if (hScore < vScore) {
-                                                z = 1;
-                                            }
-                                        }
-                                    } else {
-                                        SPFListDto spfs = tbPlanService.querySPFList(matchPlanResults.get(k).getMatchId());
-                                        if (spfs != null ) {
-                                            hScore = hScore + Double.parseDouble(spfs.getAwayTeamRangballs());
-                                            if (!rqspf.split(",")[0].equals("0")) {
+                                        String spf = planInfo.split("\\|")[0];      //胜平负
+                                        String rqspf = planInfo.split("\\|")[1];    //让球胜平负
+                                        if (!spf.equals("0,0,0")) {
+                                            if (!spf.split(",")[0].equals("0")) {
                                                 //买胜
                                                 if (hScore > vScore) {
                                                     z = 1;
                                                 }
                                             }
 
-                                            if (!rqspf.split(",")[1].equals("0")) {
+                                            if (!spf.split(",")[1].equals("0")) {
                                                 //买平
                                                 if (Objects.equals(hScore, vScore)) {
                                                     z = 1;
                                                 }
                                             }
 
-                                            if (!rqspf.split(",")[2].equals("0")) {
+                                            if (!spf.split(",")[2].equals("0")) {
                                                 //买负
                                                 if (hScore < vScore) {
                                                     z = 1;
                                                 }
                                             }
+                                        } else {
+                                            SPFListDto spfs = tbPlanService.querySPFList(matchPlanResults.get(k).getMatchId());
+                                            if (spfs != null) {
+                                                hScore = hScore + Double.parseDouble(spfs.getAwayTeamRangballs());
+                                                if (!rqspf.split(",")[0].equals("0")) {
+                                                    //买胜
+                                                    if (hScore > vScore) {
+                                                        z = 1;
+                                                    }
+                                                }
+
+                                                if (!rqspf.split(",")[1].equals("0")) {
+                                                    //买平
+                                                    if (Objects.equals(hScore, vScore)) {
+                                                        z = 1;
+                                                    }
+                                                }
+
+                                                if (!rqspf.split(",")[2].equals("0")) {
+                                                    //买负
+                                                    if (hScore < vScore) {
+                                                        z = 1;
+                                                    }
+                                                }
+                                            }
                                         }
-                                    }
 
-                                    if (z == 0) {
-                                        //胜平负,都没中
-                                        result = 0;
+                                        if (z == 0) {
+                                            //胜平负,都没中
+                                            result = 0;
+                                        } else {
+                                            //推荐比赛，中一场+1
+                                            z_count += 1;
+                                            result = 1;
+                                        }
+
+                                        //处理单场比赛结果、中奖状态
+                                        tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1, matchPlanResults.get(k).getId());
+
                                     } else {
-                                        //推荐比赛，中一场+1
-                                        z_count += 1;
-                                        result = 1;
+                                        result = 2;
                                     }
-
-                                    //处理单场比赛结果、中奖状态
-                                    tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1,matchPlanResults.get(k).getId());
-
-                                }else{
-                                    result = 2;
+                                    //未结束的不处理
                                 }
-                                //未结束的不处理
+                            }catch (Exception e){
+                                LOGGER.error("赛事id="+matchPlanResults.get(k).getMatchId(),e);
                             }
                         }
 
@@ -175,7 +180,7 @@ public class CalculationPlanJob implements Job {
             LOGGER.info("[计算方案是否命中定时任务结束]" + df.format(new Date()) + " 共：" + planResults.size() + "个方案");
 
         } catch (Exception ex) {
-            LOGGER.error("计算方案是否命中定时任务异常：" + ex);
+            LOGGER.error("计算方案是否命中定时任务异常：", ex);
         }
     }
 
