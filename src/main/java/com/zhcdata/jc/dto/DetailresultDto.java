@@ -28,4 +28,5 @@ public class DetailresultDto {
     private Integer playeridIn;
     private String teamname;
     private String pname;
+    private String homevisit;
 }
