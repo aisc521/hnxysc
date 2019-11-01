@@ -815,11 +815,13 @@
     </update>
 
     <select id="queryMacthListForJob" resultType="com.zhcdata.jc.dto.MatchResult1">
+        select *from(
         SELECT * from(
         select
         class.Name_JS matchName,/*联赛名称*/
         DATE_FORMAT(sc.MatchTime,'%H:%i') matchTime,/*开始时间*/
         sc.MatchTime2 MatchTime2,
+        sc.MatchTime matchTimeOrder,
         case when sc.MatchState = '0' then '未' /*未开始*/
         when sc.MatchState in('4','5') then '(完)' /*正在进行*/
         when sc.MatchState = '2' then '中' /*中场*/
@@ -845,76 +847,78 @@
         lottery.NO_ID number,/*期数场次*/
         IFNULL(pg.status,'0') iscollect,/*是否收藏*/
 
-        <if test="type == 1" >
+        <if test="type == 1">
             lottery.NO_ID num,/*期数场次*/
         </if>
-        <if test="type == 2" >
+        <if test="type == 2">
             lottery.NO_ID num,/*期数场次*/
             lottery.ISSUE_NUM num1,/*北单大期号*/
         </if>
-        <if test="type == 3" >
+        <if test="type == 3">
             concat(substring(lottery.ISSUE_NUM, 3),'期',NO_ID) num,
             lottery.ISSUE_NUM num1,
             lottery.NO_ID num2,
         </if>
         CASE WHEN lottery.LOTTERY = 'JCZQ' then '1'
-             WHEN lottery.LOTTERY = 'SF14' then '3'
-             WHEN lottery.LOTTERY = 'BJDC' then '2'
+        WHEN lottery.LOTTERY = 'SF14' then '3'
+        WHEN lottery.LOTTERY = 'BJDC' then '2'
         end as matchType
-        from schedule  sc
+        from schedule sc
         LEFT JOIN sclass class ON sc.SclassID = class.sclassID
         LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
         LEFT JOIN team t ON sc.HomeTeamID = t.TeamID
         LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
         LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
         LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id and pg.user_id = #{userId}
-        <if test="type == 3" >
+        <if test="type == 3">
             <if test="issueNum !=null ">
                 where lottery.ISSUE_NUM =#{issueNum}
             </if>
             <if test="issueNum ==null ">
                 where lottery. ISSUE_NUM in(
                 SELECT lottery.ISSUE_NUM from jc_match_lottery lottery
-                LEFT JOIN `schedule` sch on lottery.ID_BET007=sch.scheduleID where lottery.lottery='SF14' and sch.matchTime>= #{startTime}
+                LEFT JOIN `schedule` sch on lottery.ID_BET007=sch.scheduleID where lottery.lottery='SF14' and
+                sch.matchTime>= #{startTime}
                 GROUP BY ISSUE_NUM)
             </if>
         </if>
-        <if test="type == 1 or type == 2 or type == 4" >
+        <if test="type == 1 or type == 2 or type == 4">
             where sc.MatchTime >= #{startTime} and sc.MatchTime  <![CDATA[ <= ]]> #{endTime}
         </if>
 
-        <if test="state == 1" >/*正在进行*/
+        <if test="state == 1">/*正在进行*/
             and sc.MatchState in ('1','2','3','4','5')
         </if>
-        <if test="state == 2" >/*未开始*/
+        <if test="state == 2">/*未开始*/
             and sc.MatchState = '0'
         </if>
-        <if test="state == 3" >/*已结束*/
+        <if test="state == 3">/*已结束*/
             and sc.MatchState = '-1'
         </if>
-        <if test="type == 1" >/*竞彩*/
+        <if test="type == 1">/*竞彩*/
             and lottery.LOTTERY = 'JCZQ'
         </if>
-        <if test="type == 3" >/*足彩*/
-             and lottery.LOTTERY = 'SF14'
+        <if test="type == 3">/*足彩*/
+            and lottery.LOTTERY = 'SF14'
         </if>
-        <if test="type == 2" >/*北单*/
-             and lottery.LOTTERY = 'BJDC'
+        <if test="type == 2">/*北单*/
+            and lottery.LOTTERY = 'BJDC'
         </if>
         ) a ORDER BY
-        <if test="type == 1" >
+        <if test="type == 1">
             a.num
         </if>
-        <if test="type == 2" >
+        <if test="type == 2">
             a.num1,abs(a.num)
         </if>
-        <if test="type == 4" >
+        <if test="type == 4">
             a.matchTime
         </if>
-        <if test="type == 3" >
+        <if test="type == 3">
             a.num1,abs(a.num2)
         </if>
         asc
+        ) n order by n.matchTimeOrder asc
     </select>
 
 
