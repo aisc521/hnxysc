@@ -815,7 +815,6 @@
     </update>
 
     <select id="queryMacthListForJob" resultType="com.zhcdata.jc.dto.MatchResult1">
-        select *from(
         SELECT * from(
         select
         class.Name_JS matchName,/*联赛名称*/
@@ -912,13 +911,12 @@
             a.num1,abs(a.num)
         </if>
         <if test="type == 4">
-            a.matchTime
+            a.matchTimeOrder
         </if>
         <if test="type == 3">
             a.num1,abs(a.num2)
         </if>
         asc
-        ) n order by n.matchTimeOrder asc
     </select>
 
 
