@@ -935,8 +935,8 @@
             class.Name_JS matchName,/*联赛名称*/
             DATE_FORMAT(sc.MatchTime,'%H:%i') matchTime,
             sc.MatchTime2 MatchTime2,
-            case when sc.MatchState in('0','-10','-11','-12','-13','-14') then '0'
-				  when sc.MatchState in('1','2','3') then '3'
+            case when sc.MatchState in('0','-10','-11','-12','-13','-14') then '3'
+				  when sc.MatchState in('1','2','3') then '0'
 				  when sc.MatchState in('4','5','-1') then '5' end as ord,
             case when sc.MatchState = '0' then '未' /*未开始*/
                  when sc.MatchState in('4','5') then '(完)' /*正在进行*/
