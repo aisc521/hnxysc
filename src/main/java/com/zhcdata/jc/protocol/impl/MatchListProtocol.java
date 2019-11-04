@@ -101,6 +101,9 @@ public class MatchListProtocol implements BaseProtocol {
         String pageNo = paramMap.get("pageNo");
         String userId = paramMap.get("userId");
         String issueNum=paramMap.get("issueNum");
+        String panKouType=paramMap.get("panKouType");
+        String macthType=paramMap.get("macthType");
+
         if(type.equals("all")){
             type="5";
         }else if(type.equals("2")) {
