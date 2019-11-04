@@ -525,4 +525,13 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         where p.id = #{planId}
     </select>
 
+
+    <select id="queryPolyGoal" resultType="com.zhcdata.db.model.JcSchedule">
+        select
+        *
+        from jc_schedule sc
+
+        where sc.ScheduleID = #{matchId}
+    </select>
+
 </mapper>

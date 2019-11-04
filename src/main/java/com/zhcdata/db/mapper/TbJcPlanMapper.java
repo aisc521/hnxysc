@@ -1,5 +1,6 @@
 package com.zhcdata.db.mapper;
 
+import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
 import org.apache.ibatis.annotations.Param;
@@ -53,4 +54,6 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
 
     QueryPlanByMatchIdDto queryPlanInfoByPlanIdandUserId(@Param("planId")String planId, @Param("userId")String userId);
+
+    JcSchedule queryPolyGoal(@Param("matchId") String matchId);
 }

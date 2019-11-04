@@ -31,7 +31,7 @@
     <select id="queryHotExperts" resultType="com.zhcdata.jc.dto.ExpertInfo">
     <if test="type==1">
       SELECT e.id,e.nick_name nickName,v.lz_now lzNow,'1' pushed ,e.img,e.grade grade from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=4
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=4 and e.is_upshelf = '1'
     </if>
     <if test="type==2">
       SELECT
@@ -50,7 +50,7 @@
       e.grade grade
       from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id
-      where v.five_z=4 or v.six_z=5 or v.seven_z=6 or v.eight_z=7 or v.nine_z=8 or v.ten_z=9
+      where v.five_z=4 or v.six_z=5 or v.seven_z=6 or v.eight_z=7 or v.nine_z=8 or v.ten_z=9 and e.is_upshelf = '1'
     </if>
     <if test="type==3">
       SELECT
@@ -63,7 +63,7 @@
       v.lz_now lzNow,
       e.grade grade
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.return_seven_days>100
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.return_seven_days>100 and e.is_upshelf = '1'
     </if>
     <if test="type==4">
       SELECT
@@ -76,7 +76,7 @@
       v.lz_now lzNow,
       e.grade grade
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.seven_z=5 or v.eight_z=6 or v.nine_z=7 or v.ten_z=8
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.seven_z=5 or v.eight_z=6 or v.nine_z=7 or v.ten_z=8 and e.is_upshelf = '1'
     </if>
     <if test="type==5">
       SELECT
@@ -89,7 +89,7 @@
       e.grade grade,
       e.img
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.ten_z=7 or v.ten_z=6 or v.ten_z=5
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.ten_z=7 or v.ten_z=6 or v.ten_z=5 and e.is_upshelf = '1'
     </if>
     <if test="type==6">
       SELECT
@@ -101,7 +101,7 @@
       e.grade grade,
       e.img
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=2
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=2 and e.is_upshelf = '1'
     </if>
     <if test="type==7">
       SELECT
@@ -115,7 +115,7 @@
       e.grade grade,
       e.img
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.three_z=2 or v.four_z=3
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.three_z=2 or v.four_z=3 and e.is_upshelf = '1'
     </if>
     <if test="type==8">
       SELECT
@@ -128,7 +128,7 @@
       e.grade grade,
       e.img
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_big>=8
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_big>=8 and e.is_upshelf = '1'
     </if>
   </select>
   <select id="queryExpertDetails" resultType="com.zhcdata.jc.dto.ExpertInfo">
@@ -163,11 +163,12 @@
     v.lz_now victory,
     v.z_Seven_Days zSevenDays,
     v.return_Seven_Days returnSevenDays,
-    (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id ) pushed,
+    (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id and p.status = '1') pushed,
     e.popularity popularity
     FROM
     tb_jc_expert e
     LEFT JOIN tb_jc_victory v ON e.id = v.expert_id
+    where e.is_upshelf = '1'
     <if test="type==2">
       ORDER BY victory desc
     </if>
@@ -179,6 +180,7 @@
     <if test="type==3">
       ORDER BY returnSevenDays desc
     </if>
+
   </select>
   <select id="query" resultType="com.zhcdata.jc.dto.ExpertInfo">
     SELECT DISTINCT * FROM(

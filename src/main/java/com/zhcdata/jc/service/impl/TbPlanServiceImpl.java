@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
 import com.zhcdata.db.mapper.TbPlayerMapper;
+import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.service.TbPlanService;
@@ -147,6 +148,11 @@ public class TbPlanServiceImpl implements TbPlanService {
     @Override
     public QueryPlanByMatchIdDto queryPlanInfoByPlanIdandUserId(String planId, String userId) {
         return tbJcPlanMapper.queryPlanInfoByPlanIdandUserId(planId,userId);
+    }
+
+    @Override
+    public JcSchedule queryPolyGoal(String matchId) {
+        return tbJcPlanMapper.queryPolyGoal(matchId);
     }
 
 

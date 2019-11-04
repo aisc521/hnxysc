@@ -1,6 +1,7 @@
 package com.zhcdata.jc.service;
 
 import com.github.pagehelper.PageInfo;
+import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
 import org.apache.ibatis.annotations.Param;
@@ -72,4 +73,6 @@ public interface TbPlanService {
 
 
     QueryPlanByMatchIdDto queryPlanInfoByPlanIdandUserId(String planId, String userId);
+
+    JcSchedule queryPolyGoal(String matchId);
 }

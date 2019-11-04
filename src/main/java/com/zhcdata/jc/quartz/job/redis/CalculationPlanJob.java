@@ -1,5 +1,6 @@
 package com.zhcdata.jc.quartz.job.redis;
 
+import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.db.model.TbJcPurchaseDetailed;
@@ -73,12 +74,13 @@ public class CalculationPlanJob implements Job {
                                 if (!scoreDto.getStatusType().equals("finished") && !scoreDto.getStatusType().equals("notstarted")) {
                                     flag = "1";
                                 }
-                                Double hScore1 = Double.valueOf(scoreDto.getHomeScore());
-                                Double vScore1 = Double.valueOf(scoreDto.getGuestScore());
+
                                 if (scoreDto.getStatusType().equals("finished")) {
+                                    int hScore1 = Integer.parseInt(scoreDto.getHomeScore());
+                                    int vScore1 = Integer.parseInt(scoreDto.getGuestScore());
                                     //该赛事已结束，计算方案
-                                    Double hScore = Double.valueOf(scoreDto.getHomeScore());
-                                    Double vScore = Double.valueOf(scoreDto.getGuestScore());
+                                    int hScore = Integer.parseInt(scoreDto.getHomeScore());
+                                    int vScore = Integer.parseInt(scoreDto.getGuestScore());
                                     int z = 0; //胜平负和让球胜平负,有一个中了,就算中
 
                                     String spf = planInfo.split("\\|")[0];      //胜平负
@@ -93,7 +95,7 @@ public class CalculationPlanJob implements Job {
 
                                         if (!spf.split(",")[1].equals("0")) {
                                             //买平
-                                            if (Objects.equals(hScore, vScore)) {
+                                            if (hScore == vScore) {
                                                 z = 1;
                                             }
                                         }
@@ -105,9 +107,9 @@ public class CalculationPlanJob implements Job {
                                             }
                                         }
                                     } else {
-                                        SPFListDto spfs = tbPlanService.querySPFList(matchPlanResults.get(k).getMatchId());
-                                        if (spfs != null ) {
-                                            hScore = hScore + Double.parseDouble(spfs.getAwayTeamRangballs());
+                                        JcSchedule jcSchedule = tbPlanService.queryPolyGoal(matchPlanResults.get(k).getMatchId());
+                                        if (jcSchedule != null ) {
+                                            hScore = hScore + Integer.parseInt(String.valueOf(jcSchedule.getPolygoal()));
                                             if (!rqspf.split(",")[0].equals("0")) {
                                                 //买胜
                                                 if (hScore > vScore) {
@@ -117,7 +119,7 @@ public class CalculationPlanJob implements Job {
 
                                             if (!rqspf.split(",")[1].equals("0")) {
                                                 //买平
-                                                if (Objects.equals(hScore, vScore)) {
+                                                if (hScore == vScore) {
                                                     z = 1;
                                                 }
                                             }
@@ -128,20 +130,27 @@ public class CalculationPlanJob implements Job {
                                                     z = 1;
                                                 }
                                             }
+                                        }else{
+                                            z = 2;
+                                            result = 2;
+                                            LOGGER.info("让球胜平负查询让球数为空,比赛id为:" + matchPlanResults.get(k).getMatchId());
                                         }
                                     }
 
                                     if (z == 0) {
                                         //胜平负,都没中
                                         result = 0;
-                                    } else {
+                                        tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1,matchPlanResults.get(k).getId());
+                                    } else if(z == 1){
                                         //推荐比赛，中一场+1
                                         z_count += 1;
                                         result = 1;
+                                        //处理单场比赛结果、中奖状态
+                                        tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1,matchPlanResults.get(k).getId());
                                     }
 
-                                    //处理单场比赛结果、中奖状态
-                                    tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1,matchPlanResults.get(k).getId());
+                                  /*  //处理单场比赛结果、中奖状态
+                                    tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1,matchPlanResults.get(k).getId());*/
 
                                 }else{
                                     result = 2;
