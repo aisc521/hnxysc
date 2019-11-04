@@ -109,7 +109,8 @@ public class CalculationPlanJob implements Job {
                                     } else {
                                         JcSchedule jcSchedule = tbPlanService.queryPolyGoal(matchPlanResults.get(k).getMatchId());
                                         if (jcSchedule != null ) {
-                                            hScore = hScore + Integer.parseInt(String.valueOf(jcSchedule.getPolygoal()));
+                                            int rq = (new Double(jcSchedule.getPolygoal())).intValue();
+                                            hScore = hScore + rq;
                                             if (!rqspf.split(",")[0].equals("0")) {
                                                 //买胜
                                                 if (hScore > vScore) {
