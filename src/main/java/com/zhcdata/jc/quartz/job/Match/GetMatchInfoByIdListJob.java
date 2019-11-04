@@ -5,6 +5,7 @@ package com.zhcdata.jc.quartz.job.Match;
 
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.model.Schedule;
+import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.MatchListRsp;
 import lombok.extern.slf4j.Slf4j;
@@ -35,10 +36,11 @@ public class GetMatchInfoByIdListJob implements Job {
 
     private final SimpleDateFormat day = new SimpleDateFormat("yyyy-MM-dd");
 
-
     @Resource
     ScheduleMapper scheduleMapper;
 
+    @Resource
+    private CommonUtils commonUtils;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -47,13 +49,9 @@ public class GetMatchInfoByIdListJob implements Job {
             long s = System.currentTimeMillis();
             int update = 0;
             QiuTanXmlComm parse = new QiuTanXmlComm();
-            String today = day.format(new Date());
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(new Date());
-            calendar.add(Calendar.DAY_OF_MONTH, -1);
-            String startDate=sdf.format(calendar.getTime()).substring(0, 10);
-            List<Schedule> models = scheduleMapper.selectStatusChangedToday(startDate + " 00:00:00", today + " 23:59:59",sdf.format(new Date()));
+            String start=commonUtils.getSE().split(",")[0];
+            String end=commonUtils.getSE().split(",")[1];
+            List<Schedule> models = scheduleMapper.selectStatusChangedToday(start, end,sdf.format(new Date()));
             //List<Schedule> models = scheduleMapper.selectStatusChangedToday("2019-10-21 00:00:00", "2019-10-21 23:59:59",sdf.format(new Date()));
             StringBuilder sb = new StringBuilder();
             int p=1;
