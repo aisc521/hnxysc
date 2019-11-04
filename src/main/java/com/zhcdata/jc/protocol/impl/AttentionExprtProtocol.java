@@ -106,13 +106,13 @@ public class AttentionExprtProtocol implements BaseProtocol {
             if(fans == null){
                 fans = 0;
             }
-            tbJcExpert.setFans(Long.valueOf(fans) + Long.valueOf(1));
+            tbJcExpert.setFans(Long.valueOf(fans) - Long.valueOf(1));
         }else{
             Integer fans = Integer.valueOf(String.valueOf(tbJcExpert.getFans()));
             if(fans == null){
                 fans = 0;
             }
-            tbJcExpert.setFans(Long.valueOf(fans) - Long.valueOf(1));
+            tbJcExpert.setFans(Long.valueOf(fans) + Long.valueOf(1));
         }
         Example example1 = new Example(TbJcExpert.class);
         example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
