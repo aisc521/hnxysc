@@ -50,7 +50,7 @@ public class SubSclassJob implements Job {
                 info.setIncludeseason(a.getIncludeSeason());                        //包含的了赛季
                 info.setIszu(Boolean.valueOf(a.getIsZu()));                         //是否分局数显示
 
-                List<SubSclassInfo> list = tbSubSclassMapper.querySubSclass(a.getId());
+                List<SubSclassInfo> list = tbSubSclassMapper.querySubSclass(a.getSubID());
                 if (list != null && list.size() > 0) {
                     if(tbSubSclassMapper.updateByPrimaryKeySelective(info)>0){
                         LOGGER.info(a.getSubID() + "[子联赛]修改数据库成功");

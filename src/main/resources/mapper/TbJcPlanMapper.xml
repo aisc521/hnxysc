@@ -263,7 +263,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     Single105 smalltype
     from jc_schedule s
     LEFT JOIN jc_schedulesp ssp on s.ScheduleID=ssp.ID
-		where s.ScheduleID = #{MatchId}
+		where s.ScheduleID = #{MatchId} and ssp.kind =2
     ) k LEFT JOIN tb_team_pet_name_info p1 on k.homeId=p1.teamId
     ) kk LEFT JOIN tb_team_pet_name_info p2 on kk.awayId=p2.teamId
     ) jc LEFT JOIN `schedule` sc on jc.matchId=sc.ScheduleID
