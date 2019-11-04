@@ -91,11 +91,17 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
     }
 
     public String ternd(String trend){
+        if(trend.length() > 10){
+            trend = trend.substring(0,10);
+        }
         StringBuffer s = new StringBuffer(trend);
         for(int index = 0; index < s.length();index++){
             if(index%2==0){
                 if(index + 1 != s.length()){
-                    s.insert(index+1,",");
+                    if(index < 19){
+                        s.insert(index+1,",");
+                    }
+
                 }
             }
         }
