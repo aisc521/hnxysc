@@ -132,7 +132,7 @@ public class AttentionListProtocol implements BaseProtocol {
         String pageNo = paramMap.get("pageNo");
         String pageAmount = paramMap.get("pageAmount");
         String panKouType=paramMap.get("panKouType");
-        String macthType=paramMap.get("macthType");
+        String matchType=paramMap.get("matchType");
         if(StringUtils.isBlank(pageAmount)){
             pageAmount = "20";
         }
@@ -165,8 +165,8 @@ public class AttentionListProtocol implements BaseProtocol {
                 r1.setStatusDescFK("1");
             }
 
-            if(macthType!=null&&macthType.length()>0){
-                if(macthType.contains(r1.getMatchName())){
+            if(matchType!=null&&matchType.length()>0){
+                if(matchType.contains(r1.getMatchName())){
                     result1s.add(r1);
                 }
             }else if(panKouType!=null&&panKouType.length()>0){

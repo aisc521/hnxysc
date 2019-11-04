@@ -40,8 +40,57 @@ public class MatchListUserIdProtocol implements BaseProtocol {
 
     @Resource
     private CommonUtils commonUtils;
+
     @Resource
     private TbPgUCollectService tbPgUCollectService;
+
+    private static final Map<String, String> CorrespondingMap = new HashMap<String, String>(){{
+        put("-5", "受让五球");
+        put("-4.75", "受让四球半/五球");
+        put("-4.5", "受让四球半");
+        put("-4.25", "受让四球/四球半");
+        put("-4", "受让四球");
+        put("-3.75", "受让三球半/四球");
+        put("-3.5", "受让三球半");
+        put("-3.25", "受让三球/三球半");
+        put("-3", "受让三球");
+        put("-2.75", "受让两球半/三球");
+        put("-2.5", "受让两球半");
+        put("-2.25", "受让两球/两球半");
+        put("-2", "受让两球");
+        put("-1.75", "受让球半/两球");
+        put("-1.5", "受让一球半");
+        put("-1.25", "受让一球/球半");
+        put("-1", "受让一球");
+        put("-1.0", "受让一球");
+        put("-0.75", "受让半一");
+        put("-0.5", "受让半球");
+        put("-0.25", "受让平半");
+        put("5", "五球");
+        put("4.75", "四球半/五球");
+        put("4.5", "四球半");
+        put("4.25", "四球/四球半");
+        put("4", "四球");
+        put("3.75", "三球半/四球");
+        put("3.5", "三球半");
+        put("3.25", "三球/三球半");
+        put("3", "三球");
+        put("2.75", "两球半/三球");
+        put("2.5", "两球半");
+        put("2.25", "两球/两球半");
+        put("2", "两球");
+        put("1.75", "球半/两球");
+        put("1.5", "一球半");
+        put("1.25", "一球/球半");
+        put("1", "一球");
+        put("1.0", "一球");
+        put("0.75", "半一");
+        put("0.5", "半球");
+        put("0.25", "平半");
+        put("-0","平手");
+        put("0","平手");
+    }};
+
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -105,6 +154,8 @@ public class MatchListUserIdProtocol implements BaseProtocol {
         String pageNo = paramMap.get("pageNo");
         String userId = paramMap.get("userId");
         String issueNum=paramMap.get("issueNum");
+        String panKouType=paramMap.get("panKouType");
+        String matchType=paramMap.get("matchType");
         if(type.equals("all")){
             type="5";
         }else if(type.equals("2")) {
@@ -137,7 +188,19 @@ public class MatchListUserIdProtocol implements BaseProtocol {
                     if(tbPgUCollect != null){
                         matchResult1.setIscollect("1");
                     }
-                    result.add(matchResult1);
+
+                    if(matchType!=null&&matchType.length()>0){
+                        if(matchType.contains(matchResult1.getMatchName())){
+                            result.add(matchResult1);
+                        }
+                    }else if(panKouType!=null&&panKouType.length()>0){
+                        String panKou=CorrespondingMap.get(matchResult1.getMatchPankou());
+                        if(panKouType.contains(panKou)){
+                            result.add(matchResult1);
+                        }
+                    }else {
+                        result.add(matchResult1);
+                    }
                 }
                 Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
                 map.put("followNum",followNum);//已关数量

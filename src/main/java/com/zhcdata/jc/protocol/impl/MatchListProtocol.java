@@ -149,7 +149,7 @@ public class MatchListProtocol implements BaseProtocol {
         String userId = paramMap.get("userId");
         String issueNum=paramMap.get("issueNum");
         String panKouType=paramMap.get("panKouType");
-        String macthType=paramMap.get("macthType");
+        String matchType=paramMap.get("matchType");
 
         if(type.equals("all")){
             type="5";
@@ -186,8 +186,8 @@ public class MatchListProtocol implements BaseProtocol {
                             matchResult1.setIscollect("1");
                         }
 
-                        if(macthType!=null&&macthType.length()>0){
-                            if(macthType.contains(matchResult1.getMatchName())){
+                        if(matchType!=null&&matchType.length()>0){
+                            if(matchType.contains(matchResult1.getMatchName())){
                                 result.add(matchResult1);
                             }
                         }else if(panKouType!=null&&panKouType.length()>0){
