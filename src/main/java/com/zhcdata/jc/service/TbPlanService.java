@@ -75,4 +75,6 @@ public interface TbPlanService {
     QueryPlanByMatchIdDto queryPlanInfoByPlanIdandUserId(String planId, String userId);
 
     JcSchedule queryPolyGoal(String matchId);
+
+    PageInfo<PlanResult1> queryPlanByExpertIdForExpert(String id, String planId, String userId, Integer integer, int i);
 }

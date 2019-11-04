@@ -64,8 +64,7 @@ public class QueryPlanByExpertIdProtocol implements BaseProtocol{
         String pageNo = paramMap.get("pageNo");
         List<PlanResult1> result = new ArrayList<>();
         try{
-
-            PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertId(id,null,null,Integer.valueOf(pageNo),20);
+            PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertIdForExpert(id,null,null,Integer.valueOf(pageNo),20);
             List<PlanResult1> planList = planList1.getList();
             for (int i = 0; i < planList.size(); i++) {
                 PlanResult1 result1 = planList.get(i);
