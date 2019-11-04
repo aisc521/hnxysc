@@ -11,6 +11,15 @@ public class HorseRaceLampDto {
     private String lable;//专家标签
     private String victory;//战果
     private String warn;//随机字符串
+    private String grade;//等级
+
+    public String getGrade() {
+        return grade;
+    }
+
+    public void setGrade(String grade) {
+        this.grade = grade;
+    }
 
     public String getId() {
         return id;

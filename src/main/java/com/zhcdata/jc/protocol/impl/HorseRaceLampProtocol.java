@@ -64,6 +64,7 @@ public class HorseRaceLampProtocol implements BaseProtocol {
                         horseRaceLampDto.setVictory(hot.getLz());
                         String warStr = warn.split(";")[Integer.valueOf((System.currentTimeMillis() + "").substring(11,12))];
                         horseRaceLampDto.setWarn(warStr);
+                        horseRaceLampDto.setGrade(String.valueOf(tbJcExpert.getGrade()));
                         horseRaceLampDto.setLable(tbJcExpert.getLable());
                         hotList.add(horseRaceLampDto);
                     }
