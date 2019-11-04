@@ -201,11 +201,11 @@ public class MatchListProtocol implements BaseProtocol {
                     }
                     Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
                     map.put("followNum",followNum);//已关数量
+                    map.put("list",result);
                 }else{
                     map.put("followNum","0");//已关数量
+                    map.put("list",newList);
                 }
-
-                map.put("list",result);
             }
         }
         return map;
