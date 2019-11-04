@@ -155,7 +155,9 @@ public class SearchMatchCollectProtocol implements BaseProtocol {
                         Integer matchCount = match.get(CorrespondingMap.get(transformation(matchResult1.getMatchPankou())));
                         if (matchCount == null) matchCount = 1;//如果没有，这是第一场
                         else matchCount = matchCount + 1;//如果有，那就加一场
-                        match.put(CorrespondingMap.get(transformation(matchResult1.getMatchPankou())), matchCount);
+                        if(CorrespondingMap.get(transformation(matchResult1.getMatchPankou()))!=null) {
+                            match.put(CorrespondingMap.get(transformation(matchResult1.getMatchPankou())), matchCount);
+                        }
                         //System.out.println(transformation(matchResult1.getMatchPankou())+"   : " +
                         //        "  "+CorrespondingMap.get(transformation(matchResult1.getMatchPankou())));
                     }
