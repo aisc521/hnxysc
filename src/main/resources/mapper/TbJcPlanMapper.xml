@@ -576,4 +576,12 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         where sc.ScheduleID = #{matchId}
     </select>
 
+
+
+    <select id="queryOnePlan" resultType="com.zhcdata.db.model.TbJcPlan">
+        select
+        *
+        from tb_jc_plan p
+        where p.ascription_expert = #{expertId} order by p.create_time asc limit 0,1
+    </select>
 </mapper>
