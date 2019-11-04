@@ -903,6 +903,7 @@
         <if test="type == 2">/*北单*/
             and lottery.LOTTERY = 'BJDC'
         </if>
+        and sc.bfShow=0
         ) a ORDER BY
         <if test="type == 1">
             a.num
