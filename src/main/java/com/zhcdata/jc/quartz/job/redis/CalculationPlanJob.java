@@ -75,8 +75,8 @@ public class CalculationPlanJob implements Job {
                                     if (!scoreDto.getStatusType().equals("finished") && !scoreDto.getStatusType().equals("notstarted")) {
                                         flag = "1";
                                     }
-                                    Double hScore1 = Double.valueOf(scoreDto.getHomeScore());
-                                    Double vScore1 = Double.valueOf(scoreDto.getGuestScore());
+                                    int hScore1 = Integer.parseInt(scoreDto.getHomeScore());
+                                    int vScore1 = Integer.parseInt(scoreDto.getGuestScore());
                                     if (scoreDto.getStatusType().equals("finished")) {
                                         //该赛事已结束，计算方案
                                         Double hScore = Double.valueOf(scoreDto.getHomeScore());
