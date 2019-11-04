@@ -155,5 +155,12 @@ public class TbPlanServiceImpl implements TbPlanService {
         return tbJcPlanMapper.queryPolyGoal(matchId);
     }
 
+    @Override
+    public PageInfo<PlanResult1> queryPlanByExpertIdForExpert(String id, String planId, String userId, Integer pageNo, int pageAmount) {
+        PageHelper.startPage(pageNo, pageAmount);
+        List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertIdForExpert(Long.parseLong(id),planId,userId);
+        return new PageInfo<>(list);
+    }
+
 
 }
