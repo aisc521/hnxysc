@@ -162,5 +162,10 @@ public class TbPlanServiceImpl implements TbPlanService {
         return new PageInfo<>(list);
     }
 
+    @Override
+    public TbJcPlan queryOnePlan(String expertId) {
+        return tbJcPlanMapper.queryOnePlan(expertId);
+    }
+
 
 }

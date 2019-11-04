@@ -58,4 +58,6 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     JcSchedule queryPolyGoal(@Param("matchId") String matchId);
 
     List<PlanResult1> queryPlanByExpertIdForExpert(@Param("id")long id,@Param("planId") String planId, @Param("userId")String userId);
+
+    TbJcPlan queryOnePlan(@Param("expertId")String expertId);
 }
