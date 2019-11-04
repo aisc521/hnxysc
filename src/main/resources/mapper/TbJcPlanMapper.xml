@@ -57,14 +57,56 @@
       <if test="userId != null">
           and pd.user_id = #{userId}
       </if>
-    where 1=1
+    where 1=1 and p.status in('1','2')
     <if test="id != null">
       and e.id = #{id}
     </if>
     <if test="planId != null">
       and p.id in(#{planId})
     </if>
+
   </select>
+
+    <select id="queryPlanByExpertIdForExpert" resultType="com.zhcdata.jc.dto.PlanResult1">
+        SELECT
+        e.id,
+        e.nick_name nickName,
+        e.img,
+        e.lable,
+        (e.fans + e.start_fans) fans,
+        e.popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.title title_show_type,
+        p.price,
+        p.is_right isRight,
+        p.create_time,
+        p.plan_Hit planHit,
+        p.id planId,
+        p.type planType,
+        p.status planStatus,
+        IF(pd.id IS NOT NULL,1,0) buStatus,
+        e.grade grade
+        from tb_jc_plan  p
+        LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
+        LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
+        LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
+        LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
+        <if test="userId != null">
+            and pd.user_id = #{userId}
+        </if>
+        where 1=1
+        <if test="id != null">
+            and e.id = #{id}
+        </if>
+        <if test="planId != null">
+            and p.id in(#{planId})
+        </if>
+    </select>
+
+
 
   <select id="queryPlanByExpertId1" resultType="com.zhcdata.jc.dto.PlanResult1">
     SELECT p.id,
@@ -424,7 +466,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
         LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
 
-        where 1=1
+        where 1=1 and p.status in('1','2')
         <if test="id != null">
             and p.id in(#{id})
         </if>
@@ -463,7 +505,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         <if test="userId != null">
             and pd.user_id = #{userId}
         </if>
-        where 1=1
+        where 1=1 and p.status in ('1','2')
         <if test="id != null">
             and p.id in(#{id})
         </if>
