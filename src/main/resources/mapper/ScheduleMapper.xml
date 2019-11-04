@@ -1045,7 +1045,7 @@
         where sc.ScheduleID = #{matchId}
     </select>
     <select id="selectStatusChangedToday" resultType="com.zhcdata.db.model.Schedule">
-        SELECT * from `schedule` where MatchTime >= #{sat} and MatchTime &lt;= #{end} and MATCHstate in(0,1,2,3,4,5) and matchTime &lt;#{now}
+        SELECT * from `schedule` where MatchTime >= #{sat} and MatchTime &lt;= #{end}
     </select>
     <select id="quertMatchInfo" resultType="com.zhcdata.jc.dto.MatchInfoForBdDto">
         SELECT
