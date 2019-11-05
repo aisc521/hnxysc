@@ -74,6 +74,7 @@ public class GetMatchInfoByIdListJob implements Job {
             }
             String[] ids= sb.toString().split("\\|");
             for(int m=0;m<ids.length;m++) {
+                Thread.sleep(60000);
                 List<MatchListRsp> xml = parse.handleMothodList("http://interface.win007.com/zq/BF_XMLByID.aspx?id=" + ids[m].substring(0,ids[m].length()-1), MatchListRsp.class);
                 if (xml != null) {
                     for (MatchListRsp rsp : xml) {
