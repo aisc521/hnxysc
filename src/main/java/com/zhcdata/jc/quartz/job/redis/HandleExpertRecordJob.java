@@ -395,10 +395,13 @@ public class HandleExpertRecordJob implements Job {
                             info.setFive_z(String.valueOf(jin5z));                                                       //近5中几
                             info.setFour_z(String.valueOf(jin4z));                                                       //近4中几
                             info.setThree_z(String.valueOf(jin3z));                                                      //近3中几
-
-                            info.setReturnSevenDays(dfLv.format(lastSevenDayPayMoney.divide(lastSevenDayReturnMoney)));  //七天回报率
+                            if(lastSevenDayPayMoney.compareTo(new BigDecimal(0))>0) {
+                                info.setReturnSevenDays(String.valueOf(lastSevenDayReturnMoney.divide(lastSevenDayPayMoney,2)));  //七天回报率
+                            }
                             //info.setYlSevenDays("0");                                                                  //七天盈利率
-                            info.setReturnAll(dfLv.format(lastDayPayMoney.divide(lastDayReturnMoney)));                  //全部回报率
+                            if(lastDayPayMoney.compareTo(new BigDecimal(0))>0) {
+                                info.setReturnAll(String.valueOf(lastDayReturnMoney.divide(lastDayPayMoney,2)));                  //全部回报率
+                            }
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
 
                             //这里修改入库
