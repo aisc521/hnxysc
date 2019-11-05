@@ -114,7 +114,7 @@ public class SearchMatchCollectProtocol implements BaseProtocol {
         String matchType = paramMap.get("matchType");
         String matchTime = paramMap.get("matchTime");
         List<MatchResult1> list = new ArrayList<>();//此类型的所有比赛
-        if (matchType.equalsIgnoreCase("3")) {//足彩（按期）
+        if (matchType.equalsIgnoreCase("6")) {//足彩（按期）
             String re = (String)redisUtils.hget("SOCCER:HSET:AGAINSTLIST" + matchTime + matchType,"1");
             JavaType javaType = JsonMapper.defaultMapper().buildMapType(Map.class, String.class, Object.class);
             map = JsonMapper.defaultMapper().fromJson(re, javaType);

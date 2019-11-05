@@ -108,8 +108,8 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public void updateStatusPlanById(String id) {
-        tbJcPlanMapper.updateStatusPlanById(id);
+    public void updateStatusPlanById(String id,int status) {
+        tbJcPlanMapper.updateStatusPlanById(id,status);
     }
 
     @Override
