@@ -64,7 +64,7 @@
     <if test="planId != null">
       and p.id in(#{planId})
     </if>
-
+      GROUP BY p.id
   </select>
 
     <select id="queryPlanByExpertIdForExpert" resultType="com.zhcdata.jc.dto.PlanResult1">
@@ -351,12 +351,25 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     SELECT
     p.id planId,
     expert.id id,
-    expert.nick_name nickName
+    expert.nick_name nickName,
+    expert.lable lable,
+    expert.grade grade,
+    victory.lz_now lz,
+    victory.ten_z tenZ,
+    victory.nine_z nineZ,
+    victory.eight_z eightZ,
+    victory.seven_z sevenZ,
+    victory.six_z sixZ,
+    victory.five_z fiveZ,
+    victory.four_z fourZ,
+    victory.three_z threeZ
     from
     tb_jc_plan p
     LEFT JOIN tb_jc_expert expert ON p.ascription_expert = expert.id
+    LEFT JOIN tb_jc_victory victory ON p.ascription_expert = victory.expert_id
     where 1 = 1
-	ORDER BY p.create_time desc LIMIT 0,1
+    GROUP BY p.id
+	ORDER BY p.create_time desc LIMIT 0,20
   </select>
 
   <select id="queryExpertIdByPlanId" resultType="java.lang.String">
