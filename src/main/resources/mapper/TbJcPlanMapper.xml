@@ -411,6 +411,18 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         LEFT JOIN `schedule` sc on jc.matchId = sc.ScheduleID
         ) aaa
         left join tb_jc_match bbb on aaa.matchId = bbb.match_id and plan_id = #{pid}
+
+        ORDER BY case
+        WHEN lottery.NO_ID like '%周一%' then 1
+        WHEN lottery.NO_ID like '%周二%' then 2
+        WHEN lottery.NO_ID like '%周三%' then 3
+        WHEN lottery.NO_ID like '%周四%' then 4
+        WHEN lottery.NO_ID like '%周五%' then 5
+        WHEN lottery.NO_ID like '%周六%' then 6
+        WHEN lottery.NO_ID like '%周日%' then 7
+        end
+        asc,substr(lottery.NO_ID,3,LENGTH(lottery.NO_ID))
+
     </select>
 
     <select id="queryFreeOrPayByUidAndPid" resultType="java.util.Map">
