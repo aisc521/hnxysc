@@ -40,7 +40,7 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     List<PlanResult2> queryPlanByIdandUser(@Param("id")String id, @Param("uid")String uid);
 
-    void updateStatusPlanById(@Param("id") String id);
+    void updateStatusPlanById(@Param("id") String id,@Param("status") int status);
 
     List<TbJcPlan> queryPlanListJxAndZs();
 

@@ -55,15 +55,15 @@ public class HandleExpertRecordJob implements Job {
             calendar.setTime(new Date());
 
             calendar.add(Calendar.DAY_OF_MONTH, -2);
-            String timeThree = df.format(calendar.getTime());    //三天
+            String timeThree = df.format(calendar.getTime());                   //三天
 
-            calendar.add(Calendar.DAY_OF_MONTH, -4);    //五天
+            calendar.add(Calendar.DAY_OF_MONTH, -4);                    //五天
             String timeFive = df.format(calendar.getTime());
 
-            calendar.add(Calendar.DAY_OF_MONTH, -6);    //七天
+            calendar.add(Calendar.DAY_OF_MONTH, -6);                    //七天
             String timeSeven = df.format(calendar.getTime());
 
-            List<ExpertInfo> expertResults = tbJcExpertService.queryExperts(); //专家列表
+            List<ExpertInfo> expertResults = tbJcExpertService.queryExperts();   //专家列表
             if (expertResults != null && expertResults.size() > 0) {
                 for (int p = 0; p < expertResults.size(); p++) {
                     //当前连中
@@ -87,7 +87,7 @@ public class HandleExpertRecordJob implements Job {
                     //近3中几
                     int lz = 0;         //当前连中
                     int zs = 0;         //已发方案总数
-                    int z = 0;            //已中
+                    int z = 0;          //已中
 
                     int three = 0;      //三天总数
                     int three_z = 0;    //三天命中
@@ -123,7 +123,6 @@ public class HandleExpertRecordJob implements Job {
                         List<TbJcPlan> planResults = tbPlanService.queryPlanList(String.valueOf(expertResults.get(p).getId()), "0"); //已结束方案
                         if (planResults != null && planResults.size() > 0) {
                             for (int k = 0; k < planResults.size(); k++) {
-
                                 int xz1 = 0;                                          //记录选择个数(投入金额)
                                 int xz2 = 0;
                                 BigDecimal return_money = new BigDecimal(0);     //当前方案奖金
@@ -172,14 +171,14 @@ public class HandleExpertRecordJob implements Job {
                                         }
 
                                         //中红 不中黑
-                                        if (planResults.get(k).getStatus().equals("1")) {
+                                        if (matchlist.get(m).getStatus().equals("1")) {
                                             trend += "红";
                                         } else {
                                             trend += "黑";
                                         }
 
                                         //全部命中数(率)
-                                        if (planResults.get(k).getStatus().equals("1")) {
+                                        if (matchlist.get(m).getStatus().equals("1")) {
                                             z_count += 1;
                                         }
 
@@ -217,19 +216,32 @@ public class HandleExpertRecordJob implements Job {
                                                 //计算胜平负
                                                 if (spfs.length == 3) {
                                                     if (Double.valueOf(spfs[0]) > 0) {
-                                                        //xz += 1;
+                                                        if(m==0) {
+                                                            xz1 += 1;
+                                                        }else if(m==2){
+                                                            xz2 += 1;
+                                                        }
+
                                                         if (Integer.valueOf(scores[0]) > Integer.valueOf(scores[1])) {
                                                             money_match = new BigDecimal(spfs[0]);  //胜出 计奖金
                                                         }
                                                     }
                                                     if (Double.valueOf(spfs[1]) > 0) {
-                                                        //xz += 1;
+                                                        if(m==0) {
+                                                            xz1 += 1;
+                                                        }else if(m==2){
+                                                            xz2 += 1;
+                                                        }
                                                         if (Integer.valueOf(scores[0]) == Integer.valueOf(scores[1])) {
                                                             money_match = new BigDecimal(spfs[1]);  //平 计奖金
                                                         }
                                                     }
                                                     if (Double.valueOf(spfs[2]) > 0) {
-                                                        //xz += 1;
+                                                        if(m==0) {
+                                                            xz1 += 1;
+                                                        }else if(m==2){
+                                                            xz2 += 1;
+                                                        };
                                                         if (Integer.valueOf(scores[0]) < Integer.valueOf(scores[1])) {
                                                             money_match = new BigDecimal(spfs[2]);  //负 计奖金
                                                         }
@@ -237,30 +249,43 @@ public class HandleExpertRecordJob implements Job {
                                                 }
                                             } else {
                                                 //计算让球胜平负
-                                                //计算让球胜平负
                                                 if (rqspfs.length == 3) {
-                                                    int rb = 0;           //让球数
+                                                    BigDecimal rb = new BigDecimal(0);           //让球数
                                                     SPFListDto rballs = tbPlanService.querySPFList((matchlist.get(m).getMatchId()));
                                                     if (rballs != null) {
-                                                        rb = Integer.valueOf(rballs.getAwayTeamRangballs());
+                                                        rb =new BigDecimal(rballs.getAwayTeamRangballs());
                                                     }
 
                                                     if (Double.valueOf(rqspfs[0]) > 0) {
-                                                        xz2 += 1;
-                                                        if (Integer.valueOf(scores[0]) + rb > Integer.valueOf(scores[1])) {
-                                                            money_match = new BigDecimal(spfs[0]);  //胜出 计奖金
+                                                        if(m==0) {
+                                                            xz1 += 1;
+                                                        }else if(m==2){
+                                                            xz2 += 1;
+                                                        }
+
+                                                        if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1]))>0) {
+                                                            money_match = new BigDecimal(rqspfs[0]);  //胜出 计奖金
                                                         }
                                                     }
+
                                                     if (Double.valueOf(rqspfs[1]) > 0) {
-                                                        xz2 += 1;
-                                                        if (Integer.valueOf(scores[0]) + rb == Integer.valueOf(scores[1])) {
-                                                            money_match = new BigDecimal(spfs[1]);  //平 计奖金
+                                                        if(m==0) {
+                                                            xz1 += 1;
+                                                        }else if(m==2){
+                                                            xz2 += 1;
+                                                        }
+                                                        if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1]))==0) {
+                                                            money_match = new BigDecimal(rqspfs[1]);  //平 计奖金
                                                         }
                                                     }
                                                     if (Double.valueOf(rqspfs[2]) > 0) {
-                                                        xz2 += 1;
-                                                        if (Integer.valueOf(scores[0]) + rb < Integer.valueOf(scores[1])) {
-                                                            money_match = new BigDecimal(spfs[2]);  //负 计奖金
+                                                        if(m==0) {
+                                                            xz1 += 1;
+                                                        }else if(m==2){
+                                                            xz2 += 1;
+                                                        }
+                                                        if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) < 0) {
+                                                            money_match = new BigDecimal(rqspfs[2]);  //负 计奖金
                                                         }
                                                     }
                                                 }
@@ -273,29 +298,30 @@ public class HandleExpertRecordJob implements Job {
                                                 //第二场比赛，目前仅支持最多两场
                                                 return_money = return_money.multiply(money_match).multiply(new BigDecimal(2));
                                             }
-
                                         }
                                     }
 
-                                    pay_money = new BigDecimal(xz1).multiply(new BigDecimal(2)).multiply(new BigDecimal(xz2));
+                                    if(matchlist.size()==1) {
+                                        //推一场
+                                        pay_money = new BigDecimal(xz1).multiply(new BigDecimal(2));
+                                    }else if(matchlist.size()==2){
+                                        //推两场
+                                        pay_money = new BigDecimal(xz1).multiply(new BigDecimal(2)).multiply(new BigDecimal(xz2));
+                                    }
                                 }else {
                                     log.info("方案(id:"+planResults.get(k).getId()+")无赛事信息");
                                 }
 
                                 //当前专家方案
-                                lastDayPayMoney = lastDayPayMoney.add(pay_money);  //支出
-                                lastDayReturnMoney = return_money;                  //回报
+                                lastDayPayMoney = lastDayPayMoney.add(pay_money);                          //支出
+                                lastDayReturnMoney = lastDayReturnMoney.add(return_money);                 //回报
 
                                 if (isServerDay == 1) {
                                     //近七天
-                                    lastDayPayMoney = new BigDecimal(0);
-                                    lastDayReturnMoney = new BigDecimal(0);
+                                    lastDayPayMoney = lastDayPayMoney.add(pay_money);
+                                    lastDayReturnMoney = lastDayReturnMoney.add(return_money);
                                 }
-
                             }
-
-
-                            //处理七日回报率
 
                             int c = 1;
                             //处理近3 4 5 6 7 8 9 10场 命中场次
@@ -352,26 +378,30 @@ public class HandleExpertRecordJob implements Job {
                             }
 
                             VictoryInfo info = new VictoryInfo();
-                            info.setLzNow(String.valueOf(lz));                                              //当前连中
-                            info.setF(String.valueOf(zs));                                                  //已发方案总数
-                            info.setZ(String.valueOf(z_count));                                             //方案命中数
-                            info.setzThreeDays(three == 0 ? "0" : dfLv.format((float) three_z / three)); //三天命中率
-                            info.setzFiveDays(three == 0 ? "0" : dfLv.format((float) five_z / five));    //五天命中率
-                            info.setzSevenDays(three == 0 ? "0" : dfLv.format((float) seven_z / seven)); //七天命中率
-                            info.setTrend(trend);                                                           //趋势
-                            info.setzAll(dfLv.format((float) z_count / zs));                       //全部命中率
-                            info.setLzBig(String.valueOf(lh_history));                                      //历史最高连红
-                            info.setTen_z(String.valueOf(jin10z));                                          //近10中几
-                            info.setNine_z(String.valueOf(jin9z));                                          //近9中几
-                            info.setEight_z(String.valueOf(jin8z));                                         //近8中几
-                            info.setSeven_z(String.valueOf(jin7z));                                         //近7中几
-                            info.setNine_z(String.valueOf(jin6z));                                          //近6中几
-                            info.setFive_z(String.valueOf(jin5z));                                          //近5中几
-                            info.setFour_z(String.valueOf(jin4z));                                          //近4中几
-                            info.setThree_z(String.valueOf(jin3z));                                         //近3中几
-                            //info.setReturnSevenDays(lastDayReturnMoney==0?"0":dfLv.format((float) three_z / three));                                                   //七天回报率
-                            //info.setYlSevenDays("0");                                                     //七天盈利率
-                            info.setReturnAll(three == 0 ? "0" : dfLv.format((float) three_z / three));                                                         //全部回报率
+                            info.setLzNow(String.valueOf(lz));                                                           //当前连中
+                            info.setF(String.valueOf(zs));                                                               //已发方案总数
+                            info.setZ(String.valueOf(z_count));                                                          //方案命中数
+                            info.setzThreeDays(three == 0 ? "0" : dfLv.format((float) three_z / three));        //三天命中率
+                            info.setzFiveDays(three == 0 ? "0" : dfLv.format((float) five_z / five));           //五天命中率
+                            info.setzSevenDays(three == 0 ? "0" : dfLv.format((float) seven_z / seven));        //七天命中率
+                            info.setTrend(trend);                                                                        //趋势
+                            info.setzAll(dfLv.format((float) z_count / zs));                                    //全部命中率
+                            info.setLzBig(String.valueOf(lh_history));                                                   //历史最高连红
+                            info.setTen_z(String.valueOf(jin10z));                                                       //近10中几
+                            info.setNine_z(String.valueOf(jin9z));                                                       //近9中几
+                            info.setEight_z(String.valueOf(jin8z));                                                      //近8中几
+                            info.setSeven_z(String.valueOf(jin7z));                                                      //近7中几
+                            info.setNine_z(String.valueOf(jin6z));                                                       //近6中几
+                            info.setFive_z(String.valueOf(jin5z));                                                       //近5中几
+                            info.setFour_z(String.valueOf(jin4z));                                                       //近4中几
+                            info.setThree_z(String.valueOf(jin3z));                                                      //近3中几
+                            if(lastSevenDayPayMoney.compareTo(new BigDecimal(0))>0) {
+                                info.setReturnSevenDays(String.valueOf(lastSevenDayReturnMoney.divide(lastSevenDayPayMoney,2)));  //七天回报率
+                            }
+                            //info.setYlSevenDays("0");                                                                  //七天盈利率
+                            if(lastDayPayMoney.compareTo(new BigDecimal(0))>0) {
+                                info.setReturnAll(String.valueOf(lastDayReturnMoney.divide(lastDayPayMoney,2)));                  //全部回报率
+                            }
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
 
                             //这里修改入库
@@ -380,13 +410,13 @@ public class HandleExpertRecordJob implements Job {
                                 //已存在，则修改
                                 int r = tbJcVictoryService.updateById(info);
                                 if (r > 0) {
-                                    log.info("专家趋势计算成功");
+                                    log.info("专家(id:" + expertResults.get(p).getId() + ",nickName:" + expertResults.get(p).getNickName() + ")趋势计算成功");
                                 }
                             } else {
                                 //不存在，则添加
                                 int r = tbJcVictoryService.insert(info);
                                 if (r > 0) {
-                                    log.info("新专家趋势插入成功");
+                                    log.info("新专(id:" + expertResults.get(p).getId() + ",nickName:" + expertResults.get(p).getNickName() + ")家趋势插入成功");
                                 }
                             }
                         } else {

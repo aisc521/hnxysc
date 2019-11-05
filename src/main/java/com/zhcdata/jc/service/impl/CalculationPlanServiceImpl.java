@@ -51,19 +51,28 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
     @Transactional(rollbackFor = Exception.class)
     public void calculationPlan(List<TbJcPlan> planResults) throws BaseException {
         for (int i = 0; i < planResults.size(); i++) {
-            int result = 1;     //标识该方案是否中出,有一场未中,就是不中
-            int z_count = 0;      //已中方案数量 例如推3中1,推3中2
+            int result = 1;         //标识该方案是否中出,有一场未中,就是不中
+            int z_count = 0;        //已中方案数量 例如推3中1,推3中2
+            int ed=0;               //该方案已结束的比赛
+
             List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(String.valueOf(planResults.get(i).getId())); //该方案的赛事信息
             if (matchPlanResults != null && matchPlanResults.size() > 0) {
-                String flag = "0";// 0 结束  1开始
-
                 for (int k = 0; k < matchPlanResults.size(); k++) {
                     String planInfo = matchPlanResults.get(k).getPlanInfo();
 
+                    if(matchPlanResults.get(k).getId().equals("235")){
+                        String sd="";
+                    }
+
                     ScoreDto scoreDto = tbPlanService.queryScore(matchPlanResults.get(k).getMatchId()); //该赛事得分信息
                     if (scoreDto != null) {
-                        if (!scoreDto.getStatusType().equals("finished") && !scoreDto.getStatusType().equals("notstarted")) {
-                            flag = "1";
+                        //判断方案状态
+                        //if (!scoreDto.getStatusType().equals("finished") && !scoreDto.getStatusType().equals("notstarted")) {
+                        //    flag = "1";
+                        //}
+
+                        if(scoreDto.getStatusType().equals("finished")) {
+                            ed += 1;        //已结束个数
                         }
 
                         if (scoreDto.getStatusType().equals("finished")) {
@@ -72,10 +81,10 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                             //该赛事已结束，计算方案
                             int hScore = Integer.parseInt(scoreDto.getHomeScore());
                             int vScore = Integer.parseInt(scoreDto.getGuestScore());
-                            int z = 0; //胜平负和让球胜平负,有一个中了,就算中
+                            int z = 0;                                             //胜平负和让球胜平负,有一个中了,就算中
 
-                            String spf = planInfo.split("\\|")[0];      //胜平负
-                            String rqspf = planInfo.split("\\|")[1];    //让球胜平负
+                            String spf = planInfo.split("\\|")[0];          //胜平负
+                            String rqspf = planInfo.split("\\|")[1];        //让球胜平负
                             if (!spf.equals("0,0,0")) {
                                 if (!spf.split(",")[0].equals("0")) {
                                     //买胜
@@ -97,9 +106,9 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                                         z = 1;
                                     }
                                 }
-                            } else {
+                            } else if(!rqspf.equals("0,0,0")) {
                                 JcSchedule jcSchedule = tbPlanService.queryPolyGoal(matchPlanResults.get(k).getMatchId());
-                                if (jcSchedule != null ) {
+                                if (jcSchedule != null) {
                                     int rq = (new Double(jcSchedule.getPolygoal())).intValue();
                                     hScore = hScore + rq;
                                     if (!rqspf.split(",")[0].equals("0")) {
@@ -122,37 +131,32 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                                             z = 1;
                                         }
                                     }
-                                }else{
-                                    z = 2;
-                                    result = 2;
+                                } else {
+                                    //未查到让球数
                                     LOGGER.info("让球胜平负查询让球数为空,比赛id为:" + matchPlanResults.get(k).getMatchId());
                                 }
+                            }else {
+                                //胜平负、让球胜平负值都为0
+                                LOGGER.info("方案(id:" + planResults.get(i).getId() + "),赛事(id:" + matchPlanResults.get(k).getMatchId() + ")未选择胜平负,无法计算");
                             }
 
-                            if (z == 0) {
-                                //胜平负,都没中
-                                result = 0;
-                                tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1,matchPlanResults.get(k).getId());
-                            } else if(z == 1){
-                                //推荐比赛，中一场+1
-                                z_count += 1;
-                                result = 1;
-                                //处理单场比赛结果、中奖状态
-                                tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1,matchPlanResults.get(k).getId());
+                            if(z==0){
+                                result = 0;     //有一场赛事未中,该方案未中
+                            }else if(z==1){
+                                z_count += 1;   //当前方案中的赛事,中一场就+1
                             }
 
-                                  /*  //处理单场比赛结果、中奖状态
-                                    tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1,matchPlanResults.get(k).getId());*/
-
-                        }else{
-                            result = 2;
+                            //修改当前赛事
+                            tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1, matchPlanResults.get(k).getId());
                         }
-                        //未结束的不处理
                     }
                 }
 
-                if("1".equals(flag)){
-                    tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()));
+                if (matchPlanResults.size()==ed) {
+                    //1 在售 0 已结束 2进行中
+                    tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),0);
+                }else {
+                    tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),2);
                 }
 
                 if (result == 0) {
@@ -160,7 +164,7 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                     tbPlanService.updateStatus("0", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
                     TbJcPlan tb = planResults.get(i);
                     //refundFrozenToMoney(tb);
-                } else if(result == 1){
+                } else if (result == 1) {
                     //已中
                     tbPlanService.updateStatus("1", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
 
@@ -170,6 +174,8 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
 
                     //deductFrozen(tb);
                 }
+            } else {
+                LOGGER.info("方案(id:" + planResults.get(i).getId() + ")中未查到选择赛事");
             }
         }
     }
