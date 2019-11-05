@@ -44,25 +44,25 @@
     <select id="selectOddsResultsByMatchId" resultType="com.zhcdata.jc.dto.HandicapOddsResult">
         <if test="type == 1">
             /* 欧赔 */
-            select c.CompanyId opId,c.Name_Cn opName,l.FirstHomeWin opSatWin,l.FirstStandoff opSatFlat,l.FirstGuestwin
+            select c.CompanyId opId,c.name opName,l.FirstHomeWin opSatWin,l.FirstStandoff opSatFlat,l.FirstGuestwin
             opStaLose,IFNULL(l.RealHomeWin,l.FirstHomeWin) opNowWin,IFNULL(l.RealStandoff,l.FirstStandoff)
-            opNowFlat,IFNULL(l.RealGuestWin,l.FirstGuestwin) opNowLose from europeodds l LEFT JOIN europecompany c on
+            opNowFlat,IFNULL(l.RealGuestWin,l.FirstGuestwin) opNowLose from europeodds l LEFT JOIN europe_companys_custom c on
             l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
-            AND c.CompanyID in (16,80,81,82,90,104,115,158,255,281,545,1129)
+            order by c.sort
         </if>
         <if test="type == 2">
             /* 亚盘 */
-            SELECT c.CompanyId opId,c.Name_Cn opName,l.FirstUpodds opSatWin,l.FirstGoal opSatFlat,l.FirstDownodds
+            SELECT c.CompanyId opId,c.name opName,l.FirstUpodds opSatWin,l.FirstGoal opSatFlat,l.FirstDownodds
             opStaLose,l.Upodds_Real opNowWin,l.Goal_Real opNowFlat,l.Downodds_Real opNowLose from letgoal l LEFT JOIN
-            company c on l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
-            AND c.CompanyID in (1,3,8,12,17,23,24,31)
+            company_custom c on l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
+            order by c.sort
         </if>
         <if test="type == 3">
             /* 大小球 */
-            SELECT c.CompanyId opId,c.Name_Cn opName,l.FirstUpodds opSatWin,l.FirstGoal opSatFlat,l.FirstDownodds
+            SELECT c.CompanyId opId,c.name opName,l.FirstUpodds opSatWin,l.FirstGoal opSatFlat,l.FirstDownodds
             opStaLose,l.Upodds_Real opNowWin,l.Goal_Real opNowFlat,l.Downodds_Real opNowLose from TotalScore l LEFT JOIN
-            company c on l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
-            AND c.CompanyID in (1,3,8,12,17,23,24,31)
+            company_custom c on l.CompanyId = c.CompanyId WHERE l.ScheduleID = #{matchId}
+            order by c.sort
         </if>
 
     </select>
