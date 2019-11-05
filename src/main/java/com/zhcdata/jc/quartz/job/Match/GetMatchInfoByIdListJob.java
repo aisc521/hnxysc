@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -48,10 +49,19 @@ public class GetMatchInfoByIdListJob implements Job {
             long s = System.currentTimeMillis();
             int update = 0;
             QiuTanXmlComm parse = new QiuTanXmlComm();
-            String start=commonUtils.getSE().split(",")[0];
-            String end=commonUtils.getSE().split(",")[1];
-            List<Schedule> models = scheduleMapper.selectStatusChangedToday(start, end,sdf.format(new Date()));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.DAY_OF_MONTH, -1);
+            String startDate=day.format(calendar.getTime()).substring(0, 10);
+
+            Calendar calendar1 = Calendar.getInstance();
+            calendar1.setTime(new Date());
+            calendar1.add(Calendar.DAY_OF_MONTH, 5);
+            String endDate=day.format(calendar1.getTime()).substring(0, 10);
+
+            List<Schedule> models = scheduleMapper.selectStatusChangedToday(startDate + " 11:00:00", endDate + " 11:00:00",sdf.format(new Date()));
             //List<Schedule> models = scheduleMapper.selectStatusChangedToday("2019-10-21 00:00:00", "2019-10-21 23:59:59",sdf.format(new Date()));
+
             StringBuilder sb = new StringBuilder();
             int p=1;
             for (Schedule model : models) {
