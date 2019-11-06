@@ -23,6 +23,87 @@ public class PlanResult1 {
     private String planStatus;
     private String buStatus;
     private String grade;
+    private String tenZ;
+    private String nineZ;
+    private String eightZ;
+    private String sevenZ;
+    private String sixZ;
+    private String fiveZ;
+    private String fourZ;
+    private String threeZ;
+    private String returnSevenDays;
+
+    public String getTenZ() {
+        return tenZ;
+    }
+
+    public void setTenZ(String tenZ) {
+        this.tenZ = tenZ;
+    }
+
+    public String getNineZ() {
+        return nineZ;
+    }
+
+    public void setNineZ(String nineZ) {
+        this.nineZ = nineZ;
+    }
+
+    public String getEightZ() {
+        return eightZ;
+    }
+
+    public void setEightZ(String eightZ) {
+        this.eightZ = eightZ;
+    }
+
+    public String getSevenZ() {
+        return sevenZ;
+    }
+
+    public void setSevenZ(String sevenZ) {
+        this.sevenZ = sevenZ;
+    }
+
+    public String getSixZ() {
+        return sixZ;
+    }
+
+    public void setSixZ(String sixZ) {
+        this.sixZ = sixZ;
+    }
+
+    public String getFiveZ() {
+        return fiveZ;
+    }
+
+    public void setFiveZ(String fiveZ) {
+        this.fiveZ = fiveZ;
+    }
+
+    public String getFourZ() {
+        return fourZ;
+    }
+
+    public void setFourZ(String fourZ) {
+        this.fourZ = fourZ;
+    }
+
+    public String getThreeZ() {
+        return threeZ;
+    }
+
+    public void setThreeZ(String threeZ) {
+        this.threeZ = threeZ;
+    }
+
+    public String getReturnSevenDays() {
+        return returnSevenDays;
+    }
+
+    public void setReturnSevenDays(String returnSevenDays) {
+        this.returnSevenDays = returnSevenDays;
+    }
 
     public String getGrade() {
         return grade;

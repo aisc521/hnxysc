@@ -66,6 +66,8 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
                 //判断连中 连红
                 String lz = commonUtils.JsLz(info);
                 resultMap.put("lz", lz);
+                resultMap.put("nowLz", info.getLzNow());
+
                 resultMap.put("zSevenDays", info.getzSevenDays());
                 resultMap.put("returnSevenDays", info.getReturnSevenDays());
                 resultMap.put("status", info.getStatus());
