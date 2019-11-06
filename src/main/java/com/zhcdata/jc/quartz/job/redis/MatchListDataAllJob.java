@@ -66,13 +66,13 @@ public class MatchListDataAllJob  implements Job {
 
                 long start = ClockUtil.currentTimeMillis();
                 List<MatchResult1> list1 = new ArrayList<>();
-                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(null, null, "3", "", "1", lastNum.get(a).getIssueNum()); //竞彩 正在进行
+                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(null, null, "3", "", "1", lastNum.get(a).getIssueNum(),null,null); //竞彩 正在进行
                 list1.addAll(list1_1);
 
-                List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(null, null, "3", "", "2", lastNum.get(a).getIssueNum()); //竞彩 未开始
+                List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(null, null, "3", "", "2", lastNum.get(a).getIssueNum(),null,null); //竞彩 未开始
                 list1.addAll(list1_2);
 
-                List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(null, null, "3", "", "3", lastNum.get(a).getIssueNum()); //竞彩 已经结束
+                List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(null, null, "3", "", "3", lastNum.get(a).getIssueNum(),null,null); //竞彩 已经结束
                 list1.addAll(list1_3);
 
                 for (int b = 0; b < list1.size(); b++) {
@@ -122,13 +122,13 @@ public class MatchListDataAllJob  implements Job {
 
                 //竞彩
                 List<MatchResult1> list1=new ArrayList<>();
-                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "1", "","1",null); //竞彩 正在进行
+                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "1", "","1",null,null,null); //竞彩 正在进行
                 list1.addAll(list1_1);
 
-                List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","2",null); //竞彩 未开始
+                List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","2",null,null,null); //竞彩 未开始
                 list1.addAll(list1_2);
 
-                List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","3",null); //竞彩 已经结束
+                List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","3",null,null,null); //竞彩 已经结束
                 list1.addAll(list1_3);
                 for(int c=0;c<list1.size();c++) {
                     jc += list1.get(c).getMatchId() + ",";
@@ -137,13 +137,13 @@ public class MatchListDataAllJob  implements Job {
 
                 //北单
                 List<MatchResult1> list2=new ArrayList<>();
-                List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2", "","1",null); //北单 正在进行
+                List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2", "","1",null,null,null); //北单 正在进行
                 list2.addAll(list2_1);
 
-                List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2","","2",null); //北单 未开始
+                List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2","","2",null,null,null); //北单 未开始
                 list2.addAll(list2_2);
 
-                List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2","","3",null); //北单 已经结束
+                List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(startDateBd, endDateBd, "2","","3",null,null,null); //北单 已经结束
                 list2.addAll(list2_3);
 
                 //北单赛事ID串
@@ -156,7 +156,7 @@ public class MatchListDataAllJob  implements Job {
 
                 String str="";
                 List<MatchResult1> list5 = new ArrayList<>();
-                List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null);//全部 正在进行
+                List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null,null,null);//全部 正在进行
                 for(int a=0;a<list5_1.size();a++){
                     if(!str.contains(list5_1.get(a).getMatchId())) {
                         MatchResult1 r1=list5_1.get(a);
@@ -174,7 +174,7 @@ public class MatchListDataAllJob  implements Job {
                     }
                 }
 
-                List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2",null);//全部 未开始
+                List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2",null,null,null);//全部 未开始
                 for(int b=0;b<list5_2.size();b++){
                     if(!str.contains(list5_2.get(b).getMatchId())) {
                         MatchResult1 r2=list5_2.get(b);
@@ -192,7 +192,7 @@ public class MatchListDataAllJob  implements Job {
                     }
                 }
 
-                List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3",null);//全部 已经结束
+                List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3",null,null,null);//全部 已经结束
                 for(int c=0;c<list5_3.size();c++) {
                     if (!str.contains(list5_3.get(c).getMatchId())) {
                         MatchResult1 r3 = list5_3.get(c);

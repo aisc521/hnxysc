@@ -1,6 +1,7 @@
 package com.zhcdata.jc.protocol.impl;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.github.pagehelper.PageHelper;
 import com.google.common.base.Strings;
 import com.zhcdata.db.model.TbPgUCollect;
 import com.zhcdata.jc.dto.MatchResult1;
@@ -20,10 +21,8 @@ import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @Description 比赛列表
@@ -150,6 +149,20 @@ public class MatchListProtocol implements BaseProtocol {
         String issueNum=paramMap.get("issueNum");
         String panKouType=paramMap.get("panKouType");
         String matchType=paramMap.get("matchType");
+
+        //赛事类型或盘口赛选直接查数据库
+        if(panKouType!=null||matchType!=null){
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(df.parse(time));
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            String endDate=df.format(calendar.getTime());
+
+            PageHelper.startPage(Integer.parseInt(pageNo), 20);
+            List<MatchResult1> list = scheduleService.queryMacthListForJob(time+" 11:00:00", endDate+ "11:00:00", type,"","",null,panKouType,matchType); //竞彩
+
+            String sds="";
+        }
 
         if(type.equals("all")){
             type="5";
