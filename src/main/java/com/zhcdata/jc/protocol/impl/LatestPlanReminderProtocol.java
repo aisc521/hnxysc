@@ -41,11 +41,13 @@ public class LatestPlanReminderProtocol implements BaseProtocol {
         List<LatestPlanReminderDto> arrayList = new ArrayList<>();
         if(latestPlanReminderDto != null){
             for(int i = 0; i < latestPlanReminderDto.size(); i++){
-                String warStr = warn.split(";")[Integer.valueOf((System.currentTimeMillis() + "").substring(11,12))];
+                String[] warStr = warn.split(";");
+                int j = (int)(Math.random() * warStr.length);
+                System.out.println(warStr[j]);
                 LatestPlanReminderDto latestPlanReminderDto1 = latestPlanReminderDto.get(i);
                 String lz = commonUtils.JsLz2(latestPlanReminderDto1);
                 latestPlanReminderDto1.setLz(lz);
-                latestPlanReminderDto1.setWarn(warStr);
+                latestPlanReminderDto1.setWarn(warStr[j]);
                 arrayList.add(latestPlanReminderDto1);
             }
             resultMap.put("list", arrayList);

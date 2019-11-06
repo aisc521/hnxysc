@@ -104,6 +104,7 @@
         <if test="planId != null">
             and p.id in(#{planId})
         </if>
+        order by p.status desc,p.create_time desc
     </select>
 
 

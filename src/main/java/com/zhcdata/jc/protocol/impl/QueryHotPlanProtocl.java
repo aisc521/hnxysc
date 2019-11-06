@@ -102,12 +102,12 @@ public class QueryHotPlanProtocl implements BaseProtocol {
                     }
                 } else if (type.equals("3")) {
                     //不中退
-                    if (result.get(j).getPlanType() == "3") {
+                    if (result.get(j).getPlanType() == "2") {
                         f_result.add(result.get(j));
                     }
                 } else if (type.equals("4")) {
                     //免费
-                    if (result.get(j).getPlanType() == "4") {
+                    if (result.get(j).getPlanType() == "3") {
                         f_result.add(result.get(j));
                     }
                 } else if (type.equals("-1")) {
