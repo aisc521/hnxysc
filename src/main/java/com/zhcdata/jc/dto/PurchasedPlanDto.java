@@ -55,6 +55,15 @@ public class PurchasedPlanDto {
     private String paytype;
 
     private String orderId;
+    private String returnSevenDays;
+
+    public String getReturnSevenDays() {
+        return returnSevenDays;
+    }
+
+    public void setReturnSevenDays(String returnSevenDays) {
+        this.returnSevenDays = returnSevenDays;
+    }
 
     public String getOrderId() {
         return orderId;

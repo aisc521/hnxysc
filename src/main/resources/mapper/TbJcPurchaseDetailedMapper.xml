@@ -50,6 +50,7 @@
     victory.z_three_days zThreeDays,/*三天命中*/
     victory.z_five_days zFiveDays,/*五天命中*/
     victory.z_seven_days zSevenDays,/*七天命中*/
+    victory.return_seven_days returnSevenDays,
     plan.title titleShowType,/*方案标题*/
     plan.plan_Hit planHit,
     plan.price price,/*方案价格*/

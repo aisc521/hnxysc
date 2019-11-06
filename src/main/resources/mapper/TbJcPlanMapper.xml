@@ -364,7 +364,8 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     victory.six_z sixZ,
     victory.five_z fiveZ,
     victory.four_z fourZ,
-    victory.three_z threeZ
+    victory.three_z threeZ,
+    victory.return_seven_days returnSevenDays
     from
     tb_jc_plan p
     LEFT JOIN tb_jc_expert expert ON p.ascription_expert = expert.id

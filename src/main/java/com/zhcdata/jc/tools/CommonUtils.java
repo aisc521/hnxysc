@@ -560,7 +560,7 @@ public class CommonUtils {
 
 
     public String JsLz(ExpertInfo info){
-        String lz = info.getLzBig();
+        String lz = "";
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getLzNow())){
             info.setLzNow("0");
         }
@@ -611,6 +611,15 @@ public class CommonUtils {
             lz = "10中" + info.getTenZ();
             return lz;
         }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getReturnSevenDays())){
+            info.setReturnSevenDays("0");
+        }
+
+        if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
+            lz = "七天回报率" + info.getReturnSevenDays() + "%";
+            return lz;
+        }
+
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
             info.setSevenZ("0");
         }
@@ -686,7 +695,7 @@ public class CommonUtils {
     }
 
     public String JsLz1(PurchasedPlanDto  info){
-        String lz = info.getLzBig();
+        String lz = "";
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getLz())){
             info.setLz("0");
         }
@@ -735,6 +744,15 @@ public class CommonUtils {
         }
         if(Integer.valueOf(info.getTenZ()) == 9){//10中9
             lz = "10中" + info.getTenZ();
+            return lz;
+        }
+
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getReturnSevenDays())){
+            info.setReturnSevenDays("0");
+        }
+
+        if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
+            lz = "七天回报率" + info.getReturnSevenDays() + "%";
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
@@ -864,6 +882,16 @@ public class CommonUtils {
             lz = "10中" + info.getTenZ();
             return lz;
         }
+
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getReturnSevenDays())){
+            info.setReturnSevenDays("0");
+        }
+
+        if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
+            lz = "七天回报率" + info.getReturnSevenDays() + "%";
+            return lz;
+        }
+
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
             info.setSevenZ("0");
         }
