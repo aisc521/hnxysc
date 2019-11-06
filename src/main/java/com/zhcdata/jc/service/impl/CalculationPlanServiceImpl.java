@@ -153,9 +153,11 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                 }
 
                 if (matchPlanResults.size()==ed) {
-                    //1 在售 0 已结束 2进行中
+                    //0 已结束 1 进行中 2 在售
                     tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),0);
-                }else {
+                }else if(ed > 0){
+                    tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),1);
+                }else if(ed == 0){
                     tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),2);
                 }
 
@@ -166,13 +168,16 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                     //refundFrozenToMoney(tb);
                 } else if (result == 1) {
                     //已中
-                    tbPlanService.updateStatus("1", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
+                    if(matchPlanResults.size()==ed){
+                        tbPlanService.updateStatus("1", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
 
-                    TbJcPlan tb = planResults.get(i);//专家经验值+3
-                    UpdateExpert(tb);
-                    //扣款
+                        TbJcPlan tb = planResults.get(i);//专家经验值+3
+                        UpdateExpert(tb);
+                        //扣款
 
-                    //deductFrozen(tb);
+                        //deductFrozen(tb);
+                    }
+
                 }
             } else {
                 LOGGER.info("方案(id:" + planResults.get(i).getId() + ")中未查到选择赛事");
