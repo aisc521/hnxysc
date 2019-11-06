@@ -51,136 +51,141 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
     @Transactional(rollbackFor = Exception.class)
     public void calculationPlan(List<TbJcPlan> planResults) throws BaseException {
         for (int i = 0; i < planResults.size(); i++) {
-            int result = 1;         //标识该方案是否中出,有一场未中,就是不中
-            int z_count = 0;        //已中方案数量 例如推3中1,推3中2
-            int ed=0;               //该方案已结束的比赛
 
-            List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(String.valueOf(planResults.get(i).getId())); //该方案的赛事信息
-            if (matchPlanResults != null && matchPlanResults.size() > 0) {
-                for (int k = 0; k < matchPlanResults.size(); k++) {
-                    String planInfo = matchPlanResults.get(k).getPlanInfo();
+            try {
+                int result = 1;         //标识该方案是否中出,有一场未中,就是不中
+                int z_count = 0;        //已中方案数量 例如推3中1,推3中2
+                int ed=0;               //该方案已结束的比赛
 
-                    if(matchPlanResults.get(k).getId().equals("235")){
-                        String sd="";
-                    }
+                List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(String.valueOf(planResults.get(i).getId())); //该方案的赛事信息
+                if (matchPlanResults != null && matchPlanResults.size() > 0) {
+                    for (int k = 0; k < matchPlanResults.size(); k++) {
+                        String planInfo = matchPlanResults.get(k).getPlanInfo();
 
-                    ScoreDto scoreDto = tbPlanService.queryScore(matchPlanResults.get(k).getMatchId()); //该赛事得分信息
-                    if (scoreDto != null) {
-                        //判断方案状态
-                        //if (!scoreDto.getStatusType().equals("finished") && !scoreDto.getStatusType().equals("notstarted")) {
-                        //    flag = "1";
-                        //}
-
-                        if(scoreDto.getStatusType().equals("finished")) {
-                            ed += 1;        //已结束个数
+                        if(matchPlanResults.get(k).getId().equals("235")){
+                            String sd="";
                         }
 
-                        if (scoreDto.getStatusType().equals("finished")) {
-                            int hScore1 = Integer.parseInt(scoreDto.getHomeScore());
-                            int vScore1 = Integer.parseInt(scoreDto.getGuestScore());
-                            //该赛事已结束，计算方案
-                            int hScore = Integer.parseInt(scoreDto.getHomeScore());
-                            int vScore = Integer.parseInt(scoreDto.getGuestScore());
-                            int z = 0;                                             //胜平负和让球胜平负,有一个中了,就算中
+                        ScoreDto scoreDto = tbPlanService.queryScore(matchPlanResults.get(k).getMatchId()); //该赛事得分信息
+                        if (scoreDto != null) {
+                            //判断方案状态
+                            //if (!scoreDto.getStatusType().equals("finished") && !scoreDto.getStatusType().equals("notstarted")) {
+                            //    flag = "1";
+                            //}
 
-                            String spf = planInfo.split("\\|")[0];          //胜平负
-                            String rqspf = planInfo.split("\\|")[1];        //让球胜平负
-                            if (!spf.equals("0,0,0")) {
-                                if (!spf.split(",")[0].equals("0")) {
-                                    //买胜
-                                    if (hScore > vScore) {
-                                        z = 1;
-                                    }
-                                }
+                            if(scoreDto.getStatusType().equals("finished")) {
+                                ed += 1;        //已结束个数
+                            }
 
-                                if (!spf.split(",")[1].equals("0")) {
-                                    //买平
-                                    if (hScore == vScore) {
-                                        z = 1;
-                                    }
-                                }
+                            if (scoreDto.getStatusType().equals("finished")) {
+                                int hScore1 = Integer.parseInt(scoreDto.getHomeScore());
+                                int vScore1 = Integer.parseInt(scoreDto.getGuestScore());
+                                //该赛事已结束，计算方案
+                                int hScore = Integer.parseInt(scoreDto.getHomeScore());
+                                int vScore = Integer.parseInt(scoreDto.getGuestScore());
+                                int z = 0;                                             //胜平负和让球胜平负,有一个中了,就算中
 
-                                if (!spf.split(",")[2].equals("0")) {
-                                    //买负
-                                    if (hScore < vScore) {
-                                        z = 1;
-                                    }
-                                }
-                            } else if(!rqspf.equals("0,0,0")) {
-                                JcSchedule jcSchedule = tbPlanService.queryPolyGoal(matchPlanResults.get(k).getMatchId());
-                                if (jcSchedule != null) {
-                                    int rq = (new Double(jcSchedule.getPolygoal())).intValue();
-                                    hScore = hScore + rq;
-                                    if (!rqspf.split(",")[0].equals("0")) {
+                                String spf = planInfo.split("\\|")[0];          //胜平负
+                                String rqspf = planInfo.split("\\|")[1];        //让球胜平负
+                                if (!spf.equals("0,0,0")) {
+                                    if (!spf.split(",")[0].equals("0")) {
                                         //买胜
                                         if (hScore > vScore) {
                                             z = 1;
                                         }
                                     }
 
-                                    if (!rqspf.split(",")[1].equals("0")) {
+                                    if (!spf.split(",")[1].equals("0")) {
                                         //买平
                                         if (hScore == vScore) {
                                             z = 1;
                                         }
                                     }
 
-                                    if (!rqspf.split(",")[2].equals("0")) {
+                                    if (!spf.split(",")[2].equals("0")) {
                                         //买负
                                         if (hScore < vScore) {
                                             z = 1;
                                         }
                                     }
-                                } else {
-                                    //未查到让球数
-                                    LOGGER.info("让球胜平负查询让球数为空,比赛id为:" + matchPlanResults.get(k).getMatchId());
+                                } else if(!rqspf.equals("0,0,0")) {
+                                    JcSchedule jcSchedule = tbPlanService.queryPolyGoal(matchPlanResults.get(k).getMatchId());
+                                    if (jcSchedule != null) {
+                                        int rq = (new Double(jcSchedule.getPolygoal())).intValue();
+                                        hScore = hScore + rq;
+                                        if (!rqspf.split(",")[0].equals("0")) {
+                                            //买胜
+                                            if (hScore > vScore) {
+                                                z = 1;
+                                            }
+                                        }
+
+                                        if (!rqspf.split(",")[1].equals("0")) {
+                                            //买平
+                                            if (hScore == vScore) {
+                                                z = 1;
+                                            }
+                                        }
+
+                                        if (!rqspf.split(",")[2].equals("0")) {
+                                            //买负
+                                            if (hScore < vScore) {
+                                                z = 1;
+                                            }
+                                        }
+                                    } else {
+                                        //未查到让球数
+                                        LOGGER.info("让球胜平负查询让球数为空,比赛id为:" + matchPlanResults.get(k).getMatchId());
+                                    }
+                                }else {
+                                    //胜平负、让球胜平负值都为0
+                                    LOGGER.info("方案(id:" + planResults.get(i).getId() + "),赛事(id:" + matchPlanResults.get(k).getMatchId() + ")未选择胜平负,无法计算");
                                 }
-                            }else {
-                                //胜平负、让球胜平负值都为0
-                                LOGGER.info("方案(id:" + planResults.get(i).getId() + "),赛事(id:" + matchPlanResults.get(k).getMatchId() + ")未选择胜平负,无法计算");
-                            }
 
-                            if(z==0){
-                                result = 0;     //有一场赛事未中,该方案未中
-                            }else if(z==1){
-                                z_count += 1;   //当前方案中的赛事,中一场就+1
-                            }
+                                if(z==0){
+                                    result = 0;     //有一场赛事未中,该方案未中
+                                }else if(z==1){
+                                    z_count += 1;   //当前方案中的赛事,中一场就+1
+                                }
 
-                            //修改当前赛事
-                            tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1, matchPlanResults.get(k).getId());
+                                //修改当前赛事
+                                tbJcMatchService.updateStatus(String.valueOf(z), hScore1 + ":" + vScore1, matchPlanResults.get(k).getId());
+                            }
                         }
                     }
-                }
 
-                if (matchPlanResults.size()==ed) {
-                    //0 已结束 1 进行中 2 在售
-                    tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),0);
-                }else if(ed > 0){
-                    tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),1);
-                }else if(ed == 0){
-                    tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),2);
-                }
-
-                if (result == 0) {
-                    //未中
-                    tbPlanService.updateStatus("0", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
-                    TbJcPlan tb = planResults.get(i);
-                    //refundFrozenToMoney(tb);
-                } else if (result == 1) {
-                    //已中
-                    if(matchPlanResults.size()==ed){
-                        tbPlanService.updateStatus("1", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
-
-                        TbJcPlan tb = planResults.get(i);//专家经验值+3
-                        UpdateExpert(tb);
-                        //扣款
-
-                        //deductFrozen(tb);
+                    if (matchPlanResults.size()==ed) {
+                        //0 已结束 1 进行中 2 在售
+                        tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),0);
+                    }else if(ed > 0){
+                        tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),1);
+                    }else if(ed == 0){
+                        tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),2);
                     }
 
+                    if (result == 0) {
+                        //未中
+                        tbPlanService.updateStatus("0", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
+                        TbJcPlan tb = planResults.get(i);
+                        //refundFrozenToMoney(tb);
+                    } else if (result == 1) {
+                        //已中
+                        if(matchPlanResults.size()==ed){
+                            tbPlanService.updateStatus("1", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
+
+                            TbJcPlan tb = planResults.get(i);//专家经验值+3
+                            UpdateExpert(tb);
+                            //扣款
+
+                            //deductFrozen(tb);
+                        }
+
+                    }
+                } else {
+                    LOGGER.info("方案(id:" + planResults.get(i).getId() + ")中未查到选择赛事");
                 }
-            } else {
-                LOGGER.info("方案(id:" + planResults.get(i).getId() + ")中未查到选择赛事");
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }
