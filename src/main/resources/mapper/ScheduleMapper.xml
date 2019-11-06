@@ -873,10 +873,10 @@
         LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
         LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id and pg.user_id = #{userId}
         <if test="type == 3">
-            <if test="issueNum !=null ">
+            <if test="issueNum !=null and issueNum !=''">
                 where lottery.ISSUE_NUM =#{issueNum}
             </if>
-            <if test="issueNum ==null ">
+            <if test="issueNum ==null || issueNum==''">
                 where lottery. ISSUE_NUM in(
                 SELECT lottery.ISSUE_NUM from jc_match_lottery lottery
                 LEFT JOIN `schedule` sch on lottery.ID_BET007=sch.scheduleID where lottery.lottery='SF14' and
@@ -907,10 +907,10 @@
             and lottery.LOTTERY = 'BJDC'
         </if>
         and sc.bfShow=0
-        <if test="panKouType != null">
+        <if test="panKouType != null and panKouType != ''">
             and  goal.FirstGoal= #{panKouType}
         </if>
-        <if test="matchType != null">
+        <if test="matchType != null and matchType !=''">
             and  class.Name_JS= #{matchType}
         </if>
         ) a ORDER BY
@@ -928,7 +928,7 @@
         </if>
         asc
         <if test="panKouType != null or matchType != null">
-            ,abs(b.ord)
+            ,abs(a.ord)
         </if>
     </select>
 
