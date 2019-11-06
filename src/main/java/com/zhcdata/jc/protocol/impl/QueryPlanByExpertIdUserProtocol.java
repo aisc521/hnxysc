@@ -10,6 +10,7 @@ import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
+import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.JcLotteryUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -35,6 +36,8 @@ public class QueryPlanByExpertIdUserProtocol implements BaseProtocol{
     private TbPlanService tbPlanService;
     @Resource
     private TbJcMatchService TbJcMatchService;
+    @Resource
+    private CommonUtils commonUtils;
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -75,6 +78,8 @@ public class QueryPlanByExpertIdUserProtocol implements BaseProtocol{
             List<PlanResult1> planList = planList1.getList();
             for (int i = 0; i < planList.size(); i++) {
                 PlanResult1 result1 = planList.get(i);
+                String lz = commonUtils.JsLz2(result1);
+                result1.setLz(lz);
                 List<MatchPlanResult> matchPlanResults = TbJcMatchService.queryList(planList.get(i).getPlanId());
                 if (matchPlanResults != null && matchPlanResults.size() > 0) {
                     List<MatchPlanResult> matchPlanResults1 = new ArrayList<>();

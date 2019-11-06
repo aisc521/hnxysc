@@ -88,7 +88,16 @@
         p.type planType,
         p.status planStatus,
         IF(pd.id IS NOT NULL,1,0) buStatus,
-        e.grade grade
+        e.grade grade,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.return_seven_days returnSevenDays
         from tb_jc_plan  p
         LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
         LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
