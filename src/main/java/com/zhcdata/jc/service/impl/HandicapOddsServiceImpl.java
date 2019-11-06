@@ -267,8 +267,8 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
         Integer flatCount = getMatchCountByResult(list, 1);
         Integer loseCount = getMatchCountByResult(list, 0);
         map.put("mwin", winMap);
-        map.put("mlose", flatMap);
-        map.put("mflat", loseMap);
+        map.put("mlose", loseMap);
+        map.put("mflat", flatMap);
         winMap.put("mcount", winCount);
         flatMap.put("mcount", flatCount);
         loseMap.put("mcount", loseCount);
