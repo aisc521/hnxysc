@@ -241,7 +241,7 @@ public class HandleExpertRecordJob implements Job {
                                                             xz1 += 1;
                                                         }else if(m==2){
                                                             xz2 += 1;
-                                                        };
+                                                        }
                                                         if (Integer.valueOf(scores[0]) < Integer.valueOf(scores[1])) {
                                                             money_match = new BigDecimal(spfs[2]);  //负 计奖金
                                                         }
@@ -318,8 +318,8 @@ public class HandleExpertRecordJob implements Job {
 
                                 if (isServerDay == 1) {
                                     //近七天
-                                    lastDayPayMoney = lastDayPayMoney.add(pay_money);
-                                    lastDayReturnMoney = lastDayReturnMoney.add(return_money);
+                                    lastSevenDayPayMoney = lastSevenDayPayMoney.add(pay_money);
+                                    lastSevenDayReturnMoney = lastSevenDayReturnMoney.add(return_money);
                                 }
                             }
 
@@ -391,16 +391,20 @@ public class HandleExpertRecordJob implements Job {
                             info.setNine_z(String.valueOf(jin9z));                                                       //近9中几
                             info.setEight_z(String.valueOf(jin8z));                                                      //近8中几
                             info.setSeven_z(String.valueOf(jin7z));                                                      //近7中几
-                            info.setNine_z(String.valueOf(jin6z));                                                       //近6中几
+                            info.setSix_z(String.valueOf(jin6z));                                                       //近6中几
                             info.setFive_z(String.valueOf(jin5z));                                                       //近5中几
                             info.setFour_z(String.valueOf(jin4z));                                                       //近4中几
                             info.setThree_z(String.valueOf(jin3z));                                                      //近3中几
                             if(lastSevenDayPayMoney.compareTo(new BigDecimal(0))>0) {
-                                info.setReturnSevenDays(String.valueOf(lastSevenDayReturnMoney.divide(lastSevenDayPayMoney,2)));  //七天回报率
+                                info.setReturnSevenDays(String.valueOf(lastSevenDayReturnMoney.divide(lastSevenDayPayMoney,2).multiply(new BigDecimal(100))));  //七天回报率
+                            }else {
+                                info.setReturnSevenDays("0");
                             }
-                            //info.setYlSevenDays("0");                                                                  //七天盈利率
+                            //info.setYlSevenDays("0");                                                                                                                             //七天盈利率
                             if(lastDayPayMoney.compareTo(new BigDecimal(0))>0) {
-                                info.setReturnAll(String.valueOf(lastDayReturnMoney.divide(lastDayPayMoney,2)));                  //全部回报率
+                                info.setReturnAll(String.valueOf(lastDayReturnMoney.divide(lastDayPayMoney,2).multiply(new BigDecimal(100))));                  //全部回报率
+                            }else {
+                                info.setReturnAll("0");
                             }
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
 
