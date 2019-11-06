@@ -70,7 +70,7 @@ public class QueryExpertDetailsUserProtocol implements BaseProtocol {
                 resultMap.put("lable", info.getLable());
                 resultMap.put("introduction", info.getIntroduction());
                 resultMap.put("fans", info.getFans());
-                resultMap.put("trend", info.getTrend());
+                resultMap.put("trend", ternd(info.getTrend()));
                 String lz = commonUtils.JsLz(info);
                 resultMap.put("lz", lz);
                 resultMap.put("zSevenDays", info.getzSevenDays());
@@ -193,5 +193,24 @@ public class QueryExpertDetailsUserProtocol implements BaseProtocol {
             return lz;
         }
         return lz;
+    }
+
+
+    public String ternd(String trend){
+        if(trend.length() > 10){
+            trend = trend.substring(0,10);
+        }
+        StringBuffer s = new StringBuffer(trend);
+        for(int index = 0; index < s.length();index++){
+            if(index%2==0){
+                if(index + 1 != s.length()){
+                    if(index < 19){
+                        s.insert(index+1,",");
+                    }
+
+                }
+            }
+        }
+        return s.toString();
     }
 }
