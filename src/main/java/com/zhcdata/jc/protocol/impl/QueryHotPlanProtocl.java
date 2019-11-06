@@ -87,14 +87,14 @@ public class QueryHotPlanProtocl implements BaseProtocol {
 
 
             for (int j = 0; j < result.size(); j++) {
-                if (type.equals("1")) {
+                if (type.equals("2")) {
                     //单场
 
                     List<MatchPlanResult> matchPlanResults = result.get(j).getList();
                     if (matchPlanResults != null && matchPlanResults.size() == 1) {
                         f_result.add(result.get(j));
                     }
-                } else if (type.equals("2")) {
+                } else if (type.equals("1")) {
                     //2串1
                     List<MatchPlanResult> matchPlanResults = result.get(j).getList();
                     if (matchPlanResults != null && matchPlanResults.size() == 2) {
