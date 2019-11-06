@@ -86,7 +86,7 @@ public class ExpertJob implements Job {
                 } else if (list2.get(i).getTenZ() != null && list2.get(i).getTenZ().equals("9")) {
                     hot.setLz("10中9");
                 }
-                hot.setType("1");
+                hot.setType("2");
                 hot.setPushed(getPlanCount(list2.get(i).getId()));
                 hot.setLabel(list2.get(i).getLable());
                 hot.setImg(list2.get(i).getImg());
