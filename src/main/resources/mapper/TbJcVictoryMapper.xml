@@ -68,17 +68,15 @@
     z_all=#{zAll,jdbcType=VARCHAR},
     lz_big=#{lzBig,jdbcType=VARCHAR},
     yl_seven_days=#{ylSevenDays,jdbcType=VARCHAR},
-    ten_z=#{zAll,jdbcType=VARCHAR},
-    nine_z=#{zAll,jdbcType=VARCHAR},
 
-    eight_z=#{zAll,jdbcType=VARCHAR},
-    seven_z=#{zAll,jdbcType=VARCHAR},
-    six_z=#{zAll,jdbcType=VARCHAR},
-    five_z=#{zAll,jdbcType=VARCHAR},
-    four_z=#{zAll,jdbcType=VARCHAR},
-
-    three_z=#{zAll,jdbcType=VARCHAR}
-
+    ten_z=#{ten_z,jdbcType=VARCHAR},
+    nine_z=#{nine_z,jdbcType=VARCHAR},
+    eight_z=#{eight_z,jdbcType=VARCHAR},
+    seven_z=#{seven_z,jdbcType=VARCHAR},
+    six_z=#{six_z,jdbcType=VARCHAR},
+    five_z=#{five_z,jdbcType=VARCHAR},
+    four_z=#{four_z,jdbcType=VARCHAR},
+    three_z=#{three_z,jdbcType=VARCHAR}
 
     where expert_Id=#{expertId,jdbcType=VARCHAR}
   </update>
