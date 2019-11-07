@@ -200,7 +200,7 @@ public class MatchListProtocol implements BaseProtocol {
         List<MatchResult1> newList=new ArrayList<>();
 
         //赛事类型或盘口赛选直接查数据库
-        if(panKouType!=null||matchType!=null){
+        if(!Strings.isNullOrEmpty(panKouType) ||!Strings.isNullOrEmpty(matchType)){
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(df.parse(time));
@@ -270,8 +270,6 @@ public class MatchListProtocol implements BaseProtocol {
             map.put("followNum", "0");//已关数量
             map.put("list", newList);
         }
-
-        map.put("pageNo", pageNo);
         return map;
     }
 

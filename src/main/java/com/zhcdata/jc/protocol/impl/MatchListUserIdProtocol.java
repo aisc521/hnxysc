@@ -206,7 +206,7 @@ public class MatchListUserIdProtocol implements BaseProtocol {
         List<MatchResult1> newList=new ArrayList<>();
 
         //赛事类型或盘口赛选直接查数据库
-        if(panKouType!=null||matchType!=null){
+        if(!Strings.isNullOrEmpty(panKouType) ||!Strings.isNullOrEmpty(matchType)){
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(df.parse(time));
