@@ -130,7 +130,13 @@ public interface ScheduleMapper {
                            @Param("guestCornerHalf") String guestCornerHalf,
                            @Param("ScheduleID") String ScheduleID
                            );
-    List<MatchResult1> queryMacthListForJob(@Param("startTime") String startDate, @Param("endTime")String endDate, @Param("type")String type, @Param("userId") String userId, @Param("state")String state,@Param("issueNum")String issueNum);
+    List<MatchResult1> queryMacthListForJob(@Param("startTime") String startDate,
+                                            @Param("endTime")String endDate,
+                                            @Param("type")String type,
+                                            @Param("userId") String userId,
+                                            @Param("state")String state,@Param("issueNum")String issueNum,
+                                            @Param("panKouType")String panKouType,
+                                            @Param("matchType")String matchType);
 
     String queryZcNum(@Param("startDate")String startDate, @Param("endTime")String endDate);
 

@@ -1,6 +1,7 @@
 package com.zhcdata.jc.protocol.impl;
 
 import com.fasterxml.jackson.databind.JavaType;
+import com.github.pagehelper.PageHelper;
 import com.google.common.base.Strings;
 import com.zhcdata.db.model.TbPgUCollect;
 import com.zhcdata.jc.dto.MatchResult1;
@@ -20,10 +21,8 @@ import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @Description 比赛列表
@@ -91,6 +90,53 @@ public class MatchListProtocol implements BaseProtocol {
         put("0","平手");
     }};
 
+    private static final Map<String, String> CorrespondingMap1 = new HashMap<String, String>(){{
+        put("受让五球", "-5");
+        put("受让四球半/五球","-4.75");
+        put("受让四球半","-4.5");
+        put("受让四球/四球半","-4.25");
+        put("受让四球","-4");
+        put("受让三球半/四球","-3.75");
+        put("受让三球半","-3.5");
+        put("受让三球/三球半","-3.25");
+        put("受让三球","-3");
+        put("受让两球半/三球","-2.75");
+        put("受让两球半","-2.5");
+        put("受让两球/两球半","-2.25");
+        put("受让两球","-2");
+        put("受让球半/两球","-1.75");
+        put("受让一球半","-1.5");
+        put("受让一球/球半","-1.25");
+        put("受让一球","-1");
+        put("受让一球","-1.0");
+        put("受让半一","-0.75");
+        put("受让半球","-0.5");
+        put("受让平半","-0.25");
+        put("五球","5");
+        put("四球半/五球","4.75");
+        put("四球半","4.5");
+        put("四球/四球半","4.25");
+        put("四球","4");
+        put("三球半/四球","3.75");
+        put("三球半","3.5");
+        put("三球/三球半","3.25");
+        put("三球","3");
+        put("两球半/三球","2.75");
+        put("两球半","2.5");
+        put("两球/两球半","2.25");
+        put("两球","2");
+        put("球半/两球","1.75");
+        put("一球半","1.5");
+        put("一球/球半","1.25");
+        put("一球","1");
+        put("一球","1.0");
+        put("半一","0.75");
+        put("半球","0.5");
+        put("平半","0.25");
+        put("平手","-0");
+        put("平手","0");
+    }};
+
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -151,64 +197,88 @@ public class MatchListProtocol implements BaseProtocol {
         String panKouType=paramMap.get("panKouType");
         String matchType=paramMap.get("matchType");
 
-        if(type.equals("all")){
-            type="5";
-        }else if(type.equals("2")) {
-            //北单按期号存的缓存
-            //time = scheduleService.queryBdNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
-        }else if(type.equals("3")){
-            time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
-            //time = paramMap.get("issueNum");
-        }else if(type.equals("6")){
-            time=issueNum;
-        }
-        if(StringUtils.isBlank(time)){
-            map.put("list","");
-        }else{
-            String re = (String) redisUtils.hget("SOCCER:HSET:AGAINSTLIST"+time + type, pageNo);
-            if(!Strings.isNullOrEmpty(re)){
-                JavaType javaType = JsonMapper.defaultMapper().buildMapType(Map.class,String.class,Object.class);
-                map = JsonMapper.defaultMapper().fromJson(re, javaType);
-                String s=JsonMapper.defaultMapper().toJson(map.get("list"));
-                JsonMapper jsonMapper = JsonMapper.defaultMapper();
-                JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
-                List<MatchResult1> newList=jsonMapper.fromJson(s, javaType1);
+        List<MatchResult1> newList=new ArrayList<>();
 
-                List<MatchResult1> result = new ArrayList<>();
-                //根据userId  和比赛id查询此产比赛此用户是否关注
-                if(StringUtils.isNotBlank(userId)){
-                    for(int i = 0; i < newList.size(); i++){
-                        MatchResult1 matchResult1 = newList.get(i);
-                        String matchId = matchResult1.getMatchId();
+        //赛事类型或盘口赛选直接查数据库
+        if(panKouType!=null||matchType!=null){
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(df.parse(time));
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            String endDate=df.format(calendar.getTime());
 
-                        TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId),Long.valueOf(matchId));
-                        if(tbPgUCollect != null){
-                            matchResult1.setIscollect("1");
-                        }
+            PageHelper.startPage(Integer.parseInt(pageNo), 20);
+            newList = scheduleService.queryMacthListForJob(time+" 11:00:00", endDate+ "11:00:00", type,"","",issueNum,CorrespondingMap1.get(panKouType),matchType); //竞彩
+        }else {
 
-                        if(matchType!=null&&matchType.length()>0){
-                            if(matchType.contains(matchResult1.getMatchName())){
-                                result.add(matchResult1);
-                            }
-                        }else if(panKouType!=null&&panKouType.length()>0){
-                            String panKou=CorrespondingMap.get(matchResult1.getMatchPankou());
-                            if(panKouType.contains(panKou)){
-                                result.add(matchResult1);
-                            }
-                        }else {
-                            result.add(matchResult1);
-                        }
-                    }
-                    Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
-                    map.put("followNum",followNum);//已关数量
-                    map.put("list",result);
-                }else{
-                    map.put("followNum","0");//已关数量
-                    map.put("list",newList);
+            if (type.equals("all")) {
+                type = "5";
+            } else if (type.equals("2")) {
+                //北单按期号存的缓存
+                //time = scheduleService.queryBdNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
+            } else if (type.equals("3")) {
+                time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
+                //time = paramMap.get("issueNum");
+            } else if (type.equals("6")) {
+                time = issueNum;
+            }
+            if (StringUtils.isBlank(time)) {
+                map.put("list", "");
+            } else {
+                String re = (String) redisUtils.hget("SOCCER:HSET:AGAINSTLIST" + time + type, pageNo);
+                if (!Strings.isNullOrEmpty(re)) {
+                    JavaType javaType = JsonMapper.defaultMapper().buildMapType(Map.class, String.class, Object.class);
+                    map = JsonMapper.defaultMapper().fromJson(re, javaType);
+                    String s = JsonMapper.defaultMapper().toJson(map.get("list"));
+                    JsonMapper jsonMapper = JsonMapper.defaultMapper();
+                    JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
+                    newList = jsonMapper.fromJson(s, javaType1);
+
                 }
             }
         }
+
+        List<MatchResult1> result = new ArrayList<>();
+        //根据userId  和比赛id查询此产比赛此用户是否关注
+        if (StringUtils.isNotBlank(userId)) {
+            for (int i = 0; i < newList.size(); i++) {
+                MatchResult1 matchResult1 = newList.get(i);
+                String matchId = matchResult1.getMatchId();
+
+                TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId), Long.valueOf(matchId));
+                if (tbPgUCollect != null) {
+                    matchResult1.setIscollect("1");
+                }
+
+                if (matchType != null && matchType.length() > 0) {
+                    if (matchType.contains(matchResult1.getMatchName())) {
+                        result.add(matchResult1);
+                    }
+                } else if (panKouType != null && panKouType.length() > 0) {
+                    String panKou = CorrespondingMap.get(matchResult1.getMatchPankou());
+                    if (panKouType.contains(panKou)) {
+                        result.add(matchResult1);
+                    }
+                } else {
+                    result.add(matchResult1);
+                }
+            }
+            Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+            map.put("followNum", followNum);//已关数量
+            map.put("list", result);
+        } else {
+            map.put("followNum", "0");//已关数量
+            map.put("list", newList);
+        }
+
         return map;
     }
 
+    /**
+     * 转换盘口
+     */
+    public String getP(){
+
+        return "";
+    }
 }

@@ -821,6 +821,9 @@
         DATE_FORMAT(sc.MatchTime,'%H:%i') matchTime,/*开始时间*/
         sc.MatchTime2 MatchTime2,
         sc.MatchTime matchTimeOrder,
+        case when sc.MatchState in('0','-10','-11','-12','-13','-14') then '3'
+        when sc.MatchState in('1','2','3') then '0'
+        when sc.MatchState in('4','5','-1') then '5' end as ord,
         case when sc.MatchState = '0' then '未' /*未开始*/
         when sc.MatchState in('4','5') then '(完)' /*正在进行*/
         when sc.MatchState = '2' then '中' /*中场*/
@@ -870,10 +873,10 @@
         LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
         LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id and pg.user_id = #{userId}
         <if test="type == 3">
-            <if test="issueNum !=null ">
+            <if test="issueNum !=null and issueNum !=''">
                 where lottery.ISSUE_NUM =#{issueNum}
             </if>
-            <if test="issueNum ==null ">
+            <if test="issueNum ==null || issueNum==''">
                 where lottery. ISSUE_NUM in(
                 SELECT lottery.ISSUE_NUM from jc_match_lottery lottery
                 LEFT JOIN `schedule` sch on lottery.ID_BET007=sch.scheduleID where lottery.lottery='SF14' and
@@ -904,6 +907,12 @@
             and lottery.LOTTERY = 'BJDC'
         </if>
         and sc.bfShow=0
+        <if test="panKouType != null and panKouType != ''">
+            and  goal.FirstGoal= #{panKouType}
+        </if>
+        <if test="matchType != null and matchType !=''">
+            and  class.Name_JS= #{matchType}
+        </if>
         ) a ORDER BY
         <if test="type == 1">
             a.num
@@ -918,6 +927,9 @@
             a.num1,abs(a.num2)
         </if>
         asc
+        <if test="panKouType != null or matchType != null">
+            ,abs(a.ord)
+        </if>
     </select>
 
 
