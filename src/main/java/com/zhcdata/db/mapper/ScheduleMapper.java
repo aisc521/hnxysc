@@ -135,8 +135,8 @@ public interface ScheduleMapper {
                                             @Param("type")String type,
                                             @Param("userId") String userId,
                                             @Param("state")String state,@Param("issueNum")String issueNum,
-                                            @Param("panKouType")String panKouType,
-                                            @Param("matchType")String matchType);
+                                            @Param("panKouTypeList")List<String> panKouType,
+                                            @Param("matchTypeList")List<String> matchType);
 
     String queryZcNum(@Param("startDate")String startDate, @Param("endTime")String endDate);
 

@@ -266,31 +266,29 @@ public class MatchListUserIdProtocol implements BaseProtocol {
         return map;
     }
 
-    public String getPanKou(String value) {
-        String re = "";
+    public List<String> getPanKou(String value) {
+        List<String> list = new ArrayList<>();
         if (value.contains(",")) {
             String[] ps = value.split(",");
             for (int i = 0; i < ps.length; i++) {
-                re += "'"+CorrespondingMap1.get(ps[i]) + "',";
+                list.add(CorrespondingMap1.get(ps[i]));
             }
-            re = re.substring(0, re.length() - 1);
-        } else {
-            re = value;
+        } else if(value.length()>0) {
+            list.add(CorrespondingMap1.get(value));
         }
-        return re;
+        return list;
     }
 
-    public String getMatchType(String value){
-        String re = "";
+    public List<String> getMatchType(String value) {
+        List<String> list = new ArrayList<>();
         if (value.contains(",")) {
             String[] ps = value.split(",");
             for (int i = 0; i < ps.length; i++) {
-                re += "'"+ps[i] + "',";
+                list.add(ps[i]);
             }
-            re = re.substring(0, re.length() - 1);
-        } else {
-            re = value;
+        } else if(value.length()>0) {
+            list.add(value);
         }
-        return re;
+        return list;
     }
 }
