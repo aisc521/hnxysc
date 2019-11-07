@@ -211,7 +211,15 @@
     IFNULL(f.status,'0') status,
     e.grade,
     e.popularity,
-    v.lz_big lzBig
+    v.lz_big lzBig,
+    v.ten_z tenZ,
+    v.nine_z nineZ,
+    v.eight_z eightZ,
+    v.seven_z sevenZ,
+    v.six_z sixZ,
+    v.five_z fiveZ,
+    v.four_z fourZ,
+    v.three_z threeZ
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id and f.user_id = #{userId}
     where e.id=#{expertId}
