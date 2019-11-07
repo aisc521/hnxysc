@@ -44,7 +44,7 @@ public class MatchListProtocol implements BaseProtocol {
     @Resource
     private TbPgUCollectService tbPgUCollectService;
 
-    private static final Map<String, String> CorrespondingMap = new HashMap<String, String>(){{
+    private static final Map<String, String> CorrespondingMap = new HashMap<String, String>() {{
         put("-5", "受让五球");
         put("-4.75", "受让四球半/五球");
         put("-4.5", "受让四球半");
@@ -87,55 +87,55 @@ public class MatchListProtocol implements BaseProtocol {
         put("0.75", "半一");
         put("0.5", "半球");
         put("0.25", "平半");
-        put("-0","平手");
-        put("0","平手");
+        put("-0", "平手");
+        put("0", "平手");
     }};
 
-    private static final Map<String, String> CorrespondingMap1 = new HashMap<String, String>(){{
+    private static final Map<String, String> CorrespondingMap1 = new HashMap<String, String>() {{
         put("受让五球", "-5");
-        put("受让四球半/五球","-4.75");
-        put("受让四球半","-4.5");
-        put("受让四球/四球半","-4.25");
-        put("受让四球","-4");
-        put("受让三球半/四球","-3.75");
-        put("受让三球半","-3.5");
-        put("受让三球/三球半","-3.25");
-        put("受让三球","-3");
-        put("受让两球半/三球","-2.75");
-        put("受让两球半","-2.5");
-        put("受让两球/两球半","-2.25");
-        put("受让两球","-2");
-        put("受让球半/两球","-1.75");
-        put("受让一球半","-1.5");
-        put("受让一球/球半","-1.25");
-        put("受让一球","-1");
-        put("受让一球","-1.0");
-        put("受让半一","-0.75");
-        put("受让半球","-0.5");
-        put("受让平半","-0.25");
-        put("五球","5");
-        put("四球半/五球","4.75");
-        put("四球半","4.5");
-        put("四球/四球半","4.25");
-        put("四球","4");
-        put("三球半/四球","3.75");
-        put("三球半","3.5");
-        put("三球/三球半","3.25");
-        put("三球","3");
-        put("两球半/三球","2.75");
-        put("两球半","2.5");
-        put("两球/两球半","2.25");
-        put("两球","2");
-        put("球半/两球","1.75");
-        put("一球半","1.5");
-        put("一球/球半","1.25");
-        put("一球","1");
-        put("一球","1.0");
-        put("半一","0.75");
-        put("半球","0.5");
-        put("平半","0.25");
-        put("平手","-0");
-        put("平手","0");
+        put("受让四球半/五球", "-4.75");
+        put("受让四球半", "-4.5");
+        put("受让四球/四球半", "-4.25");
+        put("受让四球", "-4");
+        put("受让三球半/四球", "-3.75");
+        put("受让三球半", "-3.5");
+        put("受让三球/三球半", "-3.25");
+        put("受让三球", "-3");
+        put("受让两球半/三球", "-2.75");
+        put("受让两球半", "-2.5");
+        put("受让两球/两球半", "-2.25");
+        put("受让两球", "-2");
+        put("受让球半/两球", "-1.75");
+        put("受让一球半", "-1.5");
+        put("受让一球/球半", "-1.25");
+        put("受让一球", "-1");
+        put("受让一球", "-1.0");
+        put("受让半一", "-0.75");
+        put("受让半球", "-0.5");
+        put("受让平半", "-0.25");
+        put("五球", "5");
+        put("四球半/五球", "4.75");
+        put("四球半", "4.5");
+        put("四球/四球半", "4.25");
+        put("四球", "4");
+        put("三球半/四球", "3.75");
+        put("三球半", "3.5");
+        put("三球/三球半", "3.25");
+        put("三球", "3");
+        put("两球半/三球", "2.75");
+        put("两球半", "2.5");
+        put("两球/两球半", "2.25");
+        put("两球", "2");
+        put("球半/两球", "1.75");
+        put("一球半", "1.5");
+        put("一球/球半", "1.25");
+        put("一球", "1");
+        put("一球", "1.0");
+        put("半一", "0.75");
+        put("半球", "0.5");
+        put("平半", "0.25");
+        put("平手", "-0");
+        put("平手", "0");
     }};
 
     @Override
@@ -158,7 +158,6 @@ public class MatchListProtocol implements BaseProtocol {
                 return map;
             }
         }*/
-
 
 
         String matchTime = paramMap.get("matchTime");
@@ -194,28 +193,32 @@ public class MatchListProtocol implements BaseProtocol {
         String time = paramMap.get("matchTime");
         String pageNo = paramMap.get("pageNo");
         String userId = paramMap.get("userId");
-        String issueNum=paramMap.get("issueNum");
-        String panKouType=paramMap.get("panKouType");
-        String matchType=paramMap.get("matchType");
+        String issueNum = paramMap.get("issueNum");
+        String panKouType = paramMap.get("panKouType");
+        String matchType = paramMap.get("matchType");
 
-        List<MatchResult1> newList=new ArrayList<>();
+        List<MatchResult1> newList = new ArrayList<>();
 
         //赛事类型或盘口赛选直接查数据库
-        if(!Strings.isNullOrEmpty(panKouType) ||!Strings.isNullOrEmpty(matchType)){
+        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType)) {
+            if (type.equals("all")) {
+                type = "4";
+            }
+
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(df.parse(time));
             calendar.add(Calendar.DAY_OF_MONTH, 1);
-            String endDate=df.format(calendar.getTime());
+            String endDate = df.format(calendar.getTime());
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
-            newList = scheduleService.queryMacthListForJob(time+" 11:00:00", endDate+ "11:00:00", type,"","",issueNum,CorrespondingMap1.get(panKouType),matchType); //竞彩
+            newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + "11:00:00", type, null, "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //竞彩
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
             map.put("pageNo", infos.getPageNum());
             map.put("pageTotal", infos.getPages());
             map.put("totalNum", infos.getTotal());
             map.put("list", infos.getList());
-        }else {
+        } else {
 
             if (type.equals("all")) {
                 type = "5";
@@ -255,19 +258,6 @@ public class MatchListProtocol implements BaseProtocol {
                 if (tbPgUCollect != null) {
                     matchResult1.setIscollect("1");
                 }
-
-                if (matchType != null && matchType.length() > 0) {
-                    if (matchType.contains(matchResult1.getMatchName())) {
-                        result.add(matchResult1);
-                    }
-                } else if (panKouType != null && panKouType.length() > 0) {
-                    String panKou = CorrespondingMap.get(matchResult1.getMatchPankou());
-                    if (panKouType.contains(panKou)) {
-                        result.add(matchResult1);
-                    }
-                } else {
-                    result.add(matchResult1);
-                }
             }
             Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
             map.put("followNum", followNum);//已关数量
@@ -282,8 +272,31 @@ public class MatchListProtocol implements BaseProtocol {
     /**
      * 转换盘口
      */
-    public String getP(){
+    public String getPanKou(String value) {
+        String re = "";
+        if (value.contains(",")) {
+            String[] ps = value.split(",");
+            for (int i = 0; i < ps.length; i++) {
+                re += "'"+CorrespondingMap1.get(ps[i]) + "',";
+            }
+            re = re.substring(0, re.length() - 1);
+        } else {
+            re = CorrespondingMap1.get(value);
+        }
+        return re;
+    }
 
-        return "";
+    public String getMatchType(String value){
+        String re = "";
+        if (value.contains(",")) {
+            String[] ps = value.split(",");
+            for (int i = 0; i < ps.length; i++) {
+                re += "'"+ps[i] + "',";
+            }
+            re = re.substring(0, re.length() - 1);
+        } else {
+            re = value;
+        }
+        return re;
     }
 }

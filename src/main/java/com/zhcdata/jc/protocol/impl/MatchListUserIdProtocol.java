@@ -215,7 +215,7 @@ public class MatchListUserIdProtocol implements BaseProtocol {
             String endDate=df.format(calendar.getTime());
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
-            newList = scheduleService.queryMacthListForJob(time+" 11:00:00", endDate+ "11:00:00", type,"","",issueNum,CorrespondingMap1.get(panKouType),matchType); //竞彩
+            newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + "11:00:00", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //竞彩
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
             map.put("pageNo", infos.getPageNum());
             map.put("pageTotal", infos.getPages());
@@ -254,19 +254,6 @@ public class MatchListUserIdProtocol implements BaseProtocol {
                         if (tbPgUCollect != null) {
                             matchResult1.setIscollect("1");
                         }
-
-                        if (matchType != null && matchType.length() > 0) {
-                            if (matchType.contains(matchResult1.getMatchName())) {
-                                result.add(matchResult1);
-                            }
-                        } else if (panKouType != null && panKouType.length() > 0) {
-                            String panKou = CorrespondingMap.get(matchResult1.getMatchPankou());
-                            if (panKouType.contains(panKou)) {
-                                result.add(matchResult1);
-                            }
-                        } else {
-                            result.add(matchResult1);
-                        }
                     }
                     Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
                     map.put("followNum", followNum);//已关数量
@@ -277,5 +264,33 @@ public class MatchListUserIdProtocol implements BaseProtocol {
 
         map.put("pageNo", pageNo);
         return map;
+    }
+
+    public String getPanKou(String value) {
+        String re = "";
+        if (value.contains(",")) {
+            String[] ps = value.split(",");
+            for (int i = 0; i < ps.length; i++) {
+                re += "'"+CorrespondingMap1.get(ps[i]) + "',";
+            }
+            re = re.substring(0, re.length() - 1);
+        } else {
+            re = value;
+        }
+        return re;
+    }
+
+    public String getMatchType(String value){
+        String re = "";
+        if (value.contains(",")) {
+            String[] ps = value.split(",");
+            for (int i = 0; i < ps.length; i++) {
+                re += "'"+ps[i] + "',";
+            }
+            re = re.substring(0, re.length() - 1);
+        } else {
+            re = value;
+        }
+        return re;
     }
 }
