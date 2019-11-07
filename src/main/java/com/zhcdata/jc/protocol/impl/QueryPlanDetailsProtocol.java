@@ -148,14 +148,14 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         map.put("awayTeamName",firstInfo.get("awayTeamName").toString());
 
                         map.put("no_rang_num", "0");
-                        map.put("no_rang_sheng", ""+list.get(i).get("homeTeamZhu"));
-                        map.put("no_rang_ping", ""+list.get(i).get("homeTeamPing"));
-                        map.put("no_rang_fu", ""+list.get(i).get("homeTeamKe"));
+                        map.put("rang_sheng", ""+list.get(i).get("homeTeamZhu"));
+                        map.put("rang_ping", ""+list.get(i).get("homeTeamPing"));
+                        map.put("rang_fu", ""+list.get(i).get("homeTeamKe"));
 
                         map.put("rang_num", ""+list.get(i).get("awayTeamRangballs"));
-                        map.put("rang_sheng", ""+list.get(i).get("awayTeamZhu"));
-                        map.put("rang_ping", ""+list.get(i).get("awayTeamPing"));
-                        map.put("rang_fu", ""+list.get(i).get("awayTeamKe"));
+                        map.put("no_rang_sheng", ""+list.get(i).get("awayTeamZhu"));
+                        map.put("no_rang_ping", ""+list.get(i).get("awayTeamPing"));
+                        map.put("no_rang_fu", ""+list.get(i).get("awayTeamKe"));
                         map.put("match_status", ""+list.get(i).get("statusmatch"));
                         map.put("match_result", ""+list.get(i).get("matchResult"));
 
