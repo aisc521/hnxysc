@@ -74,7 +74,7 @@ public interface ScheduleService {
      * @param s2
      * @return
      */
-    List<MatchResult1> queryMacthListForJob( String startDate, String endDate, String s, String s1, String s2,String issueNum,String panKouType,String matchType);
+    List<MatchResult1> queryMacthListForJob( String startDate, String endDate, String s, String s1, String s2,String issueNum,List<String> panKouType,List<String> matchType);
 
     String queryZcNum( String startDate,  String endDate);
 
