@@ -157,7 +157,7 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                     if (matchPlanResults.size()==ed) {
                         //0 已结束 1 进行中 2 在售
                         tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),0);
-                    }else if(ed > 0){
+                    }else if(ed > 0 && ed < matchPlanResults.size()){
                         tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),1);
                     }else if(ed == 0){
                         tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),2);
