@@ -167,7 +167,7 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                         //未中
                         tbPlanService.updateStatus("0", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
                         TbJcPlan tb = planResults.get(i);
-                        //refundFrozenToMoney(tb);
+                        refundFrozenToMoney(tb);
                     } else if (result == 1) {
                         //已中
                         if(matchPlanResults.size()==ed){
@@ -175,9 +175,8 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
 
                             TbJcPlan tb = planResults.get(i);//专家经验值+3
                             UpdateExpert(tb);
-                            //扣款
-
-                            //deductFrozen(tb);
+                            //扣
+                            deductFrozen(tb);
                         }
 
                     }
