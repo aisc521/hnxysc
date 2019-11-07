@@ -145,7 +145,7 @@
     v.lz_big lzBig
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
-    where e.id=#{expertId} and e.is_upshelf = '1'
+    where e.id=#{expertId}
     	GROUP BY e.id
   </select>
   <select id="queryExperts" resultType="com.zhcdata.jc.dto.ExpertInfo">
@@ -214,7 +214,7 @@
     v.lz_big lzBig
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id and f.user_id = #{userId}
-    where e.id=#{expertId} and e.is_upshelf = '1'
+    where e.id=#{expertId}
     GROUP BY e.id
   </select>
 
