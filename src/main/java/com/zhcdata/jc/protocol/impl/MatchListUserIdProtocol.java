@@ -2,6 +2,7 @@ package com.zhcdata.jc.protocol.impl;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
 import com.zhcdata.db.model.TbPgUCollect;
 import com.zhcdata.jc.dto.MatchResult1;
@@ -215,6 +216,11 @@ public class MatchListUserIdProtocol implements BaseProtocol {
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
             newList = scheduleService.queryMacthListForJob(time+" 11:00:00", endDate+ "11:00:00", type,"","",issueNum,CorrespondingMap1.get(panKouType),matchType); //竞彩
+            PageInfo<MatchResult1> infos = new PageInfo<>(newList);
+            map.put("pageNo", infos.getPageNum());
+            map.put("pageTotal", infos.getPages());
+            map.put("totalNum", infos.getTotal());
+            map.put("list", infos.getList());
         }else {
 
             if (type.equals("all")) {
