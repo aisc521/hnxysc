@@ -56,7 +56,7 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                 int result = 1;         //标识该方案是否中出,有一场未中,就是不中
                 int z_count = 0;        //已中方案数量 例如推3中1,推3中2
                 int ed=0;               //该方案已结束的比赛
-
+                int start=0;            //该方案已经开始的个数
                 List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(String.valueOf(planResults.get(i).getId())); //该方案的赛事信息
                 if (matchPlanResults != null && matchPlanResults.size() > 0) {
                     for (int k = 0; k < matchPlanResults.size(); k++) {
@@ -76,6 +76,11 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                             if(scoreDto.getStatusType().equals("finished")) {
                                 ed += 1;        //已结束个数
                             }
+
+                            if(scoreDto.getStatusType().equals("'inprogress'")) {
+                                start += 1;        //已经开始的个数
+                            }
+
 
                             if (scoreDto.getStatusType().equals("finished")) {
                                 int hScore1 = Integer.parseInt(scoreDto.getHomeScore());
@@ -157,17 +162,25 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                     if (matchPlanResults.size()==ed) {
                         //0 已结束 1 进行中 2 在售
                         tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),0);
-                    }else if(ed > 0){
+                    }else if(ed > 0 && ed < matchPlanResults.size()){
                         tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),1);
                     }else if(ed == 0){
-                        tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),2);
+                        //全部都不是已经结束的状态
+                        //判断是否有进行中的比赛
+                        if(start == 0){//没有正在进行中的比赛
+                            tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),2);
+                        }
+                        if(start > 0){//都是进行中的比赛
+                            tbPlanService.updateStatusPlanById(String.valueOf(planResults.get(i).getId()),1);
+                        }
+
                     }
 
                     if (result == 0) {
                         //未中
                         tbPlanService.updateStatus("0", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()));
                         TbJcPlan tb = planResults.get(i);
-                        //refundFrozenToMoney(tb);
+                        refundFrozenToMoney(tb);
                     } else if (result == 1) {
                         //已中
                         if(matchPlanResults.size()==ed){
@@ -175,9 +188,8 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
 
                             TbJcPlan tb = planResults.get(i);//专家经验值+3
                             UpdateExpert(tb);
-                            //扣款
-
-                            //deductFrozen(tb);
+                            //扣
+                            deductFrozen(tb);
                         }
 
                     }
