@@ -1139,4 +1139,91 @@ public class CommonUtils {
         }
     }
 
+    public void hotExpertLzType(HotExpertDto hotExpertDto,ExpertHotResult hot){
+        String orderby = String.valueOf(hotExpertDto.getOrderBy());
+        if(orderby.startsWith("1")){//1类
+            hot.setType("1");
+            hot.setLz(String.valueOf(hotExpertDto.getOrderBy() - 100));
+            return;
+        }
+        if(orderby.startsWith("2")){//2类
+            hot.setType("2");
+            if("209".equals(orderby)){
+                hot.setLz("10中9");
+            }
+            if("208".equals(orderby)){
+                hot.setLz("9中8");
+            }
+            if("207".equals(orderby)){
+                hot.setLz("8中7");
+            }
+            if("206".equals(orderby)){
+                hot.setLz("7中6");
+            }
+            if("205".equals(orderby)){
+                hot.setLz("6中5");
+            }
+            if("204".equals(orderby)){
+                hot.setLz("5中4");
+            }
+            return;
+        }
+        if(orderby.startsWith("3")){//3类
+            hot.setType("2");
+            hot.setLz(hotExpertDto.getReturnSevenDays() + "%");
+            return;
+        }
+        if(orderby.startsWith("4")){//4类
+            hot.setType("2");
+            if("405".equals(orderby)){
+                hot.setLz("7中5");
+            }
+            if("406".equals(orderby)){
+                hot.setLz("8中6");
+            }
+            if("407".equals(orderby)){
+                hot.setLz("9中7");
+            }
+            if("408".equals(orderby)){
+                hot.setLz("10中8");
+            }
+            return;
+        }
+        if(orderby.startsWith("5")){//5类
+            hot.setType("2");
+            if("505".equals(orderby)){
+                hot.setLz("8中5");
+            }
+            if("506".equals(orderby)){
+                hot.setLz("9中6");
+            }
+            if("507".equals(orderby)){
+                hot.setLz("10中7");
+            }
+            return;
+        }
+        if(orderby.startsWith("6")){//6类
+            hot.setType("1");
+            hot.setLz(String.valueOf(hotExpertDto.getOrderBy() - 100));
+            return;
+        }
+        if(orderby.startsWith("7")){//7类
+            hot.setType("2");
+            if("702".equals(orderby)){
+                hot.setLz("3中2");
+            }
+            if("703".equals(orderby)){
+                hot.setLz("4中3");
+            }
+            return;
+        }
+        if(orderby.startsWith("8")){//8类
+            hot.setType("2");
+            hot.setLz("历史战绩佳");
+            return;
+        }
+
+    }
+
+
 }
