@@ -1170,7 +1170,7 @@ public class CommonUtils {
         }
         if(orderby.startsWith("3")){//3类
             hot.setType("2");
-            hot.setLz(hotExpertDto.getReturnSevenDays() + "%");
+            hot.setLz("回报率:" + hotExpertDto.getReturnSevenDays() + "%");
             return;
         }
         if(orderby.startsWith("4")){//4类
