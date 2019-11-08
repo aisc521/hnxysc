@@ -57,7 +57,8 @@
       v.five_z fiveZ,
       v.four_z fourZ,
       v.three_z threeZ,
-      v.return_seven_days returnSevenDays
+      v.return_seven_days returnSevenDays,
+      v.lz_big lzBig
       from tb_jc_plan  p
       LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
       LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
@@ -383,7 +384,8 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     victory.five_z fiveZ,
     victory.four_z fourZ,
     victory.three_z threeZ,
-    victory.return_seven_days returnSevenDays
+    victory.return_seven_days returnSevenDays,
+    v.lz_big lzBig
     from
     tb_jc_plan p
     LEFT JOIN tb_jc_expert expert ON p.ascription_expert = expert.id

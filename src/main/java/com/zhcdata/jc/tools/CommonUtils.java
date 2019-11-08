@@ -694,6 +694,13 @@ public class CommonUtils {
             lz = "3中" + info.getFourZ();
             return lz;
         }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getLzBig())){
+            info.setLzBig("0");
+        }
+        if(Integer.valueOf(info.getLzBig()) >= 8){//历史8连红以及以上
+            lz = info.getLzBig();
+            return lz;
+        }
         return lz;
     }
 
@@ -827,6 +834,13 @@ public class CommonUtils {
         }
         if(Integer.valueOf(info.getFourZ()) == 3){//4中3
             lz = "3中" + info.getFourZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getLzBig())){
+            info.setLzBig("0");
+        }
+        if(Integer.valueOf(info.getLzBig()) >= 8){//历史8连红以及以上
+            lz = info.getLzBig();
             return lz;
         }
         return lz;
@@ -967,6 +981,13 @@ public class CommonUtils {
             lz = "3中" + info.getFourZ();
             return lz;
         }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getLzBig())){
+            info.setLzBig("0");
+        }
+        if(Integer.valueOf(info.getLzBig()) >= 8){//历史8连红以及以上
+            lz = info.getLzBig();
+            return lz;
+        }
         return lz;
     }
 
@@ -1103,6 +1124,13 @@ public class CommonUtils {
             lz = "3中" + info.getFourZ();
             return lz;
         }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getLzBig())){
+            info.setLzBig("0");
+        }
+        if(Integer.valueOf(info.getLzBig()) >= 8){//历史8连红以及以上
+            lz = info.getLzBig();
+            return lz;
+        }
         return lz;
     }
     /**
@@ -1226,6 +1254,11 @@ public class CommonUtils {
             return;
         }
         if(orderby.startsWith("8")){//8类
+            hot.setType("1");
+            hot.setLz(String.valueOf(hotExpertDto.getLzBig()));
+            return;
+        }
+        if(orderby.startsWith("9")){//9类
             hot.setType("2");
             hot.setLz("历史战绩佳");
             return;
