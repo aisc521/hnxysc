@@ -67,7 +67,7 @@
       <if test="userId != null">
           and pd.user_id = #{userId}
       </if>
-    where 1=1 and p.status in('1','2')
+    where 1=1 and p.status in('1','2') and e.is_upshelf = '1'
     <if test="id != null">
       and e.id = #{id}
     </if>
@@ -666,7 +666,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         <if test="userId != null">
             and pd.user_id = #{userId}
         </if>
-        where 1=1 and p.status in('1','2') and v.order_By is not null
+        where 1=1 and p.status in('1','2') and v.order_By is not null and e.is_upshelf = '1'
         GROUP BY p.id
         ORDER BY v.i asc
     </select>
