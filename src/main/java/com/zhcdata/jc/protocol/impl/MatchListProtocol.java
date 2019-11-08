@@ -221,6 +221,10 @@ public class MatchListProtocol implements BaseProtocol {
             map.put("list", infos.getList());
         } else {
 
+            if(issueNum!=null&&issueNum!=""){
+                type="6";
+            }
+
             if (type.equals("all")) {
                 type = "5";
             } else if (type.equals("2")) {
