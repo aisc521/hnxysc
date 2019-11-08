@@ -48,16 +48,14 @@ public class MatchResult1 {
     private String homeImg;
     private String visitImg;
 
-    private String statusescFK;
-
-
-
     private String homeId;
     private String visitingId;
 
     private String matchType;
 
     private String matchTime2;
+
+    private String recommendCount;
 
     public String getMatchType() {
         return matchType;
@@ -129,14 +127,6 @@ public class MatchResult1 {
 
     public void setStatusType(String statusType) {
         this.statusType = statusType;
-    }
-
-    public String getStatusescFK() {
-        return statusDescFK;
-    }
-
-    public void setStatusescFK(String statusescFK) {
-        this.statusDescFK = statusescFK;
     }
 
     public String getValue() {
@@ -291,14 +281,6 @@ public class MatchResult1 {
         this.drawno = drawno;
     }
 
-    public String getStatusDescFK() {
-        return statusDescFK;
-    }
-
-    public void setStatusDescFK(String statusDescFK) {
-        this.statusDescFK = statusDescFK;
-    }
-
     public String getParName() {
         return parName;
     }
@@ -337,5 +319,21 @@ public class MatchResult1 {
 
     public void setMatchTime2(String matchTime2) {
         this.matchTime2 = matchTime2;
+    }
+
+    public String getStatusDescFK() {
+        return statusDescFK;
+    }
+
+    public void setStatusDescFK(String statusDescFK) {
+        this.statusDescFK = statusDescFK;
+    }
+
+    public String getRecommendCount() {
+        return recommendCount;
+    }
+
+    public void setRecommendCount(String recommendCount) {
+        this.recommendCount = recommendCount;
     }
 }

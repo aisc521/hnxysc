@@ -34,14 +34,6 @@ public class QueryExpertHotProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-        //        1、4连红及以上
-        //        2、5中4，6中5，7中6，8中7，9中8，10中9
-        //        3、回报率100％以上（近7天）
-        //        4、7中5，8中6，9中7，10中8
-        //        5、10中7，10中6，10中5
-        //        6、2连红和3连红
-        //        7、近3中2，近4中3
-        //
         try {
             String re = (String )redisUtils.hget("SOCCER:HSET:EXPERT", "hot");
             if(!Strings.isNullOrEmpty(re)) {

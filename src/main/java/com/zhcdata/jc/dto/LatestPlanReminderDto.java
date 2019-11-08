@@ -22,6 +22,15 @@ public class LatestPlanReminderDto {
     private String fourZ;
     private String threeZ;
     private String returnSevenDays;
+    private String lzBig;
+
+    public String getLzBig() {
+        return lzBig;
+    }
+
+    public void setLzBig(String lzBig) {
+        this.lzBig = lzBig;
+    }
 
     public String getReturnSevenDays() {
         return returnSevenDays;

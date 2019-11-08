@@ -221,6 +221,10 @@ public class MatchListProtocol implements BaseProtocol {
             map.put("list", infos.getList());
         } else {
 
+            if(issueNum!=null&&issueNum!=""){
+                type="6";
+            }
+
             if (type.equals("all")) {
                 type = "5";
             } else if (type.equals("2")) {
@@ -243,30 +247,30 @@ public class MatchListProtocol implements BaseProtocol {
                     JsonMapper jsonMapper = JsonMapper.defaultMapper();
                     JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
                     newList = jsonMapper.fromJson(s, javaType1);
-
                 }
             }
         }
 
-        List<MatchResult1> result = new ArrayList<>();
-        //根据userId  和比赛id查询此产比赛此用户是否关注
-        if (StringUtils.isNotBlank(userId)) {
-            for (int i = 0; i < newList.size(); i++) {
-                MatchResult1 matchResult1 = newList.get(i);
-                String matchId = matchResult1.getMatchId();
-
-                TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId), Long.valueOf(matchId));
-                if (tbPgUCollect != null) {
-                    matchResult1.setIscollect("1");
-                }
-            }
-            Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
-            map.put("followNum", followNum);//已关数量
-            map.put("list", result);
-        } else {
-            map.put("followNum", "0");//已关数量
-            map.put("list", newList);
-        }
+//        List<MatchResult1> result = new ArrayList<>();
+//        //根据userId  和比赛id查询此产比赛此用户是否关注
+//        if (StringUtils.isNotBlank(userId)) {
+//            for (int i = 0; i < newList.size(); i++) {
+//                MatchResult1 matchResult1 = newList.get(i);
+//                String matchId = matchResult1.getMatchId();
+//
+//                TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId), Long.valueOf(matchId));
+//                if (tbPgUCollect != null) {
+//                    matchResult1.setIscollect("1");
+//                }
+//                newList.add(matchResult1);
+//            }
+//            Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+//            map.put("followNum", followNum);//已关数量
+//            map.put("list", result);
+//        } else {
+//            map.put("followNum", "0");//已关数量
+//            map.put("list", newList);
+//        }
         return map;
     }
 

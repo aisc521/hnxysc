@@ -83,4 +83,6 @@ public interface TbPlanService {
     PageInfo<PlanResult1> queryPlanByExpertIdForExpert(String id, String planId, String userId, Integer integer, int i);
 
     TbJcPlan queryOnePlan(String expertId);
+
+    PageInfo<PlanResult1> queryHotPlan(String userId, Integer integer, int i);
 }

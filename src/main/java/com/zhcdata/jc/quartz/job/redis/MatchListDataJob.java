@@ -272,25 +272,29 @@ public class MatchListDataJob implements Job {
             //处理盘口
             r1.setMatchPankou(getPanKou1(r1.getMatchPankou()));
             if(r1.getMatchState().equals("1")){
-                r1.setStatusDescFK("2");
-                r1.setStatusescFK("2");
+                r1.setStatusDescFK("1");
                 if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
                     r1.setMatchState(len+"'");
+                }else {
+                    r1.setMatchState("'完'");
                 }
             }else if(r1.getMatchState().equals("3")){
                 r1.setStatusDescFK("3");
-                r1.setStatusescFK("3");
                 if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
                     r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");
+                }else {
+                    r1.setMatchState("'完'");
                 }
-            }
-
-            if(r1.getMatchState().equals("未")) {
-                r1.setStatusDescFK("1");
+            }else if(r1.getMatchState().equals("中")){
+                r1.setStatusDescFK("2");
+            }else if(r1.getMatchState().equals("(完)")){
+                r1.setStatusDescFK("-1");
+            }else if(r1.getMatchState().equals("未")) {
+                r1.setStatusDescFK("0");
             }
             result1s.add(r1);
         }

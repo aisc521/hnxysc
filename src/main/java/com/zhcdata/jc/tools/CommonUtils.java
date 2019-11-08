@@ -566,32 +566,13 @@ public class CommonUtils {
             lz = info.getLzNow();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getFiveZ())){
-            info.setFiveZ("0");
+
+
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
+            info.setTenZ("0");
         }
-        if(Integer.valueOf(info.getFiveZ()) == 4){//五中四
-            lz = "5中" + info.getFiveZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSixZ())){
-            info.setSixZ("0");
-        }
-        if(Integer.valueOf(info.getSixZ()) == 5){//6中5
-            lz = "6中" + info.getSixZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
-            info.setSevenZ("0");
-        }
-        if(Integer.valueOf(info.getSevenZ()) == 6){//7中6
-            lz = "7中" + info.getSevenZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
-            info.setEightZ("0");
-        }
-        if(Integer.valueOf(info.getEightZ()) == 7){//8中7
-            lz = "8中" + info.getEightZ();
+        if(Integer.valueOf(info.getTenZ()) == 9){//10中9
+            lz = "10中" + info.getTenZ();
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getNineZ())){
@@ -601,34 +582,49 @@ public class CommonUtils {
             lz = "9中" + info.getNineZ();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
-            info.setTenZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
+            info.setEightZ("0");
         }
-        if(Integer.valueOf(info.getTenZ()) == 9){//10中9
-            lz = "10中" + info.getTenZ();
+        if(Integer.valueOf(info.getEightZ()) == 7){//8中7
+            lz = "8中" + info.getEightZ();
             return lz;
         }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
+            info.setSevenZ("0");
+        }
+        if(Integer.valueOf(info.getSevenZ()) == 6){//7中6
+            lz = "7中" + info.getSevenZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSixZ())){
+            info.setSixZ("0");
+        }
+        if(Integer.valueOf(info.getSixZ()) == 5){//6中5
+            lz = "6中" + info.getSixZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getFiveZ())){
+            info.setFiveZ("0");
+        }
+        if(Integer.valueOf(info.getFiveZ()) == 4){//五中四
+            lz = "5中" + info.getFiveZ();
+            return lz;
+        }
+
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getReturnSevenDays())){
             info.setReturnSevenDays("0");
         }
 
         if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
-            lz = "七天回报率" + info.getReturnSevenDays() + "%";
+            lz = "回报率:" + info.getReturnSevenDays() + "%";
             return lz;
         }
 
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
-            info.setSevenZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
+            info.setTenZ("0");
         }
-        if(Integer.valueOf(info.getSevenZ()) == 5){//7中5
-            lz = "7中" + info.getSevenZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
-            info.setEightZ("0");
-        }
-        if(Integer.valueOf(info.getEightZ()) == 6){//8中6
-            lz = "8中" + info.getEightZ();
+        if(Integer.valueOf(info.getTenZ()) == 8){//10中8
+            lz = "10中" + info.getTenZ();
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getNineZ())){
@@ -638,13 +634,23 @@ public class CommonUtils {
             lz = "9中" + info.getNineZ();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
-            info.setTenZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
+            info.setEightZ("0");
         }
-        if(Integer.valueOf(info.getTenZ()) == 8){//10中8
-            lz = "10中" + info.getTenZ();
+        if(Integer.valueOf(info.getEightZ()) == 6){//8中6
+            lz = "8中" + info.getEightZ();
             return lz;
         }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
+            info.setSevenZ("0");
+        }
+        if(Integer.valueOf(info.getSevenZ()) == 5){//7中5
+            lz = "7中" + info.getSevenZ();
+            return lz;
+        }
+
+
+
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
             info.setTenZ("0");
         }
@@ -686,6 +692,13 @@ public class CommonUtils {
         }
         if(Integer.valueOf(info.getFourZ()) == 3){//4中3
             lz = "3中" + info.getFourZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getLzBig())){
+            info.setLzBig("0");
+        }
+        if(Integer.valueOf(info.getLzBig()) >= 8){//历史8连红以及以上
+            lz = info.getLzBig();
             return lz;
         }
         return lz;
@@ -701,32 +714,11 @@ public class CommonUtils {
             lz = info.getLz();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getFiveZ())){
-            info.setFiveZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
+            info.setTenZ("0");
         }
-        if(Integer.valueOf(info.getFiveZ()) == 4){//五中四
-            lz = "5中" + info.getFiveZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSixZ())){
-            info.setSixZ("0");
-        }
-        if(Integer.valueOf(info.getSixZ()) == 5){//6中5
-            lz = "6中" + info.getSixZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
-            info.setSevenZ("0");
-        }
-        if(Integer.valueOf(info.getSevenZ()) == 6){//7中6
-            lz = "7中" + info.getSevenZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
-            info.setEightZ("0");
-        }
-        if(Integer.valueOf(info.getEightZ()) == 7){//8中7
-            lz = "8中" + info.getEightZ();
+        if(Integer.valueOf(info.getTenZ()) == 9){//10中9
+            lz = "10中" + info.getTenZ();
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getNineZ())){
@@ -736,41 +728,40 @@ public class CommonUtils {
             lz = "9中" + info.getNineZ();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
-            info.setTenZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
+            info.setEightZ("0");
         }
-        if(Integer.valueOf(info.getTenZ()) == 9){//10中9
-            lz = "10中" + info.getTenZ();
-            return lz;
-        }
-
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getReturnSevenDays())){
-            info.setReturnSevenDays("0");
-        }
-
-        if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
-            lz = "七天回报率" + info.getReturnSevenDays() + "%";
+        if(Integer.valueOf(info.getEightZ()) == 7){//8中7
+            lz = "8中" + info.getEightZ();
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
             info.setSevenZ("0");
         }
-        if(Integer.valueOf(info.getSevenZ()) == 5){//7中5
+        if(Integer.valueOf(info.getSevenZ()) == 6){//7中6
             lz = "7中" + info.getSevenZ();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
-            info.setEightZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSixZ())){
+            info.setSixZ("0");
         }
-        if(Integer.valueOf(info.getEightZ()) == 6){//8中6
-            lz = "8中" + info.getEightZ();
+        if(Integer.valueOf(info.getSixZ()) == 5){//6中5
+            lz = "6中" + info.getSixZ();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getNineZ())){
-            info.setNineZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getFiveZ())){
+            info.setFiveZ("0");
         }
-        if(Integer.valueOf(info.getNineZ()) == 7){//9中7
-            lz = "9中" + info.getNineZ();
+        if(Integer.valueOf(info.getFiveZ()) == 4){//五中四
+            lz = "5中" + info.getFiveZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getReturnSevenDays())){
+            info.setReturnSevenDays("0");
+        }
+
+        if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
+            lz = "回报率:" + info.getReturnSevenDays() + "%";
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
@@ -780,6 +771,28 @@ public class CommonUtils {
             lz = "10中" + info.getTenZ();
             return lz;
         }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getNineZ())){
+            info.setNineZ("0");
+        }
+        if(Integer.valueOf(info.getNineZ()) == 7){//9中7
+            lz = "9中" + info.getNineZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
+            info.setEightZ("0");
+        }
+        if(Integer.valueOf(info.getEightZ()) == 6){//8中6
+            lz = "8中" + info.getEightZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
+            info.setSevenZ("0");
+        }
+        if(Integer.valueOf(info.getSevenZ()) == 5){//7中5
+            lz = "7中" + info.getSevenZ();
+            return lz;
+        }
+
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
             info.setTenZ("0");
         }
@@ -821,6 +834,13 @@ public class CommonUtils {
         }
         if(Integer.valueOf(info.getFourZ()) == 3){//4中3
             lz = "3中" + info.getFourZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getLzBig())){
+            info.setLzBig("0");
+        }
+        if(Integer.valueOf(info.getLzBig()) >= 8){//历史8连红以及以上
+            lz = info.getLzBig();
             return lz;
         }
         return lz;
@@ -837,32 +857,11 @@ public class CommonUtils {
             lz = info.getLz();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getFiveZ())){
-            info.setFiveZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
+            info.setTenZ("0");
         }
-        if(Integer.valueOf(info.getFiveZ()) == 4){//五中四
-            lz = "5中" + info.getFiveZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSixZ())){
-            info.setSixZ("0");
-        }
-        if(Integer.valueOf(info.getSixZ()) == 5){//6中5
-            lz = "6中" + info.getSixZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
-            info.setSevenZ("0");
-        }
-        if(Integer.valueOf(info.getSevenZ()) == 6){//7中6
-            lz = "7中" + info.getSevenZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
-            info.setEightZ("0");
-        }
-        if(Integer.valueOf(info.getEightZ()) == 7){//8中7
-            lz = "8中" + info.getEightZ();
+        if(Integer.valueOf(info.getTenZ()) == 9){//10中9
+            lz = "10中" + info.getTenZ();
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getNineZ())){
@@ -872,11 +871,32 @@ public class CommonUtils {
             lz = "9中" + info.getNineZ();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
-            info.setTenZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
+            info.setEightZ("0");
         }
-        if(Integer.valueOf(info.getTenZ()) == 9){//10中9
-            lz = "10中" + info.getTenZ();
+        if(Integer.valueOf(info.getEightZ()) == 7){//8中7
+            lz = "8中" + info.getEightZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
+            info.setSevenZ("0");
+        }
+        if(Integer.valueOf(info.getSevenZ()) == 6){//7中6
+            lz = "7中" + info.getSevenZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSixZ())){
+            info.setSixZ("0");
+        }
+        if(Integer.valueOf(info.getSixZ()) == 5){//6中5
+            lz = "6中" + info.getSixZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getFiveZ())){
+            info.setFiveZ("0");
+        }
+        if(Integer.valueOf(info.getFiveZ()) == 4){//五中四
+            lz = "5中" + info.getFiveZ();
             return lz;
         }
 
@@ -885,22 +905,15 @@ public class CommonUtils {
         }
 
         if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
-            lz = "七天回报率" + info.getReturnSevenDays() + "%";
+            lz = "回报率:" +  info.getReturnSevenDays() + "%";
             return lz;
         }
 
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
-            info.setSevenZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
+            info.setTenZ("0");
         }
-        if(Integer.valueOf(info.getSevenZ()) == 5){//7中5
-            lz = "7中" + info.getSevenZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
-            info.setEightZ("0");
-        }
-        if(Integer.valueOf(info.getEightZ()) == 6){//8中6
-            lz = "8中" + info.getEightZ();
+        if(Integer.valueOf(info.getTenZ()) == 8){//10中8
+            lz = "10中" + info.getTenZ();
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getNineZ())){
@@ -910,13 +923,21 @@ public class CommonUtils {
             lz = "9中" + info.getNineZ();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
-            info.setTenZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
+            info.setEightZ("0");
         }
-        if(Integer.valueOf(info.getTenZ()) == 8){//10中8
-            lz = "10中" + info.getTenZ();
+        if(Integer.valueOf(info.getEightZ()) == 6){//8中6
+            lz = "8中" + info.getEightZ();
             return lz;
         }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
+            info.setSevenZ("0");
+        }
+        if(Integer.valueOf(info.getSevenZ()) == 5){//7中5
+            lz = "7中" + info.getSevenZ();
+            return lz;
+        }
+
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
             info.setTenZ("0");
         }
@@ -958,6 +979,13 @@ public class CommonUtils {
         }
         if(Integer.valueOf(info.getFourZ()) == 3){//4中3
             lz = "3中" + info.getFourZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getLzBig())){
+            info.setLzBig("0");
+        }
+        if(Integer.valueOf(info.getLzBig()) >= 8){//历史8连红以及以上
+            lz = info.getLzBig();
             return lz;
         }
         return lz;
@@ -973,32 +1001,11 @@ public class CommonUtils {
             lz = info.getLz();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getFiveZ())){
-            info.setFiveZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
+            info.setTenZ("0");
         }
-        if(Integer.valueOf(info.getFiveZ()) == 4){//五中四
-            lz = "5中" + info.getFiveZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSixZ())){
-            info.setSixZ("0");
-        }
-        if(Integer.valueOf(info.getSixZ()) == 5){//6中5
-            lz = "6中" + info.getSixZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
-            info.setSevenZ("0");
-        }
-        if(Integer.valueOf(info.getSevenZ()) == 6){//7中6
-            lz = "7中" + info.getSevenZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
-            info.setEightZ("0");
-        }
-        if(Integer.valueOf(info.getEightZ()) == 7){//8中7
-            lz = "8中" + info.getEightZ();
+        if(Integer.valueOf(info.getTenZ()) == 9){//10中9
+            lz = "10中" + info.getTenZ();
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getNineZ())){
@@ -1008,11 +1015,32 @@ public class CommonUtils {
             lz = "9中" + info.getNineZ();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
-            info.setTenZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
+            info.setEightZ("0");
         }
-        if(Integer.valueOf(info.getTenZ()) == 9){//10中9
-            lz = "10中" + info.getTenZ();
+        if(Integer.valueOf(info.getEightZ()) == 7){//8中7
+            lz = "8中" + info.getEightZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
+            info.setSevenZ("0");
+        }
+        if(Integer.valueOf(info.getSevenZ()) == 6){//7中6
+            lz = "7中" + info.getSevenZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSixZ())){
+            info.setSixZ("0");
+        }
+        if(Integer.valueOf(info.getSixZ()) == 5){//6中5
+            lz = "6中" + info.getSixZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getFiveZ())){
+            info.setFiveZ("0");
+        }
+        if(Integer.valueOf(info.getFiveZ()) == 4){//五中四
+            lz = "5中" + info.getFiveZ();
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getReturnSevenDays())){
@@ -1020,22 +1048,15 @@ public class CommonUtils {
         }
 
         if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
-            lz = "七天回报率" + info.getReturnSevenDays() + "%";
+            lz = "回报率:" + info.getReturnSevenDays() + "%";
             return lz;
         }
 
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
-            info.setSevenZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
+            info.setTenZ("0");
         }
-        if(Integer.valueOf(info.getSevenZ()) == 5){//7中5
-            lz = "7中" + info.getSevenZ();
-            return lz;
-        }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
-            info.setEightZ("0");
-        }
-        if(Integer.valueOf(info.getEightZ()) == 6){//8中6
-            lz = "8中" + info.getEightZ();
+        if(Integer.valueOf(info.getTenZ()) == 8){//10中8
+            lz = "10中" + info.getTenZ();
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getNineZ())){
@@ -1045,13 +1066,21 @@ public class CommonUtils {
             lz = "9中" + info.getNineZ();
             return lz;
         }
-        if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
-            info.setTenZ("0");
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getEightZ())){
+            info.setEightZ("0");
         }
-        if(Integer.valueOf(info.getTenZ()) == 8){//10中8
-            lz = "10中" + info.getTenZ();
+        if(Integer.valueOf(info.getEightZ()) == 6){//8中6
+            lz = "8中" + info.getEightZ();
             return lz;
         }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
+            info.setSevenZ("0");
+        }
+        if(Integer.valueOf(info.getSevenZ()) == 5){//7中5
+            lz = "7中" + info.getSevenZ();
+            return lz;
+        }
+
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
             info.setTenZ("0");
         }
@@ -1093,6 +1122,13 @@ public class CommonUtils {
         }
         if(Integer.valueOf(info.getFourZ()) == 3){//4中3
             lz = "3中" + info.getFourZ();
+            return lz;
+        }
+        if(org.apache.commons.lang3.StringUtils.isBlank(info.getLzBig())){
+            info.setLzBig("0");
+        }
+        if(Integer.valueOf(info.getLzBig()) >= 8){//历史8连红以及以上
+            lz = info.getLzBig();
             return lz;
         }
         return lz;
@@ -1138,5 +1174,97 @@ public class CommonUtils {
             return day2-day1;
         }
     }
+
+    public void hotExpertLzType(HotExpertDto hotExpertDto,ExpertHotResult hot){
+        String orderby = String.valueOf(hotExpertDto.getOrderBy());
+        if(orderby.startsWith("1")){//1类
+            hot.setType("1");
+            hot.setLz(String.valueOf(hotExpertDto.getLzNow()));
+            return;
+        }
+        if(orderby.startsWith("2")){//2类
+            hot.setType("2");
+            if("209".equals(orderby)){
+                hot.setLz("5中4");
+            }
+            if("208".equals(orderby)){
+                hot.setLz("6中5");
+            }
+            if("207".equals(orderby)){
+                hot.setLz("7中6");
+            }
+            if("206".equals(orderby)){
+                hot.setLz("8中7");
+            }
+            if("205".equals(orderby)){
+                hot.setLz("9中8");
+            }
+            if("204".equals(orderby)){
+                hot.setLz("10中9");
+            }
+            return;
+        }
+        if(orderby.startsWith("3")){//3类
+            hot.setType("2");
+            hot.setLz("回报率:" + hotExpertDto.getReturnSevenDays() + "%");
+            return;
+        }
+        if(orderby.startsWith("4")){//4类
+            hot.setType("2");
+            if("405".equals(orderby)){
+                hot.setLz("10中8");
+            }
+            if("406".equals(orderby)){
+                hot.setLz("9中7");
+            }
+            if("407".equals(orderby)){
+                hot.setLz("8中6");
+            }
+            if("408".equals(orderby)){
+                hot.setLz("7中5");
+            }
+            return;
+        }
+        if(orderby.startsWith("5")){//5类
+            hot.setType("2");
+            if("505".equals(orderby)){
+                hot.setLz("10中7");
+            }
+            if("506".equals(orderby)){
+                hot.setLz("9中6");
+            }
+            if("507".equals(orderby)){
+                hot.setLz("8中5");
+            }
+            return;
+        }
+        if(orderby.startsWith("6")){//6类
+            hot.setType("1");
+            hot.setLz(String.valueOf(hotExpertDto.getLzNow()));
+            return;
+        }
+        if(orderby.startsWith("7")){//7类
+            hot.setType("2");
+            if("702".equals(orderby)){
+                hot.setLz("4中3");
+            }
+            if("703".equals(orderby)){
+                hot.setLz("3中2");
+            }
+            return;
+        }
+        if(orderby.startsWith("8")){//8类
+            hot.setType("1");
+            hot.setLz(String.valueOf(hotExpertDto.getLzBig()));
+            return;
+        }
+        if(orderby.startsWith("9")){//9类
+            hot.setType("2");
+            hot.setLz("历史战绩佳");
+            return;
+        }
+
+    }
+
 
 }

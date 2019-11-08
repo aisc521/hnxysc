@@ -1,5 +1,6 @@
 package com.zhcdata.db.mapper;
 
+import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
@@ -64,4 +65,6 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     List<PlanResult1> queryPlanByExpertIdForExpert(@Param("id")long id,@Param("planId") String planId, @Param("userId")String userId);
 
     TbJcPlan queryOnePlan(@Param("expertId")String expertId);
+
+    List<PlanResult1> queryHotPlan(@Param("userId")String userId);
 }

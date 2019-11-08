@@ -32,6 +32,15 @@ public class PlanResult1 {
     private String fourZ;
     private String threeZ;
     private String returnSevenDays;
+    private String lzBig;
+
+    public String getLzBig() {
+        return lzBig;
+    }
+
+    public void setLzBig(String lzBig) {
+        this.lzBig = lzBig;
+    }
 
     public String getTenZ() {
         return tenZ;

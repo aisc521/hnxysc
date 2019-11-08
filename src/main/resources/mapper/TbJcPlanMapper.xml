@@ -25,7 +25,7 @@
     <result column="red_Pay_Count" property="redPayCount" jdbcType="INTEGER"/>
   </resultMap>
   <select id="queryPlanCountByExpertId" resultType="Integer">
-    SELECT count(*) from tb_jc_plan where status=1 and ascription_expert=#{expertId}
+    SELECT count( * ) FROM tb_jc_plan p WHERE  p.status = '2' and p.ascription_expert=#{expertId}
   </select>
   <select id="queryPlanByExpertId" resultType="com.zhcdata.jc.dto.PlanResult1">
       SELECT
@@ -48,7 +48,17 @@
       p.type planType,
       p.status planStatus,
       IF(pd.id IS NOT NULL,1,0) buStatus,
-      e.grade grade
+      e.grade grade,
+      v.ten_z tenZ,
+      v.nine_z nineZ,
+      v.eight_z eightZ,
+      v.seven_z sevenZ,
+      v.six_z sixZ,
+      v.five_z fiveZ,
+      v.four_z fourZ,
+      v.three_z threeZ,
+      v.return_seven_days returnSevenDays,
+      v.lz_big lzBig
       from tb_jc_plan  p
       LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
       LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
@@ -57,7 +67,7 @@
       <if test="userId != null">
           and pd.user_id = #{userId}
       </if>
-    where 1=1 and p.status in('1','2')
+    where 1=1 and p.status = '2' and e.is_upshelf = '1'
     <if test="id != null">
       and e.id = #{id}
     </if>
@@ -65,6 +75,7 @@
       and p.id in(#{planId})
     </if>
       GROUP BY p.id
+      order by p.create_time desc
   </select>
 
     <select id="queryPlanByExpertIdForExpert" resultType="com.zhcdata.jc.dto.PlanResult1">
@@ -383,7 +394,8 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     victory.five_z fiveZ,
     victory.four_z fourZ,
     victory.three_z threeZ,
-    victory.return_seven_days returnSevenDays
+    victory.return_seven_days returnSevenDays,
+    victory.lz_big lzBig
     from
     tb_jc_plan p
     LEFT JOIN tb_jc_expert expert ON p.ascription_expert = expert.id
@@ -475,7 +487,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
   </update>
 
 
-  <select id="queryPlanByExpertIdForXg" resultType="com.zhcdata.jc.dto.PlanResult1">
+    <select id="queryPlanByExpertIdForXg" resultType="com.zhcdata.jc.dto.PlanResult1">
        SELECT e.id,
         e.nick_name nickName,
         e.img,
@@ -618,5 +630,56 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         from tb_jc_plan p
         where p.ascription_expert = #{expertId} order by p.create_time asc limit 0,1
     </select>
-
+    <select id="queryHotPlan" resultType="com.zhcdata.jc.dto.PlanResult1">
+        SELECT
+        e.id,
+        e.nick_name nickName,
+        e.img,
+        e.lable,
+        (e.fans + e.start_fans) fans,
+        e.popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.title title_show_type,
+        p.price,
+        p.is_right isRight,
+        p.create_time,
+        p.plan_Hit planHit,
+        p.id planId,
+        p.type planType,
+        p.status planStatus,
+        IF(pd.id IS NOT NULL,1,0) buStatus,
+        e.grade grade,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.return_seven_days returnSevenDays
+        from tb_jc_plan  p
+        LEFT JOIN (SELECT * from(
+        SELECT * from
+        (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+        union all
+        SELECT * from
+        (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+        union all
+        SELECT * from
+        (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+        ) vic) v on p.ascription_expert=v.expert_id
+        LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
+        LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
+        LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
+        <if test="userId != null">
+            and pd.user_id = #{userId}
+        </if>
+        where 1=1 and p.status = '2' and v.order_By is not null and e.is_upshelf = '1'
+        GROUP BY p.id
+        ORDER BY v.i asc,p.create_time desc
+    </select>
 </mapper>
