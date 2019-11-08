@@ -6,6 +6,7 @@ import com.zhcdata.jc.dto.PlanResult1;
 import com.zhcdata.jc.dto.PlanResult3;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
+import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
@@ -36,6 +37,8 @@ public class HotPlanNewJob  implements Job {
     @Resource
     private RedisUtils redisUtils;
 
+    @Resource
+    private CommonUtils commonUtils;
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -53,6 +56,8 @@ public class HotPlanNewJob  implements Job {
                     List<PlanResult1> planList = tbPlanService.queryPlanByExpertIdNoPages(ids[i], null,null);
                     for (int k = 0; k < planList.size(); k++) {
                         PlanResult1 result1 = planList.get(k);
+                        String lz = commonUtils.JsLz2(result1);
+                        result1.setLz(lz);
                         List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(k).getPlanId());
                         if (matchPlanResults != null && matchPlanResults.size() > 0) {
                             result1.setList(matchPlanResults);
