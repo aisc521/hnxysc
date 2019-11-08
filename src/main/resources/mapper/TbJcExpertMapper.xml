@@ -172,31 +172,37 @@
     LEFT JOIN
     (SELECT * from(
     SELECT * from
-    (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+    (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300
+    ORDER BY order_By,expert_id asc) t1
     union all
     SELECT * from
-    (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+    (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY
+    return_seven_days desc,expert_id asc) t2
     union all
     SELECT * from
-    (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+    (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY
+    order_By,expert_id asc) t3
     ) vic) v
     ON e.id = v.expert_id
     where e.is_upshelf = '1' and v.order_By is not null
     <if test="type==2">
-      and  v.lz_now >= 2
+      and v.lz_now >= 2
       ORDER BY v.lz_now desc,v.i asc
+
     </if>
 
     <if test="type==1">
       and v.z_Seven_Days >= 40
       ORDER BY v.z_Seven_Days desc,v.i asc
+
     </if>
 
     <if test="type==3">
       and v.return_Seven_Days >= 50
       ORDER BY v.return_Seven_Days desc,v.i asc
+
     </if>
-    limit 0,20
+
   </select>
   <select id="query" resultType="com.zhcdata.jc.dto.ExpertInfo">
     SELECT DISTINCT * FROM(

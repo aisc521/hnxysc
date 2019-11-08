@@ -25,7 +25,7 @@
     <result column="red_Pay_Count" property="redPayCount" jdbcType="INTEGER"/>
   </resultMap>
   <select id="queryPlanCountByExpertId" resultType="Integer">
-    SELECT count(*) from tb_jc_plan where status=1 and ascription_expert=#{expertId}
+    SELECT count( * ) FROM tb_jc_plan p WHERE  p.status = '2' and p.ascription_expert=#{expertId}
   </select>
   <select id="queryPlanByExpertId" resultType="com.zhcdata.jc.dto.PlanResult1">
       SELECT
