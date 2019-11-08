@@ -167,18 +167,32 @@
     e.popularity popularity
     FROM
     tb_jc_expert e
-    LEFT JOIN tb_jc_victory v ON e.id = v.expert_id
-    where e.is_upshelf = '1'
+    LEFT JOIN
+    (SELECT * from(
+    SELECT * from
+    (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+    union all
+    SELECT * from
+    (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+    union all
+    SELECT * from
+    (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+    ) vic) v
+    ON e.id = v.expert_id
+    where e.is_upshelf = '1' and v.order_By is not null
     <if test="type==2">
-      ORDER BY victory desc
+      and  v.lz_now >= 2
+      ORDER BY v.lz_now desc,v.i asc
     </if>
 
     <if test="type==1">
-      ORDER BY zSevenDays desc
+      and v.z_Seven_Days >= 40
+      ORDER BY v.z_Seven_Days desc,v.i asc
     </if>
 
     <if test="type==3">
-      ORDER BY returnSevenDays desc
+      and v.return_Seven_Days >= 50
+      ORDER BY v.return_Seven_Days desc,v.i asc
     </if>
 
   </select>
@@ -241,6 +255,95 @@
     LEFT JOIN tb_jc_victory v on f.expert_Id=v.expert_id
     where f.user_Id=#{userId} and status = '1'
     ) a
+  </select>
+
+
+  <select id="queryExpertHotInfoOrder" resultType="com.zhcdata.jc.dto.HotExpertDto">
+      select
+      e.id id,
+      e.nick_name nickName,
+      e.img img,
+      e.lable lable,
+      e.introduction introduction,
+      e.is_upshelf isUpshelf,
+      e.grade grade,
+      v.lz_now  lzNow,
+      v.z_three_days  zThreeDays,
+      v.z_five_days  zFiveDays,
+      v.z_seven_days  zSevenDays,
+      v.return_seven_days  returnSevenDays,
+      v.trend  trend,
+      v.return_all  returnAll,
+      v.z_all  zAll,
+      v.lz_big  lzBig,
+      v.yl_seven_days  ylSevenDays,
+      v.ten_z  tenZ,
+      v.nine_z  nineZ,
+      v.eight_z  eightZ,
+      v.seven_z  sevenZ,
+      v.six_z  sixZ,
+      v.five_z  fiveZ,
+      v.four_z  fourZ,
+      v.three_z  threeZ,
+      v.order_By  orderBy
+      from tb_jc_expert e
+      LEFT JOIN (SELECT * from(
+    SELECT * from
+    (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By <![CDATA[ < ]]> 300 ORDER BY order_By,expert_id asc) t1
+    union all
+    SELECT * from
+    (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+    union all
+    SELECT * from
+    (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+    ) vic) v ON e.id = v.expert_id
+      where e.is_upshelf = '1' and v.order_By is not null
+      order by v.i asc
+  </select>
+  <select id="queryExpertHotInfoOrderLimitSeven" resultType="com.zhcdata.jc.dto.HotExpertDto">
+    select
+    e.id id,
+    e.nick_name nickName,
+    e.img img,
+    e.lable lable,
+    e.introduction introduction,
+    e.is_upshelf isUpshelf,
+    e.grade grade,
+    v.lz_now  lzNow,
+    v.z_three_days  zThreeDays,
+    v.z_five_days  zFiveDays,
+    v.z_seven_days  zSevenDays,
+    v.return_seven_days  returnSevenDays,
+    v.trend  trend,
+    v.return_all  returnAll,
+    v.z_all  zAll,
+    v.lz_big  lzBig,
+    v.yl_seven_days  ylSevenDays,
+    v.ten_z  tenZ,
+    v.nine_z  nineZ,
+    v.eight_z  eightZ,
+    v.seven_z  sevenZ,
+    v.six_z  sixZ,
+    v.five_z  fiveZ,
+    v.four_z  fourZ,
+    v.three_z  threeZ,
+    v.order_By  orderBy
+    from tb_jc_expert e
+    LEFT JOIN ( SELECT * from
+    (
+    SELECT * from
+    (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+    union all
+    SELECT * from
+    (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+    union all
+    SELECT * from
+    (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+    )
+    vic) v ON e.id = v.expert_id
+    where e.is_upshelf = '1' and v.order_By is not null
+    order by v.i asc,v.order_By is not null
+    limit 0,7
   </select>
 
 </mapper>

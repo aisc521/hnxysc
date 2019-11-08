@@ -5,6 +5,7 @@ import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
 import com.zhcdata.jc.dto.ExpertInfoBdDto;
 import com.zhcdata.jc.dto.ExpertInfoDto;
+import com.zhcdata.jc.dto.HotExpertDto;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -48,4 +49,8 @@ public interface TbJcExpertService {
     ExpertInfo queryExpertDetailsAndUser(String expertId, String userId);
 
     List<ExpertInfoDto> queryExpertInfo(String userId);
+
+    List<HotExpertDto> queryExpertHotInfoOrder();
+
+    List<HotExpertDto> queryExpertHotInfoOrderLimitSeven();
 }

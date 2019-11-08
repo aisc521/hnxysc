@@ -7,6 +7,7 @@ import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
 import com.zhcdata.jc.dto.ExpertInfoBdDto;
 import com.zhcdata.jc.dto.ExpertInfoDto;
+import com.zhcdata.jc.dto.HotExpertDto;
 import com.zhcdata.jc.service.TbJcExpertService;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -77,6 +78,16 @@ public class TbJcExpertServiceImpl implements TbJcExpertService {
     @Override
     public List<ExpertInfoDto> queryExpertInfo(String userId) {
         return tbJcExpertMapper.queryExpertInfo(userId);
+    }
+
+    @Override
+    public List<HotExpertDto> queryExpertHotInfoOrder() {
+        return tbJcExpertMapper.queryExpertHotInfoOrder();
+    }
+
+    @Override
+    public List<HotExpertDto> queryExpertHotInfoOrderLimitSeven() {
+        return tbJcExpertMapper.queryExpertHotInfoOrderLimitSeven();
     }
 
 

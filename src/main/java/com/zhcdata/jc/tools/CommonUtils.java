@@ -1149,22 +1149,22 @@ public class CommonUtils {
         if(orderby.startsWith("2")){//2类
             hot.setType("2");
             if("209".equals(orderby)){
-                hot.setLz("10中9");
+                hot.setLz("5中4");
             }
             if("208".equals(orderby)){
-                hot.setLz("9中8");
-            }
-            if("207".equals(orderby)){
-                hot.setLz("8中7");
-            }
-            if("206".equals(orderby)){
-                hot.setLz("7中6");
-            }
-            if("205".equals(orderby)){
                 hot.setLz("6中5");
             }
+            if("207".equals(orderby)){
+                hot.setLz("7中6");
+            }
+            if("206".equals(orderby)){
+                hot.setLz("8中7");
+            }
+            if("205".equals(orderby)){
+                hot.setLz("9中8");
+            }
             if("204".equals(orderby)){
-                hot.setLz("5中4");
+                hot.setLz("10中9");
             }
             return;
         }
@@ -1176,29 +1176,29 @@ public class CommonUtils {
         if(orderby.startsWith("4")){//4类
             hot.setType("2");
             if("405".equals(orderby)){
-                hot.setLz("7中5");
+                hot.setLz("10中8");
             }
             if("406".equals(orderby)){
-                hot.setLz("8中6");
-            }
-            if("407".equals(orderby)){
                 hot.setLz("9中7");
             }
+            if("407".equals(orderby)){
+                hot.setLz("8中6");
+            }
             if("408".equals(orderby)){
-                hot.setLz("10中8");
+                hot.setLz("7中5");
             }
             return;
         }
         if(orderby.startsWith("5")){//5类
             hot.setType("2");
             if("505".equals(orderby)){
-                hot.setLz("8中5");
+                hot.setLz("10中7");
             }
             if("506".equals(orderby)){
                 hot.setLz("9中6");
             }
             if("507".equals(orderby)){
-                hot.setLz("10中7");
+                hot.setLz("8中5");
             }
             return;
         }
@@ -1210,10 +1210,10 @@ public class CommonUtils {
         if(orderby.startsWith("7")){//7类
             hot.setType("2");
             if("702".equals(orderby)){
-                hot.setLz("3中2");
+                hot.setLz("4中3");
             }
             if("703".equals(orderby)){
-                hot.setLz("4中3");
+                hot.setLz("3中2");
             }
             return;
         }

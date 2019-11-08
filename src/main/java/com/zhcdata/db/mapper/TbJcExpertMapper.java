@@ -4,6 +4,7 @@ import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
 import com.zhcdata.jc.dto.ExpertInfoBdDto;
 import com.zhcdata.jc.dto.ExpertInfoDto;
+import com.zhcdata.jc.dto.HotExpertDto;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -27,4 +28,8 @@ public interface TbJcExpertMapper extends Mapper<TbJcExpert> {
     ExpertInfo queryExpertDetailsAndUser(@Param("expertId")String expertId, @Param("userId")String userId);
 
     List<ExpertInfoDto> queryExpertInfo(@Param("userId")String userId);
+
+    List<HotExpertDto> queryExpertHotInfoOrder();
+
+    List<HotExpertDto> queryExpertHotInfoOrderLimitSeven();
 }

@@ -167,5 +167,12 @@ public class TbPlanServiceImpl implements TbPlanService {
         return tbJcPlanMapper.queryOnePlan(expertId);
     }
 
+    @Override
+    public PageInfo<PlanResult1> queryHotPlan(String userId, Integer pageNo, int pageAmount) {
+        PageHelper.startPage(pageNo, pageAmount);
+        List<PlanResult1> list = tbJcPlanMapper.queryHotPlan(userId);
+        return new PageInfo<>(list);
+    }
+
 
 }

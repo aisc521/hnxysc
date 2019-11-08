@@ -70,27 +70,15 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
         String pageNo = paramMap.get("pageNo");
         String type = paramMap.get("type");
         String userId = paramMap.get("userId");
-        String re = (String)redisUtils.hget("SOCCER:HSET:EXPERT", "id");
-        if (!Strings.isNullOrEmpty(re)) {
-            re = re.replace("'", "");
-            re = re.substring(0, re.length() - 1);
-            String[] ids = re.split(",");
-
-            for (int i = 0; i < ids.length; i++) {
-
-                PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertId(ids[i],null,userId,Integer.valueOf(pageNo),20);
-                List<PlanResult1> planList = planList1.getList();
-                resultMap.put("totalNum", planList1.getTotal());
-                for (int k = 0; k < planList.size(); k++) {
-                    PlanResult1 result1 = planList.get(k);
-                    List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(k).getPlanId());
-                    if (matchPlanResults != null && matchPlanResults.size() > 0) {
-                        result1.setList(matchPlanResults);
-                    }
-                    result.add(result1);
-                }
-            }
-
+        PageInfo<PlanResult1> planList1 = tbPlanService.queryHotPlan(userId,Integer.valueOf(pageNo),20);
+        List<PlanResult1> planList = planList1.getList();
+        for (int k = 0; k < planList.size(); k++) {
+             PlanResult1 result1 = planList.get(k);
+             List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(k).getPlanId());
+             if (matchPlanResults != null && matchPlanResults.size() > 0) {
+                 result1.setList(matchPlanResults);
+             }
+            result.add(result1);
         }
 
         for (int j = 0; j < result.size(); j++) {
@@ -122,7 +110,8 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
         }
         resultMap.put("list",f_result);
         resultMap.put("pageNo",pageNo);
-
+        resultMap.put("pageTotal",planList1.getPages());
+        resultMap.put("totalNum", planList1.getTotal());
         return resultMap;
 
     }
