@@ -1151,7 +1151,7 @@ public class CommonUtils {
         String orderby = String.valueOf(hotExpertDto.getOrderBy());
         if(orderby.startsWith("1")){//1类
             hot.setType("1");
-            hot.setLz(String.valueOf(hotExpertDto.getOrderBy() - 100));
+            hot.setLz(String.valueOf(hotExpertDto.getLzNow()));
             return;
         }
         if(orderby.startsWith("2")){//2类
@@ -1212,7 +1212,7 @@ public class CommonUtils {
         }
         if(orderby.startsWith("6")){//6类
             hot.setType("1");
-            hot.setLz(String.valueOf(hotExpertDto.getOrderBy() - 100));
+            hot.setLz(String.valueOf(hotExpertDto.getLzNow()));
             return;
         }
         if(orderby.startsWith("7")){//7类
