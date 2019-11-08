@@ -57,16 +57,14 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
         String uid = paramMap.get("uid");
         Map<String,Long> freeOrPay = tbPlanService.checkFreeOrPayByUidAndPlanId(uid,id);
         Map<String, Object> resultMap = new HashMap<>();
-        /*if (freeOrPay.get("type")==3||freeOrPay.get("pay")>0){*/
 
-        String matchId = "";
-        String grade = "";
-        String price = "";
-        String planStatus = "";
-        String pintroduction = "";
-        String planTitle = "";
             PlanResult2 planResult2 = new PlanResult2();
             try {
+                String grade = "";
+                String price = "";
+                String planStatus = "";
+                String pintroduction = "";
+                String planTitle = "";
                 List<PlanResult2> result = tbPlanService.queryPlanByIdandUser(id,uid);
                 if (result != null && result.size() > 0) {
                     planResult2 = result.get(0);
@@ -75,27 +73,12 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                     planStatus = planResult2.getPlanStatus();
                     pintroduction = planResult2.getPintroduction();
                     planTitle = planResult2.getTitle();
-                    List<MatchPlanResult1> matchPlanResults = tbJcMatchService.queryList1(Long.valueOf(id));
-                    if (matchPlanResults != null && matchPlanResults.size() > 0) {
-                        List<MatchPlanResult1> matchPlanResult2 = new ArrayList<>();
-                        for(int i = 0; i < matchPlanResults.size(); i++){
-                            MatchPlanResult1 matchPlanResult1 = matchPlanResults.get(i);
-                           /* MatchPlanResult1 matchPlanResult1 = matchPlanResults.get(i);
-                            String planInfo = JcLotteryUtils.OddsInfoChange(matchPlanResult1.getPlanInfo());
-                            matchPlanResult1.setPlanInfo(planInfo);
-                            matchPlanResult2.add(matchPlanResult1);*/
-                            matchId += matchPlanResult1.getMatchId() + ",";
-                        }
-                       /* planResult2.setList(matchPlanResults);*/
-                    }
                 }
                 resultMap.put("planStatus", planStatus);
                 resultMap.put("title", planTitle);
-                resultMap.put("matchId", matchId);
                 resultMap.put("grade", grade);
                 resultMap.put("price", price);
                 resultMap.put("pintroduction", pintroduction);
-                //ExpertInfo info = tbJcExpertService.queryExpertDetails(tbPlanService.queryExpertIdByPlanId(id));
                 ExpertInfo info = tbJcExpertService.queryExpertDetailsAndUser(tbPlanService.queryExpertIdByPlanId(id),uid);
                 if (info != null) {
                     //给专家人气加1
@@ -129,7 +112,6 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                     resultMap.put("status", "");
                 }
                 List<Map<String,Object>> list = tbPlanService.queryPlanInfo(id);
-                //Map<String,Object> list = tbPlanService.queryPlanInfoNextTime(id);
 
                 List<Map<String, Object>> plan_info = new ArrayList<>();
                 long first = 9999999999999L;
@@ -217,11 +199,6 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 LOGGER.error("查询方案详情异常" + ex.toString());
             }
             return resultMap;
-       /* }else {
-            resultMap.put("resCode","999999");
-            resultMap.put("message","方案尚未购买");
-            return resultMap;
-        }*/
 
     }
 }

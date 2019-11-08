@@ -60,32 +60,13 @@ public class QueryHotPlanProtocl implements BaseProtocol {
         Map<String, Object> resultMap = new HashMap<>();
         String type = paramMap.get("type");
         String pageNo = paramMap.get("pageNo");
-
         List<PlanResult1> f_result = new ArrayList<>();
-
-
         try {
-            //String re = (String) redisUtils.hget("SOCCER:HSET:PLAN", "hot");
-
             String re = (String) redisUtils.hget("SOCCER:HSET:PLANHOT", pageNo);
-
             JSONObject jsonObject = JSONObject.fromObject(re);
-
             System.out.println(jsonObject);
-
-
-           /* JsonMapper jsonMapper = JsonMapper.defaultMapper();
-            JavaType javaType = jsonMapper.buildCollectionType(List.class, PlanResult1.class);
-            List<PlanResult1> result = jsonMapper.fromJson(re, javaType);
-*/
-            //List<PlanResult1> result = (List<PlanResult1>) jsonObject.get("list");
-
-
             PlanResult3 planResult3 = com.alibaba.fastjson.JSONObject.parseObject(re,PlanResult3.class);
-
             List<PlanResult1> result = planResult3.getList();
-
-
             for (int j = 0; j < result.size(); j++) {
                 if (type.equals("2")) {
                     //单场
@@ -114,7 +95,6 @@ public class QueryHotPlanProtocl implements BaseProtocol {
                     f_result.add(result.get(j));
                 }
             }
-
             if (!Strings.isNullOrEmpty(re)) {
                 resultMap.put("list", f_result);
                 resultMap.put("message", "成功");

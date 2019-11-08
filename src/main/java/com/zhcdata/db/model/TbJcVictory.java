@@ -146,6 +146,21 @@ public class TbJcVictory implements Serializable {
     @Column(name = "create_time")
     private Date createTime;
 
+
+    /**
+     * 排序
+     */
+    @Column(name = "order_By")
+    private Integer orderBy;
+
+    public Integer getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(Integer orderBy) {
+        this.orderBy = orderBy;
+    }
+
     private static final long serialVersionUID = 1L;
 
     /**
