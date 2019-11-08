@@ -19,9 +19,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Description 处理专家战绩
@@ -38,10 +36,13 @@ public class HandleExpertRecordJob implements Job {
 
     @Resource
     private TbPlanService tbPlanService;
+
     @Resource
     private TbJcMatchService tbJcMatchService;
+
     @Resource
     private TbJcVictoryService tbJcVictoryService;
+
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -409,60 +410,60 @@ public class HandleExpertRecordJob implements Job {
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
 
                             if(Integer.parseInt(info.getLzNow())>4) {
-                                //1类
-                                info.setOrder_By(Integer.parseInt(info.getLzNow()) + 100);
+                                //1类(倒序)
+                                info.setOrder_By(getOrderBy(Integer.parseInt(info.getLzNow())) + 100);
                             }else {
-                                //2类
+                                //2类(倒序数大的在前面、数小的在后边) 9 8 7 6 5 4
                                 if(Integer.parseInt(info.getTen_z())==9){
-                                    info.setOrder_By(209);
-                                }else if(Integer.parseInt(info.getNine_z())==8){
-                                    info.setOrder_By(208);
-                                }else if(Integer.parseInt(info.getEight_z())==7){
-                                    info.setOrder_By(207);
-                                }else if(Integer.parseInt(info.getSeven_z())==6){
-                                    info.setOrder_By(206);
-                                }else if(Integer.parseInt(info.getSix_z())==5){
-                                    info.setOrder_By(205);
-                                }else if(Integer.parseInt(info.getFive_z())==4){
                                     info.setOrder_By(204);
+                                }else if(Integer.parseInt(info.getNine_z())==8){
+                                    info.setOrder_By(205);
+                                }else if(Integer.parseInt(info.getEight_z())==7){
+                                    info.setOrder_By(206);
+                                }else if(Integer.parseInt(info.getSeven_z())==6){
+                                    info.setOrder_By(207);
+                                }else if(Integer.parseInt(info.getSix_z())==5){
+                                    info.setOrder_By(208);
+                                }else if(Integer.parseInt(info.getFive_z())==4){
+                                    info.setOrder_By(209);
                                 }else {
-                                    //3类
-                                    if(lastSevenDayReturnMoney.compareTo(new BigDecimal(100))>0){
+                                    //3类(倒序)
+                                    if(new BigDecimal(info.getReturnSevenDays()).compareTo(new BigDecimal(100))>0){
                                         info.setOrder_By(300);
                                     }else {
-                                        //4类
+                                        //4类(倒序)
                                         if(Integer.parseInt(info.getSeven_z())==5){
-                                            info.setOrder_By(405);
-                                        }else if(Integer.parseInt(info.getEight_z())==6){
-                                            info.setOrder_By(406);
-                                        }else if(Integer.parseInt(info.getNine_z())==7){
-                                            info.setOrder_By(407);
-                                        }else if(Integer.parseInt(info.getTen_z())==8){
                                             info.setOrder_By(408);
+                                        }else if(Integer.parseInt(info.getEight_z())==6){
+                                            info.setOrder_By(407);
+                                        }else if(Integer.parseInt(info.getNine_z())==7){
+                                            info.setOrder_By(406);
+                                        }else if(Integer.parseInt(info.getTen_z())==8){
+                                            info.setOrder_By(405);
                                         }else {
-                                            //5类
-                                            if(Integer.parseInt(info.getEight_z())==5){
-                                                info.setOrder_By(505);
-                                            }else if(Integer.parseInt(info.getNine_z())==6){
+                                            //5类(倒序)
+                                            if(Integer.parseInt(info.getTen_z())==5){
+                                                info.setOrder_By(507);
+                                            }else if(Integer.parseInt(info.getTen_z())==6){
                                                 info.setOrder_By(506);
                                             }else if(Integer.parseInt(info.getTen_z())==7){
-                                                info.setOrder_By(507);
+                                                info.setOrder_By(505);
                                             }else {
                                                 //6类
                                                 if(Integer.parseInt(info.getLzNow())==2){
-                                                    info.setOrder_By(602);
-                                                }else if(Integer.parseInt(info.getLzNow())==3){
                                                     info.setOrder_By(603);
+                                                }else if(Integer.parseInt(info.getLzNow())==3){
+                                                    info.setOrder_By(602);
                                                 }else {
                                                     //7类
                                                     if(Integer.parseInt(info.getThree_z())==2){
-                                                        info.setOrder_By(702);
-                                                    }else if(Integer.parseInt(info.getFour_z())==3){
                                                         info.setOrder_By(703);
+                                                    }else if(Integer.parseInt(info.getFour_z())==3){
+                                                        info.setOrder_By(702);
                                                     }else {
                                                         //8类
                                                         if(Integer.parseInt(info.getLzBig())>=8){
-                                                            info.setOrder_By(Integer.parseInt(info.getLzNow()) + 800);
+                                                            info.setOrder_By(getOrderBy(Integer.parseInt(info.getLzNow())) + 800);
                                                         }else {
                                                             info.setOrder_By(900);
                                                         }
@@ -537,5 +538,10 @@ public class HandleExpertRecordJob implements Job {
             ex.printStackTrace();
         }
         log.info("[处理专家战绩结束]" + df.format(new Date()));
+    }
+
+    //转换排序顺序
+    private int getOrderBy(Integer value){
+        return 100-value;
     }
 }
