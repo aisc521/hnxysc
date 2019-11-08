@@ -3,12 +3,10 @@ package com.zhcdata.jc.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
-import com.zhcdata.db.mapper.TbPlayerMapper;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.service.TbPlanService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -113,8 +111,18 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
+    public int updateStatusPlanByIdAndStatus(String s, int status, int oldStatus) {
+        return tbJcPlanMapper.updateStatusPlanByIdAndStatus(s,status,oldStatus);
+    }
+
+    @Override
     public List<TbJcPlan> queryPlanListJxAndZs() {
         return tbJcPlanMapper.queryPlanListJxAndZs();
+    }
+
+    @Override
+    public List<TbJcPlan> queryPlanListSale() {
+        return tbJcPlanMapper.queryPlanListSale();
     }
 
     @Override

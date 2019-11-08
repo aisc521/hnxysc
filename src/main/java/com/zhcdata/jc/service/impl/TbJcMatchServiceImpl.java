@@ -2,14 +2,16 @@ package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.TbJcMatchMapper;
 import com.zhcdata.db.model.TbJcMatch;
-import com.zhcdata.jc.dto.*;
+import com.zhcdata.jc.dto.MatchInfoDto;
+import com.zhcdata.jc.dto.MatchPlanResult;
+import com.zhcdata.jc.dto.MatchPlanResult1;
+import com.zhcdata.jc.dto.MatchResult1;
 import com.zhcdata.jc.service.TbJcMatchService;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description TODO
@@ -23,6 +25,12 @@ public class TbJcMatchServiceImpl implements TbJcMatchService {
     @Override
     public List<MatchPlanResult> queryList(String id) {
         return tbJcMatchMapper.queryList(id);
+    }
+
+    //根据方案id查询是否需要计算比赛
+    @Override
+    public Map<String, Integer> queryMatchStatus(Long planId) {
+        return tbJcMatchMapper.queryMatchStatus(planId);
     }
 
     @Override

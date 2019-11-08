@@ -160,11 +160,20 @@
 
 
     <select id="queryPlanListJxAndZs" resultType="com.zhcdata.db.model.TbJcPlan">
-        select * from tb_jc_plan where 1=1
-        and status in('1','2')
-        ORDER BY create_time asc
+        select * from (
+         select p.id,p.ascription_expert,MAX(m.date_of_match) date_of_match from tb_jc_plan p ,tb_jc_match m
+        where p.id = m.plan_id and p.status = '1'
+        group by p.id,p.ascription_expert
+        ) am where now()>am.date_of_match
     </select>
 
+    <select id="queryPlanListSale" resultType="com.zhcdata.db.model.TbJcPlan">
+         select * from (
+         select p.id,p.ascription_expert,min(m.date_of_match) date_of_match from tb_jc_plan p ,tb_jc_match m
+        where p.id = m.plan_id and p.status = '2'
+        group by p.id,p.ascription_expert
+        ) am where now()>am.date_of_match
+    </select>
 
   <select id="queryScore" resultType="com.zhcdata.jc.dto.ScoreDto">
 
@@ -461,10 +470,12 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
     <update id="updateStatusPlanById">
         update tb_jc_plan set status=#{status} where id = #{id}
     </update>
+  <update id="updateStatusPlanByIdAndStatus">
+       update tb_jc_plan set status=#{status} where id = #{id} and status=#{oldStatus}
+  </update>
 
 
-
-    <select id="queryPlanByExpertIdForXg" resultType="com.zhcdata.jc.dto.PlanResult1">
+  <select id="queryPlanByExpertIdForXg" resultType="com.zhcdata.jc.dto.PlanResult1">
        SELECT e.id,
         e.nick_name nickName,
         e.img,
@@ -607,4 +618,5 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         from tb_jc_plan p
         where p.ascription_expert = #{expertId} order by p.create_time asc limit 0,1
     </select>
+
 </mapper>

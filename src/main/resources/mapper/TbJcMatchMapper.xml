@@ -17,10 +17,17 @@
     <result column="matchResult" property="matchresult" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+
   </resultMap>
   <select id="queryList" resultType="com.zhcdata.jc.dto.MatchPlanResult">
-    SELECT id id,match_Id matchId,match_num matchNum,match_name matchName,home_team hostTeam,visiting_team visitTeam,DATE_FORMAT(date_Of_Match,'%H:%i') as dateOfMatch,planInfo planInfo,status isWin from tb_jc_match
-    where plan_id =#{planId} ORDER BY match_num asc
+    SELECT m.id id,m.match_Id matchId,m.match_num matchNum,m.match_name matchName,m.home_team hostTeam,
+    m.visiting_team visitTeam,DATE_FORMAT(m.date_Of_Match,'%H:%i') as dateOfMatch,m.planInfo planInfo,m.status isWin ,
+    s.HomeScore homeScore,s.GuestScore guestScore,j.PolyGoal polyGoal,s.MatchState matchState
+    from
+    tb_jc_match m,schedule s ,jc_schedule j
+    where  s.scheduleID = m.match_id and j.scheduleID = s.scheduleID  and plan_id =#{planId}
+    ORDER BY match_num asc
+
 
   </select>
   <update id="updateStatus">
@@ -104,4 +111,9 @@
       from tb_jc_match m
       where m.plan_id = #{planId}
     </select>
+  <select id="queryMatchStatus" resultType="java.util.Map">
+        select count(m.id) a,count(s.scheduleID) b from tb_jc_match m LEFT JOIN schedule s on s.scheduleID = m.match_id
+        and s.MatchState in (-1,-12,-10)
+        where m.plan_id = #{planId}
+  </select>
 </mapper>
