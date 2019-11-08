@@ -55,6 +55,8 @@ public class MatchResult1 {
 
     private String matchTime2;
 
+    private String recommendCount;
+
     public String getMatchType() {
         return matchType;
     }
@@ -325,5 +327,13 @@ public class MatchResult1 {
 
     public void setStatusDescFK(String statusDescFK) {
         this.statusDescFK = statusDescFK;
+    }
+
+    public String getRecommendCount() {
+        return recommendCount;
+    }
+
+    public void setRecommendCount(String recommendCount) {
+        this.recommendCount = recommendCount;
     }
 }

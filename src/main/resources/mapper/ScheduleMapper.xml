@@ -847,6 +847,7 @@
         sc.GuestScore guestScore,/*客队比分*/
         sc.ScheduleID matchId,/*比赛id*/
         lottery.NO_ID number,/*期数场次*/
+        0 iscollect,
         <if test="type == 1">
             lottery.NO_ID num,/*期数场次*/
         </if>
@@ -862,7 +863,8 @@
         CASE WHEN lottery.LOTTERY = 'JCZQ' then '1'
         WHEN lottery.LOTTERY = 'SF14' then '3'
         WHEN lottery.LOTTERY = 'BJDC' then '2'
-        end as matchType
+        end as matchType,
+        (SELECT count(*) from tb_jc_match where match_id=sc.ScheduleID) recommendCount
         from schedule sc
         LEFT JOIN sclass class ON sc.SclassID = class.sclassID
         LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
@@ -984,7 +986,7 @@
             sc.ScheduleID matchId,/*比赛id*/
             lottery.ISSUE_NUM num,/*期数场次*/
             lottery.NO_ID number,/*期数场次*/
-            IFNULL(pg.status,'0') iscollect,/*是否收藏*/
+            0 iscollect,/*是否收藏*/
             case when pg.type = '1' then '1'
                  when pg.type = '2' then '3'
                  when pg.type = '3' then '2'
@@ -993,7 +995,8 @@
                  when pg.type = '2' then 'BJDC'
                  when pg.type = '3' then 'SF14'
                  end as 'Matchty',
-			lottery.LOTTERY lotterType
+			lottery.LOTTERY lotterType,
+			(SELECT count(*) from tb_jc_match where match_id=sc.ScheduleID) recommendCount
             from schedule  sc
             LEFT JOIN sclass class ON sc.SclassID = class.sclassID
             LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
