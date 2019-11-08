@@ -613,7 +613,7 @@ public class CommonUtils {
         }
 
         if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
-            lz = "七天回报率" + info.getReturnSevenDays() + "%";
+            lz = info.getReturnSevenDays() + "%";
             return lz;
         }
 
