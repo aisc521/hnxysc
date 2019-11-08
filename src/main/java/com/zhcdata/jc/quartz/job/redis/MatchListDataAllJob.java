@@ -242,10 +242,12 @@ public class MatchListDataAllJob  implements Job {
                 }else {
                     r1.setMatchState("'完'");
                 }
-            }
-
-            if(r1.getMatchState().equals("未")) {
-                r1.setStatusDescFK("1");
+            }else if(r1.getMatchState().equals("中")){
+                r1.setStatusDescFK("2");
+            }else if(r1.getMatchState().equals("(完)")){
+                r1.setStatusDescFK("-1");
+            }else if(r1.getMatchState().equals("未")) {
+                r1.setStatusDescFK("0");
             }
             result1s.add(r1);
         }

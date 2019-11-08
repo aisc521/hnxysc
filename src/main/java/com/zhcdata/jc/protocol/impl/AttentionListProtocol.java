@@ -145,7 +145,6 @@ public class AttentionListProtocol implements BaseProtocol {
             r1.setMatchPankou(getPanKou(r1.getMatchPankou()));
             if(r1.getMatchState().equals("1")){
                 r1.setStatusDescFK("2");
-                r1.setStatusescFK("2");
                 if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
@@ -153,7 +152,6 @@ public class AttentionListProtocol implements BaseProtocol {
                 }
             }else if(r1.getMatchState().equals("3")){
                 r1.setStatusDescFK("3");
-                r1.setStatusescFK("3");
                 if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));

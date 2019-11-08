@@ -243,7 +243,6 @@ public class MatchListProtocol implements BaseProtocol {
                     JsonMapper jsonMapper = JsonMapper.defaultMapper();
                     JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
                     newList = jsonMapper.fromJson(s, javaType1);
-
                 }
             }
         }

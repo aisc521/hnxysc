@@ -847,8 +847,6 @@
         sc.GuestScore guestScore,/*客队比分*/
         sc.ScheduleID matchId,/*比赛id*/
         lottery.NO_ID number,/*期数场次*/
-        IFNULL(pg.status,'0') iscollect,/*是否收藏*/
-
         <if test="type == 1">
             lottery.NO_ID num,/*期数场次*/
         </if>
@@ -871,10 +869,6 @@
         LEFT JOIN team t ON sc.HomeTeamID = t.TeamID
         LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
         LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
-        LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id
-        <if test="userId !=null and userId!=''">
-            and pg.user_id = #{userId}
-        </if>
         <if test="type == 3">
             <if test="issueNum !=null and issueNum !=''">
                 where lottery.ISSUE_NUM =#{issueNum}

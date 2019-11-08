@@ -261,7 +261,7 @@ public class MatchListUserIdProtocol implements BaseProtocol {
                 if (tbPgUCollect != null) {
                     matchResult1.setIscollect("1");
                 }
-                newList.add(matchResult1);
+                result.add(matchResult1);
             }
             Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
             map.put("followNum", followNum);//已关数量
