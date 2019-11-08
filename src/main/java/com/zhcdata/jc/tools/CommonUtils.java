@@ -613,7 +613,7 @@ public class CommonUtils {
         }
 
         if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
-            lz = info.getReturnSevenDays() + "%";
+            lz = "回报率:" + info.getReturnSevenDays() + "%";
             return lz;
         }
 
@@ -749,7 +749,7 @@ public class CommonUtils {
         }
 
         if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
-            lz = info.getReturnSevenDays() + "%";
+            lz = "回报率:" + info.getReturnSevenDays() + "%";
             return lz;
         }
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getSevenZ())){
@@ -885,7 +885,7 @@ public class CommonUtils {
         }
 
         if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
-            lz = info.getReturnSevenDays() + "%";
+            lz = "回报率:" +  info.getReturnSevenDays() + "%";
             return lz;
         }
 
@@ -1020,7 +1020,7 @@ public class CommonUtils {
         }
 
         if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
-            lz = info.getReturnSevenDays() + "%";
+            lz = "回报率:" + info.getReturnSevenDays() + "%";
             return lz;
         }
 
