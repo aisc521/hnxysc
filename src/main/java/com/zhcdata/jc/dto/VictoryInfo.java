@@ -121,6 +121,11 @@ public class VictoryInfo {
      */
     private String three_z;
 
+    /**
+     * 专家排序
+     */
+    private Integer order_By;
+
 
     public String getId() {
         return id;
@@ -312,5 +317,13 @@ public class VictoryInfo {
 
     public void setThree_z(String three_z) {
         this.three_z = three_z;
+    }
+
+    public Integer getOrder_By() {
+        return order_By;
+    }
+
+    public void setOrder_By(Integer order_By) {
+        this.order_By = order_By;
     }
 }

@@ -408,6 +408,73 @@ public class HandleExpertRecordJob implements Job {
                             }
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
 
+                            if(Integer.parseInt(info.getLzNow())>4) {
+                                //1类
+                                info.setOrder_By(Integer.parseInt(info.getLzNow()) + 100);
+                            }else {
+                                //2类
+                                if(Integer.parseInt(info.getTen_z())==9){
+                                    info.setOrder_By(209);
+                                }else if(Integer.parseInt(info.getNine_z())==8){
+                                    info.setOrder_By(208);
+                                }else if(Integer.parseInt(info.getEight_z())==7){
+                                    info.setOrder_By(207);
+                                }else if(Integer.parseInt(info.getSeven_z())==6){
+                                    info.setOrder_By(206);
+                                }else if(Integer.parseInt(info.getSix_z())==5){
+                                    info.setOrder_By(205);
+                                }else if(Integer.parseInt(info.getFive_z())==4){
+                                    info.setOrder_By(204);
+                                }else {
+                                    //3类
+                                    if(lastSevenDayReturnMoney.compareTo(new BigDecimal(100))>0){
+                                        info.setOrder_By(300);
+                                    }else {
+                                        //4类
+                                        if(Integer.parseInt(info.getSeven_z())==5){
+                                            info.setOrder_By(405);
+                                        }else if(Integer.parseInt(info.getEight_z())==6){
+                                            info.setOrder_By(406);
+                                        }else if(Integer.parseInt(info.getNine_z())==7){
+                                            info.setOrder_By(407);
+                                        }else if(Integer.parseInt(info.getTen_z())==8){
+                                            info.setOrder_By(408);
+                                        }else {
+                                            //5类
+                                            if(Integer.parseInt(info.getEight_z())==5){
+                                                info.setOrder_By(505);
+                                            }else if(Integer.parseInt(info.getNine_z())==6){
+                                                info.setOrder_By(506);
+                                            }else if(Integer.parseInt(info.getTen_z())==7){
+                                                info.setOrder_By(507);
+                                            }else {
+                                                //6类
+                                                if(Integer.parseInt(info.getLzNow())==2){
+                                                    info.setOrder_By(602);
+                                                }else if(Integer.parseInt(info.getLzNow())==3){
+                                                    info.setOrder_By(603);
+                                                }else {
+                                                    //7类
+                                                    if(Integer.parseInt(info.getThree_z())==2){
+                                                        info.setOrder_By(702);
+                                                    }else if(Integer.parseInt(info.getFour_z())==3){
+                                                        info.setOrder_By(703);
+                                                    }else {
+                                                        //8类
+                                                        if(Integer.parseInt(info.getLzBig())>=8){
+                                                            info.setOrder_By(Integer.parseInt(info.getLzNow()) + 800);
+                                                        }else {
+                                                            info.setOrder_By(900);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+
                             //这里修改入库
                             VictoryResult Victory = tbJcVictoryService.queryVictory(String.valueOf(expertResults.get(p).getId()));
                             if (Victory != null) {
@@ -451,6 +518,7 @@ public class HandleExpertRecordJob implements Job {
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
                             info.setYlSevenDays("0");
                             info.setSix_z("0");
+                            info.setOrder_By(1000);
 
                             //不存在，则添加
                             int r = tbJcVictoryService.insert(info);
