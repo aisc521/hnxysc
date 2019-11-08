@@ -196,7 +196,7 @@
       and v.return_Seven_Days >= 50
       ORDER BY v.return_Seven_Days desc,v.i asc
     </if>
-
+    limit 0,20
   </select>
   <select id="query" resultType="com.zhcdata.jc.dto.ExpertInfo">
     SELECT DISTINCT * FROM(
