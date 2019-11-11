@@ -867,7 +867,7 @@
         (SELECT count(*) from tb_jc_match where match_id=sc.ScheduleID) recommendCount
         <if test="type == 1">
             ,(select case when Single101='1' then '1'
-                         when Single105='1'  then '1' end as kind from jc_schedule where scheduleid=sc.ScheduleID)
+                         when Single105='1'  then '1' end from jc_schedule where scheduleid=sc.ScheduleID) kind
         </if>
         from schedule sc
         LEFT JOIN sclass class ON sc.SclassID = class.sclassID
