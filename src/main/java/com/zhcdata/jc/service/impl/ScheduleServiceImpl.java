@@ -721,6 +721,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                             new BigDecimal(originalOdds).compareTo(new BigDecimal(endOdds)) <= 0) {
                         //如果类型为1 为竞彩
                         if (i == 1) {
+                            sameOddsDto.setMatchType("1");
                             //设置期次文字
                             sameOddsDto.setWeekNum(sameOddsDto.getNoId());
                             if (!jcList.contains(sameOddsDto)) {
@@ -729,6 +730,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                             }
                             //如果类型为2 为北单
                         } else if (i == 2) {
+                            sameOddsDto.setMatchType("2");
                             //设置期次文字
                             sameOddsDto.setIssueBD(sameOddsDto.getIssueNum());
                             sameOddsDto.setNum(sameOddsDto.getNoId());
@@ -738,6 +740,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                             }
                             //如果类型为3 为足彩
                         } else if (i == 3) {
+                            sameOddsDto.setMatchType("3");
                             //设置期次文字
                             sameOddsDto.setIssueZC(sameOddsDto.getIssueNum());
                             sameOddsDto.setNum(sameOddsDto.getNoId());
