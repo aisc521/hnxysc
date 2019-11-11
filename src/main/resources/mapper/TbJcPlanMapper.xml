@@ -423,12 +423,12 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         s.HomeScore homeBalls1,
         s.GuestTeam awayTeamName,
         s.GuestScore awayballs1,
-        ssp.wl3 homeTeamZhu,
-        ssp.wl1 homeTeamPing,
-        ssp.wl0 homeTeamKe,
-        ssp.sf3 awayTeamZhu,
-        ssp.sf1 awayTeamPing,
-        ssp.sf0 awayTeamKe,
+        FORMAT(ssp.wl3,2) homeTeamZhu,
+        FORMAT(ssp.wl1,2) homeTeamPing,
+        FORMAT(ssp.wl0,2) homeTeamKe,
+        FORMAT(ssp.sf3,2) awayTeamZhu,
+        FORMAT(ssp.sf1,2) awayTeamPing,
+        FORMAT(ssp.sf0,2) awayTeamKe,
         s.HomeTeamID homeId,
         s.GuestTeamID awayId,
         0 homeTeamRangballs,
@@ -442,6 +442,16 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         LEFT JOIN `schedule` sc on jc.matchId = sc.ScheduleID
         ) aaa
         left join tb_jc_match bbb on aaa.matchId = bbb.match_id and plan_id = #{pid}
+        ORDER BY case
+        WHEN aaa.Num like '%周一%' then 1
+        WHEN aaa.Num like '%周二%' then 2
+        WHEN aaa.Num like '%周三%' then 3
+        WHEN aaa.Num like '%周四%' then 4
+        WHEN aaa.Num like '%周五%' then 5
+        WHEN aaa.Num like '%周六%' then 6
+        WHEN aaa.Num like '%周日%' then 7
+        end
+        asc,substr(aaa.Num,3,LENGTH(aaa.Num))
     </select>
 
     <select id="queryFreeOrPayByUidAndPid" resultType="java.util.Map">
