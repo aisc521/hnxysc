@@ -126,7 +126,7 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public PageInfo<PlanResult1> queryPlanByExpertIdForXg(String pIdList, Integer pageNo, int pageAmount) {
+    public PageInfo<PlanResult1> queryPlanByExpertIdForXg(String[] pIdList, Integer pageNo, int pageAmount) {
 
         PageHelper.startPage(pageNo, pageAmount);
         List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertIdForXg(pIdList);
@@ -134,7 +134,7 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer pageNo, int pageAmount) {
+    public PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String[] pIdList, String userId, Integer pageNo, int pageAmount) {
         PageHelper.startPage(pageNo, pageAmount);
         List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertIdForXgAndUser(pIdList,userId);
         return new PageInfo<>(list);
