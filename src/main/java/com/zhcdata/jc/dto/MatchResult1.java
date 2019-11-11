@@ -57,6 +57,8 @@ public class MatchResult1 {
 
     private String recommendCount;
 
+    private String kind;
+
     public String getMatchType() {
         return matchType;
     }
@@ -335,5 +337,13 @@ public class MatchResult1 {
 
     public void setRecommendCount(String recommendCount) {
         this.recommendCount = recommendCount;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 }

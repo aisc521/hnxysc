@@ -865,6 +865,9 @@
         WHEN lottery.LOTTERY = 'BJDC' then '2'
         end as matchType,
         (SELECT count(*) from tb_jc_match where match_id=sc.ScheduleID) recommendCount
+        <if test="type == 1">
+            ,(select kind from jc_schedulesp where id=sc.ScheduleID) kind
+        </if>
         from schedule sc
         LEFT JOIN sclass class ON sc.SclassID = class.sclassID
         LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
