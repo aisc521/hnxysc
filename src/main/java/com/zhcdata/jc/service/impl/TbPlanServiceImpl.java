@@ -5,9 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
+import com.zhcdata.db.model.TbJcRecordFocus;
 import com.zhcdata.jc.dto.*;
+import com.zhcdata.jc.enums.ProtocolCodeMsg;
+import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.TbPlanService;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -180,6 +184,18 @@ public class TbPlanServiceImpl implements TbPlanService {
         PageHelper.startPage(pageNo, pageAmount);
         List<PlanResult1> list = tbJcPlanMapper.queryHotPlan(userId);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public int updatePlanByPlanId(TbJcPlan tbJcPlan) throws BaseException {
+        Example example1 = new Example(TbJcPlan.class);
+        example1.createCriteria().andEqualTo("id",tbJcPlan.getId());
+        int i = tbJcPlanMapper.updateByExample(tbJcPlan,example1);
+        if(i <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
+        return i;
     }
 
 

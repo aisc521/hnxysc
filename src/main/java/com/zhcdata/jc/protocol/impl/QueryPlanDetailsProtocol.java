@@ -1,6 +1,7 @@
 package com.zhcdata.jc.protocol.impl;
 
 import com.google.common.base.Strings;
+import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.ExpertInfo;
 import com.zhcdata.jc.dto.MatchPlanResult1;
 import com.zhcdata.jc.dto.PlanResult2;
@@ -82,11 +83,11 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 ExpertInfo info = tbJcExpertService.queryExpertDetailsAndUser(tbPlanService.queryExpertIdByPlanId(id),uid);
                 if (info != null) {
                     //给专家人气加1
-                    Integer pop = info.getPopularity();
+                    /*Integer pop = info.getPopularity();
                     if(pop == null){
                         pop = 0;
                     }
-                    tbJcExpertService.updatePopAddOne(info.getId(),pop + 1);
+                    tbJcExpertService.updatePopAddOne(info.getId(),pop + 1);*/
                     resultMap.put("eid", info.getId());
                     resultMap.put("nickName", info.getNickName());
                     resultMap.put("img", info.getImg());
@@ -193,6 +194,15 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 }else{
                     resultMap.put("buStatus", "0");//未购买
                 }
+
+                TbJcPlan tbJcPlan = tbPlanService.queryPlanByPlanId(Long.valueOf(id));
+                //给当前方案 增加人气值  + 1
+                Integer pop = tbJcPlan.getPlanPopularity();
+                if(pop == null){
+                    pop = 0;
+                }
+                tbJcPlan.setPlanPopularity(pop + 1);
+                tbPlanService.updatePlanByPlanId(tbJcPlan);
 
             } catch (Exception ex) {
                 ex.printStackTrace();

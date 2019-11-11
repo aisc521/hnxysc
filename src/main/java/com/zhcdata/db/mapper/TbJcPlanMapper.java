@@ -67,4 +67,5 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     TbJcPlan queryOnePlan(@Param("expertId")String expertId);
 
     List<PlanResult1> queryHotPlan(@Param("userId")String userId);
+
 }

@@ -107,6 +107,13 @@ public class TbJcPlan implements Serializable {
     @Column(name = "red_Pay_Count")
     private Integer redPayCount;
 
+
+    /**
+     * 方案人气
+      */
+    @Column(name = "plan_popularity")
+    private Integer planPopularity;
+
     private static final long serialVersionUID = 1L;
 
     /**
@@ -431,5 +438,13 @@ public class TbJcPlan implements Serializable {
      */
     public void setRedPayCount(Integer redPayCount) {
         this.redPayCount = redPayCount;
+    }
+
+    public Integer getPlanPopularity() {
+        return planPopularity;
+    }
+
+    public void setPlanPopularity(Integer planPopularity) {
+        this.planPopularity = planPopularity;
     }
 }

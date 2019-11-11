@@ -45,7 +45,7 @@
     expert.img img,/*专家头像*/
     expert.lable lable,/*专家标签*/
     IFNULL(expert.fans,0) + IFNULL(expert.start_fans,0) fans,/*粉丝*/
-    expert.popularity popularity,/*人气*/
+    plan.plan_popularity popularity,/*人气*/
     victory.lz_now lz,/*当前连中*/
     victory.z_three_days zThreeDays,/*三天命中*/
     victory.z_five_days zFiveDays,/*五天命中*/
