@@ -43,11 +43,15 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     void updateStatusPlanById(@Param("id") String id,@Param("status") int status);
 
+    int updateStatusPlanByIdAndStatus(@Param("id") String id,@Param("status") int status,@Param("oldStatus") int oldStatus);
+
     List<TbJcPlan> queryPlanListJxAndZs();
 
-    List<PlanResult1> queryPlanByExpertIdForXg(@Param("id")String pIdList);
+    List<TbJcPlan> queryPlanListSale();
 
-    List<PlanResult1> queryPlanByExpertIdForXgAndUser(@Param("id")String pIdList, @Param("userId")String userId);
+    List<PlanResult1> queryPlanByExpertIdForXg(@Param("idList")String[] pIdList);
+
+    List<PlanResult1> queryPlanByExpertIdForXgAndUser(@Param("idList")String[] pIdList, @Param("userId")String userId);
 
     List<PlanIdDto> selectPlanIdByMatchId(@Param("matchId")String matchId);
 

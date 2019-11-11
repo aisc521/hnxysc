@@ -3,12 +3,10 @@ package com.zhcdata.jc.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
-import com.zhcdata.db.mapper.TbPlayerMapper;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.service.TbPlanService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -113,12 +111,22 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
+    public int updateStatusPlanByIdAndStatus(String s, int status, int oldStatus) {
+        return tbJcPlanMapper.updateStatusPlanByIdAndStatus(s,status,oldStatus);
+    }
+
+    @Override
     public List<TbJcPlan> queryPlanListJxAndZs() {
         return tbJcPlanMapper.queryPlanListJxAndZs();
     }
 
     @Override
-    public PageInfo<PlanResult1> queryPlanByExpertIdForXg(String pIdList, Integer pageNo, int pageAmount) {
+    public List<TbJcPlan> queryPlanListSale() {
+        return tbJcPlanMapper.queryPlanListSale();
+    }
+
+    @Override
+    public PageInfo<PlanResult1> queryPlanByExpertIdForXg(String[] pIdList, Integer pageNo, int pageAmount) {
 
         PageHelper.startPage(pageNo, pageAmount);
         List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertIdForXg(pIdList);
@@ -126,7 +134,7 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer pageNo, int pageAmount) {
+    public PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String[] pIdList, String userId, Integer pageNo, int pageAmount) {
         PageHelper.startPage(pageNo, pageAmount);
         List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertIdForXgAndUser(pIdList,userId);
         return new PageInfo<>(list);

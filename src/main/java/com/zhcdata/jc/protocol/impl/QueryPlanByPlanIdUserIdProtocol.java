@@ -66,15 +66,17 @@ public class QueryPlanByPlanIdUserIdProtocol implements BaseProtocol {
             if (list != null && list.size() > 0) {
                 String pIdList = "";
                 for (int p = 0; p < list.size(); p++) {
-                    pIdList += list.get(p).getId();
-                    if (p != list.size() - 1) {
-                        pIdList += ",";
+                    if(!list.get(p).getId().equals(id)){
+                        pIdList += list.get(p).getId();
+                        if (p != list.size() - 1) {
+                            pIdList += ",";
+                        }
                     }
                 }
 
                 String userId = paramMap.get("userId");
 
-                PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertIdForXgAndUser(pIdList,userId,Integer.valueOf(pageNo),20);
+                PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertIdForXgAndUser(pIdList.split(","),userId,Integer.valueOf(pageNo),20);
 
 
                 List<PlanResult1> planList = planList1.getList();

@@ -61,11 +61,15 @@ public interface TbPlanService {
 
     void updateStatusPlanById(String s,int status);
 
+    int updateStatusPlanByIdAndStatus(String s,int status,int oldStatus);
+
     List<TbJcPlan> queryPlanListJxAndZs();
 
-    PageInfo<PlanResult1> queryPlanByExpertIdForXg(String pIdList, Integer integer, int i);
+    List<TbJcPlan> queryPlanListSale();
 
-    PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer integer, int i);
+    PageInfo<PlanResult1> queryPlanByExpertIdForXg(String[] pIdList, Integer integer, int i);
+
+    PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String[] pIdList, String userId, Integer integer, int i);
 
     PageInfo<PlanIdDto> selectPlanIdByMatchId(String matchId,Integer pageNo,Integer pageAmount);
 

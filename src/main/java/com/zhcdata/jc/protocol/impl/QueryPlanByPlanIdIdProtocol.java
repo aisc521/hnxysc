@@ -71,13 +71,7 @@ public class QueryPlanByPlanIdIdProtocol implements BaseProtocol {
                         pIdList += ",";
                     }
                 }
-
-
-
-                //PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertId(id,null,null,Integer.valueOf(pageNo),20);
-
-
-                PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertIdForXg(pIdList,Integer.valueOf(pageNo),20);
+                PageInfo<PlanResult1> planList1 = tbPlanService.queryPlanByExpertIdForXg(pIdList.split(","),Integer.valueOf(pageNo),20);
                 List<PlanResult1> planList = planList1.getList();
 
                 for (int i = 0; i < planList.size(); i++) {

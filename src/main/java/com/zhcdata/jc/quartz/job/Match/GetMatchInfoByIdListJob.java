@@ -56,7 +56,7 @@ public class GetMatchInfoByIdListJob implements Job {
 
             Calendar calendar1 = Calendar.getInstance();
             calendar1.setTime(new Date());
-            calendar1.add(Calendar.DAY_OF_MONTH, 5);
+            calendar1.add(Calendar.DAY_OF_MONTH, 3);
             String endDate=day.format(calendar1.getTime()).substring(0, 10);
 
             List<Schedule> models = scheduleMapper.selectStatusChangedToday(startDate + " 11:00:00", endDate + " 11:00:00",sdf.format(new Date()));
@@ -66,7 +66,7 @@ public class GetMatchInfoByIdListJob implements Job {
             int p=1;
             for (Schedule model : models) {
                 sb.append(model.getScheduleid()).append(",");
-                if(p%200==0){
+                if(p%250==0){
                     //每组200
                     sb.append("|");
                 }
@@ -74,7 +74,6 @@ public class GetMatchInfoByIdListJob implements Job {
             }
             String[] ids= sb.toString().split("\\|");
             for(int m=0;m<ids.length;m++) {
-                Thread.sleep(60000);
                 List<MatchListRsp> xml = parse.handleMothodList("http://interface.win007.com/zq/BF_XMLByID.aspx?id=" + ids[m].substring(0,ids[m].length()-1), MatchListRsp.class);
                 if (xml != null) {
                     for (MatchListRsp rsp : xml) {
@@ -90,6 +89,7 @@ public class GetMatchInfoByIdListJob implements Job {
                     }
                 }
                 LOGGER.info("即时变化的比分数据(5分钟),共有比赛" + models.size() + ",更新:" + update + "条,耗时：" + (System.currentTimeMillis() - s) + "毫秒");
+                Thread.sleep(60000);
             }
         }catch (Exception ex){
             LOGGER.error("[按赛程ID查比赛的数据]异常",ex);
