@@ -1,12 +1,14 @@
 package com.zhcdata.jc.quartz.job.Order;
 
 import com.zhcdata.db.model.TbJcExpert;
+import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.db.model.TbJcPurchaseDetailed;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.PayService;
 import com.zhcdata.jc.service.TbJcExpertService;
 import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
+import com.zhcdata.jc.service.TbPlanService;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -39,6 +41,8 @@ public class QueryOrderStatusJob implements Job {
     private PayService payService;
     @Resource
     private TbJcExpertService tbJcExpertService;
+    @Resource
+    private TbPlanService tbPlanService;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -90,7 +94,7 @@ public class QueryOrderStatusJob implements Job {
 
 
         //更新专家信息
-        TbJcExpert tbJcExpert = tbJcExpertService.queryExpertDetailsById(Integer.valueOf(String.valueOf(tbJcPurchaseDetailed.getExpertId())));
+       /* TbJcExpert tbJcExpert = tbJcExpertService.queryExpertDetailsById(Integer.valueOf(String.valueOf(tbJcPurchaseDetailed.getExpertId())));
         Integer pop = tbJcExpert.getPopularity();
         if(pop == null){
             pop = 0;
@@ -103,9 +107,16 @@ public class QueryOrderStatusJob implements Job {
         if(h <= 0){
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }*/
+
+        //增加对应方案的人气值
+        TbJcPlan tbJcPlan1 = tbPlanService.queryPlanByPlanId(tbJcPurchaseDetailed.getSchemeId());
+        Integer pop = tbJcPlan1.getPlanPopularity();
+        if(pop == null){
+            pop = 0;
         }
-
-
+        tbJcPlan1.setPlanPopularity(pop + 10);
+        tbPlanService.updatePlanByPlanId(tbJcPlan1);
     }
 
 }

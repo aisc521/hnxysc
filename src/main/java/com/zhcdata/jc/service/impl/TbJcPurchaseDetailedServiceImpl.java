@@ -3,6 +3,7 @@ package com.zhcdata.jc.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcExpertMapper;
+import com.zhcdata.db.mapper.TbJcPlanMapper;
 import com.zhcdata.db.mapper.TbJcPurchaseDetailedMapper;
 import com.zhcdata.db.model.*;
 import com.zhcdata.jc.dto.ProtocolParamDto;
@@ -35,6 +36,8 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
     @Resource
     private CommonUtils commonUtils;
 
+    @Resource
+    private TbJcPlanMapper tbJcPlanMapper;
     @Value("${custom.dbPricd}")
     String dbPricd;
     @Value("${custom.description}")
@@ -263,7 +266,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
 
 
         //增加专家人气
-        TbJcExpert tbJcExpert = tbJcExpertMapper.queryExpertDetailsById(Integer.valueOf(String.valueOf(tbJcPlan.getAscriptionExpert())));
+        /*TbJcExpert tbJcExpert = tbJcExpertMapper.queryExpertDetailsById(Integer.valueOf(String.valueOf(tbJcPlan.getAscriptionExpert())));
         Integer pop = tbJcExpert.getPopularity();
         if(pop == null){
             pop = 0;
@@ -276,8 +279,23 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         if(h <= 0){
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
-        }
+        }*/
 
+        //增加对应方案的人气值
+        TbJcPlan tbJcPlan1 = tbJcPlanMapper.queryPlanByPlanId(tbJcPlan.getId());
+        Integer pop = tbJcPlan1.getPlanPopularity();
+        if(pop == null){
+            pop = 0;
+        }
+        tbJcPlan1.setPlanPopularity(pop + 10);
+        Example example1 = new Example(TbJcPlan.class);
+        example1.createCriteria().andEqualTo("id",tbJcPlan1.getId());
+
+        int h = tbJcPlanMapper.updateByExample(tbJcPlan1,example1);
+        if(h <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
     }
 
     public void insertOrder( TbJcPurchaseDetailed tbJcPurchaseDetailed) throws BaseException {

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
+import com.zhcdata.jc.exception.BaseException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -85,4 +86,6 @@ public interface TbPlanService {
     TbJcPlan queryOnePlan(String expertId);
 
     PageInfo<PlanResult1> queryHotPlan(String userId, Integer integer, int i);
+
+    int updatePlanByPlanId(TbJcPlan tbJcPlan) throws BaseException;
 }
