@@ -184,22 +184,22 @@ public class HandleExpertRecordJob implements Job {
                                         }
 
                                         //赛果
-                                        if(matchlist.get(m).getScore()==null) {
-                                            log.info("赛事Id:" + matchlist.get(m).getMatchId()+"无赛果,因无法计算，被迫跳过");
+                                        if (matchlist.get(m).getScore() == null) {
+                                            log.info("赛事Id:" + matchlist.get(m).getMatchId() + "无赛果,因无法计算，被迫跳过");
                                             continue;
                                         }
                                         String score = matchlist.get(m).getScore();
-                                        String hScore=score.split(":")[0];
-                                        if(hScore.contains(".")){
-                                            hScore=hScore.split("\\.")[0];
+                                        String hScore = score.split(":")[0];
+                                        if (hScore.contains(".")) {
+                                            hScore = hScore.split("\\.")[0];
                                         }
 
-                                        String gScore=score.split(":")[1];
-                                        if(gScore.contains(".")){
-                                            gScore=gScore.split("\\.")[0];
+                                        String gScore = score.split(":")[1];
+                                        if (gScore.contains(".")) {
+                                            gScore = gScore.split("\\.")[0];
                                         }
 
-                                        score = hScore+":"+gScore;
+                                        score = hScore + ":" + gScore;
                                         String[] scores = score.split(":");
 
                                         //已购方案信息
@@ -217,9 +217,9 @@ public class HandleExpertRecordJob implements Job {
                                                 //计算胜平负
                                                 if (spfs.length == 3) {
                                                     if (Double.valueOf(spfs[0]) > 0) {
-                                                        if(m==0) {
+                                                        if (m == 0) {
                                                             xz1 += 1;
-                                                        }else if(m==2){
+                                                        } else if (m == 2) {
                                                             xz2 += 1;
                                                         }
 
@@ -228,9 +228,9 @@ public class HandleExpertRecordJob implements Job {
                                                         }
                                                     }
                                                     if (Double.valueOf(spfs[1]) > 0) {
-                                                        if(m==0) {
+                                                        if (m == 0) {
                                                             xz1 += 1;
-                                                        }else if(m==2){
+                                                        } else if (m == 2) {
                                                             xz2 += 1;
                                                         }
                                                         if (Integer.valueOf(scores[0]) == Integer.valueOf(scores[1])) {
@@ -238,9 +238,9 @@ public class HandleExpertRecordJob implements Job {
                                                         }
                                                     }
                                                     if (Double.valueOf(spfs[2]) > 0) {
-                                                        if(m==0) {
+                                                        if (m == 0) {
                                                             xz1 += 1;
-                                                        }else if(m==2){
+                                                        } else if (m == 2) {
                                                             xz2 += 1;
                                                         }
                                                         if (Integer.valueOf(scores[0]) < Integer.valueOf(scores[1])) {
@@ -254,35 +254,35 @@ public class HandleExpertRecordJob implements Job {
                                                     BigDecimal rb = new BigDecimal(0);           //让球数
                                                     SPFListDto rballs = tbPlanService.querySPFList((matchlist.get(m).getMatchId()));
                                                     if (rballs != null) {
-                                                        rb =new BigDecimal(rballs.getAwayTeamRangballs());
+                                                        rb = new BigDecimal(rballs.getAwayTeamRangballs());
                                                     }
 
                                                     if (Double.valueOf(rqspfs[0]) > 0) {
-                                                        if(m==0) {
+                                                        if (m == 0) {
                                                             xz1 += 1;
-                                                        }else if(m==2){
+                                                        } else if (m == 2) {
                                                             xz2 += 1;
                                                         }
 
-                                                        if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1]))>0) {
+                                                        if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) > 0) {
                                                             money_match = new BigDecimal(rqspfs[0]);  //胜出 计奖金
                                                         }
                                                     }
 
                                                     if (Double.valueOf(rqspfs[1]) > 0) {
-                                                        if(m==0) {
+                                                        if (m == 0) {
                                                             xz1 += 1;
-                                                        }else if(m==2){
+                                                        } else if (m == 2) {
                                                             xz2 += 1;
                                                         }
-                                                        if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1]))==0) {
+                                                        if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) == 0) {
                                                             money_match = new BigDecimal(rqspfs[1]);  //平 计奖金
                                                         }
                                                     }
                                                     if (Double.valueOf(rqspfs[2]) > 0) {
-                                                        if(m==0) {
+                                                        if (m == 0) {
                                                             xz1 += 1;
-                                                        }else if(m==2){
+                                                        } else if (m == 2) {
                                                             xz2 += 1;
                                                         }
                                                         if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) < 0) {
@@ -302,15 +302,15 @@ public class HandleExpertRecordJob implements Job {
                                         }
                                     }
 
-                                    if(matchlist.size()==1) {
+                                    if (matchlist.size() == 1) {
                                         //推一场
                                         pay_money = new BigDecimal(xz1).multiply(new BigDecimal(2));
-                                    }else if(matchlist.size()==2){
+                                    } else if (matchlist.size() == 2) {
                                         //推两场
                                         pay_money = new BigDecimal(xz1).multiply(new BigDecimal(2)).multiply(new BigDecimal(xz2));
                                     }
-                                }else {
-                                    log.info("方案(id:"+planResults.get(k).getId()+")无赛事信息");
+                                } else {
+                                    log.info("方案(id:" + planResults.get(k).getId() + ")无赛事信息");
                                 }
 
                                 //当前专家方案
@@ -377,16 +377,15 @@ public class HandleExpertRecordJob implements Job {
                                 }
                                 c++;
                             }
-
                             VictoryInfo info = new VictoryInfo();
                             info.setLzNow(String.valueOf(lz));                                                           //当前连中
                             info.setF(String.valueOf(zs));                                                               //已发方案总数
                             info.setZ(String.valueOf(z_count));                                                          //方案命中数
-                            info.setzThreeDays(three == 0 ? "0" : dfLv.format((float) three_z / three));        //三天命中率
-                            info.setzFiveDays(three == 0 ? "0" : dfLv.format((float) five_z / five));           //五天命中率
-                            info.setzSevenDays(three == 0 ? "0" : dfLv.format((float) seven_z / seven));        //七天命中率
-                            info.setTrend(trend);                                                                        //趋势
-                            info.setzAll(dfLv.format((float) z_count / zs));                                    //全部命中率
+                            info.setzThreeDays(three == 0 ? new Double(0) : Double.valueOf(dfLv.format((float) three_z * 100 / three)));          //三天命中率
+                            info.setzFiveDays(five_z == 0 ? new Double(0) : Double.valueOf(dfLv.format((float) five_z * 100 / five)));           //五天命中率
+                            info.setzSevenDays(seven_z == 0 ? new Double(0) : Double.valueOf(dfLv.format((float) seven_z * 100 / seven)));       //七天命中率
+                            info.setTrend(trend);                                                                                                              //趋势
+                            info.setzAll(Double.valueOf(dfLv.format((float) z_count * 100 / zs)));                                                          //全部命中率
                             info.setLzBig(String.valueOf(lh_history));                                                   //历史最高连红
                             info.setTen_z(String.valueOf(jin10z));                                                       //近10中几
                             info.setNine_z(String.valueOf(jin9z));                                                       //近9中几
@@ -396,75 +395,75 @@ public class HandleExpertRecordJob implements Job {
                             info.setFive_z(String.valueOf(jin5z));                                                       //近5中几
                             info.setFour_z(String.valueOf(jin4z));                                                       //近4中几
                             info.setThree_z(String.valueOf(jin3z));                                                      //近3中几
-                            if(lastSevenDayPayMoney.compareTo(new BigDecimal(0))>0) {
-                                info.setReturnSevenDays(String.valueOf(lastSevenDayReturnMoney.divide(lastSevenDayPayMoney,2).multiply(new BigDecimal(100))));  //七天回报率
-                            }else {
-                                info.setReturnSevenDays("0");
+                            if (lastSevenDayPayMoney.compareTo(new BigDecimal(0)) > 0) {
+                                info.setReturnSevenDays(lastSevenDayReturnMoney.divide(lastSevenDayPayMoney, 2).multiply(new BigDecimal(100)).doubleValue());  //七天回报率
+                            } else {
+                                info.setReturnSevenDays(new Double(0));
                             }
-                            //info.setYlSevenDays("0");                                                                                                                             //七天盈利率
-                            if(lastDayPayMoney.compareTo(new BigDecimal(0))>0) {
-                                info.setReturnAll(String.valueOf(lastDayReturnMoney.divide(lastDayPayMoney,2).multiply(new BigDecimal(100))));                  //全部回报率
-                            }else {
-                                info.setReturnAll("0");
+                            //info.setYlSevenDays("0");                                                                                                                           //七天盈利率
+                            if (lastDayPayMoney.compareTo(new BigDecimal(0)) > 0) {
+                                info.setReturnAll(lastDayReturnMoney.divide(lastDayPayMoney, 2).multiply(new BigDecimal(100)).doubleValue());                  //全部回报率
+                            } else {
+                                info.setReturnAll(new Double(0));
                             }
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
 
-                            if(Integer.parseInt(info.getLzNow())>4) {
+                            if (Integer.parseInt(info.getLzNow()) > 4) {
                                 //1类(倒序)
                                 info.setOrder_By(getOrderBy(Integer.parseInt(info.getLzNow())) + 100);
-                            }else {
+                            } else {
                                 //2类(倒序数大的在前面、数小的在后边) 9 8 7 6 5 4
-                                if(Integer.parseInt(info.getTen_z())==9){
+                                if (Integer.parseInt(info.getTen_z()) == 9) {
                                     info.setOrder_By(204);
-                                }else if(Integer.parseInt(info.getNine_z())==8){
+                                } else if (Integer.parseInt(info.getNine_z()) == 8) {
                                     info.setOrder_By(205);
-                                }else if(Integer.parseInt(info.getEight_z())==7){
+                                } else if (Integer.parseInt(info.getEight_z()) == 7) {
                                     info.setOrder_By(206);
-                                }else if(Integer.parseInt(info.getSeven_z())==6){
+                                } else if (Integer.parseInt(info.getSeven_z()) == 6) {
                                     info.setOrder_By(207);
-                                }else if(Integer.parseInt(info.getSix_z())==5){
+                                } else if (Integer.parseInt(info.getSix_z()) == 5) {
                                     info.setOrder_By(208);
-                                }else if(Integer.parseInt(info.getFive_z())==4){
+                                } else if (Integer.parseInt(info.getFive_z()) == 4) {
                                     info.setOrder_By(209);
-                                }else {
+                                } else {
                                     //3类(倒序)
-                                    if(new BigDecimal(info.getReturnSevenDays()).compareTo(new BigDecimal(100))>0){
+                                    if (new BigDecimal(info.getReturnSevenDays()).compareTo(new BigDecimal(100)) > 0) {
                                         info.setOrder_By(300);
-                                    }else {
+                                    } else {
                                         //4类(倒序)
-                                        if(Integer.parseInt(info.getSeven_z())==5){
+                                        if (Integer.parseInt(info.getSeven_z()) == 5) {
                                             info.setOrder_By(408);
-                                        }else if(Integer.parseInt(info.getEight_z())==6){
+                                        } else if (Integer.parseInt(info.getEight_z()) == 6) {
                                             info.setOrder_By(407);
-                                        }else if(Integer.parseInt(info.getNine_z())==7){
+                                        } else if (Integer.parseInt(info.getNine_z()) == 7) {
                                             info.setOrder_By(406);
-                                        }else if(Integer.parseInt(info.getTen_z())==8){
+                                        } else if (Integer.parseInt(info.getTen_z()) == 8) {
                                             info.setOrder_By(405);
-                                        }else {
+                                        } else {
                                             //5类(倒序)
-                                            if(Integer.parseInt(info.getTen_z())==5){
+                                            if (Integer.parseInt(info.getTen_z()) == 5) {
                                                 info.setOrder_By(507);
-                                            }else if(Integer.parseInt(info.getTen_z())==6){
+                                            } else if (Integer.parseInt(info.getTen_z()) == 6) {
                                                 info.setOrder_By(506);
-                                            }else if(Integer.parseInt(info.getTen_z())==7){
+                                            } else if (Integer.parseInt(info.getTen_z()) == 7) {
                                                 info.setOrder_By(505);
-                                            }else {
+                                            } else {
                                                 //6类
-                                                if(Integer.parseInt(info.getLzNow())==2){
+                                                if (Integer.parseInt(info.getLzNow()) == 2) {
                                                     info.setOrder_By(603);
-                                                }else if(Integer.parseInt(info.getLzNow())==3){
+                                                } else if (Integer.parseInt(info.getLzNow()) == 3) {
                                                     info.setOrder_By(602);
-                                                }else {
+                                                } else {
                                                     //7类
-                                                    if(Integer.parseInt(info.getThree_z())==2){
+                                                    if (Integer.parseInt(info.getThree_z()) == 2) {
                                                         info.setOrder_By(703);
-                                                    }else if(Integer.parseInt(info.getFour_z())==3){
+                                                    } else if (Integer.parseInt(info.getFour_z()) == 3) {
                                                         info.setOrder_By(702);
-                                                    }else {
+                                                    } else {
                                                         //8类
-                                                        if(Integer.parseInt(info.getLzBig())>=8){
+                                                        if (Integer.parseInt(info.getLzBig()) >= 8) {
                                                             info.setOrder_By(getOrderBy(Integer.parseInt(info.getLzNow())) + 800);
-                                                        }else {
+                                                        } else {
                                                             info.setOrder_By(900);
                                                         }
                                                     }
@@ -492,19 +491,19 @@ public class HandleExpertRecordJob implements Job {
                                 }
                             }
                         } else {
-                            log.info("专家(id:" + expertResults.get(p).getId() + ",nickName:"+expertResults.get(p).getNickName()+")无发布方案");
+                            log.info("专家(id:" + expertResults.get(p).getId() + ",nickName:" + expertResults.get(p).getNickName() + ")无发布方案");
                         }
                         VictoryResult Victory = tbJcVictoryService.queryVictory(String.valueOf(expertResults.get(p).getId()));
                         if (Victory == null) {
                             VictoryInfo info = new VictoryInfo();
                             info.setLzNow(String.valueOf(0));                                  //当前连中
                             info.setF(String.valueOf(0));                                      //已发方案总数
-                            info.setZ(String.valueOf(0));                                       //方案命中数
-                            info.setzThreeDays("0");                                            //三天命中率
-                            info.setzFiveDays("0");                                             //五天命中率
-                            info.setzSevenDays("0");                                            //七天命中率
+                            info.setZ(String.valueOf(0));                                      //方案命中数
+                            info.setzThreeDays(new Double(0));                           //三天命中率
+                            info.setzFiveDays(new Double(0));                            //五天命中率
+                            info.setzSevenDays(new Double(0));                           //七天命中率
                             info.setTrend("0");                                                 //趋势
-                            info.setzAll("0");                                                  //全部命中率
+                            info.setzAll(new Double(0));                                  //全部命中率
                             info.setLzBig(String.valueOf(0));                                   //历史最高连红
                             info.setTen_z(String.valueOf(0));                                   //近10中几
                             info.setNine_z(String.valueOf(0));                                  //近9中几
@@ -514,10 +513,11 @@ public class HandleExpertRecordJob implements Job {
                             info.setFive_z(String.valueOf(0));                                  //近5中几
                             info.setFour_z(String.valueOf(0));                                  //近4中几
                             info.setThree_z(String.valueOf(0));                                 //近3中几
-                            info.setReturnSevenDays("0");                                       //七天回报率/七天盈利率
-                            info.setReturnAll("0");                                             //全部回报率
+                            info.setReturnSevenDays(new Double(0));
+                            ;                      //七天回报率/七天盈利率
+                            info.setReturnAll(new Double(0));                             //全部回报率
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
-                            info.setYlSevenDays("0");
+                            info.setYlSevenDays(new Double(0));
                             info.setSix_z("0");
                             info.setOrder_By(1000);
 
@@ -541,7 +541,7 @@ public class HandleExpertRecordJob implements Job {
     }
 
     //转换排序顺序
-    private int getOrderBy(Integer value){
-        return 100-value;
+    private int getOrderBy(Integer value) {
+        return 100 - value;
     }
 }
