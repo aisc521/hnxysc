@@ -57,7 +57,7 @@ public class MatchResult1 {
 
     private String recommendCount;
 
-    private String kind;
+    private String isSingle;
 
     public String getMatchType() {
         return matchType;
@@ -339,11 +339,11 @@ public class MatchResult1 {
         this.recommendCount = recommendCount;
     }
 
-    public String getKind() {
-        return kind;
+    public String getIsSingle() {
+        return isSingle;
     }
 
-    public void setKind(String kind) {
-        this.kind = kind;
+    public void setIsSingle(String isSingle) {
+        this.isSingle = isSingle;
     }
 }
