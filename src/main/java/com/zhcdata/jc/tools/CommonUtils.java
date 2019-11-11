@@ -615,7 +615,7 @@ public class CommonUtils {
             info.setReturnSevenDays("0");
         }
 
-        if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
+        if(new BigDecimal(info.getReturnSevenDays()).intValue() > 100){//七天回报率大于100
             lz = "回报率:" + info.getReturnSevenDays() + "%";
             return lz;
         }
@@ -760,10 +760,12 @@ public class CommonUtils {
             info.setReturnSevenDays("0");
         }
 
-        if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
+
+        if(new BigDecimal(info.getReturnSevenDays()).intValue() > 100){//七天回报率大于100
             lz = "回报率:" + info.getReturnSevenDays() + "%";
             return lz;
         }
+
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
             info.setTenZ("0");
         }
@@ -904,10 +906,11 @@ public class CommonUtils {
             info.setReturnSevenDays("0");
         }
 
-        if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
-            lz = "回报率:" +  info.getReturnSevenDays() + "%";
+        if(new BigDecimal(info.getReturnSevenDays()).intValue() > 100){//七天回报率大于100
+            lz = "回报率:" + info.getReturnSevenDays() + "%";
             return lz;
         }
+
 
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
             info.setTenZ("0");
@@ -1047,10 +1050,11 @@ public class CommonUtils {
             info.setReturnSevenDays("0");
         }
 
-        if(Integer.valueOf(info.getReturnSevenDays()) > 100){//七天回报率大于100
+        if(new BigDecimal(info.getReturnSevenDays()).intValue() > 100){//七天回报率大于100
             lz = "回报率:" + info.getReturnSevenDays() + "%";
             return lz;
         }
+
 
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
             info.setTenZ("0");
@@ -1206,7 +1210,7 @@ public class CommonUtils {
         }
         if(orderby.startsWith("3")){//3类
             hot.setType("2");
-            hot.setLz("回报率:" + hotExpertDto.getReturnSevenDays() + "%");
+            hot.setLz("回报率:" + new BigDecimal(hotExpertDto.getReturnSevenDays()).intValue() + "%");
             return;
         }
         if(orderby.startsWith("4")){//4类
