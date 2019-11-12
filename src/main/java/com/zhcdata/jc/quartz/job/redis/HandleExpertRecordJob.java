@@ -408,7 +408,7 @@ public class HandleExpertRecordJob implements Job {
                             }
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
 
-                            if (Integer.parseInt(info.getLzNow()) > 4) {
+                            if (Integer.parseInt(info.getLzNow()) >= 4) {
                                 //1类(倒序)
                                 info.setOrder_By(getOrderBy(Integer.parseInt(info.getLzNow())) + 100);
                             } else {
