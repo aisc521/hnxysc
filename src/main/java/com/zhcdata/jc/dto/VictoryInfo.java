@@ -126,6 +126,11 @@ public class VictoryInfo {
      */
     private Integer order_By;
 
+    /**
+     * 近7天命中情况
+     */
+    private String sevenDaysHit;
+
 
     public String getId() {
         return id;
@@ -325,5 +330,13 @@ public class VictoryInfo {
 
     public void setYlSevenDays(Double ylSevenDays) {
         this.ylSevenDays = ylSevenDays;
+    }
+
+    public String getSevenDaysHit() {
+        return sevenDaysHit;
+    }
+
+    public void setSevenDaysHit(String sevenDaysHit) {
+        this.sevenDaysHit = sevenDaysHit;
     }
 }

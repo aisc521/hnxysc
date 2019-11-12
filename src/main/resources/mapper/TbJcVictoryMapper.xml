@@ -77,7 +77,8 @@
     five_z=#{five_z,jdbcType=VARCHAR},
     four_z=#{four_z,jdbcType=VARCHAR},
     three_z=#{three_z,jdbcType=VARCHAR},
-    Order_By=#{order_By,jdbcType=INTEGER}
+    Order_By=#{order_By,jdbcType=INTEGER},
+    seven_days_hit=#{sevenDaysHit,jdbcType=VARCHAR}
 
     where expert_Id=#{expertId,jdbcType=VARCHAR}
   </update>

@@ -58,9 +58,11 @@ public class HandleExpertRecordJob implements Job {
             calendar.add(Calendar.DAY_OF_MONTH, -2);
             String timeThree = df.format(calendar.getTime());                   //三天
 
+            calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, -4);                    //五天
             String timeFive = df.format(calendar.getTime());
 
+            calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, -6);                    //七天
             String timeSeven = df.format(calendar.getTime());
 
@@ -146,7 +148,7 @@ public class HandleExpertRecordJob implements Job {
                                         zs += 1;        //已发方案总数(按已发赛事数量算的)
 
                                         //三天
-                                        if (matchlist.get(m).getDateOfMatch().compareTo(timeThree) > 0) {
+                                        if (matchlist.get(m).getDateOfMatch().compareTo(timeThree) >= 0) {
                                             three += 1;          //投入+1
                                             if (matchlist.get(m).getStatus().equals("1")) {
                                                 three_z += 1;    //中奖+1
@@ -154,19 +156,19 @@ public class HandleExpertRecordJob implements Job {
                                         }
 
                                         //五天
-                                        if (matchlist.get(m).getDateOfMatch().compareTo(timeFive) > 0) {
+                                        if (matchlist.get(m).getDateOfMatch().compareTo(timeFive) >= 0) {
                                             five += 1;
-                                            if (planResults.get(k).getStatus().equals("1")) {
+                                            if (matchlist.get(m).getStatus().equals("1")) {
                                                 five_z += 1;
                                             }
                                         }
 
 
                                         //七天
-                                        if (matchlist.get(m).getDateOfMatch().compareTo(timeSeven) > 0) {
+                                        if (matchlist.get(m).getDateOfMatch().compareTo(timeSeven) >= 0) {
                                             isServerDay = 1;
                                             seven += 1;
-                                            if (planResults.get(k).getStatus().equals("1")) {
+                                            if (matchlist.get(m).getStatus().equals("1")) {
                                                 seven_z += 1;
                                             }
                                         }
@@ -407,6 +409,10 @@ public class HandleExpertRecordJob implements Job {
                                 info.setReturnAll(new Double(0));
                             }
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
+                            info.setSevenDaysHit(seven+"中"+seven_z);
+                            //if(info.getSevenDaysHit().equals("0中0")){
+                            //    String s="";
+                            //}
 
                             if (Integer.parseInt(info.getLzNow()) >= 4) {
                                 //1类(倒序)
