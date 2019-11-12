@@ -53,7 +53,7 @@ public class ExpertRankingListJob implements Job{
                 LOGGER.info("专家排行榜--当前连红数据为空=========");
             }
             if(sevenReturnList != null && sevenReturnList.size() > 0){
-                redisUtils.hset("SOCCER:HSET:EXPERRTANKING", "sevenReturn", JsonMapper.defaultMapper().toJson(sevenReturnList));
+                redisUtils.hset("SOCCER:HSET:EXPERTRANKING", "sevenReturn", JsonMapper.defaultMapper().toJson(sevenReturnList));
             }else{
                 LOGGER.info("专家排行榜--七天回报率数据为空=========");
             }
