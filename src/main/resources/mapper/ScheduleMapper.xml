@@ -209,7 +209,8 @@
         s.home_yellow homeYlwCard,
         s.guest_yellow guestYlwCard,
         s.scheduleid matchId,
-        s.matchstate matchState
+        s.matchstate matchState,
+        (SELECT count(*) from tb_jc_match where match_id=s.ScheduleID) recommendCount
         FROM SCHEDULE s
         LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
         LEFT JOIN team t ON s.hometeamid = t.teamid

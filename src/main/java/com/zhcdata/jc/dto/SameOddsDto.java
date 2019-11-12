@@ -80,6 +80,8 @@ public class SameOddsDto implements Serializable {
 
     private String matchType;
 
+    private String recommendCount;
+
     @Override
     public boolean equals(Object o) {
         if (this == o){ return true;}
