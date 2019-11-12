@@ -520,7 +520,7 @@ public class HandleExpertRecordJob implements Job {
                             info.setFour_z(String.valueOf(0));                                  //近4中几
                             info.setThree_z(String.valueOf(0));                                 //近3中几
                             info.setReturnSevenDays(new Double(0));
-                            ;                      //七天回报率/七天盈利率
+                                                                                                 //七天回报率/七天盈利率
                             info.setReturnAll(new Double(0));                             //全部回报率
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
                             info.setYlSevenDays(new Double(0));

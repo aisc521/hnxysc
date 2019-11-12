@@ -40,14 +40,14 @@
     z_five_days,z_seven_days,return_seven_days,trend,return_all,
     z_all,lz_big,yl_seven_days,ten_z,nine_z,
     eight_z,seven_z,six_z,five_z,four_z,
-    three_z
+    three_z,Order_By
     )
     values (
     #{expertId,jdbcType=VARCHAR}, #{lzNow,jdbcType=VARCHAR}, #{f,jdbcType=VARCHAR}, #{z,jdbcType=VARCHAR}, #{zThreeDays,jdbcType=VARCHAR},
     #{zFiveDays,jdbcType=VARCHAR},#{zSevenDays,jdbcType=VARCHAR},#{returnSevenDays,jdbcType=VARCHAR},#{trend,jdbcType=VARCHAR},#{returnAll,jdbcType=VARCHAR},
     #{zAll,jdbcType=VARCHAR},#{lzBig,jdbcType=VARCHAR},#{ylSevenDays,jdbcType=VARCHAR},#{ten_z,jdbcType=VARCHAR},#{nine_z,jdbcType=VARCHAR},
     #{eight_z,jdbcType=VARCHAR},#{seven_z,jdbcType=VARCHAR},#{six_z,jdbcType=VARCHAR},#{five_z,jdbcType=VARCHAR},#{four_z,jdbcType=VARCHAR},
-    #{three_z,jdbcType=VARCHAR}
+    #{three_z,jdbcType=VARCHAR},#{order_By,jdbcType=INTEGER}
     )
   </insert>
 
