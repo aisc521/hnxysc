@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.SeasonPlayerStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.SeasonPlayerStatistics" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="player_id" property="playerId" jdbcType="BIGINT" />
+    <result column="team_id" property="teamId" jdbcType="BIGINT" />
+    <result column="if_home" property="ifHome" jdbcType="BIGINT" />
+    <result column="league_id" property="leagueId" jdbcType="BIGINT" />
+    <result column="match_season" property="matchSeason" jdbcType="BIGINT" />
+    <result column="sch_sum" property="schSum" jdbcType="BIGINT" />
+    <result column="back_sum" property="backSum" jdbcType="BIGINT" />
+    <result column="play_time" property="playTime" jdbcType="VARCHAR" />
+    <result column="goals" property="goals" jdbcType="BIGINT" />
+    <result column="penalty_goals" property="penaltyGoals" jdbcType="BIGINT" />
+    <result column="shots" property="shots" jdbcType="BIGINT" />
+    <result column="shots_target" property="shotsTarget" jdbcType="BIGINT" />
+    <result column="was_fouled" property="wasFouled" jdbcType="BIGINT" />
+    <result column="offside" property="offside" jdbcType="BIGINT" />
+    <result column="best_sum" property="bestSum" jdbcType="BIGINT" />
+    <result column="rating" property="rating" jdbcType="REAL" />
+    <result column="total_pass" property="totalPass" jdbcType="BIGINT" />
+    <result column="pass_suc" property="passSuc" jdbcType="BIGINT" />
+    <result column="key_pass" property="keyPass" jdbcType="BIGINT" />
+    <result column="assist" property="assist" jdbcType="BIGINT" />
+    <result column="long_ball" property="longBall" jdbcType="BIGINT" />
+    <result column="long_ball_suc" property="longBallSuc" jdbcType="BIGINT" />
+    <result column="through_ball" property="throughBall" jdbcType="BIGINT" />
+    <result column="through_ball_suc" property="throughBallSuc" jdbcType="BIGINT" />
+    <result column="dribbles_suc" property="dribblesSuc" jdbcType="BIGINT" />
+    <result column="cross_num" property="crossNum" jdbcType="BIGINT" />
+    <result column="cross_suc" property="crossSuc" jdbcType="BIGINT" />
+    <result column="tackle" property="tackle" jdbcType="BIGINT" />
+    <result column="interception" property="interception" jdbcType="BIGINT" />
+    <result column="clearance" property="clearance" jdbcType="BIGINT" />
+    <result column="dispossessed" property="dispossessed" jdbcType="BIGINT" />
+    <result column="shots_blocked" property="shotsBlocked" jdbcType="BIGINT" />
+    <result column="aertal_suc" property="aertalSuc" jdbcType="BIGINT" />
+    <result column="fouls" property="fouls" jdbcType="BIGINT" />
+    <result column="red" property="red" jdbcType="BIGINT" />
+    <result column="yellow" property="yellow" jdbcType="BIGINT" />
+    <result column="turn_over" property="turnOver" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="queryByPlayIdLenIdSeason" resultType="com.zhcdata.db.model.SeasonPlayerStatistics">
+    select  *  from season_player_statistics s where  s.player_id = #{id} and s.league_id = #{leagueID} and s.match_season = #{matchSeason}
+  </select>
+</mapper>
