@@ -289,10 +289,11 @@ public class MatchListProtocol implements BaseProtocol {
         if (value.contains(",")) {
             String[] ps = value.split(",");
             for (int i = 0; i < ps.length; i++) {
-                list.add(CorrespondingMap1.get(ps[i]));
+                //list.add(CorrespondingMap1.get(ps[i]));
+                list.add(ps[i]);
             }
         } else if(value.length()>0) {
-            list.add(CorrespondingMap1.get(value));
+            list.add(value);
         }
         return list;
     }

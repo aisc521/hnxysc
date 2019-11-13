@@ -218,7 +218,7 @@ public class MatchListUserIdProtocol implements BaseProtocol {
             String endDate=df.format(calendar.getTime());
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
-            newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + "11:00:00", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //竞彩
+            newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + " 11:00:00", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //竞彩
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
             map.put("pageNo", infos.getPageNum());
             map.put("pageTotal", infos.getPages());
@@ -287,10 +287,10 @@ public class MatchListUserIdProtocol implements BaseProtocol {
         if (value.contains(",")) {
             String[] ps = value.split(",");
             for (int i = 0; i < ps.length; i++) {
-                list.add(CorrespondingMap1.get(ps[i]));
+                list.add(ps[i]);
             }
         } else if(value.length()>0) {
-            list.add(CorrespondingMap1.get(value));
+            list.add(value);
         }
         return list;
     }
