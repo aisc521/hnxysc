@@ -208,6 +208,9 @@ public class MatchListUserIdProtocol implements BaseProtocol {
 
         //赛事类型或盘口赛选直接查数据库
         if(!Strings.isNullOrEmpty(panKouType) ||!Strings.isNullOrEmpty(matchType)){
+            if (type.equals("all")) {
+                type = "4";
+            }
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(df.parse(time));
@@ -245,7 +248,13 @@ public class MatchListUserIdProtocol implements BaseProtocol {
                     JsonMapper jsonMapper = JsonMapper.defaultMapper();
                     JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
                     newList = jsonMapper.fromJson(s, javaType1);
-
+                }else {
+                    map.put("pageTotal", "0");
+                    map.put("pageNo", "0");
+                    map.put("busiCode", "20010201");
+                    map.put("resCode", "000000");
+                    map.put("message", "成功");
+                    map.put("list", null);
                 }
             }
         }

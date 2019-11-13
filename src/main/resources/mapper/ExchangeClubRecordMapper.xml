@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.ExchangeClubRecordMapper">
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.ClubRecordInfo" >
+    insert into exchange_club_record
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="playerid != null" >
+        PlayerID,
+      </if>
+      <if test="transfertime != null" >
+        transferTime,
+      </if>
+      <if test="endtime != null" >
+        endTime,
+      </if>
+      <if test="team != null" >
+        Team,
+      </if>
+      <if test="teamnow != null" >
+        TeamNow,
+      </if>
+      <if test="teamid != null" >
+        TeamID,
+      </if>
+      <if test="teamnowid != null" >
+        TeamNowID,
+      </if>
+      <if test="money != null" >
+        Money,
+      </if>
+      <if test="place != null" >
+        Place,
+      </if>
+      <if test="zhSeason != null" >
+        ZH_Season,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="playerid != null" >
+        #{playerid,jdbcType=INTEGER},
+      </if>
+      <if test="transfertime != null" >
+        #{transfertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="team != null" >
+        #{team,jdbcType=VARCHAR},
+      </if>
+      <if test="teamnow != null" >
+        #{teamnow,jdbcType=VARCHAR},
+      </if>
+      <if test="teamid != null" >
+        #{teamid,jdbcType=INTEGER},
+      </if>
+      <if test="teamnowid != null" >
+        #{teamnowid,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="place != null" >
+        #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="zhSeason != null" >
+        #{zhSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhcdata.db.model.ClubRecordInfo" >
+    update exchange_club_record
+    <set >
+      <if test="playerid != null" >
+        PlayerID = #{playerid,jdbcType=INTEGER},
+      </if>
+      <if test="transfertime != null" >
+        transferTime = #{transfertime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        endTime = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="team != null" >
+        Team = #{team,jdbcType=VARCHAR},
+      </if>
+      <if test="teamnow != null" >
+        TeamNow = #{teamnow,jdbcType=VARCHAR},
+      </if>
+      <if test="teamid != null" >
+        TeamID = #{teamid,jdbcType=INTEGER},
+      </if>
+      <if test="teamnowid != null" >
+        TeamNowID = #{teamnowid,jdbcType=INTEGER},
+      </if>
+      <if test="money != null" >
+        Money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="place != null" >
+        Place = #{place,jdbcType=VARCHAR},
+      </if>
+      <if test="zhSeason != null" >
+        ZH_Season = #{zhSeason,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="Base_Column_List" >
+    ID, PlayerID, transferTime, endTime, Team, TeamNow, TeamID, TeamNowID, Money, Place,
+    ZH_Season, type
+  </sql>
+  <select id="selectByPrimaryKey" resultType="com.zhcdata.db.model.ClubRecordInfo" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from exchange_club_record
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+</mapper>
