@@ -122,6 +122,7 @@ custom:
       imageUrl: http://zq.win007.com/Image/team/
       localUrl: /local/webapp/image/jc/
       yuMing: http://csjch5.xhjingling.com/
+      seasonUrl: http://interface.win007.com/zq/PlayCount.aspx?ID=
   dbPricd: 20
   description: 购买方案
   productName: 购买方案

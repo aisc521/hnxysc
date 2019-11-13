@@ -410,7 +410,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     </select>
 
   <select id="queryPlanInfo" resultType="java.util.Map">
-select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
+select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds,"") odds from (
         SELECT jc.*, sc.MatchState Status, sc.HomeScore homeBalls, sc.GuestScore awayballs, sc.MatchTime2 dateOfMatch2
         from (SELECT kk.*, p2.teamName awayName
         from (SELECT k.*, p1.teamName homeName
@@ -434,6 +434,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         0 homeTeamRangballs,
         PolyGoal awayTeamRangballs,
         Single105 smalltype
+
         from jc_schedule s
         LEFT JOIN jc_schedulesp ssp on s.ScheduleID = ssp.ID
         where s.ScheduleID in (select match_id from tb_jc_match where plan_id = #{pid})) k
@@ -531,6 +532,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
 
         </if>
         group by p.id
+        order by p.create_time desc
     </select>
 
 
@@ -576,6 +578,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         </if>
 
         group by p.id
+        order by p.create_time desc
     </select>
 
 
@@ -604,6 +607,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         left join tb_jc_expert e on p.ascription_expert = e.id
         left join tb_jc_victory v on e.id = v.expert_id
         where p.id = #{planId}
+        order by p.create_time desc
     </select>
 
     <select id="queryPlanInfoByPlanIdandUserId" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
@@ -629,6 +633,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         left join tb_jc_victory v on e.id = v.expert_id
         left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId}
         where p.id = #{planId}
+        order by p.create_time desc
     </select>
 
 
@@ -698,6 +703,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         </if>
         where 1=1 and p.status = '2' and v.order_By is not null and e.is_upshelf = '1'
         GROUP BY p.id
-        ORDER BY v.i asc,p.create_time desc
+        ORDER BY  v.i asc,p.create_time desc
+
     </select>
 </mapper>

@@ -130,6 +130,6 @@
         *
         from tb_jc_purchase_detailed pd
 
-        where pd.scheme_id = #{schemeId}
+        where pd.scheme_id = #{schemeId} and pd.pay_status = '1'
     </select>
 </mapper>
