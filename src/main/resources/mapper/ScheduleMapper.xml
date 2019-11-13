@@ -923,7 +923,7 @@
                 #{name}
             </foreach>
         </if>
-        ) a ORDER BY
+        ) a GROUP BY a.matchId ORDER BY
         <if test="type == 1">
             a.num
         </if>
