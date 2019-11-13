@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.WorldRankingMapper">
+  <insert id="insertSelective" parameterType="com.zhcdata.db.model.WorldRankInfo" >
+    insert into world_ranking
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="name != null" >
+        Name,
+      </if>
+      <if test="teamid != null" >
+        TeamID,
+      </if>
+      <if test="area != null" >
+        Area,
+      </if>
+      <if test="rank != null" >
+        Rank,
+      </if>
+      <if test="chgrank != null" >
+        ChgRank,
+      </if>
+      <if test="score != null" >
+        Score,
+      </if>
+      <if test="chgscore != null" >
+        ChgScore,
+      </if>
+      <if test="update1 != null" >
+        update1,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="teamid != null" >
+        #{teamid,jdbcType=INTEGER},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null" >
+        #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="chgrank != null" >
+        #{chgrank,jdbcType=INTEGER},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="chgscore != null" >
+        #{chgscore,jdbcType=INTEGER},
+      </if>
+      <if test="update1 != null" >
+        #{update1,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="selectByTeamID" resultType="com.zhcdata.db.model.WorldRankInfo">
+    select
+    *
+    from world_ranking
+    where TeamID = #{TeamID} and type=#{Type}
+  </select>
+
+  <update id="updateByTeamID" parameterType="com.zhcdata.db.model.WorldRankInfo" >
+    update world_ranking set
+        type = #{type,jdbcType=VARCHAR},
+        name = #{name,jdbcType=VARCHAR},
+        teamid = #{teamid,jdbcType=INTEGER},
+        area = #{area,jdbcType=VARCHAR},
+        rank = #{rank,jdbcType=INTEGER},
+        chgrank = #{chgrank,jdbcType=INTEGER},
+        score = #{score,jdbcType=INTEGER},
+        chgscore = #{chgscore,jdbcType=INTEGER},
+        update1 = #{update1,jdbcType=VARCHAR}
+        where TeamID = #{teamid,jdbcType=INTEGER} and type = #{type,jdbcType=VARCHAR}
+  </update>
+</mapper>
