@@ -110,7 +110,7 @@
         *
         from tb_jc_purchase_detailed pd
 
-        where pd.user_id = #{userId} and pd.scheme_id = #{schemeId}
+        where pd.user_id = #{userId} and pd.scheme_id = #{schemeId} and pd.pay_status in('2','1','3')
     </select>
     <select id="queryOrderByUserAndOrderId" resultType="com.zhcdata.db.model.TbJcPurchaseDetailed">
         SELECT
