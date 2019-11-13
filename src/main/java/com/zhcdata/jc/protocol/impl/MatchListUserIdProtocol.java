@@ -245,7 +245,13 @@ public class MatchListUserIdProtocol implements BaseProtocol {
                     JsonMapper jsonMapper = JsonMapper.defaultMapper();
                     JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
                     newList = jsonMapper.fromJson(s, javaType1);
-
+                }else {
+                    map.put("pageTotal", "0");
+                    map.put("pageNo", "0");
+                    map.put("busiCode", "20010201");
+                    map.put("resCode", "000000");
+                    map.put("message", "成功");
+                    map.put("list", null);
                 }
             }
         }

@@ -5,7 +5,6 @@ import com.zhcdata.db.model.ClubRecordInfo;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.clubRsp;
 import lombok.extern.slf4j.Slf4j;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -15,7 +14,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import javax.annotation.Resource;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
