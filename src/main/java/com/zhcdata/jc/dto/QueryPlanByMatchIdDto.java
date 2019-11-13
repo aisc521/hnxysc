@@ -31,4 +31,14 @@ public class QueryPlanByMatchIdDto {
     private String planStatus;
     private List<MatchInfoDto> list;
     private String planId;
+    private String tenZ;
+    private String nineZ;
+    private String eightZ;
+    private String sevenZ;
+    private String sixZ;
+    private String fiveZ;
+    private String fourZ;
+    private String threeZ;
+    private String returnSevenDays;
+    private String lzBig;
 }

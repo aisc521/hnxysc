@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springside.modules.utils.mapper.JsonMapper;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -58,6 +59,7 @@ public class HotPlanNewJob  implements Job {
                         PlanResult1 result1 = planList.get(k);
                         String lz = commonUtils.JsLz2(result1);
                         result1.setLz(lz);
+                        result1.setzSevenDays(String.valueOf(new BigDecimal(result1.getzSevenDays()).intValue()));
                         List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(k).getPlanId());
                         if (matchPlanResults != null && matchPlanResults.size() > 0) {
                             result1.setList(matchPlanResults);

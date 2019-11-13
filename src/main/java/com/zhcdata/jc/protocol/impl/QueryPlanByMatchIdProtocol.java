@@ -11,11 +11,13 @@ import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
+import com.zhcdata.jc.tools.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,8 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
     private TbPlanService tbPlanService;
     @Resource
     private TbJcMatchService tbJcMatchService;
+    @Resource
+    private CommonUtils commonUtils;
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -68,6 +72,9 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
                 QueryPlanByMatchIdDto queryPlanByMatchIdDto = tbPlanService.queryPlanInfoByPlanId(planIdDtoList.get(i).getPlanId());
                 if(queryPlanByMatchIdDto != null){
                     queryPlanByMatchIdDto.setPlanId(planIdDtoList.get(i).getPlanId());
+                    String lz = commonUtils.JsLz3(queryPlanByMatchIdDto);
+                    queryPlanByMatchIdDto.setZSevenDays(String.valueOf(new BigDecimal(queryPlanByMatchIdDto.getZSevenDays()).intValue()));
+                    queryPlanByMatchIdDto.setLz(lz);
                     List<MatchInfoDto> matchInfoDtos = tbJcMatchService.queryMatchInfoDtoByPlanId(planIdDtoList.get(i).getPlanId());
                     queryPlanByMatchIdDto.setList(matchInfoDtos);
                     list.add(queryPlanByMatchIdDto);

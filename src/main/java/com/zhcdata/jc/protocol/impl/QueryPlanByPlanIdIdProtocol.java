@@ -10,12 +10,14 @@ import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
+import com.zhcdata.jc.tools.CommonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +36,8 @@ public class QueryPlanByPlanIdIdProtocol implements BaseProtocol {
     private TbPlanService tbPlanService;
     @Resource
     private TbJcMatchService tbJcMatchService;
+    @Resource
+    private CommonUtils commonUtils;
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -76,6 +80,9 @@ public class QueryPlanByPlanIdIdProtocol implements BaseProtocol {
 
                 for (int i = 0; i < planList.size(); i++) {
                     PlanResult1 result1 = planList.get(i);
+                    String lz = commonUtils.JsLz2(result1);
+                    result1.setLz(lz);
+                    result1.setzSevenDays(String.valueOf(new BigDecimal(result1.getzSevenDays()).intValue()));
                     List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(i).getPlanId());
                     if (matchPlanResults != null && matchPlanResults.size() > 0) {
                         result1.setList(matchPlanResults);

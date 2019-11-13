@@ -517,7 +517,17 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         p.id planId,
         p.type planType,
         p.status planStatus,
-        e.grade grade
+        e.grade grade,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.return_seven_days returnSevenDays,
+        v.lz_big lzBig
         from tb_jc_plan  p
         LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
         LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
@@ -546,7 +556,6 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         e.lable,
         (e.fans + e.start_fans) fans,
         p.plan_popularity popularity,
-        v.lz_now lz,
         v.z_three_days zThreeDays,
         v.z_five_days zFiveDays,
         v.z_seven_days zSevenDays,
@@ -559,7 +568,18 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         p.type planType,
         p.status planStatus,
         IF(pd.id IS NOT NULL,1,0) buStatus,
-        e.grade grade
+        e.grade grade,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.return_seven_days returnSevenDays,
+        v.lz_big lzBig,
+        v.lz_now lz
         from tb_jc_plan  p
         LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
         LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
@@ -627,7 +647,17 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         p.create_time createTime,
         IF(pd.id IS NOT NULL,1,0) buStatus,
         e.grade grade,
-        p.status planStatus
+        p.status planStatus,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.return_seven_days returnSevenDays,
+        v.lz_big lzBig
         from tb_jc_plan p
         left join tb_jc_expert e on p.ascription_expert = e.id
         left join tb_jc_victory v on e.id = v.expert_id
