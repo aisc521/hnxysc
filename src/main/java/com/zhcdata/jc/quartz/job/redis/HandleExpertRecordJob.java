@@ -294,6 +294,11 @@ public class HandleExpertRecordJob implements Job {
                                                 }
                                             }
 
+                                            if(matchlist.get(m).getMatchState().equals("-10")||matchlist.get(m).getMatchState().equals("-12")||matchlist.get(m).getMatchState().equals("-14")){
+                                                //腰斩、取消、推迟的比赛，sp值为1
+                                                money_match=new BigDecimal(1);
+                                            }
+
                                             if (m == 0) {
                                                 //第一场比赛
                                                 return_money = money_match;
