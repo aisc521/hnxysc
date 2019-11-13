@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhcdata.db.mapper.SclassMapper">
+
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.Sclass">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="sclassID" jdbcType="INTEGER" property="sclassid" />
+    <result column="Color" jdbcType="CHAR" property="color" />
+    <result column="Name_J" jdbcType="CHAR" property="nameJ" />
+    <result column="Name_F" jdbcType="CHAR" property="nameF" />
+    <result column="Name_E" jdbcType="CHAR" property="nameE" />
+    <result column="Name_JS" jdbcType="CHAR" property="nameJs" />
+    <result column="Name_FS" jdbcType="CHAR" property="nameFs" />
+    <result column="Name_ES" jdbcType="CHAR" property="nameEs" />
+    <result column="Name_S" jdbcType="CHAR" property="nameS" />
+    <result column="Kind" jdbcType="SMALLINT" property="kind" />
+    <result column="Mode" jdbcType="SMALLINT" property="mode" />
+    <result column="count_round" jdbcType="SMALLINT" property="countRound" />
+    <result column="curr_round" jdbcType="SMALLINT" property="currRound" />
+    <result column="Curr_matchSeason" jdbcType="CHAR" property="currMatchseason" />
+    <result column="Sclass_pic" jdbcType="VARCHAR" property="sclassPic" />
+    <result column="ifstop" jdbcType="TINYINT" property="ifstop" />
+    <result column="Sclass_type" jdbcType="TINYINT" property="sclassType" />
+    <result column="count_group" jdbcType="SMALLINT" property="countGroup" />
+    <result column="Bf_simply_disp" jdbcType="TINYINT" property="bfSimplyDisp" />
+    <result column="sclass_sequence" jdbcType="SMALLINT" property="sclassSequence" />
+    <result column="InfoID" jdbcType="SMALLINT" property="infoid" />
+    <result column="Bf_IfDisp" jdbcType="TINYINT" property="bfIfdisp" />
+    <result column="ModifyTime" jdbcType="TIMESTAMP" property="modifytime" />
+    <result column="BeginSeason" jdbcType="VARCHAR" property="beginseason" />
+    <result column="subSclassID" jdbcType="INTEGER" property="subsclassid" />
+    <result column="ifHaveSub" jdbcType="TINYINT" property="ifhavesub" />
+    <result column="ifSort" jdbcType="TINYINT" property="ifsort" />
+    <result column="ifHavePaper" jdbcType="TINYINT" property="ifhavepaper" />
+    <result column="ifShowScore" jdbcType="TINYINT" property="ifshowscore" />
+    <result column="rank_matchSeason" jdbcType="CHAR" property="rankMatchseason" />
+    <result column="sclass_rule" jdbcType="LONGVARCHAR" property="sclassRule" />
+  </resultMap>
+
+  <select id="querySclassInfo" resultType="com.zhcdata.db.model.Sclass">
+    select  *  from sclass where  1 = 1
+  </select>
+</mapper>

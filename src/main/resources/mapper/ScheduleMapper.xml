@@ -923,7 +923,7 @@
                 #{name}
             </foreach>
         </if>
-        ) a ORDER BY
+        ) a GROUP BY a.matchId ORDER BY
         <if test="type == 1">
             a.num
         </if>
@@ -991,7 +991,7 @@
             sc.ScheduleID matchId,/*比赛id*/
             lottery.ISSUE_NUM num,/*期数场次*/
             lottery.NO_ID number,/*期数场次*/
-            0 iscollect,/*是否收藏*/
+            1 iscollect,/*是否收藏*/
             case when pg.type = '1' then '1'
                  when pg.type = '2' then '3'
                  when pg.type = '3' then '2'

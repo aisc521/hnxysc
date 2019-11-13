@@ -616,7 +616,7 @@ public class CommonUtils {
         }
 
         if(new BigDecimal(info.getReturnSevenDays()).intValue() > 100){//七天回报率大于100
-            lz = "回报率:" + info.getReturnSevenDays() + "%";
+            lz = "回报率:" + new BigDecimal(info.getReturnSevenDays()).intValue() + "%";
             return lz;
         }
 
@@ -762,7 +762,7 @@ public class CommonUtils {
 
 
         if(new BigDecimal(info.getReturnSevenDays()).intValue() > 100){//七天回报率大于100
-            lz = "回报率:" + info.getReturnSevenDays() + "%";
+            lz = "回报率:" + new BigDecimal(info.getReturnSevenDays()).intValue() + "%";
             return lz;
         }
 
@@ -907,7 +907,7 @@ public class CommonUtils {
         }
 
         if(new BigDecimal(info.getReturnSevenDays()).intValue() > 100){//七天回报率大于100
-            lz = "回报率:" + info.getReturnSevenDays() + "%";
+            lz = "回报率:" + new BigDecimal(info.getReturnSevenDays()).intValue() + "%";
             return lz;
         }
 
@@ -1051,7 +1051,7 @@ public class CommonUtils {
         }
 
         if(new BigDecimal(info.getReturnSevenDays()).intValue() > 100){//七天回报率大于100
-            lz = "回报率:" + info.getReturnSevenDays() + "%";
+            lz = "回报率:" + new BigDecimal(info.getReturnSevenDays()).intValue() + "%";
             return lz;
         }
 

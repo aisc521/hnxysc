@@ -46,6 +46,6 @@
     <table tableName="tb_jc_static"/>
     <table tableName="tb_jc_user"/>
     <table tableName="tb_jc_victory"/>-->
-    <table tableName="detailresult"/>
+    <table tableName="sclass"/>
   </context>
 </generatorConfiguration>
