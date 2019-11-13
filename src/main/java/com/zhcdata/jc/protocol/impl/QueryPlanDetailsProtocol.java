@@ -130,15 +130,30 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         map.put("homeTeamName",firstInfo.get("homeTeamName").toString());
                         map.put("awayTeamName",firstInfo.get("awayTeamName").toString());
 
-                        map.put("no_rang_num", "0");
-                        map.put("rang_sheng", ""+list.get(i).get("homeTeamZhu"));
-                        map.put("rang_ping", ""+list.get(i).get("homeTeamPing"));
-                        map.put("rang_fu", ""+list.get(i).get("homeTeamKe"));
 
+
+                        String odds = list.get(i).get("odds").toString();
+                        if(StringUtils.isNotBlank(odds) && odds != null && odds != "null"){
+                            String[] oddsArr = odds.split("/");
+                            if(oddsArr.length == 6){
+                                map.put("rang_sheng", ""+oddsArr[3]);
+                                map.put("rang_ping", ""+oddsArr[4]);
+                                map.put("rang_fu", ""+oddsArr[5]);
+                                map.put("no_rang_sheng", ""+oddsArr[0]);
+                                map.put("no_rang_ping", ""+oddsArr[1]);
+                                map.put("no_rang_fu", ""+oddsArr[2]);
+                            }
+                        }else{
+                            map.put("rang_sheng", ""+list.get(i).get("homeTeamZhu"));
+                            map.put("rang_ping", ""+list.get(i).get("homeTeamPing"));
+                            map.put("rang_fu", ""+list.get(i).get("homeTeamKe"));
+                            map.put("no_rang_sheng", ""+list.get(i).get("awayTeamZhu"));
+                            map.put("no_rang_ping", ""+list.get(i).get("awayTeamPing"));
+                            map.put("no_rang_fu", ""+list.get(i).get("awayTeamKe"));
+                        }
+
+                        map.put("no_rang_num", "0");
                         map.put("rang_num", ""+list.get(i).get("awayTeamRangballs"));
-                        map.put("no_rang_sheng", ""+list.get(i).get("awayTeamZhu"));
-                        map.put("no_rang_ping", ""+list.get(i).get("awayTeamPing"));
-                        map.put("no_rang_fu", ""+list.get(i).get("awayTeamKe"));
                         map.put("match_status", ""+list.get(i).get("statusmatch"));
                         map.put("match_result", ""+list.get(i).get("matchResult"));
 

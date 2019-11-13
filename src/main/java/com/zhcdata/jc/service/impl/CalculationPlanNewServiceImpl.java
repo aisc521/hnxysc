@@ -172,6 +172,11 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 String order_id = tbJcPurchaseDetailed.getOrderId();
                 String[] order = order_id.split("-");
                 String payType = String.valueOf(tbJcPurchaseDetailed.getPayType());
+                //判断是否支付成功
+                if("0".equals(tbJcPurchaseDetailed.getPayStatus())){//未成功
+                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "退款====付款未成功:" +  tbJcPurchaseDetailed.getBuyMoney());
+                    continue;
+                }
                 String remark = "";
                 if("20".equals(payType)){
                     remark = "微信支付-方案未中退款";
@@ -204,9 +209,10 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     }
                 }
                 String resCode = String.valueOf(result.get("resCode"));
-                if("000000".equals(resCode)){//退款成功
+                if("000000".equals(resCode) || "109023".equals(resCode) || "010124".equals(resCode)){//退款成功
                     //更新订单表信息
                     tbJcPurchaseDetailed.setPayStatus(Long.valueOf(3));
+                    tbJcPurchaseDetailed.setAwardStatus(Long.valueOf(0));
                     Example example = new Example(TbJcPurchaseDetailed.class);
                     example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
                     int j = purchaseDetailedService.updateByExampleSelective(tbJcPurchaseDetailed,example);
@@ -214,8 +220,12 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                         throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                                 ProtocolCodeMsg.UPDATE_FAILE.getMsg());
                     }
+                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "退款成功====退款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "退款类型:" + remark);
+
+                }else{
+                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "退款失败====退款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "退款类型:" + remark);
+
                 }
-                LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "退款成功====退款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "退款类型:" + remark);
             }
         }
 
@@ -249,12 +259,18 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 if("99".equals(payType)){
                     remark = "点播卡支付-方案未中退款";
                 }
+                //判断是否支付成功
+                if("0".equals(tbJcPurchaseDetailed.getPayStatus())){//未成功
+                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款====付款未成功:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark);
+                    continue;
+                }
                 result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getThirdMoney()),remark,tbJcPurchaseDetailed.getSrc());
                 String resCode = String.valueOf(result.get("resCode"));
-                if("000000".equals(resCode)){
+                if("000000".equals(resCode) || "109024".equals(resCode) || "010124".equals(resCode)){
                     //更新订单表 为支付成功的状态
                     //更新订单表信息
                     tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
+                    tbJcPurchaseDetailed.setAwardStatus(Long.valueOf(1));
                     Example example = new Example(TbJcPurchaseDetailed.class);
                     example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
                     int j = purchaseDetailedService.updateByExampleSelective(tbJcPurchaseDetailed,example);
@@ -262,9 +278,13 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                         throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                                 ProtocolCodeMsg.UPDATE_FAILE.getMsg());
                     }
+                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款成功====扣款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark);
+
+                }else{
+                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款失败====扣款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark);
+
                 }
 
-                LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款成功====扣款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark);
             }
         }
     }

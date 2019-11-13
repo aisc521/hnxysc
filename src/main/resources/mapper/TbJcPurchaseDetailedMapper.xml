@@ -84,6 +84,7 @@
     LEFT JOIN tb_jc_plan plan ON pd.scheme_id = plan.id
     LEFT JOIN tb_jc_match match1 ON  pd.scheme_id = match1.plan_id
     where pd.user_id = #{userId}
+    GROUP BY pd.scheme_id
     order by pd.create_time desc
   </select>
 
@@ -130,6 +131,6 @@
         *
         from tb_jc_purchase_detailed pd
 
-        where pd.scheme_id = #{schemeId}
+        where pd.scheme_id = #{schemeId} and pd.pay_status = '1'
     </select>
 </mapper>
