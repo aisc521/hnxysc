@@ -166,7 +166,14 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
         List<TbJcPurchaseDetailed> tbJcPurchaseDetailedList = purchaseDetailedService.queryTbJcPurchaseDetailedByPlanId(planResults.getId());
         if(tbJcPurchaseDetailedList.size() > 0){
             for(int h = 0; h < tbJcPurchaseDetailedList.size(); h++){
+
                 TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedList.get(h);
+                if("1".equals(tbJcPurchaseDetailed.getFirst())){//判断是否是首单   首单  不退款
+                    LOGGER.info("首单订单，不退款:" + "用户id:" + tbJcPurchaseDetailed.getUserId() + "===" + "订单id:" + tbJcPurchaseDetailed.getOrderId());
+                    //执行扣款操作
+                    deductFrozen(planResults);
+                    continue;
+                }
                 //判断是否是冻结状态  以及订单号 是否是 冻结的订单号
                 String pay_status = String.valueOf(tbJcPurchaseDetailed.getPayStatus());
                 String order_id = tbJcPurchaseDetailed.getOrderId();

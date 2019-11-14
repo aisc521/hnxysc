@@ -70,6 +70,14 @@ public class QueryOrderProtocol  implements BaseProtocol {
         if(1 == tbJcPurchaseDetailed.getPayStatus()){
             resultMap.put("status", "2");
         }
+        if(4 == tbJcPurchaseDetailed.getPayStatus()){
+            resultMap.put("status", "4");
+            resultMap.put("message", "方案比赛已经开始,无法购买,所支付金额已为您充到余额中");
+        }
+        if(5 == tbJcPurchaseDetailed.getPayStatus()){
+            resultMap.put("status", "5");
+            resultMap.put("message", "首单两元优惠无法再次享用,方案金额已为您充到余额中");
+        }
         resultMap.put("orderId", tbJcPurchaseDetailed.getOrderId());
         resultMap.put("thirdAmount", tbJcPurchaseDetailed.getThirdMoney());
         return resultMap;

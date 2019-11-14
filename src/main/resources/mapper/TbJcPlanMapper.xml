@@ -115,7 +115,7 @@
         LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
         LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
         <if test="userId != null">
-            and pd.user_id = #{userId}
+            and pd.user_id = #{userId} and pd.pay_status in ('2','1','3');
         </if>
         where 1=1
         <if test="id != null">
@@ -586,7 +586,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
         LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
         <if test="userId != null">
-            and pd.user_id = #{userId}
+            and pd.user_id = #{userId} and pd.pay_status in ('1','2','3')
         </if>
         where 1=1 and p.status in ('1','2')
         <if test="idList != null and idList.length > 0">
@@ -661,7 +661,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         from tb_jc_plan p
         left join tb_jc_expert e on p.ascription_expert = e.id
         left join tb_jc_victory v on e.id = v.expert_id
-        left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId}
+        left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId} and pd.pay_status in('1','2','3')
         where p.id = #{planId}
         order by p.create_time desc
     </select>
@@ -729,7 +729,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
         LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
         <if test="userId != null">
-            and pd.user_id = #{userId}
+            and pd.user_id = #{userId} and pd.pay_status in('1','2','3')
         </if>
         where 1=1 and p.status = '2' and v.order_By is not null and e.is_upshelf = '1'
         GROUP BY p.id

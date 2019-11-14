@@ -123,14 +123,14 @@ public class SchemePurchaseProtocol implements BaseProtocol {
         }
 
         //判断是否是首次购买
-        List<TbJcPurchaseDetailed> list = tbJcPurchaseDetailedService.queryIsFirstBuy(Long.valueOf(String.valueOf(paramMap.get("userId"))));
-        if("21".equals(payType) && list.size() <= 0){
+        Integer list = tbJcPurchaseDetailedService.queryIsFirstBuy(Long.valueOf(String.valueOf(paramMap.get("userId"))));
+        if("21".equals(payType) && list <= 0){
             resultMap.put("resCode", ProtocolCodeMsg.MONEY_ERROR.getCode());
             resultMap.put("message", "支付宝支持的交易金额为大于10元");
             return resultMap;
         }
         //判断首单 是都是点播卡支付
-        if(list.size() <= 0 && "99".equals(payType)){
+        if(list <= 0 && "99".equals(payType)){
             resultMap.put("resCode", ProtocolCodeMsg.FIRST_BUY_ERROR.getCode());
             resultMap.put("message", "首单不支持点播卡支付");
             return resultMap;

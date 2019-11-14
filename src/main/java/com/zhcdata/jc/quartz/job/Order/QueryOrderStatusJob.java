@@ -1,9 +1,9 @@
 package com.zhcdata.jc.quartz.job.Order;
 
-import com.zhcdata.db.model.TbJcExpert;
+
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.db.model.TbJcPurchaseDetailed;
-import com.zhcdata.jc.enums.ProtocolCodeMsg;
+
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.PayService;
 import com.zhcdata.jc.service.TbJcExpertService;
@@ -16,11 +16,12 @@ import org.quartz.JobExecutionException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
-import tk.mybatis.mapper.entity.Example;
+
 
 import javax.annotation.Resource;
-import javax.validation.constraints.Max;
+
 import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
 
@@ -40,8 +41,6 @@ public class QueryOrderStatusJob implements Job {
     @Resource
     private PayService payService;
     @Resource
-    private TbJcExpertService tbJcExpertService;
-    @Resource
     private TbPlanService tbPlanService;
 
     @Override
@@ -54,69 +53,77 @@ public class QueryOrderStatusJob implements Job {
                 Map<String, Object> result = payService.queryOrderStatus(String.valueOf(tbJcPurchaseDetailed.getBuyMoney()),String.valueOf(tbJcPurchaseDetailed.getPayType()),String.valueOf(tbJcPurchaseDetailed.getUserId()),
                         String.valueOf(tbJcPurchaseDetailed.getOrderId()),String.valueOf(tbJcPurchaseDetailed.getSrc()));
                 if("2".equals(result.get("status"))){//成功
-                    String first = tbJcPurchaseDetailed.getFirst();
-                    if("1".equals(first)){//首次
-                        tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
+
+                    //先判断此订单对应的方案 是否是已停售的状态
+                    TbJcPlan tbJcPlan = tbPlanService.queryPlanByPlanId(tbJcPurchaseDetailed.getSchemeId());
+                    if(tbJcPlan != null){
+                        //判断是否已经是首单
+                        //根据状态查询是否是首单 ===查询此用户是否有支付成功的状态的订单
+                        Integer tbJcPurchaseDetailedList1 = tbJcPurchaseDetailedService.queryIfHaveSuccessOeder(tbJcPurchaseDetailed.getUserId());
+                        if(!"2".equals(tbJcPlan.getStatus())){//不是在售状态的方案  执行退款操作
+                                tbJcPurchaseDetailed.setPayStatus(Long.valueOf(4));//不在在售状态退款状态
+                                tbJcPurchaseDetailed.setUpdateTime(new Date());
+                                //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
+                                tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("thirdAmount"))));
+                            try {
+                                tbJcPurchaseDetailedService.updateTbJcPurchaseDetailed(tbJcPurchaseDetailed,tbJcPurchaseDetailedService,tbPlanService);
+                                tbJcPurchaseDetailedService.refundFrozenToMoney(tbJcPlan,tbJcPurchaseDetailedService,payService);
+                            } catch (BaseException e) {
+                                e.printStackTrace();
+                            }
+                                continue;
+                        }
+                        if("2".equals(result.get("thirdAmount")) && tbJcPurchaseDetailedList1 > 0){//首单两元 但是 此用户已经有支付成功的状态  退款
+
+                            tbJcPurchaseDetailed.setPayStatus(Long.valueOf(5));
+                            tbJcPurchaseDetailed.setUpdateTime(new Date());
+                            //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
+                            tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("thirdAmount"))));
+                            try {
+                                tbJcPurchaseDetailedService.updateTbJcPurchaseDetailed(tbJcPurchaseDetailed,tbJcPurchaseDetailedService,tbPlanService);
+                                tbJcPurchaseDetailedService.refundFrozenToMoney(tbJcPlan,tbJcPurchaseDetailedService,payService);
+                            } catch (BaseException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            //判断是否已经是首单
+                            if(tbJcPurchaseDetailedList1 <= 0){//首次
+                                /*tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));*/
+                                tbJcPurchaseDetailed.setFirst("1");
+                            }else{
+                                /*tbJcPurchaseDetailed.setPayStatus(Long.valueOf(1));*/
+                                tbJcPurchaseDetailed.setFirst("0");
+                            }
+                            tbJcPurchaseDetailed.setPayStatus(Long.valueOf(1));
+                            tbJcPurchaseDetailed.setUpdateTime(new Date());
+
+                            //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
+                            tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("thirdAmount"))));
+                            try {
+                                tbJcPurchaseDetailedService.updateTbJcPurchaseDetailed(tbJcPurchaseDetailed,tbJcPurchaseDetailedService,tbPlanService);
+                            } catch (BaseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
                     }else{
-                        tbJcPurchaseDetailed.setPayStatus(Long.valueOf(1));
-                    }
-                    tbJcPurchaseDetailed.setUpdateTime(new Date());
-                    //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
-                    tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("thirdAmount"))));
-                    try {
-                        updateTbJcPurchaseDetailed(tbJcPurchaseDetailed);
-                    } catch (BaseException e) {
-                        e.printStackTrace();
+                        log.info("支付回调，无对应的方案信息");
                     }
                 }
+
                 if("8".equals(result.get("status"))){//失败
                     tbJcPurchaseDetailed.setPayStatus(Long.valueOf(8));
                     tbJcPurchaseDetailed.setUpdateTime(new Date());
                     try {
-                        updateTbJcPurchaseDetailed(tbJcPurchaseDetailed);
+                        tbJcPurchaseDetailedService.updateTbJcPurchaseDetailed(tbJcPurchaseDetailed,tbJcPurchaseDetailedService,tbPlanService);
                     } catch (BaseException e) {
                         e.printStackTrace();
                     }
                 }
+
             }
         }
     }
 
-
-    public void updateTbJcPurchaseDetailed(TbJcPurchaseDetailed tbJcPurchaseDetailed) throws BaseException {
-        Example example = new Example(TbJcPurchaseDetailed.class);
-        example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
-        int j = tbJcPurchaseDetailedService.updateByExampleSelective(tbJcPurchaseDetailed,example);
-        if(j <= 0){
-            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
-                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
-        }
-
-
-        //更新专家信息
-       /* TbJcExpert tbJcExpert = tbJcExpertService.queryExpertDetailsById(Integer.valueOf(String.valueOf(tbJcPurchaseDetailed.getExpertId())));
-        Integer pop = tbJcExpert.getPopularity();
-        if(pop == null){
-            pop = 0;
-        }
-        tbJcExpert.setPopularity(pop + 10);
-        Example example1 = new Example(TbJcExpert.class);
-        example1.createCriteria().andEqualTo("id",tbJcExpert.getId());
-
-        int h = tbJcExpertService.updateByExample(tbJcExpert,example1);
-        if(h <= 0){
-            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
-                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
-        }*/
-
-        //增加对应方案的人气值
-        TbJcPlan tbJcPlan1 = tbPlanService.queryPlanByPlanId(tbJcPurchaseDetailed.getSchemeId());
-        Integer pop = tbJcPlan1.getPlanPopularity();
-        if(pop == null){
-            pop = 0;
-        }
-        tbJcPlan1.setPlanPopularity(pop + 10);
-        tbPlanService.updatePlanByPlanId(tbJcPlan1);
-    }
 
 }
