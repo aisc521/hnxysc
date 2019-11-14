@@ -62,10 +62,10 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Map<String, Object> schemePurchase(TbJcPlan tbJcPlan, String userId, Map<String, String> paramMap,PayService payService,Integer list,ProtocolParamDto.HeadBean headBean) throws BaseException {
+    public Map<String, Object> schemePurchase(TbJcPlan tbJcPlan, String userId, Map<String, String> paramMap,PayService payService,Integer list,ProtocolParamDto.HeadBean headBean,String cell) throws BaseException {
         Map<String, Object> result = new HashMap<>();
         try{
-            TbJcPurchaseDetailed tbJcPurchaseDetailed = generatedObject(tbJcPlan,userId,paramMap,list,headBean);
+            TbJcPurchaseDetailed tbJcPurchaseDetailed = generatedObject(tbJcPlan,userId,paramMap,list,headBean,cell);
 
             if("20".equals(paramMap.get("payType"))){//微信native
                 result = payService.wechatPay(userId,String.valueOf(tbJcPlan.getPrice()),productName,description,"20",tbJcPurchaseDetailed.getOrderId(),headBean.getSrc(),paramMap.get("ip"));
@@ -270,7 +270,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public TbJcPurchaseDetailed generatedObject(TbJcPlan tbJcPlan, String userId,Map<String, String> paramMap,Integer list,ProtocolParamDto.HeadBean headBean){
+    public TbJcPurchaseDetailed generatedObject(TbJcPlan tbJcPlan, String userId,Map<String, String> paramMap,Integer list,ProtocolParamDto.HeadBean headBean,String cell){
         TbJcPurchaseDetailed tbJcPurchaseDetailed = new TbJcPurchaseDetailed();
         Calendar cal = Calendar.getInstance();
         int day = cal.get(Calendar.DATE);
@@ -282,7 +282,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         //tbJcPurchaseDetailed.setUserName(tbJcUser.getUserName());//用户名
         //tbJcPurchaseDetailed.setCell(tbJcUser.getCell());//用户手机号
         tbJcPurchaseDetailed.setPayStatus(Long.valueOf(0));//支付状态
-
+        tbJcPurchaseDetailed.setCell(cell);
         tbJcPurchaseDetailed.setCreateTime(new Date());//创建时间
         tbJcPurchaseDetailed.setYear(String.valueOf(year));
         tbJcPurchaseDetailed.setMonth(String.valueOf(month));
