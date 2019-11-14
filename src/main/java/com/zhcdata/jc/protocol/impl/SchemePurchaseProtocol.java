@@ -62,14 +62,6 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             return map;
         }
 
-        String cell = paramMap.get("cell");
-        if (Strings.isNullOrEmpty(cell) || !NumberUtil.isNumber(cell)) {
-            LOGGER.info("[" + ProtocolCodeMsg.CELL_IS_NOY_NULL.getMsg() + "]:cell---" + cell);
-            map.put("resCode", ProtocolCodeMsg.CELL_IS_NOY_NULL.getCode());
-            map.put("message", ProtocolCodeMsg.CELL_IS_NOY_NULL.getMsg());
-            return map;
-        }
-
         String payType = paramMap.get("payType");
         if (Strings.isNullOrEmpty(payType) || !NumberUtil.isNumber(payType)) {
             LOGGER.info("[" + ProtocolCodeMsg.PAY_TYPE.getMsg() + "]:payType---" + payType);

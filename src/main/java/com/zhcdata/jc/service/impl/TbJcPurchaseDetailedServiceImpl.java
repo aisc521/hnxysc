@@ -15,6 +15,7 @@ import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
 import com.zhcdata.jc.service.TbPlanService;
 import com.zhcdata.jc.tools.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -282,7 +283,9 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         //tbJcPurchaseDetailed.setUserName(tbJcUser.getUserName());//用户名
         //tbJcPurchaseDetailed.setCell(tbJcUser.getCell());//用户手机号
         tbJcPurchaseDetailed.setPayStatus(Long.valueOf(0));//支付状态
-        tbJcPurchaseDetailed.setCell(cell);
+        if(StringUtils.isNotBlank(cell)){
+            tbJcPurchaseDetailed.setCell(cell);
+        }
         tbJcPurchaseDetailed.setCreateTime(new Date());//创建时间
         tbJcPurchaseDetailed.setYear(String.valueOf(year));
         tbJcPurchaseDetailed.setMonth(String.valueOf(month));
