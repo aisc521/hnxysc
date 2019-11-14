@@ -5,8 +5,6 @@ import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.JcChampionRunnerOddsRsp.JcChampi
 
 public interface JcChampionRunnerOddsService {
 
-    JcChampionRunnerOdds queryJcChampionRunnerOddsByTypeAndMatchIdAndTeams(String typeRsp, String matchID, String teams);
-
     void updateJcChampionRunnerOdds(JcChampionRunnerOdds jcChampionRunnerOdds, JcChampionRunnerOddsRsp jcChampionRunnerOddsRsp,int j);
 
     void insertJcChampionRunnerOdds(JcChampionRunnerOddsRsp jcChampionRunnerOddsRsp,int j);

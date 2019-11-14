@@ -66,17 +66,24 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
         PageInfo<PlanIdDto> planIdDtos = tbPlanService.selectPlanIdByMatchId(matchId,Integer.valueOf(pageNo),20);
         List<PlanIdDto> planIdDtoList = planIdDtos.getList();
         List list = new ArrayList();
-        if(planIdDtoList.size() > 0){
-            for(int i = 0; i < planIdDtoList.size(); i++){
-                //根据planId 查询 方案信息
-                QueryPlanByMatchIdDto queryPlanByMatchIdDto = tbPlanService.queryPlanInfoByPlanId(planIdDtoList.get(i).getPlanId());
-                if(queryPlanByMatchIdDto != null){
-                    queryPlanByMatchIdDto.setPlanId(planIdDtoList.get(i).getPlanId());
-                    String lz = commonUtils.JsLz3(queryPlanByMatchIdDto);
-                    queryPlanByMatchIdDto.setZSevenDays(String.valueOf(new BigDecimal(queryPlanByMatchIdDto.getZSevenDays()).intValue()));
-                    queryPlanByMatchIdDto.setLz(lz);
-                    List<MatchInfoDto> matchInfoDtos = tbJcMatchService.queryMatchInfoDtoByPlanId(planIdDtoList.get(i).getPlanId());
-                    queryPlanByMatchIdDto.setList(matchInfoDtos);
+        if(planIdDtoList!= null && planIdDtoList.size()>0){
+            String [] a = new String[planIdDtoList.size()];
+            for (int i = 0;i<planIdDtoList.size();i++){
+                a[i]= String.valueOf(planIdDtoList.get(i).getPlanId());
+            }
+
+            //根据planId 查询 方案信息
+            //QueryPlanByMatchIdDto queryPlanByMatchIdDto = tbPlanService.queryPlanInfoByPlanId(planIdDtoList.get(i).getPlanId());
+            List<QueryPlanByMatchIdDto> queryPlanByMatchIdDto = tbPlanService.queryPlanByPlanIdList(a);
+            if(queryPlanByMatchIdDto != null && queryPlanByMatchIdDto.size() > 0){
+                for(int j = 0; j < queryPlanByMatchIdDto.size(); j++){
+                    QueryPlanByMatchIdDto queryPlanByMatchIdDto1 = queryPlanByMatchIdDto.get(j);
+                    queryPlanByMatchIdDto1.setPlanId(queryPlanByMatchIdDto1.getPlanId());
+                    String lz = commonUtils.JsLz3(queryPlanByMatchIdDto1);
+                    queryPlanByMatchIdDto1.setZSevenDays(String.valueOf(new BigDecimal(queryPlanByMatchIdDto1.getZSevenDays()).intValue()));
+                    queryPlanByMatchIdDto1.setLz(lz);
+                    List<MatchInfoDto> matchInfoDtos = tbJcMatchService.queryMatchInfoDtoByPlanId(queryPlanByMatchIdDto1.getPlanId());
+                    queryPlanByMatchIdDto1.setList(matchInfoDtos);
                     list.add(queryPlanByMatchIdDto);
                 }
             }
