@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.JcChampionRunnerOddsMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.JcChampionRunnerOdds" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="odds_type" property="oddsType" jdbcType="BIGINT" />
+    <result column="game_type" property="gameType" jdbcType="VARCHAR" />
+    <result column="play_code" property="playCode" jdbcType="CHAR" />
+    <result column="match_id" property="matchId" jdbcType="VARCHAR" />
+    <result column="team" property="team" jdbcType="VARCHAR" />
+    <result column="odds" property="odds" jdbcType="VARCHAR" />
+    <result column="is_end" property="isEnd" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="queryJcChampionRunnerOddsByTypeAndMatchIdAndTeams" resultType="com.zhcdata.db.model.JcChampionRunnerOdds">
+    select  *  from jc_champion_runner_odds odds where odds.play_code = #{typeRsp} and odds.match_id = #{matchID} and odds.team = #{teams}
+  </select>
+</mapper>
