@@ -611,7 +611,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         <if test="userId != null">
             and pd.user_id = #{userId} and pd.pay_status in ('1','2','3')
         </if>
-        where 1=1 and p.status = '2' and and v.order_By is not null and e.is_upshelf = '1'
+        where 1=1 and p.status = '2' and  v.order_By is not null and e.is_upshelf = '1'
         <if test="idList != null and idList.length > 0">
             and p.id in
             <foreach collection="idList" item="pid" index="index" open="(" close=")" separator=",">
