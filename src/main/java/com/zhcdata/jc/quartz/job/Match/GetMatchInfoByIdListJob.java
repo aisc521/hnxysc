@@ -4,10 +4,8 @@
 package com.zhcdata.jc.quartz.job.Match;
 
 import com.zhcdata.db.mapper.ScheduleMapper;
-import com.zhcdata.db.model.Schedule;
+import com.zhcdata.jc.service.GetMatchInfoByIdListService;
 import com.zhcdata.jc.tools.CommonUtils;
-import com.zhcdata.jc.xml.QiuTanXmlComm;
-import com.zhcdata.jc.xml.rsp.MatchListRsp;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -20,7 +18,6 @@ import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 //接口4
 @SuppressWarnings("SpringJavaAutowiringInspection")
@@ -37,18 +34,15 @@ public class GetMatchInfoByIdListJob implements Job {
     private final SimpleDateFormat day = new SimpleDateFormat("yyyy-MM-dd");
 
     @Resource
-    ScheduleMapper scheduleMapper;
-
-    @Resource
-    private CommonUtils commonUtils;
+    GetMatchInfoByIdListService getMatchInfoByIdListService;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         LOGGER.info("id查询比赛信息定时任务启动");
         try {
-            long s = System.currentTimeMillis();
-            int update = 0;
-            QiuTanXmlComm parse = new QiuTanXmlComm();
+            //long s = System.currentTimeMillis();
+            //int update = 0;
+            //QiuTanXmlComm parse = new QiuTanXmlComm();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, -1);
@@ -59,38 +53,39 @@ public class GetMatchInfoByIdListJob implements Job {
             calendar1.add(Calendar.DAY_OF_MONTH, 3);
             String endDate=day.format(calendar1.getTime()).substring(0, 10);
 
-            List<Schedule> models = scheduleMapper.selectStatusChangedToday(startDate + " 11:00:00", endDate + " 11:00:00",sdf.format(new Date()));
-            //List<Schedule> models = scheduleMapper.selectStatusChangedToday("2019-10-21 00:00:00", "2019-10-21 23:59:59",sdf.format(new Date()));
-
-            StringBuilder sb = new StringBuilder();
-            int p=1;
-            for (Schedule model : models) {
-                sb.append(model.getScheduleid()).append(",");
-                if(p%250==0){
-                    //每组200
-                    sb.append("|");
-                }
-                p++;
-            }
-            String[] ids= sb.toString().split("\\|");
-            for(int m=0;m<ids.length;m++) {
-                List<MatchListRsp> xml = parse.handleMothodList("http://interface.win007.com/zq/BF_XMLByID.aspx?id=" + ids[m].substring(0,ids[m].length()-1), MatchListRsp.class);
-                if (xml != null) {
-                    for (MatchListRsp rsp : xml) {
-                        Schedule model = new Schedule();
-                        model.setScheduleid(Integer.valueOf(rsp.getA()));                                       //赛事ID
-                        model.setMatchstate((short) rsp.getF());                                                 //状态
-                        model.setMatchtime(sdf.parse(rsp.getD().replaceAll("/", "-")));       //时间
-                        model.setBfshow(rsp.getHidden().equals("True"));
-                        if (scheduleMapper.updateByPrimaryKeySelective(model) > 0) {
-                            LOGGER.error("更新成功" + model.getScheduleid());
-                        }
-                        update++;
-                    }
-                }
-                LOGGER.info("即时变化的比分数据(5分钟),共有比赛" + models.size() + ",更新:" + update + "条,耗时：" + (System.currentTimeMillis() - s) + "毫秒");
-                Thread.sleep(60000);
-            }
+            getMatchInfoByIdListService.dealMatch(startDate,endDate);
+//            List<Schedule> models = scheduleMapper.selectStatusChangedToday(startDate + " 11:00:00", endDate + " 11:00:00",sdf.format(new Date()));
+//            //List<Schedule> models = scheduleMapper.selectStatusChangedToday("2019-10-21 00:00:00", "2019-10-21 23:59:59",sdf.format(new Date()));
+//
+//            StringBuilder sb = new StringBuilder();
+//            int p=1;
+//            for (Schedule model : models) {
+//                sb.append(model.getScheduleid()).append(",");
+//                if(p%250==0){
+//                    //每组200
+//                    sb.append("|");
+//                }
+//                p++;
+//            }
+//            String[] ids= sb.toString().split("\\|");
+//            for(int m=0;m<ids.length;m++) {
+//                List<MatchListRsp> xml = parse.handleMothodList("http://interface.win007.com/zq/BF_XMLByID.aspx?id=" + ids[m].substring(0,ids[m].length()-1), MatchListRsp.class);
+//                if (xml != null) {
+//                    for (MatchListRsp rsp : xml) {
+//                        Schedule model = new Schedule();
+//                        model.setScheduleid(Integer.valueOf(rsp.getA()));                                       //赛事ID
+//                        model.setMatchstate((short) rsp.getF());                                                 //状态
+//                        model.setMatchtime(sdf.parse(rsp.getD().replaceAll("/", "-")));       //时间
+//                        model.setBfshow(rsp.getHidden().equals("True"));
+//                        if (scheduleMapper.updateByPrimaryKeySelective(model) > 0) {
+//                            LOGGER.error("更新成功" + model.getScheduleid());
+//                        }
+//                        update++;
+//                    }
+//                }
+//                LOGGER.info("即时变化的比分数据(5分钟),共有比赛" + models.size() + ",更新:" + update + "条,耗时：" + (System.currentTimeMillis() - s) + "毫秒");
+//                Thread.sleep(60000);
+//            }
         }catch (Exception ex){
             LOGGER.error("[按赛程ID查比赛的数据]异常",ex);
         }
