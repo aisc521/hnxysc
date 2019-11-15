@@ -5,6 +5,7 @@ import com.zhcdata.jc.dto.PurchasedPlanDto;
 import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
 
+import javax.annotation.security.PermitAll;
 import java.util.List;
 
 public interface TbJcPurchaseDetailedMapper extends Mapper<TbJcPurchaseDetailed> {
@@ -18,7 +19,9 @@ public interface TbJcPurchaseDetailedMapper extends Mapper<TbJcPurchaseDetailed>
 
     TbJcPurchaseDetailed queryOrderByUserAndOrderId(@Param("userId")Long userId, @Param("orderId")String orderId);
 
-    List<TbJcPurchaseDetailed> queryIsFirstBuy(@Param("userId")Long userId);
+    Integer queryIsFirstBuy(@Param("userId")Long userId);
 
     List<TbJcPurchaseDetailed> queryTbJcPurchaseDetailedByPlanId(@Param("schemeId")Long id);
+
+    Integer queryIfHaveSuccessOeder(@Param("userId") Long userId);
 }

@@ -42,8 +42,8 @@ public class IsTheFirstOrderProtocol implements BaseProtocol {
     @Override
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map<String, Object> resultMap = new HashMap<>();
-        List<TbJcPurchaseDetailed> list = tbJcPurchaseDetailedService.queryIsFirstBuy(Long.valueOf(String.valueOf(paramMap.get("userId"))));
-        if(list.size() <= 0){//首单
+        Integer list = tbJcPurchaseDetailedService.queryIsFirstBuy(Long.valueOf(String.valueOf(paramMap.get("userId"))));
+        if(list <= 0){//首单
             resultMap.put("isFirst","1");
         }else{
             resultMap.put("isFirst","0");
