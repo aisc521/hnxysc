@@ -2,6 +2,7 @@ package com.zhcdata.db.mapper;
 
 
 import com.zhcdata.db.model.MultiLetgoal;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -20,13 +21,13 @@ public interface MultiLetgoalMapper {
 
     int updateByPrimaryKey(MultiLetgoal record);
 
-    MultiLetgoal selectByMatchIdAndCompanyAndHandicap(String matchId, String cpy, String frist_goal);
+    MultiLetgoal selectByMatchIdAndCompanyAndHandicap(@Param("matchId")String matchId, @Param("cpy")String cpy, @Param("frist_goal")String frist_goal);
 
-    MultiLetgoal selectByMatchIdAndCompanyAndHandicapNum(String matchId, String cpy, Short num);
+    MultiLetgoal selectByMatchIdAndCompanyAndHandicapNum(@Param("matchId")String matchId, @Param("cpy")String cpy, @Param("num")Short num);
 
     List<MultiLetgoal> selectByMid(String id);
 
     void deleteByMid(String mid);
 
-    void updateOddsByOddsId(Integer oddsid, Float upodds, Float goal, Float downodds, Date addtime);
+    void updateOddsByOddsId(@Param("oddsid")Integer oddsid, @Param("upodds")Float upodds, @Param("goal")Float goal, @Param("downodds")Float downodds, @Param("addtime")Date addtime);
 }
