@@ -154,7 +154,11 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
             //根据比赛id，查询欧赔对应公司的赔率
             Double startChange = getSameOddsStartChange(pam);
             Double endChange = getSameOddsEndChange(pam);
-            result = europeOddsMapper.queryOddsByCompanyAndMatch(matchId, companyId, matchType, beginDate, startChange, endChange);
+            if ("5".equals(oddsCompany)) {
+                result = europeOddsMapper.queryJcOddsByCompanyAndMatch(matchId, matchType, beginDate, startChange, endChange);
+            } else {
+                result = europeOddsMapper.queryOddsByCompanyAndMatch(matchId, companyId, matchType, beginDate, startChange, endChange);
+            }
         } else {
             //同盘分析
             //根据比赛id，查询亚盘对应公司的赔率（澳彩）
