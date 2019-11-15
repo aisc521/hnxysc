@@ -1002,6 +1002,10 @@
                  end as 'Matchty',
 			lottery.LOTTERY lotterType,
 			(SELECT count(*) from tb_jc_match where match_id=sc.ScheduleID) recommendCount
+            <if test="type == 1">
+                ,(select case when Single101='1' then '1'
+                when Single105='1'  then '1' end from jc_schedule where scheduleid=sc.ScheduleID) isSingle
+            </if>
             from schedule  sc
             LEFT JOIN sclass class ON sc.SclassID = class.sclassID
             LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
