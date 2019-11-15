@@ -84,7 +84,7 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
                     queryPlanByMatchIdDto1.setLz(lz);
                     List<MatchInfoDto> matchInfoDtos = tbJcMatchService.queryMatchInfoDtoByPlanId(queryPlanByMatchIdDto1.getPlanId());
                     queryPlanByMatchIdDto1.setList(matchInfoDtos);
-                    list.add(queryPlanByMatchIdDto);
+                    list.add(queryPlanByMatchIdDto1);
                 }
             }
         }
