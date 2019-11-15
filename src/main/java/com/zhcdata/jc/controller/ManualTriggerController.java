@@ -30,12 +30,12 @@ public class ManualTriggerController {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(day.parse(date));
             calendar.add(Calendar.DAY_OF_MONTH, -1);
-            String startDate=day.format(calendar.getTime()).substring(0, 10);
+            String startDate=day.format(calendar.getTime());
 
             Calendar calendar1 = Calendar.getInstance();
             calendar1.setTime(day.parse(date));
             calendar1.add(Calendar.DAY_OF_MONTH, 3);
-            String endDate=day.format(calendar1.getTime()).substring(0, 10);
+            String endDate=day.format(calendar1.getTime());
 
             getMatchInfoByIdListService.dealMatch(startDate,endDate);
             LOGGER.info("已触发成功(" + date + "补赛事状态)");

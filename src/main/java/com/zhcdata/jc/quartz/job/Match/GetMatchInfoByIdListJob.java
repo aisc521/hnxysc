@@ -46,12 +46,12 @@ public class GetMatchInfoByIdListJob implements Job {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, -1);
-            String startDate=day.format(calendar.getTime()).substring(0, 10);
+            String startDate=day.format(calendar.getTime());
 
             Calendar calendar1 = Calendar.getInstance();
             calendar1.setTime(new Date());
             calendar1.add(Calendar.DAY_OF_MONTH, 3);
-            String endDate=day.format(calendar1.getTime()).substring(0, 10);
+            String endDate=day.format(calendar1.getTime());
 
             getMatchInfoByIdListService.dealMatch(startDate,endDate);
 //            List<Schedule> models = scheduleMapper.selectStatusChangedToday(startDate + " 11:00:00", endDate + " 11:00:00",sdf.format(new Date()));
