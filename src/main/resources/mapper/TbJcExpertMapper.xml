@@ -167,8 +167,8 @@
       (e.fans + e.start_fans) fans,
       e.introduction,
       v.lz_now victory,
-      v.z_Seven_Days zSevenDays,
-      v.return_Seven_Days returnSevenDays,
+      CEILING(v.z_Seven_Days) zSevenDays,
+      CEILING(v.return_Seven_Days) returnSevenDays,
       v.seven_days_hit sevendays_hit,
       (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id and p.status = '2') pushed,
       e.popularity popularity
