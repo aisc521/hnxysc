@@ -160,13 +160,18 @@ public class SearchMatchCollectProtocol implements BaseProtocol {
                 break;
             case 2:
                 for (MatchResult1 matchResult1 : list) {
-                    if (!Strings.isNullOrEmpty(matchResult1.getMatchPankou())){
-                        Integer matchCount = match.get(CorrespondingMap.get(transformation(matchResult1.getMatchPankou())));
+                    if (!Strings.isNullOrEmpty(getPanKou(matchResult1.getMatchPankou()))){
+                        String pan=matchResult1.getMatchPankou();
+                        pan=getPanKou(pan);
+                        pan=transformation(pan);
+                        //pan=CorrespondingMap.get(pan);
+                        Integer matchCount = match.get(pan);
                         if (matchCount == null) matchCount = 1;//如果没有，这是第一场
                         else matchCount = matchCount + 1;//如果有，那就加一场
-                        if(CorrespondingMap.get(transformation(matchResult1.getMatchPankou()))!=null) {
+                        if(CorrespondingMap.get(transformation(getPanKou(matchResult1.getMatchPankou())))!=null) {
                             //match.put(CorrespondingMap.get(transformation(matchResult1.getMatchPankou())), matchCount);
-                            match.put(transformation(matchResult1.getMatchPankou()), matchCount);
+                            String dfd = transformation(getPanKou(matchResult1.getMatchPankou()));
+                            match.put(dfd, matchCount);
                         }
                         //System.out.println(transformation(matchResult1.getMatchPankou())+"   : " +
                         //        "  "+CorrespondingMap.get(transformation(matchResult1.getMatchPankou())));
@@ -199,5 +204,34 @@ public class SearchMatchCollectProtocol implements BaseProtocol {
             if (!flag)str = "-"+str;
             return str;
         }else return matchPankou;
+    }
+
+    public String getPanKou(String value){
+        if(value!=null) {
+            if (value.equals("0.0")) {
+                value = "0";
+            } else if (value.equals("1.0")) {
+                value = "1";
+            } else if (value.equals("2.0")) {
+                value = "2";
+            } else if (value.equals("3.0")) {
+                value = "3";
+            } else if (value.equals("4.0")) {
+                value = "4";
+            } else if (value.equals("5.0")) {
+                value = "5";
+            } else if (value.equals("-1.0")) {
+                value = "-1";
+            } else if (value.equals("-2.0")) {
+                value = "-2";
+            } else if (value.equals("-3.0")) {
+                value = "-3";
+            } else if (value.equals("-4.0")) {
+                value = "-4";
+            } else if (value.equals("-5.0")) {
+                value = "-5";
+            }
+        }
+        return value;
     }
 }
