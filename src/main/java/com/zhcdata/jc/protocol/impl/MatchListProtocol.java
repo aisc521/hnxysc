@@ -204,6 +204,8 @@ public class MatchListProtocol implements BaseProtocol {
         if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType)) {
             if (type.equals("all")) {
                 type = "4";
+            }else if(type.equals("6")){
+                type="3";
             }
 
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
