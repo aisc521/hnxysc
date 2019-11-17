@@ -213,7 +213,7 @@ public class MatchListProtocol implements BaseProtocol {
             String endDate = df.format(calendar.getTime());
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
-            newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + "11:00:00", type, null, "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //竞彩
+            newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + " 11:00:00", type, null, "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //竞彩
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
             map.put("pageNo", infos.getPageNum());
             map.put("pageTotal", infos.getPages());
