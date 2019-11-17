@@ -124,6 +124,7 @@ public class SearchMatchCollectProtocol implements BaseProtocol {
             list.addAll(jsonMapper.fromJson(s, javaType1));
         } else {//全部 精彩 + 二期北单
             int pageNo = 0;
+            int currentPageTotal=0;
             while (true) {
                 pageNo++;
                 String re = (String) redisUtils.hget("SOCCER:HSET:AGAINSTLIST" + matchTime + matchType, String.valueOf(pageNo));
@@ -134,6 +135,14 @@ public class SearchMatchCollectProtocol implements BaseProtocol {
                 JsonMapper jsonMapper = JsonMapper.defaultMapper();
                 JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
                 String s = JsonMapper.defaultMapper().toJson(map.get("list"));
+
+                if(currentPageTotal==0){
+                    currentPageTotal=Integer.parseInt(map.get("pageTotal").toString());
+                }
+
+                if(pageNo>currentPageTotal){
+                    break;
+                }
                 list.addAll(jsonMapper.fromJson(s, javaType1));
             }
         }
