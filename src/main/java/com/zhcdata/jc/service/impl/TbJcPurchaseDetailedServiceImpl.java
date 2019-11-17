@@ -370,10 +370,10 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         //是否首次
         if(list <= 0){
             tbJcPurchaseDetailed.setFirst("1");
-            tbJcPurchaseDetailed.setThirdMoney(Long.valueOf("2"));
+            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal("2"));
         }else{
             tbJcPurchaseDetailed.setFirst("0");
-            tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(tbJcPlan.getPrice()));
+            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
         }
         tbJcPurchaseDetailed.setUpdateTime(new Date());
 

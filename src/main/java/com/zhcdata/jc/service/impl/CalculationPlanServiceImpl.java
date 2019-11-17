@@ -333,7 +333,7 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                 if("99".equals(payType)){
                     remark = "点播卡支付-方案未中退款";
                 }
-                result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getThirdMoney()),remark,tbJcPurchaseDetailed.getSrc());
+                result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), tbJcPurchaseDetailed.getThirdMoney(),remark,tbJcPurchaseDetailed.getSrc());
                 String resCode = String.valueOf(result.get("resCode"));
                 if("000000".equals(resCode)){
                     //更新订单表 为支付成功的状态

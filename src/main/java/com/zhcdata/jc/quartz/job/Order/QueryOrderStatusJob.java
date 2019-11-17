@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import java.util.List;
@@ -60,11 +61,11 @@ public class QueryOrderStatusJob implements Job {
                         //判断是否已经是首单
                         //根据状态查询是否是首单 ===查询此用户是否有支付成功的状态的订单
                         Integer tbJcPurchaseDetailedList1 = tbJcPurchaseDetailedService.queryIfHaveSuccessOeder(tbJcPurchaseDetailed.getUserId());
-                        if(!"2".equals(tbJcPlan.getStatus())){//不是在售状态的方案  执行退款操作
+                        if(!"2".equals(String.valueOf(tbJcPlan.getStatus()))){//不是在售状态的方案  执行退款操作
                                 tbJcPurchaseDetailed.setPayStatus(Long.valueOf(4));//不在在售状态退款状态
                                 tbJcPurchaseDetailed.setUpdateTime(new Date());
                                 //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
-                                tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("thirdAmount"))));
+                                tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(String.valueOf(result.get("thirdAmount"))));
                             try {
                                 tbJcPurchaseDetailedService.updateTbJcPurchaseDetailed(tbJcPurchaseDetailed,tbJcPurchaseDetailedService,tbPlanService);
                                 tbJcPurchaseDetailedService.refundFrozenToMoney(tbJcPlan,tbJcPurchaseDetailedService,payService);
@@ -73,12 +74,12 @@ public class QueryOrderStatusJob implements Job {
                             }
                                 continue;
                         }
-                        if("2".equals(result.get("thirdAmount")) && tbJcPurchaseDetailedList1 > 0){//首单两元 但是 此用户已经有支付成功的状态  退款
+                        if(new BigDecimal(String.valueOf(result.get("thirdAmount"))).intValue() == 2 && tbJcPurchaseDetailedList1 > 0){//首单两元 但是 此用户已经有支付成功的状态  退款
 
                             tbJcPurchaseDetailed.setPayStatus(Long.valueOf(5));
                             tbJcPurchaseDetailed.setUpdateTime(new Date());
                             //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
-                            tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("thirdAmount"))));
+                            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(String.valueOf(result.get("thirdAmount"))));
                             try {
                                 tbJcPurchaseDetailedService.updateTbJcPurchaseDetailed(tbJcPurchaseDetailed,tbJcPurchaseDetailedService,tbPlanService);
                                 tbJcPurchaseDetailedService.refundFrozenToMoney(tbJcPlan,tbJcPurchaseDetailedService,payService);
@@ -98,7 +99,7 @@ public class QueryOrderStatusJob implements Job {
                             tbJcPurchaseDetailed.setUpdateTime(new Date());
 
                             //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
-                            tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(String.valueOf(result.get("thirdAmount"))));
+                            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(String.valueOf(result.get("thirdAmount"))));
                             try {
                                 tbJcPurchaseDetailedService.updateTbJcPurchaseDetailed(tbJcPurchaseDetailed,tbJcPurchaseDetailedService,tbPlanService);
                             } catch (BaseException e) {

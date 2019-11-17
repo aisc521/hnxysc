@@ -135,7 +135,7 @@
     </select>
     <select id="queryIfHaveSuccessOeder" resultType="java.lang.Integer">
         SELECT
-        COUNT (*)
+        count(*)
         from tb_jc_purchase_detailed pd
 
         where pd.user_id = #{userId} and pd.pay_status in ('2','1','3')
