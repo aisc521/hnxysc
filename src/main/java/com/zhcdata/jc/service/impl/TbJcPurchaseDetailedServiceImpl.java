@@ -337,7 +337,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(dbPricd));//支付金额
             tbJcPurchaseDetailed.setPlanPayType("99");//支付类型
         }
-        if("2".equals(tbJcPlan.getType())){//不中全退
+        if("2".equals(tbJcPlan.getType().toString())){//不中全退
             tbJcPurchaseDetailed.setOrderId(commonUtils.createOrderId("JCZF"));//订单id
         }else{
             tbJcPurchaseDetailed.setOrderId(commonUtils.createOrderId("JC"));//订单id
