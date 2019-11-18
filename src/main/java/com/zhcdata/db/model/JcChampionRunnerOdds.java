@@ -21,7 +21,7 @@ public class JcChampionRunnerOdds implements Serializable {
      * 玩法类型
      */
     @Column(name = "game_type")
-    private String gameType;
+    private Long gameType;
 
     /**
      * 玩法类型代码(对应玩法表)
@@ -111,7 +111,7 @@ public class JcChampionRunnerOdds implements Serializable {
      *
      * @return game_type - 玩法类型
      */
-    public String getGameType() {
+    public Long getGameType() {
         return gameType;
     }
 
@@ -120,7 +120,7 @@ public class JcChampionRunnerOdds implements Serializable {
      *
      * @param gameType 玩法类型
      */
-    public void setGameType(String gameType) {
+    public void setGameType(Long gameType) {
         this.gameType = gameType;
     }
 

@@ -88,4 +88,8 @@ public interface TbPlanService {
     PageInfo<PlanResult1> queryHotPlan(String userId, Integer integer, int i);
 
     int updatePlanByPlanId(TbJcPlan tbJcPlan) throws BaseException;
+
+    List<QueryPlanByMatchIdDto> queryPlanByPlanIdList(String[] planIdDtoList);
+
+    List<QueryPlanByMatchIdDto> queryPlanInfoByPlanIdandUserIdList(String[] planIdDtoList, String userId);
 }

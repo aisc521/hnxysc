@@ -35,9 +35,6 @@ public class JcChampionRunnerOddsJob implements Job {
 
     @Value("${custom.qiutan.url.championRunnerOddsUrl}")
     String requestUrl;
-
-    @Resource
-    private JcChampionRunnerOddsService jcChampionRunnerOddsService;
     @Resource
     private JcChampionRunnerOddsTypeService jcChampionRunnerOddsTypeService;
     @Override
@@ -46,10 +43,10 @@ public class JcChampionRunnerOddsJob implements Job {
         long s = System.currentTimeMillis();
         try {
             JcChampionRunnerFirstOdds object  = (JcChampionRunnerFirstOdds) new QiuTanXmlComm().handleMothod(requestUrl,JcChampionRunnerFirstOdds.class,JcChampionRunnerOddsRsp.class);
-            ArrayList arrayList = (ArrayList)new QiuTanXmlComm().handleMothod(requestUrl,JcChampionRunnerFirstOdds.class,JcChampionRunnerOddsRsp.class);
+            /*ArrayList arrayList = (ArrayList)new QiuTanXmlComm().handleMothod(requestUrl,JcChampionRunnerOddsRsp.class);
             if(arrayList.size() <= 0){
                 return;
-            }
+            }*/
             List<JcChampionRunnerOddsRsp> list = object.getList();
             if(list != null && list.size() > 0){
                 for(int i = 0; i < list.size(); i++){
@@ -64,25 +61,9 @@ public class JcChampionRunnerOddsJob implements Job {
                     }
                     JcChampionRunnerOddsType jcChampionRunnerOddsType = jcChampionRunnerOddsTypeService.queryJcChampionRunnerOddsTypeByPlayTypeNameAndGameType(typeRsp,type);
                     if(jcChampionRunnerOddsType != null){//更新
-                        int j = jcChampionRunnerOddsTypeService.updataJcChampionRunnerOddsType(jcChampionRunnerOddsType,jcChampionRunnerOddsRsp);
-                        if(j > 0){//更新成功===查询冠亚军赔率表
-                            JcChampionRunnerOdds jcChampionRunnerOdds = jcChampionRunnerOddsService.queryJcChampionRunnerOddsByTypeAndMatchIdAndTeams(typeRsp,jcChampionRunnerOddsRsp.getMatchID(),jcChampionRunnerOddsRsp.getTeams());
-                            if(jcChampionRunnerOdds != null){//更新
-                                jcChampionRunnerOddsService.updateJcChampionRunnerOdds(jcChampionRunnerOdds,jcChampionRunnerOddsRsp,j);
-                            }else{//新增
-                                jcChampionRunnerOddsService.insertJcChampionRunnerOdds(jcChampionRunnerOddsRsp,j);
-                            }
-                        }
+                        jcChampionRunnerOddsTypeService.updataJcChampionRunnerOddsType(jcChampionRunnerOddsType,jcChampionRunnerOddsRsp);
                     }else{//新增
-                        int j = jcChampionRunnerOddsTypeService.insertJcChampionRunnerOddsType(jcChampionRunnerOddsRsp);
-                        if(j > 0){//新增成功==查询冠亚军赔率表
-                            JcChampionRunnerOdds jcChampionRunnerOdds = jcChampionRunnerOddsService.queryJcChampionRunnerOddsByTypeAndMatchIdAndTeams(typeRsp,jcChampionRunnerOddsRsp.getMatchID(),jcChampionRunnerOddsRsp.getTeams());
-                            if(jcChampionRunnerOdds != null){//更新
-                                jcChampionRunnerOddsService.updateJcChampionRunnerOdds(jcChampionRunnerOdds,jcChampionRunnerOddsRsp,j);
-                            }else{//新增
-                                jcChampionRunnerOddsService.insertJcChampionRunnerOdds(jcChampionRunnerOddsRsp,j);
-                            }
-                        }
+                        jcChampionRunnerOddsTypeService.insertJcChampionRunnerOddsType(jcChampionRunnerOddsRsp);
                     }
                 }
             }else{

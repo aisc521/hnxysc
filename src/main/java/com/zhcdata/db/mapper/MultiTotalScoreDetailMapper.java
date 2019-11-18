@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.MultiTotalScoreDetail;
+import org.apache.ibatis.annotations.Param;
 
 public interface MultiTotalScoreDetailMapper {
 
@@ -18,7 +19,7 @@ public interface MultiTotalScoreDetailMapper {
 
     int updateByPrimaryKey(MultiTotalScoreDetail record);
 
-    MultiTotalScoreDetail selectByMidAndCpyAndNum(String mid, String cpy,String num);
+    MultiTotalScoreDetail selectByMidAndCpyAndNum(@Param("mid")String mid, @Param("cpy")String cpy,@Param("num") String num);
 
     void deleteByOddsId(Integer oddsid);
 }

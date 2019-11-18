@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.MultiLetGoalhalfDetail;
+import org.apache.ibatis.annotations.Param;
 
 public interface MultiLetGoalhalfDetailMapper {
     int deleteByPrimaryKey(Integer id);
@@ -15,7 +16,7 @@ public interface MultiLetGoalhalfDetailMapper {
 
     int updateByPrimaryKey(MultiLetGoalhalfDetail record);
 
-    MultiLetGoalhalfDetail selectByMidAndCpyAndNum(String mid, String cpy, String num);
+    MultiLetGoalhalfDetail selectByMidAndCpyAndNum(@Param("mid")String mid, @Param("cpy")String cpy, @Param("num")String num);
 
-    void deleteByOddsId(Integer oddsid);
+    void deleteByOddsId(@Param("oddsid")Integer oddsid);
 }

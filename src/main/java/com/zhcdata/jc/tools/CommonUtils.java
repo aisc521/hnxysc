@@ -1235,10 +1235,10 @@ public class CommonUtils {
                 hot.setLz("10中7");
             }
             if("506".equals(orderby)){
-                hot.setLz("9中6");
+                hot.setLz("10中6");
             }
             if("507".equals(orderby)){
-                hot.setLz("8中5");
+                hot.setLz("10中5");
             }
             return;
         }

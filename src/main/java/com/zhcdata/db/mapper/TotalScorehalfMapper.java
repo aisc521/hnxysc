@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.TotalScorehalf;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -18,14 +19,14 @@ public interface TotalScorehalfMapper {
 
     int updateByPrimaryKey(TotalScorehalf record);
 
-    TotalScorehalf selectByMatchIdAndCpyAndFristGoal(Integer scheduleid, Integer companyid, Float firstgoal);
+    TotalScorehalf selectByMatchIdAndCpyAndFristGoal(@Param("scheduleid")Integer scheduleid, @Param("companyid")Integer companyid, @Param("firstgoal")Float firstgoal);
 
-    TotalScorehalf selectByMidAndCpy(String mid, String cpy);
+    TotalScorehalf selectByMidAndCpy(@Param("mid")String mid, @Param("cpy")String cpy);
 
     List<TotalScorehalf> selectByMid(String mid);
 
     void deleteByMid(String mid);
 
-    void updateOddsByOddsId(Integer oddsid, Float upodds, Float downodds, Date modifytime, Float goal);
+    void updateOddsByOddsId(@Param("oddsid")Integer oddsid, @Param("upodds")Float upodds, @Param("downodds")Float downodds, @Param("modifytime")Date modifytime, @Param("goal")Float goal);
 
 }

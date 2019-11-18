@@ -61,6 +61,7 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.PLANID_NULL.getMsg());
             return map;
         }
+
         String payType = paramMap.get("payType");
         if (Strings.isNullOrEmpty(payType) || !NumberUtil.isNumber(payType)) {
             LOGGER.info("[" + ProtocolCodeMsg.PAY_TYPE.getMsg() + "]:payType---" + payType);
@@ -137,7 +138,7 @@ public class SchemePurchaseProtocol implements BaseProtocol {
         }
 
         //生成订单信息 并且调用支付
-        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,String.valueOf(paramMap.get("userId")),paramMap,payService,list,headBean);
+        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,String.valueOf(paramMap.get("userId")),paramMap,payService,list,headBean,String.valueOf(paramMap.get("cell")));
         return resultMap;
     }
 }

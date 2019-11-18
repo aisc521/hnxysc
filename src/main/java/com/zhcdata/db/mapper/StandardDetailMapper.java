@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.StandardDetail;
+import org.apache.ibatis.annotations.Param;
 
 public interface StandardDetailMapper {
 
@@ -16,7 +17,7 @@ public interface StandardDetailMapper {
 
     int updateByPrimaryKey(StandardDetail record);
 
-    StandardDetail selectByMidAndCpy(String mid, String cpy);
+    StandardDetail selectByMidAndCpy(@Param("mid") String mid, @Param("cpy") String cpy);
 
     void deleteByOddsId(Integer oddsid);
 }

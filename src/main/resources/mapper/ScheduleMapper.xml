@@ -1002,6 +1002,8 @@
                  end as 'Matchty',
 			lottery.LOTTERY lotterType,
 			(SELECT count(*) from tb_jc_match where match_id=sc.ScheduleID) recommendCount
+            ,(select case when Single101='1' then '1'
+                when Single105='1'  then '1' end from jc_schedule where scheduleid=sc.ScheduleID) isSingle
             from schedule  sc
             LEFT JOIN sclass class ON sc.SclassID = class.sclassID
             LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
@@ -1012,7 +1014,7 @@
             WHERE pg.status = '1' and pg.user_id = #{userId} and pg.over_time <![CDATA[>=]]> now()
             GROUP BY sc.ScheduleID
             ORDER BY sc.MatchTime
-            ) b ORDER BY abs(b.ord) asc,b.MatchTime asc
+            ) b ORDER BY abs(b.ord) asc,b.MatchTime asc,matchid asc
     </select>
 
     <select id="selectMatchIdExceedNow" resultType="java.lang.Integer">

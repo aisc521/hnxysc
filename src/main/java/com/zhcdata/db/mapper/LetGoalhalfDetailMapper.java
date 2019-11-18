@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.LetGoalhalfDetail;
+import org.apache.ibatis.annotations.Param;
 
 public interface LetGoalhalfDetailMapper {
     int deleteByPrimaryKey(Integer id);
@@ -15,7 +16,7 @@ public interface LetGoalhalfDetailMapper {
 
     int updateByPrimaryKey(LetGoalhalfDetail record);
 
-    LetGoalhalfDetail selectByMidAndCpy(String mid, String cpy);
+    LetGoalhalfDetail selectByMidAndCpy(@Param("mid")String mid,@Param("cpy") String cpy);
 
     void deleteByOddsId(Integer oddsid);
 }
