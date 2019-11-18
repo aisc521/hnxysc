@@ -95,7 +95,8 @@ public class CalculationPlanJob implements Job {
             try{
                 calculationPlanService.updatePlanStatus(TbJcPlan);
             }catch (Exception e){
-                LOGGER.error("修改失败入"+" 方案id为"+TbJcPlan.getId(),e);
+                LOGGER.error("修改失败"+" 方案id为"+TbJcPlan.getId(),e);
+                e.printStackTrace();
             }
 
         }

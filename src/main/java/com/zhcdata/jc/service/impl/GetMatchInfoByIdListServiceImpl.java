@@ -51,9 +51,24 @@ public class GetMatchInfoByIdListServiceImpl implements GetMatchInfoByIdListServ
                 if (xml != null) {
                     for (MatchListRsp rsp : xml) {
                         Schedule model = new Schedule();
-                        model.setScheduleid(Integer.valueOf(rsp.getA()));                                       //赛事ID
+                        model.setScheduleid(Integer.valueOf(rsp.getA()));                                        //赛事ID
                         model.setMatchstate((short) rsp.getF());                                                 //状态
                         model.setMatchtime(sdf.parse(rsp.getD().replaceAll("/", "-")));       //时间
+                        model.setHomescore((short)rsp.getJ());
+                        model.setGuestscore((short)rsp.getK());
+                        if(!rsp.getL().equals("")) {
+                            model.setHomehalfscore(Short.valueOf(rsp.getL()));
+                        }
+                        if(!rsp.getM().equals("")) {
+                            model.setGuesthalfscore(Short.valueOf(rsp.getM()));
+                        }
+                        model.setHomeRed(Short.valueOf(rsp.getN()));
+                        model.setGuestRed(Short.valueOf(rsp.getO()));
+
+                        if(rsp.getYellow().contains("-")) {
+                            model.setHomeYellow(Short.valueOf(rsp.getYellow().split("-")[0]));
+                            model.setGuestYellow(Short.valueOf(rsp.getYellow().split("-")[1]));
+                        }
                         model.setBfshow(rsp.getHidden().equals("True"));
                         if (scheduleMapper.updateByPrimaryKeySelective(model) > 0) {
                             LOGGER.error("更新成功" + model.getScheduleid());
