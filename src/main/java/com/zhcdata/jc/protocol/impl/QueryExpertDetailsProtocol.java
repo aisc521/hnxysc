@@ -10,11 +10,13 @@ import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcExpertService;
 import com.zhcdata.jc.service.TbPlanService;
 import com.zhcdata.jc.tools.CommonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -68,8 +70,16 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
                 resultMap.put("lz", lz);
                 resultMap.put("nowLz", info.getLzNow());
 
-                resultMap.put("zSevenDays", info.getzSevenDays());
-                resultMap.put("returnSevenDays", info.getReturnSevenDays());
+                if(StringUtils.isNotBlank(info.getzSevenDays())){
+                    resultMap.put("zSevenDays", new BigDecimal(info.getzSevenDays()).intValue());
+                }else{
+                    resultMap.put("zSevenDays", "");
+                }
+                if(StringUtils.isNotBlank(info.getReturnSevenDays())){
+                    resultMap.put("returnSevenDays", new BigDecimal(info.getReturnSevenDays()).intValue());
+                }else{
+                    resultMap.put("returnSevenDays", "");
+                }
                 resultMap.put("status", info.getStatus());
                 resultMap.put("grade", info.getGrade());
                 if(plan != null){
