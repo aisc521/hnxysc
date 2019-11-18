@@ -81,13 +81,10 @@
     <result column="first_sf0" jdbcType="VARCHAR" property="firstSf0" />
   </resultMap>
   <select id="queryJcSchedulespByScId" resultType="com.zhcdata.db.model.JcSchedulesp">
-    select
-    sp.*,
-    jc.Single101 rspfdg,
-    jc.Single105 spfdg
-    from jc_schedulesp sp
-    left join jc_schedule jc ON sp.ID = jc.ID
-    where jc.ScheduleID=#{bet007Id} and sp.kind = '2'
+
+
+   select * from jc_schedulesp sp where sp.id = #{bet007Id}
+
   </select>
 
   <select id="queryJcSchedulespByIdFive" resultType="com.zhcdata.jc.dto.QueryFiveGameDto">
