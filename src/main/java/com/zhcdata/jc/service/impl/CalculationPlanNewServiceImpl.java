@@ -268,7 +268,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 }
                 //判断是否支付成功
                 if("0".equals(tbJcPurchaseDetailed.getPayStatus())){//未成功
-                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款====付款未成功:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark);
+                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款====付款未成功:" +  tbJcPurchaseDetailed.getThirdMoney() + "扣款类型:" + remark);
                     continue;
                 }
                 result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), tbJcPurchaseDetailed.getThirdMoney(),remark,tbJcPurchaseDetailed.getSrc());
@@ -285,10 +285,10 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                         throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                                 ProtocolCodeMsg.UPDATE_FAILE.getMsg());
                     }
-                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款成功====扣款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark);
+                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款成功====扣款金额:" +  tbJcPurchaseDetailed.getThirdMoney() + "扣款类型:" + remark);
 
                 }else{
-                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款失败====扣款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark);
+                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款失败====扣款金额:" +  tbJcPurchaseDetailed.getThirdMoney() + "扣款类型:" + remark);
 
                 }
 
