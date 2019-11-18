@@ -131,32 +131,32 @@ public class MatchListDataJob implements Job {
             String startDate = "";
             String endDate = "";
 
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, -2);
-            startDate=df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
+            //startDate=df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
 
             Calendar calendar1 = Calendar.getInstance();
             calendar1.setTime(new Date());
             calendar1.add(Calendar.DAY_OF_MONTH, -1);
-            endDate=df.format(calendar1.getTime()).substring(0, 10) + " 11:00:00";
+            //endDate=df.format(calendar1.getTime()).substring(0, 10) + " 11:00:00";
 
             String time="";
 
             for(int i=0;i<5;i++){
                 long start = ClockUtil.currentTimeMillis();
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
-                startDate=df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
+                startDate=df.format(calendar.getTime()) + " 11:00:00";
 
                 calendar1.add(Calendar.DAY_OF_MONTH, 1);
-                endDate=df.format(calendar1.getTime()).substring(0, 10) + " 11:00:00";
+                endDate=df.format(calendar1.getTime()) + " 11:00:00";
 
-                time=startDate.substring(0, 10);
+                time=startDate;
 
                 //北单
-                String sBd=df.format(calendar.getTime()).substring(0, 10) + " 10:00:00";
-                String eBd=df.format(calendar1.getTime()).substring(0, 10) + " 10:00:00";
+                String sBd=df.format(calendar.getTime()) + " 10:00:00";
+                String eBd=df.format(calendar1.getTime()) + " 10:00:00";
 
                 List<MatchResult1> list2 = new ArrayList<>();
 
@@ -176,6 +176,7 @@ public class MatchListDataJob implements Job {
                 deal(list2, sBd.split(" ")[0], "2");
 
                 //竞彩
+
                 List<MatchResult1> list1=new ArrayList<>();
                 List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","1",null,null,null); //竞彩
                 list1.addAll(list1_1);
@@ -192,9 +193,11 @@ public class MatchListDataJob implements Job {
 
 
                 //全部
+                String sAll=df.format(calendar.getTime()) + " 10:59:59";
+                String eAll=df.format(calendar1.getTime()) + " 10:59:59";
                 String str = "";
                 List<MatchResult1> list5 = new ArrayList<>();
-                List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4", "", "1", null,null,null);
+                List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(sAll, eAll, "4", "", "1", null,null,null);
                 for (int a = 0; a < list5_1.size(); a++) {
                     if (!str.contains(list5_1.get(a).getMatchId())) {
                         MatchResult1 r1 = list5_1.get(a);
@@ -212,7 +215,7 @@ public class MatchListDataJob implements Job {
                     }
                 }
 
-                List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4", "", "2", null,null,null);
+                List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(sAll, eAll, "4", "", "2", null,null,null);
                 for (int b = 0; b < list5_2.size(); b++) {
                     if (!str.contains(list5_2.get(b).getMatchId())) {
                         MatchResult1 r2 = list5_2.get(b);
@@ -230,7 +233,7 @@ public class MatchListDataJob implements Job {
                     }
                 }
 
-                List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4", "", "3", null,null,null);
+                List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(sAll, eAll, "4", "", "3", null,null,null);
                 for (int c = 0; c < list5_3.size(); c++) {
                     if (!str.contains(list5_3.get(c).getMatchId())) {
                         MatchResult1 r3 = list5_3.get(c);

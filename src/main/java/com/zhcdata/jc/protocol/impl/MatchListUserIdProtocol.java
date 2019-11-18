@@ -22,6 +22,7 @@ import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -210,7 +211,10 @@ public class MatchListUserIdProtocol implements BaseProtocol {
         if(!Strings.isNullOrEmpty(panKouType) ||!Strings.isNullOrEmpty(matchType)){
             if (type.equals("all")) {
                 type = "4";
+            }else if(type.equals("6")){
+                type="3";
             }
+
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(df.parse(time));
@@ -220,10 +224,46 @@ public class MatchListUserIdProtocol implements BaseProtocol {
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
             newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + " 11:00:00", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //竞彩
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
+
+            List<MatchResult1> list=new ArrayList<>();
+            for(int j=0;j< infos.getList().size();j++){
+                MatchResult1 r1=infos.getList().get(j);
+                //处理盘口
+                r1.setMatchPankou(getPanKou1(r1.getMatchPankou()));
+                if(r1.getMatchState().equals("1")){
+                    r1.setStatusDescFK("1");
+                    if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                        Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
+                        String len = getMinute(df.format(ts), df.format(new Date()));
+                        r1.setMatchState(len+"'");
+                    }else {
+                        r1.setMatchState("'完'");
+                    }
+                }else if(r1.getMatchState().equals("3")){
+                    r1.setStatusDescFK("3");
+                    if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                        Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
+                        String len = getMinute(df.format(ts), df.format(new Date()));
+                        r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");
+                    }else {
+                        r1.setMatchState("'完'");
+                    }
+                }else if(r1.getMatchState().equals("中")){
+                    r1.setStatusDescFK("2");
+                }else if(r1.getMatchState().equals("(完)")){
+                    r1.setStatusDescFK("-1");
+                }else if(r1.getMatchState().equals("未")) {
+                    r1.setStatusDescFK("0");
+                }else if(r1.getMatchState().equals("完")) {
+                    r1.setStatusDescFK("-1");
+                }
+                list.add(r1);
+            }
+
             map.put("pageNo", infos.getPageNum());
             map.put("pageTotal", infos.getPages());
             map.put("totalNum", infos.getTotal());
-            map.put("list", infos.getList());
+            map.put("list", list);
         }else {
 
             if (type.equals("all")) {
@@ -306,5 +346,55 @@ public class MatchListUserIdProtocol implements BaseProtocol {
             list.add(value);
         }
         return list;
+    }
+
+    private String getMinute(String s, String e) {
+        String str = "";
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date d1 = sdf.parse(s);     //开始时间
+            Date d2 = sdf.parse(e);     //结束时间
+
+            long diff = d2.getTime() - d1.getTime();
+            long nd = 1000 * 24 * 60 * 60;
+            long nh = 1000 * 60 * 60;
+            long nm = 1000 * 60;
+
+            long day = diff / nd;
+            long hour1 = diff % nd / nh;
+            long min = diff % nd % nh / nm;
+            str = String.valueOf(min);
+        } catch (Exception ex) {
+            LOGGER.error("计算比赛时间异常" + "s:" + s + "e:" , ex);
+        }
+        return str;
+    }
+    public String getPanKou1(String value){
+        if(value!=null) {
+            if (value.equals("0.0")) {
+                value = "0";
+            } else if (value.equals("1.0")) {
+                value = "1";
+            } else if (value.equals("2.0")) {
+                value = "2";
+            } else if (value.equals("3.0")) {
+                value = "3";
+            } else if (value.equals("4.0")) {
+                value = "4";
+            } else if (value.equals("5.0")) {
+                value = "5";
+            } else if (value.equals("-1.0")) {
+                value = "-1";
+            } else if (value.equals("-2.0")) {
+                value = "-2";
+            } else if (value.equals("-3.0")) {
+                value = "-3";
+            } else if (value.equals("-4.0")) {
+                value = "-4";
+            } else if (value.equals("-5.0")) {
+                value = "-5";
+            }
+        }
+        return value;
     }
 }
