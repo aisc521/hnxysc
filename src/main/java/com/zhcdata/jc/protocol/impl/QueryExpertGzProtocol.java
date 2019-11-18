@@ -8,11 +8,13 @@ import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcExpertService;
+import com.zhcdata.jc.tools.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,8 @@ import java.util.Map;
 public class QueryExpertGzProtocol implements BaseProtocol {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
+    @Resource
+    private CommonUtils commonUtils;
     @Resource
     private TbJcExpertService tbJcExpertService;
     @Override
@@ -47,7 +51,14 @@ public class QueryExpertGzProtocol implements BaseProtocol {
         String userId = paramMap.get("userId");
         try {
             List<ExpertInfoDto> list = tbJcExpertService.queryExpertInfo(userId);
-            resultMap.put("list",list);
+            List newList = new ArrayList();
+            for(int i = 0; i < list.size(); i++){
+                ExpertInfoDto expertInfoDto = list.get(i);
+                String lz = commonUtils.JsLzExpertInfoDto(expertInfoDto);
+                expertInfoDto.setExpertHitNum(lz);
+                newList.add(expertInfoDto);
+            }
+            resultMap.put("list",newList);
         } catch (Exception ex) {
             LOGGER.error("已关注专家列表" + ex.getMessage());
         }

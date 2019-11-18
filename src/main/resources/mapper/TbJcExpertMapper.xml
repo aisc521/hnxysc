@@ -263,6 +263,17 @@
     e.img expertIcon,
     e.grade expertLevel,
     v.lz_now expertHitNum,
+    v.lz_big lzBig,
+    v.ten_z tenZ,
+    v.nine_z nineZ,
+    v.eight_z eightZ,
+    v.seven_z sevenZ,
+    v.six_z sixZ,
+    v.five_z fiveZ,
+    v.four_z fourZ,
+    v.three_z threeZ,
+    v.return_seven_days returnSevenDays
+
     (SELECT count(*) from tb_jc_plan p where p.ascription_expert=f.expert_Id and p.status = '2') expertReleaseCount
     from tb_jc_record_focus f LEFT JOIN tb_jc_expert e on f.expert_Id=e.id
     LEFT JOIN tb_jc_victory v on f.expert_Id=v.expert_id
