@@ -97,6 +97,10 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
                     return result;
                 }
             }else{
+                Map<String, Object> result1 = generateJcFive(Integer.valueOf(matchId));
+                redisUtils.hset("SOCCER:BETTING:FIVEMETHOD:" + matchId, "v", JsonMapper.defaultMapper().toJson(result1));
+                redisUtils.expire("SOCCER:BETTING:FIVEMETHOD:" + matchId, RedisCodeMsg.SAME_ODDS.getSeconds());
+                result = JSONArray.parseObject((String) redisUtils.hget("SOCCER:BETTING:FIVEMETHOD:" + matchId, "v"), Map.class);
                 return result;
             }
         }else{//北单
@@ -109,6 +113,10 @@ public class MatchBettingCollectProtocol implements BaseProtocol {
                     result.put("timeId", timeId);
                     return resultMap;
                 } else{
+                    Map<String, Object> result1 = generateBjdcFive(Integer.valueOf(matchId));
+                    redisUtils.hset("SOCCER:BETTING:FIVEMETHODBJDC:" + matchId, "v", JsonMapper.defaultMapper().toJson(result1));
+                    redisUtils.expire("SOCCER:BETTING:FIVEMETHODBJDC:" + matchId, RedisCodeMsg.SAME_ODDS.getSeconds());
+                    result = JSONArray.parseObject((String) redisUtils.hget("SOCCER:BETTING:FIVEMETHODBJDC:" + matchId, "v"), Map.class);
                     return result;
                 }
             }else{
