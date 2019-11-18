@@ -252,19 +252,19 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 String remark = "";
                 String payType = String.valueOf(tbJcPurchaseDetailed.getPayType());
                 if("20".equals(payType)){
-                    remark = "微信支付-方案未中退款";
+                    remark = "微信支付-方案未中扣款";
                 }
                 if("21".equals(payType)){
-                    remark = "支付宝支付-方案未中退款";
+                    remark = "支付宝支付-方案未中扣款";
                 }
                 if("22".equals(payType)){
-                    remark = "微信支付-方案未中退款";
+                    remark = "微信支付-方案未中扣款";
                 }
                 if("0".equals(payType)){
-                    remark = "余额支付-方案未中退款";
+                    remark = "余额支付-方案未中扣款";
                 }
                 if("99".equals(payType)){
-                    remark = "点播卡支付-方案未中退款";
+                    remark = "点播卡支付-方案未中扣款";
                 }
                 //判断是否支付成功
                 if("0".equals(tbJcPurchaseDetailed.getPayStatus())){//未成功
