@@ -33,23 +33,20 @@ import java.util.List;
 @Component
 public class JcChampionRunnerOddsJob implements Job {
 
-   /* @Value("${custom.qiutan.url.championRunnerOddsUrl}")
-    String requestUrl;*/
-
-    @Resource
-    private JcChampionRunnerOddsService jcChampionRunnerOddsService;
+    @Value("${custom.qiutan.url.championRunnerOddsUrl}")
+    String requestUrl;
     @Resource
     private JcChampionRunnerOddsTypeService jcChampionRunnerOddsTypeService;
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        /*log.error("冠亚军赔率定时任务启动");
+        log.error("冠亚军赔率定时任务启动");
         long s = System.currentTimeMillis();
         try {
             JcChampionRunnerFirstOdds object  = (JcChampionRunnerFirstOdds) new QiuTanXmlComm().handleMothod(requestUrl,JcChampionRunnerFirstOdds.class,JcChampionRunnerOddsRsp.class);
-            ArrayList arrayList = (ArrayList)new QiuTanXmlComm().handleMothod(requestUrl,JcChampionRunnerFirstOdds.class,JcChampionRunnerOddsRsp.class);
+            /*ArrayList arrayList = (ArrayList)new QiuTanXmlComm().handleMothod(requestUrl,JcChampionRunnerOddsRsp.class);
             if(arrayList.size() <= 0){
                 return;
-            }
+            }*/
             List<JcChampionRunnerOddsRsp> list = object.getList();
             if(list != null && list.size() > 0){
                 for(int i = 0; i < list.size(); i++){
@@ -76,6 +73,6 @@ public class JcChampionRunnerOddsJob implements Job {
             e.printStackTrace();
             log.error("冠亚军赔率定时任务异常:" + e.getCause());
         }
-        log.error("冠亚军赔率定时任务启动,耗时："+(System.currentTimeMillis()-s)+"毫秒");*/
+        log.error("冠亚军赔率定时任务启动,耗时："+(System.currentTimeMillis()-s)+"毫秒");
     }
 }

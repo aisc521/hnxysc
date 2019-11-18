@@ -108,18 +108,20 @@ public class JcChampionRunnerOddsTypeServiceImpl implements JcChampionRunnerOdds
     public void insertJcChampionRunnerOdds(JcChampionRunnerOddsType jcChampionRunnerOddsType, JcChampionRunnerOddsRsp jcChampionRunnerOddsRsp) throws BaseException {
         //详情信息查询是否存在
         JcChampionRunnerOdds jcChampionRunnerOdds = jcChampionRunnerOddsMapper.queryJcChampionRunnerOddsByPlayCodeAndMatchIdAndTeams(jcChampionRunnerOddsType.getPlayCode(),jcChampionRunnerOddsRsp.getMatchID(),jcChampionRunnerOddsRsp.getTeams());
-        jcChampionRunnerOdds.setOddsType(jcChampionRunnerOddsType.getId());
-        jcChampionRunnerOdds.setGameType(jcChampionRunnerOddsType.getGameType());
-        jcChampionRunnerOdds.setPlayCode(jcChampionRunnerOddsType.getPlayCode());
-        jcChampionRunnerOdds.setMatchId(jcChampionRunnerOddsRsp.getMatchID());
-        jcChampionRunnerOdds.setOdds(jcChampionRunnerOddsRsp.getOdds());
-        if("True".equals(jcChampionRunnerOddsRsp.getIsEnd())){
-            jcChampionRunnerOdds.setIsEnd(Long.valueOf(1));
-        }else{
-            jcChampionRunnerOdds.setIsEnd(Long.valueOf(0));
-        }
-        //jcChampionRunnerOdds.setStatus();
-        if(jcChampionRunnerOdds != null){//更新
+        if(jcChampionRunnerOdds != null){
+
+            jcChampionRunnerOdds.setOddsType(jcChampionRunnerOddsType.getId());
+            jcChampionRunnerOdds.setGameType(jcChampionRunnerOddsType.getGameType());
+            jcChampionRunnerOdds.setPlayCode(jcChampionRunnerOddsType.getPlayCode());
+            jcChampionRunnerOdds.setMatchId(jcChampionRunnerOddsRsp.getMatchID());
+            jcChampionRunnerOdds.setOdds(jcChampionRunnerOddsRsp.getOdds());
+            jcChampionRunnerOdds.setTeam(jcChampionRunnerOddsRsp.getTeams());
+            if("True".equals(jcChampionRunnerOddsRsp.getIsEnd())){
+                jcChampionRunnerOdds.setIsEnd(Long.valueOf(1));
+            }else{
+                jcChampionRunnerOdds.setIsEnd(Long.valueOf(0));
+            }
+            jcChampionRunnerOdds.setUpdateTime(new Date());
             Example example2 = new Example(JcChampionRunnerOdds.class);
             example2.createCriteria().andEqualTo("id",jcChampionRunnerOdds.getId());
             jcChampionRunnerOdds.setUpdateTime(new Date());
@@ -128,7 +130,19 @@ public class JcChampionRunnerOddsTypeServiceImpl implements JcChampionRunnerOdds
                 throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                         ProtocolCodeMsg.UPDATE_FAILE.getMsg());
             }
-        }else{//新增
+        }else{
+            jcChampionRunnerOdds = new JcChampionRunnerOdds();
+            jcChampionRunnerOdds.setOddsType(jcChampionRunnerOddsType.getId());
+            jcChampionRunnerOdds.setGameType(jcChampionRunnerOddsType.getGameType());
+            jcChampionRunnerOdds.setPlayCode(jcChampionRunnerOddsType.getPlayCode());
+            jcChampionRunnerOdds.setMatchId(jcChampionRunnerOddsRsp.getMatchID());
+            jcChampionRunnerOdds.setOdds(jcChampionRunnerOddsRsp.getOdds());
+            jcChampionRunnerOdds.setTeam(jcChampionRunnerOddsRsp.getTeams());
+            if("True".equals(jcChampionRunnerOddsRsp.getIsEnd())){
+                jcChampionRunnerOdds.setIsEnd(Long.valueOf(1));
+            }else{
+                jcChampionRunnerOdds.setIsEnd(Long.valueOf(0));
+            }
             jcChampionRunnerOdds.setUpdateTime(new Date());
             jcChampionRunnerOdds.setCreateTime(new Date());
             int h = jcChampionRunnerOddsMapper.insert(jcChampionRunnerOdds);
@@ -137,6 +151,5 @@ public class JcChampionRunnerOddsTypeServiceImpl implements JcChampionRunnerOdds
                         ProtocolCodeMsg.INSERT_FAILE.getMsg());
             }
         }
-
     }
 }

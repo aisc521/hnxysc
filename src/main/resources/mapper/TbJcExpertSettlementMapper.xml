@@ -24,4 +24,32 @@
     <result column="expert_person_name" property="expertPersonName" jdbcType="VARCHAR" />
     <result column="expert_id" property="expertId" jdbcType="BIGINT" />
   </resultMap>
+  <select id="queryTbJcExpertSettlement" resultType="com.zhcdata.jc.dto.SettlementDto">
+    select
+      bbb.*,
+      FORMAT((IFNULL(bbb.settlement_amount,0) * (IFNULL(bbb.divide_proport,0) / 100)),2) real_income
+      from (
+      select
+      aaa.*,
+      FORMAT((IFNULL(aaa.sale_price,0) + IFNULL(pay_ondemand_price,0)),2) settlement_amount
+      from (
+      select
+      e.nick_name nikeName,/*专家昵称*/
+      e.mobile mobile,/*专家手机号*/
+      e.ascription ascription,/*专家所属负责人*/
+      (select count(*) from tb_jc_plan p where p.ascription_expert = e.id and PERIOD_DIFF(date_format(now(),'%Y%m'),date_format(p.create_time,'%Y%m')) =1) expert_plan_num,
+      FORMAT((select sum(pd1.third_money) from tb_jc_purchase_detailed pd1 where 1= 1 and pd1.expert_id = e.id and PERIOD_DIFF(date_format(now(),'%Y%m'),date_format(pd1.create_time,'%Y%m')) =1 and pd1.pay_status = '2' and pd1.pay_type in('20','21','22','0')),2) sale_price,
+      FORMAT((select sum(pd1.third_money) from tb_jc_purchase_detailed pd1 where 1= 1 and pd1.expert_id = e.id and PERIOD_DIFF(date_format(now(),'%Y%m'),date_format(pd1.create_time,'%Y%m')) =1 and pd1.pay_status = '2' and pd1.pay_type = '99'),2) pay_ondemand_price,
+      20 ondemand_average,
+      '' free_ondemand_price,
+      e.royalty_ratio divide_proport,
+      d.d_value expert_person_name,
+      e.id id
+      from tb_jc_expert e
+      LEFT JOIN tb_jc_purchase_detailed pd ON e.id = pd.expert_id
+      LEFT JOIN tb_jc_dictionary d ON e.ascription = d.d_key
+      where 1 = 1
+      GROUP BY e.id
+      ) aaa where 1 = 1) bbb where 1 = 1
+  </select>
 </mapper>

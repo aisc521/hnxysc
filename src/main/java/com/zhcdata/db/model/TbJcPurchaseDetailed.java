@@ -1,6 +1,7 @@
 package com.zhcdata.db.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.*;
 
@@ -68,7 +69,7 @@ public class TbJcPurchaseDetailed implements Serializable {
      * 三方金额
      */
     @Column(name = "third_money")
-    private Long thirdMoney;
+    private BigDecimal thirdMoney;
 
     /**
      * 购买金额
@@ -380,7 +381,7 @@ public class TbJcPurchaseDetailed implements Serializable {
      *
      * @return third_money - 三方金额
      */
-    public Long getThirdMoney() {
+    public BigDecimal getThirdMoney() {
         return thirdMoney;
     }
 
@@ -389,7 +390,7 @@ public class TbJcPurchaseDetailed implements Serializable {
      *
      * @param thirdMoney 三方金额
      */
-    public void setThirdMoney(Long thirdMoney) {
+    public void setThirdMoney(BigDecimal thirdMoney) {
         this.thirdMoney = thirdMoney;
     }
 

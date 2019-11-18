@@ -1014,7 +1014,7 @@
             WHERE pg.status = '1' and pg.user_id = #{userId} and pg.over_time <![CDATA[>=]]> now()
             GROUP BY sc.ScheduleID
             ORDER BY sc.MatchTime
-            ) b ORDER BY abs(b.ord) asc,b.MatchTime asc
+            ) b ORDER BY abs(b.ord) asc,b.MatchTime asc,matchid asc
     </select>
 
     <select id="selectMatchIdExceedNow" resultType="java.lang.Integer">

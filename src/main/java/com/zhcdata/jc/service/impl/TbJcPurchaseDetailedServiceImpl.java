@@ -111,7 +111,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 }
             }
             if("99".equals(paramMap.get("payType"))){//点播
-                result = payService.discountRecommendUse(userId, tbJcPurchaseDetailed.getOrderId(), description, headBean.getSrc());
+                result = payService.discountRecommendUse(userId, tbJcPurchaseDetailed.getOrderId(), "点播卡购买", headBean.getSrc());
                 if("000000".equals(result.get("resCode"))){
                     //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
                     modifyOrderStatus(result,tbJcPlan,tbJcPurchaseDetailed,list);
@@ -337,7 +337,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(dbPricd));//支付金额
             tbJcPurchaseDetailed.setPlanPayType("99");//支付类型
         }
-        if("2".equals(tbJcPlan.getType())){//不中全退
+        if("2".equals(tbJcPlan.getType().toString())){//不中全退
             tbJcPurchaseDetailed.setOrderId(commonUtils.createOrderId("JCZF"));//订单id
         }else{
             tbJcPurchaseDetailed.setOrderId(commonUtils.createOrderId("JC"));//订单id
@@ -370,10 +370,10 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         //是否首次
         if(list <= 0){
             tbJcPurchaseDetailed.setFirst("1");
-            tbJcPurchaseDetailed.setThirdMoney(Long.valueOf("2"));
+            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal("2"));
         }else{
             tbJcPurchaseDetailed.setFirst("0");
-            tbJcPurchaseDetailed.setThirdMoney(Long.valueOf(tbJcPlan.getPrice()));
+            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
         }
         tbJcPurchaseDetailed.setUpdateTime(new Date());
 
