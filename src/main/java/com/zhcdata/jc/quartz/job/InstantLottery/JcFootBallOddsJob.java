@@ -70,7 +70,7 @@ public class JcFootBallOddsJob implements Job {
                         //查询赛程表
                         Schedule schedule = scheduleService.queryScheduleById(Long.valueOf(jcSchedule.getScheduleid()));
                         if(schedule != null){
-                            JcSchedulesp jcSchedulesp = jcSchedulespService.queryJcSchedulespById(jcSchedule.getScheduleid());
+                            JcSchedulesp jcSchedulesp = jcSchedulespService.queryJcSchedulespById(jcSchedule.getId());
                             if(jcSchedulesp != null){//更新
                                 jcSchedulespService.updateJcSchedulesp(jcSchedulesp,jcSchedule,jcFootBallOddsRsp,schedule);
                                 //插入竞彩sp变化表数据

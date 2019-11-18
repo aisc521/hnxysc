@@ -32,11 +32,21 @@ public interface EuropeOddsMapper {
                                            @Param("matchType")Integer matchType,@Param("beginDate")String beginDate,
                                            @Param("satOdds") Double satOdds,@Param("endOdds") Double endOdds);
 
+    AnalysisDto queryJcOddsByCompanyAndMatch(@Param("matchId") Integer matchId,
+                                           @Param("matchType")Integer matchType,@Param("beginDate")String beginDate,
+                                           @Param("satOdds") Double satOdds,@Param("endOdds") Double endOdds);
+
     List<AnalysisMatchDto> querySameOddsMatchByOdds(@Param("companyId")Integer companyId,@Param("matchType")Integer matchType,
                                                     @Param("satOdds") Double satOdds,@Param("endOdds") Double endOdds,
                                                     @Param("beginDate") String beginDate,
                                                     @Param("satWin") Double satWin,@Param("satLose") Double satLose,
                                                     @Param("satFlat") Double satFlat,@Param("oddsId") Integer oddsId);
+
+    List<AnalysisMatchDto> querySameJcOddsMatchByOdds(@Param("matchType")Integer matchType,
+                                                    @Param("satOdds") Double satOdds,@Param("endOdds") Double endOdds,
+                                                    @Param("beginDate") String beginDate,
+                                                    @Param("satWin") String satWin,@Param("satLose") String satLose,
+                                                    @Param("satFlat") String satFlat,@Param("oddsId") Integer oddsId);
 
     List<AnalysisMatchDto> querySameOddsMatchByFlagAndOdds(@Param("companyId")Integer companyId,@Param("matchType")Integer matchType,
                                                     @Param("satChange") Double satChange,@Param("endChange") Double endChange,

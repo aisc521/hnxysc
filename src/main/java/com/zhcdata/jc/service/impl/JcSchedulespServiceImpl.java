@@ -47,7 +47,7 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateJcSchedulesp(JcSchedulesp jcSchedulesp, JcSchedule jcSchedule, JcFootBallOddsRsp jcFootBallOddsRsp,Schedule schedule) throws BaseException {
-        jcSchedulesp.setId(String.valueOf(jcSchedule.getScheduleid()));
+        jcSchedulesp.setId(String.valueOf(jcSchedule.getId()));
         jcSchedulesp.setKind("2");//单关过关
         //让球胜平负sp
         List<JcFootBallOddsRqRsp> rq = jcFootBallOddsRsp.getRq();
@@ -227,7 +227,7 @@ public class JcSchedulespServiceImpl implements JcSchedulespService {
     @Override
     public Integer insertJcSchedulesp(JcSchedule jcSchedule, JcFootBallOddsRsp jcFootBallOddsRsp,Schedule schedule) throws BaseException {
         JcSchedulesp jcSchedulesp = new JcSchedulesp();
-        jcSchedulesp.setId(String.valueOf(jcSchedule.getScheduleid()));
+        jcSchedulesp.setId(String.valueOf(jcSchedule.getId()));
         jcSchedulesp.setKind("2");//单关过关
         //让球胜平负sp
         List<JcFootBallOddsRqRsp> rq = jcFootBallOddsRsp.getRq();

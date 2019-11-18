@@ -333,7 +333,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     ,ssp.wl3 homeTeamZhu,ssp.wl1 homeTeamPing,ssp.wl0 homeTeamKe,ssp.sf3 awayTeamZhu,ssp.sf1 awayTeamPing,ssp.sf0 awayTeamKe,s.HomeTeamID homeId,s.GuestTeamID awayId,0 homeTeamRangballs,PolyGoal awayTeamRangballs,
     Single105 smalltype
     from jc_schedule s
-    LEFT JOIN jc_schedulesp ssp on s.ScheduleID=ssp.ID
+    LEFT JOIN jc_schedulesp ssp on s.ID=ssp.ID
 		where s.ScheduleID = #{MatchId} and ssp.kind =2
     ) k LEFT JOIN tb_team_pet_name_info p1 on k.homeId=p1.teamId
     ) kk LEFT JOIN tb_team_pet_name_info p2 on kk.awayId=p2.teamId
@@ -436,7 +436,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         Single105 smalltype
 
         from jc_schedule s
-        LEFT JOIN jc_schedulesp ssp on s.ScheduleID = ssp.ID
+        LEFT JOIN jc_schedulesp ssp on s.ID = ssp.ID
         where s.ScheduleID in (select match_id from tb_jc_match where plan_id = #{pid})) k
         LEFT JOIN tb_team_pet_name_info p1 on k.homeId = p1.teamId order by dateOfMatch) kk
         LEFT JOIN tb_team_pet_name_info p2 on kk.awayId = p2.teamId) jc
