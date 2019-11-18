@@ -388,11 +388,11 @@ public class HandleExpertRecordJob implements Job {
                             info.setLzNow(String.valueOf(lz));                                                            //当前连中
                             info.setF(String.valueOf(zs));                                                                //已发方案总数
                             info.setZ(String.valueOf(z_count));                                                           //方案命中数
-                            info.setzThreeDays(three == 0 ? new Double(0) : Double.valueOf(Math.round((float) three_z * 100 / three)));          //三天命中率
-                            info.setzFiveDays(five_z == 0 ? new Double(0) : Double.valueOf(Math.round((float) five_z * 100 / five)));            //五天命中率
-                            info.setzSevenDays(seven_z == 0 ? new Double(0) : Double.valueOf(Math.round((float) seven_z * 100 / seven)));        //七天命中率
+                            info.setzThreeDays(three == 0 ? new Double(0) : Double.valueOf(Math.floor((float) three_z * 100 / three)));          //三天命中率
+                            info.setzFiveDays(five_z == 0 ? new Double(0) : Double.valueOf(Math.floor((float) five_z * 100 / five)));            //五天命中率
+                            info.setzSevenDays(seven_z == 0 ? new Double(0) : Double.valueOf(Math.floor((float) seven_z * 100 / seven)));        //七天命中率
                             info.setTrend(trend);                                                                                                       //趋势
-                            info.setzAll(Double.valueOf(Math.round((float) z_count * 100 / zs)));                                                       //全部命中率
+                            info.setzAll(Double.valueOf(Math.floor((float) z_count * 100 / zs)));                                                       //全部命中率
                             info.setLzBig(String.valueOf(lh_history));                                                   //历史最高连红
                             info.setTen_z(String.valueOf(jin10z));                                                       //近10中几
                             info.setNine_z(String.valueOf(jin9z));                                                       //近9中几
@@ -403,13 +403,13 @@ public class HandleExpertRecordJob implements Job {
                             info.setFour_z(String.valueOf(jin4z));                                                       //近4中几
                             info.setThree_z(String.valueOf(jin3z));                                                      //近3中几
                             if (lastSevenDayPayMoney.compareTo(new BigDecimal(0)) > 0) {
-                                info.setReturnSevenDays(Double.valueOf(Math.round(lastSevenDayReturnMoney.divide(lastSevenDayPayMoney, 2).multiply(new BigDecimal(100)).doubleValue())));  //七天回报率
+                                info.setReturnSevenDays(Double.valueOf(Math.floor(lastSevenDayReturnMoney.divide(lastSevenDayPayMoney, 2).multiply(new BigDecimal(100)).doubleValue())));  //七天回报率
                             } else {
                                 info.setReturnSevenDays(new Double(0));
                             }
                             //info.setYlSevenDays("0");                                                                                                                           //七天盈利率
                             if (lastDayPayMoney.compareTo(new BigDecimal(0)) > 0) {
-                                info.setReturnAll(Double.valueOf(Math.round(lastDayReturnMoney.divide(lastDayPayMoney, 2).multiply(new BigDecimal(100)).doubleValue())));                  //全部回报率
+                                info.setReturnAll(Double.valueOf(Math.floor(lastDayReturnMoney.divide(lastDayPayMoney, 2).multiply(new BigDecimal(100)).doubleValue())));                  //全部回报率
                             } else {
                                 info.setReturnAll(new Double(0));
                             }
