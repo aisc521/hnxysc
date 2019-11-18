@@ -86,8 +86,8 @@
     jc.Single101 rspfdg,
     jc.Single105 spfdg
     from jc_schedulesp sp
-    left join jc_schedule jc ON sp.ID = jc.ScheduleID
-    where sp.ID=#{bet007Id} and sp.kind = '2'
+    left join jc_schedule jc ON sp.ID = jc.ID
+    where jc.ScheduleID=#{bet007Id} and sp.kind = '2'
   </select>
 
   <select id="queryJcSchedulespByIdFive" resultType="com.zhcdata.jc.dto.QueryFiveGameDto">
@@ -96,14 +96,14 @@
     jc.Single101 rspfdg,
     jc.Single105 spfdg
     from jc_schedulesp sp
-    left join jc_schedule jc ON sp.ID = jc.ScheduleID
-    where sp.ID=#{bet007Id} and sp.kind = '2'
+    left join jc_schedule jc ON sp.ID = jc.ID
+    where jc.ScheduleID=#{bet007Id} and sp.kind = '2'
   </select>
 
   <select id="queryJczqListReuslt" resultType="java.util.Map">
     select s.scheduleId,s.MatchState ,s.sclass matchName,s.matchId issueNum,s.HomeTeam hostname,s.GuestTeam  guestName,s. matchTime,
     CAST(sa.HomeScore AS CHAR) HomeScore  ,CAST(sa.GuestScore AS CHAR) GuestScore ,CAST(sa.HomeHalfScore AS CHAR) HomeHalfScore,CAST(sa.GuestHalfScore AS CHAR) GuestHalfScore,CAST(s.PolyGoal AS CHAR) PolyGoal ,p.*
-    from jc_schedule s LEFT JOIN jc_schedulesp p on s.scheduleId = p.id
+    from jc_schedule s LEFT JOIN jc_schedulesp p on s.id = p.id
     LEFT JOIN  schedule sa on sa.scheduleId = s.scheduleId
     where 1=1 and  sa.MatchState = -1 and p.kind =2
     and  s.MatchTime >= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
@@ -114,7 +114,7 @@
   </select>
   <select id="queryTodayMatchCount" resultType="java.lang.Integer">
         select count(*)
-      from jc_schedule s LEFT JOIN jc_schedulesp p on s.scheduleId = p.id
+      from jc_schedule s LEFT JOIN jc_schedulesp p on s.id = p.id
     LEFT JOIN  schedule sa on sa.scheduleId = s.scheduleId
     where 1=1 and p.kind =2
     and  s.MatchTime >= str_to_date(#{startDate}, '%Y-%m-%d %H:%i:%s')
