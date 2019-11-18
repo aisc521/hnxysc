@@ -92,7 +92,6 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 }
             }
             if("22".equals(paramMap.get("payType"))){//微信H5
-                price = "3";
                 result = payService.wechatPay(userId,price,productName,description,"22",tbJcPurchaseDetailed.getOrderId(),headBean.getSrc(),paramMap.get("ip"));
                 if("000000".equals(result.get("resCode"))){
                     insertOrder(tbJcPurchaseDetailed);
