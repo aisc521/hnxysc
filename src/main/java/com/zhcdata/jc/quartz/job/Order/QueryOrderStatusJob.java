@@ -53,7 +53,7 @@ public class QueryOrderStatusJob implements Job {
                 TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedList.get(i);
                 Map<String, Object> result = payService.queryOrderStatus(String.valueOf(tbJcPurchaseDetailed.getBuyMoney()),String.valueOf(tbJcPurchaseDetailed.getPayType()),String.valueOf(tbJcPurchaseDetailed.getUserId()),
                         String.valueOf(tbJcPurchaseDetailed.getOrderId()),String.valueOf(tbJcPurchaseDetailed.getSrc()));
-                if("2".equals(result.get("status"))){//成功
+                if("2".equals(result.get("status")) || "4".equals(result.get("status"))){//成功/冻结
 
                     //先判断此订单对应的方案 是否是已停售的状态
                     TbJcPlan tbJcPlan = tbPlanService.queryPlanByPlanId(tbJcPurchaseDetailed.getSchemeId());
@@ -95,7 +95,12 @@ public class QueryOrderStatusJob implements Job {
                                 /*tbJcPurchaseDetailed.setPayStatus(Long.valueOf(1));*/
                                 tbJcPurchaseDetailed.setFirst("0");
                             }
-                            tbJcPurchaseDetailed.setPayStatus(Long.valueOf(1));
+                            if("2".equals(result.get("status"))){
+                                tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));//付款成功
+                            }else if("4".equals(result.get("status"))){
+                                tbJcPurchaseDetailed.setPayStatus(Long.valueOf(1));//冻结
+                            }
+
                             tbJcPurchaseDetailed.setUpdateTime(new Date());
 
                             //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
