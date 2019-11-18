@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.RefereeInfo;
+import org.apache.ibatis.annotations.Param;
 
 public interface RefereeInfoMapper {
 
@@ -16,5 +17,5 @@ public interface RefereeInfoMapper {
 
     int updateByPrimaryKey(RefereeInfo record);
 
-    RefereeInfo selectByMidAndTypeAndPid(Integer mid, Integer type, Integer pid);
+    RefereeInfo selectByMidAndTypeAndPid(@Param("mid") Integer mid, @Param("type") Integer type, @Param("pid") Integer pid);
 }
