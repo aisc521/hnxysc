@@ -20,11 +20,6 @@ public class JcChampionRunnerOddsServiceImpl implements JcChampionRunnerOddsServ
 
 
     @Override
-    public JcChampionRunnerOdds queryJcChampionRunnerOddsByTypeAndMatchIdAndTeams(String typeRsp, String matchID, String teams) {
-        return jcChampionRunnerOddsMapper.queryJcChampionRunnerOddsByTypeAndMatchIdAndTeams(typeRsp,matchID,teams);
-    }
-
-    @Override
     public void updateJcChampionRunnerOdds(JcChampionRunnerOdds jcChampionRunnerOdds, JcChampionRunnerOddsRsp jcChampionRunnerOddsRsp,int j) {
         jcChampionRunnerOdds.setOddsType(Long.valueOf(j));
         String typeRsp = jcChampionRunnerOddsRsp.getType();

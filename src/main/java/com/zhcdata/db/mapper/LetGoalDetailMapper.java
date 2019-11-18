@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.LetGoalDetail;
+import org.apache.ibatis.annotations.Param;
 
 public interface LetGoalDetailMapper {
     int deleteByPrimaryKey(Integer id);
@@ -15,9 +16,9 @@ public interface LetGoalDetailMapper {
 
     int updateByPrimaryKey(LetGoalDetail record);
 
-    LetGoalDetail selectByMatchAndCpyOrderByTimeDescLimit1(int id, int cpy);
+    LetGoalDetail selectByMatchAndCpyOrderByTimeDescLimit1(@Param("id")int id, @Param("cpy")int cpy);
 
-    LetGoalDetail selectByMatchAndCpyOrderByTimeAscLimit1(int id, int cpy);
+    LetGoalDetail selectByMatchAndCpyOrderByTimeAscLimit1(@Param("id")int id, @Param("cpy")int cpy);
 
     void deleteByOddsId(Integer oddsid);
 }

@@ -25,15 +25,15 @@ public interface LetgoalMapper {
 
     int updateByPrimaryKey(Letgoal record);
 
-    Letgoal selectByMatchIdAndCompany(String matchId, String cpy);
+    Letgoal selectByMatchIdAndCompany(@Param("matchId")String matchId, @Param("cpy")String cpy);
 
-    Map<String, Object> selectOddsIdAndStartTimeByByMatchIdAndCompany(String matchId, String cpy);
+    Map<String, Object> selectOddsIdAndStartTimeByByMatchIdAndCompany(@Param("matchId")String matchId,@Param("cpy")String cpy);
 
     List<Letgoal> selectByMid(String mid);
 
     void deleteByMid(int mid);
 
-    void updateOddsByOddsId(Integer oddsid, Float upodds, Float goal, Float downodds, Date modifytime);
+    void updateOddsByOddsId(@Param("oddsid")Integer oddsid, @Param("upodds")Float upodds, @Param("goal")Float goal, @Param("downodds")Float downodds, @Param("modifytime")Date modifytime);
 
     //Letgoal selectByMidAndCpyNew(String mid, String cpy);
 

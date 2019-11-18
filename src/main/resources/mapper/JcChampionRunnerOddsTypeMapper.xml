@@ -19,4 +19,7 @@
   <select id="queryJcChampionRunnerOddsTypeByPlayTypeNameAndGameType" resultType="com.zhcdata.db.model.JcChampionRunnerOddsType">
     select  *  from jc_champion_runner_odds_type odds where odds.play_type_name = #{typeRsp} and odds.game_type = #{type}
   </select>
+  <select id="queryJcChampionRunnerOddsTypeByGameType" resultType="com.zhcdata.db.model.JcChampionRunnerOddsType">
+    select  *  from jc_champion_runner_odds_type odds where odds.play_type_name = #{typeRsp}
+  </select>
 </mapper>

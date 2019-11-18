@@ -68,4 +68,7 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     List<PlanResult1> queryHotPlan(@Param("userId")String userId);
 
+    List<QueryPlanByMatchIdDto> queryPlanByPlanIdList(@Param("planIdDtoList")String[] planIdDtoList);
+
+    List<QueryPlanByMatchIdDto> queryPlanInfoByPlanIdandUserIdList(@Param("planIdDtoList")String[] planIdDtoList, @Param("userId")String userId);
 }

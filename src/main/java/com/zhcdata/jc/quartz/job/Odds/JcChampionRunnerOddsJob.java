@@ -33,8 +33,8 @@ import java.util.List;
 @Component
 public class JcChampionRunnerOddsJob implements Job {
 
-    @Value("${custom.qiutan.url.championRunnerOddsUrl}")
-    String requestUrl;
+   /* @Value("${custom.qiutan.url.championRunnerOddsUrl}")
+    String requestUrl;*/
 
     @Resource
     private JcChampionRunnerOddsService jcChampionRunnerOddsService;
@@ -42,7 +42,7 @@ public class JcChampionRunnerOddsJob implements Job {
     private JcChampionRunnerOddsTypeService jcChampionRunnerOddsTypeService;
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        log.error("冠亚军赔率定时任务启动");
+        /*log.error("冠亚军赔率定时任务启动");
         long s = System.currentTimeMillis();
         try {
             JcChampionRunnerFirstOdds object  = (JcChampionRunnerFirstOdds) new QiuTanXmlComm().handleMothod(requestUrl,JcChampionRunnerFirstOdds.class,JcChampionRunnerOddsRsp.class);
@@ -64,25 +64,9 @@ public class JcChampionRunnerOddsJob implements Job {
                     }
                     JcChampionRunnerOddsType jcChampionRunnerOddsType = jcChampionRunnerOddsTypeService.queryJcChampionRunnerOddsTypeByPlayTypeNameAndGameType(typeRsp,type);
                     if(jcChampionRunnerOddsType != null){//更新
-                        int j = jcChampionRunnerOddsTypeService.updataJcChampionRunnerOddsType(jcChampionRunnerOddsType,jcChampionRunnerOddsRsp);
-                        if(j > 0){//更新成功===查询冠亚军赔率表
-                            JcChampionRunnerOdds jcChampionRunnerOdds = jcChampionRunnerOddsService.queryJcChampionRunnerOddsByTypeAndMatchIdAndTeams(typeRsp,jcChampionRunnerOddsRsp.getMatchID(),jcChampionRunnerOddsRsp.getTeams());
-                            if(jcChampionRunnerOdds != null){//更新
-                                jcChampionRunnerOddsService.updateJcChampionRunnerOdds(jcChampionRunnerOdds,jcChampionRunnerOddsRsp,j);
-                            }else{//新增
-                                jcChampionRunnerOddsService.insertJcChampionRunnerOdds(jcChampionRunnerOddsRsp,j);
-                            }
-                        }
+                        jcChampionRunnerOddsTypeService.updataJcChampionRunnerOddsType(jcChampionRunnerOddsType,jcChampionRunnerOddsRsp);
                     }else{//新增
-                        int j = jcChampionRunnerOddsTypeService.insertJcChampionRunnerOddsType(jcChampionRunnerOddsRsp);
-                        if(j > 0){//新增成功==查询冠亚军赔率表
-                            JcChampionRunnerOdds jcChampionRunnerOdds = jcChampionRunnerOddsService.queryJcChampionRunnerOddsByTypeAndMatchIdAndTeams(typeRsp,jcChampionRunnerOddsRsp.getMatchID(),jcChampionRunnerOddsRsp.getTeams());
-                            if(jcChampionRunnerOdds != null){//更新
-                                jcChampionRunnerOddsService.updateJcChampionRunnerOdds(jcChampionRunnerOdds,jcChampionRunnerOddsRsp,j);
-                            }else{//新增
-                                jcChampionRunnerOddsService.insertJcChampionRunnerOdds(jcChampionRunnerOddsRsp,j);
-                            }
-                        }
+                        jcChampionRunnerOddsTypeService.insertJcChampionRunnerOddsType(jcChampionRunnerOddsRsp);
                     }
                 }
             }else{
@@ -92,6 +76,6 @@ public class JcChampionRunnerOddsJob implements Job {
             e.printStackTrace();
             log.error("冠亚军赔率定时任务异常:" + e.getCause());
         }
-        log.error("冠亚军赔率定时任务启动,耗时："+(System.currentTimeMillis()-s)+"毫秒");
+        log.error("冠亚军赔率定时任务启动,耗时："+(System.currentTimeMillis()-s)+"毫秒");*/
     }
 }

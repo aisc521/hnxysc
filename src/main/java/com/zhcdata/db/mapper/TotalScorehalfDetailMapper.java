@@ -2,6 +2,7 @@ package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.TotalScorehalfDetail;
 import com.zhcdata.jc.dto.SimplifyOdds;
+import org.apache.ibatis.annotations.Param;
 
 public interface TotalScorehalfDetailMapper {
     int deleteByPrimaryKey(Integer id);
@@ -16,9 +17,9 @@ public interface TotalScorehalfDetailMapper {
 
     int updateByPrimaryKey(TotalScorehalfDetail record);
 
-    TotalScorehalfDetail selectByMidAndCpy(String mid, String cpy);
+    TotalScorehalfDetail selectByMidAndCpy(@Param("mid") String mid, @Param("cpy") String cpy);
 
-    SimplifyOdds selectTotalScorehalfSloByMidAndCpy(String mid, String cpy);
+    SimplifyOdds selectTotalScorehalfSloByMidAndCpy(@Param("mid")String mid, @Param("cpy")String cpy);
 
     void deleteByOddsId(Integer oddsid);
 }

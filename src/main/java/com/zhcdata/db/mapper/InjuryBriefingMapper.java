@@ -1,6 +1,7 @@
 package com.zhcdata.db.mapper;
 
 import com.zhcdata.db.model.InjuryBriefing;
+import org.apache.ibatis.annotations.Param;
 
 public interface InjuryBriefingMapper {
 
@@ -16,6 +17,6 @@ public interface InjuryBriefingMapper {
 
     int updateByPrimaryKey(InjuryBriefing record);
 
-    InjuryBriefing selectByMidAndTeam(Integer mid, String team,String mark);
+    InjuryBriefing selectByMidAndTeam(@Param("mid")Integer mid, @Param("team")String team, @Param("mark")String mark);
 
 }
