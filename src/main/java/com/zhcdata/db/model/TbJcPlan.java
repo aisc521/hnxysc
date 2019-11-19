@@ -2,6 +2,7 @@ package com.zhcdata.db.model;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -123,7 +124,7 @@ public class TbJcPlan implements Serializable {
     public void setCnt(Integer cnt) {
         this.cnt = cnt;
     }
-
+    @Transient
     private Integer cnt ;//传递参数需要用
 
     private static final long serialVersionUID = 1L;
