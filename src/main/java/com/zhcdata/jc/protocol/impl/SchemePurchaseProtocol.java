@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import com.zhcdata.db.model.TbJcMatch;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.db.model.TbJcPurchaseDetailed;
-import com.zhcdata.db.model.TbJcUser;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -18,7 +17,10 @@ import org.springside.modules.utils.number.NumberUtil;
 import javax.annotation.Resource;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Description 方案购买
@@ -138,7 +140,7 @@ public class SchemePurchaseProtocol implements BaseProtocol {
         }
 
         //生成订单信息 并且调用支付
-        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,String.valueOf(paramMap.get("userId")),paramMap,payService,list,headBean,String.valueOf(paramMap.get("cell")));
+        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,paramMap.get("userId"),paramMap,payService,list,headBean,paramMap.get("cell"));
         return resultMap;
     }
 }

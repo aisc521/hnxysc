@@ -275,6 +275,61 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         }
     }
 
+    @Override
+    public String refundFrozenToMoney(String type ,TbJcPurchaseDetailed tbJcPurchaseDetailed, PayService payService) throws BaseException {
+        String remark = "";
+        //判断是否是冻结状态  以及订单号 是否是 冻结的订单号
+        String pay_status = String.valueOf(tbJcPurchaseDetailed.getPayStatus());
+        String order_id = tbJcPurchaseDetailed.getOrderId();
+        String[] order = order_id.split("-");
+        String payType = String.valueOf(tbJcPurchaseDetailed.getPayType());
+        //判断是否支付成功
+      /*  if("0".equals(tbJcPurchaseDetailed.getPayStatus())){//未成功
+            log.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "退款====付款未成功:" +  tbJcPurchaseDetailed.getBuyMoney());
+            return;
+        }*/
+        String planStr = "";
+        if("1".equals(type)){
+            planStr="重复支付退款";
+        }
+        else if("2".equals(type)){
+            planStr="方案过期退款";
+        }
+        Map result = new HashMap();
+        if("20".equals(payType)){
+            remark = "微信支付-"+planStr;
+            if("0".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+            }
+        }
+        if("21".equals(payType)){
+            remark = "支付宝支付-"+planStr;
+            if("0".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+            }
+        }
+        if("22".equals(payType)){
+            remark = "微信支付-"+planStr;
+            if("0".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+            }
+        }
+        if("0".equals(payType)){
+            remark = "余额支付-"+planStr;
+            if("0".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+            }
+        }
+        if("99".equals(payType)){
+            remark = "点播卡支付-"+planStr;
+            if("0".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                result = payService.refundDiscount(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(),"1",remark,tbJcPurchaseDetailed.getSrc());
+            }
+        }
+        String resCode = String.valueOf(result.get("resCode"));
+       return resCode;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public TbJcPurchaseDetailed generatedObject(TbJcPlan tbJcPlan, String userId,Map<String, String> paramMap,Integer list,ProtocolParamDto.HeadBean headBean,String cell){
         TbJcPurchaseDetailed tbJcPurchaseDetailed = new TbJcPurchaseDetailed();
@@ -356,7 +411,9 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
 
     @Transactional(rollbackFor = Exception.class)
     public void modifyOrderStatus(Map<String, Object> result,TbJcPlan tbJcPlan,TbJcPurchaseDetailed tbJcPurchaseDetailed,Integer list) throws BaseException {
-        tbJcPurchaseDetailed.setPayId(String.valueOf(result.get("payingId")));
+       if(result.get("payingId")!=null){
+           tbJcPurchaseDetailed.setPayId(String.valueOf(result.get("payingId")));
+       }
         if("2".equals(tbJcPurchaseDetailed.getPlanType())){//不中全退
             /*if(list <= 0){
                 tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
