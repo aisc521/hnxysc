@@ -535,10 +535,10 @@ public class CommonUtils {
         String tradType = "";
         switch (payType) {
             case 0:
-                tradType = "PAY_"+sysType+"_KK_XJ";
+                tradType = "PAY_"+sysType+"_DJ_XJ";
                 break; //竞彩余额支付
             case 3:
-                tradType = "PAY_"+sysType+"_KK_XJ";
+                tradType = "PAY_"+sysType+"_DJ_XJ";
                 break; //红包支付
             case 20:
                 tradType = "DEPOPAY_"+sysType+"_SQ_WXNATIVE";
