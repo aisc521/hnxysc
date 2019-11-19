@@ -120,7 +120,7 @@ public class MatchListDataAllJob  implements Job {
                 String format1 = df1.format(calendar1.getTime());
                 endDate = format1 + " 11:00:00";
                 endDateBd= format1 + " 09:59:59";
-                endDateAll=format + " 10:59:59";
+                endDateAll=format1 + " 10:59:59";
 
                 time = startDate.substring(0, 10);
 
