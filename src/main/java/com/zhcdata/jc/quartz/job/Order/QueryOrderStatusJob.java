@@ -56,13 +56,18 @@ public class QueryOrderStatusJob implements Job {
                 if("2".equals(result.get("status")) || "4".equals(result.get("status"))){//成功/冻结
 
                     //先判断此订单对应的方案 是否是已停售的状态
-                    TbJcPlan tbJcPlan = tbPlanService.queryPlanByPlanId(tbJcPurchaseDetailed.getSchemeId());
+                    TbJcPlan tbJcPlan = tbPlanService.queryPlanByPlanId(tbJcPurchaseDetailed.getSchemeId(),tbJcPurchaseDetailed.getUserId());
                     if(tbJcPlan != null){
                         //判断是否已经是首单
                         //根据状态查询是否是首单 ===查询此用户是否有支付成功的状态的订单
                         Integer tbJcPurchaseDetailedList1 = tbJcPurchaseDetailedService.queryIfHaveSuccessOeder(tbJcPurchaseDetailed.getUserId());
-                        if(!"2".equals(String.valueOf(tbJcPlan.getStatus()))){//不是在售状态的方案  执行退款操作
-                                tbJcPurchaseDetailed.setPayStatus(Long.valueOf(4));//不在在售状态退款状态
+                        if(!"2".equals(String.valueOf(tbJcPlan.getStatus()))||tbJcPlan.getCnt()>1){//不是在售状态的方案或者已经买过该定单  执行退款操作
+                                if(tbJcPlan.getCnt()>1){
+                                    tbJcPurchaseDetailed.setPayStatus(Long.valueOf(5));//买过该方案
+                                }else{
+                                    tbJcPurchaseDetailed.setPayStatus(Long.valueOf(4));//不在在售状态退款状态
+                                }
+
                                 tbJcPurchaseDetailed.setUpdateTime(new Date());
                                 //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
                                 tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(String.valueOf(result.get("thirdAmount"))));

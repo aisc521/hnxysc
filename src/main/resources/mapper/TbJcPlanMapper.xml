@@ -378,6 +378,12 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     SELECT * from tb_jc_plan p where p.id = #{id}
   </select>
 
+  <select id="queryPlanByPlanIdAndUserId" resultType="com.zhcdata.db.model.TbJcPlan">
+    SELECT p.*,count(d.id) cnt from tb_jc_plan p LEFT JOIN tb_jc_purchase_detailed d on d.scheme_id = p.id
+    and d.pay_status in(1,2) and user_id = #{userId} where p.id = #{id}
+
+  </select>
+
   <select id="queryLatestPlanReminder" resultType="com.zhcdata.jc.dto.LatestPlanReminderDto">
     SELECT
     p.id planId,
@@ -871,8 +877,4 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         GROUP BY p.id
         ORDER BY  v.i asc,p.create_time desc
     </select>
-
-
-
-
 </mapper>

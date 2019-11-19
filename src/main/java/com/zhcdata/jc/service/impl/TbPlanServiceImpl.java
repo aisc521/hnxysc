@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
-import com.zhcdata.db.model.TbJcRecordFocus;
 import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -77,6 +76,11 @@ public class TbPlanServiceImpl implements TbPlanService {
     public TbJcPlan queryPlanByPlanId(Long schemeId) {
 
         return tbJcPlanMapper.queryPlanByPlanId(schemeId);
+    }
+
+    @Override
+    public TbJcPlan queryPlanByPlanId(Long schemeId, Long userId) {
+        return tbJcPlanMapper.queryPlanByPlanIdAndUserId(schemeId,userId);
     }
 
     @Override
