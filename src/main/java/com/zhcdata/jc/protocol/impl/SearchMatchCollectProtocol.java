@@ -163,16 +163,19 @@ public class SearchMatchCollectProtocol implements BaseProtocol {
                     if (!Strings.isNullOrEmpty(getPanKou(matchResult1.getMatchPankou()))){
                         String pan=matchResult1.getMatchPankou();
                         pan=getPanKou(pan);
-                        pan=transformation(pan);
+                        //pan=transformation(pan);
                         //pan=CorrespondingMap.get(pan);
                         Integer matchCount = match.get(pan);
                         if (matchCount == null) matchCount = 1;//如果没有，这是第一场
                         else matchCount = matchCount + 1;//如果有，那就加一场
-                        if(CorrespondingMap.get(transformation(getPanKou(matchResult1.getMatchPankou())))!=null) {
+
+                        match.put(getPanKou(matchResult1.getMatchPankou()), matchCount);
+                        //if(CorrespondingMap.get(transformation(getPanKou(matchResult1.getMatchPankou())))!=null) {
                             //match.put(CorrespondingMap.get(transformation(matchResult1.getMatchPankou())), matchCount);
-                            String dfd = transformation(getPanKou(matchResult1.getMatchPankou()));
-                            match.put(dfd, matchCount);
-                        }
+
+                            //String dfd = transformation(getPanKou(matchResult1.getMatchPankou()));
+                            //match.put(dfd, matchCount);
+                        //}
                         //System.out.println(transformation(matchResult1.getMatchPankou())+"   : " +
                         //        "  "+CorrespondingMap.get(transformation(matchResult1.getMatchPankou())));
                     }
