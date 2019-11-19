@@ -103,7 +103,7 @@
         *
         from tb_jc_purchase_detailed pd
 
-        where pd.pay_status in ('0','1') and pd.pay_type in('20','21','22')
+        where pd.pay_status = 0 and pd.pay_type in('20','21','22')
     </select>
     <select id="queryTbJcPurchaseDetailedByUserAndPlanId" resultType="com.zhcdata.db.model.TbJcPurchaseDetailed">
         SELECT

@@ -34,6 +34,8 @@ public interface TbJcPurchaseDetailedService {
 
     void refundFrozenToMoney(TbJcPlan tbJcPlan,TbJcPurchaseDetailedService tbJcPurchaseDetailedService,PayService payService) throws BaseException;
 
+    String refundFrozenToMoney(String type,TbJcPurchaseDetailed tbJcPurchaseDetailed,PayService payService) throws BaseException;
+
     /**
      * 增加方案人气
      * @param tbJcPlan

@@ -83,7 +83,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
          }
         //0 已结束 1 进行中 2 在售
         tbPlanService.updateStatusPlanById(String.valueOf(tbJcPlan.getId()),0);
-        if(z_count > 0&&matchPlanResultsList.size()==z_count){
+        if(z_count > 0&&matchPlanResultsList.size() == z_count){
             tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()));
             UpdateExpert(tbJcPlan);
             //扣
