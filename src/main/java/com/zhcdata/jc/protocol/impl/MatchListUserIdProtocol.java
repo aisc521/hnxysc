@@ -222,7 +222,13 @@ public class MatchListUserIdProtocol implements BaseProtocol {
             String endDate=df.format(calendar.getTime());
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
-            newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + " 11:00:00", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //竞彩
+            if(type.equals("4")) {
+                newList = scheduleService.queryMacthListForJob(time + " 10:59:59", endDate + " 10:59:59", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //全部
+            }else if(type.equals("2")) {
+                newList = scheduleService.queryMacthListForJob(time + " 09:59:59", endDate + " 09:59:59", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //北单
+            }else {
+                newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + " 11:00:00", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType));
+            }
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
 
             List<MatchResult1> list=new ArrayList<>();
