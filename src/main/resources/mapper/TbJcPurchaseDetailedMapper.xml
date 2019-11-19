@@ -59,12 +59,7 @@
     expert.grade level,/*专家等级*/
     plan.id planId,
     plan.status status,
-    case when pd.pay_type = '0' then pd.red_money
-    when pd.pay_type = '20' then pd.third_money
-    when pd.pay_type = '21' then pd.third_money
-    when pd.pay_type = '22' then pd.third_money
-    when pd.pay_type = '99' then 0
-    end AS thirdMoney,/*支付金额*/
+    pd.third_money thirdMoney,/*支付金额*/
     pd.buy_money buyMoney ,
     pd.first firstone,
     victory.ten_z tenZ,

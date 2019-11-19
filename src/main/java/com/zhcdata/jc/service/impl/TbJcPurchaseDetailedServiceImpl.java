@@ -331,7 +331,6 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             }else{
                 tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(tbJcPlan.getPrice()));//支付金额
             }
-            tbJcPurchaseDetailed.setRedMoney(tbJcPurchaseDetailed.getBuyMoney());
             tbJcPurchaseDetailed.setPlanPayType("2");//支付类型
         }
         if("99".equals(paramMap.get("payType"))){
@@ -372,12 +371,10 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         //是否首次
         if(list <= 0){
             tbJcPurchaseDetailed.setFirst("1");
-//            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal("2"));
-            tbJcPurchaseDetailed.setThirdMoney(BigDecimal.ZERO);
+            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal("2"));
         }else{
             tbJcPurchaseDetailed.setFirst("0");
-            tbJcPurchaseDetailed.setThirdMoney(BigDecimal.ZERO);
-            tbJcPurchaseDetailed.setRedMoney(tbJcPlan.getPrice());
+            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
         }
         tbJcPurchaseDetailed.setUpdateTime(new Date());
 
