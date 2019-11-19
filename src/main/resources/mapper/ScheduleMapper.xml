@@ -995,8 +995,8 @@
             lottery.NO_ID number,/*期数场次*/
             1 iscollect,/*是否收藏*/
             case when pg.type = '1' then '1'
-                 when pg.type = '2' then '3'
-                 when pg.type = '3' then '2'
+                 when pg.type = '2' then '2'
+                 when pg.type = '3' then '3'
                  end as 'matchtype',
             case when pg.type = '1' then 'JCZQ'
                  when pg.type = '2' then 'BJDC'
@@ -1034,7 +1034,7 @@
         SCHEDULE sc
         LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID  = lottery.ID_BET007
         WHERE
-        sc.MatchTime <![CDATA[<]]> #{startDate}
+        sc.MatchTime <![CDATA[<]]> now()
         AND sc.MatchState = '-1'
         AND lottery.LOTTERY = 'SF14'
         GROUP BY
@@ -1050,7 +1050,7 @@
         SCHEDULE sc
         LEFT JOIN jc_match_lottery lottery ON  sc.ScheduleID  = lottery.ID_BET007
         WHERE
-        sc.MatchTime > #{startDate}
+        sc.MatchTime > now()
         AND lottery.LOTTERY = 'SF14'
         GROUP BY
         drawno
