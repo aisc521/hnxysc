@@ -111,7 +111,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 }
             }
             if("99".equals(paramMap.get("payType"))){//点播
-                result = payService.discountRecommendUse(userId, tbJcPurchaseDetailed.getOrderId(), "点播卡购买", headBean.getSrc());
+                result = payService.discountRecommendUse(userId, tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
                 if("000000".equals(result.get("resCode"))){
                     //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
                     modifyOrderStatus(result,tbJcPlan,tbJcPurchaseDetailed,list);
