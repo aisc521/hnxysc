@@ -152,7 +152,7 @@ public class MatchListDataJob implements Job {
                 calendar1.add(Calendar.DAY_OF_MONTH, 1);
                 endDate=df.format(calendar1.getTime()) + " 11:00:00";
 
-                time=startDate;
+                time=startDate.substring(0, 10);
 
                 //北单
                 String sBd=df.format(calendar.getTime()) + " 10:00:00";
