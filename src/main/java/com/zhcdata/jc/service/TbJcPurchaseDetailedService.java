@@ -3,7 +3,6 @@ package com.zhcdata.jc.service;
 import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.db.model.TbJcPurchaseDetailed;
-import com.zhcdata.db.model.TbJcUser;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.dto.PurchasedPlanDto;
 import com.zhcdata.jc.exception.BaseException;
@@ -34,4 +33,11 @@ public interface TbJcPurchaseDetailedService {
     void updateTbJcPurchaseDetailed(TbJcPurchaseDetailed tbJcPurchaseDetailed,TbJcPurchaseDetailedService tbJcPurchaseDetailedService,TbPlanService tbPlanService) throws BaseException;
 
     void refundFrozenToMoney(TbJcPlan tbJcPlan,TbJcPurchaseDetailedService tbJcPurchaseDetailedService,PayService payService) throws BaseException;
+
+    /**
+     * 增加方案人气
+     * @param tbJcPlan
+     * @throws BaseException
+     */
+    void addPlanPopularity(TbJcPlan tbJcPlan) throws BaseException;
 }

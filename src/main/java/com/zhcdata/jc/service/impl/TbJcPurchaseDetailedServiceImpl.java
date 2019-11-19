@@ -5,7 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcExpertMapper;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
 import com.zhcdata.db.mapper.TbJcPurchaseDetailedMapper;
-import com.zhcdata.db.model.*;
+import com.zhcdata.db.model.TbJcPlan;
+import com.zhcdata.db.model.TbJcPurchaseDetailed;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.dto.PurchasedPlanDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
@@ -330,6 +331,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             }else{
                 tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(tbJcPlan.getPrice()));//支付金额
             }
+            tbJcPurchaseDetailed.setRedMoney(tbJcPurchaseDetailed.getBuyMoney());
             tbJcPurchaseDetailed.setPlanPayType("2");//支付类型
         }
         if("99".equals(paramMap.get("payType"))){
@@ -370,10 +372,12 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         //是否首次
         if(list <= 0){
             tbJcPurchaseDetailed.setFirst("1");
-            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal("2"));
+//            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal("2"));
+            tbJcPurchaseDetailed.setThirdMoney(BigDecimal.ZERO);
         }else{
             tbJcPurchaseDetailed.setFirst("0");
-            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
+            tbJcPurchaseDetailed.setThirdMoney(BigDecimal.ZERO);
+            tbJcPurchaseDetailed.setRedMoney(tbJcPlan.getPrice());
         }
         tbJcPurchaseDetailed.setUpdateTime(new Date());
 
@@ -402,7 +406,18 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
         }*/
+        addPlanPopularity(tbJcPlan);
 
+
+    }
+
+    /**
+     * 增加方案人气
+     * @param tbJcPlan
+     * @throws BaseException
+     */
+    @Override
+    public void addPlanPopularity(TbJcPlan tbJcPlan) throws BaseException {
         //增加对应方案的人气值
         TbJcPlan tbJcPlan1 = tbJcPlanMapper.queryPlanByPlanId(tbJcPlan.getId());
         Integer pop = tbJcPlan1.getPlanPopularity();

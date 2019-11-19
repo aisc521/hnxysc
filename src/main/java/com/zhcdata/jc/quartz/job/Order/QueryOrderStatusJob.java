@@ -1,12 +1,11 @@
 package com.zhcdata.jc.quartz.job.Order;
 
 
+import com.zhcdata.db.mapper.TbJcPlanMapper;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.db.model.TbJcPurchaseDetailed;
-
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.PayService;
-import com.zhcdata.jc.service.TbJcExpertService;
 import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
 import com.zhcdata.jc.service.TbPlanService;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +16,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
-
 import javax.annotation.Resource;
-
 import java.math.BigDecimal;
 import java.util.Date;
-
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +39,8 @@ public class QueryOrderStatusJob implements Job {
     private PayService payService;
     @Resource
     private TbPlanService tbPlanService;
+    @Resource
+    private TbJcPlanMapper tbJcPlanMapper;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -112,6 +110,11 @@ public class QueryOrderStatusJob implements Job {
                             tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(String.valueOf(result.get("thirdAmount"))));
                             try {
                                 tbJcPurchaseDetailedService.updateTbJcPurchaseDetailed(tbJcPurchaseDetailed,tbJcPurchaseDetailedService,tbPlanService);
+
+                                /* ***增加对应方案的人气值-------------*/
+                                tbJcPurchaseDetailedService.addPlanPopularity(tbJcPlan);
+                                /* ***增加对应方案的人气值-------------*/
+
                             } catch (BaseException e) {
                                 e.printStackTrace();
                             }
