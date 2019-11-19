@@ -864,7 +864,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             text = "中";
         } else if ("3".equals(matchState)) {
             //下半场
-            matchState = "2";
+            matchState = "3";
             if (matchTime2 != null) {
                 //计算下半场进行的时长 matchTime2为半场开始时间，在计算的时间上+45分钟
                 long l = ClockUtil.currentTimeMillis();
@@ -878,37 +878,37 @@ public class ScheduleServiceImpl implements ScheduleService {
             }
         } else if ("4".equals(matchState)) {
             //加时
-            matchState = "2";
-            text = "90'";
+            matchState = "-1";
+            text = "(完)";
             matchMinute = "90";
-        } else if ("5".equals(matchState)) {
+        } else if ("-1".equals(matchState)) {
             //点球
-            matchState = "2";
-            text = "90'";
+            matchState = "-1";
+            text = "(完)";
             matchMinute = "90";
         } else if ("-1".equals(matchState)) {
             //完结
-            matchState = "3";
+            matchState = "-1";
             text = "完";
         } else if ("-14".equals(matchState)) {
             //推迟
-            matchState = "4";
+            matchState = "-14";
             text = "推迟";
         } else if ("-12".equals(matchState)) {
             //腰斩
-            matchState = "5";
+            matchState = "-12";
             text = "腰斩";
         } else if ("-13".equals(matchState)) {
             //中断
-            matchState = "5";
+            matchState = "-13";
             text = "腰斩";
         } else if ("-10".equals(matchState)) {
             //取消
-            matchState = "6";
+            matchState = "-10";
             text = "取消";
         } else if ("-11".equals(matchState)) {
             //待定
-            matchState = "7";
+            matchState = "-11";
             text = "待定";
         }
         dto.setMatchState(matchState);
