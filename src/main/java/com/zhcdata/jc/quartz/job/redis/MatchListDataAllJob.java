@@ -92,6 +92,8 @@ public class MatchListDataAllJob  implements Job {
         String startDateBd = "";
         String endDate = "";
         String endDateBd = "";
+        String startDateAll="";
+        String endDateAll="";
 
         try{
             SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -112,11 +114,13 @@ public class MatchListDataAllJob  implements Job {
                 String format = df1.format(calendar.getTime());
                 startDate = format + " 11:00:00";
                 startDateBd= format + " 09:59:59";
+                startDateAll=format + " 10:59:59";
 
                 calendar1.add(Calendar.DAY_OF_MONTH, 1);
                 String format1 = df1.format(calendar1.getTime());
                 endDate = format1 + " 11:00:00";
                 endDateBd= format1 + " 09:59:59";
+                endDateAll=format + " 10:59:59";
 
                 time = startDate.substring(0, 10);
 
@@ -156,7 +160,7 @@ public class MatchListDataAllJob  implements Job {
 
                 String str="";
                 List<MatchResult1> list5 = new ArrayList<>();
-                List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null,null,null);//全部 正在进行
+                List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDateAll, endDateAll, "4","","1",null,null,null);//全部 正在进行
                 for(int a=0;a<list5_1.size();a++){
                     if(!str.contains(list5_1.get(a).getMatchId())) {
                         MatchResult1 r1=list5_1.get(a);
@@ -174,7 +178,7 @@ public class MatchListDataAllJob  implements Job {
                     }
                 }
 
-                List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2",null,null,null);//全部 未开始
+                List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDateAll, endDateAll, "4","","2",null,null,null);//全部 未开始
                 for(int b=0;b<list5_2.size();b++){
                     if(!str.contains(list5_2.get(b).getMatchId())) {
                         MatchResult1 r2=list5_2.get(b);
@@ -192,7 +196,7 @@ public class MatchListDataAllJob  implements Job {
                     }
                 }
 
-                List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3",null,null,null);//全部 已经结束
+                List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDateAll, endDateAll, "4","","3",null,null,null);//全部 已经结束
                 for(int c=0;c<list5_3.size();c++) {
                     if (!str.contains(list5_3.get(c).getMatchId())) {
                         MatchResult1 r3 = list5_3.get(c);
