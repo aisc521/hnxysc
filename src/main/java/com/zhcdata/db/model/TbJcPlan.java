@@ -1,8 +1,9 @@
 package com.zhcdata.db.model;
 
+import javax.persistence.Column;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "tb_jc_plan")
 public class TbJcPlan implements Serializable {
@@ -113,6 +114,17 @@ public class TbJcPlan implements Serializable {
       */
     @Column(name = "plan_popularity")
     private Integer planPopularity;
+
+
+    public Integer getCnt() {
+        return cnt;
+    }
+
+    public void setCnt(Integer cnt) {
+        this.cnt = cnt;
+    }
+
+    private Integer cnt ;//传递参数需要用
 
     private static final long serialVersionUID = 1L;
 

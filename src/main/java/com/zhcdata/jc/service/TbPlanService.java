@@ -48,6 +48,8 @@ public interface TbPlanService {
 
     TbJcPlan queryPlanByPlanId(Long schemeId);
 
+    TbJcPlan queryPlanByPlanId(Long schemeId,Long userId);
+
     List<LatestPlanReminderDto>  queryLatestPlanReminder();
 
     String queryExpertIdByPlanId(String id);

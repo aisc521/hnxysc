@@ -31,6 +31,8 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     TbJcPlan queryPlanByPlanId(@Param("id")Long schemeId);
 
+    TbJcPlan queryPlanByPlanIdAndUserId(@Param("id")Long schemeId,@Param("userId")Long userId);
+
     List<LatestPlanReminderDto> queryLatestPlanReminder();
 
     String queryExpertIdByPlanId(String id);
