@@ -50,7 +50,7 @@ public class GetMatchInfoByIdListJob implements Job {
 
             Calendar calendar1 = Calendar.getInstance();
             calendar1.setTime(new Date());
-            calendar1.add(Calendar.DAY_OF_MONTH, 3);
+            calendar1.add(Calendar.DAY_OF_MONTH, 4);
             String endDate=day.format(calendar1.getTime());
 
             getMatchInfoByIdListService.dealMatch(startDate,endDate);

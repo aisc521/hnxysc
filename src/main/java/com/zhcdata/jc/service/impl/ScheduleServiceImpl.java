@@ -881,7 +881,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             matchState = "-1";
             text = "(完)";
             matchMinute = "90";
-        } else if ("-1".equals(matchState)) {
+        } else if ("5".equals(matchState)) {
             //点球
             matchState = "-1";
             text = "(完)";

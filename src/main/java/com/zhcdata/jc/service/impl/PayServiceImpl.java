@@ -85,7 +85,7 @@ public class PayServiceImpl implements PayService {
             paramsMap.put("orderId", orderId);
             paramsMap.put("oprSys", "O");
             paramsMap.put("amount", payMoney);
-            paramsMap.put("productName", "商品购买");
+            paramsMap.put("productName", description);
             paramsMap.put("description", description);
             paramsMap.put("spbillCreateIp", ip);
             paramsMap.put("tradeType", commonUtils.getPayTradType(Integer.parseInt(payType), "O"));

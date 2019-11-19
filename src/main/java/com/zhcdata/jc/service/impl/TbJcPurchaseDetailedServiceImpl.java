@@ -5,7 +5,8 @@ import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcExpertMapper;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
 import com.zhcdata.db.mapper.TbJcPurchaseDetailedMapper;
-import com.zhcdata.db.model.*;
+import com.zhcdata.db.model.TbJcPlan;
+import com.zhcdata.db.model.TbJcPurchaseDetailed;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.dto.PurchasedPlanDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
@@ -111,7 +112,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 }
             }
             if("99".equals(paramMap.get("payType"))){//点播
-                result = payService.discountRecommendUse(userId, tbJcPurchaseDetailed.getOrderId(), "点播卡购买", headBean.getSrc());
+                result = payService.discountRecommendUse(userId, tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
                 if("000000".equals(result.get("resCode"))){
                     //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
                     modifyOrderStatus(result,tbJcPlan,tbJcPurchaseDetailed,list);
@@ -402,7 +403,18 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
         }*/
+        addPlanPopularity(tbJcPlan);
 
+
+    }
+
+    /**
+     * 增加方案人气
+     * @param tbJcPlan
+     * @throws BaseException
+     */
+    @Override
+    public void addPlanPopularity(TbJcPlan tbJcPlan) throws BaseException {
         //增加对应方案的人气值
         TbJcPlan tbJcPlan1 = tbJcPlanMapper.queryPlanByPlanId(tbJcPlan.getId());
         Integer pop = tbJcPlan1.getPlanPopularity();
