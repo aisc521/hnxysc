@@ -114,7 +114,7 @@ public class PayServiceImpl implements PayService {
             paramsMap.put("amount", payMoney);
             paramsMap.put("productName", productName);
             String md5 = commonUtils.bodyMd5(paramsMap);
-            String returnStrJson = HttpUtils.PayHttpPost(accUrl, paramsMap, "10100103", "UTF-8", src, md5);
+            String returnStrJson = HttpUtils.PayHttpPost(accUrl, paramsMap, "10100110", "UTF-8", src, md5);
             Map<String, Object> bodyMap = handlePayJosn(returnStrJson);
             if (bodyMap != null) {
                 returnMap.putAll(bodyMap);
