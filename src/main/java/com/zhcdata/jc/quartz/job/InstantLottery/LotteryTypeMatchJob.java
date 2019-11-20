@@ -78,11 +78,11 @@ public class LotteryTypeMatchJob implements Job {
                             //根据bet007查询赛程表
                             Schedule schedule = lotteryTypeMatchJobService.queryScheduleByBet007(Integer.parseInt(lotteryTypeMatchRsp.getID_bet007()));
                             //根据id查询竞彩足球赔率表
-                            JcSchedulesp jcSchedulesp = lotteryTypeMatchJobService.queryJcSchedulespByScId(jcSchedule.getId());
+                            //JcSchedulesp jcSchedulesp = lotteryTypeMatchJobService.queryJcSchedulespByScId(jcSchedule.getId());
                             if(jcSchedule != null){//更新
-                                lotteryTypeMatchJobService.updateJcSchedule(jcSchedule,schedule,jcSchedulesp,lotteryTypeMatchRsp);
+                                lotteryTypeMatchJobService.updateJcSchedule(jcSchedule,schedule,lotteryTypeMatchRsp);
                             }else{//新增
-                                lotteryTypeMatchJobService.insertJcSchedule(schedule,jcSchedulesp,lotteryTypeMatchRsp);
+                                lotteryTypeMatchJobService.insertJcSchedule(schedule,lotteryTypeMatchRsp);
                             }
                         }else{
                             log.error("彩票赛程与球探网ID关联表定时任务返回数据不是竞彩玩法不需入库");

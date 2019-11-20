@@ -63,7 +63,7 @@ public interface LotteryTypeMatchJobService {
      * @param jcSchedulesp
      * @param lotteryTypeMatchRsp
      */
-    void updateJcSchedule(JcSchedule jcSchedule, Schedule schedule, JcSchedulesp jcSchedulesp, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
+    void updateJcSchedule(JcSchedule jcSchedule, Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
 
     /**
      * 新增竞彩表
@@ -71,5 +71,5 @@ public interface LotteryTypeMatchJobService {
      * @param jcSchedulesp
      * @param lotteryTypeMatchRsp
      */
-    void insertJcSchedule(Schedule schedule, JcSchedulesp jcSchedulesp, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
+    void insertJcSchedule(Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
 }
