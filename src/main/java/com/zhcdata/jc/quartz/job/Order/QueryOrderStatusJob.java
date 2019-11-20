@@ -10,11 +10,10 @@ import com.zhcdata.jc.service.PayService;
 import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
 import com.zhcdata.jc.service.TbPlanService;
 import lombok.extern.slf4j.Slf4j;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.entity.Example;
 
@@ -29,10 +28,9 @@ import java.util.Map;
  * @Author cuishuai
  * @Date 2019/10/11 9:27
  */
-@Configuration
-@EnableScheduling
 @Slf4j
 @Component
+@DisallowConcurrentExecution
 public class QueryOrderStatusJob implements Job {
 
     @Resource
@@ -72,7 +70,7 @@ public class QueryOrderStatusJob implements Job {
                     else if(new BigDecimal(String.valueOf(result.get("thirdAmount"))).intValue() == 2 && tbJcPurchaseDetailedList1 > 0){//首单两元 但是 此用户已经有支付成功的状态  退款
                         operateRefundFrozenToMoney(tbJcPurchaseDetailed,result,5l);
                     } //普通订单重复退款
-                    else if(tbJcPlan.getCnt()>1){
+                    else if(tbJcPlan.getCnt()>0){
                         operateRefundFrozenToMoney(tbJcPurchaseDetailed,result,6l);
                     }
                     else{
@@ -126,7 +124,16 @@ public class QueryOrderStatusJob implements Job {
     }
     public void operateRefundFrozenToMoney(TbJcPurchaseDetailed tbJcPurchaseDetailed,Map<String, Object> result,Long payStatus){
         try {
-            String resCode = tbJcPurchaseDetailedService.refundFrozenToMoney("2",tbJcPurchaseDetailed,payService);
+            String type = "";
+
+            if(payStatus == 4){
+                type = "2";
+            }else if(payStatus == 5){
+                type = "3";
+            }else if(payStatus == 6){
+                type = "1";
+            }
+            String resCode = tbJcPurchaseDetailedService.refundFrozenToMoney(type,tbJcPurchaseDetailed,payService);
             if("000000".equals(resCode) || "109023".equals(resCode) || "010124".equals(resCode)){//退款成功
                 //更新订单表信息
                 tbJcPurchaseDetailed.setAwardStatus(Long.valueOf(0));
@@ -134,6 +141,9 @@ public class QueryOrderStatusJob implements Job {
                 tbJcPurchaseDetailed.setUpdateTime(new Date());
                 //获取返回金额 实际支付金额  ******************  返回字段名称暂时未定
                 tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(String.valueOf(result.get("thirdAmount"))));
+                if(result.get("thirdAmount")!=null){
+                    tbJcPurchaseDetailed.setPayId(String.valueOf(result.get("payingId")));
+                }
                 Example example = new Example(TbJcPurchaseDetailed.class);
                 example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
                 int j = tbJcPurchaseDetailedService.updateByExampleSelective(tbJcPurchaseDetailed,example);

@@ -258,31 +258,36 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
                 String payType = String.valueOf(tbJcPurchaseDetailed.getPayType());
                 String remark = "";
                 if("20".equals(payType)){
-                    remark = "微信支付-方案未中退款";
+                   // remark = "微信支付-方案未中退款";
+                    remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
                 if("21".equals(payType)){
-                    remark = "支付宝支付-方案未中退款";
+                    //remark = "支付宝支付-方案未中退款";
+                    remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
                 if("22".equals(payType)){
-                    remark = "微信支付-方案未中退款";
+                   // remark = "微信支付-方案未中退款";
+                    remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
                 if("0".equals(payType)){
-                    remark = "余额支付-方案未中退款";
+                    //remark = "余额支付-方案未中退款";
+                    remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
                 if("99".equals(payType)){
-                    remark = "点播卡支付-方案未中退款";
+                    //remark = "点播卡支付-方案未中退款";
+                    remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundDiscount(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(),"1",remark,tbJcPurchaseDetailed.getSrc());
                     }
