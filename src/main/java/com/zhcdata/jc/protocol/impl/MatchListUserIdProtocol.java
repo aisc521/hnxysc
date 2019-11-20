@@ -216,6 +216,7 @@ public class MatchListUserIdProtocol implements BaseProtocol {
             }
 
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(df.parse(time));
             calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -240,7 +241,7 @@ public class MatchListUserIdProtocol implements BaseProtocol {
                     r1.setStatusDescFK("1");
                     if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                         Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
-                        String len = getMinute(df.format(ts), df.format(new Date()));
+                        String len = getMinute(df1.format(ts), df1.format(new Date()));
                         r1.setMatchState(len+"'");
                     }else {
                         r1.setMatchState("'完'");
@@ -249,7 +250,7 @@ public class MatchListUserIdProtocol implements BaseProtocol {
                     r1.setStatusDescFK("3");
                     if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                         Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
-                        String len = getMinute(df.format(ts), df.format(new Date()));
+                        String len = getMinute(df1.format(ts), df1.format(new Date()));
                         r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");
                     }else {
                         r1.setMatchState("'完'");
