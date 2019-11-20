@@ -121,6 +121,9 @@ public class HandleExpertRecordJob implements Job {
                     int jin5z = 0;        //近 5中几
                     int jin4z = 0;        //近 4中几
                     int jin3z = 0;        //近 3中几
+                    //if(String.valueOf(expertResults.get(p).getId()).equals("111")){
+                    //    String sd="";
+                    //}
 
                     try {
                         List<TbJcPlan> planResults = tbPlanService.queryPlanList(String.valueOf(expertResults.get(p).getId()), "0"); //已结束方案
@@ -321,13 +324,13 @@ public class HandleExpertRecordJob implements Job {
                                 }
 
                                 //当前专家方案
-                                lastDayPayMoney = lastDayPayMoney.add(pay_money);                          //支出
-                                lastDayReturnMoney = lastDayReturnMoney.add(return_money);                 //回报
+                                lastDayPayMoney = lastDayPayMoney.add(pay_money);                                           //支出
+                                lastDayReturnMoney = lastDayReturnMoney.add(return_money.multiply(new BigDecimal(2)));  //回报
 
                                 if (isServerDay == 1) {
                                     //近七天
                                     lastSevenDayPayMoney = lastSevenDayPayMoney.add(pay_money);
-                                    lastSevenDayReturnMoney = lastSevenDayReturnMoney.add(return_money);
+                                    lastSevenDayReturnMoney = lastSevenDayReturnMoney.add(return_money.multiply(new BigDecimal(2)));
                                 }
                             }
 
@@ -403,13 +406,13 @@ public class HandleExpertRecordJob implements Job {
                             info.setFour_z(String.valueOf(jin4z));                                                       //近4中几
                             info.setThree_z(String.valueOf(jin3z));                                                      //近3中几
                             if (lastSevenDayPayMoney.compareTo(new BigDecimal(0)) > 0) {
-                                info.setReturnSevenDays(Double.valueOf(Math.floor(lastSevenDayReturnMoney.divide(lastSevenDayPayMoney, 2).multiply(new BigDecimal(100)).doubleValue())));  //七天回报率
+                                info.setReturnSevenDays(Double.valueOf(Math.floor(lastSevenDayReturnMoney.multiply(new BigDecimal(100)).divide(lastSevenDayPayMoney, 2).doubleValue())));  //七天回报率
                             } else {
                                 info.setReturnSevenDays(new Double(0));
                             }
                             //info.setYlSevenDays("0");                                                                                                                           //七天盈利率
                             if (lastDayPayMoney.compareTo(new BigDecimal(0)) > 0) {
-                                info.setReturnAll(Double.valueOf(Math.floor(lastDayReturnMoney.divide(lastDayPayMoney, 2).multiply(new BigDecimal(100)).doubleValue())));                  //全部回报率
+                                info.setReturnAll(Double.valueOf(Math.floor(lastDayReturnMoney.multiply(new BigDecimal(100)).divide(lastDayPayMoney, 2).doubleValue())));                  //全部回报率
                             } else {
                                 info.setReturnAll(new Double(0));
                             }
