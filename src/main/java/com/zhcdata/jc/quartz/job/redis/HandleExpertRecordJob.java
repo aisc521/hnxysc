@@ -121,14 +121,17 @@ public class HandleExpertRecordJob implements Job {
                     int jin5z = 0;        //近 5中几
                     int jin4z = 0;        //近 4中几
                     int jin3z = 0;        //近 3中几
-                    //if(String.valueOf(expertResults.get(p).getId()).equals("111")){
-                    //    String sd="";
-                    //}
+                    if(String.valueOf(expertResults.get(p).getId()).equals("63")){
+                        String sd="";
+                    }
 
                     try {
                         List<TbJcPlan> planResults = tbPlanService.queryPlanList(String.valueOf(expertResults.get(p).getId()), "0"); //已结束方案
                         if (planResults != null && planResults.size() > 0) {
                             for (int k = 0; k < planResults.size(); k++) {
+                                if(planResults.get(k).getId()==398){
+                                    String sfsd="";
+                                }
                                 int xz1 = 0;                                          //记录选择个数(投入金额)
                                 int xz2 = 0;
                                 BigDecimal return_money = new BigDecimal(0);     //当前方案奖金
@@ -224,7 +227,7 @@ public class HandleExpertRecordJob implements Job {
                                                     if (Double.valueOf(spfs[0]) > 0) {
                                                         if (m == 0) {
                                                             xz1 += 1;
-                                                        } else if (m == 2) {
+                                                        } else if (m == 1) {
                                                             xz2 += 1;
                                                         }
 
@@ -235,7 +238,7 @@ public class HandleExpertRecordJob implements Job {
                                                     if (Double.valueOf(spfs[1]) > 0) {
                                                         if (m == 0) {
                                                             xz1 += 1;
-                                                        } else if (m == 2) {
+                                                        } else if (m == 1) {
                                                             xz2 += 1;
                                                         }
                                                         if (Integer.valueOf(scores[0]) == Integer.valueOf(scores[1])) {
@@ -245,7 +248,7 @@ public class HandleExpertRecordJob implements Job {
                                                     if (Double.valueOf(spfs[2]) > 0) {
                                                         if (m == 0) {
                                                             xz1 += 1;
-                                                        } else if (m == 2) {
+                                                        } else if (m == 1) {
                                                             xz2 += 1;
                                                         }
                                                         if (Integer.valueOf(scores[0]) < Integer.valueOf(scores[1])) {
@@ -265,7 +268,7 @@ public class HandleExpertRecordJob implements Job {
                                                     if (Double.valueOf(rqspfs[0]) > 0) {
                                                         if (m == 0) {
                                                             xz1 += 1;
-                                                        } else if (m == 2) {
+                                                        } else if (m == 1) {
                                                             xz2 += 1;
                                                         }
 
@@ -277,7 +280,7 @@ public class HandleExpertRecordJob implements Job {
                                                     if (Double.valueOf(rqspfs[1]) > 0) {
                                                         if (m == 0) {
                                                             xz1 += 1;
-                                                        } else if (m == 2) {
+                                                        } else if (m == 1) {
                                                             xz2 += 1;
                                                         }
                                                         if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) == 0) {
@@ -287,7 +290,7 @@ public class HandleExpertRecordJob implements Job {
                                                     if (Double.valueOf(rqspfs[2]) > 0) {
                                                         if (m == 0) {
                                                             xz1 += 1;
-                                                        } else if (m == 2) {
+                                                        } else if (m == 1) {
                                                             xz2 += 1;
                                                         }
                                                         if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) < 0) {
@@ -297,9 +300,9 @@ public class HandleExpertRecordJob implements Job {
                                                 }
                                             }
 
-                                            if(matchlist.get(m).getMatchState().equals("-10")||matchlist.get(m).getMatchState().equals("-12")||matchlist.get(m).getMatchState().equals("-14")){
+                                            if (matchlist.get(m).getMatchState().equals("-10") || matchlist.get(m).getMatchState().equals("-12") || matchlist.get(m).getMatchState().equals("-14")) {
                                                 //腰斩、取消、推迟的比赛，sp值为1
-                                                money_match=new BigDecimal(1);
+                                                money_match = new BigDecimal(1);
                                             }
 
                                             if (m == 0) {
@@ -328,6 +331,7 @@ public class HandleExpertRecordJob implements Job {
                                 lastDayReturnMoney = lastDayReturnMoney.add(return_money.multiply(new BigDecimal(2)));  //回报
 
                                 if (isServerDay == 1) {
+                                    System.out.println("方案号"+planResults.get(k).getId()+"奖金:" + return_money.multiply(new BigDecimal(2)) + "," + "投注金额:" + pay_money);
                                     //近七天
                                     lastSevenDayPayMoney = lastSevenDayPayMoney.add(pay_money);
                                     lastSevenDayReturnMoney = lastSevenDayReturnMoney.add(return_money.multiply(new BigDecimal(2)));
