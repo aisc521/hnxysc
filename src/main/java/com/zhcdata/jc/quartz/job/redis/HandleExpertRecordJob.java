@@ -121,17 +121,17 @@ public class HandleExpertRecordJob implements Job {
                     int jin5z = 0;        //近 5中几
                     int jin4z = 0;        //近 4中几
                     int jin3z = 0;        //近 3中几
-                    if(String.valueOf(expertResults.get(p).getId()).equals("63")){
-                        String sd="";
-                    }
+                    //if(String.valueOf(expertResults.get(p).getId()).equals("63")){
+                    //    String sd="";
+                    //}
 
                     try {
                         List<TbJcPlan> planResults = tbPlanService.queryPlanList(String.valueOf(expertResults.get(p).getId()), "0"); //已结束方案
                         if (planResults != null && planResults.size() > 0) {
                             for (int k = 0; k < planResults.size(); k++) {
-                                if(planResults.get(k).getId()==398){
-                                    String sfsd="";
-                                }
+                                //if(planResults.get(k).getId()==486){
+                                //    String sfsd="";
+                                //}
                                 int xz1 = 0;                                          //记录选择个数(投入金额)
                                 int xz2 = 0;
                                 BigDecimal return_money = new BigDecimal(0);     //当前方案奖金
@@ -310,7 +310,7 @@ public class HandleExpertRecordJob implements Job {
                                                 return_money = money_match;
                                             } else {
                                                 //第二场比赛，目前仅支持最多两场
-                                                return_money = return_money.multiply(money_match).multiply(new BigDecimal(2));
+                                                return_money = return_money.multiply(money_match);
                                             }
                                         }
                                     }
