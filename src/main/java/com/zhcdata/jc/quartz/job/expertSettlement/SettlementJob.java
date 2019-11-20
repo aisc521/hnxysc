@@ -1,3 +1,4 @@
+/*
 package com.zhcdata.jc.quartz.job.expertSettlement;
 
 import com.zhcdata.db.model.TbJcExpertSettlement;
@@ -17,11 +18,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+*/
 /**
  * @Description 专家销售统计 一个月一次
  * @Author cuishuai
  * @Date 2019/11/15 14:57
- */
+ *//*
+
 @Configuration
 @EnableScheduling
 @Slf4j
@@ -74,3 +77,4 @@ public class SettlementJob implements Job {
         log.error("专家销售结算统计定时任务结束,耗时："+(System.currentTimeMillis()-s)+"毫秒");
     }
 }
+*/
