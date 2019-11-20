@@ -20,7 +20,7 @@ public class PurchasedPlanDto {
     private String zFiveDays;
     private String zSevenDays;
     private String titleShowType;
-    private String price;
+    private BigDecimal price;
     private String createTime;
 
     private String matchName;
@@ -320,11 +320,11 @@ public class PurchasedPlanDto {
         this.titleShowType = titleShowType;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

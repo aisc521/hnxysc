@@ -143,10 +143,10 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateJcSchedule(JcSchedule jcSchedule, Schedule schedule, JcSchedulesp jcSchedulesp, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException {
+    public void updateJcSchedule(JcSchedule jcSchedule, Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException {
         Example example = new Example(JcMatchLottery.class);
         example.createCriteria().andEqualTo("id",jcSchedule.getId());
-        int i = jcScheduleMapper.updateByExampleSelective(generJcSchedule(jcSchedule,schedule,jcSchedulesp,lotteryTypeMatchRsp),example);
+        int i = jcScheduleMapper.updateByExampleSelective(generJcSchedule(jcSchedule,schedule,lotteryTypeMatchRsp),example);
         if(i <= 0){
             throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
                     ProtocolCodeMsg.UPDATE_FAILE.getMsg());
@@ -155,16 +155,16 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertJcSchedule(Schedule schedule, JcSchedulesp jcSchedulesp, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException {
+    public void insertJcSchedule(Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException {
         JcSchedule jcSchedule = new JcSchedule();
-        int i = jcScheduleMapper.insertSelective(generJcSchedule(jcSchedule,schedule,jcSchedulesp,lotteryTypeMatchRsp));
+        int i = jcScheduleMapper.insertSelective(generJcSchedule(jcSchedule,schedule,lotteryTypeMatchRsp));
         if(i <= 0){
             throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
                     ProtocolCodeMsg.INSERT_FAILE.getMsg());
         }
     }
 
-    private JcSchedule generJcSchedule(JcSchedule jcSchedule,Schedule schedule, JcSchedulesp jcSchedulesp, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException {
+    private JcSchedule generJcSchedule(JcSchedule jcSchedule,Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException {
         jcSchedule.setAddtime(new Date());
         jcSchedule.setScheduleid(Integer.valueOf(lotteryTypeMatchRsp.getID_bet007()));
         jcSchedule.setMatchid(lotteryTypeMatchRsp.getID());
