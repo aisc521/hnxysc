@@ -71,6 +71,14 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.PAY_TYPE.getMsg());
             return map;
         }
+
+        String flag = paramMap.get("flag");
+        if (Strings.isNullOrEmpty(flag) || !NumberUtil.isNumber(flag)) {
+            LOGGER.info("[" + ProtocolCodeMsg.PAY_FLAG.getMsg() + "]:flag---" + payType);
+            map.put("resCode", ProtocolCodeMsg.PAY_FLAG.getCode());
+            map.put("message", ProtocolCodeMsg.PAY_FLAG.getMsg());
+            return map;
+        }
         return null;
     }
 
@@ -127,6 +135,13 @@ public class SchemePurchaseProtocol implements BaseProtocol {
 
         //判断是否是首次购买
         Integer list = tbJcPurchaseDetailedService.queryIsFirstBuy(Long.valueOf(String.valueOf(paramMap.get("userId"))));
+
+        String flag = paramMap.get("flag");
+        if(list==0&&!"1".equals(flag)){
+            resultMap.put("resCode", ProtocolCodeMsg.PAY_FLAG_EXIT.getCode());
+            resultMap.put("message", ProtocolCodeMsg.PAY_FLAG_EXIT.getMsg());
+            return resultMap;
+        }
         if("21".equals(payType) && list <= 0){
             resultMap.put("resCode", ProtocolCodeMsg.MONEY_ERROR.getCode());
             resultMap.put("message", "支付宝支持的交易金额为大于10元");

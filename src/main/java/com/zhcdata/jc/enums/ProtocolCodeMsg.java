@@ -116,7 +116,11 @@ public enum ProtocolCodeMsg {
     FIRST_BUY_ERROR("101027", "首单不支持点播卡支付!"),
     EXPERT_ERROR("101028", "专家信息为空!"),
     CELL_IS_NOY_NULL("101029", "手机号不能为空!"),
-    SF14_startIssue("090401","开始期次不能为空");
+    SF14_startIssue("090401","开始期次不能为空"),
+
+    PAY_FLAG("022801","标识不能为空"),
+
+    PAY_FLAG_EXIT("022802","请重新获取支付"),
 
     ;
     private String code;
