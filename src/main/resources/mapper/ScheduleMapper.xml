@@ -912,7 +912,9 @@
         <if test="type == 2">/*北单*/
             and lottery.LOTTERY = 'BJDC'
         </if>
-        and sc.bfShow=0
+        <if test="type != 3">
+            and sc.bfShow=0
+        </if>
         <if test="panKouTypeList != null and panKouTypeList.size>0">
             and goal.FirstGoal in
             <foreach collection="panKouTypeList" item="name" index="index" open="(" close=")" separator=",">
