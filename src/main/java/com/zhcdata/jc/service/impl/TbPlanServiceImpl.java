@@ -53,8 +53,8 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public int updateStatus(String isRight, String planHit, String id) {
-        return tbJcPlanMapper.updateStatus(isRight,planHit,id);
+    public int updateStatus(String isRight, String planHit, String id,String flag) {
+        return tbJcPlanMapper.updateStatus(isRight,planHit,id,flag);
     }
 
     @Override
