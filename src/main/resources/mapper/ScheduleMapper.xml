@@ -1090,7 +1090,7 @@
         LEFT JOIN jc_match_lottery l on sc.ScheduleID = l.ID_BET007 and l.LOTTERY = 'BJDC'
         LEFT JOIN sclass s on sc.SclassID = s.sclassID
         LEFT JOIN team t1 on sc.HomeTeamID = t1.TeamID
-        LEFT JOIN team t2 on sc.GuestTeamID = t1.TeamID
+        LEFT JOIN team t2 on sc.GuestTeamID = t2.TeamID
         where sc.ScheduleID = #{matchId}
     </select>
 
