@@ -167,4 +167,6 @@ public interface ScheduleMapper {
     List<MatchResult1> selectNowIssueNum();
 
     List<Schedule> queryMatchByStatus();
+
+    Schedule queryLastNoCupMatchByTeam(@Param("teamId") Integer teamId,@Param("date") Date matchTime);
 }

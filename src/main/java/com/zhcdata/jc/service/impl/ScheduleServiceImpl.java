@@ -8,9 +8,11 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.mapper.TbJcMatchLineupMapper;
+import com.zhcdata.db.mapper.TbSclassMapper;
 import com.zhcdata.db.mapper.TbScoreMapper;
 import com.zhcdata.db.model.JcMatchLineupInfo;
 import com.zhcdata.db.model.Schedule;
+import com.zhcdata.db.model.SclassInfo;
 import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.enums.RedisCodeMsg;
 import com.zhcdata.jc.service.ScheduleService;
@@ -18,6 +20,7 @@ import com.zhcdata.jc.tools.Const;
 import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.utils.time.ClockUtil;
@@ -44,6 +47,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     private TbJcMatchLineupMapper matchLineupMapper;
     @Resource
     private TbScoreMapper scoreMapper;
+    @Autowired
+    private TbSclassMapper sclassMapper;
 
     @Override
     public Schedule queryScheduleById(Long idBet007) {
@@ -233,10 +238,23 @@ public class ScheduleServiceImpl implements ScheduleService {
         Date matchtime = schedule.getMatchtime();
         List<IntegralRankingDto> hostInfoList = new ArrayList<>();
         List<IntegralRankingDto> guestInfoList = new ArrayList<>();
+        List<SclassInfo> sclassInfos = sclassMapper.querySClass(String.valueOf(sclassid));
+        //联赛为true，杯赛为false
+        //判断当前比赛是否是杯赛
+        boolean flag = false;
+        if (sclassInfos != null && sclassInfos.size() > 0) {
+            flag = Short.parseShort("2") == sclassInfos.get(0).getKind();
+        }
+
         //主队积分数据  积分排行
-        //比赛数、胜负、进球、积分、排名、胜率
-        //总
         Integer hometeamid = schedule.getHometeamid();
+        //比赛数、胜负、进球、积分、排名、胜率
+        if (flag) {
+            Schedule beforeSchedule = scheduleMapper.queryLastNoCupMatchByTeam(hometeamid, schedule.getMatchtime());
+            sclassid = beforeSchedule.getSclassid();
+            subSclassID = beforeSchedule.getSubsclassid();
+        }
+        //总
         IntegralRankingDto homeTotalData = scoreMapper.queryIntegralRanking(sclassid, subSclassID, null, hometeamid, season);
         if (homeTotalData == null) {
             homeTotalData = new IntegralRankingDto();
@@ -259,9 +277,14 @@ public class ScheduleServiceImpl implements ScheduleService {
         hostInfoList.add(homeGuestData);
         hostInfoList.add(homeNearly6);
         //客队积分数据
-        //比赛数、胜负、进球、积分、排名、胜率
-        //总
         Integer guestteamid = schedule.getGuestteamid();
+        //比赛数、胜负、进球、积分、排名、胜率
+        if (flag) {
+            Schedule beforeSchedule = scheduleMapper.queryLastNoCupMatchByTeam(guestteamid, schedule.getMatchtime());
+            sclassid = beforeSchedule.getSclassid();
+            subSclassID = beforeSchedule.getSubsclassid();
+        }
+        //总
         IntegralRankingDto guestTotalData = scoreMapper.queryIntegralRanking(sclassid, subSclassID, null, guestteamid, season);
         if (guestTotalData == null) {
             guestTotalData = new IntegralRankingDto();
