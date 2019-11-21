@@ -111,7 +111,7 @@
     LEFT JOIN jc_schedulesp o on o.ID = jcs.ID
     LEFT JOIN team t ON s.hometeamid = t.teamid
     LEFT JOIN team t2 ON s.guestteamid = t2.teamid
-    where  s.ScheduleID = #{matchId}and o.kind = '2' and o.first_sf3 is not null
+    where  s.ScheduleID = #{matchId} and o.kind = '2' and o.first_sf3 is not null and o.first_sf3 != ''
   </select>
   <select id="querySameOddsMatchByOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
     select * from (
