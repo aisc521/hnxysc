@@ -22,6 +22,7 @@ public interface LotteryTypeMatchJobService {
      */
     JcMatchLottery queryJcMatchLotteryByBet007(long Betoo7,String gameType);
 
+    JcMatchLottery queryJcMatchLotteryByBet007_1(long num,String lottery,String id);
     /**
      * 更新JcMatchLottery数据
      * @param jcMatchLottery
