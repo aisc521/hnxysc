@@ -1001,6 +1001,7 @@
             case when pg.type = '1' then '1'
                  when pg.type = '2' then '2'
                  when pg.type = '3' then '3'
+                 when pg.type = '4' then '4'
                  end as 'matchtype',
             case when pg.type = '1' then 'JCZQ'
                  when pg.type = '2' then 'BJDC'
@@ -1090,7 +1091,7 @@
         LEFT JOIN jc_match_lottery l on sc.ScheduleID = l.ID_BET007 and l.LOTTERY = 'BJDC'
         LEFT JOIN sclass s on sc.SclassID = s.sclassID
         LEFT JOIN team t1 on sc.HomeTeamID = t1.TeamID
-        LEFT JOIN team t2 on sc.GuestTeamID = t1.TeamID
+        LEFT JOIN team t2 on sc.GuestTeamID = t2.TeamID
         where sc.ScheduleID = #{matchId}
     </select>
 
