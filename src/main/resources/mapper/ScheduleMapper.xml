@@ -1151,4 +1151,8 @@
     <select id="queryMatchByStatus" resultType="com.zhcdata.db.model.Schedule">
         select * from schedule sc where sc.MatchState in ('1','2','3','4','5')
     </select>
+    <select id="queryLastNoCupMatchByTeam" resultType="com.zhcdata.db.model.Schedule">
+        SELECT s.* from `schedule` s left join sclass ss on s.sclassID = ss.sclassID
+         where ss.kind = 1 and (s.homeTeamId=#{teamId} or s.guestTeamId=#{teamId}) and s.matchTime &lt; #{date} ORDER BY s.matchTime desc LIMIT 1
+    </select>
 </mapper>
