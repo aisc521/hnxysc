@@ -29,7 +29,7 @@ public interface TbJcExpertService {
      * 所有专家列表
      * @return
      */
-    List<ExpertInfo> queryExperts();
+    List<ExpertInfo> queryExperts(String time);
 
     /**
      * 专家榜

@@ -36,8 +36,8 @@ public class TbJcExpertServiceImpl implements TbJcExpertService {
     }
 
     @Override
-    public List<ExpertInfo> queryExperts() {
-        return tbJcExpertMapper.queryExperts();
+    public List<ExpertInfo> queryExperts(String time) {
+        return tbJcExpertMapper.queryExperts(time);
     }
 
     @Override

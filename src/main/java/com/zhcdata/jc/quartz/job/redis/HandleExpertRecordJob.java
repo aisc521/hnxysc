@@ -7,6 +7,7 @@ import com.zhcdata.jc.service.TbJcExpertService;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbJcVictoryService;
 import com.zhcdata.jc.service.TbPlanService;
+import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.javassist.bytecode.stackmap.BasicBlock;
 import org.omg.PortableInterceptor.INACTIVE;
@@ -43,6 +44,8 @@ public class HandleExpertRecordJob implements Job {
     @Resource
     private TbJcVictoryService tbJcVictoryService;
 
+    @Resource
+    private RedisUtils redisUtils;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -66,7 +69,8 @@ public class HandleExpertRecordJob implements Job {
             calendar.add(Calendar.DAY_OF_MONTH, -6);                    //七天
             String timeSeven = df.format(calendar.getTime());
 
-            List<ExpertInfo> expertResults = tbJcExpertService.queryExperts();   //专家列表
+            String time = (String) redisUtils.hget("SOCCER:HSET:HandleExpertRecordJob", "TIME");
+            List<ExpertInfo> expertResults = tbJcExpertService.queryExperts(time);   //专家列表
             if (expertResults != null && expertResults.size() > 0) {
                 for (int p = 0; p < expertResults.size(); p++) {
                     //当前连中
@@ -331,7 +335,7 @@ public class HandleExpertRecordJob implements Job {
                                 lastDayReturnMoney = lastDayReturnMoney.add(return_money.multiply(new BigDecimal(2)));  //回报
 
                                 if (isServerDay == 1) {
-                                    System.out.println("方案号"+planResults.get(k).getId()+"奖金:" + return_money.multiply(new BigDecimal(2)) + "," + "投注金额:" + pay_money);
+                                    System.out.println("方案号" + planResults.get(k).getId() + "奖金:" + return_money.multiply(new BigDecimal(2)) + "," + "投注金额:" + pay_money);
                                     //近七天
                                     lastSevenDayPayMoney = lastSevenDayPayMoney.add(pay_money);
                                     lastSevenDayReturnMoney = lastSevenDayReturnMoney.add(return_money.multiply(new BigDecimal(2)));
@@ -421,7 +425,7 @@ public class HandleExpertRecordJob implements Job {
                                 info.setReturnAll(new Double(0));
                             }
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
-                            info.setSevenDaysHit(seven+"中"+seven_z);
+                            info.setSevenDaysHit(seven + "中" + seven_z);
                             //if(info.getSevenDaysHit().equals("0中0")){
                             //    String s="";
                             //}
@@ -532,7 +536,7 @@ public class HandleExpertRecordJob implements Job {
                             info.setFour_z(String.valueOf(0));                                  //近4中几
                             info.setThree_z(String.valueOf(0));                                 //近3中几
                             info.setReturnSevenDays(new Double(0));
-                                                                                                 //七天回报率/七天盈利率
+                            //七天回报率/七天盈利率
                             info.setReturnAll(new Double(0));                             //全部回报率
                             info.setExpertId(String.valueOf(expertResults.get(p).getId()));
                             info.setYlSevenDays(new Double(0));
@@ -550,6 +554,9 @@ public class HandleExpertRecordJob implements Job {
                         ex.printStackTrace();
                     }
                 }
+                redisUtils.hset("SOCCER:HSET:HandleExpertRecordJob", "TIME", df.format(new Date()));
+            } else {
+                log.info("因为没有新结束的方案,所以不需要处理战绩。上次计算战绩时间" + time);
             }
         } catch (Exception ex) {
             log.error("[处理专家战绩异常]");

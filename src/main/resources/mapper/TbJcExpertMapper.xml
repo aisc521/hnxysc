@@ -151,7 +151,8 @@
     	GROUP BY e.id
   </select>
   <select id="queryExperts" resultType="com.zhcdata.jc.dto.ExpertInfo">
-    SELECT * from tb_jc_expert
+    SELECT * from tb_jc_expert where id in(
+    SELECT ascription_expert id from tb_jc_plan where update_time>=#{time} GROUP BY ascription_expert)
   </select>
   <select id="queryExpertsByType" resultType="com.zhcdata.jc.dto.ExpertInfoBdDto">
       select  * from (
