@@ -1092,7 +1092,7 @@
         LEFT JOIN sclass s on sc.SclassID = s.sclassID
         LEFT JOIN team t1 on sc.HomeTeamID = t1.TeamID
         LEFT JOIN team t2 on sc.GuestTeamID = t2.TeamID
-        where sc.ScheduleID = #{matchId}
+        where sc.ScheduleID = #{matchId} 
     </select>
 
     <select id="selectByStatusInTime" resultType="com.zhcdata.db.model.Schedule">
