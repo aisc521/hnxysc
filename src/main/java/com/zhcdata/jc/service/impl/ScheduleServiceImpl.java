@@ -243,7 +243,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         //判断当前比赛是否是杯赛
         boolean flag = false;
         if (sclassInfos != null && sclassInfos.size() > 0) {
-            flag = "2".equals(sclassInfos.get(0).getKind());
+            flag = Short.parseShort("2") == sclassInfos.get(0).getKind();
         }
 
         //主队积分数据  积分排行
