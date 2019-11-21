@@ -944,6 +944,7 @@
         <if test="panKouTypeList != null or matchTypeList != null">
             ,abs(a.ord)
         </if>
+        ,matchid asc
     </select>
 
 
