@@ -101,7 +101,8 @@
     sum(case when hometeamid =  #{teamId} then homescore else guestscore END) goal,
     sum(case when hometeamid =  #{teamId} then guestscore else homescore end) lost
     FROM(
-    SELECT * from schedule where matchState = -1
+    SELECT s.* from schedule s left join sclass ss ON s.SclassID = ss.sclassID
+				WHERE ss.kind = 1 matchState = -1
               AND matchtime <![CDATA[<]]> #{matchTime}
      AND (hometeamid = #{teamId} or guestteamid = #{teamId})
      order by matchtime desc limit #{count}) t
@@ -944,6 +945,7 @@
         <if test="panKouTypeList != null or matchTypeList != null">
             ,abs(a.ord)
         </if>
+        ,matchid asc
     </select>
 
 

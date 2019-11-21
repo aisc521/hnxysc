@@ -247,6 +247,8 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
                 map.put("ratioLose", loseOdds);
             }
             map.put("list", list);
+        }else {
+            map.put("list", Lists.newArrayList());
         }
 
         return map;

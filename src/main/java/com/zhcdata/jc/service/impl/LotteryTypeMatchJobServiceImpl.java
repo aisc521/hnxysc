@@ -50,6 +50,10 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
     public JcMatchLottery queryJcMatchLotteryByBet007(long Betoo7,String gameType) {
         return jcMatchLotteryMapper.queryJcMatchLotteryByBet007(Betoo7,gameType);
     }
+    @Override
+    public JcMatchLottery queryJcMatchLotteryByBet007_1(long num,String lottery,String id) {
+        return jcMatchLotteryMapper.queryJcMatchLotteryByBet007_1(num,lottery,id);
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

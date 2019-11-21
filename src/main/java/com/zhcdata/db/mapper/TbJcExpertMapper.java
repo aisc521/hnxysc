@@ -15,7 +15,7 @@ public interface TbJcExpertMapper extends Mapper<TbJcExpert> {
 
     ExpertInfo queryExpertDetails(@Param("expertId")long l);
 
-    List<ExpertInfo> queryExperts();
+    List<ExpertInfo> queryExperts(@Param("time")String time);
 
     List<ExpertInfoBdDto> queryExpertsByType(@Param("type") String type);
 

@@ -9,6 +9,8 @@ import java.util.List;
 public interface JcMatchLotteryMapper extends Mapper<JcMatchLottery> {
     JcMatchLottery queryJcMatchLotteryByBet007(@Param("bet007Id") long betoo7,@Param("gameType") String gameType);
 
+    JcMatchLottery queryJcMatchLotteryByBet007_1(@Param("num") long num,@Param("lottery") String lottery,@Param("id") String id);
+
     JcMatchLottery queryJcMatchLotteryByIssueNumAndNoId(@Param("issueNum") String issueNum, @Param("noId") String noId);
 
     List<JcMatchLottery> queryJcMatchLotteryByMatchIdAndType(@Param("matchId")Integer matchId);
