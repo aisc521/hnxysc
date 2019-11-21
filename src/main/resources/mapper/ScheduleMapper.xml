@@ -102,7 +102,7 @@
     sum(case when hometeamid =  #{teamId} then guestscore else homescore end) lost
     FROM(
     SELECT s.* from schedule s left join sclass ss ON s.SclassID = ss.sclassID
-				WHERE ss.kind = 1 matchState = -1
+				WHERE ss.kind = 1 and matchState = -1
               AND matchtime <![CDATA[<]]> #{matchTime}
      AND (hometeamid = #{teamId} or guestteamid = #{teamId})
      order by matchtime desc limit #{count}) t

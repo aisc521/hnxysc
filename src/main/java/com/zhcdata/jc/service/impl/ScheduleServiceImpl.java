@@ -20,6 +20,7 @@ import com.zhcdata.jc.tools.Const;
 import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.utils.time.ClockUtil;
@@ -46,7 +47,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private TbJcMatchLineupMapper matchLineupMapper;
     @Resource
     private TbScoreMapper scoreMapper;
-    @Resource
+    @Autowired
     private TbSclassMapper sclassMapper;
 
     @Override
