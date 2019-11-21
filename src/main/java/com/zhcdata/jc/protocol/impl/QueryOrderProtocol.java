@@ -61,7 +61,7 @@ public class QueryOrderProtocol  implements BaseProtocol {
         if(1 == tbJcPurchaseDetailed.getPayStatus()){
             resultMap.put("status", "2");
         }else{
-            resultMap.put("status", tbJcPurchaseDetailed.getPayStatus());
+            resultMap.put("status", tbJcPurchaseDetailed.getPayStatus() + "");
         }
 
         resultMap.put("orderId", tbJcPurchaseDetailed.getOrderId());
