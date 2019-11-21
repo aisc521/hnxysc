@@ -271,7 +271,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款====付款未成功:" +  tbJcPurchaseDetailed.getThirdMoney() + "扣款类型:" + remark);
                     continue;
                 }
-                result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), tbJcPurchaseDetailed.getThirdMoney(),remark,tbJcPurchaseDetailed.getSrc());
+                result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), new BigDecimal(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                 String resCode = String.valueOf(result.get("resCode"));
                 if("000000".equals(resCode) || "109024".equals(resCode) || "010124".equals(resCode)){
                     //更新订单表 为支付成功的状态
