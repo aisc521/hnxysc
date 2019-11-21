@@ -271,21 +271,20 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款====付款未成功:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark +  "订单号:" + tbJcPurchaseDetailed.getOrderId());
                     continue;
                 }
-                result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), new BigDecimal(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+                //判断是否是点播状态
+                if("99".equals(tbJcPurchaseDetailed.getPayType().toString())){
+                    //更新订单表 为支付成功的状态
+                    //更新订单表信息
+                    updatePd(tbJcPurchaseDetailed);
+
+                }else{
+                    result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), new BigDecimal(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+                }
                 String resCode = String.valueOf(result.get("resCode"));
                 if("000000".equals(resCode) || "109024".equals(resCode) || "010124".equals(resCode)){
                     //更新订单表 为支付成功的状态
                     //更新订单表信息
-                    tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
-                    tbJcPurchaseDetailed.setAwardStatus(Long.valueOf(1));
-                    Example example = new Example(TbJcPurchaseDetailed.class);
-                    example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
-                    int j = purchaseDetailedService.updateByExampleSelective(tbJcPurchaseDetailed,example);
-                    if(j <= 0){
-                        throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
-                                ProtocolCodeMsg.UPDATE_FAILE.getMsg());
-                    }
-                    LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款成功====扣款金额:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark);
+                    updatePd(tbJcPurchaseDetailed);
 
                 }else{
                     LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款失败====扣款金额:" +  tbJcPurchaseDetailed.getThirdMoney() + "扣款类型:" + remark + "订单号:" + tbJcPurchaseDetailed.getOrderId());
@@ -294,5 +293,18 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
 
             }
         }
+    }
+
+    public void updatePd(TbJcPurchaseDetailed tbJcPurchaseDetailed) throws BaseException {
+        tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
+        tbJcPurchaseDetailed.setAwardStatus(Long.valueOf(1));
+        Example example = new Example(TbJcPurchaseDetailed.class);
+        example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
+        int j = purchaseDetailedService.updateByExampleSelective(tbJcPurchaseDetailed,example);
+        if(j <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
+        LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款成功====扣款金额:" +  tbJcPurchaseDetailed.getBuyMoney());
     }
 }
