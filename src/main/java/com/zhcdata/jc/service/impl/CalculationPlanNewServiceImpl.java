@@ -57,7 +57,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
         }
         List<MatchPlanResult> matchPlanResultsList = tbJcMatchService.queryList(String.valueOf(tbJcPlan.getId())); //该方案的赛事信息
         int z_count = 0;        //已中方案数量 例如推3中1,推3中2
-
+        int cancel = 0 ;        //存在有取消，推迟和腰斩的比赛标识
         for(MatchPlanResult matchPlanResult :matchPlanResultsList){
 
             int z = 0;              //胜平负和让球胜平负,有一个中了,就算中
@@ -77,6 +77,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
             }else{
                 z_count = z_count+1;
                 z = 1;
+                cancel = 1;
             }
 
             tbJcMatchService.updateStatus(String.valueOf(z), homeScore + ":" + guestScore, matchPlanResult.getId());
@@ -84,13 +85,18 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
         //0 已结束 1 进行中 2 在售
         tbPlanService.updateStatusPlanById(String.valueOf(tbJcPlan.getId()),0);
         if(z_count > 0&&matchPlanResultsList.size() == z_count){
-            tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()));
+
             UpdateExpert(tbJcPlan);
-            //扣
-            deductFrozen(tbJcPlan);
+            if(cancel == 1){ //退款
+                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"0");
+                refundFrozenToMoney(tbJcPlan,"2");
+            }else{//扣款
+                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"1");
+                deductFrozen(tbJcPlan);
+            }
         }else{
-            tbPlanService.updateStatus("0", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()));
-            refundFrozenToMoney(tbJcPlan);
+            tbPlanService.updateStatus("0", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"0");
+            refundFrozenToMoney(tbJcPlan,"1");
         }
     }
     public boolean isWinAwad(String code,int homeScore,int guestScore ,int rq) throws BaseException {
@@ -159,9 +165,11 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
 
     /**
      * 退款
+     * type 1 方案未中退款，2方案里有取消比赛的退款
+     *
      */
     @Transactional(rollbackFor = Exception.class)
-    public void refundFrozenToMoney(TbJcPlan planResults) throws BaseException {
+    public void refundFrozenToMoney(TbJcPlan planResults,String type) throws BaseException {
         Map result = new HashMap();
         List<TbJcPurchaseDetailed> tbJcPurchaseDetailedList = purchaseDetailedService.queryTbJcPurchaseDetailedByPlanId(planResults.getId());
         if(tbJcPurchaseDetailedList.size() > 0){
@@ -185,32 +193,37 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     continue;
                 }
                 String remark = "";
-                if("20".equals(payType)){
+                if("1".equals(type)){
                     remark = "方案未中退款";
+                }else if("2".equals(type)){
+                    remark = "比赛取消退款";
+                }
+                if("20".equals(payType)){
+                    //remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
                 if("21".equals(payType)){
-                    remark = "方案未中退款";
+                    //remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
                 if("22".equals(payType)){
-                    remark = "方案未中退款";
+                    //remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
                 if("0".equals(payType)){
-                    remark = "方案未中退款";
+                    //remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
                 if("99".equals(payType)){
-                    remark = "方案未中退款";
+                    //remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundDiscount(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(),"1",remark,tbJcPurchaseDetailed.getSrc());
                     }
