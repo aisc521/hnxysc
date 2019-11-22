@@ -129,27 +129,45 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         map.put("time",dateOfMatch.getTime());
                         map.put("homeTeamName",firstInfo.get("homeTeamName").toString());
                         map.put("awayTeamName",firstInfo.get("awayTeamName").toString());
-
+                        String matchResult = String.valueOf(list.get(i).get("matchResult"));
 
 
                         String odds = list.get(i).get("odds").toString();
                         if(StringUtils.isNotBlank(odds) && odds != null && odds != "null"){
                             String[] oddsArr = odds.split("/");
-                            if(oddsArr.length == 6){
-                                map.put("rang_sheng", ""+oddsArr[3]);
-                                map.put("rang_ping", ""+oddsArr[4]);
-                                map.put("rang_fu", ""+oddsArr[5]);
-                                map.put("no_rang_sheng", ""+oddsArr[0]);
-                                map.put("no_rang_ping", ""+oddsArr[1]);
-                                map.put("no_rang_fu", ""+oddsArr[2]);
+                            if("vs".equals(matchResult)){
+                                map.put("rang_sheng", "1.00");
+                                map.put("rang_ping", "1.00");
+                                map.put("rang_fu", "1.00");
+                                map.put("no_rang_sheng", "1.00");
+                                map.put("no_rang_ping", "1.00");
+                                map.put("no_rang_fu", "1.00");
+                            }else{
+                                if(oddsArr.length == 6){
+                                    map.put("rang_sheng", ""+oddsArr[3]);
+                                    map.put("rang_ping", ""+oddsArr[4]);
+                                    map.put("rang_fu", ""+oddsArr[5]);
+                                    map.put("no_rang_sheng", ""+oddsArr[0]);
+                                    map.put("no_rang_ping", ""+oddsArr[1]);
+                                    map.put("no_rang_fu", ""+oddsArr[2]);
+                                }
                             }
                         }else{
-                            map.put("rang_sheng", ""+list.get(i).get("homeTeamZhu"));
-                            map.put("rang_ping", ""+list.get(i).get("homeTeamPing"));
-                            map.put("rang_fu", ""+list.get(i).get("homeTeamKe"));
-                            map.put("no_rang_sheng", ""+list.get(i).get("awayTeamZhu"));
-                            map.put("no_rang_ping", ""+list.get(i).get("awayTeamPing"));
-                            map.put("no_rang_fu", ""+list.get(i).get("awayTeamKe"));
+                            if("vs".equals(matchResult)){
+                                map.put("rang_sheng", "1.00");
+                                map.put("rang_ping", "1.00");
+                                map.put("rang_fu", "1.00");
+                                map.put("no_rang_sheng", "1.00");
+                                map.put("no_rang_ping", "1.00");
+                                map.put("no_rang_fu", "1.00");
+                            }else{
+                                map.put("rang_sheng", ""+list.get(i).get("homeTeamZhu"));
+                                map.put("rang_ping", ""+list.get(i).get("homeTeamPing"));
+                                map.put("rang_fu", ""+list.get(i).get("homeTeamKe"));
+                                map.put("no_rang_sheng", ""+list.get(i).get("awayTeamZhu"));
+                                map.put("no_rang_ping", ""+list.get(i).get("awayTeamPing"));
+                                map.put("no_rang_fu", ""+list.get(i).get("awayTeamKe"));
+                            }
                         }
 
                         map.put("no_rang_num", "0");
@@ -157,7 +175,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         map.put("match_status", ""+list.get(i).get("statusmatch"));
                         map.put("match_result", ""+list.get(i).get("matchResult"));
 
-                        String matchResult = String.valueOf(list.get(i).get("matchResult"));
+
                         String rang_num = String.valueOf(list.get(i).get("awayTeamRangballs"));
                         //计算那个中了
                         if(StringUtils.isNotBlank(matchResult) && !"null".equals(matchResult)){
