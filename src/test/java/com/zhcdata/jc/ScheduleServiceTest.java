@@ -27,7 +27,7 @@ public class ScheduleServiceTest {
     @Test
     public void queryMatchAnalysis() throws ParseException {
 //        scheduleService.updateMatchAnalysis(1,1);
-//        Map<String, Object> stringObjectMap = scheduleService.matchAnalysisByType(1815086, "0", "0");
+//        Map<String, Object> stringObjectMap = scheduleService.matchAnalysisByType(1735015, "0", "0");
 //        System.out.println(JsonMapper.defaultMapper().toJson(stringObjectMap));
 
 //        Calendar instance = Calendar.getInstance();

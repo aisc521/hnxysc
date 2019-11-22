@@ -51,7 +51,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
 
         //判断这个方案是否全部开完奖
         Map<String,Integer> map = tbJcMatchService.queryMatchStatus(tbJcPlan.getId());
-        if(map.get("a") != map.get("b")){
+        if(!String.valueOf(map.get("a")).equals(String.valueOf(map.get("b")))){
             LOGGER.info("该方案 id = "+tbJcPlan.getId()+"  有比赛没有出结果，无法计算");
             return;
         }
@@ -64,9 +64,10 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
             String planInfo = matchPlanResult.getPlanInfo();
             int homeScore = Integer.parseInt(matchPlanResult.getHomeScore());
             int guestScore = Integer.parseInt(matchPlanResult.getGuestScore());
+            String allSCore = homeScore+":"+guestScore;
             int rq = new BigDecimal(matchPlanResult.getPolyGoal()).intValue();
 
-            LOGGER.error("比赛计算-比赛id="+matchPlanResult.getMatchId()+" 比分="+homeScore+":"+guestScore+" 让"+rq+" 球");
+            LOGGER.error("比赛计算-比赛id="+matchPlanResult.getMatchId()+" 比分="+allSCore+" 让"+rq+" 球");
             if("-1".equals(matchPlanResult.getMatchState())){
                 String spf = planInfo.split("\\|")[0];          //胜平负
                 String rqspf = planInfo.split("\\|")[1];        //让球胜平负
@@ -78,9 +79,10 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 z_count = z_count+1;
                 z = 1;
                 cancel = 1;
+                allSCore = "vs";//取消的比赛比分改成vs
             }
 
-            tbJcMatchService.updateStatus(String.valueOf(z), homeScore + ":" + guestScore, matchPlanResult.getId());
+            tbJcMatchService.updateStatus(String.valueOf(z), allSCore, matchPlanResult.getId());
          }
         //0 已结束 1 进行中 2 在售
         tbPlanService.updateStatusPlanById(String.valueOf(tbJcPlan.getId()),0);

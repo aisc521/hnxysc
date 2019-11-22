@@ -169,6 +169,12 @@ public class AttentionListProtocol implements BaseProtocol {
                 r1.setStatusDescFK("0");
             }else if(r1.getMatchState().equals("完")) {
                 r1.setStatusDescFK("-1");
+            }else if(r1.getMatchState().equals("推迟")){
+                r1.setStatusDescFK("0");
+            }else if(r1.getMatchState().equals("腰斩")){
+                r1.setStatusDescFK("-1");
+            }else if(r1.getMatchState().equals("取消")){
+                r1.setStatusDescFK("0");
             }
 
             if(matchType!=null&&matchType.length()>0){
