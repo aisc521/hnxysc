@@ -12,6 +12,7 @@ import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcExpertService;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
+import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.JcLotteryUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -38,6 +39,8 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
 
     @Resource
     private TbJcExpertService tbJcExpertService;
+    @Resource
+    private CommonUtils commonUtils;
 
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
@@ -95,7 +98,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                     resultMap.put("introduction", info.getIntroduction());
                     resultMap.put("fans", info.getFans());
                     resultMap.put("trend", info.getTrend());
-                    resultMap.put("lz", info.getLzNow());
+                    resultMap.put("lz", commonUtils.JsLz(info));
                     resultMap.put("zSevenDays", info.getzSevenDays());
                     resultMap.put("returnSevenDays", info.getReturnSevenDays());
                     resultMap.put("status", info.getStatus());
