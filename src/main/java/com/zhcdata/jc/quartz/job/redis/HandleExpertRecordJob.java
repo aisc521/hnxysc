@@ -309,6 +309,12 @@ public class HandleExpertRecordJob implements Job {
                                             if (matchlist.get(m).getMatchState().equals("-10") || matchlist.get(m).getMatchState().equals("-12") || matchlist.get(m).getMatchState().equals("-14")) {
                                                 //腰斩、取消、推迟的比赛，sp值为1
                                                 money_match = new BigDecimal(1);
+                                                if(xz1>0){
+                                                    money_match=money_match.multiply(new BigDecimal(xz1));
+                                                }
+                                                if(xz2>0){
+                                                    money_match=money_match.multiply(new BigDecimal(xz2));
+                                                }
                                             }
 
                                             if (m == 0) {

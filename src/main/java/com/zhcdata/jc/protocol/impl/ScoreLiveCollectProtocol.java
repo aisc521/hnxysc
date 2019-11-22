@@ -98,7 +98,14 @@ public class ScoreLiveCollectProtocol implements BaseProtocol{
                 resultMap.put("matchMakeTime","完");
             }else if(mo.getMatchState().equals("中")){
                 resultMap.put("matchMakeTime","中");
-            }else {
+            }else if(mo.getMatchState().equals("取消")){
+                resultMap.put("statusDescFK","0");
+            }else if(mo.getMatchState().equals("腰斩")){
+                resultMap.put("statusDescFK","0");
+            }else if(mo.getMatchState().equals("推迟")){
+                resultMap.put("statusDescFK","0");
+            }
+            else {
                 if(mo.getMatchState().equals("1")){
                     if(!mo.getMatchTime2().contains("0000-00-00 00:00:00")) {
                         Timestamp ts = Timestamp.valueOf(mo.getMatchTime2());
