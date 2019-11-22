@@ -902,7 +902,7 @@
             and sc.MatchState = '0'
         </if>
         <if test="state == 3">/*已结束*/
-            and sc.MatchState = '-1'
+            and sc.MatchState in(-1)
         </if>
         <if test="type == 1">/*竞彩*/
             and lottery.LOTTERY = 'JCZQ'

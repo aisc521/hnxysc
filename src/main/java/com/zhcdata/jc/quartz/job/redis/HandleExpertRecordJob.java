@@ -304,6 +304,8 @@ public class HandleExpertRecordJob implements Job {
                                                 }
                                             }
 
+                                            //比赛推迟36小时算取消,比赛算中,方案算结束。如果两场，需要等到推迟36小时，再结束
+                                            //这判断为1，没有问题
                                             if (matchlist.get(m).getMatchState().equals("-10") || matchlist.get(m).getMatchState().equals("-12") || matchlist.get(m).getMatchState().equals("-14")) {
                                                 //腰斩、取消、推迟的比赛，sp值为1
                                                 money_match = new BigDecimal(1);
