@@ -429,8 +429,8 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
   <select id="queryPlanInfo" resultType="java.util.Map">
 select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds,"") odds from (
         SELECT jc.*, sc.MatchState Status, sc.HomeScore homeBalls, sc.GuestScore awayballs, sc.MatchTime2 dateOfMatch2
-        from (SELECT kk.*, s.Name_J awayName
-        from (SELECT k.*, s.Name_J homeName
+        from (SELECT kk.*, p2.Name_J awayName
+        from (SELECT k.*, p1.Name_J homeName
         from (SELECT ScheduleID matchId,
         s.MatchTime dateOfMatch,
         s.MatchID Num,
