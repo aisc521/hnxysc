@@ -392,7 +392,7 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
      * @return
      */
     private List<Map<String,Double>> getSameHandicapChange(Integer changeTimes,String pam) {
-        List<String> list = Arrays.asList(pam.split("|"));
+        List<String> list = Arrays.asList(pam.split("\\|"));
         //变盘次数不为0或选择项包含全部，或全选，返回空list
         if (0 != changeTimes || list.contains("") || list.contains("0") || list.size() == 6) {
             return Lists.newArrayList();
