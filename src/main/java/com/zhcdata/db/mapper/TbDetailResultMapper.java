@@ -9,6 +9,10 @@ import java.util.List;
 public interface TbDetailResultMapper {
     List<DetailResultInfo> queryDetailResult(@Param("ScheduleID") String ScheduleID,@Param("ID") String ID);
 
+    List<DetailResultInfo> queryDetailList(@Param("ScheduleID") String ScheduleID);
+
+    int deleteByPrimaryKey(@Param("id") int id);
+
     int insertSelective(DetailResultInfo detailResultInfo);
 
     int updateByPrimaryKeySelective(DetailResultInfo detailResultInfo);

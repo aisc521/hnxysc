@@ -5,6 +5,14 @@
     select * from DetailResult where ScheduleID=#{ScheduleID} and ID=#{ID}
   </select>
 
+  <select id="queryDetailList" resultType="com.zhcdata.db.model.DetailResultInfo">
+    select * from DetailResult where ScheduleID=#{ScheduleID}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from DetailResult
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
 
   <insert id="insertSelective" parameterType="com.zhcdata.db.model.DetailResultInfo" >
     insert into detailresult

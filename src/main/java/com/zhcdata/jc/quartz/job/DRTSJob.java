@@ -52,6 +52,11 @@ public class DRTSJob implements Job {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        String matchIds = "";       //事件ID
+        String dIds = "";           //赛事ID
+        String matchIds_t = "";     //事件ID
+        String dIds_t = "";         //赛事ID
+
         try {
             String xml = HttpUtils.getHtmlResult(url);
             SAXReader saxReader = new SAXReader();
@@ -61,7 +66,7 @@ public class DRTSJob implements Job {
             for (org.dom4j.Element one : childElements) {
                 if (one.getName().equals("event")) {
                     //比赛的详细事件
-                    int j=0;
+                    int j = 0;
                     List<Element> twos = one.elements();
                     for (org.dom4j.Element two : twos) {
                         j++;
@@ -82,9 +87,9 @@ public class DRTSJob implements Job {
                         info.setScheduleid(Integer.parseInt(values[0]));        //赛程 ID
                         info.setHappentime(Short.parseShort(values[3]));        //发生时间
 
-                        //if(info.getId().toString().contains("6920165")){
-                        //   String sdsd="";
-                        //}
+                        if (values[0].equals("1751796")) {
+                            String sdsd = "";
+                        }
 
                         Schedule scheduleInfo = scheduleMapper.selectByPrimaryKey(info.getScheduleid());
                         if (scheduleInfo != null) {                             //球队 ID
@@ -112,6 +117,9 @@ public class DRTSJob implements Job {
                                 info.setPlayeridIn(Integer.valueOf(values[8]));      //球员
                             }
                         }
+
+                        dIds += info.getId() + ",";
+                        matchIds += info.getScheduleid() + ",";
                         List<DetailResultInfo> queryDetailResult = tbDetailResultMapper.queryDetailResult(info.getScheduleid().toString(), info.getId().toString());
                         if (queryDetailResult == null || queryDetailResult.size() == 0) {
                             if (tbDetailResultMapper.insertSelective(info) > 0) {
@@ -127,7 +135,6 @@ public class DRTSJob implements Job {
                             }
                         }
                     }
-
                 } else if (one.getName().equals("technic")) {
                     //技术统计
                     List<Element> twos = one.elements();
@@ -248,6 +255,8 @@ public class DRTSJob implements Job {
                                 }
                                 info.setModifytime(df.format(new Date()));
 
+                                dIds_t += info.getId() + ",";
+                                matchIds_t += info.getScheduleid() + ",";
                                 List<TTSInfo> ttsInfos = tbTeamTechStatisticsMapper.queryTTS(info.getScheduleid().toString(), info.getTeamid().toString());
                                 if (ttsInfos != null && ttsInfos.size() > 0) {
                                     log.info("球队技术统计已存在，进行修改");
@@ -273,6 +282,25 @@ public class DRTSJob implements Job {
                     }
                 }
             }
+
+            //处理删除事件
+            String[] ids = matchIds.substring(0, matchIds.length() - 1).split(",");
+            for (int b = 0; b < ids.length; b++) {
+                List<DetailResultInfo> list = tbDetailResultMapper.queryDetailList(ids[b]);
+                System.out.println(ids[b]);
+                if (list != null && list.size() > 0) {
+                    for (int c = 0; c < list.size(); c++) {
+                        System.out.println(list.get(c).getId());
+                        if (!dIds.contains(String.valueOf(list.get(c).getId()))) {
+                            if(tbDetailResultMapper.deleteByPrimaryKey(list.get(c).getId())>0) {
+                            log.info("[比赛详细事件]接口 删除赛事ID:" + ids[b] + ",事件ID:" + list.get(c).getId());
+                            }
+                        }
+                    }
+                }
+            }
+
+
         } catch (Exception ex) {
             log.error("当天比赛的详细事件&技术统计异常" + ex.getMessage());
             ex.printStackTrace();
