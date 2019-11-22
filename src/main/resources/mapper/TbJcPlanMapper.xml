@@ -455,8 +455,8 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         from jc_schedule s
         LEFT JOIN jc_schedulesp ssp on s.ID = ssp.ID
         where s.ScheduleID in (select match_id from tb_jc_match where plan_id = #{pid})) k
-        LEFT JOIN tb_team_pet_name_info p1 on k.homeId = p1.teamId order by dateOfMatch) kk
-        LEFT JOIN tb_team_pet_name_info p2 on kk.awayId = p2.teamId) jc
+        LEFT JOIN team p1 on k.homeId = p1.teamId order by dateOfMatch) kk
+        LEFT JOIN team p2 on kk.awayId = p2.teamId) jc
         LEFT JOIN `schedule` sc on jc.matchId = sc.ScheduleID
         ) aaa
         left join tb_jc_match bbb on aaa.matchId = bbb.match_id and plan_id = #{pid}
