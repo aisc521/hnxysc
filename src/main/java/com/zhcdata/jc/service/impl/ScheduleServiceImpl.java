@@ -915,11 +915,11 @@ public class ScheduleServiceImpl implements ScheduleService {
             text = "完";
         } else if ("-14".equals(matchState)) {
             //推迟
-            matchState = "-14";
             text = "推迟";
+            matchState = "0";
         } else if ("-12".equals(matchState)) {
             //腰斩
-            matchState = "-12";
+            matchState = "0";
             text = "腰斩";
         } else if ("-13".equals(matchState)) {
             //中断
@@ -927,7 +927,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             text = "腰斩";
         } else if ("-10".equals(matchState)) {
             //取消
-            matchState = "-10";
+            matchState = "0";
             text = "取消";
         } else if ("-11".equals(matchState)) {
             //待定
