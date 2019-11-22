@@ -125,7 +125,7 @@ custom:
       seasonUrl: http://interface.win007.com/zq/PlayCount.aspx?ID=
       championRunnerOddsUrl: http://interface.win007.com/zq/JcZqOdds.aspx?type=guanjun
   dbPricd: 20
-  description: 购买方案
-  productName: 购买方案
+  description: 比赛方案
+  productName: 比赛方案
 
 
