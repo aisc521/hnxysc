@@ -50,6 +50,7 @@ public class SeasonPlayerStatisticsJob implements Job{
                 return;
             }
             for(int i = 0; i < sclassList.size(); i++){
+                Thread.sleep(20000);    //延时20秒
                 Sclass sclass = sclassList.get(i);
                 ArrayList arrayList = (ArrayList)new QiuTanXmlComm().handleMothod(requestUrl + sclass.getSclassid(),PlayerStaticRsp.class);
                 if(arrayList.size() <= 0){

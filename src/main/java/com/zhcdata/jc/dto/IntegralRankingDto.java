@@ -9,7 +9,7 @@ public class IntegralRankingDto {
     private String lost;//失
     private String goalDiff;//净
     private String score;//得分
-    private String rank;//排行
+    private Integer rank;//排行
 
     public IntegralRankingDto() {
         this.matchCount = "0";
@@ -20,7 +20,7 @@ public class IntegralRankingDto {
         this.lost = "0";
         this.goalDiff = "0";
         this.score = "0";
-        this.rank = "0";
+        this.rank = 0;
     }
 
     public String getMatchCount() {
@@ -87,11 +87,11 @@ public class IntegralRankingDto {
         this.score = score;
     }
 
-    public String getRank() {
+    public Integer getRank() {
         return rank;
     }
 
-    public void setRank(String rank) {
+    public void setRank(Integer rank) {
         this.rank = rank;
     }
 }

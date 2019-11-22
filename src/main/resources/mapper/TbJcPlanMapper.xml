@@ -341,7 +341,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
 
   </select>
   <update id="updateStatus">
-    update tb_jc_plan set status='0',plan_Hit=#{planHit},is_right=#{isRight} where id = #{id}
+    update tb_jc_plan set status='0',plan_Hit=#{planHit},is_right=#{isRight},is_deduct_money =#{flag}  where id = #{id}
   </update>
   <select id="queryPlanById" resultType="com.zhcdata.jc.dto.PlanResult2">
     SELECT e.id,
