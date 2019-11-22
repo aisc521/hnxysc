@@ -90,7 +90,7 @@
         </if>
     </select>
     <select id="selectNearlyMatchData" resultType="com.zhcdata.jc.dto.IntegralRankingDto">
-    select t2.matchCount,t2.winCount,t2.flatCount,t2.loseCount,t2.goal,t2.lost,(winCount*3+flatCount) score,(t2.goal-t2.lost) goalDiff from (
+    select '--' as rank, t2.matchCount,t2.winCount,t2.flatCount,t2.loseCount,t2.goal,t2.lost,(winCount*3+flatCount) score,(t2.goal-t2.lost) goalDiff from (
     SELECT
     count(Scheduleid) matchCount,
     sum(case when hometeamid = #{teamId} and homescore>guestscore then 1
