@@ -78,7 +78,7 @@ public class SameBeginOddsGoalMatchProtocol implements BaseProtocol {
         } else {
             if ("0".equals(paramMap.get("chgTimes"))) {
                 String pam = paramMap.get("pam");
-                if (Strings.isNullOrEmpty(pam) || !NumberUtil.isNumber(pam.replaceAll("|", ""))) {
+                if (Strings.isNullOrEmpty(pam) || !NumberUtil.isNumber(pam.replaceAll("\\|", ""))) {
                     commonUtils.errorMessageToMap(map, ProtocolCodeMsg.PAM_NOT_ASSIGNED);
                     return map;
                 }
