@@ -267,6 +267,8 @@ public class MatchListProtocol implements BaseProtocol {
                 list.add(r1);
             }
 
+            Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+            map.put("followNum", followNum);//已关数量
             map.put("pageNo", infos.getPageNum());
             map.put("pageTotal", infos.getPages());
             map.put("totalNum", infos.getTotal());
@@ -299,6 +301,7 @@ public class MatchListProtocol implements BaseProtocol {
                     JsonMapper jsonMapper = JsonMapper.defaultMapper();
                     JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
                     newList = jsonMapper.fromJson(s, javaType1);
+
                 } else {
                     map.put("pageTotal", "0");
                     map.put("pageNo", "0");
@@ -308,28 +311,27 @@ public class MatchListProtocol implements BaseProtocol {
                     map.put("list", null);
                 }
             }
-        }
+            List<MatchResult1> result = new ArrayList<>();
+            //根据userId  和比赛id查询此产比赛此用户是否关注
+            if (StringUtils.isNotBlank(userId)) {
+                for (int i = 0; i < newList.size(); i++) {
+                    MatchResult1 matchResult1 = newList.get(i);
+                    String matchId = matchResult1.getMatchId();
 
-//        List<MatchResult1> result = new ArrayList<>();
-//        //根据userId  和比赛id查询此产比赛此用户是否关注
-//        if (StringUtils.isNotBlank(userId)) {
-//            for (int i = 0; i < newList.size(); i++) {
-//                MatchResult1 matchResult1 = newList.get(i);
-//                String matchId = matchResult1.getMatchId();
-//
-//                TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId), Long.valueOf(matchId));
-//                if (tbPgUCollect != null) {
-//                    matchResult1.setIscollect("1");
-//                }
-//                newList.add(matchResult1);
-//            }
-//            Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
-//            map.put("followNum", followNum);//已关数量
-//            map.put("list", result);
-//        } else {
-//            map.put("followNum", "0");//已关数量
-//            map.put("list", newList);
-//        }
+                    TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId), Long.valueOf(matchId));
+                    if (tbPgUCollect != null) {
+                        matchResult1.setIscollect("1");
+                    }
+                    result.add(matchResult1);
+                }
+                Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+                map.put("followNum", followNum);//已关数量
+                map.put("list", result);
+            } else {
+                map.put("followNum", "0");//已关数量
+                map.put("list", newList);
+            }
+        }
         return map;
     }
 
