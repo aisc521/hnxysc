@@ -130,8 +130,8 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         if (dateOfMatch.getTime()<first)
                             first = dateOfMatch.getTime();
                         map.put("time",dateOfMatch.getTime());
-                        map.put("homeTeamName",firstInfo.get("homeTeamName").toString());
-                        map.put("awayTeamName",firstInfo.get("awayTeamName").toString());
+                        map.put("homeTeamName",firstInfo.get("homeName").toString());
+                        map.put("awayTeamName",firstInfo.get("awayName").toString());
                         String matchResult = String.valueOf(list.get(i).get("matchResult"));
 
 

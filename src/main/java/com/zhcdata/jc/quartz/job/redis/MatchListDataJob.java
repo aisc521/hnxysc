@@ -303,7 +303,7 @@ public class MatchListDataJob implements Job {
             }else if(r1.getMatchState().equals("推迟")){
                 r1.setStatusDescFK("0");
             }else if(r1.getMatchState().equals("腰斩")){
-                r1.setStatusDescFK("-1");
+                r1.setStatusDescFK("0");
             }else if(r1.getMatchState().equals("取消")){
                 r1.setStatusDescFK("0");
             }

@@ -30,7 +30,7 @@ import java.util.*;
 @Slf4j
 @Component
 public class HandleExpertRecordJob implements Job {
-    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Resource
     private TbJcExpertService tbJcExpertService;
@@ -49,7 +49,7 @@ public class HandleExpertRecordJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        log.info("[处理专家战绩开启]" + df.format(new Date()));
+        log.info("[处理专家战绩开启]" + df2.format(new Date()));
 
         try {
             DecimalFormat dfLv = new DecimalFormat("0.00");//格式化小数
@@ -201,6 +201,9 @@ public class HandleExpertRecordJob implements Job {
                                             continue;
                                         }
                                         String score = matchlist.get(m).getScore();
+                                        if(score.equals("vs")){
+                                            score="0:0";
+                                        }
                                         String hScore = score.split(":")[0];
                                         if (hScore.contains(".")) {
                                             hScore = hScore.split("\\.")[0];
@@ -309,6 +312,12 @@ public class HandleExpertRecordJob implements Job {
                                             if (matchlist.get(m).getMatchState().equals("-10") || matchlist.get(m).getMatchState().equals("-12") || matchlist.get(m).getMatchState().equals("-14")) {
                                                 //腰斩、取消、推迟的比赛，sp值为1
                                                 money_match = new BigDecimal(1);
+                                                if(xz1>0){
+                                                    money_match=money_match.multiply(new BigDecimal(xz1));
+                                                }
+                                                if(xz2>0){
+                                                    money_match=money_match.multiply(new BigDecimal(xz2));
+                                                }
                                             }
 
                                             if (m == 0) {
@@ -556,7 +565,7 @@ public class HandleExpertRecordJob implements Job {
                         ex.printStackTrace();
                     }
                 }
-                redisUtils.hset("SOCCER:HSET:HandleExpertRecordJob", "TIME", df.format(new Date()));
+                redisUtils.hset("SOCCER:HSET:HandleExpertRecordJob", "TIME", df2.format(new Date()));
             } else {
                 log.info("因为没有新结束的方案,所以不需要处理战绩。上次计算战绩时间" + time);
             }
@@ -564,7 +573,7 @@ public class HandleExpertRecordJob implements Job {
             log.error("[处理专家战绩异常]");
             ex.printStackTrace();
         }
-        log.info("[处理专家战绩结束]" + df.format(new Date()));
+        log.info("[处理专家战绩结束]" + df2.format(new Date()));
     }
 
     //转换排序顺序
