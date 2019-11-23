@@ -20,7 +20,7 @@
 
   </resultMap>
   <select id="queryList" resultType="com.zhcdata.jc.dto.MatchPlanResult">
-    SELECT m.id id,m.match_Id matchId,m.match_num matchNum,m.match_name matchName,t1.Name_J hostTeam,
+    SELECT m.id id,m.match_Id matchId,m.match_num matchNum,class.Name_JS matchName,t1.Name_J hostTeam,
     t2.Name_J visitTeam,DATE_FORMAT(m.date_Of_Match,'%H:%i') as dateOfMatch,m.planInfo planInfo,m.status isWin ,
     s.HomeScore homeScore,s.GuestScore guestScore,j.PolyGoal polyGoal,s.MatchState matchState
     from
@@ -29,6 +29,8 @@
     left join jc_schedule j on m.match_id = j.ScheduleID
     LEFT JOIN team t1 ON s.HomeTeamID = t1.TeamID
     LEFT JOIN team t2 ON s.GuestTeamID = t2.TeamID
+    LEFT JOIN team t2 ON s.GuestTeamID = t2.TeamID
+    LEFT JOIN sclass class ON s.SclassID = class.sclassID
     where  s.scheduleID = m.match_id and j.scheduleID = s.scheduleID  and plan_id =#{planId}
     ORDER BY match_num asc
 
@@ -109,7 +111,7 @@
     <select id="queryMatchInfoDtoByPlanId" resultType="com.zhcdata.jc.dto.MatchInfoDto">
 
       SELECT
-      m.match_name matchName,
+      class.Name_JS matchName,
       t1.Name_J hostTeam,
       t2.Name_J visitTeam,
       m.date_of_match dateOfMatch
@@ -117,6 +119,7 @@
       left join schedule s on m.match_id = s.ScheduleID
       left join team t1 on  s.HomeTeamID  = t1.TeamID
       left join team t2 on s.GuestTeamID = t2.TeamID
+       LEFT JOIN sclass class ON s.SclassID = class.sclassID
       where m.plan_id = #{planId}
     </select>
   <select id="queryMatchStatus" resultType="java.util.Map">
