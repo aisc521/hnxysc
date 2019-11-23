@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.javassist.bytecode.stackmap.BasicBlock;
 import org.omg.PortableInterceptor.INACTIVE;
 import org.quartz.Job;
+import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.stereotype.Component;
@@ -51,6 +52,9 @@ public class HandleExpertRecordJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         log.info("[处理专家战绩开启]" + df2.format(new Date()));
 
+        JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
+        String type = dataMap.getString("type");
+
         try {
             DecimalFormat dfLv = new DecimalFormat("0.00");//格式化小数
 
@@ -70,7 +74,13 @@ public class HandleExpertRecordJob implements Job {
             String timeSeven = df.format(calendar.getTime());
 
             String time = (String) redisUtils.hget("SOCCER:HSET:HandleExpertRecordJob", "TIME");
-            List<ExpertInfo> expertResults = tbJcExpertService.queryExperts(time);   //专家列表
+            List<ExpertInfo> expertResults = new ArrayList<>();
+            if(type.equals("1")){
+                expertResults=tbJcExpertService.queryExpertsAll();   //所有专家列表
+            }else {
+                expertResults=tbJcExpertService.queryExperts(time);   //所有专家列表(有新结束方案)
+            }
+
             if (expertResults != null && expertResults.size() > 0) {
                 for (int p = 0; p < expertResults.size(); p++) {
                     //当前连中
@@ -125,9 +135,9 @@ public class HandleExpertRecordJob implements Job {
                     int jin5z = 0;        //近 5中几
                     int jin4z = 0;        //近 4中几
                     int jin3z = 0;        //近 3中几
-                    //if(String.valueOf(expertResults.get(p).getId()).equals("63")){
-                    //    String sd="";
-                    //}
+                    if(String.valueOf(expertResults.get(p).getId()).equals("121")){
+                        String sd="";
+                    }
 
                     try {
                         List<TbJcPlan> planResults = tbPlanService.queryPlanList(String.valueOf(expertResults.get(p).getId()), "0"); //已结束方案

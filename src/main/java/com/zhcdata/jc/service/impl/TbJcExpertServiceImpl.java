@@ -41,6 +41,11 @@ public class TbJcExpertServiceImpl implements TbJcExpertService {
     }
 
     @Override
+    public List<ExpertInfo> queryExpertsAll() {
+        return tbJcExpertMapper.queryExpertsAll();
+    }
+
+    @Override
     public PageInfo<ExpertInfoBdDto> queryExpertsByType(String type, Integer pageNo, Integer pageAmount) {
 
         PageHelper.startPage(pageNo, pageAmount);

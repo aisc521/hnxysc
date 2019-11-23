@@ -26,11 +26,15 @@ public interface TbJcExpertService {
     ExpertInfo queryExpertDetails(String expertId);
 
     /**
-     * 所有专家列表
+     * 所有专家列表(有新方案专家)
      * @return
      */
     List<ExpertInfo> queryExperts(String time);
 
+    /**
+     * 所有方案
+     */
+    List<ExpertInfo> queryExpertsAll();
     /**
      * 专家榜
      * @param type
