@@ -159,7 +159,8 @@
       SELECT
       (select count(*) plannum from tb_jc_plan p
       left join tb_jc_match m ON p.id = m.plan_id
-      where p.ascription_expert = e.id and DATE_SUB(CURDATE(), INTERVAL 7 DAY)<![CDATA[ <= ]]> p.create_time) num,
+
+      where p.ascription_expert = e.id and DATE_SUB(CURDATE(), INTERVAL 7 DAY)<![CDATA[ <= ]]> p.create_time and p.status = '0') num,
       e.id,
       e.img,
       e.nick_name nickName,
