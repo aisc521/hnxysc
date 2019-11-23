@@ -75,10 +75,10 @@ public class HandleExpertRecordJob implements Job {
 
             String time = (String) redisUtils.hget("SOCCER:HSET:HandleExpertRecordJob", "TIME");
             List<ExpertInfo> expertResults = new ArrayList<>();
-            if(type.equals("1")){
-                expertResults=tbJcExpertService.queryExpertsAll();   //所有专家列表
-            }else {
-                expertResults=tbJcExpertService.queryExperts(time);   //所有专家列表(有新结束方案)
+            if (type != null && type.equals("1")) {
+                expertResults = tbJcExpertService.queryExpertsAll();   //所有专家列表
+            } else {
+                expertResults = tbJcExpertService.queryExperts(time);   //所有专家列表(有新结束方案)
             }
 
             if (expertResults != null && expertResults.size() > 0) {
@@ -135,8 +135,8 @@ public class HandleExpertRecordJob implements Job {
                     int jin5z = 0;        //近 5中几
                     int jin4z = 0;        //近 4中几
                     int jin3z = 0;        //近 3中几
-                    if(String.valueOf(expertResults.get(p).getId()).equals("121")){
-                        String sd="";
+                    if (String.valueOf(expertResults.get(p).getId()).equals("121")) {
+                        String sd = "";
                     }
 
                     try {
@@ -211,8 +211,8 @@ public class HandleExpertRecordJob implements Job {
                                             continue;
                                         }
                                         String score = matchlist.get(m).getScore();
-                                        if(score.equals("vs")){
-                                            score="0:0";
+                                        if (score.equals("vs")) {
+                                            score = "0:0";
                                         }
                                         String hScore = score.split(":")[0];
                                         if (hScore.contains(".")) {
@@ -322,11 +322,11 @@ public class HandleExpertRecordJob implements Job {
                                             if (matchlist.get(m).getMatchState().equals("-10") || matchlist.get(m).getMatchState().equals("-12") || matchlist.get(m).getMatchState().equals("-14")) {
                                                 //腰斩、取消、推迟的比赛，sp值为1
                                                 money_match = new BigDecimal(1);
-                                                if(xz1>0){
-                                                    money_match=money_match.multiply(new BigDecimal(xz1));
+                                                if (xz1 > 0) {
+                                                    money_match = money_match.multiply(new BigDecimal(xz1));
                                                 }
-                                                if(xz2>0){
-                                                    money_match=money_match.multiply(new BigDecimal(xz2));
+                                                if (xz2 > 0) {
+                                                    money_match = money_match.multiply(new BigDecimal(xz2));
                                                 }
                                             }
 
