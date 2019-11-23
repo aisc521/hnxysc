@@ -137,6 +137,11 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
     }
 
     @Override
+    public List<TbJcPurchaseDetailed> queryOrderFive() {
+        return tbJcPurchaseDetailedMapper.queryOrderFive();
+    }
+
+    @Override
     public int updateByExampleSelective(TbJcPurchaseDetailed tbJcPurchaseDetailed, Example example) {
         return tbJcPurchaseDetailedMapper.updateByExampleSelective(tbJcPurchaseDetailed,example);
     }

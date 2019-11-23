@@ -10,10 +10,8 @@ import com.zhcdata.jc.service.PayService;
 import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
 import com.zhcdata.jc.service.TbPlanService;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.DisallowConcurrentExecution;
-import org.quartz.Job;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
+import org.apache.commons.lang3.StringUtils;
+import org.quartz.*;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.entity.Example;
 
@@ -47,12 +45,30 @@ public class QueryOrderStatusJob implements Job {
 
         long start = System.currentTimeMillis();
         log.info(" 需要冻结的订单 start.....");
-        //查询状态是0(未支付) 1(冻结状态) /支付方式是（微信Native支付_20,支付宝支付_21,微信H5支付_22）的订单
-        List<TbJcPurchaseDetailed> tbJcPurchaseDetailedList = tbJcPurchaseDetailedService.queryOrder();
+
+
+        JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
+        String type = dataMap.getString("type"); // 1 为五分钟之内的 2五分钟以后30分钟一次
+
+
+        List<TbJcPurchaseDetailed> tbJcPurchaseDetailedList  = null;
+        if("1".equals(type)|| StringUtils.isBlank(type)){ //只查五分钟之内的
+            //查询状态是0(未支付) 1(冻结状态) /支付方式是（微信Native支付_20,支付宝支付_21,微信H5支付_22）的订单
+            tbJcPurchaseDetailedList = tbJcPurchaseDetailedService.queryOrder();
+        }else{
+            tbJcPurchaseDetailedList = tbJcPurchaseDetailedService.queryOrderFive();
+        }
+
         if(tbJcPurchaseDetailedList == null){
             log.info(" 没有需要冻结的订单");
             return;
         }
+        handleLogic(tbJcPurchaseDetailedList);
+        long end = System.currentTimeMillis();
+        log.info(" 需要冻结的订单 end 耗时 "+(end-start)+".....");
+    }
+
+    public void handleLogic(List<TbJcPurchaseDetailed> tbJcPurchaseDetailedList){
         for(int i = 0; i < tbJcPurchaseDetailedList.size(); i++){
             TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedList.get(i);
             Map<String, Object> result = payService.queryOrderStatus(String.valueOf(tbJcPurchaseDetailed.getBuyMoney()),String.valueOf(tbJcPurchaseDetailed.getPayType()),String.valueOf(tbJcPurchaseDetailed.getUserId()),
@@ -119,9 +135,8 @@ public class QueryOrderStatusJob implements Job {
                 log.error("订单发起冻结返回状诚无法处理 订单号" + tbJcPurchaseDetailed.getOrderId() + "返回状态:"+result.get("status"));
             }
         }
-        long end = System.currentTimeMillis();
-        log.info(" 需要冻结的订单 end 耗时 "+(end-start)+".....");
     }
+
     public void operateRefundFrozenToMoney(TbJcPurchaseDetailed tbJcPurchaseDetailed,Map<String, Object> result,Long payStatus){
         try {
             String type = "";
