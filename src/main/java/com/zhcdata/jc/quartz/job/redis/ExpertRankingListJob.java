@@ -96,20 +96,16 @@ public class ExpertRankingListJob implements Job{
 
 
 
-
-            if(newSevemList != null && newSevemList.size() > 0){
-                redisUtils.hset("SOCCER:HSET:EXPERTRANKING", "sevenMz", JsonMapper.defaultMapper().toJson(newSevemList));
-            }else{
+            redisUtils.hset("SOCCER:HSET:EXPERTRANKING", "sevenMz", JsonMapper.defaultMapper().toJson(newSevemList));
+            redisUtils.hset("SOCCER:HSET:EXPERTRANKING", "nowLh", JsonMapper.defaultMapper().toJson(newNowLhList));
+            redisUtils.hset("SOCCER:HSET:EXPERTRANKING", "sevenReturn", JsonMapper.defaultMapper().toJson(newSevenReturnLhList));
+            if(newSevemList == null && newSevemList.size() <= 0){
                 LOGGER.info("专家排行榜--七天命中率数据为空=========");
             }
-            if(nowLhList != null && nowLhList.size() > 0){
-                redisUtils.hset("SOCCER:HSET:EXPERTRANKING", "nowLh", JsonMapper.defaultMapper().toJson(newNowLhList));
-            }else{
+            if(nowLhList == null && nowLhList.size() <= 0){
                 LOGGER.info("专家排行榜--当前连红数据为空=========");
             }
-            if(sevenReturnList != null && sevenReturnList.size() > 0){
-                redisUtils.hset("SOCCER:HSET:EXPERTRANKING", "sevenReturn", JsonMapper.defaultMapper().toJson(newSevenReturnLhList));
-            }else{
+            if(sevenReturnList == null && sevenReturnList.size() <= 0){
                 LOGGER.info("专家排行榜--七天回报率数据为空=========");
             }
         }catch (Exception e){
