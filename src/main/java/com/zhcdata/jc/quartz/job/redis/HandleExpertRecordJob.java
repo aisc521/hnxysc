@@ -74,6 +74,9 @@ public class HandleExpertRecordJob implements Job {
             String timeSeven = df.format(calendar.getTime());
 
             String time = (String) redisUtils.hget("SOCCER:HSET:HandleExpertRecordJob", "TIME");
+
+            //更新时间(任务开启先记录时间,以免漏掉开启到结束这段时间的方案)
+            redisUtils.hset("SOCCER:HSET:HandleExpertRecordJob", "TIME", df2.format(new Date()));
             List<ExpertInfo> expertResults = new ArrayList<>();
             if (type != null && type.equals("1")) {
                 expertResults = tbJcExpertService.queryExpertsAll();   //所有专家列表
@@ -578,7 +581,6 @@ public class HandleExpertRecordJob implements Job {
                         ex.printStackTrace();
                     }
                 }
-                redisUtils.hset("SOCCER:HSET:HandleExpertRecordJob", "TIME", df2.format(new Date()));
             } else {
                 log.info("因为没有新结束的方案,所以不需要处理战绩。上次计算战绩时间" + time);
             }
