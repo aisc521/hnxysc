@@ -1,6 +1,8 @@
 package com.zhcdata.jc.service.impl;
 
+import com.zhcdata.db.mapper.JcScheduleMapper;
 import com.zhcdata.db.mapper.ScheduleMapper;
+import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.service.GetMatchInfoByIdListService;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
@@ -23,6 +25,9 @@ public class GetMatchInfoByIdListServiceImpl implements GetMatchInfoByIdListServ
 
     @Resource
     ScheduleMapper scheduleMapper;
+
+    @Resource
+    JcScheduleMapper jcScheduleMapper;
 
     @Override
     public void dealMatch(String startDate,String endDate){
@@ -71,7 +76,21 @@ public class GetMatchInfoByIdListServiceImpl implements GetMatchInfoByIdListServ
                         }
                         model.setBfshow(rsp.getHidden().equals("True"));
                         if (scheduleMapper.updateByPrimaryKeySelective(model) > 0) {
-                            LOGGER.error("更新成功" + model.getScheduleid());
+                            LOGGER.info("更新成功" + model.getScheduleid());
+                        }else {
+                            LOGGER.info("更新失败(不需要)" + model.getScheduleid());
+                        }
+
+                        if(rsp.getA().equals("1810097")) {
+                            String ll = "";
+                        }
+                        JcSchedule jcSchedule=new JcSchedule();
+                        jcSchedule.setScheduleid(Integer.valueOf(rsp.getA()));
+                        jcSchedule.setIsturned(Boolean.valueOf(rsp.getZ()));
+                        if(jcScheduleMapper.updateByPrimaryKeySelective(jcSchedule)>0){
+                            LOGGER.info("更新成功(竞彩表)" + model.getScheduleid());
+                        }else {
+                            LOGGER.info("更新失败(竞彩表,不需要)" + model.getScheduleid());
                         }
                         update++;
                     }
