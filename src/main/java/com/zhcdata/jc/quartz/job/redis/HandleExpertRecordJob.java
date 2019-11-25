@@ -424,6 +424,9 @@ public class HandleExpertRecordJob implements Job {
                             info.setzFiveDays(five_z == 0 ? new Double(0) : Double.valueOf(Math.floor((float) five_z * 100 / five)));            //五天命中率
                             info.setzSevenDays(seven_z == 0 ? new Double(0) : Double.valueOf(Math.floor((float) seven_z * 100 / seven)));        //七天命中率
                             info.setTrend(trend);                                                                                                       //趋势
+                            if(trend.length()>10){
+                                info.setTrend(trend.substring(trend.length()-10,trend.length()));
+                            }
                             info.setzAll(Double.valueOf(Math.floor((float) z_count * 100 / zs)));                                                       //全部命中率
                             info.setLzBig(String.valueOf(lh_history));                                                   //历史最高连红
                             info.setTen_z(String.valueOf(jin10z));                                                       //近10中几
