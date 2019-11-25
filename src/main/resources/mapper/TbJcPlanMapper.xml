@@ -805,7 +805,8 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         0 buStatus,
         e.grade grade,
         p.status planStatus,
-        p.id planid
+        p.id planid,
+        p.plan_Hit planHit
         from tb_jc_plan p
         left join tb_jc_expert e on p.ascription_expert = e.id
         left join
@@ -861,7 +862,8 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         v.three_z threeZ,
         v.return_seven_days returnSevenDays,
         v.lz_big lzBig,
-        p.id planid
+        p.id planid,
+        p.plan_Hit planHit
         from tb_jc_plan p
         left join tb_jc_expert e on p.ascription_expert = e.id
         left join
