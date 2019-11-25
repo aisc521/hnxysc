@@ -352,7 +352,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
 
   </select>
   <update id="updateStatus">
-    update tb_jc_plan set status='0',plan_Hit=#{planHit},is_right=#{isRight},is_deduct_money =#{flag}  where id = #{id}
+    update tb_jc_plan set status='0',plan_Hit=#{planHit},is_right=#{isRight},is_deduct_money =#{flag},update_time=now()  where id = #{id}
   </update>
   <select id="queryPlanById" resultType="com.zhcdata.jc.dto.PlanResult2">
     SELECT e.id,
@@ -508,7 +508,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
     </select>
 
     <update id="updateStatusPlanById">
-        update tb_jc_plan set status=#{status} where id = #{id}
+        update tb_jc_plan set status=#{status},update_time=now() where id = #{id}
     </update>
   <update id="updateStatusPlanByIdAndStatus">
        update tb_jc_plan set status=#{status} where id = #{id} and status=#{oldStatus}
