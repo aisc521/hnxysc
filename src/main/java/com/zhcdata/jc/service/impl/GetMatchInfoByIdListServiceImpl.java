@@ -81,9 +81,6 @@ public class GetMatchInfoByIdListServiceImpl implements GetMatchInfoByIdListServ
                             LOGGER.info("更新失败(不需要)" + model.getScheduleid());
                         }
 
-                        if(rsp.getA().equals("1810097")) {
-                            String ll = "";
-                        }
                         JcSchedule jcSchedule=new JcSchedule();
                         jcSchedule.setScheduleid(Integer.valueOf(rsp.getA()));
                         jcSchedule.setIsturned(Boolean.valueOf(rsp.getZ()));
