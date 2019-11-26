@@ -551,7 +551,7 @@ public class HandleExpertRecordJob implements Job {
                             info.setzThreeDays(new Double(0));                           //三天命中率
                             info.setzFiveDays(new Double(0));                            //五天命中率
                             info.setzSevenDays(new Double(0));                           //七天命中率
-                            info.setTrend("0");                                                 //趋势
+                            info.setTrend("");                                                  //趋势
                             info.setzAll(new Double(0));                                  //全部命中率
                             info.setLzBig(String.valueOf(0));                                   //历史最高连红
                             info.setTen_z(String.valueOf(0));                                   //近10中几
