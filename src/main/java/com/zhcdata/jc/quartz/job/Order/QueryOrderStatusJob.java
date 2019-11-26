@@ -44,14 +44,12 @@ public class QueryOrderStatusJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
         long start = System.currentTimeMillis();
-        log.info(" 需要冻结的订单 start.....");
-
-
         JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
         String type = dataMap.getString("type"); // 1 为五分钟之内的 2五分钟以后30分钟一次
-
-
         List<TbJcPurchaseDetailed> tbJcPurchaseDetailedList  = null;
+
+        log.info(" 需要冻结的订单 start.....type="+type);
+
         if("1".equals(type)|| StringUtils.isBlank(type)){ //只查五分钟之内的
             //查询状态是0(未支付) 1(冻结状态) /支付方式是（微信Native支付_20,支付宝支付_21,微信H5支付_22）的订单
             tbJcPurchaseDetailedList = tbJcPurchaseDetailedService.queryOrder();
@@ -59,7 +57,7 @@ public class QueryOrderStatusJob implements Job {
             tbJcPurchaseDetailedList = tbJcPurchaseDetailedService.queryOrderFive();
         }
 
-        if(tbJcPurchaseDetailedList == null){
+        if(tbJcPurchaseDetailedList == null||tbJcPurchaseDetailedList.size()<1){
             log.info(" 没有需要冻结的订单");
             return;
         }
