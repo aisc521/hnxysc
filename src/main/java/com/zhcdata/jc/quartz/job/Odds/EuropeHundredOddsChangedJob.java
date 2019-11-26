@@ -90,6 +90,9 @@ public class EuropeHundredOddsChangedJob implements Job {
                         EuropeOddsDetail detail = BeanUtils.parseEuropeOddsDetail(mo);
                         detail.setOddsid(dbl.getOddsid());
                         detailMapper.insertSelective(detail);
+                        log.info("百欧子表新增主表数据");
+                        log.info("主表："+xml.toString());
+                        log.info("子表："+detail.toString());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
