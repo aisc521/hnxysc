@@ -868,7 +868,10 @@
         WHEN lottery.LOTTERY = 'SF14' then '3'
         WHEN lottery.LOTTERY = 'BJDC' then '2'
         end as matchType,
-        (SELECT count(*) from tb_jc_match where match_id=sc.ScheduleID) recommendCount
+        (SELECT count(*) from tb_jc_match m
+        left join tb_jc_plan p on m.plan_id = p.id
+        left join tb_jc_expert e  on p.ascription_expert = e.id
+        where m.match_id=sc.ScheduleID and e.is_upshelf = '1') recommendCount
         <if test="type == 1">
             ,(select case when Single101='1' then '1'
                          when Single105='1'  then '1' end from jc_schedule where scheduleid=sc.ScheduleID) isSingle
@@ -1008,7 +1011,10 @@
                  when pg.type = '3' then 'SF14'
                  end as 'Matchty',
 			lottery.LOTTERY lotterType,
-			(SELECT count(*) from tb_jc_match where match_id=sc.ScheduleID) recommendCount
+			(SELECT count(*) from tb_jc_match m
+                left join tb_jc_plan p on m.plan_id = p.id
+                left join tb_jc_expert e  on p.ascription_expert = e.id
+                where m.match_id=sc.ScheduleID and e.is_upshelf = '1') recommendCount
             ,(select case when Single101='1' then '1'
                 when Single105='1'  then '1' end from jc_schedule where scheduleid=sc.ScheduleID) isSingle
             from schedule  sc
