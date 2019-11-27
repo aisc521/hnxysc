@@ -69,6 +69,7 @@ public class QueryOrderStatusJob implements Job {
     public void handleLogic(List<TbJcPurchaseDetailed> tbJcPurchaseDetailedList){
         for(int i = 0; i < tbJcPurchaseDetailedList.size(); i++){
             TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedList.get(i);
+            log.info("需要冻结的订单 订单号="+tbJcPurchaseDetailed.getOrderId());
             Map<String, Object> result = payService.queryOrderStatus(String.valueOf(tbJcPurchaseDetailed.getBuyMoney()),String.valueOf(tbJcPurchaseDetailed.getPayType()),String.valueOf(tbJcPurchaseDetailed.getUserId()),
                     String.valueOf(tbJcPurchaseDetailed.getOrderId()),String.valueOf(tbJcPurchaseDetailed.getSrc()));
             if("4".equals(result.get("status"))){//成功/冻结

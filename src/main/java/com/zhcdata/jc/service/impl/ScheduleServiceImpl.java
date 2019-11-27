@@ -159,7 +159,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Integer> matchIds = scheduleMapper.selectScheduleIdByTime(before, after);
         log.error("查询到的前后一天的比赛记录数为：{}", matchIds.size());
         for (Integer matchId : matchIds) {
-            matchAnalysisByType(matchId, null, null);
+            try {
+                matchAnalysisByType(matchId, null, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("比赛{}分析数据更新异常", matchId);
+            }
         }
     }
 
@@ -251,8 +256,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         //比赛数、胜负、进球、积分、排名、胜率
         if (flag) {
             Schedule beforeSchedule = scheduleMapper.queryLastNoCupMatchByTeam(hometeamid, schedule.getMatchtime());
-            sclassid = beforeSchedule.getSclassid();
-            subSclassID = beforeSchedule.getSubsclassid();
+            if (beforeSchedule != null) {
+                sclassid = beforeSchedule.getSclassid();
+                subSclassID = beforeSchedule.getSubsclassid();
+            }
         }
         //总
         IntegralRankingDto homeTotalData = scoreMapper.queryIntegralRanking(sclassid, subSclassID, null, hometeamid, season);
@@ -281,8 +288,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         //比赛数、胜负、进球、积分、排名、胜率
         if (flag) {
             Schedule beforeSchedule = scheduleMapper.queryLastNoCupMatchByTeam(guestteamid, schedule.getMatchtime());
-            sclassid = beforeSchedule.getSclassid();
-            subSclassID = beforeSchedule.getSubsclassid();
+            if (beforeSchedule != null) {
+                sclassid = beforeSchedule.getSclassid();
+                subSclassID = beforeSchedule.getSubsclassid();
+            }
         }
         //总
         IntegralRankingDto guestTotalData = scoreMapper.queryIntegralRanking(sclassid, subSclassID, null, guestteamid, season);
