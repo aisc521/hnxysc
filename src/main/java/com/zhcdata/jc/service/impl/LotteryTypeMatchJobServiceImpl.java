@@ -181,7 +181,7 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
 
     @Override
     public void deleteMatchLotteryById(JcMatchLottery jcMatchLottery) {
-        jcMatchLotteryMapper.deleteByPrimaryKey(jcMatchLottery);
+        jcMatchLotteryMapper.delete(jcMatchLottery);
     }
 
     private JcSchedule generJcSchedule(JcSchedule jcSchedule,Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException {
