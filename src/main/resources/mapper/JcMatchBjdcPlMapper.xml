@@ -69,7 +69,7 @@
   </select>
 
   <select id="queryBjdcByMatchId" resultType="com.zhcdata.db.model.JcMatchBjdcPl">
-    select * from jc_match_bjdc_pl p where p.ID_BET007 = #{matchId} and p.NO_ID = (select lo.NO_ID from jc_match_lottery lo where lo.ID_BET007 = #{matchId}  GROUP BY lo.NO_ID)
+    select * from jc_match_bjdc_pl p where p.ID_BET007 = #{matchId} and p.NO_ID = (select lo.NO_ID from jc_match_lottery lo where lo.ID_BET007 = #{matchId}  and lo.LOTTERY='BJDC' GROUP BY lo.NO_ID)
   </select>
   <select id="queryJcMatchBdPlByLottery" resultType="com.zhcdata.db.model.JcMatchBjdcPl">
     select * from jc_match_bjdc_pl p where p.LOTTERY_PLAY in ('15','12');
