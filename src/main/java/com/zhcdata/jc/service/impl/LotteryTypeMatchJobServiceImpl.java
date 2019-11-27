@@ -148,7 +148,7 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateJcSchedule(JcSchedule jcSchedule, Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException {
-        Example example = new Example(JcMatchLottery.class);
+        Example example = new Example(JcSchedule.class);
         example.createCriteria().andEqualTo("id",jcSchedule.getId());
         int i = jcScheduleMapper.updateByExampleSelective(generJcSchedule(jcSchedule,schedule,lotteryTypeMatchRsp),example);
         if(i <= 0){
@@ -166,6 +166,22 @@ public class LotteryTypeMatchJobServiceImpl implements LotteryTypeMatchJobServic
             throw new BaseException(ProtocolCodeMsg.INSERT_FAILE.getCode(),
                     ProtocolCodeMsg.INSERT_FAILE.getMsg());
         }
+    }
+
+    @Override
+    public void updateLottery(JcMatchLottery jcMatchLottery) throws BaseException {
+        Example example = new Example(JcMatchLottery.class);
+        example.createCriteria().andEqualTo("id",jcMatchLottery.getId());
+        int i = jcMatchLotteryMapper.updateByExampleSelective(jcMatchLottery,example);
+        if(i <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
+    }
+
+    @Override
+    public void deleteMatchLotteryById(JcMatchLottery jcMatchLottery) {
+        jcMatchLotteryMapper.deleteByPrimaryKey(jcMatchLottery);
     }
 
     private JcSchedule generJcSchedule(JcSchedule jcSchedule,Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException {

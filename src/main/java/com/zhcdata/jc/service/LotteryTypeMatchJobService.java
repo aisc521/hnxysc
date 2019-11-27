@@ -73,4 +73,8 @@ public interface LotteryTypeMatchJobService {
      * @param lotteryTypeMatchRsp
      */
     void insertJcSchedule(Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
+
+    void updateLottery(JcMatchLottery jcMatchLottery) throws BaseException;
+
+    void deleteMatchLotteryById(JcMatchLottery jcMatchLottery);
 }
