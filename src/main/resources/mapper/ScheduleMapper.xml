@@ -1071,6 +1071,14 @@
         drawno ASC
     </select>
 
+    <select id="queryIssueList" resultType="com.zhcdata.jc.dto.DrawNoResult">
+        select * from(
+        SELECT
+        ISSUE_NUM drawno
+        FROM jc_match_lottery where ISSUE_NUM&lt;#{issue} AND LOTTERY = 'SF14' GROUP BY drawno desc LIMIT 10
+        ) a GROUP BY drawno asc
+    </select>
+
     <select id="selectIconAndTime" resultType="com.zhcdata.jc.dto.IconAndTimeDto" parameterType="java.lang.Integer">
        select
         sc.MatchTime time,

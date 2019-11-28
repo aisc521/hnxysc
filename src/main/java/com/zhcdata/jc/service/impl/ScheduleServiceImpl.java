@@ -1119,6 +1119,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public List<DrawNoResult> queryIssueList(Integer issue) {
+        return scheduleMapper.queryIssueList(issue);
+    }
+
+    @Override
     public IconAndTimeDto selectIconAndTime(Integer matchId) {
         return scheduleMapper.selectIconAndTime(matchId);
     }

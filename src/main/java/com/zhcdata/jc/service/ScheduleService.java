@@ -86,6 +86,8 @@ public interface ScheduleService {
 
     List<DrawNoResult> queryList(String s);
 
+    List<DrawNoResult> queryIssueList(Integer issue);
+
     IconAndTimeDto selectIconAndTime(Integer matchId);
 
    /* List<Integer> selectMatchIdExceedNowBd();*/

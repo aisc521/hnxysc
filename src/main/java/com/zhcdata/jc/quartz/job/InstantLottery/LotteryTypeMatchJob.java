@@ -6,6 +6,7 @@ import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.service.LotteryTypeMatchJobService;
 import com.zhcdata.jc.tools.Const;
 import com.zhcdata.jc.tools.JcLotteryUtils;
+import com.zhcdata.jc.tools.RedisUtils;
 import com.zhcdata.jc.xml.QiuTanXmlComm;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterType.LotteryTypeMatchFristRsp;
 import com.zhcdata.jc.xml.rsp.InstantLotteryRsp.LotterType.LotteryTypeMatchRsp;
@@ -43,6 +44,9 @@ public class LotteryTypeMatchJob implements Job {
     @Value("${custom.qiutan.url.lotterTypeMacthUrl}")
     String requestUrl;
 
+    @Resource
+    private RedisUtils redisUtils;
+
     /**
      * 每十分钟执行一次 定时任务
      */
@@ -53,6 +57,7 @@ public class LotteryTypeMatchJob implements Job {
         log.error("彩票赛程与球探网ID关联表定时任务启动");
         long s = System.currentTimeMillis();
         try {
+            String zcIssue="";//足彩在售其次(接口中有就在售,没有就停售)
             LotteryTypeMatchFristRsp object  = (LotteryTypeMatchFristRsp) new QiuTanXmlComm().handleMothod(requestUrl,LotteryTypeMatchFristRsp.class,LotteryTypeMatchRsp.class);
             List<LotteryTypeMatchRsp> lotteryTypeMatchRspList = object.getList();
             if(lotteryTypeMatchRspList != null && lotteryTypeMatchRspList.size() > 0){
@@ -72,6 +77,11 @@ public class LotteryTypeMatchJob implements Job {
                                     lotteryTypeMatchJobService.deleteMatchLotteryById(jcMatchLottery);
                                 }
                                 jcMatchLottery = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007_1(Long.parseLong(lotteryTypeMatchRsp.getIssueNum()),gameType, lotteryTypeMatchRsp.getID());
+
+                                //足彩赛事
+                                if(gameType.equals("SF14")&&!zcIssue.contains(lotteryTypeMatchRsp.getIssueNum())){
+                                    zcIssue+=lotteryTypeMatchRsp.getIssueNum()+",";
+                                }
                             }else {
                                 jcMatchLottery = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(lotteryTypeMatchRsp.getID_bet007()),gameType);
                             }
@@ -106,6 +116,9 @@ public class LotteryTypeMatchJob implements Job {
                         e.printStackTrace();
                     }
                 }
+                redisUtils.hset("SOCCER:HSET:zcIssue",  "zcIssue", zcIssue);
+                System.out.println("-----------------------------------------------------------");
+                System.out.println(redisUtils.hget("SOCCER:HSET:zcIssue",  "zcIssue"));
             }else{
                 log.error("彩票赛程与球探网ID关联表定时任务返回数据为空");
             }
