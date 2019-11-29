@@ -16,6 +16,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -235,6 +236,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     //更新订单表信息
                     tbJcPurchaseDetailed.setPayStatus(Long.valueOf(3));
                     tbJcPurchaseDetailed.setAwardStatus(Long.valueOf(0));
+                    tbJcPurchaseDetailed.setUpdateTime(new Date());
                     Example example = new Example(TbJcPurchaseDetailed.class);
                     example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
                     int j = purchaseDetailedService.updateByExampleSelective(tbJcPurchaseDetailed,example);
@@ -313,6 +315,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
     public void updatePd(TbJcPurchaseDetailed tbJcPurchaseDetailed) throws BaseException {
         tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
         tbJcPurchaseDetailed.setAwardStatus(Long.valueOf(1));
+        tbJcPurchaseDetailed.setUpdateTime(new Date());
         Example example = new Example(TbJcPurchaseDetailed.class);
         example.createCriteria().andEqualTo("id",tbJcPurchaseDetailed.getId());
         int j = purchaseDetailedService.updateByExampleSelective(tbJcPurchaseDetailed,example);
