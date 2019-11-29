@@ -218,7 +218,16 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                             map.put("rwinStatus", "4");
                         }
 
-                        map.put("planInfo", ""+list.get(i).get("planInfo"));
+                        if(freeOrPay.get("type")==3){//免费
+                            map.put("planInfo", ""+list.get(i).get("planInfo"));
+                        }else{
+                            if(freeOrPay.get("pay")>0){//已购买
+                                map.put("planInfo", ""+list.get(i).get("planInfo"));
+                            }else{
+                                map.put("planInfo", "");
+                            }
+                        }
+
                         plan_info.add(map);
                     }
                 }
