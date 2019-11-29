@@ -233,7 +233,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                             if(freeOrPay.get("pay")>0){//已购买
                                 map.put("planInfo", ""+list.get(i).get("planInfo"));
                             }else{
-                                map.put("planInfo", "");
+                                map.put("planInfo", "0,0,0|0,0,0");
                             }
                         }
 
