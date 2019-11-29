@@ -82,7 +82,16 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 resultMap.put("title", planTitle);
                 resultMap.put("grade", grade);
                 resultMap.put("price", price);
-                resultMap.put("pintroduction", pintroduction);
+                if(freeOrPay.get("type")==3){//免费
+                    resultMap.put("pintroduction", pintroduction);
+                }else{
+                    if(freeOrPay.get("pay")>0){//已购买
+                        resultMap.put("pintroduction", pintroduction);
+                    }else{
+                        resultMap.put("pintroduction", "");
+                    }
+                }
+
                 ExpertInfo info = tbJcExpertService.queryExpertDetailsAndUser(tbPlanService.queryExpertIdByPlanId(id),uid);
                 if (info != null) {
                     //给专家人气加1
