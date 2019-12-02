@@ -52,10 +52,12 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
 
         //判断这个方案是否全部开完奖
         Map<String,Integer> map = tbJcMatchService.queryMatchStatus(tbJcPlan.getId());
+        LOGGER.info("需要处理的方案 id = "+tbJcPlan.getId()+"map a="+String.valueOf(map.get("a")+" map b "+String.valueOf(map.get("b"))));
         if(!String.valueOf(map.get("a")).equals(String.valueOf(map.get("b")))){
             LOGGER.info("该方案 id = "+tbJcPlan.getId()+"  有比赛没有出结果，无法计算");
             return;
         }
+        LOGGER.info("需要处理的方案 id = "+tbJcPlan.getId());
         List<MatchPlanResult> matchPlanResultsList = tbJcMatchService.queryList(String.valueOf(tbJcPlan.getId())); //该方案的赛事信息
         int z_count = 0;        //已中方案数量 例如推3中1,推3中2
         int cancel = 0 ;        //存在有取消，推迟和腰斩的比赛标识
@@ -68,7 +70,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
             String allSCore = homeScore+":"+guestScore;
             int rq = new BigDecimal(matchPlanResult.getPolyGoal()).intValue();
 
-            LOGGER.error("比赛计算-比赛id="+matchPlanResult.getMatchId()+" 比分="+allSCore+" 让"+rq+" 球");
+            LOGGER.error("比赛计算-比赛id="+matchPlanResult.getMatchId()+" 比分="+allSCore+" 让"+rq+" 球 比赛状态="+matchPlanResult.getMatchState());
             if("-1".equals(matchPlanResult.getMatchState())){
                 String spf = planInfo.split("\\|")[0];          //胜平负
                 String rqspf = planInfo.split("\\|")[1];        //让球胜平负
@@ -91,13 +93,16 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
 
             UpdateExpert(tbJcPlan);
             if(cancel == 1){ //退款
+                LOGGER.info("方案id="+tbJcPlan.getId()+" 退款操作-比赛异常退款");
                 tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"0");
                 refundFrozenToMoney(tbJcPlan,"2");
             }else{//扣款
+                LOGGER.info("方案id="+tbJcPlan.getId()+" 扣款操作-方案命中");
                 tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"1");
                 deductFrozen(tbJcPlan);
             }
         }else{
+            LOGGER.info("方案id="+tbJcPlan.getId()+" 退款操作-方案末中");
             tbPlanService.updateStatus("0", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"0");
             refundFrozenToMoney(tbJcPlan,"1");
         }
@@ -179,6 +184,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
             for(int h = 0; h < tbJcPurchaseDetailedList.size(); h++){
 
                 TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedList.get(h);
+                LOGGER.info("需要处理的退款订单 orderId= "+tbJcPurchaseDetailed.getOrderId());
                 if("1".equals(tbJcPurchaseDetailed.getFirst())){//判断是否是首单   首单  不退款
                     LOGGER.info("首单订单，不退款:" + "用户id:" + tbJcPurchaseDetailed.getUserId() + "===" + "订单id:" + tbJcPurchaseDetailed.getOrderId());
                     //执行扣款操作
@@ -266,6 +272,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
         if(tbJcPurchaseDetailedList.size() > 0){
             for(int h = 0; h < tbJcPurchaseDetailedList.size(); h++){
                 TbJcPurchaseDetailed tbJcPurchaseDetailed = tbJcPurchaseDetailedList.get(h);
+                LOGGER.info("需要处理的扣款订单 orderId= "+tbJcPurchaseDetailed.getOrderId());
                 String remark = "";
                 String payType = String.valueOf(tbJcPurchaseDetailed.getPayType());
                 if("20".equals(payType)){
