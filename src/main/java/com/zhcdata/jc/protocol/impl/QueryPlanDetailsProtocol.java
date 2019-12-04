@@ -237,9 +237,9 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                                 map.put("planInfo", ""+list.get(i).get("planInfo"));
                             }else{
                                 if("0".equals(planStatus)){
-                                    resultMap.put("pintroduction", pintroduction);
+                                    map.put("planInfo", ""+list.get(i).get("planInfo"));
                                 }else{
-                                    resultMap.put("pintroduction", "");
+                                    map.put("planInfo", "0,0,0|0,0,0");
                                 }
                             }
                         }
