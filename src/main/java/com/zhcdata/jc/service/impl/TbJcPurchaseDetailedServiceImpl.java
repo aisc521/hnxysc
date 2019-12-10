@@ -444,7 +444,12 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             tbJcPurchaseDetailed.setThirdMoney(new BigDecimal("2"));
         }else{
             tbJcPurchaseDetailed.setFirst("0");
-            tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
+            if("99".equals(tbJcPurchaseDetailed.getPlanPayType())){
+                tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(20));
+            }else{
+                tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
+            }
+
         }
         tbJcPurchaseDetailed.setUpdateTime(new Date());
 
