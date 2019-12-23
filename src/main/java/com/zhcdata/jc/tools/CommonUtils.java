@@ -698,7 +698,7 @@ public class CommonUtils {
             info.setLzBig("0");
         }
         if(new BigDecimal(info.getLzBig()).intValue() >= 8){//历史8连红以及以上
-            lz = info.getLzBig();
+            lz = "历史" + info.getLzBig() + "连红";
             return lz;
         }
         return lz;
@@ -842,7 +842,7 @@ public class CommonUtils {
             info.setLzBig("0");
         }
         if(new BigDecimal(info.getLzBig()).intValue() >= 8){//历史8连红以及以上
-            lz = info.getLzBig();
+            lz = "历史" + info.getLzBig() + "连红";
             return lz;
         }
         return lz;
@@ -988,7 +988,7 @@ public class CommonUtils {
             info.setLzBig("0");
         }
         if(new BigDecimal(info.getLzBig()).intValue() >= 8){//历史8连红以及以上
-            lz = info.getLzBig();
+            lz = "历史" + info.getLzBig() + "连红";
             return lz;
         }
         return lz;
@@ -1132,7 +1132,7 @@ public class CommonUtils {
             info.setLzBig("0");
         }
         if(new BigDecimal(info.getLzBig()).intValue() >= 8){//历史8连红以及以上
-            lz = info.getLzBig();
+            lz = "历史" + info.getLzBig() + "连红";
             return lz;
         }
         return lz;
@@ -1409,7 +1409,7 @@ public class CommonUtils {
             info.setLzBig("0");
         }
         if(new BigDecimal(info.getLzBig()).intValue() >= 8){//历史8连红以及以上
-            lz = info.getLzBig();
+            lz = "历史" + info.getLzBig() + "连红";
             return lz;
         }
         return lz;
@@ -1554,7 +1554,7 @@ public class CommonUtils {
             info.setLzBig("0");
         }
         if(new BigDecimal(info.getLzBig()).intValue() >= 8){//历史8连红以及以上
-            lz = info.getLzBig();
+            lz = "历史" + info.getLzBig() + "连红";
             return lz;
         }
         return lz;
