@@ -125,6 +125,11 @@ public class SchemePurchaseProtocol implements BaseProtocol {
 
         //判断是否是支付宝支付  判断是否在支付时间范围内
         String payType = paramMap.get("payType");
+        if("21".equals(payType)){
+            resultMap.put("resCode", ProtocolCodeMsg.ZFB_ERROR.getCode());
+            resultMap.put("message", ProtocolCodeMsg.ZFB_ERROR.getMsg());
+            return resultMap;
+        }
         Calendar instance = Calendar.getInstance();
         int i = instance.get(Calendar.HOUR_OF_DAY);
         if ("21".equals(payType) && i < 7) {
