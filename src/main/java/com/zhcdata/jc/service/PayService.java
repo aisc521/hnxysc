@@ -71,7 +71,7 @@ public interface PayService {
      * @param orderId   订单号
      * @param description 购买说明文字
      * @param src   src
-     * @return
+     * @return type 1普通次卡  5周卡   7免费赠送限时点播卡
      */
     Map<String,Object> discountRecommendUse(String userId, String orderId, String description, String src);
 
@@ -103,7 +103,7 @@ public interface PayService {
      * 退回已使用的未中点播卡次数
      * @param userId        用户id
      * @param orderId       支付点播订单号
-     * @param type          1.无期限 2.有期限 9.有期限有次数限制 如果不填为1无期限
+     * @param type          1.普通次卡   5.周卡
      * @param productName   说明文字 如点播方案不中退
      * @param src           用户src  使用购买时的SRC即可
      * @return

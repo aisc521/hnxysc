@@ -227,7 +227,7 @@ public class PayServiceImpl implements PayService {
             Map<String, Object> paramsMap = new HashMap<>();
             paramsMap.put("userId", userId);
             paramsMap.put("orderId", orderId);
-            paramsMap.put("type", Strings.isNullOrEmpty(type) ? "1" : type);//1.无期限 2.有期限 9.有期限有次数限制
+            paramsMap.put("type", Strings.isNullOrEmpty(type) ? "1" : type);//1.无期限 5.周卡
             paramsMap.put("flag", "5");//标识：0 支出标识 1充值赠送 2 系统赠送 3大礼包 4购买 5 退回
             paramsMap.put("lotteryName", "JCZ");
             paramsMap.put("addTimes", 1);
