@@ -1,5 +1,6 @@
 package com.zhcdata.jc.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ public class PurchasedPlanDto {
     private String zFiveDays;
     private String zSevenDays;
     private String titleShowType;
-    private String price;
+    private BigDecimal price;
     private String createTime;
 
     private String matchName;
@@ -35,8 +36,8 @@ public class PurchasedPlanDto {
 
 
     private String planId;
-    private String thirdMoney;
-    private String buyMoney;
+    private BigDecimal thirdMoney;
+    private BigDecimal buyMoney;
     private String firstone;
 
     private String tenZ;
@@ -55,6 +56,15 @@ public class PurchasedPlanDto {
     private String paytype;
 
     private String orderId;
+    private String returnSevenDays;
+
+    public String getReturnSevenDays() {
+        return returnSevenDays;
+    }
+
+    public void setReturnSevenDays(String returnSevenDays) {
+        this.returnSevenDays = returnSevenDays;
+    }
 
     public String getOrderId() {
         return orderId;
@@ -144,19 +154,19 @@ public class PurchasedPlanDto {
         this.threeZ = threeZ;
     }
 
-    public String getThirdMoney() {
+    public BigDecimal getThirdMoney() {
         return thirdMoney;
     }
 
-    public void setThirdMoney(String thirdMoney) {
+    public void setThirdMoney(BigDecimal thirdMoney) {
         this.thirdMoney = thirdMoney;
     }
 
-    public String getBuyMoney() {
+    public BigDecimal getBuyMoney() {
         return buyMoney;
     }
 
-    public void setBuyMoney(String buyMoney) {
+    public void setBuyMoney(BigDecimal buyMoney) {
         this.buyMoney = buyMoney;
     }
 
@@ -310,11 +320,11 @@ public class PurchasedPlanDto {
         this.titleShowType = titleShowType;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

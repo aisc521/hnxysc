@@ -78,6 +78,10 @@ public class SameOddsDto implements Serializable {
     private Integer fireFlagFlat;
     private Integer fireFlagLose;
 
+    private String matchType;
+
+    private String recommendCount;
+
     @Override
     public boolean equals(Object o) {
         if (this == o){ return true;}

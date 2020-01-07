@@ -1,4 +1,3 @@
-# REDIS (RedisProperties)
 spring:
   redis:
     # Redis数据库索引（默认为0）
@@ -111,7 +110,7 @@ custom:
     acc: http://ceshiacc.zhongcaishou.com/accCenter
     push: http://ceshiu.zhongcaishou.com/push.do
   job: false
-  job_group: test,data,pl
+  job_group: test,data,pl,service
   qiutan:
     url:
       todayurl: http://interface.win007.com/zq/today.aspx
@@ -123,8 +122,10 @@ custom:
       imageUrl: http://zq.win007.com/Image/team/
       localUrl: /local/webapp/image/jc/
       yuMing: http://csjch5.xhjingling.com/
+      seasonUrl: http://interface.win007.com/zq/PlayCount.aspx?ID=
+      championRunnerOddsUrl: http://interface.win007.com/zq/JcZqOdds.aspx?type=guanjun
   dbPricd: 20
-  description: 购买方案
-  productName: 购买方案
+  description: 比赛方案
+  productName: 比赛方案
 
 

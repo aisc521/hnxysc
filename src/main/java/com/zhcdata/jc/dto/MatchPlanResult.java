@@ -10,6 +10,47 @@ public class MatchPlanResult {
     private String dateOfMatch;
     private String isWin;
     private String id;
+    private String homeScore;
+    private String guestScore;
+    private String polyGoal;
+
+    private String matchState;
+
+
+    public String getMatchState() {
+        return matchState;
+    }
+
+    public void setMatchState(String matchState) {
+        this.matchState = matchState;
+    }
+
+
+    public String getHomeScore() {
+        return homeScore;
+    }
+
+    public void setHomeScore(String homeScore) {
+        this.homeScore = homeScore;
+    }
+
+    public String getGuestScore() {
+        return guestScore;
+    }
+
+    public void setGuestScore(String guestScore) {
+        this.guestScore = guestScore;
+    }
+
+    public String getPolyGoal() {
+        return polyGoal;
+    }
+
+    public void setPolyGoal(String polyGoal) {
+        this.polyGoal = polyGoal;
+    }
+
+
 
     public String getId() {
         return id;

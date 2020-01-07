@@ -22,6 +22,7 @@ public interface LotteryTypeMatchJobService {
      */
     JcMatchLottery queryJcMatchLotteryByBet007(long Betoo7,String gameType);
 
+    JcMatchLottery queryJcMatchLotteryByBet007_1(long num,String lottery,String id);
     /**
      * 更新JcMatchLottery数据
      * @param jcMatchLottery
@@ -63,7 +64,7 @@ public interface LotteryTypeMatchJobService {
      * @param jcSchedulesp
      * @param lotteryTypeMatchRsp
      */
-    void updateJcSchedule(JcSchedule jcSchedule, Schedule schedule, JcSchedulesp jcSchedulesp, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
+    void updateJcSchedule(JcSchedule jcSchedule, Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
 
     /**
      * 新增竞彩表
@@ -71,5 +72,9 @@ public interface LotteryTypeMatchJobService {
      * @param jcSchedulesp
      * @param lotteryTypeMatchRsp
      */
-    void insertJcSchedule(Schedule schedule, JcSchedulesp jcSchedulesp, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
+    void insertJcSchedule(Schedule schedule, LotteryTypeMatchRsp lotteryTypeMatchRsp) throws ParseException, BaseException;
+
+    void updateLottery(JcMatchLottery jcMatchLottery) throws BaseException;
+
+    void deleteMatchLotteryById(JcMatchLottery jcMatchLottery);
 }

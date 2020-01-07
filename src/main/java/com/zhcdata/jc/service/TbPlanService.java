@@ -1,8 +1,10 @@
 package com.zhcdata.jc.service;
 
 import com.github.pagehelper.PageInfo;
+import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
+import com.zhcdata.jc.exception.BaseException;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -36,7 +38,7 @@ public interface TbPlanService {
 
     SPFListDto querySPFList(String matchId);
 
-    int updateStatus(String isRight, String planHit, String id);
+    int updateStatus(String isRight, String planHit, String id,String flag);
 
     List<PlanResult2> queryPlanById(String id);
 
@@ -45,6 +47,8 @@ public interface TbPlanService {
     List<PlanResult1> queryPlanByExpertId1(String id);
 
     TbJcPlan queryPlanByPlanId(Long schemeId);
+
+    TbJcPlan queryPlanByPlanId(Long schemeId,Long userId);
 
     List<LatestPlanReminderDto>  queryLatestPlanReminder();
 
@@ -58,13 +62,17 @@ public interface TbPlanService {
 
     List<PlanResult1> queryPlanByExpertIdNoPages(String id, String planId, String userId);
 
-    void updateStatusPlanById(String s);
+    void updateStatusPlanById(String s,int status);
+
+    int updateStatusPlanByIdAndStatus(String s,int status,int oldStatus);
 
     List<TbJcPlan> queryPlanListJxAndZs();
 
-    PageInfo<PlanResult1> queryPlanByExpertIdForXg(String pIdList, Integer integer, int i);
+    List<TbJcPlan> queryPlanListSale();
 
-    PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer integer, int i);
+    PageInfo<PlanResult1> queryPlanByExpertIdForXg(String[] pIdList, Integer integer, int i);
+
+    PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String[] pIdList, String userId, Integer integer, int i);
 
     PageInfo<PlanIdDto> selectPlanIdByMatchId(String matchId,Integer pageNo,Integer pageAmount);
 
@@ -72,4 +80,18 @@ public interface TbPlanService {
 
 
     QueryPlanByMatchIdDto queryPlanInfoByPlanIdandUserId(String planId, String userId);
+
+    JcSchedule queryPolyGoal(String matchId);
+
+    PageInfo<PlanResult1> queryPlanByExpertIdForExpert(String id, String planId, String userId, Integer integer, int i);
+
+    TbJcPlan queryOnePlan(String expertId);
+
+    PageInfo<PlanResult1> queryHotPlan(String userId, Integer integer, int i);
+
+    int updatePlanByPlanId(TbJcPlan tbJcPlan) throws BaseException;
+
+    List<QueryPlanByMatchIdDto> queryPlanByPlanIdList(String[] planIdDtoList);
+
+    List<QueryPlanByMatchIdDto> queryPlanInfoByPlanIdandUserIdList(String[] planIdDtoList, String userId);
 }

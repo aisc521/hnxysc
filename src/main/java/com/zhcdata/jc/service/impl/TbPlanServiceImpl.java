@@ -3,12 +3,14 @@ package com.zhcdata.jc.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
-import com.zhcdata.db.mapper.TbPlayerMapper;
+import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
+import com.zhcdata.jc.enums.ProtocolCodeMsg;
+import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.service.TbPlanService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -51,8 +53,8 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public int updateStatus(String isRight, String planHit, String id) {
-        return tbJcPlanMapper.updateStatus(isRight,planHit,id);
+    public int updateStatus(String isRight, String planHit, String id,String flag) {
+        return tbJcPlanMapper.updateStatus(isRight,planHit,id,flag);
     }
 
     @Override
@@ -74,6 +76,11 @@ public class TbPlanServiceImpl implements TbPlanService {
     public TbJcPlan queryPlanByPlanId(Long schemeId) {
 
         return tbJcPlanMapper.queryPlanByPlanId(schemeId);
+    }
+
+    @Override
+    public TbJcPlan queryPlanByPlanId(Long schemeId, Long userId) {
+        return tbJcPlanMapper.queryPlanByPlanIdAndUserId(schemeId,userId);
     }
 
     @Override
@@ -107,8 +114,13 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public void updateStatusPlanById(String id) {
-        tbJcPlanMapper.updateStatusPlanById(id);
+    public void updateStatusPlanById(String id,int status) {
+        tbJcPlanMapper.updateStatusPlanById(id,status);
+    }
+
+    @Override
+    public int updateStatusPlanByIdAndStatus(String s, int status, int oldStatus) {
+        return tbJcPlanMapper.updateStatusPlanByIdAndStatus(s,status,oldStatus);
     }
 
     @Override
@@ -117,7 +129,12 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public PageInfo<PlanResult1> queryPlanByExpertIdForXg(String pIdList, Integer pageNo, int pageAmount) {
+    public List<TbJcPlan> queryPlanListSale() {
+        return tbJcPlanMapper.queryPlanListSale();
+    }
+
+    @Override
+    public PageInfo<PlanResult1> queryPlanByExpertIdForXg(String[] pIdList, Integer pageNo, int pageAmount) {
 
         PageHelper.startPage(pageNo, pageAmount);
         List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertIdForXg(pIdList);
@@ -125,7 +142,7 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String pIdList, String userId, Integer pageNo, int pageAmount) {
+    public PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String[] pIdList, String userId, Integer pageNo, int pageAmount) {
         PageHelper.startPage(pageNo, pageAmount);
         List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertIdForXgAndUser(pIdList,userId);
         return new PageInfo<>(list);
@@ -147,6 +164,52 @@ public class TbPlanServiceImpl implements TbPlanService {
     @Override
     public QueryPlanByMatchIdDto queryPlanInfoByPlanIdandUserId(String planId, String userId) {
         return tbJcPlanMapper.queryPlanInfoByPlanIdandUserId(planId,userId);
+    }
+
+    @Override
+    public JcSchedule queryPolyGoal(String matchId) {
+        return tbJcPlanMapper.queryPolyGoal(matchId);
+    }
+
+    @Override
+    public PageInfo<PlanResult1> queryPlanByExpertIdForExpert(String id, String planId, String userId, Integer pageNo, int pageAmount) {
+        PageHelper.startPage(pageNo, pageAmount);
+        List<PlanResult1> list = tbJcPlanMapper.queryPlanByExpertIdForExpert(Long.parseLong(id),planId,userId);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public TbJcPlan queryOnePlan(String expertId) {
+        return tbJcPlanMapper.queryOnePlan(expertId);
+    }
+
+    @Override
+    public PageInfo<PlanResult1> queryHotPlan(String userId, Integer pageNo, int pageAmount) {
+        PageHelper.startPage(pageNo, pageAmount);
+        List<PlanResult1> list = tbJcPlanMapper.queryHotPlan(userId);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public int updatePlanByPlanId(TbJcPlan tbJcPlan) throws BaseException {
+        Example example1 = new Example(TbJcPlan.class);
+        example1.createCriteria().andEqualTo("id",tbJcPlan.getId());
+        int i = tbJcPlanMapper.updateByExample(tbJcPlan,example1);
+        if(i <= 0){
+            throw new BaseException(ProtocolCodeMsg.UPDATE_FAILE.getCode(),
+                    ProtocolCodeMsg.UPDATE_FAILE.getMsg());
+        }
+        return i;
+    }
+
+    @Override
+    public List<QueryPlanByMatchIdDto> queryPlanByPlanIdList(String[] planIdDtoList) {
+        return tbJcPlanMapper.queryPlanByPlanIdList(planIdDtoList);
+    }
+
+    @Override
+    public List<QueryPlanByMatchIdDto> queryPlanInfoByPlanIdandUserIdList(String[] planIdDtoList, String userId) {
+        return tbJcPlanMapper.queryPlanInfoByPlanIdandUserIdList(planIdDtoList,userId);
     }
 
 

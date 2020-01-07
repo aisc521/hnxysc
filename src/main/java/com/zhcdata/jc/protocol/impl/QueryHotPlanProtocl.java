@@ -60,41 +60,22 @@ public class QueryHotPlanProtocl implements BaseProtocol {
         Map<String, Object> resultMap = new HashMap<>();
         String type = paramMap.get("type");
         String pageNo = paramMap.get("pageNo");
-
         List<PlanResult1> f_result = new ArrayList<>();
-
-
         try {
-            //String re = (String) redisUtils.hget("SOCCER:HSET:PLAN", "hot");
-
             String re = (String) redisUtils.hget("SOCCER:HSET:PLANHOT", pageNo);
-
             JSONObject jsonObject = JSONObject.fromObject(re);
-
             System.out.println(jsonObject);
-
-
-           /* JsonMapper jsonMapper = JsonMapper.defaultMapper();
-            JavaType javaType = jsonMapper.buildCollectionType(List.class, PlanResult1.class);
-            List<PlanResult1> result = jsonMapper.fromJson(re, javaType);
-*/
-            //List<PlanResult1> result = (List<PlanResult1>) jsonObject.get("list");
-
-
             PlanResult3 planResult3 = com.alibaba.fastjson.JSONObject.parseObject(re,PlanResult3.class);
-
             List<PlanResult1> result = planResult3.getList();
-
-
             for (int j = 0; j < result.size(); j++) {
-                if (type.equals("1")) {
+                if (type.equals("2")) {
                     //单场
 
                     List<MatchPlanResult> matchPlanResults = result.get(j).getList();
                     if (matchPlanResults != null && matchPlanResults.size() == 1) {
                         f_result.add(result.get(j));
                     }
-                } else if (type.equals("2")) {
+                } else if (type.equals("1")) {
                     //2串1
                     List<MatchPlanResult> matchPlanResults = result.get(j).getList();
                     if (matchPlanResults != null && matchPlanResults.size() == 2) {
@@ -102,19 +83,18 @@ public class QueryHotPlanProtocl implements BaseProtocol {
                     }
                 } else if (type.equals("3")) {
                     //不中退
-                    if (result.get(j).getPlanType() == "3") {
+                    if (result.get(j).getPlanType().equals("2")) {
                         f_result.add(result.get(j));
                     }
                 } else if (type.equals("4")) {
                     //免费
-                    if (result.get(j).getPlanType() == "4") {
+                    if (result.get(j).getPlanType().equals("3")) {
                         f_result.add(result.get(j));
                     }
                 } else if (type.equals("-1")) {
                     f_result.add(result.get(j));
                 }
             }
-
             if (!Strings.isNullOrEmpty(re)) {
                 resultMap.put("list", f_result);
                 resultMap.put("message", "成功");

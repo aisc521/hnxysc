@@ -34,7 +34,7 @@
     and MatchSeason=#{matchseason}
   </select>
   <select id="queryIntegralRanking" resultType="com.zhcdata.jc.dto.IntegralRankingDto">
-    select ifnull(rank,0) rank,
+    select concat(ifnull(rank,0),'') rank,
     ifnull(matchCount,0)  matchCount,
     ifnull(winCount,0) winCount,
     ifnull(flatCount,0) flatCount,

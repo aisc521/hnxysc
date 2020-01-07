@@ -2,6 +2,7 @@ package com.zhcdata.db.mapper;
 
 
 import com.zhcdata.db.model.TotalScore;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -20,15 +21,15 @@ public interface TotalScoreMapper {
 
     int updateByPrimaryKey(TotalScore record);
 
-    TotalScore selectTotalScoreByMatchAndCpyAndFristHandicap(Integer scheduleid, Integer companyid, Float firstgoal);
+    TotalScore selectTotalScoreByMatchAndCpyAndFristHandicap(@Param("scheduleid")Integer scheduleid, @Param("companyid")Integer companyid, @Param("firstgoal")Float firstgoal);
 
-    TotalScore selectTotalScoreByMatchAndCpy(Integer scheduleid, Integer companyid);
+    TotalScore selectTotalScoreByMatchAndCpy(@Param("scheduleid")Integer scheduleid, @Param("companyid")Integer companyid);
 
     List<TotalScore> selectByMid(String mid);
 
     void deleteByMid(String mid);
 
-    void updateOddsByOddsId(Integer oddsid, Date modifytime, Float upodds, Float goal, Float downodds);
+    void updateOddsByOddsId(@Param("oddsid")Integer oddsid, @Param("modifytime")Date modifytime, @Param("upodds")Float upodds, @Param("goal")Float goal, @Param("downodds")Float downodds);
 
     //void updateOddsByOddsId(Integer oddsid, Date modifytime, Float upodds, Float goal, Float downodds);
 }

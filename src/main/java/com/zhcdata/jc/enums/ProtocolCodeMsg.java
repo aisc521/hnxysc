@@ -112,10 +112,16 @@ public enum ProtocolCodeMsg {
     STATUS_IS_NOT_EXIT("101023", "状态信息不合法!"),
     ISSUENUM_IS_NOT_EXIT("101024", "期号不能为空!"),
     USERMENUBUY_MENU_MONEY_ERROR("101025", "不在交易时间范围内!"),
+    ZFB_ERROR("20200228", "暂不支持该支付方式"),
     MONEY_ERROR("101026", "支付宝支付金额错误!"),
     FIRST_BUY_ERROR("101027", "首单不支持点播卡支付!"),
     EXPERT_ERROR("101028", "专家信息为空!"),
-    SF14_startIssue("090401","开始期次不能为空");
+    CELL_IS_NOY_NULL("101029", "手机号不能为空!"),
+    SF14_startIssue("090401","开始期次不能为空"),
+
+    PAY_FLAG("022801","标识不能为空"),
+
+    PAY_FLAG_EXIT("022802","请重新获取支付"),
 
     ;
     private String code;

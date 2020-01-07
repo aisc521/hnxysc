@@ -1,8 +1,10 @@
 package com.zhcdata.db.model;
 
+import javax.persistence.Column;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "tb_jc_plan")
 public class TbJcPlan implements Serializable {
@@ -106,6 +108,24 @@ public class TbJcPlan implements Serializable {
      */
     @Column(name = "red_Pay_Count")
     private Integer redPayCount;
+
+
+    /**
+     * 方案人气
+      */
+    @Column(name = "plan_popularity")
+    private Integer planPopularity;
+
+
+    public Integer getCnt() {
+        return cnt;
+    }
+
+    public void setCnt(Integer cnt) {
+        this.cnt = cnt;
+    }
+    @Transient
+    private Integer cnt ;//传递参数需要用
 
     private static final long serialVersionUID = 1L;
 
@@ -431,5 +451,13 @@ public class TbJcPlan implements Serializable {
      */
     public void setRedPayCount(Integer redPayCount) {
         this.redPayCount = redPayCount;
+    }
+
+    public Integer getPlanPopularity() {
+        return planPopularity;
+    }
+
+    public void setPlanPopularity(Integer planPopularity) {
+        this.planPopularity = planPopularity;
     }
 }

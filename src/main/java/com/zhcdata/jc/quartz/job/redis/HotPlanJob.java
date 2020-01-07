@@ -44,7 +44,7 @@ public class HotPlanJob implements Job {
     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        try {
+      /*  try {
             LOGGER.info("[热门方案定时任务开启]" + df.format(new Date()));
             String re = (String)redisUtils.hget("SOCCER:HSET:EXPERT", "id");
             if (!Strings.isNullOrEmpty(re)) {
@@ -93,13 +93,13 @@ public class HotPlanJob implements Job {
                             //最后一页，不满20条也要存
                             if (j == result1s.size() - 1) {
                                 Map<String, Object> map = new HashMap<String, Object>();
-                            /*    map.put("busiCode", "20010201");
+                            *//*    map.put("busiCode", "20010201");
                                 map.put("resCode", "000000");
                                 map.put("message", "成功");
                                 map.put("pageNo", p);
                                 map.put("pageTotal", pc);
                                 map.put("list", resultNew);
-*/
+*//*
                                 PlanResult3 planResult3 = new PlanResult3();
                                 planResult3.setBusiCode("20010201");
                                 planResult3.setResCode("000000");
@@ -113,13 +113,13 @@ public class HotPlanJob implements Job {
                         } else {
                             //20条
                             resultNew.add(result1s.get(j));
-                            /*Map<String, Object> map = new HashMap<String, Object>();
+                            *//*Map<String, Object> map = new HashMap<String, Object>();
                             map.put("busiCode", "20010201");
                             map.put("resCode", "000000");
                             map.put("message", "成功");
                             map.put("pageNo", p);
                             map.put("pageTotal", pc);
-                            map.put("list", resultNew);*/
+                            map.put("list", resultNew);*//*
 
                             PlanResult3 planResult3 = new PlanResult3();
                             planResult3.setBusiCode("20010201");
@@ -143,6 +143,6 @@ public class HotPlanJob implements Job {
             }
         } catch (Exception ex) {
             LOGGER.error("处理热门方案异常:" + ex);
-        }
+        }*/
     }
 }

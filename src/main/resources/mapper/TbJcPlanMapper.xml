@@ -25,7 +25,7 @@
     <result column="red_Pay_Count" property="redPayCount" jdbcType="INTEGER"/>
   </resultMap>
   <select id="queryPlanCountByExpertId" resultType="Integer">
-    SELECT count(*) from tb_jc_plan where status=1 and ascription_expert=#{expertId}
+    SELECT count( * ) FROM tb_jc_plan p WHERE  p.status = '2' and p.ascription_expert=#{expertId}
   </select>
   <select id="queryPlanByExpertId" resultType="com.zhcdata.jc.dto.PlanResult1">
       SELECT
@@ -34,7 +34,7 @@
       e.img,
       e.lable,
       (e.fans + e.start_fans) fans,
-      e.popularity,
+      p.plan_popularity popularity,
       v.lz_now lz,
       v.z_three_days zThreeDays,
       v.z_five_days zFiveDays,
@@ -48,23 +48,99 @@
       p.type planType,
       p.status planStatus,
       IF(pd.id IS NOT NULL,1,0) buStatus,
-      e.grade grade
+      e.grade grade,
+      v.ten_z tenZ,
+      v.nine_z nineZ,
+      v.eight_z eightZ,
+      v.seven_z sevenZ,
+      v.six_z sixZ,
+      v.five_z fiveZ,
+      v.four_z fourZ,
+      v.three_z threeZ,
+      v.return_seven_days returnSevenDays,
+      v.lz_big lzBig
       from tb_jc_plan  p
-      LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
+      LEFT JOIN
+      (SELECT * from(
+      SELECT * from
+      (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+      union all
+      SELECT * from
+      (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+      union all
+      SELECT * from
+      (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+      ) vic) v
+      on p.ascription_expert=v.expert_id
       LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
       LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
       LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
       <if test="userId != null">
           and pd.user_id = #{userId}
       </if>
-    where 1=1
+    where 1=1 and p.status = '2' and e.is_upshelf = '1' and v.order_By is not null
     <if test="id != null">
       and e.id = #{id}
     </if>
     <if test="planId != null">
       and p.id in(#{planId})
     </if>
+      GROUP BY p.id
+      ORDER BY  v.i asc,p.create_time desc
   </select>
+
+    <select id="queryPlanByExpertIdForExpert" resultType="com.zhcdata.jc.dto.PlanResult1">
+        SELECT
+        e.id,
+        e.nick_name nickName,
+        e.img,
+        e.lable,
+        (e.fans + e.start_fans) fans,
+        p.plan_popularity popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.title title_show_type,
+        p.price,
+        p.is_right isRight,
+        p.create_time,
+        p.plan_Hit planHit,
+        p.id planId,
+        p.type planType,
+        p.status planStatus,
+        IF(pd.id IS NOT NULL,1,0) buStatus,
+        e.grade grade,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.lz_big lzBig,
+        v.return_seven_days returnSevenDays
+        from tb_jc_plan  p
+        LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
+        LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
+        LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
+        LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
+        <if test="userId != null">
+            and pd.user_id = #{userId} and pd.pay_status in ('2','1','3')
+        </if>
+        where 1=1
+        <if test="id != null">
+            and e.id = #{id}
+        </if>
+        <if test="planId != null">
+            and p.id in(#{planId})
+        </if>
+        group by p.id
+        order by p.status desc,p.create_time desc
+    </select>
+
+
 
   <select id="queryPlanByExpertId1" resultType="com.zhcdata.jc.dto.PlanResult1">
     SELECT p.id,
@@ -107,13 +183,20 @@
 
 
     <select id="queryPlanListJxAndZs" resultType="com.zhcdata.db.model.TbJcPlan">
-        select * from tb_jc_plan where 1=1
-
-            and status in('1','2')
-
-        ORDER BY create_time asc
+        select * from (
+         select p.id,p.ascription_expert,MAX(m.date_of_match) date_of_match from tb_jc_plan p ,tb_jc_match m
+        where p.id = m.plan_id and p.status = '1'
+        group by p.id,p.ascription_expert
+        ) am where now()>am.date_of_match
     </select>
 
+    <select id="queryPlanListSale" resultType="com.zhcdata.db.model.TbJcPlan">
+         select * from (
+         select p.id,p.ascription_expert,min(m.date_of_match) date_of_match from tb_jc_plan p ,tb_jc_match m
+        where p.id = m.plan_id and p.status = '2'
+        group by p.id,p.ascription_expert
+        ) am where now()>am.date_of_match
+    </select>
 
   <select id="queryScore" resultType="com.zhcdata.jc.dto.ScoreDto">
 
@@ -262,7 +345,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     ,ssp.wl3 homeTeamZhu,ssp.wl1 homeTeamPing,ssp.wl0 homeTeamKe,ssp.sf3 awayTeamZhu,ssp.sf1 awayTeamPing,ssp.sf0 awayTeamKe,s.HomeTeamID homeId,s.GuestTeamID awayId,0 homeTeamRangballs,PolyGoal awayTeamRangballs,
     Single105 smalltype
     from jc_schedule s
-    LEFT JOIN jc_schedulesp ssp on s.ScheduleID=ssp.ID
+    LEFT JOIN jc_schedulesp ssp on s.ID=ssp.ID
 		where s.ScheduleID = #{MatchId} and ssp.kind =2
     ) k LEFT JOIN tb_team_pet_name_info p1 on k.homeId=p1.teamId
     ) kk LEFT JOIN tb_team_pet_name_info p2 on kk.awayId=p2.teamId
@@ -270,7 +353,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
 
   </select>
   <update id="updateStatus">
-    update tb_jc_plan set status='0',plan_Hit=#{planHit},is_right=#{isRight} where id = #{id}
+    update tb_jc_plan set status='0',plan_Hit=#{planHit},is_right=#{isRight},is_deduct_money =#{flag},update_time=now()  where id = #{id}
   </update>
   <select id="queryPlanById" resultType="com.zhcdata.jc.dto.PlanResult2">
     SELECT e.id,
@@ -299,7 +382,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     and p.id= #{id}
   </select>
   <select id="queryPlanId" resultType="com.zhcdata.jc.dto.PlanResult1">
-    SELECT plan_id id from tb_jc_match where match_id in(SELECT match_id from tb_jc_match where plan_id=#{planId})
+    SELECT   DISTINCT(plan_id) id from tb_jc_match where match_id in(SELECT match_id from tb_jc_match where plan_id=#{planId})
   </select>
 
 
@@ -307,16 +390,37 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     SELECT * from tb_jc_plan p where p.id = #{id}
   </select>
 
+  <select id="queryPlanByPlanIdAndUserId" resultType="com.zhcdata.db.model.TbJcPlan">
+    SELECT p.*,count(d.id) cnt from tb_jc_plan p LEFT JOIN tb_jc_purchase_detailed d on d.scheme_id = p.id
+    and d.pay_status in(1,2) and user_id = #{userId} where p.id = #{id}
+
+  </select>
+
   <select id="queryLatestPlanReminder" resultType="com.zhcdata.jc.dto.LatestPlanReminderDto">
     SELECT
     p.id planId,
     expert.id id,
-    expert.nick_name nickName
+    expert.nick_name nickName,
+    expert.lable lable,
+    expert.grade grade,
+    victory.lz_now lz,
+    victory.ten_z tenZ,
+    victory.nine_z nineZ,
+    victory.eight_z eightZ,
+    victory.seven_z sevenZ,
+    victory.six_z sixZ,
+    victory.five_z fiveZ,
+    victory.four_z fourZ,
+    victory.three_z threeZ,
+    victory.return_seven_days returnSevenDays,
+    victory.lz_big lzBig
     from
     tb_jc_plan p
     LEFT JOIN tb_jc_expert expert ON p.ascription_expert = expert.id
-    where 1 = 1
-	ORDER BY p.create_time desc LIMIT 0,1
+    LEFT JOIN tb_jc_victory victory ON p.ascription_expert = victory.expert_id
+    where 1 = 1 and p.status = '2' and expert.is_upshelf = '1'
+    GROUP BY p.id
+	ORDER BY p.create_time desc LIMIT 0,20
   </select>
 
   <select id="queryExpertIdByPlanId" resultType="java.lang.String">
@@ -324,10 +428,10 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     </select>
 
   <select id="queryPlanInfo" resultType="java.util.Map">
-select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
+select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds,"") odds from (
         SELECT jc.*, sc.MatchState Status, sc.HomeScore homeBalls, sc.GuestScore awayballs, sc.MatchTime2 dateOfMatch2
-        from (SELECT kk.*, p2.teamName awayName
-        from (SELECT k.*, p1.teamName homeName
+        from (SELECT kk.*, p2.Name_J awayName
+        from (SELECT k.*, p1.Name_J homeName
         from (SELECT ScheduleID matchId,
         s.MatchTime dateOfMatch,
         s.MatchID Num,
@@ -337,31 +441,42 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         s.HomeScore homeBalls1,
         s.GuestTeam awayTeamName,
         s.GuestScore awayballs1,
-        ssp.wl3 homeTeamZhu,
-        ssp.wl1 homeTeamPing,
-        ssp.wl0 homeTeamKe,
-        ssp.sf3 awayTeamZhu,
-        ssp.sf1 awayTeamPing,
-        ssp.sf0 awayTeamKe,
+        FORMAT(ssp.wl3,2) homeTeamZhu,
+        FORMAT(ssp.wl1,2) homeTeamPing,
+        FORMAT(ssp.wl0,2) homeTeamKe,
+        FORMAT(ssp.sf3,2) awayTeamZhu,
+        FORMAT(ssp.sf1,2) awayTeamPing,
+        FORMAT(ssp.sf0,2) awayTeamKe,
         s.HomeTeamID homeId,
         s.GuestTeamID awayId,
         0 homeTeamRangballs,
         PolyGoal awayTeamRangballs,
         Single105 smalltype
+
         from jc_schedule s
-        LEFT JOIN jc_schedulesp ssp on s.ScheduleID = ssp.ID
+        LEFT JOIN jc_schedulesp ssp on s.ID = ssp.ID
         where s.ScheduleID in (select match_id from tb_jc_match where plan_id = #{pid})) k
-        LEFT JOIN tb_team_pet_name_info p1 on k.homeId = p1.teamId order by dateOfMatch) kk
-        LEFT JOIN tb_team_pet_name_info p2 on kk.awayId = p2.teamId) jc
+        LEFT JOIN team p1 on k.homeId = p1.teamId order by dateOfMatch) kk
+        LEFT JOIN team p2 on kk.awayId = p2.teamId) jc
         LEFT JOIN `schedule` sc on jc.matchId = sc.ScheduleID
         ) aaa
         left join tb_jc_match bbb on aaa.matchId = bbb.match_id and plan_id = #{pid}
+        ORDER BY case
+        WHEN aaa.Num like '%周一%' then 1
+        WHEN aaa.Num like '%周二%' then 2
+        WHEN aaa.Num like '%周三%' then 3
+        WHEN aaa.Num like '%周四%' then 4
+        WHEN aaa.Num like '%周五%' then 5
+        WHEN aaa.Num like '%周六%' then 6
+        WHEN aaa.Num like '%周日%' then 7
+        end
+        asc,substr(aaa.Num,3,LENGTH(aaa.Num))
     </select>
 
     <select id="queryFreeOrPayByUidAndPid" resultType="java.util.Map">
         select * from
 (select type from tb_jc_plan where id = #{pid}) as sss left join
-(select count(id) pay from tb_jc_purchase_detailed where scheme_id = #{pid} and user_id = #{uid}) mmm on 1 = 1
+(select count(id) pay from tb_jc_purchase_detailed where scheme_id = #{pid} and user_id = #{uid} and pay_status  in ('2','1','3')) mmm  on 1 = 1
     </select>
 
 
@@ -394,9 +509,11 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
     </select>
 
     <update id="updateStatusPlanById">
-        update tb_jc_plan set status='2' where id = #{id}
+        update tb_jc_plan set status=#{status},update_time=now() where id = #{id}
     </update>
-
+  <update id="updateStatusPlanByIdAndStatus">
+       update tb_jc_plan set status=#{status} where id = #{id} and status=#{oldStatus}
+  </update>
 
 
     <select id="queryPlanByExpertIdForXg" resultType="com.zhcdata.jc.dto.PlanResult1">
@@ -405,7 +522,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.img,
         e.lable,
         (e.fans + e.start_fans) fans,
-        e.popularity,
+        p.plan_popularity popularity,
         v.lz_now lz,
         v.z_three_days zThreeDays,
         v.z_five_days zFiveDays,
@@ -418,16 +535,44 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         p.id planId,
         p.type planType,
         p.status planStatus,
-        e.grade grade
+        e.grade grade,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.return_seven_days returnSevenDays,
+        v.lz_big lzBig
         from tb_jc_plan  p
-        LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
+        LEFT JOIN
+        (SELECT * from(
+        SELECT * from
+        (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+        union all
+        SELECT * from
+        (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+        union all
+        SELECT * from
+        (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+        ) vic) v
+        on p.ascription_expert=v.expert_id
         LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
         LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
 
-        where 1=1
-        <if test="id != null">
-            and p.id in(#{id})
+        where 1=1 and p.status = '2'  and v.order_By is not null and e.is_upshelf = '1'
+        <if test="idList != null and idList.length > 0">
+            and p.id in
+            <foreach collection="idList" item="pid" index="index" open="(" close=")" separator=",">
+                #{pid}
+            </foreach>
+
         </if>
+
+        GROUP BY p.id
+        ORDER BY  v.i asc,p.create_time desc
     </select>
 
 
@@ -440,8 +585,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.img,
         e.lable,
         (e.fans + e.start_fans) fans,
-        e.popularity,
-        v.lz_now lz,
+        p.plan_popularity popularity,
         v.z_three_days zThreeDays,
         v.z_five_days zFiveDays,
         v.z_seven_days zSevenDays,
@@ -454,22 +598,48 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         p.type planType,
         p.status planStatus,
         IF(pd.id IS NOT NULL,1,0) buStatus,
-        e.grade grade
+        e.grade grade,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.return_seven_days returnSevenDays,
+        v.lz_big lzBig,
+        v.lz_now lz
         from tb_jc_plan  p
-        LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
+        LEFT JOIN
+        (SELECT * from(
+        SELECT * from
+        (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+        union all
+        SELECT * from
+        (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+        union all
+        SELECT * from
+        (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+        ) vic) v
+        on p.ascription_expert=v.expert_id
         LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
         LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
         LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
         <if test="userId != null">
-            and pd.user_id = #{userId}
+            and pd.user_id = #{userId} and pd.pay_status in ('1','2','3')
         </if>
-        where 1=1
-        <if test="id != null">
-            and p.id in(#{id})
+        where 1=1 and p.status = '2' and  v.order_By is not null and e.is_upshelf = '1'
+        <if test="idList != null and idList.length > 0">
+            and p.id in
+            <foreach collection="idList" item="pid" index="index" open="(" close=")" separator=",">
+                 #{pid}
+            </foreach>
+
         </if>
 
-
-
+        GROUP BY p.id
+        ORDER BY  v.i asc,p.create_time desc
     </select>
 
 
@@ -483,7 +653,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.img img,
         e.lable lable,
         (e.fans + e.start_fans)  fans,
-        e.popularity popularity,
+        p.plan_popularity popularity,
         v.lz_now lz,
         v.z_three_days zThreeDays,
         v.z_five_days zFiveDays,
@@ -496,8 +666,12 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         p.status planStatus
         from tb_jc_plan p
         left join tb_jc_expert e on p.ascription_expert = e.id
-        left join tb_jc_victory v on e.id = v.expert_id
-        where p.id = #{planId}
+        left join
+         tb_jc_victory v
+         on e.id = v.expert_id
+        where p.id = #{planId} and p.status = '2'  and e.is_upshelf = '1'
+        GROUP BY p.id
+        ORDER BY p.create_time desc
     </select>
 
     <select id="queryPlanInfoByPlanIdandUserId" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
@@ -507,7 +681,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         e.img img,
         e.lable lable,
        (e.fans + e.start_fans) fans,
-        e.popularity popularity,
+        p.plan_popularity popularity,
         v.lz_now lz,
         v.z_three_days zThreeDays,
         v.z_five_days zFiveDays,
@@ -517,12 +691,216 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo from (
         p.create_time createTime,
         IF(pd.id IS NOT NULL,1,0) buStatus,
         e.grade grade,
-        p.status planStatus
+        p.status planStatus,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.return_seven_days returnSevenDays,
+        v.lz_big lzBig
         from tb_jc_plan p
         left join tb_jc_expert e on p.ascription_expert = e.id
-        left join tb_jc_victory v on e.id = v.expert_id
-        left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId}
-        where p.id = #{planId}
+        left join
+         tb_jc_victory v
+         on e.id = v.expert_id
+        left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId} and pd.pay_status in('1','2','3')
+        where p.id = #{planId} and p.status = '2'  and e.is_upshelf = '1'
+        GROUP BY p.id
+        ORDER BY p.create_time desc
     </select>
 
+
+    <select id="queryPolyGoal" resultType="com.zhcdata.db.model.JcSchedule">
+        select
+        *
+        from jc_schedule sc
+
+        where sc.ScheduleID = #{matchId}
+    </select>
+
+
+
+    <select id="queryOnePlan" resultType="com.zhcdata.db.model.TbJcPlan">
+        select
+        *
+        from tb_jc_plan p
+        where p.ascription_expert = #{expertId} order by p.create_time asc limit 0,1
+    </select>
+    <select id="queryHotPlan" resultType="com.zhcdata.jc.dto.PlanResult1">
+        SELECT
+        e.id,
+        e.nick_name nickName,
+        e.img,
+        e.lable,
+        (e.fans + e.start_fans) fans,
+        p.plan_popularity popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.title title_show_type,
+        p.price,
+        p.is_right isRight,
+        p.create_time,
+        p.plan_Hit planHit,
+        p.id planId,
+        p.type planType,
+        p.status planStatus,
+        v.lz_big lzBig,
+        IF(pd.id IS NOT NULL,1,0) buStatus,
+        e.grade grade,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.return_seven_days returnSevenDays
+        from tb_jc_plan  p
+        LEFT JOIN (SELECT * from(
+        SELECT * from
+        (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+        union all
+        SELECT * from
+        (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+        union all
+        SELECT * from
+        (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+        ) vic) v on p.ascription_expert=v.expert_id
+        LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
+        LEFT JOIN tb_jc_expert e on p.ascription_expert=e.id
+        LEFT JOIN tb_jc_purchase_detailed pd on p.id=pd.scheme_id
+        <if test="userId != null">
+            and pd.user_id = #{userId} and pd.pay_status in('1','2','3')
+        </if>
+        where 1=1 and p.status = '2' and v.order_By is not null and e.is_upshelf = '1'
+        GROUP BY p.id
+        ORDER BY  v.i asc,p.create_time desc
+
+    </select>
+
+
+
+
+
+    <select id="queryPlanByPlanIdList" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
+        select
+        e.id id,
+        e.nick_name nickName,
+        e.img img,
+        e.lable lable,
+        (e.fans + e.start_fans)  fans,
+        p.plan_popularity popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.lz_big lzBig,
+        v.return_seven_days returnSevenDays,
+        v.lz_big lzBig,
+        p.title titleShowType,
+        p.price price,
+        p.create_time createTime,
+        0 buStatus,
+        e.grade grade,
+        p.status planStatus,
+        p.id planid,
+        p.plan_Hit planHit
+        from tb_jc_plan p
+        left join tb_jc_expert e on p.ascription_expert = e.id
+        left join
+        (SELECT * from(
+        SELECT * from
+        (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+        union all
+        SELECT * from
+        (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+        union all
+        SELECT * from
+        (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+        ) vic) v
+        on e.id = v.expert_id
+        where 1 = 1   and e.is_upshelf = '1' and v.order_By is not null
+        <if test="planIdDtoList != null and planIdDtoList.length > 0">
+            and p.id in
+            <foreach collection="planIdDtoList" item="pid" index="index" open="(" close=")" separator=",">
+                #{pid}
+            </foreach>
+
+        </if>
+        GROUP BY p.id
+        ORDER BY  v.i asc,p.create_time desc
+    </select>
+
+
+    <select id="queryPlanInfoByPlanIdandUserIdList" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
+        select
+        e.id id,
+        e.nick_name nickName,
+        e.img img,
+        e.lable lable,
+        (e.fans + e.start_fans) fans,
+        p.plan_popularity popularity,
+        v.lz_now lz,
+        v.z_three_days zThreeDays,
+        v.z_five_days zFiveDays,
+        v.z_seven_days zSevenDays,
+        p.title titleShowType,
+        p.price price,
+        p.create_time createTime,
+        IF(pd.id IS NOT NULL,1,0) buStatus,
+        e.grade grade,
+        p.status planStatus,
+        v.ten_z tenZ,
+        v.nine_z nineZ,
+        v.eight_z eightZ,
+        v.seven_z sevenZ,
+        v.six_z sixZ,
+        v.five_z fiveZ,
+        v.four_z fourZ,
+        v.three_z threeZ,
+        v.return_seven_days returnSevenDays,
+        v.lz_big lzBig,
+        p.id planid,
+        p.plan_Hit planHit
+        from tb_jc_plan p
+        left join tb_jc_expert e on p.ascription_expert = e.id
+        left join
+        (SELECT * from(
+        SELECT * from
+        (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+        union all
+        SELECT * from
+        (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+        union all
+        SELECT * from
+        (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+        ) vic) v
+        on e.id = v.expert_id
+        left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId} and pd.pay_status in('1','2','3')
+        where 1 = 1  and e.is_upshelf = '1' and v.order_By is not null
+        <if test="planIdDtoList != null and planIdDtoList.length > 0">
+            and p.id in
+            <foreach collection="planIdDtoList" item="pid" index="index" open="(" close=")" separator=",">
+                #{pid}
+            </foreach>
+
+        </if>
+        GROUP BY p.id
+        ORDER BY  v.i asc,p.create_time desc
+    </select>
 </mapper>

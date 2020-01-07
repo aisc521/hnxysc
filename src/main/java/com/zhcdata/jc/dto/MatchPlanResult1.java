@@ -11,6 +11,7 @@ public class MatchPlanResult1 {
     private String score;
     private String status;
     private String isWin;
+    private String matchState;
 
     public String getIsWin() {
         return isWin;
@@ -90,5 +91,13 @@ public class MatchPlanResult1 {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getMatchState() {
+        return matchState;
+    }
+
+    public void setMatchState(String matchState) {
+        this.matchState = matchState;
     }
 }

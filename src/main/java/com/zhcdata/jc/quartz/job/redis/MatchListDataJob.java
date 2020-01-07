@@ -67,13 +67,13 @@ public class MatchListDataJob implements Job {
                 issueNum = String.valueOf(Integer.parseInt(issueNum) + 1);
             }
             List<MatchResult1> list6 = new ArrayList<>();
-            List<MatchResult1> list6_1 = scheduleService.queryMacthListForJob(null, null, "3", "", "1", issueNum); //竞彩 正在进行
+            List<MatchResult1> list6_1 = scheduleService.queryMacthListForJob(null, null, "3", "", "1", issueNum,null,null); //竞彩 正在进行
             list6.addAll(list6_1);
 
-            List<MatchResult1> list6_2 = scheduleService.queryMacthListForJob(null, null, "3", "", "2", issueNum); //竞彩 未开始
+            List<MatchResult1> list6_2 = scheduleService.queryMacthListForJob(null, null, "3", "", "2", issueNum,null,null); //竞彩 未开始
             list6.addAll(list6_2);
 
-            List<MatchResult1> list6_3 = scheduleService.queryMacthListForJob(null, null, "3", "", "3", issueNum); //竞彩 已经结束
+            List<MatchResult1> list6_3 = scheduleService.queryMacthListForJob(null, null, "3", "", "3", issueNum,null,null); //竞彩 已经结束
             list6.addAll(list6_3);
 
             deal(list6, issueNum, "6"); //目前存6
@@ -92,13 +92,13 @@ public class MatchListDataJob implements Job {
         try {
             List<MatchResult1> list3 = new ArrayList<>();
 
-            List<MatchResult1> list3_1 = scheduleService.queryMacthListForJob(s, e, "3", "", "1", null);
+            List<MatchResult1> list3_1 = scheduleService.queryMacthListForJob(s, e, "3", "", "1", null,null,null);
             list3.addAll(list3_1);
 
-            List<MatchResult1> list3_2 = scheduleService.queryMacthListForJob(s, e, "3", "", "2", null);
+            List<MatchResult1> list3_2 = scheduleService.queryMacthListForJob(s, e, "3", "", "2", null,null,null);
             list3.addAll(list3_2);
 
-            List<MatchResult1> list3_3 = scheduleService.queryMacthListForJob(s, e, "3", "", "3", null);
+            List<MatchResult1> list3_3 = scheduleService.queryMacthListForJob(s, e, "3", "", "3", null,null,null);
             list3.addAll(list3_3);
 
             //足彩赛事ID串
@@ -131,42 +131,42 @@ public class MatchListDataJob implements Job {
             String startDate = "";
             String endDate = "";
 
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, -2);
-            startDate=df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
+            //startDate=df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
 
             Calendar calendar1 = Calendar.getInstance();
             calendar1.setTime(new Date());
             calendar1.add(Calendar.DAY_OF_MONTH, -1);
-            endDate=df.format(calendar1.getTime()).substring(0, 10) + " 11:00:00";
+            //endDate=df.format(calendar1.getTime()).substring(0, 10) + " 11:00:00";
 
             String time="";
 
             for(int i=0;i<5;i++){
                 long start = ClockUtil.currentTimeMillis();
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
-                startDate=df.format(calendar.getTime()).substring(0, 10) + " 11:00:00";
+                startDate=df.format(calendar.getTime()) + " 11:00:00";
 
                 calendar1.add(Calendar.DAY_OF_MONTH, 1);
-                endDate=df.format(calendar1.getTime()).substring(0, 10) + " 11:00:00";
+                endDate=df.format(calendar1.getTime()) + " 11:00:00";
 
                 time=startDate.substring(0, 10);
 
                 //北单
-                String sBd=df.format(calendar.getTime()).substring(0, 10) + " 10:00:00";
-                String eBd=df.format(calendar1.getTime()).substring(0, 10) + " 10:00:00";
+                String sBd=df.format(calendar.getTime()) + " 10:00:00";
+                String eBd=df.format(calendar1.getTime()) + " 10:00:00";
 
                 List<MatchResult1> list2 = new ArrayList<>();
 
-                List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(sBd, eBd, "2", "", "1", null);//北单 正在进行
+                List<MatchResult1> list2_1 = scheduleService.queryMacthListForJob(sBd, eBd, "2", "", "1", null,null,null);//北单 正在进行
                 list2.addAll(list2_1);
 
-                List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(sBd, eBd, "2", "", "2", null);//北单 未开始
+                List<MatchResult1> list2_2 = scheduleService.queryMacthListForJob(sBd, eBd, "2", "", "2", null,null,null);//北单 未开始
                 list2.addAll(list2_2);
 
-                List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(sBd, eBd, "2", "", "3", null);//北单 已结束
+                List<MatchResult1> list2_3 = scheduleService.queryMacthListForJob(sBd, eBd, "2", "", "3", null,null,null);//北单 已结束
                 list2.addAll(list2_3);
 
                 //北单赛事ID串
@@ -176,12 +176,13 @@ public class MatchListDataJob implements Job {
                 deal(list2, sBd.split(" ")[0], "2");
 
                 //竞彩
+
                 List<MatchResult1> list1=new ArrayList<>();
-                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","1",null); //竞彩
+                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","1",null,null,null); //竞彩
                 list1.addAll(list1_1);
-                List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","2",null); //竞彩
+                List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","2",null,null,null); //竞彩
                 list1.addAll(list1_2);
-                List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","3",null); //竞彩
+                List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "1","","3",null,null,null); //竞彩
                 list1.addAll(list1_3);
 
                 //竞彩赛事ID串
@@ -192,9 +193,11 @@ public class MatchListDataJob implements Job {
 
 
                 //全部
+                String sAll=df.format(calendar.getTime()) + " 10:59:59";
+                String eAll=df.format(calendar1.getTime()) + " 10:59:59";
                 String str = "";
                 List<MatchResult1> list5 = new ArrayList<>();
-                List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4", "", "1", null);
+                List<MatchResult1> list5_1 = scheduleService.queryMacthListForJob(sAll, eAll, "4", "", "1", null,null,null);
                 for (int a = 0; a < list5_1.size(); a++) {
                     if (!str.contains(list5_1.get(a).getMatchId())) {
                         MatchResult1 r1 = list5_1.get(a);
@@ -212,7 +215,7 @@ public class MatchListDataJob implements Job {
                     }
                 }
 
-                List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4", "", "2", null);
+                List<MatchResult1> list5_2 = scheduleService.queryMacthListForJob(sAll, eAll, "4", "", "2", null,null,null);
                 for (int b = 0; b < list5_2.size(); b++) {
                     if (!str.contains(list5_2.get(b).getMatchId())) {
                         MatchResult1 r2 = list5_2.get(b);
@@ -230,7 +233,7 @@ public class MatchListDataJob implements Job {
                     }
                 }
 
-                List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4", "", "3", null);
+                List<MatchResult1> list5_3 = scheduleService.queryMacthListForJob(sAll, eAll, "4", "", "3", null,null,null);
                 for (int c = 0; c < list5_3.size(); c++) {
                     if (!str.contains(list5_3.get(c).getMatchId())) {
                         MatchResult1 r3 = list5_3.get(c);
@@ -272,25 +275,37 @@ public class MatchListDataJob implements Job {
             //处理盘口
             r1.setMatchPankou(getPanKou1(r1.getMatchPankou()));
             if(r1.getMatchState().equals("1")){
-                r1.setStatusDescFK("2");
-                r1.setStatusescFK("2");
+                r1.setStatusDescFK("1");
                 if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
                     r1.setMatchState(len+"'");
+                }else {
+                    r1.setMatchState("'完'");
                 }
             }else if(r1.getMatchState().equals("3")){
                 r1.setStatusDescFK("3");
-                r1.setStatusescFK("3");
                 if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                     Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                     String len = getMinute(df.format(ts), df.format(new Date()));
                     r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");
+                }else {
+                    r1.setMatchState("'完'");
                 }
-            }
-
-            if(r1.getMatchState().equals("未")) {
-                r1.setStatusDescFK("1");
+            }else if(r1.getMatchState().equals("中")){
+                r1.setStatusDescFK("2");
+            }else if(r1.getMatchState().equals("(完)")){
+                r1.setStatusDescFK("-1");
+            }else if(r1.getMatchState().equals("未")) {
+                r1.setStatusDescFK("0");
+            }else if(r1.getMatchState().equals("完")) {
+                r1.setStatusDescFK("-1");
+            }else if(r1.getMatchState().equals("推迟")){
+                r1.setStatusDescFK("0");
+            }else if(r1.getMatchState().equals("腰斩")){
+                r1.setStatusDescFK("0");
+            }else if(r1.getMatchState().equals("取消")){
+                r1.setStatusDescFK("0");
             }
             result1s.add(r1);
         }

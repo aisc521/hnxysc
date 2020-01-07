@@ -1,18 +1,23 @@
 package com.zhcdata.jc.protocol.impl;
 
 import com.google.common.base.Strings;
+import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.ExpertInfo;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcExpertService;
+import com.zhcdata.jc.service.TbPlanService;
 import com.zhcdata.jc.tools.CommonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +34,8 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
     private CommonUtils commonUtils;
     @Resource
     private TbJcExpertService tbJcExpertService;
+    @Resource
+    private TbPlanService tbPlanService;
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -48,6 +55,8 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
         Map<String, Object> resultMap = new HashMap<>();
         try{
             ExpertInfo info = tbJcExpertService.queryExpertDetails(expertId);
+            //查询从专家 是否是发单超过七天
+            TbJcPlan plan = tbPlanService.queryOnePlan(expertId);
             if (info != null) {
                 resultMap.put("id", info.getId());
                 resultMap.put("nickName", info.getNickName());
@@ -55,14 +64,36 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
                 resultMap.put("lable", info.getLable());
                 resultMap.put("introduction", info.getIntroduction());
                 resultMap.put("fans", info.getFans());
-                resultMap.put("trend", info.getTrend());
+                resultMap.put("trend", ternd(info.getTrend()));
                 //判断连中 连红
                 String lz = commonUtils.JsLz(info);
                 resultMap.put("lz", lz);
-                resultMap.put("zSevenDays", info.getzSevenDays());
-                resultMap.put("returnSevenDays", info.getReturnSevenDays());
+                resultMap.put("nowLz", info.getLzNow());
+
+                if(StringUtils.isNotBlank(info.getzSevenDays())){
+                    resultMap.put("zSevenDays", new BigDecimal(info.getzSevenDays()).intValue());
+                }else{
+                    resultMap.put("zSevenDays", "");
+                }
+                if(StringUtils.isNotBlank(info.getReturnSevenDays())){
+                    resultMap.put("returnSevenDays", new BigDecimal(info.getReturnSevenDays()).intValue());
+                }else{
+                    resultMap.put("returnSevenDays", "");
+                }
                 resultMap.put("status", info.getStatus());
                 resultMap.put("grade", info.getGrade());
+                if(plan != null){
+                    Date create = plan.getCreateTime();
+                    Date now = new Date();
+                    Integer dayNum = commonUtils.differentDays(create,now);
+                    if(dayNum <= 7){
+                        resultMap.put("smaller", "1");//小于七天
+                    }else{
+                        resultMap.put("smaller", "0");//大于等于七天
+                    }
+                }else {
+                    resultMap.put("smaller", "1");//小于七天
+                }
                 resultMap.put("message", "成功");
                 resultMap.put("resCode", "000000");
                 resultMap.put("busiCode", "");
@@ -82,6 +113,7 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
                 resultMap.put("message", "专家id不存在");
                 resultMap.put("resCode", "");
                 resultMap.put("busiCode", "");
+                resultMap.put("smaller","");
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -90,5 +122,22 @@ public class QueryExpertDetailsProtocol implements BaseProtocol {
         return resultMap;
     }
 
+    public String ternd(String trend){
+        if(trend.length() > 10){
+            trend = trend.substring(trend.length() - 10,trend.length());
+        }
+        StringBuffer s = new StringBuffer(trend);
+        for(int index = 0; index < s.length();index++){
+            if(index%2==0){
+                if(index + 1 != s.length()){
+                    if(index < 19){
+                        s.insert(index+1,",");
+                    }
+
+                }
+            }
+        }
+        return s.toString();
+    }
 
 }

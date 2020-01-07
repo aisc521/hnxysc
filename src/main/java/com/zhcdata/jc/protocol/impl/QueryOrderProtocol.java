@@ -58,18 +58,12 @@ public class QueryOrderProtocol  implements BaseProtocol {
             resultMap.put("message", ProtocolCodeMsg.ORDER_IS_NULL.getMsg());
             return resultMap;
         }
-        if(0 == tbJcPurchaseDetailed.getPayStatus()){
-            resultMap.put("status", "0");
-        }
-        if(2 == tbJcPurchaseDetailed.getPayStatus()){
-            resultMap.put("status", "2");
-        }
-        if(8 == tbJcPurchaseDetailed.getPayStatus()){
-            resultMap.put("status", "8");
-        }
         if(1 == tbJcPurchaseDetailed.getPayStatus()){
             resultMap.put("status", "2");
+        }else{
+            resultMap.put("status", tbJcPurchaseDetailed.getPayStatus() + "");
         }
+
         resultMap.put("orderId", tbJcPurchaseDetailed.getOrderId());
         resultMap.put("thirdAmount", tbJcPurchaseDetailed.getThirdMoney());
         return resultMap;

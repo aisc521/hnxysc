@@ -11,11 +11,13 @@ import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
+import com.zhcdata.jc.tools.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +35,8 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
     private TbPlanService tbPlanService;
     @Resource
     private TbJcMatchService tbJcMatchService;
+    @Resource
+    private CommonUtils commonUtils;
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -62,15 +66,25 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
         PageInfo<PlanIdDto> planIdDtos = tbPlanService.selectPlanIdByMatchId(matchId,Integer.valueOf(pageNo),20);
         List<PlanIdDto> planIdDtoList = planIdDtos.getList();
         List list = new ArrayList();
-        if(planIdDtoList.size() > 0){
-            for(int i = 0; i < planIdDtoList.size(); i++){
-                //根据planId 查询 方案信息
-                QueryPlanByMatchIdDto queryPlanByMatchIdDto = tbPlanService.queryPlanInfoByPlanId(planIdDtoList.get(i).getPlanId());
-                if(queryPlanByMatchIdDto != null){
-                    queryPlanByMatchIdDto.setPlanId(planIdDtoList.get(i).getPlanId());
-                    List<MatchInfoDto> matchInfoDtos = tbJcMatchService.queryMatchInfoDtoByPlanId(planIdDtoList.get(i).getPlanId());
-                    queryPlanByMatchIdDto.setList(matchInfoDtos);
-                    list.add(queryPlanByMatchIdDto);
+        if(planIdDtoList!= null && planIdDtoList.size()>0){
+            String [] a = new String[planIdDtoList.size()];
+            for (int i = 0;i<planIdDtoList.size();i++){
+                a[i]= String.valueOf(planIdDtoList.get(i).getPlanId());
+            }
+
+            //根据planId 查询 方案信息
+            //QueryPlanByMatchIdDto queryPlanByMatchIdDto = tbPlanService.queryPlanInfoByPlanId(planIdDtoList.get(i).getPlanId());
+            List<QueryPlanByMatchIdDto> queryPlanByMatchIdDto = tbPlanService.queryPlanByPlanIdList(a);
+            if(queryPlanByMatchIdDto != null && queryPlanByMatchIdDto.size() > 0){
+                for(int j = 0; j < queryPlanByMatchIdDto.size(); j++){
+                    QueryPlanByMatchIdDto queryPlanByMatchIdDto1 = queryPlanByMatchIdDto.get(j);
+                    queryPlanByMatchIdDto1.setPlanId(queryPlanByMatchIdDto1.getPlanId());
+                    String lz = commonUtils.JsLz3(queryPlanByMatchIdDto1);
+                    queryPlanByMatchIdDto1.setZSevenDays(String.valueOf(new BigDecimal(queryPlanByMatchIdDto1.getZSevenDays()).intValue()));
+                    queryPlanByMatchIdDto1.setLz(lz);
+                    List<MatchInfoDto> matchInfoDtos = tbJcMatchService.queryMatchInfoDtoByPlanId(queryPlanByMatchIdDto1.getPlanId());
+                    queryPlanByMatchIdDto1.setList(matchInfoDtos);
+                    list.add(queryPlanByMatchIdDto1);
                 }
             }
         }

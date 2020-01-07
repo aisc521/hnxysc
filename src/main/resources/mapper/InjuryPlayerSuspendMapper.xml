@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zhcdata.db.mapper.InjuryPlayerSuspendMapper" >
+  <resultMap id="BaseResultMap" type="com.zhcdata.db.model.InjuryPlayerSuspend" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="schedule_id" property="scheduleId" jdbcType="INTEGER" />
+    <result column="teamID" property="teamid" jdbcType="INTEGER" />
+    <result column="playerID" property="playerid" jdbcType="INTEGER" />
+    <result column="en_name" property="enName" jdbcType="VARCHAR" />
+    <result column="cn_name" property="cnName" jdbcType="VARCHAR" />
+    <result column="ReasonType" property="reasontype" jdbcType="INTEGER" />
+    <result column="Reason" property="reason" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+<!--  Integer scheduleId, Integer teamid, Integer playerid-->
+    <select id="selectByMidTidPid" resultType="com.zhcdata.db.model.InjuryPlayerSuspend">
+      select * from injury_player_suspend where schedule_id = #{scheduleId} and teamID = #{teamid} and playerID = #{playerid} order by id desc limit 1
+    </select>
+</mapper>

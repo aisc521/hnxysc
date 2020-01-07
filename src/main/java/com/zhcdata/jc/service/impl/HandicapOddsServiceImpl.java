@@ -154,7 +154,11 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
             //根据比赛id，查询欧赔对应公司的赔率
             Double startChange = getSameOddsStartChange(pam);
             Double endChange = getSameOddsEndChange(pam);
-            result = europeOddsMapper.queryOddsByCompanyAndMatch(matchId, companyId, matchType, beginDate, startChange, endChange);
+            if ("5".equals(oddsCompany)) {
+                result = europeOddsMapper.queryJcOddsByCompanyAndMatch(matchId, matchType, beginDate, startChange, endChange);
+            } else {
+                result = europeOddsMapper.queryOddsByCompanyAndMatch(matchId, companyId, matchType, beginDate, startChange, endChange);
+            }
         } else {
             //同盘分析
             //根据比赛id，查询亚盘对应公司的赔率（澳彩）
@@ -243,6 +247,8 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
                 map.put("ratioLose", loseOdds);
             }
             map.put("list", list);
+        }else {
+            map.put("list", Lists.newArrayList());
         }
 
         return map;
@@ -386,7 +392,7 @@ public class HandicapOddsServiceImpl implements HandicapOddsService {
      * @return
      */
     private List<Map<String,Double>> getSameHandicapChange(Integer changeTimes,String pam) {
-        List<String> list = Arrays.asList(pam.split("|"));
+        List<String> list = Arrays.asList(pam.split("\\|"));
         //变盘次数不为0或选择项包含全部，或全选，返回空list
         if (0 != changeTimes || list.contains("") || list.contains("0") || list.size() == 6) {
             return Lists.newArrayList();

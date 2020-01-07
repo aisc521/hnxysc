@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import com.zhcdata.db.model.TbJcMatch;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.db.model.TbJcPurchaseDetailed;
-import com.zhcdata.db.model.TbJcUser;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -18,7 +17,10 @@ import org.springside.modules.utils.number.NumberUtil;
 import javax.annotation.Resource;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Description 方案购买
@@ -61,11 +63,20 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.PLANID_NULL.getMsg());
             return map;
         }
+
         String payType = paramMap.get("payType");
         if (Strings.isNullOrEmpty(payType) || !NumberUtil.isNumber(payType)) {
             LOGGER.info("[" + ProtocolCodeMsg.PAY_TYPE.getMsg() + "]:payType---" + payType);
             map.put("resCode", ProtocolCodeMsg.PAY_TYPE.getCode());
             map.put("message", ProtocolCodeMsg.PAY_TYPE.getMsg());
+            return map;
+        }
+
+        String flag = paramMap.get("flag");
+        if (Strings.isNullOrEmpty(flag) || !NumberUtil.isNumber(flag)) {
+            LOGGER.info("[" + ProtocolCodeMsg.PAY_FLAG.getMsg() + "]:flag---" + payType);
+            map.put("resCode", ProtocolCodeMsg.PAY_FLAG.getCode());
+            map.put("message", ProtocolCodeMsg.PAY_FLAG.getMsg());
             return map;
         }
         return null;
@@ -114,6 +125,11 @@ public class SchemePurchaseProtocol implements BaseProtocol {
 
         //判断是否是支付宝支付  判断是否在支付时间范围内
         String payType = paramMap.get("payType");
+       /* if("21".equals(payType)){
+            resultMap.put("resCode", ProtocolCodeMsg.ZFB_ERROR.getCode());
+            resultMap.put("message", ProtocolCodeMsg.ZFB_ERROR.getMsg());
+            return resultMap;
+        }*/
         Calendar instance = Calendar.getInstance();
         int i = instance.get(Calendar.HOUR_OF_DAY);
         if ("21".equals(payType) && i < 7) {
@@ -123,21 +139,28 @@ public class SchemePurchaseProtocol implements BaseProtocol {
         }
 
         //判断是否是首次购买
-        List<TbJcPurchaseDetailed> list = tbJcPurchaseDetailedService.queryIsFirstBuy(Long.valueOf(String.valueOf(paramMap.get("userId"))));
-        if("21".equals(payType) && list.size() <= 0){
+        Integer list = tbJcPurchaseDetailedService.queryIsFirstBuy(Long.valueOf(String.valueOf(paramMap.get("userId"))));
+
+        String flag = paramMap.get("flag");
+        if(list==0&&!"1".equals(flag)){
+            resultMap.put("resCode", ProtocolCodeMsg.PAY_FLAG_EXIT.getCode());
+            resultMap.put("message", ProtocolCodeMsg.PAY_FLAG_EXIT.getMsg());
+            return resultMap;
+        }
+        if("21".equals(payType) && list <= 0){
             resultMap.put("resCode", ProtocolCodeMsg.MONEY_ERROR.getCode());
             resultMap.put("message", "支付宝支持的交易金额为大于10元");
             return resultMap;
         }
         //判断首单 是都是点播卡支付
-        if(list.size() <= 0 && "99".equals(payType)){
+        if(list <= 0 && "99".equals(payType)){
             resultMap.put("resCode", ProtocolCodeMsg.FIRST_BUY_ERROR.getCode());
             resultMap.put("message", "首单不支持点播卡支付");
             return resultMap;
         }
 
         //生成订单信息 并且调用支付
-        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,String.valueOf(paramMap.get("userId")),paramMap,payService,list,headBean);
+        resultMap = tbJcPurchaseDetailedService.schemePurchase(tbJcPlan,paramMap.get("userId"),paramMap,payService,list,headBean,paramMap.get("cell"));
         return resultMap;
     }
 }

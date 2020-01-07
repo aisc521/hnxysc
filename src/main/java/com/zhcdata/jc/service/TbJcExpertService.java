@@ -5,6 +5,7 @@ import com.zhcdata.db.model.TbJcExpert;
 import com.zhcdata.jc.dto.ExpertInfo;
 import com.zhcdata.jc.dto.ExpertInfoBdDto;
 import com.zhcdata.jc.dto.ExpertInfoDto;
+import com.zhcdata.jc.dto.HotExpertDto;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
@@ -25,11 +26,15 @@ public interface TbJcExpertService {
     ExpertInfo queryExpertDetails(String expertId);
 
     /**
-     * 所有专家列表
+     * 所有专家列表(有新方案专家)
      * @return
      */
-    List<ExpertInfo> queryExperts();
+    List<ExpertInfo> queryExperts(String time);
 
+    /**
+     * 所有方案
+     */
+    List<ExpertInfo> queryExpertsAll();
     /**
      * 专家榜
      * @param type
@@ -48,4 +53,8 @@ public interface TbJcExpertService {
     ExpertInfo queryExpertDetailsAndUser(String expertId, String userId);
 
     List<ExpertInfoDto> queryExpertInfo(String userId);
+
+    List<HotExpertDto> queryExpertHotInfoOrder();
+
+    List<HotExpertDto> queryExpertHotInfoOrderLimitSeven();
 }

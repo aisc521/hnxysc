@@ -31,10 +31,14 @@
    d.playername_j playernameJ,
    d.PlayerID_in playeridIn,
    t.Name_J teamname,
-   p.Name_J pname
+   p.Name_J pname,
+   case when d.TeamID = s.HomeTeamID then '1'
+        when d.TeamID = s.GuestTeamID then '2'
+        end as 'homevisit'
    from detailresult d
    LEFT JOIN team t ON d.TeamID = t.TeamID
    LEFT JOIN player p ON d.PlayerID = p.PlayerID
+   LEFT JOIN schedule s ON d.ScheduleID = s.ScheduleID
    where d.ScheduleID = #{matchId}
   </select>
 

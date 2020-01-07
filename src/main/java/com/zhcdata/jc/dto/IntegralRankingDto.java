@@ -12,15 +12,15 @@ public class IntegralRankingDto {
     private String rank;//排行
 
     public IntegralRankingDto() {
-        this.matchCount = "0";
-        this.winCount = "0";
-        this.flatCount = "0";
-        this.loseCount = "0";
-        this.goal = "0";
-        this.lost = "0";
-        this.goalDiff = "0";
-        this.score = "0";
-        this.rank = "0";
+        this.matchCount = "--";
+        this.winCount = "--";
+        this.flatCount = "--";
+        this.loseCount = "--";
+        this.goal = "--";
+        this.lost = "--";
+        this.goalDiff = "--";
+        this.score = "--";
+        this.rank = "--";
     }
 
     public String getMatchCount() {

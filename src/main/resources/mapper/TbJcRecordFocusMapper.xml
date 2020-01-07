@@ -15,11 +15,11 @@
     SELECT * from tb_jc_record_focus rec where rec.user_Id = #{userId} and rec.expert_Id = #{expertId}
   </select>
   <select id="queryFollowExpertPushNum" resultType="integer">
-    select
-    count(*)
-    from
-    tb_jc_record_focus f
-    LEFT JOIN tb_jc_plan p ON f.expert_Id = p.ascription_expert
-    where f.user_Id = #{userId} and f.status = '1' and p.status = '1'
+ select count(*) from (select
+     DISTINCT(p.ascription_expert)
+    from tb_jc_plan p
+    LEFT JOIN tb_jc_record_focus f ON f.expert_Id = p.ascription_expert
+    where p.status = '2' and f.user_Id = #{userId} and f.status = '1') a where 1 = 1
+
   </select>
 </mapper>

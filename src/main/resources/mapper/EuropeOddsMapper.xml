@@ -32,6 +32,21 @@
                 column="{satWin=satWin,satLose=satLose,satFlat=satFlat,oddsId=oddsId,companyId=companyId,
                 matchType=matchType,satOdds=satOdds,endOdds=endOdds,beginDate=beginDate}" />
   </resultMap>
+  <resultMap id="SameBeginOddsJcResultMap" type="com.zhcdata.jc.dto.AnalysisDto">
+    <id column="oddsId" property="oddsId" jdbcType="INTEGER" />
+    <id column="hostName" property="hostName" jdbcType="VARCHAR" />
+    <id column="hostIcon" property="hostIcon" jdbcType="VARCHAR" />
+    <id column="guestName" property="guestName" jdbcType="VARCHAR" />
+    <id column="guestIcon" property="guestIcon" jdbcType="VARCHAR" />
+    <id column="matchDate" property="matchDate" jdbcType="TIMESTAMP" />
+    <id column="satWin" property="satWin" jdbcType="REAL" />
+    <id column="satLose" property="satLose" jdbcType="REAL" />
+    <id column="satFlat" property="satFlat" jdbcType="REAL" />
+    <collection property="list" select="com.zhcdata.db.mapper.EuropeOddsMapper.querySameJcOddsMatchByOdds"
+                ofType="com.zhcdata.jc.dto.AnalysisMatchDto" javaType="java.util.ArrayList"
+                column="{satWin=satWin,satLose=satLose,satFlat=satFlat,oddsId=oddsId,matchType=matchType,
+                satOdds=satOdds,endOdds=endOdds,beginDate=beginDate}" />
+  </resultMap>
   <sql id="Base_Column_List" >
     OddsID, ScheduleID, CompanyID, FirstHomeWin, FirstStandoff, FirstGuestWin, RealHomeWin, 
     RealStandoff, RealGuestWin, ModifyTime, HomeWin_R, GuestWin_R, Standoff_R, isStopLive
@@ -74,6 +89,30 @@
     LEFT JOIN team t2 ON s.guestteamid = t2.teamid
     where  s.ScheduleID = #{matchId}
   </select>
+  <select id="queryJcOddsByCompanyAndMatch" resultMap="SameBeginOddsJcResultMap">
+    SELECT
+    #{matchType} matchType,
+    #{satOdds} satOdds,
+    #{endOdds} endOdds,
+    #{beginDate} beginDate,
+    o.spID oddsId,
+    t.name_j hostName,
+    t.flag hostIcon,
+    t2.name_j guestName,
+    t2.flag guestIcon,
+    s.matchTime matchDate,
+    o.first_sf3 satWin,
+    o.first_sf0 satLose,
+    o.first_sf1 satFlat,
+    s.HomeTeamID homeId,
+    s.GuestTeamID guestId
+    FROM SCHEDULE s
+    left join jc_schedule jcs on s.ScheduleID = jcs.ScheduleID
+    LEFT JOIN jc_schedulesp o on o.ID = jcs.ID
+    LEFT JOIN team t ON s.hometeamid = t.teamid
+    LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+    where  s.ScheduleID = #{matchId} and o.kind = '2' and o.first_sf3 is not null and o.first_sf3 != ''
+  </select>
   <select id="querySameOddsMatchByOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
     select * from (
     select o.OddsID,o.scheduleId,o.FirstHomeWin satWin,o.FirstStandoff satFlat,o.FirstGuestWin satLose,
@@ -113,6 +152,54 @@
     order by s.MatchTime desc
     ) _temp where 1=1
     and OddsID != #{oddsId}
+    <if test="satOdds != null">
+      and odd >= #{satOdds}
+    </if>
+    <if test="endOdds != null">
+      and odd <![CDATA[<]]> #{endOdds}
+    </if>
+    limit 50
+  </select>
+  <select id="querySameJcOddsMatchByOdds" resultType="com.zhcdata.jc.dto.AnalysisMatchDto">
+    select * from (
+    select o.spID,o.ID,o.first_sf3 satWin,o.first_sf1 satFlat,o.first_sf0 satLose,
+    ifnull(o.sf3,o.first_sf3) endWin,
+    ifnull(o.sf1,o.first_sf1) endFlat,
+    ifnull(o.sf0,o.first_sf0) endLose,
+    sc.name_js matchName,
+    t.name_j homeName,
+    s.homescore homeScore,
+    t2.name_j guestName,
+    s.guestscore guestScore,
+    case when s.HomeScore > s.GuestScore then 3
+    when s.HomeScore = s.GuestScore then 1
+    else 0 end result,
+    case when o.first_sf3 - o.first_sf0 <![CDATA[<=]]> 0 THEN
+      abs(o.sf3 - o.first_sf3)
+    ELSE
+      abs(o.sf0 - o.first_sf0)
+    END odd
+    from jc_schedulesp o
+    LEFT JOIN jc_schedule jcs  on o.ID = jcs.ID
+    LEFT JOIN `schedule` s  on jcs.ScheduleID = s.ScheduleID
+    LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
+    LEFT JOIN sclass_type sct ON sct.sclassid = sc.sclassid
+    LEFT JOIN team t ON s.hometeamid = t.teamid
+    LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+    where s.MatchState = -1 and o.kind = '2'
+    <if test="matchType != null and matchType != 1">
+      and sct.type = #{matchType}
+    </if>
+    AND o.first_sf3 = #{satWin}
+    AND o.first_sf0 = #{satLose}
+    AND o.first_sf1 = #{satFlat}
+    <if test="beginDate != null">
+      and s.MatchTime >= #{beginDate}
+    </if>
+    group by o.ID,s.MatchTime
+    order by s.MatchTime desc
+    ) _temp where 1=1
+    and spID != #{oddsId}
     <if test="satOdds != null">
       and odd >= #{satOdds}
     </if>

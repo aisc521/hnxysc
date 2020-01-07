@@ -43,7 +43,7 @@ public interface PayService {
     Map<String, Object> aliPay(String userId, String payMoney, String description, String payType, String orderId, String src, String ip);
 
     /**
-     * 余额支付
+     * 余额支付(冻结余额)
      * @param payMoney 支付金额
      * @param payType   支付方式 0，3 余额支付
      * @param userId 用户id

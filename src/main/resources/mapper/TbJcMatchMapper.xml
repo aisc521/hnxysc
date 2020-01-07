@@ -17,16 +17,30 @@
     <result column="matchResult" property="matchresult" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
     <result column="createTime" property="createtime" jdbcType="TIMESTAMP" />
+
   </resultMap>
   <select id="queryList" resultType="com.zhcdata.jc.dto.MatchPlanResult">
-    SELECT id id,match_Id matchId,match_num matchNum,match_name matchName,home_team hostTeam,visiting_team visitTeam,date_Of_Match dateOfMatch,planInfo planInfo,status isWin from tb_jc_match
-    where plan_id =#{planId} ORDER BY match_num asc
+    SELECT m.id id,m.match_Id matchId,m.match_num matchNum,class.Name_JS matchName,t1.Name_J hostTeam,
+    t2.Name_J visitTeam,DATE_FORMAT(m.date_Of_Match,'%H:%i') as dateOfMatch,m.planInfo planInfo,m.status isWin ,
+    s.HomeScore homeScore,s.GuestScore guestScore,j.PolyGoal polyGoal,s.MatchState matchState
+    from
+    tb_jc_match m
+    left join schedule s on m.match_id = s.ScheduleID
+    left join jc_schedule j on m.match_id = j.ScheduleID
+    LEFT JOIN team t1 ON s.HomeTeamID = t1.TeamID
+    LEFT JOIN team t2 ON s.GuestTeamID = t2.TeamID
+    LEFT JOIN sclass class ON s.SclassID = class.sclassID
+    where  s.scheduleID = m.match_id and j.scheduleID = s.scheduleID  and plan_id =#{planId}
+    ORDER BY match_num asc
+
+
   </select>
   <update id="updateStatus">
     update tb_jc_match set status=#{status},matchResult=#{score} where id=#{id}
   </update>
   <select id="queryList1" resultType="com.zhcdata.jc.dto.MatchPlanResult1">
-    SELECT match_Id matchId,match_num matchNum,match_name matchName,home_team hostTeam,visiting_team visitTeam,date_Of_Match dateOfMatch,status,matchResult score,planInfo planInfo,status isWin from tb_jc_match
+    SELECT m.match_Id matchId,m.match_num matchNum,m.match_name matchName,m.home_team hostTeam,m.visiting_team visitTeam,m.date_Of_Match dateOfMatch,m.status,m.matchResult score,m.planInfo planInfo,m.status isWin,s.MatchState matchState from tb_jc_match m
+    LEFT JOIN `schedule` s on m.match_Id=s.ScheduleID
     where plan_id =#{planId} ORDER BY match_num asc
   </select>
 
@@ -96,11 +110,26 @@
     <select id="queryMatchInfoDtoByPlanId" resultType="com.zhcdata.jc.dto.MatchInfoDto">
 
       SELECT
-      m.match_name matchName,
-      m.home_team hostTeam,
-      m.visiting_team visitTeam,
+      class.Name_JS matchName,
+      t1.Name_J hostTeam,
+      t2.Name_J visitTeam,
       m.date_of_match dateOfMatch
       from tb_jc_match m
+      left join schedule s on m.match_id = s.ScheduleID
+      left join team t1 on  s.HomeTeamID  = t1.TeamID
+      left join team t2 on s.GuestTeamID = t2.TeamID
+       LEFT JOIN sclass class ON s.SclassID = class.sclassID
       where m.plan_id = #{planId}
     </select>
+  <select id="queryMatchStatus" resultType="java.util.Map">
+        select  sum(ab.a) a,sum(ab.b) b from (
+				select count(m.id) a,count(s.scheduleID) b from tb_jc_match m LEFT JOIN schedule s on s.scheduleID = m.match_id
+        and s.MatchState in (-1,-12,-10)
+        where m.plan_id = #{planId}
+				union all
+				select 0 a,count(s.scheduleID) b from tb_jc_match m LEFT JOIN schedule s on s.scheduleID = m.match_id
+        and s.MatchState =-14 and  now()>DATE_ADD(s.matchtime, INTERVAL 36 HOUR)
+        where m.plan_id = #{planId}
+) ab
+  </select>
 </mapper>

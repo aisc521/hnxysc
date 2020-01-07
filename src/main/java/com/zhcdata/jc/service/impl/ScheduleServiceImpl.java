@@ -8,9 +8,11 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.mapper.TbJcMatchLineupMapper;
+import com.zhcdata.db.mapper.TbSclassMapper;
 import com.zhcdata.db.mapper.TbScoreMapper;
 import com.zhcdata.db.model.JcMatchLineupInfo;
 import com.zhcdata.db.model.Schedule;
+import com.zhcdata.db.model.SclassInfo;
 import com.zhcdata.jc.dto.*;
 import com.zhcdata.jc.enums.RedisCodeMsg;
 import com.zhcdata.jc.service.ScheduleService;
@@ -18,6 +20,7 @@ import com.zhcdata.jc.tools.Const;
 import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.utils.time.ClockUtil;
@@ -44,6 +47,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     private TbJcMatchLineupMapper matchLineupMapper;
     @Resource
     private TbScoreMapper scoreMapper;
+    @Autowired
+    private TbSclassMapper sclassMapper;
 
     @Override
     public Schedule queryScheduleById(Long idBet007) {
@@ -154,7 +159,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         List<Integer> matchIds = scheduleMapper.selectScheduleIdByTime(before, after);
         log.error("查询到的前后一天的比赛记录数为：{}", matchIds.size());
         for (Integer matchId : matchIds) {
-            matchAnalysisByType(matchId, null, null);
+            try {
+                matchAnalysisByType(matchId, null, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error("比赛{}分析数据更新异常", matchId);
+            }
         }
     }
 
@@ -233,10 +243,25 @@ public class ScheduleServiceImpl implements ScheduleService {
         Date matchtime = schedule.getMatchtime();
         List<IntegralRankingDto> hostInfoList = new ArrayList<>();
         List<IntegralRankingDto> guestInfoList = new ArrayList<>();
+        List<SclassInfo> sclassInfos = sclassMapper.querySClass(String.valueOf(sclassid));
+        //联赛为true，杯赛为false
+        //判断当前比赛是否是杯赛
+        boolean flag = false;
+        if (sclassInfos != null && sclassInfos.size() > 0) {
+            flag = Short.parseShort("2") == sclassInfos.get(0).getKind();
+        }
+
         //主队积分数据  积分排行
-        //比赛数、胜负、进球、积分、排名、胜率
-        //总
         Integer hometeamid = schedule.getHometeamid();
+        //比赛数、胜负、进球、积分、排名、胜率
+        if (flag) {
+            Schedule beforeSchedule = scheduleMapper.queryLastNoCupMatchByTeam(hometeamid, schedule.getMatchtime());
+            if (beforeSchedule != null) {
+                sclassid = beforeSchedule.getSclassid();
+                subSclassID = beforeSchedule.getSubsclassid();
+            }
+        }
+        //总
         IntegralRankingDto homeTotalData = scoreMapper.queryIntegralRanking(sclassid, subSclassID, null, hometeamid, season);
         if (homeTotalData == null) {
             homeTotalData = new IntegralRankingDto();
@@ -259,9 +284,16 @@ public class ScheduleServiceImpl implements ScheduleService {
         hostInfoList.add(homeGuestData);
         hostInfoList.add(homeNearly6);
         //客队积分数据
-        //比赛数、胜负、进球、积分、排名、胜率
-        //总
         Integer guestteamid = schedule.getGuestteamid();
+        //比赛数、胜负、进球、积分、排名、胜率
+        if (flag) {
+            Schedule beforeSchedule = scheduleMapper.queryLastNoCupMatchByTeam(guestteamid, schedule.getMatchtime());
+            if (beforeSchedule != null) {
+                sclassid = beforeSchedule.getSclassid();
+                subSclassID = beforeSchedule.getSubsclassid();
+            }
+        }
+        //总
         IntegralRankingDto guestTotalData = scoreMapper.queryIntegralRanking(sclassid, subSclassID, null, guestteamid, season);
         if (guestTotalData == null) {
             guestTotalData = new IntegralRankingDto();
@@ -721,6 +753,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                             new BigDecimal(originalOdds).compareTo(new BigDecimal(endOdds)) <= 0) {
                         //如果类型为1 为竞彩
                         if (i == 1) {
+                            sameOddsDto.setMatchType("1");
                             //设置期次文字
                             sameOddsDto.setWeekNum(sameOddsDto.getNoId());
                             if (!jcList.contains(sameOddsDto)) {
@@ -729,6 +762,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                             }
                             //如果类型为2 为北单
                         } else if (i == 2) {
+                            sameOddsDto.setMatchType("2");
                             //设置期次文字
                             sameOddsDto.setIssueBD(sameOddsDto.getIssueNum());
                             sameOddsDto.setNum(sameOddsDto.getNoId());
@@ -738,6 +772,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                             }
                             //如果类型为3 为足彩
                         } else if (i == 3) {
+                            sameOddsDto.setMatchType("3");
                             //设置期次文字
                             sameOddsDto.setIssueZC(sameOddsDto.getIssueNum());
                             sameOddsDto.setNum(sameOddsDto.getNoId());
@@ -861,7 +896,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             text = "中";
         } else if ("3".equals(matchState)) {
             //下半场
-            matchState = "2";
+            matchState = "3";
             if (matchTime2 != null) {
                 //计算下半场进行的时长 matchTime2为半场开始时间，在计算的时间上+45分钟
                 long l = ClockUtil.currentTimeMillis();
@@ -875,37 +910,37 @@ public class ScheduleServiceImpl implements ScheduleService {
             }
         } else if ("4".equals(matchState)) {
             //加时
-            matchState = "2";
-            text = "90'";
+            matchState = "-1";
+            text = "(完)";
             matchMinute = "90";
         } else if ("5".equals(matchState)) {
             //点球
-            matchState = "2";
-            text = "90'";
+            matchState = "-1";
+            text = "(完)";
             matchMinute = "90";
         } else if ("-1".equals(matchState)) {
             //完结
-            matchState = "3";
+            matchState = "-1";
             text = "完";
         } else if ("-14".equals(matchState)) {
             //推迟
-            matchState = "4";
             text = "推迟";
+            matchState = "0";
         } else if ("-12".equals(matchState)) {
             //腰斩
-            matchState = "5";
+            matchState = "0";
             text = "腰斩";
         } else if ("-13".equals(matchState)) {
             //中断
-            matchState = "5";
+            matchState = "-13";
             text = "腰斩";
         } else if ("-10".equals(matchState)) {
             //取消
-            matchState = "6";
+            matchState = "0";
             text = "取消";
         } else if ("-11".equals(matchState)) {
             //待定
-            matchState = "7";
+            matchState = "-11";
             text = "待定";
         }
         dto.setMatchState(matchState);
@@ -1052,8 +1087,8 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return
      */
     @Override
-    public List<MatchResult1> queryMacthListForJob(String startDate, String endDate, String type, String userId, String state,String issueNum) {
-        return scheduleMapper.queryMacthListForJob(startDate, endDate, type, userId, state,issueNum);
+    public List<MatchResult1> queryMacthListForJob(String startDate, String endDate, String type, String userId, String state,String issueNum,List<String> panKouType,List<String> matchType) {
+        return scheduleMapper.queryMacthListForJob(startDate, endDate, type, userId, state,issueNum,panKouType,matchType);
     }
 
     @Override
@@ -1081,6 +1116,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<DrawNoResult> queryList(String startDate) {
         return scheduleMapper.queryList(startDate);
+    }
+
+    @Override
+    public List<DrawNoResult> queryIssueList(Integer issue) {
+        return scheduleMapper.queryIssueList(issue);
     }
 
     @Override

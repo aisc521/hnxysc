@@ -29,22 +29,22 @@ public class VictoryInfo {
     /**
      *三天命中率
      */
-    private String zThreeDays;
+    private Double zThreeDays;
 
     /**
      *五天命中率
      */
-    private String zFiveDays;
+    private Double zFiveDays;
 
     /**
      *七天命中率
      */
-    private String zSevenDays;
+    private Double zSevenDays;
 
     /**
      *七天回报率
      */
-    private String returnSevenDays;
+    private Double returnSevenDays;
 
     /**
      *趋势（黑红黑红红）
@@ -64,12 +64,12 @@ public class VictoryInfo {
     /**
      *全部回报率
      */
-    private String returnAll;
+    private Double returnAll;
 
     /**
      *全部命中率
      */
-    private String zAll;
+    private Double zAll;
 
     /**
      *历史最高连红
@@ -79,7 +79,7 @@ public class VictoryInfo {
     /**
      *七天盈利率
      */
-    private String ylSevenDays;
+    private Double ylSevenDays;
 
     /**
      *近10中几
@@ -120,6 +120,16 @@ public class VictoryInfo {
      *近3中几
      */
     private String three_z;
+
+    /**
+     * 专家排序
+     */
+    private Integer order_By;
+
+    /**
+     * 近7天命中情况
+     */
+    private String sevenDaysHit;
 
 
     public String getId() {
@@ -162,38 +172,6 @@ public class VictoryInfo {
         this.z = z;
     }
 
-    public String getzThreeDays() {
-        return zThreeDays;
-    }
-
-    public void setzThreeDays(String zThreeDays) {
-        this.zThreeDays = zThreeDays;
-    }
-
-    public String getzFiveDays() {
-        return zFiveDays;
-    }
-
-    public void setzFiveDays(String zFiveDays) {
-        this.zFiveDays = zFiveDays;
-    }
-
-    public String getzSevenDays() {
-        return zSevenDays;
-    }
-
-    public void setzSevenDays(String zSevenDays) {
-        this.zSevenDays = zSevenDays;
-    }
-
-    public String getReturnSevenDays() {
-        return returnSevenDays;
-    }
-
-    public void setReturnSevenDays(String returnSevenDays) {
-        this.returnSevenDays = returnSevenDays;
-    }
-
     public String getTrend() {
         return trend;
     }
@@ -218,36 +196,12 @@ public class VictoryInfo {
         this.updateTime = updateTime;
     }
 
-    public String getReturnAll() {
-        return returnAll;
-    }
-
-    public void setReturnAll(String returnAll) {
-        this.returnAll = returnAll;
-    }
-
-    public String getzAll() {
-        return zAll;
-    }
-
-    public void setzAll(String zAll) {
-        this.zAll = zAll;
-    }
-
     public String getLzBig() {
         return lzBig;
     }
 
     public void setLzBig(String lzBig) {
         this.lzBig = lzBig;
-    }
-
-    public String getYlSevenDays() {
-        return ylSevenDays;
-    }
-
-    public void setYlSevenDays(String ylSevenDays) {
-        this.ylSevenDays = ylSevenDays;
     }
 
     public String getTen_z() {
@@ -312,5 +266,77 @@ public class VictoryInfo {
 
     public void setThree_z(String three_z) {
         this.three_z = three_z;
+    }
+
+    public Integer getOrder_By() {
+        return order_By;
+    }
+
+    public void setOrder_By(Integer order_By) {
+        this.order_By = order_By;
+    }
+
+    public Double getzThreeDays() {
+        return zThreeDays;
+    }
+
+    public void setzThreeDays(Double zThreeDays) {
+        this.zThreeDays = zThreeDays;
+    }
+
+    public Double getzFiveDays() {
+        return zFiveDays;
+    }
+
+    public void setzFiveDays(Double zFiveDays) {
+        this.zFiveDays = zFiveDays;
+    }
+
+    public Double getzSevenDays() {
+        return zSevenDays;
+    }
+
+    public void setzSevenDays(Double zSevenDays) {
+        this.zSevenDays = zSevenDays;
+    }
+
+    public Double getReturnSevenDays() {
+        return returnSevenDays;
+    }
+
+    public void setReturnSevenDays(Double returnSevenDays) {
+        this.returnSevenDays = returnSevenDays;
+    }
+
+    public Double getReturnAll() {
+        return returnAll;
+    }
+
+    public void setReturnAll(Double returnAll) {
+        this.returnAll = returnAll;
+    }
+
+    public Double getzAll() {
+        return zAll;
+    }
+
+    public void setzAll(Double zAll) {
+        this.zAll = zAll;
+    }
+
+    public Double getYlSevenDays() {
+        return ylSevenDays;
+    }
+
+    public void setYlSevenDays(Double ylSevenDays) {
+        this.ylSevenDays = ylSevenDays;
+    }
+
+    public String getSevenDaysHit() {
+        return sevenDaysHit;
+    }
+
+    public void setSevenDaysHit(String sevenDaysHit) {
+        this.sevenDaysHit = sevenDaysHit;
     }
 }

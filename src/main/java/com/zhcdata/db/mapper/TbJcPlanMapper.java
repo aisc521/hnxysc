@@ -1,5 +1,7 @@
 package com.zhcdata.db.mapper;
 
+import com.github.pagehelper.PageInfo;
+import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.TbJcPlan;
 import com.zhcdata.jc.dto.*;
 import org.apache.ibatis.annotations.Param;
@@ -19,7 +21,7 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     SPFListDto querySPFList(@Param("MatchId") long MatchId);
 
-    int updateStatus(@Param("isRight") String isRight, @Param("planHit") String planHit, @Param("id") String id);
+    int updateStatus(@Param("isRight") String isRight, @Param("planHit") String planHit, @Param("id") String id,@Param("flag") String flag);
 
     List<PlanResult2> queryPlanById(@Param("id") String id);
 
@@ -28,6 +30,8 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
     List<PlanResult1> queryPlanByExpertId1(@Param("id") long expertId);
 
     TbJcPlan queryPlanByPlanId(@Param("id")Long schemeId);
+
+    TbJcPlan queryPlanByPlanIdAndUserId(@Param("id")Long schemeId,@Param("userId")Long userId);
 
     List<LatestPlanReminderDto> queryLatestPlanReminder();
 
@@ -39,13 +43,17 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     List<PlanResult2> queryPlanByIdandUser(@Param("id")String id, @Param("uid")String uid);
 
-    void updateStatusPlanById(@Param("id") String id);
+    void updateStatusPlanById(@Param("id") String id,@Param("status") int status);
+
+    int updateStatusPlanByIdAndStatus(@Param("id") String id,@Param("status") int status,@Param("oldStatus") int oldStatus);
 
     List<TbJcPlan> queryPlanListJxAndZs();
 
-    List<PlanResult1> queryPlanByExpertIdForXg(@Param("id")String pIdList);
+    List<TbJcPlan> queryPlanListSale();
 
-    List<PlanResult1> queryPlanByExpertIdForXgAndUser(@Param("id")String pIdList, @Param("userId")String userId);
+    List<PlanResult1> queryPlanByExpertIdForXg(@Param("idList")String[] pIdList);
+
+    List<PlanResult1> queryPlanByExpertIdForXgAndUser(@Param("idList")String[] pIdList, @Param("userId")String userId);
 
     List<PlanIdDto> selectPlanIdByMatchId(@Param("matchId")String matchId);
 
@@ -53,4 +61,16 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
 
     QueryPlanByMatchIdDto queryPlanInfoByPlanIdandUserId(@Param("planId")String planId, @Param("userId")String userId);
+
+    JcSchedule queryPolyGoal(@Param("matchId") String matchId);
+
+    List<PlanResult1> queryPlanByExpertIdForExpert(@Param("id")long id,@Param("planId") String planId, @Param("userId")String userId);
+
+    TbJcPlan queryOnePlan(@Param("expertId")String expertId);
+
+    List<PlanResult1> queryHotPlan(@Param("userId")String userId);
+
+    List<QueryPlanByMatchIdDto> queryPlanByPlanIdList(@Param("planIdDtoList")String[] planIdDtoList);
+
+    List<QueryPlanByMatchIdDto> queryPlanInfoByPlanIdandUserIdList(@Param("planIdDtoList")String[] planIdDtoList, @Param("userId")String userId);
 }

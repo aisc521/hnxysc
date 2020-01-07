@@ -130,7 +130,13 @@ public interface ScheduleMapper {
                            @Param("guestCornerHalf") String guestCornerHalf,
                            @Param("ScheduleID") String ScheduleID
                            );
-    List<MatchResult1> queryMacthListForJob(@Param("startTime") String startDate, @Param("endTime")String endDate, @Param("type")String type, @Param("userId") String userId, @Param("state")String state,@Param("issueNum")String issueNum);
+    List<MatchResult1> queryMacthListForJob(@Param("startTime") String startDate,
+                                            @Param("endTime")String endDate,
+                                            @Param("type")String type,
+                                            @Param("userId") String userId,
+                                            @Param("state")String state,@Param("issueNum")String issueNum,
+                                            @Param("panKouTypeList")List<String> panKouType,
+                                            @Param("matchTypeList")List<String> matchType);
 
     String queryZcNum(@Param("startDate")String startDate, @Param("endTime")String endDate);
 
@@ -141,6 +147,8 @@ public interface ScheduleMapper {
     List<Integer> selectMatchIdExceedNow();
 
     List<DrawNoResult> queryList(@Param("startDate")String startDate);
+
+    List<DrawNoResult> queryIssueList(@Param("issue")Integer issue);
 
     IconAndTimeDto selectIconAndTime(@Param("matchId")Integer matchId);
 
@@ -161,4 +169,6 @@ public interface ScheduleMapper {
     List<MatchResult1> selectNowIssueNum();
 
     List<Schedule> queryMatchByStatus();
+
+    Schedule queryLastNoCupMatchByTeam(@Param("teamId") Integer teamId,@Param("date") Date matchTime);
 }

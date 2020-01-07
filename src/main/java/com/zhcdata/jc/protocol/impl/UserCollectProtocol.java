@@ -125,22 +125,25 @@ public class UserCollectProtocol implements BaseProtocol {
             tbPgUCollect.setSrc(src);
             tbPgUCollect.setCreateTime(new Date());
             tbPgUCollect.setUpdateTime(new Date());
-            //查询lottery
-            JcMatchLottery lottery = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(matchId),"JCZQ");
-            if(lottery != null){
-                tbPgUCollect.setType(1);//竞彩
-            }
-            JcMatchLottery lottery1 = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(matchId),"BJDC");
-            if(lottery1 != null){
-                tbPgUCollect.setType(2);//北单
-            }
-            JcMatchLottery lottery2 = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(matchId),"SF14");
-            if(lottery2 != null){
-                tbPgUCollect.setType(3);//足彩
-            }
+            tbPgUCollect.setType(Integer.parseInt(flag));
+            if(tbPgUCollect.getType()==5) {
+                //查询lottery
+                JcMatchLottery lottery = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(matchId), "JCZQ");
+                if (lottery != null) {
+                    tbPgUCollect.setType(1);//竞彩
+                }
+                JcMatchLottery lottery1 = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(matchId), "BJDC");
+                if (lottery1 != null) {
+                    tbPgUCollect.setType(2);//北单
+                }
+                JcMatchLottery lottery2 = lotteryTypeMatchJobService.queryJcMatchLotteryByBet007(Long.parseLong(matchId), "SF14");
+                if (lottery2 != null) {
+                    tbPgUCollect.setType(3);//足彩
+                }
 
-            if(lottery == null && lottery2 == null && lottery1 == null){
-                tbPgUCollect.setType(4);//其他
+                if (lottery == null && lottery2 == null && lottery1 == null) {
+                    tbPgUCollect.setType(4);//其他
+                }
             }
 
             int insert = tbPgUCollectService.insertTbPgUCollect(tbPgUCollect);

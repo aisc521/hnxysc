@@ -30,15 +30,17 @@
     </update>
     <select id="queryHotExperts" resultType="com.zhcdata.jc.dto.ExpertInfo">
     <if test="type==1">
-      SELECT e.id,e.nick_name nickName,v.lz_now lzNow,'1' pushed ,e.img,e.grade grade from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=4
+      SELECT e.id,e.nick_name nickName,v.lz_now lzNow,
+      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id  and p.status = '2') pushed,
+      e.img,e.grade grade from tb_jc_victory v
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=4 and e.is_upshelf = '1'
     </if>
     <if test="type==2">
       SELECT
       e.id,
       e.nick_name nickName,
       v.lz_now lzNow,
-      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id ) pushed,
+      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id  and p.status = '2') pushed,
       v.five_z fiveZ,
       v.six_z sixZ,
       v.seven_z sevenZ,
@@ -50,33 +52,33 @@
       e.grade grade
       from tb_jc_victory v
       LEFT JOIN tb_jc_expert e on e.id=v.expert_id
-      where v.five_z=4 or v.six_z=5 or v.seven_z=6 or v.eight_z=7 or v.nine_z=8 or v.ten_z=9
+      where v.five_z=4 or v.six_z=5 or v.seven_z=6 or v.eight_z=7 or v.nine_z=8 or v.ten_z=9 and e.is_upshelf = '1'
     </if>
     <if test="type==3">
       SELECT
       e.id,
       e.nick_name nickName,
       return_seven_days returnSevenDays,
-      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id ) pushed,
+      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id  and p.status = '2') pushed,
       e.img,
       e.lable lable,
       v.lz_now lzNow,
       e.grade grade
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.return_seven_days>100
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.return_seven_days>100 and e.is_upshelf = '1'
     </if>
     <if test="type==4">
       SELECT
       e.id,
       e.nick_name nickName,
-      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id ) pushed,
+      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id  and p.status = '2') pushed,
       e.img,
       v.lz_now lzNow,
       e.lable lable,
       v.lz_now lzNow,
       e.grade grade
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.seven_z=5 or v.eight_z=6 or v.nine_z=7 or v.ten_z=8
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.seven_z=5 or v.eight_z=6 or v.nine_z=7 or v.ten_z=8 and e.is_upshelf = '1'
     </if>
     <if test="type==5">
       SELECT
@@ -85,50 +87,50 @@
       v.lz_now lzNow,
       e.lable lable,
       v.lz_now lzNow,
-      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id ) pushed,
+      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id  and p.status = '2') pushed,
       e.grade grade,
       e.img
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.ten_z=7 or v.ten_z=6 or v.ten_z=5
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.ten_z=7 or v.ten_z=6 or v.ten_z=5 and e.is_upshelf = '1'
     </if>
     <if test="type==6">
       SELECT
       e.id,
       e.nick_name nickName,
       v.lz_now lzNow,
-      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id ) pushed,
+      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id  and p.status = '2') pushed,
       e.lable lable,
       e.grade grade,
       e.img
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=2
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_now>=2 and e.is_upshelf = '1'
     </if>
     <if test="type==7">
       SELECT
       e.id,
       e.nick_name nickName,
       v.lz_now lzNow,
-      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id ) pushed,
+      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id  and p.status = '2') pushed,
       v.three_z threeZ,
       v.four_z fourZ ,
       e.lable lable,
       e.grade grade,
       e.img
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.three_z=2 or v.four_z=3
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.three_z=2 or v.four_z=3 and e.is_upshelf = '1'
     </if>
     <if test="type==8">
       SELECT
       e.id,
       e.nick_name nickName,
       v.lz_now lzNow,
-      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id ) pushed,
+      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id  and p.status = '2') pushed,
       v.lz_big lzBig ,
       e.lable lable,
       e.grade grade,
       e.img
       from tb_jc_victory v
-      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_big>=8
+      LEFT JOIN tb_jc_expert e on e.id=v.expert_id where v.lz_big>=8 and e.is_upshelf = '1'
     </if>
   </select>
   <select id="queryExpertDetails" resultType="com.zhcdata.jc.dto.ExpertInfo">
@@ -145,45 +147,77 @@
     v.lz_big lzBig
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id
-    where e.id=#{expertId} and e.is_upshelf = '1'
+    where e.id=#{expertId}
     	GROUP BY e.id
   </select>
   <select id="queryExperts" resultType="com.zhcdata.jc.dto.ExpertInfo">
-    SELECT * from tb_jc_expert
+    SELECT * from tb_jc_expert where id in(
+    SELECT ascription_expert id from tb_jc_plan where update_time>=#{time} GROUP BY ascription_expert)
+  </select>
+    <select id="queryExpertsAll" resultType="com.zhcdata.jc.dto.ExpertInfo">
+    SELECT id from tb_jc_expert
   </select>
   <select id="queryExpertsByType" resultType="com.zhcdata.jc.dto.ExpertInfoBdDto">
-    SELECT
-    e.id,
-    e.img,
-    e.nick_name nickName,
-    e.grade,
-    e.lable,
-    (e.fans + e.start_fans) fans,
-    e.introduction,
-    v.lz_now victory,
-    v.z_Seven_Days zSevenDays,
-    v.return_Seven_Days returnSevenDays,
-    (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id ) pushed,
-    e.popularity popularity
-    FROM
-    tb_jc_expert e
-    LEFT JOIN tb_jc_victory v ON e.id = v.expert_id
-    <if test="type==2">
-      ORDER BY victory desc
-    </if>
+      select  * from (
+      SELECT
+      (select count(*) plannum from tb_jc_plan p
+      left join tb_jc_match m ON p.id = m.plan_id
 
-    <if test="type==1">
-      ORDER BY zSevenDays desc
-    </if>
+      where p.ascription_expert = e.id and DATE_SUB(CURDATE(), INTERVAL 7 DAY)<![CDATA[ <= ]]> p.create_time and p.status = '0') num,
+      e.id,
+      e.img,
+      e.nick_name nickName,
+      e.grade,
+      e.lable,
+      (e.fans + e.start_fans) fans,
+      e.introduction,
+      v.lz_now victory,
+      CEILING(v.z_Seven_Days) zSevenDays,
+      CEILING(v.return_Seven_Days) returnSevenDays,
+      v.seven_days_hit sevendays_hit,
+      (SELECT count( * ) FROM tb_jc_plan p WHERE p.ascription_expert = e.id and p.status = '2') pushed,
+      e.popularity popularity
+      FROM
+      tb_jc_expert e
+      LEFT JOIN
+      (SELECT * from(
+      SELECT * from
+      (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300
+      ORDER BY order_By,expert_id asc) t1
+      union all
+      SELECT * from
+      (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY
+      return_seven_days desc,expert_id asc) t2
+      union all
+      SELECT * from
+      (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY
+      order_By,expert_id asc) t3
+      ) vic) v
+      ON e.id = v.expert_id
+      where e.is_upshelf = '1' and v.order_By is not null
+      <if test="type==2">
+          and v.lz_now >= 2
+          ORDER BY v.lz_now desc,v.i asc
 
-    <if test="type==3">
-      ORDER BY returnSevenDays desc
-    </if>
+      </if>
+
+      <if test="type==1">
+          and v.z_Seven_Days >= 40
+          ORDER BY v.z_Seven_Days desc,v.i asc
+
+      </if>
+
+      <if test="type==3">
+          and v.return_Seven_Days >= 50
+          ORDER BY v.return_Seven_Days desc,v.i asc
+
+      </if>
+)aaa where aaa.num >= 10
   </select>
   <select id="query" resultType="com.zhcdata.jc.dto.ExpertInfo">
     SELECT DISTINCT * FROM(
     SELECT e.id,e.nick_name,e.lable,(e.fans + e.start_fans) fans,v.trend,e.img,
-    (SELECT count(*) from tb_jc_plan where ascription_expert=f.expert_Id) pushed
+    (SELECT count(*) from tb_jc_plan where ascription_expert=f.expert_Id  and p.status = '2') pushed
     from tb_jc_record_focus f LEFT JOIN tb_jc_expert e on f.expert_Id=e.id
     LEFT JOIN tb_jc_victory v on f.expert_Id=v.expert_id
     where f.user_Id=#{userId}
@@ -209,10 +243,18 @@
     IFNULL(f.status,'0') status,
     e.grade,
     e.popularity,
-    v.lz_big lzBig
+    v.lz_big lzBig,
+    v.ten_z tenZ,
+    v.nine_z nineZ,
+    v.eight_z eightZ,
+    v.seven_z sevenZ,
+    v.six_z sixZ,
+    v.five_z fiveZ,
+    v.four_z fourZ,
+    v.three_z threeZ
     from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
     LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id and f.user_id = #{userId}
-    where e.id=#{expertId} and e.is_upshelf = '1'
+    where e.id=#{expertId}
     GROUP BY e.id
   </select>
 
@@ -226,11 +268,110 @@
     e.img expertIcon,
     e.grade expertLevel,
     v.lz_now expertHitNum,
-    (SELECT count(*) from tb_jc_plan where ascription_expert=f.expert_Id) expertReleaseCount
+    v.lz_big lzBig,
+    v.ten_z tenZ,
+    v.nine_z nineZ,
+    v.eight_z eightZ,
+    v.seven_z sevenZ,
+    v.six_z sixZ,
+    v.five_z fiveZ,
+    v.four_z fourZ,
+    v.three_z threeZ,
+    v.return_seven_days returnSevenDays,
+    (SELECT count(*) from tb_jc_plan p where p.ascription_expert=f.expert_Id and p.status = '2') expertReleaseCount
     from tb_jc_record_focus f LEFT JOIN tb_jc_expert e on f.expert_Id=e.id
     LEFT JOIN tb_jc_victory v on f.expert_Id=v.expert_id
     where f.user_Id=#{userId} and status = '1'
     ) a
+  </select>
+
+
+  <select id="queryExpertHotInfoOrder" resultType="com.zhcdata.jc.dto.HotExpertDto">
+      select
+      e.id id,
+      e.nick_name nickName,
+      e.img img,
+      e.lable lable,
+      e.introduction introduction,
+      e.is_upshelf isUpshelf,
+      e.grade grade,
+      v.lz_now  lzNow,
+      v.z_three_days  zThreeDays,
+      v.z_five_days  zFiveDays,
+      v.z_seven_days  zSevenDays,
+      v.return_seven_days  returnSevenDays,
+      v.trend  trend,
+      v.return_all  returnAll,
+      v.z_all  zAll,
+      v.lz_big  lzBig,
+      v.yl_seven_days  ylSevenDays,
+      v.ten_z  tenZ,
+      v.nine_z  nineZ,
+      v.eight_z  eightZ,
+      v.seven_z  sevenZ,
+      v.six_z  sixZ,
+      v.five_z  fiveZ,
+      v.four_z  fourZ,
+      v.three_z  threeZ,
+      v.order_By  orderBy
+      from tb_jc_expert e
+      LEFT JOIN (SELECT * from(
+    SELECT * from
+    (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By <![CDATA[ < ]]> 300 ORDER BY order_By,expert_id asc) t1
+    union all
+    SELECT * from
+    (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+    union all
+    SELECT * from
+    (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+    ) vic) v ON e.id = v.expert_id
+      where e.is_upshelf = '1' and v.order_By is not null
+      order by v.i asc
+  </select>
+  <select id="queryExpertHotInfoOrderLimitSeven" resultType="com.zhcdata.jc.dto.HotExpertDto">
+    select
+    e.id id,
+    e.nick_name nickName,
+    e.img img,
+    e.lable lable,
+    e.introduction introduction,
+    e.is_upshelf isUpshelf,
+    e.grade grade,
+    v.lz_now  lzNow,
+    v.z_three_days  zThreeDays,
+    v.z_five_days  zFiveDays,
+    v.z_seven_days  zSevenDays,
+    v.return_seven_days  returnSevenDays,
+    v.trend  trend,
+    v.return_all  returnAll,
+    v.z_all  zAll,
+    v.lz_big  lzBig,
+    v.yl_seven_days  ylSevenDays,
+    v.ten_z  tenZ,
+    v.nine_z  nineZ,
+    v.eight_z  eightZ,
+    v.seven_z  sevenZ,
+    v.six_z  sixZ,
+    v.five_z  fiveZ,
+    v.four_z  fourZ,
+    v.three_z  threeZ,
+    v.order_By  orderBy
+    from tb_jc_expert e
+    LEFT JOIN ( SELECT * from
+    (
+    SELECT * from
+    (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+    union all
+    SELECT * from
+    (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+    union all
+    SELECT * from
+    (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+    )
+    vic) v ON e.id = v.expert_id
+    where e.is_upshelf = '1' and v.order_By is not null
+    order by v.i asc,v.order_By is not null
+    limit 0,7
   </select>
 
 </mapper>

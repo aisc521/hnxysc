@@ -90,7 +90,7 @@
         </if>
     </select>
     <select id="selectNearlyMatchData" resultType="com.zhcdata.jc.dto.IntegralRankingDto">
-    select t2.matchCount,t2.winCount,t2.flatCount,t2.loseCount,t2.goal,t2.lost,(winCount*3+flatCount) score,(t2.goal-t2.lost) goalDiff from (
+    select '--' as rank, t2.matchCount,t2.winCount,t2.flatCount,t2.loseCount,t2.goal,t2.lost,(winCount*3+flatCount) score,(t2.goal-t2.lost) goalDiff from (
     SELECT
     count(Scheduleid) matchCount,
     sum(case when hometeamid = #{teamId} and homescore>guestscore then 1
@@ -101,7 +101,8 @@
     sum(case when hometeamid =  #{teamId} then homescore else guestscore END) goal,
     sum(case when hometeamid =  #{teamId} then guestscore else homescore end) lost
     FROM(
-    SELECT * from schedule where matchState = -1
+    SELECT s.* from schedule s left join sclass ss ON s.SclassID = ss.sclassID
+				WHERE ss.kind = 1 and matchState = -1
               AND matchtime <![CDATA[<]]> #{matchTime}
      AND (hometeamid = #{teamId} or guestteamid = #{teamId})
      order by matchtime desc limit #{count}) t
@@ -155,12 +156,14 @@
         t2.name_j guestName,
         s.guestscore guestScore,
         s.guesthalfscore guestHalfScore,
-        CASE WHEN s.hometeamid = #{homeTeamId} THEN 1 ELSE 2 END panlu
+        CASE WHEN s.hometeamid = #{homeTeamId} THEN 1 ELSE 2 END panlu,
+        ifnull(l.Goal_Real,0) goal
         FROM
         schedule s
         LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
         LEFT JOIN team t ON s.hometeamid = t.teamid
         LEFT JOIN team t2 ON s.guestteamid = t2.teamid
+        LEFT JOIN letgoal l on s.scheduleID = l.scheduleid and l.companyid = 8
         WHERE
         matchState = -1
         AND matchtime <![CDATA[<]]> #{matchTime}
@@ -190,7 +193,7 @@
         (case when o.FirstHomeWin <![CDATA[<]]> o.RealHomeWin then 1 else -1 end)
         else
         (case when o.FirstGuestWin <![CDATA[<]]> o.RealGuestWin then 1 else -1 end) end trend,
-        l.FirstGoal firstGoal,l.FirstUpOdds firstUpOdds,l.FirstDownOdds firstDownOdds from (
+        l.FirstGoal firstGoal,l.FirstUpOdds firstUpOdds,l.FirstDownOdds firstDownOdds,recommendCount from (
         SELECT
         CASE l.lottery WHEN 'JCZQ' THEN '1' WHEN 'BJDC' THEN '2' WHEN 'SF14' THEN '3' ELSE '4' END lotteryType,
         l.issue_num issueNum,
@@ -209,7 +212,8 @@
         s.home_yellow homeYlwCard,
         s.guest_yellow guestYlwCard,
         s.scheduleid matchId,
-        s.matchstate matchState
+        s.matchstate matchState,
+        (SELECT count(*) from tb_jc_match where match_id=s.ScheduleID) recommendCount
         FROM SCHEDULE s
         LEFT JOIN sclass sc ON s.sclassid = sc.sclassid
         LEFT JOIN team t ON s.hometeamid = t.teamid
@@ -821,6 +825,9 @@
         DATE_FORMAT(sc.MatchTime,'%H:%i') matchTime,/*开始时间*/
         sc.MatchTime2 MatchTime2,
         sc.MatchTime matchTimeOrder,
+        case when sc.MatchState in('0','-10','-11','-12','-13','-14') then '3'
+        when sc.MatchState in('1','2','3') then '0'
+        when sc.MatchState in('4','5','-1') then '5' end as ord,
         case when sc.MatchState = '0' then '未' /*未开始*/
         when sc.MatchState in('4','5') then '(完)' /*正在进行*/
         when sc.MatchState = '2' then '中' /*中场*/
@@ -844,8 +851,7 @@
         sc.GuestScore guestScore,/*客队比分*/
         sc.ScheduleID matchId,/*比赛id*/
         lottery.NO_ID number,/*期数场次*/
-        IFNULL(pg.status,'0') iscollect,/*是否收藏*/
-
+        0 iscollect,
         <if test="type == 1">
             lottery.NO_ID num,/*期数场次*/
         </if>
@@ -861,19 +867,26 @@
         CASE WHEN lottery.LOTTERY = 'JCZQ' then '1'
         WHEN lottery.LOTTERY = 'SF14' then '3'
         WHEN lottery.LOTTERY = 'BJDC' then '2'
-        end as matchType
+        end as matchType,
+        (SELECT count(*) from tb_jc_match m
+        left join tb_jc_plan p on m.plan_id = p.id
+        left join tb_jc_expert e  on p.ascription_expert = e.id
+        where m.match_id=sc.ScheduleID and e.is_upshelf = '1') recommendCount
+        <if test="type == 1">
+            ,(select case when Single101='1' then '1'
+                         when Single105='1'  then '1' end from jc_schedule where scheduleid=sc.ScheduleID) isSingle
+        </if>
         from schedule sc
         LEFT JOIN sclass class ON sc.SclassID = class.sclassID
         LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
         LEFT JOIN team t ON sc.HomeTeamID = t.TeamID
         LEFT JOIN team t2 ON sc.GuestTeamID = t2.TeamID
         LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID = lottery.ID_BET007
-        LEFT JOIN tb_pg_u_collect pg ON sc.ScheduleID = pg.match_id and pg.user_id = #{userId}
         <if test="type == 3">
-            <if test="issueNum !=null ">
+            <if test="issueNum !=null and issueNum !=''">
                 where lottery.ISSUE_NUM =#{issueNum}
             </if>
-            <if test="issueNum ==null ">
+            <if test="issueNum ==null || issueNum==''">
                 where lottery. ISSUE_NUM in(
                 SELECT lottery.ISSUE_NUM from jc_match_lottery lottery
                 LEFT JOIN `schedule` sch on lottery.ID_BET007=sch.scheduleID where lottery.lottery='SF14' and
@@ -892,7 +905,7 @@
             and sc.MatchState = '0'
         </if>
         <if test="state == 3">/*已结束*/
-            and sc.MatchState = '-1'
+            and sc.MatchState in(-1,-10,-12,-14)
         </if>
         <if test="type == 1">/*竞彩*/
             and lottery.LOTTERY = 'JCZQ'
@@ -903,8 +916,22 @@
         <if test="type == 2">/*北单*/
             and lottery.LOTTERY = 'BJDC'
         </if>
-        and sc.bfShow=0
-        ) a ORDER BY
+        <if test="type != 3">
+            and sc.bfShow=0
+        </if>
+        <if test="panKouTypeList != null and panKouTypeList.size>0">
+            and goal.FirstGoal in
+            <foreach collection="panKouTypeList" item="name" index="index" open="(" close=")" separator=",">
+                #{name}
+            </foreach>
+        </if>
+        <if test="matchTypeList != null and matchTypeList.size>0">
+            and class.Name_JS in
+            <foreach collection="matchTypeList" item="name" index="index" open="(" close=")" separator=",">
+                #{name}
+            </foreach>
+        </if>
+        ) a GROUP BY a.matchId ORDER BY
         <if test="type == 1">
             a.num
         </if>
@@ -918,6 +945,10 @@
             a.num1,abs(a.num2)
         </if>
         asc
+        <if test="panKouTypeList != null or matchTypeList != null">
+            ,abs(a.ord)
+        </if>
+        ,matchid asc
     </select>
 
 
@@ -969,16 +1000,23 @@
             sc.ScheduleID matchId,/*比赛id*/
             lottery.ISSUE_NUM num,/*期数场次*/
             lottery.NO_ID number,/*期数场次*/
-            IFNULL(pg.status,'0') iscollect,/*是否收藏*/
+            1 iscollect,/*是否收藏*/
             case when pg.type = '1' then '1'
-                 when pg.type = '2' then '3'
-                 when pg.type = '3' then '2'
+                 when pg.type = '2' then '2'
+                 when pg.type = '3' then '3'
+                 when pg.type = '4' then '4'
                  end as 'matchtype',
             case when pg.type = '1' then 'JCZQ'
                  when pg.type = '2' then 'BJDC'
                  when pg.type = '3' then 'SF14'
                  end as 'Matchty',
-			lottery.LOTTERY lotterType
+			lottery.LOTTERY lotterType,
+			(SELECT count(*) from tb_jc_match m
+                left join tb_jc_plan p on m.plan_id = p.id
+                left join tb_jc_expert e  on p.ascription_expert = e.id
+                where m.match_id=sc.ScheduleID and e.is_upshelf = '1') recommendCount
+            ,(select case when Single101='1' then '1'
+                when Single105='1'  then '1' end from jc_schedule where scheduleid=sc.ScheduleID) isSingle
             from schedule  sc
             LEFT JOIN sclass class ON sc.SclassID = class.sclassID
             LEFT JOIN letgoal goal ON sc.ScheduleID = goal.ScheduleID and goal.CompanyID = '8'
@@ -989,7 +1027,7 @@
             WHERE pg.status = '1' and pg.user_id = #{userId} and pg.over_time <![CDATA[>=]]> now()
             GROUP BY sc.ScheduleID
             ORDER BY sc.MatchTime
-            ) b ORDER BY abs(b.ord) asc,b.MatchTime asc
+            ) b ORDER BY abs(b.ord) asc,b.MatchTime asc,matchid asc
     </select>
 
     <select id="selectMatchIdExceedNow" resultType="java.lang.Integer">
@@ -1007,7 +1045,7 @@
         SCHEDULE sc
         LEFT JOIN jc_match_lottery lottery ON sc.ScheduleID  = lottery.ID_BET007
         WHERE
-        sc.MatchTime <![CDATA[<]]> #{startDate}
+        sc.MatchTime <![CDATA[<]]> now()
         AND sc.MatchState = '-1'
         AND lottery.LOTTERY = 'SF14'
         GROUP BY
@@ -1023,7 +1061,7 @@
         SCHEDULE sc
         LEFT JOIN jc_match_lottery lottery ON  sc.ScheduleID  = lottery.ID_BET007
         WHERE
-        sc.MatchTime > #{startDate}
+        sc.MatchTime > now()
         AND lottery.LOTTERY = 'SF14'
         GROUP BY
         drawno
@@ -1031,6 +1069,14 @@
         ) a
         ORDER BY
         drawno ASC
+    </select>
+
+    <select id="queryIssueList" resultType="com.zhcdata.jc.dto.DrawNoResult">
+        select * from(
+        SELECT
+        ISSUE_NUM drawno
+        FROM jc_match_lottery where ISSUE_NUM&lt;#{issue} AND LOTTERY = 'SF14' GROUP BY drawno desc LIMIT 10
+        ) a GROUP BY drawno asc
     </select>
 
     <select id="selectIconAndTime" resultType="com.zhcdata.jc.dto.IconAndTimeDto" parameterType="java.lang.Integer">
@@ -1046,18 +1092,20 @@
         where sc.ScheduleID = #{matchId}
     </select>
     <select id="selectStatusChangedToday" resultType="com.zhcdata.db.model.Schedule">
-        SELECT * from `schedule` where MatchTime >= #{sat} and MatchTime &lt;= #{end} and matchState!=-1
+        SELECT * from `schedule` where MatchTime >= #{sat} and MatchTime &lt;= #{end}
     </select>
     <select id="quertMatchInfo" resultType="com.zhcdata.jc.dto.MatchInfoForBdDto">
         SELECT
-        sc.HomeTeam homeTeam,
-        sc.GuestTeam guestTeam,
+        t1.Name_J homeTeam,
+        t2.Name_J guestTeam,
         l.ISSUE_NUM issueNum,
         s.Name_JS className,
         sc.MatchTime dateOfMatch
         from `schedule` sc
         LEFT JOIN jc_match_lottery l on sc.ScheduleID = l.ID_BET007 and l.LOTTERY = 'BJDC'
         LEFT JOIN sclass s on sc.SclassID = s.sclassID
+        LEFT JOIN team t1 on sc.HomeTeamID = t1.TeamID
+        LEFT JOIN team t2 on sc.GuestTeamID = t2.TeamID
         where sc.ScheduleID = #{matchId}
     </select>
 
@@ -1117,5 +1165,9 @@
 
     <select id="queryMatchByStatus" resultType="com.zhcdata.db.model.Schedule">
         select * from schedule sc where sc.MatchState in ('1','2','3','4','5')
+    </select>
+    <select id="queryLastNoCupMatchByTeam" resultType="com.zhcdata.db.model.Schedule">
+        SELECT s.* from `schedule` s left join sclass ss on s.sclassID = ss.sclassID
+         where ss.kind = 1 and (s.homeTeamId=#{teamId} or s.guestTeamId=#{teamId}) and s.matchTime &lt; #{date} ORDER BY s.matchTime desc LIMIT 1
     </select>
 </mapper>

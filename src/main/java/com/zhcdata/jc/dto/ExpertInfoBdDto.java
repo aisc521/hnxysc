@@ -23,5 +23,6 @@ public class ExpertInfoBdDto {
     private String  returnSevenDays;
     private String pushed;
     private String popularity;
+    private String sevendayshit;
 
 }
