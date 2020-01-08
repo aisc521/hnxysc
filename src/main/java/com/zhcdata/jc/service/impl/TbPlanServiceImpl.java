@@ -203,13 +203,13 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public List<QueryPlanByMatchIdDto> queryPlanByPlanIdList(String[] planIdDtoList) {
-        return tbJcPlanMapper.queryPlanByPlanIdList(planIdDtoList);
+    public List<QueryPlanByMatchIdDto> queryPlanByPlanIdList(String[] planIdDtoList,String orderInfo) {
+        return tbJcPlanMapper.queryPlanByPlanIdList(planIdDtoList,orderInfo);
     }
 
     @Override
-    public List<QueryPlanByMatchIdDto> queryPlanInfoByPlanIdandUserIdList(String[] planIdDtoList, String userId) {
-        return tbJcPlanMapper.queryPlanInfoByPlanIdandUserIdList(planIdDtoList,userId);
+    public List<QueryPlanByMatchIdDto> queryPlanInfoByPlanIdandUserIdList(String[] planIdDtoList, String userId,String orderInfo) {
+        return tbJcPlanMapper.queryPlanInfoByPlanIdandUserIdList(planIdDtoList,userId,orderInfo);
     }
 
 

@@ -2,6 +2,7 @@ package com.zhcdata.jc.protocol.impl;
 
 import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
+import com.zhcdata.db.model.Schedule;
 import com.zhcdata.jc.dto.MatchInfoDto;
 import com.zhcdata.jc.dto.PlanIdDto;
 import com.zhcdata.jc.dto.ProtocolParamDto;
@@ -9,6 +10,7 @@ import com.zhcdata.jc.dto.QueryPlanByMatchIdDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
+import com.zhcdata.jc.service.ScheduleService;
 import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
 import com.zhcdata.jc.tools.CommonUtils;
@@ -39,6 +41,9 @@ public class QueryPlanByMatchIdAndUserProtocol implements BaseProtocol {
     private TbJcMatchService tbJcMatchService;
     @Resource
     private CommonUtils commonUtils;
+    @Resource
+    private ScheduleService scheduleService;
+
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
         Map<String, Object> map = new HashMap<>();
@@ -82,9 +87,18 @@ public class QueryPlanByMatchIdAndUserProtocol implements BaseProtocol {
             for (int i = 0; i < planIdDtoList.size(); i++) {
                 a[i] = String.valueOf(planIdDtoList.get(i).getPlanId());
             }
-            //根据planId 查询 方案信息
-            //QueryPlanByMatchIdDto queryPlanByMatchIdDto = tbPlanService.queryPlanInfoByPlanIdandUserId(planIdDtoList.get(i).getPlanId(),userId);
-            List<QueryPlanByMatchIdDto> queryPlanByMatchIdDto1 = tbPlanService.queryPlanInfoByPlanIdandUserIdList(a,userId);
+            //判断是否是已经完场的比赛
+            Schedule schedule = scheduleService.queryScheduleById(Long.valueOf(matchId));
+            if(schedule == null){
+                return resultMap;
+            }
+            List<QueryPlanByMatchIdDto> queryPlanByMatchIdDto1 = new ArrayList<>();
+            //已经完场的比赛
+            if("-1".equals(String.valueOf(schedule.getMatchstate()))){
+                queryPlanByMatchIdDto1 = tbPlanService.queryPlanInfoByPlanIdandUserIdList(a,userId,"2");
+            }else{
+                 queryPlanByMatchIdDto1 = tbPlanService.queryPlanInfoByPlanIdandUserIdList(a,userId,"1");
+            }
             if(queryPlanByMatchIdDto1 != null && queryPlanByMatchIdDto1.size() > 0){
                 for(int j = 0; j < queryPlanByMatchIdDto1.size(); j++){
                     QueryPlanByMatchIdDto queryPlanByMatchIdDto = queryPlanByMatchIdDto1.get(j);

@@ -445,7 +445,30 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         }else{
             tbJcPurchaseDetailed.setFirst("0");
             if("99".equals(tbJcPurchaseDetailed.getPlanPayType())){
-                tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(20));
+
+                //判断点播支付类型
+                //普通点播次卡
+                if("1".equals(String.valueOf(result.get("type")))){
+                    tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(20));
+                }
+                //周卡
+                if("5".equals(String.valueOf(result.get("type")))){
+                    tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(10));
+                    //点播周卡支付
+                    tbJcPurchaseDetailed.setPlanPayType("3");
+                    tbJcPurchaseDetailed.setPayInfo("点播周卡支付");
+                    tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(10));//支付金额
+                    tbJcPurchaseDetailed.setPayType(Long.valueOf(98));
+                }
+                //免费点播卡
+                if("7".equals(String.valueOf(result.get("type")))){
+                    tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(0));
+                    //免费点播卡支付
+                    tbJcPurchaseDetailed.setPlanPayType("4");
+                    tbJcPurchaseDetailed.setPayInfo("免费点播卡卡支付");
+                    tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(0));//支付金额
+                    tbJcPurchaseDetailed.setPayType(Long.valueOf(97));
+                }
             }else{
                 tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
             }

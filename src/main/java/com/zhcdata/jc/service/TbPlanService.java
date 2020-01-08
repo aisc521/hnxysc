@@ -91,7 +91,7 @@ public interface TbPlanService {
 
     int updatePlanByPlanId(TbJcPlan tbJcPlan) throws BaseException;
 
-    List<QueryPlanByMatchIdDto> queryPlanByPlanIdList(String[] planIdDtoList);
+    List<QueryPlanByMatchIdDto> queryPlanByPlanIdList(String[] planIdDtoList,String orderInfo);
 
-    List<QueryPlanByMatchIdDto> queryPlanInfoByPlanIdandUserIdList(String[] planIdDtoList, String userId);
+    List<QueryPlanByMatchIdDto> queryPlanInfoByPlanIdandUserIdList(String[] planIdDtoList, String userId,String orderInfo);
 }

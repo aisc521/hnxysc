@@ -790,117 +790,351 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
 
 
     <select id="queryPlanByPlanIdList" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
-        select
-        e.id id,
-        e.nick_name nickName,
-        e.img img,
-        e.lable lable,
-        (e.fans + e.start_fans)  fans,
-        p.plan_popularity popularity,
-        v.lz_now lz,
-        v.z_three_days zThreeDays,
-        v.z_five_days zFiveDays,
-        v.z_seven_days zSevenDays,
-        v.ten_z tenZ,
-        v.nine_z nineZ,
-        v.eight_z eightZ,
-        v.seven_z sevenZ,
-        v.six_z sixZ,
-        v.five_z fiveZ,
-        v.four_z fourZ,
-        v.three_z threeZ,
-        v.lz_big lzBig,
-        v.return_seven_days returnSevenDays,
-        v.lz_big lzBig,
-        p.title titleShowType,
-        p.price price,
-        p.create_time createTime,
-        0 buStatus,
-        e.grade grade,
-        p.status planStatus,
-        p.id planid,
-        p.plan_Hit planHit
-        from tb_jc_plan p
-        left join tb_jc_expert e on p.ascription_expert = e.id
-        left join
-        (SELECT * from(
-        SELECT * from
-        (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
-        union all
-        SELECT * from
-        (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
-        union all
-        SELECT * from
-        (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
-        ) vic) v
-        on e.id = v.expert_id
-        where 1 = 1   and e.is_upshelf = '1' and v.order_By is not null
-        <if test="planIdDtoList != null and planIdDtoList.length > 0">
-            and p.id in
-            <foreach collection="planIdDtoList" item="pid" index="index" open="(" close=")" separator=",">
-                #{pid}
-            </foreach>
 
+        <if test="orderInfo == '1'">
+            select
+            e.id id,
+            e.nick_name nickName,
+            e.img img,
+            e.lable lable,
+            (e.fans + e.start_fans)  fans,
+            p.plan_popularity popularity,
+            v.lz_now lz,
+            v.z_three_days zThreeDays,
+            v.z_five_days zFiveDays,
+            v.z_seven_days zSevenDays,
+            v.ten_z tenZ,
+            v.nine_z nineZ,
+            v.eight_z eightZ,
+            v.seven_z sevenZ,
+            v.six_z sixZ,
+            v.five_z fiveZ,
+            v.four_z fourZ,
+            v.three_z threeZ,
+            v.lz_big lzBig,
+            v.return_seven_days returnSevenDays,
+            v.lz_big lzBig,
+            p.title titleShowType,
+            p.price price,
+            p.create_time createTime,
+            0 buStatus,
+            e.grade grade,
+            p.status planStatus,
+            p.id planid,
+            p.plan_Hit planHit
+            from tb_jc_plan p
+            left join tb_jc_expert e on p.ascription_expert = e.id
+            left join
+            (SELECT * from(
+            SELECT * from
+            (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+            union all
+            SELECT * from
+            (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+            union all
+            SELECT * from
+            (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+            ) vic) v
+            on e.id = v.expert_id
+            where 1 = 1   and e.is_upshelf = '1' and v.order_By is not null
+            <if test="planIdDtoList != null and planIdDtoList.length > 0">
+                and p.id in
+                <foreach collection="planIdDtoList" item="pid" index="index" open="(" close=")" separator=",">
+                    #{pid}
+                </foreach>
+
+            </if>
+            GROUP BY p.id
+            ORDER BY  v.i asc,p.create_time desc
         </if>
-        GROUP BY p.id
-        ORDER BY  v.i asc,p.create_time desc
+        <if test="orderInfo == '2'">
+            (select
+            e.id id,
+            e.nick_name nickName,
+            e.img img,
+            e.lable lable,
+            (e.fans + e.start_fans)  fans,
+            p.plan_popularity popularity,
+            v.lz_now lz,
+            v.z_three_days zThreeDays,
+            v.z_five_days zFiveDays,
+            v.z_seven_days zSevenDays,
+            v.ten_z tenZ,
+            v.nine_z nineZ,
+            v.eight_z eightZ,
+            v.seven_z sevenZ,
+            v.six_z sixZ,
+            v.five_z fiveZ,
+            v.four_z fourZ,
+            v.three_z threeZ,
+            v.lz_big lzBig,
+            v.return_seven_days returnSevenDays,
+            v.lz_big lzBig,
+            p.title titleShowType,
+            p.price price,
+            p.create_time createTime,
+            0 buStatus,
+            e.grade grade,
+            p.status planStatus,
+            p.id planid,
+            p.plan_Hit planHit
+            from tb_jc_plan p
+            left join tb_jc_expert e on p.ascription_expert = e.id
+            left join
+            (SELECT * from(
+            SELECT * from
+            (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+            union all
+            SELECT * from
+            (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+            union all
+            SELECT * from
+            (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+            ) vic) v
+            on e.id = v.expert_id
+            where 1 = 1   and e.is_upshelf = '1' and v.order_By is not null and p.is_right in('0','1')
+            <if test="planIdDtoList != null and planIdDtoList.length > 0">
+                and p.id in
+                <foreach collection="planIdDtoList" item="pid" index="index" open="(" close=")" separator=",">
+                    #{pid}
+                </foreach>
+
+            </if>
+            GROUP BY p.id
+            ORDER BY p.is_right desc, v.i asc,p.create_time desc,limit 999999999999)
+
+            union all
+
+            (select
+            e.id id,
+            e.nick_name nickName,
+            e.img img,
+            e.lable lable,
+            (e.fans + e.start_fans)  fans,
+            p.plan_popularity popularity,
+            v.lz_now lz,
+            v.z_three_days zThreeDays,
+            v.z_five_days zFiveDays,
+            v.z_seven_days zSevenDays,
+            v.ten_z tenZ,
+            v.nine_z nineZ,
+            v.eight_z eightZ,
+            v.seven_z sevenZ,
+            v.six_z sixZ,
+            v.five_z fiveZ,
+            v.four_z fourZ,
+            v.three_z threeZ,
+            v.lz_big lzBig,
+            v.return_seven_days returnSevenDays,
+            v.lz_big lzBig,
+            p.title titleShowType,
+            p.price price,
+            p.create_time createTime,
+            0 buStatus,
+            e.grade grade,
+            p.status planStatus,
+            p.id planid,
+            p.plan_Hit planHit
+            from tb_jc_plan p
+            left join tb_jc_expert e on p.ascription_expert = e.id
+            left join
+            (SELECT * from(
+            SELECT * from
+            (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+            union all
+            SELECT * from
+            (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+            union all
+            SELECT * from
+            (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+            ) vic) v
+            on e.id = v.expert_id
+            where 1 = 1   and e.is_upshelf = '1' and v.order_By is not null and p.is_right = '2'
+            <if test="planIdDtoList != null and planIdDtoList.length > 0">
+                and p.id in
+                <foreach collection="planIdDtoList" item="pid" index="index" open="(" close=")" separator=",">
+                    #{pid}
+                </foreach>
+
+            </if>
+            GROUP BY p.id
+            ORDER BY p.is_right desc, v.i asc,p.create_time desc limit 999999999999)
+        </if>
+
     </select>
 
 
     <select id="queryPlanInfoByPlanIdandUserIdList" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
-        select
-        e.id id,
-        e.nick_name nickName,
-        e.img img,
-        e.lable lable,
-        (e.fans + e.start_fans) fans,
-        p.plan_popularity popularity,
-        v.lz_now lz,
-        v.z_three_days zThreeDays,
-        v.z_five_days zFiveDays,
-        v.z_seven_days zSevenDays,
-        p.title titleShowType,
-        p.price price,
-        p.create_time createTime,
-        IF(pd.id IS NOT NULL,1,0) buStatus,
-        e.grade grade,
-        p.status planStatus,
-        v.ten_z tenZ,
-        v.nine_z nineZ,
-        v.eight_z eightZ,
-        v.seven_z sevenZ,
-        v.six_z sixZ,
-        v.five_z fiveZ,
-        v.four_z fourZ,
-        v.three_z threeZ,
-        v.return_seven_days returnSevenDays,
-        v.lz_big lzBig,
-        p.id planid,
-        p.plan_Hit planHit
-        from tb_jc_plan p
-        left join tb_jc_expert e on p.ascription_expert = e.id
-        left join
-        (SELECT * from(
-        SELECT * from
-        (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
-        union all
-        SELECT * from
-        (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
-        union all
-        SELECT * from
-        (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
-        ) vic) v
-        on e.id = v.expert_id
-        left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId} and pd.pay_status in('1','2','3')
-        where 1 = 1  and e.is_upshelf = '1' and v.order_By is not null
-        <if test="planIdDtoList != null and planIdDtoList.length > 0">
-            and p.id in
-            <foreach collection="planIdDtoList" item="pid" index="index" open="(" close=")" separator=",">
-                #{pid}
-            </foreach>
 
+
+        <if test="orderInfo == 1">
+            select
+            e.id id,
+            e.nick_name nickName,
+            e.img img,
+            e.lable lable,
+            (e.fans + e.start_fans) fans,
+            p.plan_popularity popularity,
+            v.lz_now lz,
+            v.z_three_days zThreeDays,
+            v.z_five_days zFiveDays,
+            v.z_seven_days zSevenDays,
+            p.title titleShowType,
+            p.price price,
+            p.create_time createTime,
+            IF(pd.id IS NOT NULL,1,0) buStatus,
+            e.grade grade,
+            p.status planStatus,
+            v.ten_z tenZ,
+            v.nine_z nineZ,
+            v.eight_z eightZ,
+            v.seven_z sevenZ,
+            v.six_z sixZ,
+            v.five_z fiveZ,
+            v.four_z fourZ,
+            v.three_z threeZ,
+            v.return_seven_days returnSevenDays,
+            v.lz_big lzBig,
+            p.id planid,
+            p.plan_Hit planHit
+            from tb_jc_plan p
+            left join tb_jc_expert e on p.ascription_expert = e.id
+            left join
+            (SELECT * from(
+            SELECT * from
+            (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+            union all
+            SELECT * from
+            (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+            union all
+            SELECT * from
+            (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+            ) vic) v
+            on e.id = v.expert_id
+            left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId} and pd.pay_status in('1','2','3')
+            where 1 = 1  and e.is_upshelf = '1' and v.order_By is not null
+            <if test="planIdDtoList != null and planIdDtoList.length > 0">
+                and p.id in
+                <foreach collection="planIdDtoList" item="pid" index="index" open="(" close=")" separator=",">
+                    #{pid}
+                </foreach>
+
+            </if>
+            GROUP BY p.id
+            ORDER BY  v.i asc,p.create_time desc
         </if>
-        GROUP BY p.id
-        ORDER BY  v.i asc,p.create_time desc
+        <if test="orderInfo == 2">
+            (select
+            e.id id,
+            e.nick_name nickName,
+            e.img img,
+            e.lable lable,
+            (e.fans + e.start_fans) fans,
+            p.plan_popularity popularity,
+            v.lz_now lz,
+            v.z_three_days zThreeDays,
+            v.z_five_days zFiveDays,
+            v.z_seven_days zSevenDays,
+            p.title titleShowType,
+            p.price price,
+            p.create_time createTime,
+            IF(pd.id IS NOT NULL,1,0) buStatus,
+            e.grade grade,
+            p.status planStatus,
+            v.ten_z tenZ,
+            v.nine_z nineZ,
+            v.eight_z eightZ,
+            v.seven_z sevenZ,
+            v.six_z sixZ,
+            v.five_z fiveZ,
+            v.four_z fourZ,
+            v.three_z threeZ,
+            v.return_seven_days returnSevenDays,
+            v.lz_big lzBig,
+            p.id planid,
+            p.plan_Hit planHit
+            from tb_jc_plan p
+            left join tb_jc_expert e on p.ascription_expert = e.id
+            left join
+            (SELECT * from(
+            SELECT * from
+            (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+            union all
+            SELECT * from
+            (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+            union all
+            SELECT * from
+            (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+            ) vic) v
+            on e.id = v.expert_id
+            left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId} and pd.pay_status in('1','2','3')
+            where 1 = 1  and e.is_upshelf = '1' and v.order_By is not null and p.is_right in('0','1')
+            <if test="planIdDtoList != null and planIdDtoList.length > 0">
+                and p.id in
+                <foreach collection="planIdDtoList" item="pid" index="index" open="(" close=")" separator=",">
+                    #{pid}
+                </foreach>
+
+            </if>
+            GROUP BY p.id
+            ORDER BY  p.is_right desc ,v.i asc,p.create_time desc limit 999999999999)
+
+            union all
+
+            (select
+            e.id id,
+            e.nick_name nickName,
+            e.img img,
+            e.lable lable,
+            (e.fans + e.start_fans) fans,
+            p.plan_popularity popularity,
+            v.lz_now lz,
+            v.z_three_days zThreeDays,
+            v.z_five_days zFiveDays,
+            v.z_seven_days zSevenDays,
+            p.title titleShowType,
+            p.price price,
+            p.create_time createTime,
+            IF(pd.id IS NOT NULL,1,0) buStatus,
+            e.grade grade,
+            p.status planStatus,
+            v.ten_z tenZ,
+            v.nine_z nineZ,
+            v.eight_z eightZ,
+            v.seven_z sevenZ,
+            v.six_z sixZ,
+            v.five_z fiveZ,
+            v.four_z fourZ,
+            v.three_z threeZ,
+            v.return_seven_days returnSevenDays,
+            v.lz_big lzBig,
+            p.id planid,
+            p.plan_Hit planHit
+            from tb_jc_plan p
+            left join tb_jc_expert e on p.ascription_expert = e.id
+            left join
+            (SELECT * from(
+            SELECT * from
+            (SELECT (@a:=@a+1) as i,tb_jc_victory.* from tb_jc_victory,(select @a:=0) as it where order_By<![CDATA[ < ]]>300 ORDER BY order_By,expert_id asc) t1
+            union all
+            SELECT * from
+            (SELECT (@b:=@b+1) as i,tb_jc_victory.* from tb_jc_victory,(select @b:=200) as it where order_By=300 ORDER BY return_seven_days desc,expert_id asc) t2
+            union all
+            SELECT * from
+            (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
+            ) vic) v
+            on e.id = v.expert_id
+            left join tb_jc_purchase_detailed pd on p.id = pd.scheme_id and pd.user_id = #{userId} and pd.pay_status in('1','2','3')
+            where 1 = 1  and e.is_upshelf = '1' and v.order_By is not null and p.is_right = '2'
+            <if test="planIdDtoList != null and planIdDtoList.length > 0">
+                and p.id in
+                <foreach collection="planIdDtoList" item="pid" index="index" open="(" close=")" separator=",">
+                    #{pid}
+                </foreach>
+
+            </if>
+            GROUP BY p.id
+            ORDER BY  p.is_right desc, v.i asc,p.create_time desc limit 999999999999)
+        </if>
     </select>
 </mapper>

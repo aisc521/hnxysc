@@ -191,6 +191,13 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     deductFrozenOne(tbJcPurchaseDetailed);
                     continue;
                 }
+                //判断是否是免费的点播卡支付  如果是 不退款
+                if("4".equals(tbJcPurchaseDetailed.getPlanPayType()) && "97".equals(tbJcPurchaseDetailed.getPayType()) ){
+                    LOGGER.info("首单订单，不退款:" + "用户id:" + tbJcPurchaseDetailed.getUserId() + "===" + "订单id:" + tbJcPurchaseDetailed.getOrderId());
+                    //执行扣款操作
+                    deductFrozenOne(tbJcPurchaseDetailed);
+                    continue;
+                }
                 //判断是否是冻结状态  以及订单号 是否是 冻结的订单号
                 String pay_status = String.valueOf(tbJcPurchaseDetailed.getPayStatus());
                 String order_id = tbJcPurchaseDetailed.getOrderId();
@@ -231,10 +238,18 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                         result = payService.refundFrozenToMoney(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), BigDecimal.valueOf(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
+                //普通点播卡退款
                 if("99".equals(payType)){
                     //remark = "方案未中退款";
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
                         result = payService.refundDiscount(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(),"1",remark,tbJcPurchaseDetailed.getSrc());
+                    }
+                }
+                //点播卡周卡退款
+                if("98".equals(payType)){
+                    //remark = "方案未中退款";
+                    if("1".equals(pay_status) && "JCZF".equals(order[0])){//退款
+                        result = payService.refundDiscount(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(),"5",remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
                 String resCode = String.valueOf(result.get("resCode"));
@@ -356,11 +371,11 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 if("0".equals(payType)){
                     remark = "方案已中扣款";
                 }
-                if("99".equals(payType)){
+                if("99".equals(payType) || "98".equals(payType) || "97".equals(payType)){
                     remark = "方案已中扣款";
                 }
                 //判断是否是点播状态
-                if("99".equals(tbJcPurchaseDetailed.getPayType().toString())){
+                if("99".equals(tbJcPurchaseDetailed.getPayType().toString()) || "98".equals(tbJcPurchaseDetailed.getPayType().toString()) || "97".equals(tbJcPurchaseDetailed.getPayType().toString())){
                     //更新订单表 为支付成功的状态
                     //更新订单表信息
                     updatePd(tbJcPurchaseDetailed);
