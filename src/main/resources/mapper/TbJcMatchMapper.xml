@@ -20,9 +20,16 @@
 
   </resultMap>
   <select id="queryList" resultType="com.zhcdata.jc.dto.MatchPlanResult">
-    SELECT m.id id,m.match_Id matchId,m.match_num matchNum,class.Name_JS matchName,t1.Name_J hostTeam,
-    t2.Name_J visitTeam,DATE_FORMAT(m.date_Of_Match,'%H:%i') as dateOfMatch,m.planInfo planInfo,m.status isWin ,
-    s.HomeScore homeScore,s.GuestScore guestScore,j.PolyGoal polyGoal,s.MatchState matchState
+
+    SELECT m.id id,m.match_Id matchId,m.match_num matchNum,class.Name_JS matchName,
+
+		case when lo.turn = 'True' then t2.Name_J else t1.Name_J end hostTeam,
+		case when lo.turn = 'True' then t1.Name_J else t2.Name_J end visitTeam,
+
+    DATE_FORMAT(m.date_Of_Match,'%H:%i') as dateOfMatch,m.planInfo planInfo,m.status isWin ,
+    case when lo.turn = 'True' then s.GuestScore else s.HomeScore end homeScore,
+		case when lo.turn = 'True' then s.HomeScore else s.GuestScore end guestScore,
+		j.PolyGoal polyGoal,s.MatchState matchState
     from
     tb_jc_match m
     left join schedule s on m.match_id = s.ScheduleID
@@ -30,6 +37,7 @@
     LEFT JOIN team t1 ON s.HomeTeamID = t1.TeamID
     LEFT JOIN team t2 ON s.GuestTeamID = t2.TeamID
     LEFT JOIN sclass class ON s.SclassID = class.sclassID
+    LEFT JOIN jc_match_lottery lo ON s.ScheduleID = lo.ID_bet007 and lo.lottery = 'JCZQ'
     where  s.scheduleID = m.match_id and j.scheduleID = s.scheduleID  and plan_id =#{planId}
     ORDER BY match_num asc
 
