@@ -212,7 +212,7 @@
           ORDER BY v.return_Seven_Days desc,v.i asc
 
       </if>
-)aaa where aaa.num >= 10
+)aaa where aaa.num >= 7
   </select>
   <select id="query" resultType="com.zhcdata.jc.dto.ExpertInfo">
     SELECT DISTINCT * FROM(
@@ -369,7 +369,7 @@
     (SELECT (@c:=@c+1) as i,tb_jc_victory.* from tb_jc_victory,(select @c:=2000) as it where order_By>300 ORDER BY order_By,expert_id asc) t3
     )
     vic) v ON e.id = v.expert_id
-    where e.is_upshelf = '1' and v.order_By is not null
+    where e.is_upshelf = '1' and v.order_By is not null and v.lz_now>4
     order by v.i asc,v.order_By is not null
     limit 0,7
   </select>

@@ -457,7 +457,7 @@ public class HandleExpertRecordJob implements Job {
                             //    String s="";
                             //}
 
-                            if (Integer.parseInt(info.getLzNow()) >= 4) {
+                            if (Integer.parseInt(info.getLzNow()) >= 5) {
                                 //1类(倒序)
                                 info.setOrder_By(getOrderBy(Integer.parseInt(info.getLzNow())) + 100);
                             } else {
