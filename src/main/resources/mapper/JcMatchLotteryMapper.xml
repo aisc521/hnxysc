@@ -18,7 +18,7 @@
     <result column="type" property="type" jdbcType="CHAR" />
   </resultMap>
   <select id="queryJcMatchLotteryByIssueNumAndNoId" resultType="com.zhcdata.db.model.JcMatchLottery">
-    select * from jc_match_lottery jc where jc.ISSUE_NUM=#{issueNum} and jc.NO_ID = #{noId}
+    select * from jc_match_lottery jc where jc.ISSUE_NUM=#{issueNum} and jc.NO_ID = #{noId} and jc.LOTTERY = 'BJDC'
   </select>
 
   <select id="queryJcMatchLotteryByBet007" resultType="com.zhcdata.db.model.JcMatchLottery">
