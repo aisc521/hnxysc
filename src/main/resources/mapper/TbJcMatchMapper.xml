@@ -136,7 +136,7 @@
         where m.plan_id = #{planId}
 				union all
 				select 0 a,count(s.scheduleID) b from tb_jc_match m LEFT JOIN schedule s on s.scheduleID = m.match_id
-        and s.MatchState =-14 and  now()>DATE_ADD(s.matchtime, INTERVAL 36 HOUR)
+        and s.MatchState in (-14,0)  and  now()>DATE_ADD(m.date_of_match, INTERVAL 36 HOUR)
         where m.plan_id = #{planId}
 ) ab
   </select>
