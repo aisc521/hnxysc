@@ -2,6 +2,7 @@ package com.zhcdata.jc.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.base.Strings;
 import com.zhcdata.db.mapper.TbJcExpertMapper;
 import com.zhcdata.db.mapper.TbJcPlanMapper;
 import com.zhcdata.db.mapper.TbJcPurchaseDetailedMapper;
@@ -15,6 +16,7 @@ import com.zhcdata.jc.service.PayService;
 import com.zhcdata.jc.service.TbJcPurchaseDetailedService;
 import com.zhcdata.jc.service.TbPlanService;
 import com.zhcdata.jc.tools.CommonUtils;
+import com.zhcdata.jc.tools.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,9 +72,49 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             TbJcPurchaseDetailed tbJcPurchaseDetailed = generatedObject(tbJcPlan,userId,paramMap,list,headBean,cell);
             //判断是否是首单
             String price = String.valueOf(tbJcPlan.getPrice());
-            if(list <= 0){//首单
-                price = "2";
+
+            if(!Strings.isNullOrEmpty(paramMap.get("couponId"))) {
+                tbJcPurchaseDetailed.setCouponId(paramMap.get("couponId"));         //优惠券ID
+                tbJcPurchaseDetailed.setAccess(paramMap.get("access"));             //优惠券获取方式 0 付费购买  1免费赠送
+                tbJcPurchaseDetailed.setCouponType(paramMap.get("type"));           //优惠券类型 0 通用券 1 代金券 2 打折券
+
+                String type = paramMap.get("type");//0 通用券 1 代金券 2 打折券
+                if (type.equals("0")) {
+                    //通用券
+                    //使用优惠券
+                    result = payService.currencyCouponPay(userId,paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
+                    if(!"000000".equals(result.get("resCode"))){
+                        return result;
+                    }
+                    tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("couponPrice"));//优惠券金额(免费获取,金额0)
+                    insertOrder(tbJcPurchaseDetailed);
+                } else if (type.equals("1")) {
+                    //计算代金券 相当于满减
+                    price=String.valueOf(Integer.parseInt(price)-Integer.valueOf(paramMap.get("denomination")));
+                    tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("denomination"));//代金券金额
+                } else if (type.equals("2")) {
+                    //计算打折券
+                    price=String.valueOf(new BigDecimal(price).multiply(new BigDecimal(paramMap.get("denomination"))));
+                    tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("denomination"));//打折券折扣
+                }
+
+
+
+                if("000000".equals(result.get("resCode"))){
+                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName","JCZ");
+                    result.put("schemeName",tbJcPlan.getTitle());
+                }
+                if(type.equals("0")){
+                    return result;
+                }
+            }else {
+                //不使用优惠券,判断首单2元
+                if(list <= 0){//首单
+                    price = "2";
+                }
             }
+
             if("20".equals(paramMap.get("payType"))){//微信native
                 result = payService.wechatPay(userId,price,productName,description,"20",tbJcPurchaseDetailed.getOrderId(),headBean.getSrc(),paramMap.get("ip"));
                 if("000000".equals(result.get("resCode"))){
@@ -122,8 +164,12 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 }
             }
 
-
-
+            //优惠券最后扣减使用(以免出现扣了优惠券,支付失败的情况)
+            if(!Strings.isNullOrEmpty(paramMap.get("couponId"))) {
+                if (!paramMap.get("type").equals("0")) {
+                    result = payService.currencyCouponPay(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
+                }
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

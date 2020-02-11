@@ -246,6 +246,27 @@ public class PayServiceImpl implements PayService {
         return bodyMap;
     }
 
+    @Override
+    public Map<String, Object> currencyCouponPay(String userId,String couponId, String orderId, String description, String src) {
+        Map<String, Object> returnMap = new HashMap<String, Object>(2);
+        Map<String, Object> paramsMap = new HashMap<>(6);
+        try {
+            paramsMap.put("userId",userId);                   //登录用户id
+            paramsMap.put("oprSys", "O");                     //暂时传o
+            paramsMap.put("couponId", couponId);              //优惠券ID
+            paramsMap.put("orderId",orderId);                 //子系统订单号
+            paramsMap.put("oprStatus","1");                   //使用
+            String returnJson = HttpUtils.PayHttpPost(accUrl, paramsMap, "10100405", "UTF-8", src, commonUtils.bodyMd5(paramsMap));
+            returnMap = handlePayJosn(returnJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("请求支付系统异常", e);
+            returnMap.put("resCode", ProtocolCodeMsg.USER_BUY_FAIL.getCode());
+            returnMap.put("message", ProtocolCodeMsg.USER_BUY_FAIL.getMsg());
+        }
+        return returnMap;
+    }
+
     /**
      * 解析有关支付系统返回的字符串
      * 如果成功返回boyMap

@@ -110,4 +110,14 @@ public interface PayService {
      */
     Map<String,Object> refundDiscount(Long userId,String orderId,String type,String productName,String src);
 
+
+    /**
+     * 通用券使用
+     * @param userId
+     * @param orderId
+     * @param description
+     * @param src
+     * @return
+     */
+    Map<String,Object> currencyCouponPay(String userId,String couponId, String orderId, String description, String src);
 }

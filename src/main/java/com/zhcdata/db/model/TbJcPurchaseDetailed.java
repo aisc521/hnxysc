@@ -185,6 +185,27 @@ public class TbJcPurchaseDetailed implements Serializable {
     @Column(name = "first")
     private String first;
 
+    /**
+     * 优惠券获取方式
+     */
+    @Column(name = "access")
+    private String access;
+
+    /**
+     * 优惠券金额
+     */
+    @Column(name = "coupon_pay_money")
+    private String couponPayMoney;
+
+    /**
+     * 优惠券ID
+     */
+    @Column(name = "coupon_id")
+    private String couponId;
+
+    @Column(name = "coupon_type")
+    private String couponType;
+
 
     public String getFirst() {
         return first;
@@ -744,5 +765,37 @@ public class TbJcPurchaseDetailed implements Serializable {
      */
     public void setPlanPayType(String planPayType) {
         this.planPayType = planPayType;
+    }
+
+    public String getCouponPayMoney() {
+        return couponPayMoney;
+    }
+
+    public void setCouponPayMoney(String couponPayMoney) {
+        this.couponPayMoney = couponPayMoney;
+    }
+
+    public String getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
+    }
+
+    public String getAccess() {
+        return access;
+    }
+
+    public void setAccess(String access) {
+        this.access = access;
+    }
+
+    public String getCouponType() {
+        return couponType;
+    }
+
+    public void setCouponType(String couponType) {
+        this.couponType = couponType;
     }
 }
