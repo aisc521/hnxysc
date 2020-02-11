@@ -71,11 +71,18 @@
     victory.four_z fourZ,
     victory.three_z threeZ,
     victory.lz_big lzBig,
-    case when pd.pay_type = '0' then '余额支付'
-    when pd.pay_type = '20' then '微信支付'
-    when pd.pay_type = '21' then '支付宝支付'
-    when pd.pay_type = '22' then '微信支付'
-    when pd.pay_type = '99' then '点播卡支付'
+    case
+	when pd.pay_type = '0'  and pd.coupon_pay_money is null then '余额支付'
+    when pd.pay_type = '20' and pd.coupon_pay_money is null then '微信支付'
+    when pd.pay_type = '21' and pd.coupon_pay_money is null then '支付宝支付'
+    when pd.pay_type = '22' and pd.coupon_pay_money is null then '微信支付'
+    when pd.pay_type = '99' and pd.coupon_pay_money is null then '点播卡支付'
+    when pd.pay_type='77' then '优惠券支付'
+	when pd.pay_type = '0'  and pd.coupon_pay_money is not null then '余额支付+优惠券'
+    when pd.pay_type = '20' and pd.coupon_pay_money is not null then '微信支付+优惠券'
+    when pd.pay_type = '21' and pd.coupon_pay_money is not null then '支付宝支付+优惠券'
+    when pd.pay_type = '22' and pd.coupon_pay_money is not null then '微信支付+优惠券'
+    when pd.pay_type = '99' and pd.coupon_pay_money is not null then '点播卡支付+优惠券'
     end AS paytype,
     pd.order_id orderId
     from tb_jc_purchase_detailed pd
