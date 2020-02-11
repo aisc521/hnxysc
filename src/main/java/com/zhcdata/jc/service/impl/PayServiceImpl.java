@@ -1,7 +1,6 @@
 package com.zhcdata.jc.service.impl;
 
 import com.google.common.base.Strings;
-
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -9,8 +8,6 @@ import com.zhcdata.jc.service.PayService;
 import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springside.modules.utils.mapper.JsonMapper;
@@ -239,6 +236,29 @@ public class PayServiceImpl implements PayService {
             bodyMap = handlePayJosn(returnStr);
         } catch (BaseException e) {
             log.error("账户中心增加优惠次数更新或插入失败，订单号为" + orderId, e);
+        } catch (Exception e) {
+            log.error("账户中心增加优惠次数接口", e);
+        }
+        log.error("账户中心增加优惠次数，订单号为" + orderId);
+        return bodyMap;
+    }
+
+    @Override
+    public Map<String, Object> deductCoupons(Long userId, String couponId, String orderId, String oprStatus, String src) {
+        //调用账户中心接口进行扣款处理
+        Map<String, Object> bodyMap = new HashMap<>();
+        try {
+            //根据支付id调用账户中心接口，判断订单是否支付完成
+            Map<String, Object> paramsMap = new HashMap<>();
+            paramsMap.put("userId", userId);
+            paramsMap.put("orderId", orderId);
+            paramsMap.put("oprSys", "O");
+            paramsMap.put("couponId", couponId);
+            paramsMap.put("oprStatus", oprStatus);
+            String returnStr = HttpUtils.httpPost(accUrl, paramsMap, "10100405", "UTF-8", src, null, "A");
+            bodyMap = handlePayJosn(returnStr);
+        } catch (BaseException e) {
+            log.error("账户中心优惠卷操作失败，订单号为" + orderId, e);
         } catch (Exception e) {
             log.error("账户中心增加优惠次数接口", e);
         }

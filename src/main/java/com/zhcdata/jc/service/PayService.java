@@ -110,4 +110,16 @@ public interface PayService {
      */
     Map<String,Object> refundDiscount(Long userId,String orderId,String type,String productName,String src);
 
+
+    /**
+     *
+     * @param userId
+     * @param couponId  优惠卷id
+     * @param orderId  业务系统订单id
+     * @param oprStatus 1 使用（未使用变使用）2 锁定（未使用变锁定）-1 取消锁定（锁定变未使用）
+     * @param src
+     * @return
+     */
+    Map<String,Object> deductCoupons(Long userId, String couponId, String orderId, String oprStatus, String src);
+
 }

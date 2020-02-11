@@ -252,6 +252,12 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                         result = payService.refundDiscount(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(),"5",remark,tbJcPurchaseDetailed.getSrc());
                     }
                 }
+                if("77".equals(payType)&&"0".equals(tbJcPurchaseDetailed.getCouponType())){
+                    //remark = "优惠卷上来直接扣除";
+                    if("1".equals(pay_status) && "JCZF".equals(order[0])){//优惠卷上来直接扣除
+                        result = payService.deductCoupons(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getCouponId(),tbJcPurchaseDetailed.getOrderId(),"1",tbJcPurchaseDetailed.getSrc());
+                    }
+                }
                 String resCode = String.valueOf(result.get("resCode"));
                 if("000000".equals(resCode) || "109023".equals(resCode) || "010124".equals(resCode)){//退款成功
                     //更新订单表信息
@@ -317,6 +323,11 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     updatePd(tbJcPurchaseDetailed);
 
                 }else{
+                    if("77".equals(payType)&&"0".equals(tbJcPurchaseDetailed.getCouponType())){
+                        //remark = "优惠卷上来直接扣除";
+                        //优惠卷上来直接扣除
+                        result = payService.deductCoupons(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getCouponId(),tbJcPurchaseDetailed.getOrderId(),"1",tbJcPurchaseDetailed.getSrc());
+                    }
                     result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), new BigDecimal(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
                 }
                 String resCode = String.valueOf(result.get("resCode"));

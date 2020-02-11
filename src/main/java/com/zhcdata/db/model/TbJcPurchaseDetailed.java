@@ -1,9 +1,10 @@
 package com.zhcdata.db.model;
 
+import javax.persistence.Column;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.*;
 
 @Table(name = "tb_jc_purchase_detailed")
 public class TbJcPurchaseDetailed implements Serializable {
@@ -184,6 +185,29 @@ public class TbJcPurchaseDetailed implements Serializable {
      */
     @Column(name = "first")
     private String first;
+
+    @Column(name = "coupon_type")
+    private String couponType;
+
+    @Column(name = "coupon_id")
+    private String couponId;
+
+    public String getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(String couponId) {
+        this.couponId = couponId;
+    }
+
+    public String getCouponType() {
+        return couponType;
+    }
+
+    public void setCouponType(String couponType) {
+        this.couponType = couponType;
+    }
+
 
 
     public String getFirst() {
