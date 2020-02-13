@@ -428,15 +428,15 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     </select>
 
   <select id="queryPlanInfo" resultType="java.util.Map">
-select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds,"") odds from (
+select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds,"") odds,bbb.date_of_match dateOfMatch,bbb.match_num Num,bbb.match_name matchName from (
         SELECT jc.*, sc.MatchState Status, sc.HomeScore homeBalls, sc.GuestScore awayballs, sc.MatchTime2 dateOfMatch2
         from (SELECT kk.*, p2.Name_J awayName
         from (SELECT k.*, p1.Name_J homeName
         from (SELECT ScheduleID matchId,
-        s.MatchTime dateOfMatch,
-        s.MatchID Num,
+        s.MatchTime dateOfMatch1,
+        s.MatchID Num1,
         s.MatchState Status1,
-        s.sclass matchName,
+        s.sclass matchName1,
         s.HomeTeam homeTeamName,
         s.HomeScore homeBalls1,
         s.GuestTeam awayTeamName,
@@ -456,21 +456,21 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         from jc_schedule s
         LEFT JOIN jc_schedulesp ssp on s.ID = ssp.ID
         where s.ScheduleID in (select match_id from tb_jc_match where plan_id = #{pid})) k
-        LEFT JOIN team p1 on k.homeId = p1.teamId order by dateOfMatch) kk
+        LEFT JOIN team p1 on k.homeId = p1.teamId order by dateOfMatch1) kk
         LEFT JOIN team p2 on kk.awayId = p2.teamId) jc
         LEFT JOIN `schedule` sc on jc.matchId = sc.ScheduleID
         ) aaa
         left join tb_jc_match bbb on aaa.matchId = bbb.match_id and plan_id = #{pid}
         ORDER BY case
-        WHEN aaa.Num like '%周一%' then 1
-        WHEN aaa.Num like '%周二%' then 2
-        WHEN aaa.Num like '%周三%' then 3
-        WHEN aaa.Num like '%周四%' then 4
-        WHEN aaa.Num like '%周五%' then 5
-        WHEN aaa.Num like '%周六%' then 6
-        WHEN aaa.Num like '%周日%' then 7
+        WHEN aaa.Num1 like '%周一%' then 1
+        WHEN aaa.Num1 like '%周二%' then 2
+        WHEN aaa.Num1 like '%周三%' then 3
+        WHEN aaa.Num1 like '%周四%' then 4
+        WHEN aaa.Num1 like '%周五%' then 5
+        WHEN aaa.Num1 like '%周六%' then 6
+        WHEN aaa.Num1 like '%周日%' then 7
         end
-        asc,substr(aaa.Num,3,LENGTH(aaa.Num))
+        asc,substr(aaa.Num1,3,LENGTH(aaa.Num1))
     </select>
 
     <select id="queryFreeOrPayByUidAndPid" resultType="java.util.Map">
@@ -644,7 +644,9 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
 
 
     <select id="selectPlanIdByMatchId" resultType="com.zhcdata.jc.dto.PlanIdDto">
-        SELECT plan_id planId from tb_jc_match where match_id in(#{matchId})
+        SELECT plan_id planId from tb_jc_match m
+        left join jc_schedule s on s.ScheduleID in(#{matchId})
+        where m.match_id in(#{matchId}) and s.MatchID = m.match_num
     </select>
     <select id="queryPlanInfoByPlanId" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
         select
