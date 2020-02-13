@@ -14,6 +14,9 @@ import org.springside.modules.utils.mapper.JsonMapper;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +38,8 @@ public class PayServiceImpl implements PayService {
 
     @Value("${custom.url.acc}")
     private String accUrl;
+
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public Map<String, Object> wechatPay(String userId, String payMoney, String productName, String description, String payType, String orderId, String src, String ip) {
@@ -260,6 +265,82 @@ public class PayServiceImpl implements PayService {
             log.error("请求支付系统异常", e);
             returnMap.put("resCode", ProtocolCodeMsg.USER_BUY_FAIL.getCode());
             returnMap.put("message", ProtocolCodeMsg.USER_BUY_FAIL.getMsg());
+        }
+        return returnMap;
+    }
+
+    //验证优惠券
+    @Override
+    public Map<String,Object> couponVerify(Map<String,String> paramMap,String src){
+        Map<String, Object> returnMap = new HashMap<String, Object>(2);
+
+        //判断是否包含优惠券购买
+        String couponId=paramMap.get("couponId");
+        if(!Strings.isNullOrEmpty(couponId)) {
+            paramMap.put(couponId,couponId);
+            try {
+                //验证优惠券有效性
+                Map<String, Object> paramsMap_acc = new HashMap<>(10);
+                paramsMap_acc.put("userId", paramMap.get("userId")); //登录用户id
+                paramsMap_acc.put("oprSys", "O");                    //暂时传o
+                paramsMap_acc.put("couponId", couponId);             //优惠券ID
+                String transactionType = "10100407";                 //协议号
+                String md5 = commonUtils.bodyMd5(paramsMap_acc);     //加密参数
+                String returnJson = HttpUtils.PayHttpPost(accUrl, paramsMap_acc, transactionType, "UTF-8", src, md5);
+
+                //验证优惠券状态
+                //验证优惠券有效期
+                //判断优惠券类型(打折券、代金券、通用券)
+
+                Map<String, Object> returnMap_acc = new HashMap<>(2);
+                returnMap_acc = handlePayJosn(returnJson);
+                paramMap.put("type",returnMap_acc.get("type").toString());          //优惠券类型 0通用 1代金 2折扣
+                paramMap.put("access",returnMap_acc.get("accesss").toString());     //0付费 1免费
+                paramMap.put("couponPrice",returnMap_acc.get("price").toString());  //价格
+                String status=returnMap_acc.get("status").toString();               //优惠券获取状态
+                if(status.equals("-1")){
+                    //是否验证，有效日期
+                    Date date = format.parse(returnMap_acc.get("validityDate").toString());
+                    Date nowDate = new Date();
+                    if(nowDate.compareTo(date) > 0){//当前时间大于有效期
+                        returnMap.put("resCode", ProtocolCodeMsg.COUPON_OVERDUE.getCode());
+                        returnMap.put("message", ProtocolCodeMsg.COUPON_OVERDUE.getMsg());
+                        return returnMap;
+                    }
+                    //未使用，锁定 优惠券可以使用，锁定优惠券
+//                    Map<String, Object> paramsMap1_acc = new HashMap<>(10);
+//                    paramsMap1_acc.put("userId", paramMap.get("userId"));  //登录用户id
+//                    paramsMap1_acc.put("oprSys", "O");                     //暂时传o
+//                    paramsMap1_acc.put("couponId", couponId);              //优惠券ID
+//                    paramsMap1_acc.put("orderId","");                      //子系统订单号
+//                    paramsMap1_acc.put("oprStatus","2");                   //锁定
+//                    String returnJson1 = HttpUtils.PayHttpPost(accUrl, paramsMap1_acc, "10100405", "UTF-8", headBean.getSrc(), commonUtils.bodyMd5(paramsMap1_acc));
+//                    Map<String, Object> returnMap1_acc = new HashMap<>(2);
+//                    returnMap1_acc = handlePayJosn(returnJson1);
+//                    if(1==2){
+//                        //锁定失败
+//                        resultMap.put("resCode", ProtocolCodeMsg.COUPON_LOCKING_FAIL.getCode());
+//                        resultMap.put("message", ProtocolCodeMsg.COUPON_LOCKING_FAIL.getMsg());
+//                        return resultMap;
+//                    }
+                }else if(status.equals("1")){
+                    //已使用
+                    returnMap.put("resCode", ProtocolCodeMsg.COUPON_ALREADY_USED.getCode());
+                    returnMap.put("message", ProtocolCodeMsg.COUPON_ALREADY_USED.getMsg());
+                    return returnMap;
+                }else if(status.equals("2")){
+                    //已锁定，继续下一步
+                }else if(status.equals("9")){
+                    //已过期
+                    returnMap.put("resCode", ProtocolCodeMsg.COUPON_OVERDUE.getCode());
+                    returnMap.put("message", ProtocolCodeMsg.COUPON_OVERDUE.getMsg());
+                    return returnMap;
+                }
+            }catch (Exception ex){
+                ex.printStackTrace();
+                returnMap.put("resCode", ProtocolCodeMsg.USER_BUY_FAIL.getCode());
+                returnMap.put("message", ProtocolCodeMsg.USER_BUY_FAIL.getMsg());
+            }
         }
         return returnMap;
     }

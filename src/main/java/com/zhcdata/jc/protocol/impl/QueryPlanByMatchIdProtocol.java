@@ -82,7 +82,7 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
             }
             List<QueryPlanByMatchIdDto> queryPlanByMatchIdDto = new ArrayList<>();
             //已经完场的比赛
-            if("-1".equals(schedule.getMatchstate())){
+            if("-1".equals(schedule.getMatchstate().toString())){
                 queryPlanByMatchIdDto = tbPlanService.queryPlanByPlanIdList(a,"2");
             }else{
                 queryPlanByMatchIdDto = tbPlanService.queryPlanByPlanIdList(a,"1");

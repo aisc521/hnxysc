@@ -793,7 +793,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
 
     <select id="queryPlanByPlanIdList" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
 
-        <if test="orderInfo == '1'">
+        <if test="orderInfo == 1">
             select
             e.id id,
             e.nick_name nickName,
@@ -849,7 +849,7 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
             GROUP BY p.id
             ORDER BY  v.i asc,p.create_time desc
         </if>
-        <if test="orderInfo == '2'">
+        <if test="orderInfo == 2">
             (select
             e.id id,
             e.nick_name nickName,

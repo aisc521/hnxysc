@@ -120,4 +120,13 @@ public interface PayService {
      * @return
      */
     Map<String,Object> currencyCouponPay(String userId,String couponId, String orderId, String description, String src);
+
+
+    /**
+     * 验证优惠券
+     * @param paramMap
+     * @param src
+     * @return
+     */
+    Map<String,Object> couponVerify(Map<String, String> paramMap,String src);
 }
