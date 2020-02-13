@@ -87,6 +87,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                         return result;
                     }
                     tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("couponPrice"));//优惠券金额(免费获取,金额0)
+                    tbJcPurchaseDetailed.setPayStatus(Long.parseLong("2"));
                     insertOrder(tbJcPurchaseDetailed);
                 } else if (type.equals("1")) {
                     //计算代金券 相当于满减

@@ -48,7 +48,7 @@ public class SchemePurchaseProtocol implements BaseProtocol {
     @Resource
     private TbJcPurchaseDetailedService tbJcPurchaseDetailedService;
     DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+    DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
     @Value("${custom.url.acc}")
     String accUrl;
 
@@ -119,11 +119,16 @@ public class SchemePurchaseProtocol implements BaseProtocol {
                 paramMap.put("type",returnMap_acc.get("type").toString());          //优惠券类型 0通用 1代金 2折扣
                 paramMap.put("access",returnMap_acc.get("accesss").toString());     //0付费 1免费
                 paramMap.put("couponPrice",returnMap_acc.get("price").toString());  //价格
-
-                String status=returnMap_acc.get("status").toString();               //获取状态
+                String status=returnMap_acc.get("status").toString();               //优惠券获取状态
                 if(status.equals("-1")){
-                    //是否验证，有效日期(待定)
-
+                    //是否验证，有效日期
+                    Date date = format1.parse(returnMap_acc.get("validityDate").toString());
+                    Date nowDate = new Date();
+                    if(nowDate.compareTo(date) > 0){//当前时间大于有效期
+                        resultMap.put("resCode", ProtocolCodeMsg.COUPON_OVERDUE.getCode());
+                        resultMap.put("message", ProtocolCodeMsg.COUPON_OVERDUE.getMsg());
+                        return resultMap;
+                    }
                     //未使用，锁定 优惠券可以使用，锁定优惠券
 //                    Map<String, Object> paramsMap1_acc = new HashMap<>(10);
 //                    paramsMap1_acc.put("userId", paramMap.get("userId"));  //登录用户id
