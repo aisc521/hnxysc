@@ -269,6 +269,27 @@ public class PayServiceImpl implements PayService {
         return returnMap;
     }
 
+    @Override
+    public Map<String, Object> currencyCouponLock(String userId,String couponId, String orderId, String description, String src) {
+        Map<String, Object> returnMap = new HashMap<String, Object>(2);
+        Map<String, Object> paramsMap = new HashMap<>(6);
+        try {
+            paramsMap.put("userId", userId);                   //登录用户id
+            paramsMap.put("oprSys", "O");                      //暂时传o
+            paramsMap.put("couponId", couponId);               //优惠券ID
+            paramsMap.put("orderId", orderId);                 //子系统订单号
+            paramsMap.put("oprStatus", "2");                   //使用
+            String returnJson = HttpUtils.PayHttpPost(accUrl, paramsMap, "10100405", "UTF-8", src, commonUtils.bodyMd5(paramsMap));
+            returnMap = handlePayJosn(returnJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("优惠券锁定异常", e);
+            returnMap.put("resCode", ProtocolCodeMsg.COUPON_LOCKING_FAIL.getCode());
+            returnMap.put("message", ProtocolCodeMsg.COUPON_LOCKING_FAIL.getMsg());
+        }
+        return returnMap;
+    }
+
     //验证优惠券
     @Override
     public Map<String,Object> couponVerify(Map<String,String> paramMap,String src){
@@ -294,6 +315,11 @@ public class PayServiceImpl implements PayService {
 
                 Map<String, Object> returnMap_acc = new HashMap<>(2);
                 returnMap_acc = handlePayJosn(returnJson);
+                if(!"000000".equals(returnMap_acc.get("resCode"))){
+                    returnMap.put("resCode", returnMap_acc.get("resCode"));
+                    returnMap.put("message", returnMap_acc.get("message"));
+                    return returnMap;
+                }
                 paramMap.put("type",returnMap_acc.get("type").toString());          //优惠券类型 0通用 1代金 2折扣
                 paramMap.put("access",returnMap_acc.get("access").toString());     //0付费 1免费
                 paramMap.put("couponPrice",returnMap_acc.get("price").toString());  //价格
@@ -309,22 +335,6 @@ public class PayServiceImpl implements PayService {
                             return returnMap;
                         }
                     }
-                    //未使用，锁定 优惠券可以使用，锁定优惠券
-//                    Map<String, Object> paramsMap1_acc = new HashMap<>(10);
-//                    paramsMap1_acc.put("userId", paramMap.get("userId"));  //登录用户id
-//                    paramsMap1_acc.put("oprSys", "O");                     //暂时传o
-//                    paramsMap1_acc.put("couponId", couponId);              //优惠券ID
-//                    paramsMap1_acc.put("orderId","");                      //子系统订单号
-//                    paramsMap1_acc.put("oprStatus","2");                   //锁定
-//                    String returnJson1 = HttpUtils.PayHttpPost(accUrl, paramsMap1_acc, "10100405", "UTF-8", headBean.getSrc(), commonUtils.bodyMd5(paramsMap1_acc));
-//                    Map<String, Object> returnMap1_acc = new HashMap<>(2);
-//                    returnMap1_acc = handlePayJosn(returnJson1);
-//                    if(1==2){
-//                        //锁定失败
-//                        resultMap.put("resCode", ProtocolCodeMsg.COUPON_LOCKING_FAIL.getCode());
-//                        resultMap.put("message", ProtocolCodeMsg.COUPON_LOCKING_FAIL.getMsg());
-//                        return resultMap;
-//                    }
                 }else if(status.equals("1")){
                     //已使用
                     returnMap.put("resCode", ProtocolCodeMsg.COUPON_ALREADY_USED.getCode());

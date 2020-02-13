@@ -74,6 +74,12 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             String price = String.valueOf(tbJcPlan.getPrice());
 
             if(!Strings.isNullOrEmpty(paramMap.get("couponId"))) {
+                //未使用，锁定 优惠券可以使用，锁定优惠券
+                result=payService.currencyCouponLock(userId,paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
+                if(!"000000".equals(result.get("resCode"))){
+                    return result;
+                }
+
                 tbJcPurchaseDetailed.setCouponId(paramMap.get("couponId"));         //优惠券ID
                 tbJcPurchaseDetailed.setAccess(paramMap.get("access"));             //优惠券获取方式 0 付费购买  1免费赠送
                 tbJcPurchaseDetailed.setCouponType(paramMap.get("type"));           //优惠券类型 0 通用券 1 代金券 2 打折券
@@ -88,18 +94,44 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                     }
                     tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("couponPrice"));//优惠券金额(免费获取,金额0)
                     tbJcPurchaseDetailed.setPayStatus(Long.parseLong("2"));
+                    tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(0));
+                    tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(price));
+                    tbJcPurchaseDetailed.setPayInfo("优惠券支付");
+                    tbJcPurchaseDetailed.setPlanPayType("77");
+                    tbJcPurchaseDetailed.setDeductionMoney(price);
                     insertOrder(tbJcPurchaseDetailed);
                 } else if (type.equals("1")) {
                     //计算代金券 相当于满减
+                    if("EQ".equals(paramMap.get("useType"))){
+                        //指定金额
+                        if(new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber")))!=0){
+                            result.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
+                            result.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
+                            return result;
+                        }
+                    }else if("GT".equals(paramMap.get("useType"))){
+                        //满减
+                        if(new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber")))>0){
+                            result.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
+                            result.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
+                            return result;
+                        }
+                    }
+
                     price=String.valueOf(Integer.parseInt(price)-Integer.valueOf(paramMap.get("denomination")));
+                    tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("couponPrice"));//优惠券金额(免费获取,金额0)
+                    //tbJcPurchaseDetailed.setPayStatus(Long.parseLong("2"));           //支付回来有赋值
+                    //tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(price));
+                    //tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(price));
+                    //tbJcPurchaseDetailed.setPayInfo("优惠券支付");
+                    //tbJcPurchaseDetailed.setPlanPayType("77");
+                    //tbJcPurchaseDetailed.setDeductionMoney(price);
                     tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("denomination"));//代金券金额
                 } else if (type.equals("2")) {
                     //计算打折券
                     price=String.valueOf(new BigDecimal(price).multiply(new BigDecimal(paramMap.get("denomination"))));
                     tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("denomination"));//打折券折扣
                 }
-
-
 
                 if("000000".equals(result.get("resCode"))){
                     result.put("orderId",tbJcPurchaseDetailed.getOrderId());
@@ -168,7 +200,8 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             //优惠券最后扣减使用(以免出现扣了优惠券,支付失败的情况)
             if(!Strings.isNullOrEmpty(paramMap.get("couponId"))) {
                 if (!paramMap.get("type").equals("0")) {
-                    result = payService.currencyCouponPay(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
+                    //抵扣券和打折券优惠券扣减(支付成功再扣减)
+                    result = payService.currencyCouponPay(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "购买方案", headBean.getSrc());
                 }
             }
         }catch (Exception e){

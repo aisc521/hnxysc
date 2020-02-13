@@ -207,6 +207,8 @@ public class TbJcPurchaseDetailed implements Serializable {
     @Column(name = "coupon_type")
     private String couponType;
 
+    @Column(name = "deduction_money")
+    private String deductionMoney;
 
     public String getFirst() {
         return first;
@@ -798,5 +800,13 @@ public class TbJcPurchaseDetailed implements Serializable {
 
     public void setCouponType(String couponType) {
         this.couponType = couponType;
+    }
+
+    public String getDeductionMoney() {
+        return deductionMoney;
+    }
+
+    public void setDeductionMoney(String deductionMoney) {
+        this.deductionMoney = deductionMoney;
     }
 }

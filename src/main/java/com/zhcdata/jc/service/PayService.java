@@ -112,7 +112,7 @@ public interface PayService {
 
 
     /**
-     * 通用券使用
+     * 优惠券券使用
      * @param userId
      * @param orderId
      * @param description
@@ -121,6 +121,17 @@ public interface PayService {
      */
     Map<String,Object> currencyCouponPay(String userId,String couponId, String orderId, String description, String src);
 
+
+    /**
+     * 优惠券锁定
+     * @param userId
+     * @param couponId
+     * @param orderId
+     * @param description
+     * @param src
+     * @return
+     */
+    Map<String,Object> currencyCouponLock(String userId,String couponId, String orderId, String description, String src);
 
     /**
      * 验证优惠券
