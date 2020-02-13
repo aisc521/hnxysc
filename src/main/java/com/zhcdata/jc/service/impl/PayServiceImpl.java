@@ -299,13 +299,15 @@ public class PayServiceImpl implements PayService {
                 paramMap.put("couponPrice",returnMap_acc.get("price").toString());  //价格
                 String status=returnMap_acc.get("status").toString();               //优惠券获取状态
                 if(status.equals("-1")){
-                    //是否验证，有效日期
-                    Date date = format.parse(returnMap_acc.get("validityDate").toString());
-                    Date nowDate = new Date();
-                    if(nowDate.compareTo(date) > 0){//当前时间大于有效期
-                        returnMap.put("resCode", ProtocolCodeMsg.COUPON_OVERDUE.getCode());
-                        returnMap.put("message", ProtocolCodeMsg.COUPON_OVERDUE.getMsg());
-                        return returnMap;
+                    if(!"0".equals(returnMap_acc.get("validityDate").toString())) {
+                        //是否验证，有效日期
+                        Date date = format.parse(returnMap_acc.get("validityDate").toString());
+                        Date nowDate = new Date();
+                        if (nowDate.compareTo(date) > 0) {//当前时间大于有效期
+                            returnMap.put("resCode", ProtocolCodeMsg.COUPON_OVERDUE.getCode());
+                            returnMap.put("message", ProtocolCodeMsg.COUPON_OVERDUE.getMsg());
+                            return returnMap;
+                        }
                     }
                     //未使用，锁定 优惠券可以使用，锁定优惠券
 //                    Map<String, Object> paramsMap1_acc = new HashMap<>(10);
