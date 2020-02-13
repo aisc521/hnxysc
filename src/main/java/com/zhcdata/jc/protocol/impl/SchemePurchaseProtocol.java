@@ -97,7 +97,7 @@ public class SchemePurchaseProtocol implements BaseProtocol {
 
         //验证优惠券
         resultMap=payService.couponVerify(paramMap,headBean.getSrc());
-        if(resultMap!=null){
+        if(resultMap!=null&&resultMap.size()>0) {
             return resultMap;
         }
 
