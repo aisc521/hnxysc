@@ -112,14 +112,12 @@ public interface PayService {
 
 
     /**
-     *
+     * 通用券使用
      * @param userId
-     * @param couponId  优惠卷id
-     * @param orderId  业务系统订单id
-     * @param oprStatus 1 使用（未使用变使用）2 锁定（未使用变锁定）-1 取消锁定（锁定变未使用）
+     * @param orderId
+     * @param description
      * @param src
      * @return
      */
-    Map<String,Object> deductCoupons(Long userId, String couponId, String orderId, String oprStatus, String src);
-
+    Map<String,Object> currencyCouponPay(String userId,String couponId, String orderId, String description, String src);
 }

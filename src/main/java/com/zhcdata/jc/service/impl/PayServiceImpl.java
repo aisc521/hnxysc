@@ -244,26 +244,24 @@ public class PayServiceImpl implements PayService {
     }
 
     @Override
-    public Map<String, Object> deductCoupons(Long userId, String couponId, String orderId, String oprStatus, String src) {
-        //调用账户中心接口进行扣款处理
-        Map<String, Object> bodyMap = new HashMap<>();
+    public Map<String, Object> currencyCouponPay(String userId,String couponId, String orderId, String description, String src) {
+        Map<String, Object> returnMap = new HashMap<String, Object>(2);
+        Map<String, Object> paramsMap = new HashMap<>(6);
         try {
-            //根据支付id调用账户中心接口，判断订单是否支付完成
-            Map<String, Object> paramsMap = new HashMap<>();
-            paramsMap.put("userId", userId);
-            paramsMap.put("orderId", orderId);
-            paramsMap.put("oprSys", "O");
-            paramsMap.put("couponId", couponId);
-            paramsMap.put("oprStatus", oprStatus);
-            String returnStr = HttpUtils.httpPost(accUrl, paramsMap, "10100405", "UTF-8", src, null, "A");
-            bodyMap = handlePayJosn(returnStr);
-        } catch (BaseException e) {
-            log.error("账户中心优惠卷操作失败，订单号为" + orderId, e);
+            paramsMap.put("userId",userId);                   //登录用户id
+            paramsMap.put("oprSys", "O");                     //暂时传o
+            paramsMap.put("couponId", couponId);              //优惠券ID
+            paramsMap.put("orderId",orderId);                 //子系统订单号
+            paramsMap.put("oprStatus","1");                   //使用
+            String returnJson = HttpUtils.PayHttpPost(accUrl, paramsMap, "10100405", "UTF-8", src, commonUtils.bodyMd5(paramsMap));
+            returnMap = handlePayJosn(returnJson);
         } catch (Exception e) {
-            log.error("账户中心增加优惠次数接口", e);
+            e.printStackTrace();
+            log.error("请求支付系统异常", e);
+            returnMap.put("resCode", ProtocolCodeMsg.USER_BUY_FAIL.getCode());
+            returnMap.put("message", ProtocolCodeMsg.USER_BUY_FAIL.getMsg());
         }
-        log.error("账户中心增加优惠次数，订单号为" + orderId);
-        return bodyMap;
+        return returnMap;
     }
 
     /**
