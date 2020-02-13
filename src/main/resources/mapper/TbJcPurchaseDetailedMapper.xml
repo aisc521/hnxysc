@@ -59,7 +59,7 @@
     expert.grade level,/*专家等级*/
     plan.id planId,
     plan.status status,
-    IFNULL(pd.third_money,0)+IFNULL(pd.coupon_pay_money,0) thirdMoney,/*支付金额*/
+    IFNULL(pd.third_money,0) thirdMoney,/*支付金额*/
     pd.buy_money buyMoney ,
     pd.first firstone,
     victory.ten_z tenZ,
