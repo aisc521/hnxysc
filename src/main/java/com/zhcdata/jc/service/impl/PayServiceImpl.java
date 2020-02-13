@@ -295,7 +295,7 @@ public class PayServiceImpl implements PayService {
                 Map<String, Object> returnMap_acc = new HashMap<>(2);
                 returnMap_acc = handlePayJosn(returnJson);
                 paramMap.put("type",returnMap_acc.get("type").toString());          //优惠券类型 0通用 1代金 2折扣
-                paramMap.put("access",returnMap_acc.get("accesss").toString());     //0付费 1免费
+                paramMap.put("access",returnMap_acc.get("access").toString());     //0付费 1免费
                 paramMap.put("couponPrice",returnMap_acc.get("price").toString());  //价格
                 String status=returnMap_acc.get("status").toString();               //优惠券获取状态
                 if(status.equals("-1")){
