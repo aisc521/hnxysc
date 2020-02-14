@@ -134,6 +134,17 @@ public interface PayService {
     Map<String,Object> currencyCouponLock(String userId,String couponId, String orderId, String description, String src);
 
     /**
+     * 解锁
+     * @param userId
+     * @param couponId
+     * @param orderId
+     * @param description
+     * @param src
+     * @return
+     */
+    Map<String,Object> currencyCouponUnLock(String userId,String couponId, String orderId, String description, String src);
+
+    /**
      * 验证优惠券
      * @param paramMap
      * @param src

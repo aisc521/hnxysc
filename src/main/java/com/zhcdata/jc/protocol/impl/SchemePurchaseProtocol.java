@@ -176,13 +176,13 @@ public class SchemePurchaseProtocol implements BaseProtocol {
         }
 
         //判断优惠券是否符合限额
-        if(paramMap.get("type").equals("1")) {
-            if (tbJcPlan.getPrice() < Long.valueOf(paramMap.get("useNumber"))) {
-                resultMap.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
-                resultMap.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
-                return resultMap;
-            }
-        }
+//        if(paramMap.get("type").equals("1")) {
+//            if (tbJcPlan.getPrice() < Long.valueOf(paramMap.get("useNumber"))) {
+//                resultMap.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
+//                resultMap.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
+//                return resultMap;
+//            }
+//        }
 
 
         //生成订单信息 并且调用支付

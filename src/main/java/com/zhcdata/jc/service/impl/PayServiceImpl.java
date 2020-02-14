@@ -290,6 +290,27 @@ public class PayServiceImpl implements PayService {
         return returnMap;
     }
 
+    @Override
+    public Map<String, Object> currencyCouponUnLock(String userId,String couponId, String orderId, String description, String src) {
+        Map<String, Object> returnMap = new HashMap<String, Object>(2);
+        Map<String, Object> paramsMap = new HashMap<>(6);
+        try {
+            paramsMap.put("userId", userId);                   //登录用户id
+            paramsMap.put("oprSys", "O");                      //暂时传o
+            paramsMap.put("couponId", couponId);               //优惠券ID
+            paramsMap.put("orderId", orderId);                 //子系统订单号
+            paramsMap.put("oprStatus", "-1");                  //解锁
+            String returnJson = HttpUtils.PayHttpPost(accUrl, paramsMap, "10100405", "UTF-8", src, commonUtils.bodyMd5(paramsMap));
+            returnMap = handlePayJosn(returnJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("优惠券锁定异常", e);
+            returnMap.put("resCode", ProtocolCodeMsg.COUPON_LOCKING_FAIL.getCode());
+            returnMap.put("message", ProtocolCodeMsg.COUPON_LOCKING_FAIL.getMsg());
+        }
+        return returnMap;
+    }
+
     //验证优惠券
     @Override
     public Map<String,Object> couponVerify(Map<String,String> paramMap,String src){
@@ -320,9 +341,13 @@ public class PayServiceImpl implements PayService {
                     returnMap.put("message", returnMap_acc.get("message"));
                     return returnMap;
                 }
-                paramMap.put("type",returnMap_acc.get("type").toString());          //优惠券类型 0通用 1代金 2折扣
-                paramMap.put("access",returnMap_acc.get("access").toString());     //0付费 1免费
-                paramMap.put("couponPrice",returnMap_acc.get("price").toString());  //价格
+                paramMap.put("type",returnMap_acc.get("type").toString());              //优惠券类型 0通用 1代金 2折扣
+                paramMap.put("access",returnMap_acc.get("access").toString());          //0付费 1免费
+                paramMap.put("couponPrice",returnMap_acc.get("price").toString());      //价格
+                paramMap.put("useType",returnMap_acc.get("useType").toString());        //ANY 任意 EQ 指定金额 GT 满减
+                paramMap.put("couponStatus",returnMap_acc.get("status").toString());    //优惠券状态
+                paramMap.put("useNumber",returnMap_acc.get("useNumber").toString());    //
+                paramMap.put("denomination",returnMap_acc.get("denomination").toString()); //
                 String status=returnMap_acc.get("status").toString();               //优惠券获取状态
                 if(status.equals("-1")){
                     if(!"0".equals(returnMap_acc.get("validityDate").toString())) {
@@ -342,6 +367,7 @@ public class PayServiceImpl implements PayService {
                     return returnMap;
                 }else if(status.equals("2")){
                     //已锁定，继续下一步
+                    return returnMap;
                 }else if(status.equals("9")){
                     //已过期
                     returnMap.put("resCode", ProtocolCodeMsg.COUPON_OVERDUE.getCode());

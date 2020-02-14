@@ -68,16 +68,18 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
     @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> schemePurchase(TbJcPlan tbJcPlan, String userId, Map<String, String> paramMap,PayService payService,Integer list,ProtocolParamDto.HeadBean headBean,String cell) throws BaseException {
         Map<String, Object> result = new HashMap<>();
-        try{
-            TbJcPurchaseDetailed tbJcPurchaseDetailed = generatedObject(tbJcPlan,userId,paramMap,list,headBean,cell);
+        try {
+            TbJcPurchaseDetailed tbJcPurchaseDetailed = generatedObject(tbJcPlan, userId, paramMap, list, headBean, cell);
             //判断是否是首单
             String price = String.valueOf(tbJcPlan.getPrice());
 
-            if(!Strings.isNullOrEmpty(paramMap.get("couponId"))) {
-                //未使用，锁定 优惠券可以使用，锁定优惠券
-                result=payService.currencyCouponLock(userId,paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
-                if(!"000000".equals(result.get("resCode"))){
-                    return result;
+            if (!Strings.isNullOrEmpty(paramMap.get("couponId"))) {
+                if (!paramMap.get("couponStatus").equals("2")) {
+                    //未锁定，则锁定操作 已锁定，下一步
+                    result = payService.currencyCouponLock(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
+                    if (!"000000".equals(result.get("resCode"))) {
+                        return result;
+                    }
                 }
 
                 tbJcPurchaseDetailed.setCouponId(paramMap.get("couponId"));         //优惠券ID
@@ -88,8 +90,8 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 if (type.equals("0")) {
                     //通用券
                     //使用优惠券
-                    result = payService.currencyCouponPay(userId,paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
-                    if(!"000000".equals(result.get("resCode"))){
+                    result = payService.currencyCouponPay(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
+                    if (!"000000".equals(result.get("resCode"))) {
                         return result;
                     }
                     tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("couponPrice"));//优惠券金额(免费获取,金额0)
@@ -98,113 +100,136 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                     tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(price));
                     tbJcPurchaseDetailed.setPayInfo("优惠券支付");
                     tbJcPurchaseDetailed.setPlanPayType("77");
-                    tbJcPurchaseDetailed.setDeductionMoney(price);
+                    tbJcPurchaseDetailed.setDeductionMoney(Long.valueOf(price));
                     insertOrder(tbJcPurchaseDetailed);
                 } else if (type.equals("1")) {
                     //计算代金券 相当于满减
-                    if("EQ".equals(paramMap.get("useType"))){
+                    if ("EQ".equals(paramMap.get("useType"))) {
                         //指定金额
-                        if(new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber")))!=0){
+                        if (new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber"))) != 0) {
                             result.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
                             result.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
                             return result;
                         }
-                    }else if("GT".equals(paramMap.get("useType"))){
+                    } else if ("GT".equals(paramMap.get("useType"))) {
                         //满减
-                        if(new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber")))>0){
+                        if (new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber"))) > 0) {
                             result.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
                             result.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
                             return result;
                         }
                     }
 
-                    price=String.valueOf(Integer.parseInt(price)-Integer.valueOf(paramMap.get("denomination")));
-                    tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("couponPrice"));//优惠券金额(免费获取,金额0)
-                    //tbJcPurchaseDetailed.setPayStatus(Long.parseLong("2"));           //支付回来有赋值
+                    price = String.valueOf(Integer.parseInt(price) - Integer.valueOf(paramMap.get("denomination")));
+                    tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("couponPrice"));    //优惠券金额(免费获取,金额0)
+                    //tbJcPurchaseDetailed.setPayStatus(Long.parseLong("2"));               //支付回来有赋值
                     //tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(price));
                     //tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(price));
-                    //tbJcPurchaseDetailed.setPayInfo("优惠券支付");
+                    tbJcPurchaseDetailed.setPayInfo("优惠券支付");
                     //tbJcPurchaseDetailed.setPlanPayType("77");
                     //tbJcPurchaseDetailed.setDeductionMoney(price);
-                    tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("denomination"));//代金券金额
+                    tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(price));
+                    tbJcPurchaseDetailed.setDeductionMoney(Long.valueOf(paramMap.get("denomination"))); //已优惠金额
                 } else if (type.equals("2")) {
                     //计算打折券
-                    price=String.valueOf(new BigDecimal(price).multiply(new BigDecimal(paramMap.get("denomination"))));
-                    tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("denomination"));//打折券折扣
+                    if ("EQ".equals(paramMap.get("useType"))) {
+                        //指定金额
+                        if (new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber"))) != 0) {
+                            result.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
+                            result.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
+                            return result;
+                        }
+                    } else if ("GT".equals(paramMap.get("useType"))) {
+                        //满减
+                        if (new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber"))) > 0) {
+                            result.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
+                            result.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
+                            return result;
+                        }
+                    }
+                    price = String.valueOf(new BigDecimal(price).multiply(new BigDecimal(paramMap.get("denomination"))).divide(new BigDecimal(10)));
+                    tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("couponPrice"));    //优惠券金额(免费获取,金额0)
+                    tbJcPurchaseDetailed.setPayInfo("优惠券支付");
+                    tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(price));
+                    tbJcPurchaseDetailed.setDeductionMoney(Long.valueOf(tbJcPlan.getPrice()-Long.valueOf(price))); //已优惠金额
                 }
 
-                if("000000".equals(result.get("resCode"))){
-                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
-                    result.put("lotteryName","JCZ");
-                    result.put("schemeName",tbJcPlan.getTitle());
+                if ("000000".equals(result.get("resCode"))) {
+                    result.put("orderId", tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName", "JCZ");
+                    result.put("schemeName", tbJcPlan.getTitle());
                 }
-                if(type.equals("0")){
+                if (type.equals("0")) {
                     return result;
                 }
-            }else {
+            } else {
                 //不使用优惠券,判断首单2元
-                if(list <= 0){//首单
+                if (list <= 0) {//首单
                     price = "2";
                 }
             }
 
-            if("20".equals(paramMap.get("payType"))){//微信native
-                result = payService.wechatPay(userId,price,productName,description,"20",tbJcPurchaseDetailed.getOrderId(),headBean.getSrc(),paramMap.get("ip"));
-                if("000000".equals(result.get("resCode"))){
+            if ("20".equals(paramMap.get("payType"))) {//微信native
+                result = payService.wechatPay(userId, price, productName, description, "20", tbJcPurchaseDetailed.getOrderId(), headBean.getSrc(), paramMap.get("ip"));
+                if ("000000".equals(result.get("resCode"))) {
                     insertOrder(tbJcPurchaseDetailed);
-                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
-                    result.put("lotteryName","JCZ");
-                    result.put("schemeName",tbJcPlan.getTitle());
+                    result.put("orderId", tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName", "JCZ");
+                    result.put("schemeName", tbJcPlan.getTitle());
                 }
 
             }
-            if("21".equals(paramMap.get("payType"))){//支付宝支付
-                result = payService.aliPay(userId,price,description,"21",tbJcPurchaseDetailed.getOrderId(),headBean.getSrc(),paramMap.get("ip"));
-                if("000000".equals(result.get("resCode"))){
+            if ("21".equals(paramMap.get("payType"))) {//支付宝支付
+                result = payService.aliPay(userId, price, description, "21", tbJcPurchaseDetailed.getOrderId(), headBean.getSrc(), paramMap.get("ip"));
+                if ("000000".equals(result.get("resCode"))) {
                     insertOrder(tbJcPurchaseDetailed);
-                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
-                    result.put("lotteryName","JCZ");
-                    result.put("schemeName",tbJcPlan.getTitle());
+                    result.put("orderId", tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName", "JCZ");
+                    result.put("schemeName", tbJcPlan.getTitle());
                 }
             }
-            if("22".equals(paramMap.get("payType"))){//微信H5
-                result = payService.wechatPay(userId,price,productName,description,"22",tbJcPurchaseDetailed.getOrderId(),headBean.getSrc(),paramMap.get("ip"));
-                if("000000".equals(result.get("resCode"))){
+            if ("22".equals(paramMap.get("payType"))) {//微信H5
+                result = payService.wechatPay(userId, price, productName, description, "22", tbJcPurchaseDetailed.getOrderId(), headBean.getSrc(), paramMap.get("ip"));
+                if ("000000".equals(result.get("resCode"))) {
                     insertOrder(tbJcPurchaseDetailed);
-                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
-                    result.put("lotteryName","JCZ");
-                    result.put("schemeName",tbJcPlan.getTitle());
+                    result.put("orderId", tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName", "JCZ");
+                    result.put("schemeName", tbJcPlan.getTitle());
                 }
             }
-            if("0".equals(paramMap.get("payType"))){//余额支付
+            if ("0".equals(paramMap.get("payType"))) {//余额支付
                 result = payService.moneyPay(price, "0", userId, tbJcPurchaseDetailed.getOrderId(), headBean.getSrc(), productName);
-                if("000000".equals(result.get("resCode"))){
+                if ("000000".equals(result.get("resCode"))) {
                     //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
-                    modifyOrderStatus(result,tbJcPlan,tbJcPurchaseDetailed,list);
-                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
-                    result.put("lotteryName","JCZ");
-                    result.put("schemeName",tbJcPlan.getTitle());
+                    modifyOrderStatus(result, tbJcPlan, tbJcPurchaseDetailed, list);
+                    result.put("orderId", tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName", "JCZ");
+                    result.put("schemeName", tbJcPlan.getTitle());
                 }
             }
-            if("99".equals(paramMap.get("payType"))){//点播
+            if ("99".equals(paramMap.get("payType"))) {//点播
                 result = payService.discountRecommendUse(userId, tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
-                if("000000".equals(result.get("resCode"))){
+                if ("000000".equals(result.get("resCode"))) {
                     //不需要定时任务查询订单信息 直接返回订单是否成功状态 直接修改
-                    modifyOrderStatus(result,tbJcPlan,tbJcPurchaseDetailed,list);
-                    result.put("orderId",tbJcPurchaseDetailed.getOrderId());
-                    result.put("lotteryName","JCZ");
-                    result.put("schemeName",tbJcPlan.getTitle());
+                    modifyOrderStatus(result, tbJcPlan, tbJcPurchaseDetailed, list);
+                    result.put("orderId", tbJcPurchaseDetailed.getOrderId());
+                    result.put("lotteryName", "JCZ");
+                    result.put("schemeName", tbJcPlan.getTitle());
                 }
             }
 
             //优惠券最后扣减使用(以免出现扣了优惠券,支付失败的情况)
-            if(!Strings.isNullOrEmpty(paramMap.get("couponId"))) {
+            if (!Strings.isNullOrEmpty(paramMap.get("couponId"))) {
                 if (!paramMap.get("type").equals("0")) {
                     //抵扣券和打折券优惠券扣减(支付成功再扣减)
-                    result = payService.currencyCouponPay(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "购买方案", headBean.getSrc());
+                    if ("000000".equals(result.get("resCode"))) {
+                        result = payService.currencyCouponPay(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "购买方案", headBean.getSrc());
+                    }else {
+                        result=payService.currencyCouponUnLock(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
+                    }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -550,7 +575,8 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                     tbJcPurchaseDetailed.setPayType(Long.valueOf(97));
                 }
             }else{
-                tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
+                //tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
+                //tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
             }
 
         }
