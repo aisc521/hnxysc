@@ -39,12 +39,9 @@
       e.ascription ascription,/*专家所属负责人*/
       (select count(*) from tb_jc_plan p where p.ascription_expert = e.id and PERIOD_DIFF(date_format(now(),'%Y%m'),date_format(p.create_time,'%Y%m')) =1) expert_plan_num,
       FORMAT(
-			(select sum(pd1.third_money) from tb_jc_purchase_detailed pd1 where 1= 1 and pd1.expert_id = e.id and PERIOD_DIFF(date_format(now(),'%Y%m'),date_format(pd1.create_time,'%Y%m')) =1 and pd1.pay_status = '2' and pd1.pay_type in('20','21','22','0'))
+			IFNULL((select sum(pd1.third_money) from tb_jc_purchase_detailed pd1 where 1= 1 and pd1.expert_id = e.id and PERIOD_DIFF(date_format(now(),'%Y%m'),date_format(pd1.create_time,'%Y%m')) =1 and pd1.pay_status = '2' and pd1.pay_type in('20','21','22','0')),'0')
 			+
-			(case when
-			(SELECT SUM(purchase.coupon_pay_money) from tb_jc_purchase_detailed purchase where e.id = purchase.expert_id AND purchase.coupon_type in ('0','1','2') AND purchase.pay_status = '2' GROUP BY purchase.expert_id) is null then 0
-			else
-			(SELECT SUM(purchase.coupon_pay_money) from tb_jc_purchase_detailed purchase where e.id = purchase.expert_id AND purchase.coupon_type in ('0','1','2') AND purchase.pay_status = '2' GROUP BY purchase.expert_id)end)
+			IFNULL((SELECT SUM(purchase.coupon_pay_money) from tb_jc_purchase_detailed purchase where e.id = purchase.expert_id AND purchase.coupon_type in ('0','1','2') AND purchase.pay_status = '2' GROUP BY purchase.expert_id),'0')
 			,2) sale_price,
       FORMAT((select sum(pd1.third_money) from tb_jc_purchase_detailed pd1 where 1= 1 and pd1.expert_id = e.id and PERIOD_DIFF(date_format(now(),'%Y%m'),date_format(pd1.create_time,'%Y%m')) =1 and pd1.pay_status = '2' and pd1.pay_type = '99'),2) pay_ondemand_price,
       20 ondemand_average,
