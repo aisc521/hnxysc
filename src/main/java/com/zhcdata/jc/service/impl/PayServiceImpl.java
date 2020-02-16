@@ -39,7 +39,7 @@ public class PayServiceImpl implements PayService {
     @Value("${custom.url.acc}")
     private String accUrl;
 
-    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public Map<String, Object> wechatPay(String userId, String payMoney, String productName, String description, String payType, String orderId, String src, String ip) {
@@ -352,7 +352,7 @@ public class PayServiceImpl implements PayService {
                 if(status.equals("-1")){
                     if(!"0".equals(returnMap_acc.get("validityDate").toString())) {
                         //是否验证，有效日期
-                        Date date = format.parse(returnMap_acc.get("validityDate").toString());
+                        Date date = format.parse(returnMap_acc.get("validityDate").toString()+" 23:59:59");
                         Date nowDate = new Date();
                         if (nowDate.compareTo(date) > 0) {//当前时间大于有效期
                             returnMap.put("resCode", ProtocolCodeMsg.COUPON_OVERDUE.getCode());
