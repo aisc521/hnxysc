@@ -88,6 +88,13 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.PAY_FLAG.getMsg());
             return map;
         }
+
+        String couponId=paramMap.get("couponId");
+        if (Strings.isNullOrEmpty(couponId)&&payType.equals("77")) {
+            map.put("resCode", ProtocolCodeMsg.COUPONID_NO_NULL.getCode());
+            map.put("message", ProtocolCodeMsg.COUPONID_NO_NULL.getMsg());
+            return map;
+        }
         return null;
     }
 

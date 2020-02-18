@@ -74,6 +74,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
             String price = String.valueOf(tbJcPlan.getPrice());
 
             if (!Strings.isNullOrEmpty(paramMap.get("couponId"))) {
+                tbJcPurchaseDetailed.setFirst("0");           //使用优惠券相当于放弃首单
                 if (!paramMap.get("couponStatus").equals("2")) {
                     //未锁定，则锁定操作 已锁定，下一步
                     result = payService.currencyCouponLock(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
@@ -166,6 +167,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 //不使用优惠券,判断首单2元
                 if (list <= 0) {//首单
                     price = "2";
+                    tbJcPurchaseDetailed.setFirst("1");
                 }
             }
 

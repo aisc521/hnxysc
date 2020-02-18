@@ -270,6 +270,9 @@ public class MatchListUserIdProtocol implements BaseProtocol {
                 }else if(r1.getMatchState().equals("取消")){
                     r1.setStatusDescFK("0");
                 }
+                if(type.equals("4")) {
+                    r1.setMatchType("5");
+                }
                 list.add(r1);
             }
 

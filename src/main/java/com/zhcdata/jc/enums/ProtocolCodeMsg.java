@@ -130,6 +130,8 @@ public enum ProtocolCodeMsg {
     COUPON_LOCKING_FAIL("022805","优惠券锁定失败"),
 
     COUPON_NO_USE("022805","优惠券不能使用,未达到金额限制"),
+
+    COUPONID_NO_NULL("022805","优惠券ID不能为空"),
     ;
     private String code;
 
