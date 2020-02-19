@@ -577,7 +577,9 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                     tbJcPurchaseDetailed.setPayType(Long.valueOf(97));
                 }
             }else{
-                //tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
+                if(Strings.isNullOrEmpty(tbJcPurchaseDetailed.getCouponId())) {
+                    tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
+                }
                 //tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(tbJcPlan.getPrice()));
             }
 
