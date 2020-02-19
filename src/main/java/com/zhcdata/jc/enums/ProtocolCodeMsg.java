@@ -123,13 +123,13 @@ public enum ProtocolCodeMsg {
 
     PAY_FLAG_EXIT("022802","请重新获取支付"),
 
-    COUPON_OVERDUE("022803","优惠券已过期"),
+    COUPON_OVERDUE("022803","该优惠券无法使用，请重新选择！"),
 
-    COUPON_ALREADY_USED("022804","优惠券已使用"),
+    COUPON_ALREADY_USED("022804","该优惠券无法使用，请重新选择！"),
 
     COUPON_LOCKING_FAIL("022805","优惠券锁定失败"),
 
-    COUPON_NO_USE("022805","优惠券不能使用,未达到金额限制"),
+    COUPON_NO_USE("022805","该优惠券无法使用，请重新选择！"),
 
     COUPONID_NO_NULL("022805","优惠券ID不能为空"),
     ;
