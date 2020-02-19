@@ -522,9 +522,10 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
         tbJcPurchaseDetailed.setExpertId(tbJcPlan.getAscriptionExpert());//专家id
         tbJcPurchaseDetailed.setPlanType(String.valueOf(tbJcPlan.getType()));//方案类型
         tbJcPurchaseDetailed.setSrc(headBean.getSrc());
-
-
-
+        if(!Strings.isNullOrEmpty(paramMap.get("couponId"))){
+            //修改时间(优惠券支付，创建和修改时间一步完成)
+            tbJcPurchaseDetailed.setUpdateTime(new Date());
+        }
         return tbJcPurchaseDetailed;
     }
 
