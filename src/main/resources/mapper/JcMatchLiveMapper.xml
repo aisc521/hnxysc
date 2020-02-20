@@ -16,9 +16,8 @@
     live.TIME eventTime,
     live.CONTENT value
     from jc_match_live live
-    left join schedule sc on live.scheduleID = sc.scheduleID
-    where live.scheduleID = #{matchId} and sc.MatchState in('1','2','3','4','5')
-    ORDER BY live.TIME;
+    where live.scheduleID = #{matchId}
+    ORDER BY live.TIME
   </select>
 
 </mapper>
