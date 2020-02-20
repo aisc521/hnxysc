@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 
 /**
  * @Description < 文字直播·真(20200242)>
- * @Author cuishuai
- * @Date 2019/9/19 15:44
+ * @Author Yore
+ * @Date 2020/02/20 15:44
  */
 @Service("20200242")
 public class TextLiving2Protocol implements BaseProtocol {
