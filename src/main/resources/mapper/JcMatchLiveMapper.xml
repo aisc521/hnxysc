@@ -17,7 +17,7 @@
     live.CONTENT value
     from jc_match_live live
     where live.scheduleID = #{matchId}
-    ORDER BY live.TIME
+    ORDER BY live.TIME desc,ID desc
   </select>
 
 </mapper>

@@ -2,6 +2,7 @@ package com.zhcdata.jc.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,8 @@ import java.util.Map;
  * @version 1.0
  * @Date 2019/4/20 13:51
  */
-public class TextLiving {
+public class TextLiving implements Serializable {
+    private static final long serialVersionUID = 6007414525535539338L;
     @JsonIgnore
     private int id;
     private String eventType;
