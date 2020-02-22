@@ -132,6 +132,10 @@ public enum ProtocolCodeMsg {
     COUPON_NO_USE("022805","该优惠券无法使用，请重新选择！"),
 
     COUPONID_NO_NULL("022805","优惠券ID不能为空"),
+
+    TABLETYPE_NO_NULL("020101","tableType类型不能为空"),
+
+    MATCHTYPE_NO_NULL("020101","matchType不能为空")
     ;
     private String code;
 

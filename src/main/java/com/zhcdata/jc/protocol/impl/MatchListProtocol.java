@@ -365,7 +365,7 @@ public class MatchListProtocol implements BaseProtocol {
         return list;
     }
 
-    private String getMinute(String s, String e) {
+    public String getMinute(String s, String e) {
         String str = "";
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
