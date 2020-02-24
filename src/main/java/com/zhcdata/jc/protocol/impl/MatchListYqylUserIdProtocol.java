@@ -25,11 +25,14 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Service("20200244")
-public class MatchListYqylProtocol implements BaseProtocol {
+@Service("20200245")
+public class MatchListYqylUserIdProtocol  implements BaseProtocol {
 
     @Resource
     private RedisUtils redisUtils;
+
+    @Resource
+    private TbPgUCollectService tbPgUCollectService;
 
     @Resource
     private ScheduleService scheduleService;
@@ -67,6 +70,14 @@ public class MatchListYqylProtocol implements BaseProtocol {
             return map;
         }
 
+        String userId = paramMap.get("userId");              //用户ID
+        if (Strings.isNullOrEmpty(userId)) {
+            LOGGER.info("[" + ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg() + "]:userId---" + userId);
+            map.put("resCode", ProtocolCodeMsg.USER_ID_NOT_EXIST.getCode());
+            map.put("message", ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg());
+            return map;
+        }
+
         String type= paramMap.get("type");                  //1竞彩 2北单 3足彩 4全部
         if (Strings.isNullOrEmpty(type)) {
             LOGGER.info("[" + ProtocolCodeMsg.TYPE_NULL.getMsg() + "]:type---" + type);
@@ -83,6 +94,7 @@ public class MatchListYqylProtocol implements BaseProtocol {
         String tableType = paramMap.get("tableType");       //类型 赛果11 赛程22 即时33
         String time = paramMap.get("matchTime");            //时间
         String pageNo = paramMap.get("pageNo");             //页码
+        String userId = paramMap.get("userId");             //用户ID
         String panKouType = paramMap.get("panKouType");     //盘口
         String matchType = paramMap.get("matchType");       //赛事类型 法甲 法乙
         String type= paramMap.get("type");                  //1竞彩 2北单 3足彩 4全部
@@ -148,6 +160,11 @@ public class MatchListYqylProtocol implements BaseProtocol {
                 }
                 list.add(r1);
             }
+
+            if (StringUtils.isNotBlank(userId)) {
+                Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+                map.put("followNum", followNum);//已关数量
+            }
             map.put("pageNo", infos.getPageNum());
             map.put("pageTotal", infos.getPages());
             map.put("totalNum", infos.getTotal());
@@ -173,6 +190,27 @@ public class MatchListYqylProtocol implements BaseProtocol {
                     map.put("resCode", "000000");
                     map.put("message", "成功");
                     map.put("list", null);
+                }
+
+                List<MatchResult1> result = new ArrayList<>();
+                //根据userId  和比赛id查询此产比赛此用户是否关注
+                if (StringUtils.isNotBlank(userId)) {
+                    for (int i = 0; i < newList.size(); i++) {
+                        MatchResult1 matchResult1 = newList.get(i);
+                        String matchId = matchResult1.getMatchId();
+
+                        TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId), Long.valueOf(matchId));
+                        if (tbPgUCollect != null) {
+                            matchResult1.setIscollect("1");
+                        }
+                        result.add(matchResult1);
+                    }
+                    Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+                    map.put("followNum", followNum);//已关数量
+                    map.put("list", result);
+                } else {
+                    map.put("followNum", "0");//已关数量
+                    map.put("list", newList);
                 }
             }
         }
