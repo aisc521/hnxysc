@@ -68,7 +68,7 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
     public Map<String, Object> processLogic(ProtocolParamDto.HeadBean headBean, Map<String, String> paramMap) throws Exception {
         Map<String, Object> map = new HashMap<>();
         String type = paramMap.get("type");             //赛事 让球
-        String matchType = paramMap.get("matchType");   //法甲 法乙
+        String matchType = paramMap.get("matchType");   //竞彩 北单 足彩
         String matchTime = paramMap.get("matchTime");   //日期
         String tableType=paramMap.get("tableType");     //赛程、赛果、即时
         List<MatchResult1> list = new ArrayList<>();

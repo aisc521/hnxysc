@@ -59,6 +59,8 @@ public class MatchResult1 {
 
     private String isSingle;
 
+    private String maxNum;
+
     public String getMatchType() {
         return matchType;
     }
@@ -345,5 +347,13 @@ public class MatchResult1 {
 
     public void setIsSingle(String isSingle) {
         this.isSingle = isSingle;
+    }
+
+    public String getMaxNum() {
+        return maxNum;
+    }
+
+    public void setMaxNum(String maxNum) {
+        this.maxNum = maxNum;
     }
 }

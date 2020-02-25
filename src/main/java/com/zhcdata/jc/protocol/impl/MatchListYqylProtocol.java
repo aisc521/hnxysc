@@ -85,11 +85,12 @@ public class MatchListYqylProtocol implements BaseProtocol {
         String pageNo = paramMap.get("pageNo");             //页码
         String panKouType = paramMap.get("panKouType");     //盘口
         String matchType = paramMap.get("matchType");       //赛事类型 法甲 法乙
-        String type= paramMap.get("type");                  //1竞彩 2北单 3足彩 4全部
+        String type = paramMap.get("type");                  //1竞彩 2北单 3足彩 4全部
+        String issue = paramMap.get("issue");                //选择足彩，就要传期次
 
 
         List<MatchResult1> newList = new ArrayList<>();
-        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType)) {
+        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType)||!type.equals("4")) {
             if (type.equals("all")) {
                 type = "4";
             }else if(type.equals("6")){
@@ -104,13 +105,19 @@ public class MatchListYqylProtocol implements BaseProtocol {
             String endDate = df.format(calendar.getTime());
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
-            newList = scheduleService.queryMacthListForJob(time + " 10:59:59", endDate + " 10:59:59", type, "", "", "", matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
+            newList = scheduleService.queryMacthListForJob(time + " 10:59:59", endDate + " 10:59:59", type, "", "", issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
 
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
 
+            Long num=Long.parseLong("0");
             List<MatchResult1> list=new ArrayList<>();
             for(int j=0;j< infos.getList().size();j++){
                 MatchResult1 r1=infos.getList().get(j);
+                if(type.equals("3")&&Long.parseLong(r1.getNum1())>num){
+                    num=Long.parseLong(r1.getNum1());
+                    r1.setMaxNum(num.toString());
+                }
+
                 //处理盘口
                 r1.setMatchPankou(matchListProtocol.getPanKou1(r1.getMatchPankou()));
                 if(r1.getMatchState().equals("1")){
