@@ -98,7 +98,7 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
         String panKouType = paramMap.get("panKouType");     //盘口
         String matchType = paramMap.get("matchType");       //赛事类型 法甲 法乙
         String type= paramMap.get("type");                  //1竞彩 2北单 3足彩 4全部
-
+        String issue = paramMap.get("issue");               //选择足彩，就要传期次
 
         List<MatchResult1> newList = new ArrayList<>();
         if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType)) {
@@ -116,7 +116,7 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
             String endDate = df.format(calendar.getTime());
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
-            newList = scheduleService.queryMacthListForJob(time + " 10:59:59", endDate + " 10:59:59", type, "", "", "", matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
+            newList = scheduleService.queryMacthListForJob(time + " 10:59:59", endDate + " 10:59:59", type, "", "", issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
 
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
 
