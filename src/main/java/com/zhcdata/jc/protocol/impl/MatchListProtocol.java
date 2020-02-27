@@ -267,8 +267,10 @@ public class MatchListProtocol implements BaseProtocol {
                 list.add(r1);
             }
 
-            Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
-            map.put("followNum", followNum);//已关数量
+            if (StringUtils.isNotBlank(userId)) {
+                Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
+                map.put("followNum", followNum);//已关数量
+            }
             map.put("pageNo", infos.getPageNum());
             map.put("pageTotal", infos.getPages());
             map.put("totalNum", infos.getTotal());
