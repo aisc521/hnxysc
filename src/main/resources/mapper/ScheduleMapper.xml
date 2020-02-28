@@ -1172,4 +1172,10 @@
         SELECT s.* from `schedule` s left join sclass ss on s.sclassID = ss.sclassID
          where ss.kind = 1 and (s.homeTeamId=#{teamId} or s.guestTeamId=#{teamId}) and s.matchTime &lt; #{date} ORDER BY s.matchTime desc LIMIT 1
     </select>
+
+    <!--根据日期查询当日的竞彩、北单、足彩-->
+    <select id="queryMatchType" resultType="com.zhcdata.jc.dto.MatchResult1">
+        SELECT scheduleID matchId,lottery matchType,issue_num drawno from `schedule` sc LEFT JOIN jc_match_lottery lottery on sc.scheduleID=lottery.ID_BET007 where sc.matchTime>#{matchTime} and sc.matchTime&lt;DATE_ADD(#{matchTime},INTERVAL 1 DAY)
+        and lottery.lottery in('JCZQ','BJDC','SF14')
+    </select>
 </mapper>

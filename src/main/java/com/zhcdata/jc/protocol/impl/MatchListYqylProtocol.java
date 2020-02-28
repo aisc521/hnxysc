@@ -35,7 +35,7 @@ public class MatchListYqylProtocol implements BaseProtocol {
     private ScheduleService scheduleService;
 
     @Resource
-    private  MatchListProtocol matchListProtocol;
+    private MatchListProtocol matchListProtocol;
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
@@ -67,7 +67,7 @@ public class MatchListYqylProtocol implements BaseProtocol {
             return map;
         }
 
-        String type= paramMap.get("type");                  //1竞彩 2北单 3足彩 4全部
+        String type = paramMap.get("type");                  //1竞彩 2北单 3足彩 4全部
         if (Strings.isNullOrEmpty(type)) {
             LOGGER.info("[" + ProtocolCodeMsg.TYPE_NULL.getMsg() + "]:type---" + type);
             map.put("resCode", ProtocolCodeMsg.TYPE_NULL.getCode());
@@ -90,11 +90,11 @@ public class MatchListYqylProtocol implements BaseProtocol {
 
 
         List<MatchResult1> newList = new ArrayList<>();
-        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType)||!type.equals("4")) {
+        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType) || !type.equals("4") || !Strings.isNullOrEmpty(issue)) {
             if (type.equals("all")) {
                 type = "4";
-            }else if(type.equals("6")){
-                type="3";
+            } else if (type.equals("6")) {
+                type = "3";
             }
 
             SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -109,48 +109,48 @@ public class MatchListYqylProtocol implements BaseProtocol {
 
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
 
-            Long num=Long.parseLong("0");
-            List<MatchResult1> list=new ArrayList<>();
-            for(int j=0;j< infos.getList().size();j++){
-                MatchResult1 r1=infos.getList().get(j);
-                if(type.equals("3")&&Long.parseLong(r1.getNum1())>num){
-                    num=Long.parseLong(r1.getNum1());
+            Long num = Long.parseLong("0");
+            List<MatchResult1> list = new ArrayList<>();
+            for (int j = 0; j < infos.getList().size(); j++) {
+                MatchResult1 r1 = infos.getList().get(j);
+                if (type.equals("3") && Long.parseLong(r1.getNum1()) > num) {
+                    num = Long.parseLong(r1.getNum1());
                     r1.setMaxNum(num.toString());
                 }
 
                 //处理盘口
                 r1.setMatchPankou(matchListProtocol.getPanKou1(r1.getMatchPankou()));
-                if(r1.getMatchState().equals("1")){
+                if (r1.getMatchState().equals("1")) {
                     r1.setStatusDescFK("1");
-                    if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                    if (r1.getMatchTime2() != null && !r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                         Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                         String len = matchListProtocol.getMinute(df1.format(ts), df1.format(new Date()));
-                        r1.setMatchState(len+"'");
-                    }else {
+                        r1.setMatchState(len + "'");
+                    } else {
                         r1.setMatchState("'完'");
                     }
-                }else if(r1.getMatchState().equals("3")){
+                } else if (r1.getMatchState().equals("3")) {
                     r1.setStatusDescFK("3");
-                    if(r1.getMatchTime2()!=null&&!r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
+                    if (r1.getMatchTime2() != null && !r1.getMatchTime2().contains("0000-00-00 00:00:00")) {
                         Timestamp ts = Timestamp.valueOf(r1.getMatchTime2());
                         String len = matchListProtocol.getMinute(df1.format(ts), df1.format(new Date()));
-                        r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len))+"'");
-                    }else {
+                        r1.setMatchState((45 + Integer.valueOf(len)) > 90 ? "90+'" : String.valueOf(45 + Integer.valueOf(len)) + "'");
+                    } else {
                         r1.setMatchState("'完'");
                     }
-                }else if(r1.getMatchState().equals("中")){
+                } else if (r1.getMatchState().equals("中")) {
                     r1.setStatusDescFK("2");
-                }else if(r1.getMatchState().equals("(完)")){
+                } else if (r1.getMatchState().equals("(完)")) {
                     r1.setStatusDescFK("-1");
-                }else if(r1.getMatchState().equals("未")) {
+                } else if (r1.getMatchState().equals("未")) {
                     r1.setStatusDescFK("0");
-                }else if(r1.getMatchState().equals("完")) {
+                } else if (r1.getMatchState().equals("完")) {
                     r1.setStatusDescFK("-1");
-                }else if(r1.getMatchState().equals("推迟")){
+                } else if (r1.getMatchState().equals("推迟")) {
                     r1.setStatusDescFK("0");
-                }else if(r1.getMatchState().equals("腰斩")){
+                } else if (r1.getMatchState().equals("腰斩")) {
                     r1.setStatusDescFK("0");
-                }else if(r1.getMatchState().equals("取消")){
+                } else if (r1.getMatchState().equals("取消")) {
                     r1.setStatusDescFK("0");
                 }
                 list.add(r1);
@@ -159,7 +159,7 @@ public class MatchListYqylProtocol implements BaseProtocol {
             map.put("pageTotal", infos.getPages());
             map.put("totalNum", infos.getTotal());
             map.put("list", list);
-        }else {
+        } else {
 
             if (StringUtils.isBlank(time)) {
                 map.put("list", "");

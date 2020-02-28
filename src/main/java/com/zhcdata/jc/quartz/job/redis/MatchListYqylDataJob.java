@@ -64,12 +64,13 @@ public class MatchListYqylDataJob implements Job {
 
             String time=startDate.substring(0, 10);
 
+            //更新当日所有
             List<MatchResult1> list1=new ArrayList<>();
-            List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null,null,null); //全部
+            List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null,null,null); //正在进行
             list1.addAll(list1_1);
-            List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2",null,null,null); //全部
+            List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2",null,null,null); //未开始
             list1.addAll(list1_2);
-            List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3",null,null,null); //全部
+            List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3",null,null,null); //已结束
             list1.addAll(list1_3);
             matchListDataJob.deal(list1,time,"33");
 
