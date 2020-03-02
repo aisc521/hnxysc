@@ -90,7 +90,7 @@ public class MatchListYqylProtocol implements BaseProtocol {
 
 
         List<MatchResult1> newList = new ArrayList<>();
-        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType) || !type.equals("4") || !Strings.isNullOrEmpty(issue)) {
+        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType) || !type.equals("5") || !Strings.isNullOrEmpty(issue)) {
             if (type.equals("all")) {
                 type = "4";
             } else if (type.equals("6")) {
