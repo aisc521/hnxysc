@@ -73,103 +73,151 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
         String type = paramMap.get("type");             //赛事 让球
         String matchType = paramMap.get("matchType");   //竞彩 北单 足彩
         String matchTime = paramMap.get("matchTime");   //日期
-        String tableType = paramMap.get("tableType");     //赛程、赛果、即时
+        String tableType = paramMap.get("tableType");   //赛程、赛果、即时
+        String issue=paramMap.get("issue");             //期次
         List<MatchResult1> list = new ArrayList<>();
 
         int pageNo = 0;
         int currentPageTotal = 0;
-        while (true) {
-            pageNo++;
-            String re = (String) redisUtils.hget("SOCCER:HSET:AGAINSTLIST" + matchTime + tableType, String.valueOf(pageNo));
-            if (Strings.isNullOrEmpty(re)) break;
+        if(!Strings.isNullOrEmpty(issue)) {
+            String re = (String)redisUtils.hget("SOCCER:HSET:AGAINSTLIST" + issue + "6","1");
             JavaType javaType = JsonMapper.defaultMapper().buildMapType(Map.class, String.class, Object.class);
             map = JsonMapper.defaultMapper().fromJson(re, javaType);
-
             JsonMapper jsonMapper = JsonMapper.defaultMapper();
             JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
             String s = JsonMapper.defaultMapper().toJson(map.get("list"));
-
-            if (currentPageTotal == 0) {
-                currentPageTotal = Integer.parseInt(map.get("pageTotal").toString());
-            }
-
-            if (pageNo > currentPageTotal) {
-                break;
-            }
             list.addAll(jsonMapper.fromJson(s, javaType1));
-        }
 
-        String JCZQ = "";
-        String BJDC = "";
-        String SF14 = "";
-        String drawno = "0";
-        if (!matchType.equals("4")) {
-            List<MatchResult1> mType = scheduleMapper.queryMatchType(matchTime + " 11:00:00");
-            for (int k = 0; k < mType.size(); k++) {
-                if (mType.get(k).getMatchType().equals("JCZQ")) {
-                    JCZQ += mType.get(k).getMatchId() + ",";
-                } else if (mType.get(k).getMatchType().equals("BJDC")) {
-                    BJDC += mType.get(k).getMatchId() + ",";
-                } else if (mType.get(k).getMatchType().equals("SF14")) {
-                    SF14 += mType.get(k).getMatchId() + ",";
-                    if (Long.parseLong(mType.get(k).getDrawno()) > Long.parseLong(drawno)) {
-                        drawno = mType.get(k).getDrawno();
+            StringBuilder sb = new StringBuilder();
+            Map<String, Integer> match = new HashMap<>();
+            switch (Integer.parseInt(type)){
+                case 1:
+                    for (MatchResult1 matchResult1 : list) {
+                        Integer matchCount = match.get(matchResult1.getMatchName());
+                        if (matchCount == null) matchCount = 1;//如果没有，这是第一场
+                        else matchCount = matchCount + 1;//如果有，那就加一场
+                        match.put(matchResult1.getMatchName(), matchCount);
+                    }
+                    break;
+                case 2:
+                    for (MatchResult1 matchResult1 : list) {
+                        if (!Strings.isNullOrEmpty(getPanKou(matchResult1.getMatchPankou()))){
+                            String pan=matchResult1.getMatchPankou();
+                            pan=getPanKou(pan);
+                            //pan=transformation(pan);
+                            //pan=CorrespondingMap.get(pan);
+                            Integer matchCount = match.get(pan);
+                            if (matchCount == null) matchCount = 1;//如果没有，这是第一场
+                            else matchCount = matchCount + 1;//如果有，那就加一场
+
+                            match.put(getPanKou(matchResult1.getMatchPankou()), matchCount);
+                        }
+                    }
+                    break;
+            }
+            for (Map.Entry<String, Integer> entry : match.entrySet()) {
+                sb.append(entry.getKey()).append(",").append(entry.getValue()).append("|");
+            }
+            Map<String, Object> result = new HashMap<>();
+            result.put("message", "success");
+            if (sb.toString().length() > 0) sb.deleteCharAt(sb.length() - 1);
+            result.put("info", sb);
+            return result;
+        }else {
+            while (true) {
+                pageNo++;
+                String re = (String) redisUtils.hget("SOCCER:HSET:AGAINSTLIST" + matchTime + tableType, String.valueOf(pageNo));
+                if (Strings.isNullOrEmpty(re)) break;
+                JavaType javaType = JsonMapper.defaultMapper().buildMapType(Map.class, String.class, Object.class);
+                map = JsonMapper.defaultMapper().fromJson(re, javaType);
+
+                JsonMapper jsonMapper = JsonMapper.defaultMapper();
+                JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
+                String s = JsonMapper.defaultMapper().toJson(map.get("list"));
+
+                if (currentPageTotal == 0) {
+                    currentPageTotal = Integer.parseInt(map.get("pageTotal").toString());
+                }
+
+                if (pageNo > currentPageTotal) {
+                    break;
+                }
+                list.addAll(jsonMapper.fromJson(s, javaType1));
+            }
+
+
+            String JCZQ = "";
+            String BJDC = "";
+            String SF14 = "";
+            String drawno = "0";
+            if (!matchType.equals("4")) {
+                List<MatchResult1> mType = scheduleMapper.queryMatchType(matchTime + " 11:00:00");
+                for (int k = 0; k < mType.size(); k++) {
+                    if (mType.get(k).getMatchType().equals("JCZQ")) {
+                        JCZQ += mType.get(k).getMatchId() + ",";
+                    } else if (mType.get(k).getMatchType().equals("BJDC")) {
+                        BJDC += mType.get(k).getMatchId() + ",";
+                    } else if (mType.get(k).getMatchType().equals("SF14")) {
+                        SF14 += mType.get(k).getMatchId() + ",";
+                        if (Long.parseLong(mType.get(k).getDrawno()) > Long.parseLong(drawno)) {
+                            drawno = mType.get(k).getDrawno();
+                        }
                     }
                 }
             }
-        }
 
 
-        String mt = "";
-        if (matchType.equals("1")) {
-            mt = JCZQ;
-        } else if (matchType.equals("2")) {
-            mt = BJDC;
-        } else if (matchType.equals("3")) {
-            mt = SF14;
-        }
-
-        StringBuilder sb = new StringBuilder();
-        Map<String, Integer> match = new HashMap<>();
-        if (type.equals("1")) {
-            //赛事
-            for (MatchResult1 matchResult1 : list) {
-                if (!"4".equals(matchType) && !mt.contains(matchResult1.getMatchId())) {
-                    continue;
-                }
-                Integer matchCount = match.get(matchResult1.getMatchName());
-                if (matchCount == null) matchCount = 1;//如果没有，这是第一场
-                else matchCount = matchCount + 1;//如果有，那就加一场
-                match.put(matchResult1.getMatchName(), matchCount);
+            String mt = "";
+            if (matchType.equals("1")) {
+                mt = JCZQ;
+            } else if (matchType.equals("2")) {
+                mt = BJDC;
+            } else if (matchType.equals("3")) {
+                mt = SF14;
             }
-        } else if (type.equals("2")) {
-            //让球
-            for (MatchResult1 matchResult1 : list) {
-                if (!"4".equals(matchType) && !mt.contains(matchResult1.getMatchId())) {
-                    continue;
-                }
-                if (!Strings.isNullOrEmpty(getPanKou(matchResult1.getMatchPankou()))) {
-                    String pan = matchResult1.getMatchPankou();
-                    pan = getPanKou(pan);
-                    Integer matchCount = match.get(pan);
+
+            StringBuilder sb = new StringBuilder();
+            Map<String, Integer> match = new HashMap<>();
+            if (type.equals("1")) {
+                //赛事
+                for (MatchResult1 matchResult1 : list) {
+                    if (!"4".equals(matchType) && !mt.contains(matchResult1.getMatchId())) {
+                        continue;
+                    }
+                    Integer matchCount = match.get(matchResult1.getMatchName());
                     if (matchCount == null) matchCount = 1;//如果没有，这是第一场
                     else matchCount = matchCount + 1;//如果有，那就加一场
+                    match.put(matchResult1.getMatchName(), matchCount);
+                }
+            } else if (type.equals("2")) {
+                //让球
+                for (MatchResult1 matchResult1 : list) {
+                    if (!"4".equals(matchType) && !mt.contains(matchResult1.getMatchId())) {
+                        continue;
+                    }
+                    if (!Strings.isNullOrEmpty(getPanKou(matchResult1.getMatchPankou()))) {
+                        String pan = matchResult1.getMatchPankou();
+                        pan = getPanKou(pan);
+                        Integer matchCount = match.get(pan);
+                        if (matchCount == null) matchCount = 1;//如果没有，这是第一场
+                        else matchCount = matchCount + 1;//如果有，那就加一场
 
-                    match.put(getPanKou(matchResult1.getMatchPankou()), matchCount);
+                        match.put(getPanKou(matchResult1.getMatchPankou()), matchCount);
+                    }
                 }
             }
-        }
 
 
-        for (Map.Entry<String, Integer> entry : match.entrySet()) {
-            sb.append(entry.getKey()).append(",").append(entry.getValue()).append("|");
+            for (Map.Entry<String, Integer> entry : match.entrySet()) {
+                sb.append(entry.getKey()).append(",").append(entry.getValue()).append("|");
+            }
+            Map<String, Object> result = new HashMap<>();
+            result.put("message", "success");
+            result.put("issue", drawno);
+            if (sb.toString().length() > 0) sb.deleteCharAt(sb.length() - 1);
+            result.put("info", sb);
+            return result;
         }
-        Map<String, Object> result = new HashMap<>();
-        result.put("message", "success");
-        result.put("issue", drawno);
-        if (sb.toString().length() > 0) sb.deleteCharAt(sb.length() - 1);
-        result.put("info", sb);
-        return result;
     }
 
 
