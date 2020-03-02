@@ -72,17 +72,17 @@ public class MatchListYqylDataJob implements Job {
             list1.addAll(list1_2);
             List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3",null,null,null); //已结束
             list1.addAll(list1_3);
-            matchListDataJob.deal(list1,time,"33");
+            matchListDataJob.deal(list1,time,"33","yqyl");
 
 
             //更新当日赛程
             List<MatchResult1> list_match = scheduleService.queryMacthListForJob(startDate, endDate, "4", "", "2", null, null, null); //竞彩 正在进行
-            matchListDataJob.deal(list_match,time,"22");
+            matchListDataJob.deal(list_match,time,"22","yqyl");
 
             //更新当日赛果
             List<MatchResult1> list_result = scheduleService.queryMacthListForJob(startDate, endDate, "4", "", "3", null, null, null); //竞彩 正在进行
 
-            matchListDataJob.deal(list_result,time,"11");
+            matchListDataJob.deal(list_result,time,"11","yqyl");
 
         }catch (Exception ex){
             LOGGER.error("定时任务[有球有料 即时更新]");

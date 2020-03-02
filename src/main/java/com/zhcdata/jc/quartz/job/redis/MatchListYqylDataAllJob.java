@@ -70,7 +70,7 @@ public class MatchListYqylDataAllJob implements Job {
 
                 List<MatchResult1> list = scheduleService.queryMacthListForJob(startDate, endDate, "4", "", "3", null, null, null); //竞彩 正在进行
 
-                matchListDataJob.deal(list,time,"11");
+                matchListDataJob.deal(list,time,"11","yqyl");
             }
 
             //赛程 向后查看6天
@@ -84,7 +84,7 @@ public class MatchListYqylDataAllJob implements Job {
                 time=startDate.substring(0, 10);
 
                 List<MatchResult1> list = scheduleService.queryMacthListForJob(startDate, endDate, "4", "", "2", null, null, null); //竞彩 正在进行
-                matchListDataJob.deal(list,time,"22");
+                matchListDataJob.deal(list,time,"22","yqyl");
             }
         }catch (Exception ex){
             LOGGER.error("定时任务[有球有料 赛程 赛果]");

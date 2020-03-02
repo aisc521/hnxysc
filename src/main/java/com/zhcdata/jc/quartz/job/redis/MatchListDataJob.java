@@ -76,7 +76,7 @@ public class MatchListDataJob implements Job {
             List<MatchResult1> list6_3 = scheduleService.queryMacthListForJob(null, null, "3", "", "3", issueNum,null,null); //竞彩 已经结束
             list6.addAll(list6_3);
 
-            deal(list6, issueNum, "6"); //目前存6
+            deal(list6, issueNum, "6",""); //目前存6
             LOGGER.info("按期次更新足彩赛事列表成功");
         }catch (Exception ex){
             LOGGER.error("按期次刷新足彩(分钟) 异常");
@@ -109,7 +109,7 @@ public class MatchListDataJob implements Job {
             if (list3 != null && list3.size() > 0) {
                 String time = scheduleService.queryZcNum(commonUtils.getSE().split(",")[0], commonUtils.getSE().split(",")[1]);
                 if (StringUtils.isNotBlank(time)) {
-                    deal(list3, time, "3");
+                    deal(list3, time, "3","");
                     long zc_e = ClockUtil.currentTimeMillis();
                     LOGGER.info("更新足彩赛事列表成功 期号:" + list3.get(0).getNum1() + "共" + list3.size() + "条(包含最新2期,不等同于场次) 耗时:" + (zc_e - zc_s));
                 } else {
@@ -173,7 +173,7 @@ public class MatchListDataJob implements Job {
                 for (int a = 0; a < list2.size(); a++) {
                     bd += list2.get(a).getMatchId() + ",";
                 }
-                deal(list2, sBd.split(" ")[0], "2");
+                deal(list2, sBd.split(" ")[0], "2","");
 
                 //竞彩
 
@@ -189,7 +189,7 @@ public class MatchListDataJob implements Job {
                 for(int c=0;c<list1.size();c++) {
                     jc += list1.get(c).getMatchId() + ",";
                 }
-                deal(list1,time,"1");
+                deal(list1,time,"1","");
 
 
                 //全部
@@ -250,7 +250,7 @@ public class MatchListDataJob implements Job {
                         str += list5_3.get(c).getMatchId() + ",";
                     }
                 }
-                deal(list5, time, "5");
+                deal(list5, time, "5","");
 
                 long end = ClockUtil.currentTimeMillis();
                 System.out.println(time);
@@ -268,10 +268,13 @@ public class MatchListDataJob implements Job {
      * @param time
      * @param type
      */
-    public void deal(List<MatchResult1> result1s_1,String time,String type){
+    public void deal(List<MatchResult1> result1s_1,String time,String type,String mark){
         List<MatchResult1> result1s=new ArrayList<>();
         for(int v=0;v<result1s_1.size();v++){
             MatchResult1 r1=result1s_1.get(v);
+            if(mark.equals("yqyl")) {
+                r1.setMatchType("5");
+            }
             //处理盘口
             r1.setMatchPankou(getPanKou1(r1.getMatchPankou()));
             if(r1.getMatchState().equals("1")){

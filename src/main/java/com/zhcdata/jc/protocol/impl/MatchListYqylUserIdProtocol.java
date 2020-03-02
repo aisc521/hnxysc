@@ -101,7 +101,7 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
         String issue = paramMap.get("issue");               //选择足彩，就要传期次
 
         List<MatchResult1> newList = new ArrayList<>();
-        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType)) {
+        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType) || !type.equals("4") || !Strings.isNullOrEmpty(issue)) {
             if (type.equals("all")) {
                 type = "4";
             }else if(type.equals("6")){
