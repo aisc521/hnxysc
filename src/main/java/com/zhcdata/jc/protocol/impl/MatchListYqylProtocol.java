@@ -103,9 +103,17 @@ public class MatchListYqylProtocol implements BaseProtocol {
             calendar.setTime(df.parse(time));
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             String endDate = df.format(calendar.getTime());
+            String state="";
+            if(tableType.equals("11")){
+                state="3"; // 赛果
+            }else if(tableType.equals("22")){
+                state="0"; //赛程
+            }else if(tableType.equals("33")){
+                state="1"; //即时
+            }
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
-            newList = scheduleService.queryMacthListForJob(time + " 10:59:59", endDate + " 10:59:59", type, "", "", issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
+            newList = scheduleService.queryMacthListForJob(time + " 10:59:59", endDate + " 10:59:59", type, "", state, issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
 
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
 
