@@ -150,7 +150,7 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
             String BJDC = "";
             String SF14 = "";
             String drawno = "0";
-            if (!matchType.equals("4")) {
+            if (!matchType.equals("5")) {
                 List<MatchResult1> mType = scheduleMapper.queryMatchType(matchTime + " 11:00:00");
                 for (int k = 0; k < mType.size(); k++) {
                     if (mType.get(k).getMatchType().equals("JCZQ")) {
@@ -181,7 +181,7 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
             if (type.equals("1")) {
                 //赛事
                 for (MatchResult1 matchResult1 : list) {
-                    if (!"4".equals(matchType) && !mt.contains(matchResult1.getMatchId())) {
+                    if (!"5".equals(matchType) && !mt.contains(matchResult1.getMatchId())) {
                         continue;
                     }
                     Integer matchCount = match.get(matchResult1.getMatchName());
@@ -192,7 +192,7 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
             } else if (type.equals("2")) {
                 //让球
                 for (MatchResult1 matchResult1 : list) {
-                    if (!"4".equals(matchType) && !mt.contains(matchResult1.getMatchId())) {
+                    if (!"5".equals(matchType) && !mt.contains(matchResult1.getMatchId())) {
                         continue;
                     }
                     if (!Strings.isNullOrEmpty(getPanKou(matchResult1.getMatchPankou()))) {
