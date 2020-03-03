@@ -49,13 +49,13 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
             return map;
         }
 
-        String matchTime = paramMap.get("matchTime");   //日期
-        if (Strings.isNullOrEmpty(matchTime)) {
-            LOGGER.info("[" + ProtocolCodeMsg.TIME_NULL.getMsg() + "]:matchTime---" + matchTime);
-            map.put("resCode", ProtocolCodeMsg.TIME_NULL.getCode());
-            map.put("message", ProtocolCodeMsg.TIME_NULL.getMsg());
-            return map;
-        }
+//        String matchTime = paramMap.get("matchTime");   //日期
+//        if (Strings.isNullOrEmpty(matchTime)) {
+//            LOGGER.info("[" + ProtocolCodeMsg.TIME_NULL.getMsg() + "]:matchTime---" + matchTime);
+//            map.put("resCode", ProtocolCodeMsg.TIME_NULL.getCode());
+//            map.put("message", ProtocolCodeMsg.TIME_NULL.getMsg());
+//            return map;
+//        }
 
         String tableType=paramMap.get("tableType");     //赛程、赛果、即时
         if (Strings.isNullOrEmpty(tableType)) {
