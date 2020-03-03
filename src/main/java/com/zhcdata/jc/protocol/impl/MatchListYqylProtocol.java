@@ -97,12 +97,17 @@ public class MatchListYqylProtocol implements BaseProtocol {
                 type = "3";
             }
 
+            String endDate="";
             SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(df.parse(time));
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-            String endDate = df.format(calendar.getTime());
+            if(!Strings.isNullOrEmpty(time)) {
+                time = time + " 10:59:59";
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(df.parse(time));
+                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                endDate = df.format(calendar.getTime()) + " 10:59:59";
+            }
+
             String state="";
             if(tableType.equals("11")){
                 state="3"; // 赛果
@@ -113,7 +118,7 @@ public class MatchListYqylProtocol implements BaseProtocol {
             }
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
-            newList = scheduleService.queryMacthListForJob(time + " 10:59:59", endDate + " 10:59:59", type, "", state, issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
+            newList = scheduleService.queryMacthListForJob(time, endDate, type, "", state, issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
 
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
 

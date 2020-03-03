@@ -890,8 +890,10 @@
             <if test="issueNum ==null || issueNum==''">
                 where lottery. ISSUE_NUM in(
                 SELECT lottery.ISSUE_NUM from jc_match_lottery lottery
-                LEFT JOIN `schedule` sch on lottery.ID_BET007=sch.scheduleID where lottery.lottery='SF14' and
-                sch.matchTime>= #{startTime}
+                LEFT JOIN `schedule` sch on lottery.ID_BET007=sch.scheduleID where lottery.lottery='SF14'
+                <if test="startTime !=null and startTime !=''">
+                  and sch.matchTime>= #{startTime}
+                </if>
                 GROUP BY ISSUE_NUM)
             </if>
         </if>
