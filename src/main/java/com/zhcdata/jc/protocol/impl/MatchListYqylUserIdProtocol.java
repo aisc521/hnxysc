@@ -54,13 +54,13 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
             return map;
         }
 
-        String matchTime = paramMap.get("matchTime");    //时间 日期
-        if (Strings.isNullOrEmpty(matchTime)) {
-            LOGGER.info("[" + ProtocolCodeMsg.TIME_NULL.getMsg() + "]:matchTime---" + matchTime);
-            map.put("resCode", ProtocolCodeMsg.TIME_NULL.getCode());
-            map.put("message", ProtocolCodeMsg.TIME_NULL.getMsg());
-            return map;
-        }
+//        String matchTime = paramMap.get("matchTime");    //时间 日期
+//        if (Strings.isNullOrEmpty(matchTime)) {
+//            LOGGER.info("[" + ProtocolCodeMsg.TIME_NULL.getMsg() + "]:matchTime---" + matchTime);
+//            map.put("resCode", ProtocolCodeMsg.TIME_NULL.getCode());
+//            map.put("message", ProtocolCodeMsg.TIME_NULL.getMsg());
+//            return map;
+//        }
 
         String pageNo = paramMap.get("pageNo");             //页码
         if (Strings.isNullOrEmpty(pageNo) || !NumberUtil.isNumber(pageNo)) {

@@ -895,7 +895,7 @@
                 GROUP BY ISSUE_NUM)
             </if>
         </if>
-        <if test="type == 1 or type == 2 or type == 4">
+        <if test="type == 1 or type == 2 or type == 4 or type == 5">
             where sc.MatchTime >= #{startTime} and sc.MatchTime  <![CDATA[ <= ]]> #{endTime}
         </if>
 
@@ -944,6 +944,9 @@
         </if>
         <if test="type == 3">
             a.num1,abs(a.num2)
+        </if>
+        <if test="type == 5">
+            a.matchTimeOrder
         </if>
         asc
         <if test="panKouTypeList != null or matchTypeList != null">
