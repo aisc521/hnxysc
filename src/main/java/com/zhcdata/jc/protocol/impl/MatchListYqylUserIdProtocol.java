@@ -201,7 +201,7 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
                     map.put("busiCode", "20010201");
                     map.put("resCode", "000000");
                     map.put("message", "成功");
-                    map.put("list", null);
+                    map.put("list", new ArrayList<>());
                 }
 
                 List<MatchResult1> result = new ArrayList<>();
