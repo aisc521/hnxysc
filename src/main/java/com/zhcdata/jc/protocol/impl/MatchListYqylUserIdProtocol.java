@@ -111,11 +111,11 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
             SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             if(!Strings.isNullOrEmpty(time)) {
-                time = time + " 10:59:59";
+                time = time + " 11:00:00";
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(df.parse(time));
                 calendar.add(Calendar.DAY_OF_MONTH, 1);
-                endDate = df.format(calendar.getTime()) + " 10:59:59";
+                endDate = df.format(calendar.getTime()) + " 11:00:00";
             }
 
             String state="";
