@@ -77,6 +77,15 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
         String issue=paramMap.get("issue");             //期次
         List<MatchResult1> list = new ArrayList<>();
 
+        String state="";
+        if(tableType.equals("11")){
+            state="-1,-10,-12,-14,";
+        }else if(tableType.equals("22")){
+            state="0,";
+        }else if(tableType.equals("33")){
+            state="1,2,3,4,5,";
+        }
+
         int pageNo = 0;
         int currentPageTotal = 0;
         if(!Strings.isNullOrEmpty(issue)) {
@@ -93,24 +102,28 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
             switch (Integer.parseInt(type)){
                 case 1:
                     for (MatchResult1 matchResult1 : list) {
-                        Integer matchCount = match.get(matchResult1.getMatchName());
-                        if (matchCount == null) matchCount = 1;//如果没有，这是第一场
-                        else matchCount = matchCount + 1;//如果有，那就加一场
-                        match.put(matchResult1.getMatchName(), matchCount);
+                        if(state.contains(matchResult1.getStatusDescFK())) {
+                            Integer matchCount = match.get(matchResult1.getMatchName());
+                            if (matchCount == null) matchCount = 1;//如果没有，这是第一场
+                            else matchCount = matchCount + 1;//如果有，那就加一场
+                            match.put(matchResult1.getMatchName(), matchCount);
+                        }
                     }
                     break;
                 case 2:
                     for (MatchResult1 matchResult1 : list) {
-                        if (!Strings.isNullOrEmpty(getPanKou(matchResult1.getMatchPankou()))){
-                            String pan=matchResult1.getMatchPankou();
-                            pan=getPanKou(pan);
-                            //pan=transformation(pan);
-                            //pan=CorrespondingMap.get(pan);
-                            Integer matchCount = match.get(pan);
-                            if (matchCount == null) matchCount = 1;//如果没有，这是第一场
-                            else matchCount = matchCount + 1;//如果有，那就加一场
+                        if(state.contains(matchResult1.getStatusDescFK())) {
+                            if (!Strings.isNullOrEmpty(getPanKou(matchResult1.getMatchPankou()))) {
+                                String pan = matchResult1.getMatchPankou();
+                                pan = getPanKou(pan);
+                                //pan=transformation(pan);
+                                //pan=CorrespondingMap.get(pan);
+                                Integer matchCount = match.get(pan);
+                                if (matchCount == null) matchCount = 1;//如果没有，这是第一场
+                                else matchCount = matchCount + 1;//如果有，那就加一场
 
-                            match.put(getPanKou(matchResult1.getMatchPankou()), matchCount);
+                                match.put(getPanKou(matchResult1.getMatchPankou()), matchCount);
+                            }
                         }
                     }
                     break;
