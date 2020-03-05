@@ -64,8 +64,11 @@ public class BeanUtils {
             inDb.setWeather(model.getV());//天气
         if (model.getW() != null)
             inDb.setTemperature(model.getW());//温度
-        if (model.getExplain2() != null)
-            inDb.setTemperature(model.getExplain2().split(";")[0]);//电视台信息
+        if (model.getExplain2() != null) {
+            inDb.setTv(model.getExplain2().split(";")[0]);    //电视台信息
+            //inDb.setTemperature(model.getExplain2().split(";")[0]);//电视台信息
+            inDb.setExplainlist(model.getExplain2());
+        }
         // TODO: 2019/9/10 裁判信息 需要用 裁判数据接口
         // TODO: 2019/9/10 阵容需要用出场阵容接口
         if (model.getJ() >= 0)
