@@ -51,6 +51,14 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
             map.put("message", ProtocolCodeMsg.PLANID_NULL.getMsg());
             return map;
         }
+
+        String uid = paramMap.get("uid");
+        if (Strings.isNullOrEmpty(uid)) {
+            LOGGER.info("[" + ProtocolCodeMsg.UID_NO_NULL.getMsg() + "]:uid---" + uid);
+            map.put("resCode", ProtocolCodeMsg.UID_NO_NULL.getCode());
+            map.put("message", ProtocolCodeMsg.UID_NO_NULL.getMsg());
+            return map;
+        }
         return null;
     }
 

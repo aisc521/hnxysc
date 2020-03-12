@@ -135,7 +135,9 @@ public enum ProtocolCodeMsg {
 
     TABLETYPE_NO_NULL("020101","tableType类型不能为空"),
 
-    MATCHTYPE_NO_NULL("020101","matchType不能为空")
+    MATCHTYPE_NO_NULL("020101","matchType不能为空"),
+
+    UID_NO_NULL("022002","uid不能为空"),
     ;
     private String code;
 
