@@ -42,4 +42,5 @@ public class QueryPlanByMatchIdDto {
     private String returnSevenDays;
     private String lzBig;
     private String planHit;
+    private String planType;
 }
