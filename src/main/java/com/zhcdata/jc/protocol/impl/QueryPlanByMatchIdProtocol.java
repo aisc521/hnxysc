@@ -95,7 +95,7 @@ public class QueryPlanByMatchIdProtocol implements BaseProtocol {
                     QueryPlanByMatchIdDto queryPlanByMatchIdDto1 = queryPlanByMatchIdDto.get(j);
                     queryPlanByMatchIdDto1.setPlanId(queryPlanByMatchIdDto1.getPlanId());
                     String lz = commonUtils.JsLz3(queryPlanByMatchIdDto1);
-                    queryPlanByMatchIdDto1.setzSevenDays(String.valueOf(new BigDecimal(queryPlanByMatchIdDto1.getzSevenDays()).intValue()));
+                    queryPlanByMatchIdDto1.setZsevenDays(String.valueOf(new BigDecimal(queryPlanByMatchIdDto1.getZsevenDays()).intValue()));
                     queryPlanByMatchIdDto1.setLz(lz);
                     List<MatchInfoDto> matchInfoDtos = tbJcMatchService.queryMatchInfoDtoByPlanId(queryPlanByMatchIdDto1.getPlanId());
                     queryPlanByMatchIdDto1.setList(matchInfoDtos);
