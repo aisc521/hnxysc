@@ -119,13 +119,14 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
             }
 
             String state="";
-//            if(tableType.equals("11")){
-//                state="3"; // 赛果
-//            }else if(tableType.equals("22")){
-//                state="0"; //赛程
-//            }else if(tableType.equals("33")){
-//                state="1"; //即时
-//            }
+            if(tableType.equals("11")){
+                state="3"; // 赛果
+            }else if(tableType.equals("22")){
+                state="0"; //赛程
+            }else if(tableType.equals("33")){
+                //state="1"; //即时
+            }
+            //备注 赛果、赛程 需要传状态，即时的不需要状态(查当天的)
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
             newList = scheduleService.queryMacthListForJob(time, endDate , type, "", state, issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
