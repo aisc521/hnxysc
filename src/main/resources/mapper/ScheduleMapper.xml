@@ -898,7 +898,7 @@
             </if>
         </if>
         <if test="type == 1 or type == 2 or type == 4 or type == 5">
-            where sc.MatchTime >= #{startTime} and sc.MatchTime  <![CDATA[ <= ]]> #{endTime}
+            where sc.MatchTime >= #{startTime} and sc.MatchTime  <![CDATA[ < ]]> #{endTime}
         </if>
 
         <if test="state == 1">/*正在进行*/
