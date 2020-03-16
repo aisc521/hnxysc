@@ -173,10 +173,26 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
                 list.add(r1);
             }
 
+            List<MatchResult1> list2=new ArrayList<>();
             if (StringUtils.isNotBlank(userId)) {
+                for (int i = 0; i < list.size(); i++) {
+                    MatchResult1 matchResult1 = list.get(i);
+                    String matchId = matchResult1.getMatchId();
+
+                    TbPgUCollect tbPgUCollect = tbPgUCollectService.queryUserCollectByUserIdAndMacthId(Long.valueOf(userId), Long.valueOf(matchId));
+                    if (tbPgUCollect != null) {
+                        matchResult1.setIscollect("1");
+                    }
+                    list2.add(matchResult1);
+                }
                 Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
                 map.put("followNum", followNum);//已关数量
+                map.put("list", list2);
+            } else {
+                map.put("followNum", "0");//已关数量
+                map.put("list", list);
             }
+
             map.put("pageNo", infos.getPageNum());
             map.put("pageTotal", infos.getPages());
             map.put("totalNum", infos.getTotal());
