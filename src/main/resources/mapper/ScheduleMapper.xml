@@ -935,6 +935,9 @@
             </foreach>
         </if>
         ) a GROUP BY a.matchId ORDER BY
+        <if test="panKouTypeList != null or matchTypeList != null">
+            abs(a.ord) asc,
+        </if>
         <if test="type == 1">
             a.num
         </if>
@@ -951,9 +954,6 @@
             a.matchTimeOrder
         </if>
         asc
-        <if test="panKouTypeList != null or matchTypeList != null">
-            ,abs(a.ord)
-        </if>
         ,matchid asc
     </select>
 

@@ -114,7 +114,7 @@ public class MatchListYqylProtocol implements BaseProtocol {
             }else if(tableType.equals("22")){
                 state="0"; //赛程
             }else if(tableType.equals("33")){
-                state="1"; //即时
+                //state="1"; //即时
             }
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
