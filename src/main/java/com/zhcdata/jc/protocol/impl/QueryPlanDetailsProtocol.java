@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -138,7 +139,10 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
 
                         map.put("num",firstInfo.get("Num").toString());
                         map.put("matchName",firstInfo.get("matchName").toString());
-                        Date dateOfMatch = (Date)firstInfo.get("dateOfMatch");
+
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date dateOfMatch1 = sdf.parse(String.valueOf(firstInfo.get("dateOfMatch")));
+                        Date dateOfMatch = dateOfMatch1;
                         if (dateOfMatch.getTime()<first)
                             first = dateOfMatch.getTime();
                         map.put("time",dateOfMatch.getTime());
