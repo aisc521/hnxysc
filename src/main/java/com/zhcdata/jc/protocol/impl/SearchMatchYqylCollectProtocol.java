@@ -83,7 +83,7 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
         }else if(tableType.equals("22")){
             state="0,";
         }else if(tableType.equals("33")){
-            state="1,2,3,4,5,";
+            state="0,1,2,3,4,5,-1,-10,-12,-14,";
         }
 
         int pageNo = 0;
