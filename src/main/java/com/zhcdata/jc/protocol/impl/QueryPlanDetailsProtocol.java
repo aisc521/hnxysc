@@ -107,7 +107,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                     resultMap.put("nickName", info.getNickName());
                     resultMap.put("img", info.getImg());
                     resultMap.put("lable", info.getLable());
-                    resultMap.put("introduction", info.getIntroduction());
+                    resultMap.put("introduction", info.getIntroduction().replaceAll("\r\n"," "));
                     resultMap.put("fans", info.getFans());
                     resultMap.put("trend", info.getTrend());
                     resultMap.put("lz", commonUtils.JsLz(info));
