@@ -45,7 +45,8 @@
   </select>
 
   <update id="updateStatusByUserId" parameterType="com.zhcdata.db.model.TbPgUCollect">
-    update tb_pg_u_collect set status = #{status,jdbcType=INTEGER} ,type=#{type,jdbcType=INTEGER}, update_time = now()
+    update tb_pg_u_collect set status = #{status,jdbcType=INTEGER} ,type=#{type,jdbcType=INTEGER}, update_time = now(),
+            match_time=#{matchTime},over_time=#{overTime}
     where user_id = #{userId,jdbcType=BIGINT} and match_id=#{matchId,jdbcType=BIGINT}
   </update>
 

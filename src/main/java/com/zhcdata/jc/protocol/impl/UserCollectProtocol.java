@@ -105,6 +105,8 @@ public class UserCollectProtocol implements BaseProtocol {
                 tbPgUCollect.setStatus(Integer.parseInt(type));
                 tbPgUCollect.setType(Integer.parseInt(flag));
                 tbPgUCollect.setMatchId(Long.parseLong(matchId));
+                tbPgUCollect.setMatchTime(df.parse(matchTime));
+                tbPgUCollect.setOverTime(calenUntil(matchTime));
                 int update = tbPgUCollectService.updateStatusByUserId(tbPgUCollect);
                 if(update > 0){
                     Integer followNum = tbPgUCollectService.queryCount(Long.valueOf(userId));
