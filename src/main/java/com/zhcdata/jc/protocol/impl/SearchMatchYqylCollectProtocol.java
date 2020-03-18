@@ -86,6 +86,19 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
             state="0,1,2,3,4,5,-1,-10,-12,-14,";
         }
 
+        //如果是足彩,首先根据时间查出最大的期次号
+        if(Strings.isNullOrEmpty(issue)&&matchType.equals("3")) {
+            issue="0";
+            SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(df1.parse(matchTime+" 11:00:00"));
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            List<MatchResult1> issueByMatchTime = scheduleMapper.queryIssueByMatchTime(matchTime+" 11:00:00",df1.format(calendar.getTime()));
+            if (issueByMatchTime != null && issueByMatchTime.size() > 0) {
+                issue = issueByMatchTime.get(0).getDrawno();
+            }
+        }
+
         int pageNo = 0;
         int currentPageTotal = 0;
         if(!Strings.isNullOrEmpty(issue)) {
@@ -133,6 +146,7 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
             }
             Map<String, Object> result = new HashMap<>();
             result.put("message", "success");
+            result.put("issue", issue);
             if (sb.toString().length() > 0) sb.deleteCharAt(sb.length() - 1);
             result.put("info", sb);
             return result;
@@ -162,7 +176,6 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
             String JCZQ = "";
             String BJDC = "";
             String SF14 = "";
-            String drawno = "0";
             if (!matchType.equals("5")) {
                 List<MatchResult1> mType = scheduleMapper.queryMatchType(matchTime + " 11:00:00");
                 for (int k = 0; k < mType.size(); k++) {
@@ -172,9 +185,9 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
                         BJDC += mType.get(k).getMatchId() + ",";
                     } else if (mType.get(k).getMatchType().equals("SF14")) {
                         SF14 += mType.get(k).getMatchId() + ",";
-                        if (Long.parseLong(mType.get(k).getDrawno()) > Long.parseLong(drawno)) {
-                            drawno = mType.get(k).getDrawno();
-                        }
+                        //if (Long.parseLong(mType.get(k).getDrawno()) > Long.parseLong(issue)) {
+                        //   issue = mType.get(k).getDrawno();
+                        //}
                     }
                 }
             }
@@ -226,7 +239,7 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
             }
             Map<String, Object> result = new HashMap<>();
             result.put("message", "success");
-            result.put("issue", drawno);
+            result.put("issue", issue);
             if (sb.toString().length() > 0) sb.deleteCharAt(sb.length() - 1);
             result.put("info", sb);
             return result;

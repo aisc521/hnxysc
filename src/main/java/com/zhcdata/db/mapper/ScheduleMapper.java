@@ -179,4 +179,6 @@ public interface ScheduleMapper {
     Schedule queryLastNoCupMatchByTeam(@Param("teamId") Integer teamId, @Param("date") Date matchTime);
 
     List<MatchResult1> queryMatchType(@Param("matchTime") String matchTime);
+
+    List<MatchResult1> queryIssueByMatchTime(@Param("s") String s,@Param("e") String e);
 }
