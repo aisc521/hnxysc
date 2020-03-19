@@ -473,7 +473,7 @@ public class HandleExpertRecordJob implements Job {
                                 } else if (Integer.parseInt(info.getSix_z()) == 5) {
                                     info.setOrder_By(208);
                                 } else if (Integer.parseInt(info.getFive_z()) == 4) {
-                                    info.setOrder_By(209);
+                                    //info.setOrder_By(209);        //5中4
                                 } else {
                                     //3类(倒序)
                                     if (new BigDecimal(info.getReturnSevenDays()).compareTo(new BigDecimal(100)) > 0) {
@@ -496,7 +496,9 @@ public class HandleExpertRecordJob implements Job {
                                                 info.setOrder_By(506);
                                             } else if (Integer.parseInt(info.getTen_z()) == 7) {
                                                 info.setOrder_By(505);
-                                            } else {
+                                            } else if(Integer.parseInt(info.getLzNow()) == 4){
+                                                info.setOrder_By(551); //新增4连红
+                                            }else {
                                                 //6类
                                                 if (Integer.parseInt(info.getLzNow()) == 2) {
                                                     info.setOrder_By(603);
@@ -508,7 +510,9 @@ public class HandleExpertRecordJob implements Job {
                                                         info.setOrder_By(703);
                                                     } else if (Integer.parseInt(info.getFour_z()) == 3) {
                                                         info.setOrder_By(702);
-                                                    } else {
+                                                    } else if(Integer.parseInt(info.getFive_z()) == 4){
+                                                        info.setOrder_By(751); //新增5中4
+                                                    }else {
                                                         //8类
                                                         if (Integer.parseInt(info.getLzBig()) >= 8) {
                                                             info.setOrder_By(getOrderBy(Integer.parseInt(info.getLzNow())) + 800);
