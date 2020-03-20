@@ -222,4 +222,26 @@ public class Letgoal {
     public int hashCode() {
         return Objects.hash(oddsid, scheduleid, companyid, firstgoal, firstupodds, firstdownodds, goal, upodds, downodds, modifytime, goalReal, upoddsReal, downoddsReal);
     }
+
+
+    @Override
+    public String toString() {
+        return "Letgoal{" +
+                "oddsid=" + oddsid +
+                ", scheduleid=" + scheduleid +
+                ", companyid=" + companyid +
+                ", firstgoal=" + firstgoal +
+                ", firstupodds=" + firstupodds +
+                ", firstdownodds=" + firstdownodds +
+                ", goal=" + goal +
+                ", upodds=" + upodds +
+                ", downodds=" + downodds +
+                ", modifytime=" + modifytime +
+                ", result=" + result +
+                ", goalReal=" + goalReal +
+                ", upoddsReal=" + upoddsReal +
+                ", downoddsReal=" + downoddsReal +
+                ", starttime=" + starttime +
+                '}';
+    }
 }
