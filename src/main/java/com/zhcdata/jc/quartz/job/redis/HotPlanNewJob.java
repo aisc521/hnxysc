@@ -122,6 +122,7 @@ public class HotPlanNewJob  implements Job {
                 LOGGER.info("[热门方案定时任务结束]共" + result1s.size() + df.format(new Date()));
             }else{
                 LOGGER.info("无专家排行信息");
+                redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(1), JsonMapper.defaultMapper().toJson(new ArrayList<>()));
             }
         }catch (Exception e){
             e.printStackTrace();
