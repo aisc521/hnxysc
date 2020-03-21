@@ -84,6 +84,12 @@ public class MultHandicapHandleServiceImpl implements MultHandicapOddsService {
         if (db == null) {
             try {
                 int insert_id = letgoalMapper.insertSelective(xml);
+                try {
+                    if (insert_id>0)
+                        log.warn("亚盘主表新增记录完成，数据体{}",xml.toString());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 if (insert_id > 0) {
                     multi_yp_add(flag);
                     Letgoal dbAfterInsert = letgoalMapper.selectByMatchIdAndCompany(info[0], info[1]);
