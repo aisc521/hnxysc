@@ -118,11 +118,14 @@ public class HotPlanNewJob  implements Job {
                         }
                     }
                 }
+
+                if(result1s.size()==0){
+                    redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(1), JsonMapper.defaultMapper().toJson(new ArrayList<>()));
+                }
                 //放入缓存，取值即可
                 LOGGER.info("[热门方案定时任务结束]共" + result1s.size() + df.format(new Date()));
             }else{
                 LOGGER.info("无专家排行信息");
-                redisUtils.hset("SOCCER:HSET:PLANHOT",  String.valueOf(1), JsonMapper.defaultMapper().toJson(new ArrayList<>()));
             }
         }catch (Exception e){
             e.printStackTrace();
