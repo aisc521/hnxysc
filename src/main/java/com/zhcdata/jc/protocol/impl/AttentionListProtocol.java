@@ -198,6 +198,7 @@ public class AttentionListProtocol implements BaseProtocol {
         resultMap.put("pageNo", pageNo);
         resultMap.put("pageTotal", list.getPages());
         resultMap.put("list", result1s);
+        resultMap.put("followNum",result1s.size());
         return resultMap;
     }
 
