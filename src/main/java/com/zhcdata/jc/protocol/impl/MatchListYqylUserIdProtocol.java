@@ -136,6 +136,7 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
             List<MatchResult1> list=new ArrayList<>();
             for(int j=0;j< infos.getList().size();j++){
                 MatchResult1 r1=infos.getList().get(j);
+                r1.setMatchType(type);
                 //处理盘口
                 r1.setMatchPankou(matchListProtocol.getPanKou1(r1.getMatchPankou()));
                 if(r1.getMatchState().equals("1")){
