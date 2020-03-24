@@ -25,6 +25,7 @@ public class QueryPlanByMatchIdDto {
     private String buStatus;
     private String grade;
     private String planStatus;
+    private String matchPlanType;
     private List<MatchInfoDto> list;
     private String planId;
     private String tenZ;
@@ -279,4 +280,8 @@ public class QueryPlanByMatchIdDto {
     public void setZsevenDays(String zsevenDays) {
         this.zsevenDays = zsevenDays;
     }
+
+    public String getMatchPlanType() { return matchPlanType; }
+
+    public void setMatchPlanType(String matchPlanType) { this.matchPlanType = matchPlanType; }
 }

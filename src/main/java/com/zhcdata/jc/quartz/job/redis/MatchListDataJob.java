@@ -365,6 +365,11 @@ public class MatchListDataJob implements Job {
                 }
             }
         }
+
+        //如果结果集为空,则清空缓存数据
+        if(result1s.size()==0){
+            redisUtils.hset("SOCCER:HSET:AGAINSTLIST"+time + type,  "1","");
+        }
     }
     private String getMinute(String s, String e) {
         String str = "";
