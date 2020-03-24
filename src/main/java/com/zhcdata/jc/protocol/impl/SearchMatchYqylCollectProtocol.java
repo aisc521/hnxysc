@@ -102,54 +102,62 @@ public class SearchMatchYqylCollectProtocol implements BaseProtocol {
         int pageNo = 0;
         int currentPageTotal = 0;
         if(!Strings.isNullOrEmpty(issue)) {
-            String re = (String)redisUtils.hget("SOCCER:HSET:AGAINSTLIST" + issue + "6","1");
-            JavaType javaType = JsonMapper.defaultMapper().buildMapType(Map.class, String.class, Object.class);
-            map = JsonMapper.defaultMapper().fromJson(re, javaType);
-            JsonMapper jsonMapper = JsonMapper.defaultMapper();
-            JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
-            String s = JsonMapper.defaultMapper().toJson(map.get("list"));
-            list.addAll(jsonMapper.fromJson(s, javaType1));
+            String re = (String) redisUtils.hget("SOCCER:HSET:AGAINSTLIST" + issue + "6", "1");
+            if (!Strings.isNullOrEmpty(re)) {
+                JavaType javaType = JsonMapper.defaultMapper().buildMapType(Map.class, String.class, Object.class);
+                map = JsonMapper.defaultMapper().fromJson(re, javaType);
+                JsonMapper jsonMapper = JsonMapper.defaultMapper();
+                JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
+                String s = JsonMapper.defaultMapper().toJson(map.get("list"));
+                list.addAll(jsonMapper.fromJson(s, javaType1));
 
-            StringBuilder sb = new StringBuilder();
-            Map<String, Integer> match = new HashMap<>();
-            switch (Integer.parseInt(type)){
-                case 1:
-                    for (MatchResult1 matchResult1 : list) {
-                        if(state.contains(matchResult1.getStatusDescFK())) {
-                            Integer matchCount = match.get(matchResult1.getMatchName());
-                            if (matchCount == null) matchCount = 1;//如果没有，这是第一场
-                            else matchCount = matchCount + 1;//如果有，那就加一场
-                            match.put(matchResult1.getMatchName(), matchCount);
-                        }
-                    }
-                    break;
-                case 2:
-                    for (MatchResult1 matchResult1 : list) {
-                        if(state.contains(matchResult1.getStatusDescFK())) {
-                            if (!Strings.isNullOrEmpty(getPanKou(matchResult1.getMatchPankou()))) {
-                                String pan = matchResult1.getMatchPankou();
-                                pan = getPanKou(pan);
-                                //pan=transformation(pan);
-                                //pan=CorrespondingMap.get(pan);
-                                Integer matchCount = match.get(pan);
+                StringBuilder sb = new StringBuilder();
+                Map<String, Integer> match = new HashMap<>();
+                switch (Integer.parseInt(type)) {
+                    case 1:
+                        for (MatchResult1 matchResult1 : list) {
+                            if (state.contains(matchResult1.getStatusDescFK())) {
+                                Integer matchCount = match.get(matchResult1.getMatchName());
                                 if (matchCount == null) matchCount = 1;//如果没有，这是第一场
                                 else matchCount = matchCount + 1;//如果有，那就加一场
-
-                                match.put(getPanKou(matchResult1.getMatchPankou()), matchCount);
+                                match.put(matchResult1.getMatchName(), matchCount);
                             }
                         }
-                    }
-                    break;
+                        break;
+                    case 2:
+                        for (MatchResult1 matchResult1 : list) {
+                            if (state.contains(matchResult1.getStatusDescFK())) {
+                                if (!Strings.isNullOrEmpty(getPanKou(matchResult1.getMatchPankou()))) {
+                                    String pan = matchResult1.getMatchPankou();
+                                    pan = getPanKou(pan);
+                                    //pan=transformation(pan);
+                                    //pan=CorrespondingMap.get(pan);
+                                    Integer matchCount = match.get(pan);
+                                    if (matchCount == null) matchCount = 1;//如果没有，这是第一场
+                                    else matchCount = matchCount + 1;//如果有，那就加一场
+
+                                    match.put(getPanKou(matchResult1.getMatchPankou()), matchCount);
+                                }
+                            }
+                        }
+                        break;
+                }
+                for (Map.Entry<String, Integer> entry : match.entrySet()) {
+                    sb.append(entry.getKey()).append(",").append(entry.getValue()).append("|");
+                }
+                Map<String, Object> result = new HashMap<>();
+                result.put("message", "success");
+                result.put("issue", issue);
+                if (sb.toString().length() > 0) sb.deleteCharAt(sb.length() - 1);
+                result.put("info", sb);
+                return result;
+            }else {
+                Map<String, Object> result = new HashMap<>();
+                result.put("message", "success");
+                result.put("issue", issue);
+                result.put("info", "");
+                return result;
             }
-            for (Map.Entry<String, Integer> entry : match.entrySet()) {
-                sb.append(entry.getKey()).append(",").append(entry.getValue()).append("|");
-            }
-            Map<String, Object> result = new HashMap<>();
-            result.put("message", "success");
-            result.put("issue", issue);
-            if (sb.toString().length() > 0) sb.deleteCharAt(sb.length() - 1);
-            result.put("info", sb);
-            return result;
         }else {
             while (true) {
                 pageNo++;
