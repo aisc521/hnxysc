@@ -89,6 +89,7 @@ public class QueryPlanByPlanIdUserIdProtocol implements BaseProtocol {
                     PlanResult1 result1 = planList.get(i);
                     String lz = commonUtils.JsLz2(result1);
                     result1.setLz(lz);
+                    result1.setMatchPlanType("1");
                     result1.setzSevenDays(String.valueOf(new BigDecimal(result1.getzSevenDays()).intValue()));
                     List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(i).getPlanId());
                     if (matchPlanResults != null && matchPlanResults.size() > 0) {

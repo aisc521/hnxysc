@@ -89,18 +89,18 @@ public class QueryPlanByMatchIdAndUserProtocol implements BaseProtocol {
             }
             //判断是否是已经完场的比赛
             Schedule schedule = scheduleService.queryScheduleById(Long.valueOf(matchId));
-            if(schedule == null){
+            if (schedule == null) {
                 return resultMap;
             }
             List<QueryPlanByMatchIdDto> queryPlanByMatchIdDto1 = new ArrayList<>();
             //已经完场的比赛
-            if("-1".equals(String.valueOf(schedule.getMatchstate()))){
-                queryPlanByMatchIdDto1 = tbPlanService.queryPlanInfoByPlanIdandUserIdList(a,userId,"2");
-            }else{
-                 queryPlanByMatchIdDto1 = tbPlanService.queryPlanInfoByPlanIdandUserIdList(a,userId,"1");
+            if ("-1".equals(String.valueOf(schedule.getMatchstate()))) {
+                queryPlanByMatchIdDto1 = tbPlanService.queryPlanInfoByPlanIdandUserIdList(a, userId, "2");
+            } else {
+                queryPlanByMatchIdDto1 = tbPlanService.queryPlanInfoByPlanIdandUserIdList(a, userId, "1");
             }
-            if(queryPlanByMatchIdDto1 != null && queryPlanByMatchIdDto1.size() > 0){
-                for(int j = 0; j < queryPlanByMatchIdDto1.size(); j++){
+            if (queryPlanByMatchIdDto1 != null && queryPlanByMatchIdDto1.size() > 0) {
+                for (int j = 0; j < queryPlanByMatchIdDto1.size(); j++) {
                     QueryPlanByMatchIdDto queryPlanByMatchIdDto = queryPlanByMatchIdDto1.get(j);
                     queryPlanByMatchIdDto.setPlanId(queryPlanByMatchIdDto.getPlanId());
                     String lz = commonUtils.JsLz3(queryPlanByMatchIdDto);
@@ -108,9 +108,9 @@ public class QueryPlanByMatchIdAndUserProtocol implements BaseProtocol {
                     queryPlanByMatchIdDto.setLz(lz);
                     List<MatchInfoDto> matchInfoDtos = tbJcMatchService.queryMatchInfoDtoByPlanId(queryPlanByMatchIdDto.getPlanId());
                     queryPlanByMatchIdDto.setList(matchInfoDtos);
+                    queryPlanByMatchIdDto.setMatchPlanType("1");
                     list.add(queryPlanByMatchIdDto);
                 }
-
             }
         }
 

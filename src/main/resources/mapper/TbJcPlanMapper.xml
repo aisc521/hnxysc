@@ -58,7 +58,8 @@
       v.four_z fourZ,
       v.three_z threeZ,
       v.return_seven_days returnSevenDays,
-      v.lz_big lzBig
+      v.lz_big lzBig,
+      '1' matchPlanType
       from tb_jc_plan  p
       LEFT JOIN
       (SELECT * from(

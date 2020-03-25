@@ -78,7 +78,7 @@ public class QueryPlanByExpertIdProtocol implements BaseProtocol{
                 List<MatchPlanResult> matchPlanResults = TbJcMatchService.queryList(planList.get(i).getPlanId());
                 if (matchPlanResults != null && matchPlanResults.size() > 0) {
                     List<MatchPlanResult> matchPlanResults1 = new ArrayList<>();
-                    for(int j = 0; j < matchPlanResults.size(); j++){
+                    for (int j = 0; j < matchPlanResults.size(); j++) {
                         MatchPlanResult matchPlanResult1 = matchPlanResults.get(j);
                         String planInfo = JcLotteryUtils.OddsInfoChange(matchPlanResult1.getPlanInfo());
                         matchPlanResult1.setPlanInfo(planInfo);
@@ -86,6 +86,7 @@ public class QueryPlanByExpertIdProtocol implements BaseProtocol{
                     }
                     result1.setList(matchPlanResults1);
                 }
+                result1.setMatchPlanType("1");
                 result.add(result1);
             }
             resultMap.put("pageNo",pageNo);

@@ -33,6 +33,7 @@ public class PlanResult1 {
     private String threeZ;
     private String returnSevenDays;
     private String lzBig;
+    private String matchPlanType;
 
     public String getLzBig() {
         return lzBig;
@@ -276,4 +277,7 @@ public class PlanResult1 {
         this.list = list;
     }
 
+    public String getMatchPlanType() { return matchPlanType; }
+
+    public void setMatchPlanType(String matchPlanType) { this.matchPlanType = matchPlanType; }
 }

@@ -80,6 +80,7 @@ public class QueryPlanByExpertIdUserProtocol implements BaseProtocol{
             for (int i = 0; i < planList.size(); i++) {
                 PlanResult1 result1 = planList.get(i);
                 String lz = commonUtils.JsLz2(result1);
+                result1.setMatchPlanType("1");
                 result1.setLz(lz);
                 result1.setzSevenDays(String.valueOf(new BigDecimal(result1.getzSevenDays()).intValue()));
                 result1.setzFiveDays(String.valueOf(new BigDecimal(result1.getzFiveDays()).intValue()));
