@@ -824,7 +824,8 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
             e.grade grade,
             p.status planStatus,
             p.id planid,
-            p.plan_Hit planHit
+            p.plan_Hit planHit,
+            type planType
             from tb_jc_plan p
             left join tb_jc_expert e on p.ascription_expert = e.id
             left join
@@ -880,7 +881,8 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
             e.grade grade,
             p.status planStatus,
             p.id planid,
-            p.plan_Hit planHit
+            p.plan_Hit planHit,
+            type planType
             from tb_jc_plan p
             left join tb_jc_expert e on p.ascription_expert = e.id
             left join
@@ -937,7 +939,8 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
             e.grade grade,
             p.status planStatus,
             p.id planid,
-            p.plan_Hit planHit
+            p.plan_Hit planHit,
+            type planType
             from tb_jc_plan p
             left join tb_jc_expert e on p.ascription_expert = e.id
             left join
