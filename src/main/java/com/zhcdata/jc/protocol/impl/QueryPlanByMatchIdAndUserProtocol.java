@@ -64,8 +64,8 @@ public class QueryPlanByMatchIdAndUserProtocol implements BaseProtocol {
         String userId = paramMap.get("userId");
         if (Strings.isNullOrEmpty(userId)) {
             LOGGER.info("[" + ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg() + "]:userId---" + userId);
-            map.put("resCode", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getCode());
-            map.put("message", ProtocolCodeMsg.PAGE_NO_NOT_ILLEGAL.getMsg());
+            map.put("resCode", ProtocolCodeMsg.USER_ID_NOT_EXIST.getCode());
+            map.put("message", ProtocolCodeMsg.USER_ID_NOT_EXIST.getMsg());
             return map;
         }
         return null;
