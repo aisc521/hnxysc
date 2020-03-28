@@ -16,9 +16,9 @@ public class QueryPlanByMatchIdDto {
     private String fans;
     private String popularity;
     private String lz;
-    private String zthreeDays;
-    private String zfiveDays;
-    private String zsevenDays;
+    private String zThreeDays;
+    private String zFiveDays;
+    private String zSevenDays;
     private String titleShowType;
     private String price;
     private String createTime;
@@ -97,6 +97,30 @@ public class QueryPlanByMatchIdDto {
         this.lz = lz;
     }
 
+    public String getzThreeDays() {
+        return zThreeDays;
+    }
+
+    public void setzThreeDays(String zThreeDays) {
+        this.zThreeDays = zThreeDays;
+    }
+
+    public String getzFiveDays() {
+        return zFiveDays;
+    }
+
+    public void setzFiveDays(String zFiveDays) {
+        this.zFiveDays = zFiveDays;
+    }
+
+    public String getzSevenDays() {
+        return zSevenDays;
+    }
+
+    public void setzSevenDays(String zSevenDays) {
+        this.zSevenDays = zSevenDays;
+    }
+
     public String getTitleShowType() {
         return titleShowType;
     }
@@ -143,6 +167,14 @@ public class QueryPlanByMatchIdDto {
 
     public void setPlanStatus(String planStatus) {
         this.planStatus = planStatus;
+    }
+
+    public String getMatchPlanType() {
+        return matchPlanType;
+    }
+
+    public void setMatchPlanType(String matchPlanType) {
+        this.matchPlanType = matchPlanType;
     }
 
     public List<MatchInfoDto> getList() {
@@ -256,32 +288,4 @@ public class QueryPlanByMatchIdDto {
     public void setPlanType(String planType) {
         this.planType = planType;
     }
-
-    public String getZthreeDays() {
-        return zthreeDays;
-    }
-
-    public void setZthreeDays(String zthreeDays) {
-        this.zthreeDays = zthreeDays;
-    }
-
-    public String getZfiveDays() {
-        return zfiveDays;
-    }
-
-    public void setZfiveDays(String zfiveDays) {
-        this.zfiveDays = zfiveDays;
-    }
-
-    public String getZsevenDays() {
-        return zsevenDays;
-    }
-
-    public void setZsevenDays(String zsevenDays) {
-        this.zsevenDays = zsevenDays;
-    }
-
-    public String getMatchPlanType() { return matchPlanType; }
-
-    public void setMatchPlanType(String matchPlanType) { this.matchPlanType = matchPlanType; }
 }
