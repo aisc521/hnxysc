@@ -59,7 +59,7 @@
       v.three_z threeZ,
       v.return_seven_days returnSevenDays,
       v.lz_big lzBig,
-      '1' matchPlanType
+      p.match_Plan_Type matchPlanType
       from tb_jc_plan  p
       LEFT JOIN
       (SELECT * from(
@@ -121,7 +121,8 @@
         v.four_z fourZ,
         v.three_z threeZ,
         v.lz_big lzBig,
-        v.return_seven_days returnSevenDays
+        v.return_seven_days returnSevenDays,
+        p.match_plan_type matchPlanType
         from tb_jc_plan  p
         LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
         LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
@@ -501,7 +502,9 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         p.price price,
         p.create_time createTime,
         e.grade grade,
-        p.introduction pintroduction,p.status planStatus
+        p.introduction pintroduction,
+        p.status planStatus,
+        p.match_Plan_Type matchPlanType
         from tb_jc_expert e LEFT JOIN tb_jc_victory v on e.id=v.expert_id
         LEFT JOIN tb_jc_record_focus f on e.id=f.expert_id and f.user_Id = #{uid}
         LEFT JOIN tb_jc_plan p on p.ascription_expert=e.id
@@ -764,7 +767,8 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
         v.five_z fiveZ,
         v.four_z fourZ,
         v.three_z threeZ,
-        v.return_seven_days returnSevenDays
+        v.return_seven_days returnSevenDays,
+        p.match_plan_type matchPlanType
         from tb_jc_plan  p
         LEFT JOIN (SELECT * from(
         SELECT * from
@@ -1003,7 +1007,8 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
             v.lz_big lzBig,
             p.id planid,
             p.plan_Hit planHit,
-            p.type planType
+            p.type planType,
+            p.match_Plan_Type matchPlanType
             from tb_jc_plan p
             left join tb_jc_expert e on p.ascription_expert = e.id
             left join
@@ -1060,7 +1065,8 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
             v.lz_big lzBig,
             p.id planid,
             p.plan_Hit planHit,
-            p.type planType
+            p.type planType,
+            p.match_Plan_Type matchPlanType
             from tb_jc_plan p
             left join tb_jc_expert e on p.ascription_expert = e.id
             left join
@@ -1118,7 +1124,8 @@ select aaa.*,bbb.status statusmatch,bbb.matchResult,bbb.planInfo,IFNULL(bbb.odds
             v.lz_big lzBig,
             p.id planid,
             p.plan_Hit planHit,
-            p.type planType
+            p.type planType,
+            p.match_Plan_Type matchPlanType
             from tb_jc_plan p
             left join tb_jc_expert e on p.ascription_expert = e.id
             left join

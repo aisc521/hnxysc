@@ -80,7 +80,6 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
         for (int k = 0; k < planList.size(); k++) {
              PlanResult1 result1 = planList.get(k);
              String lz = commonUtils.JsLz2(result1);
-             result1.setMatchPlanType("1");
              result1.setzSevenDays(String.valueOf(new BigDecimal(result1.getzSevenDays()).intValue()));
              result1.setLz(lz);
              List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(k).getPlanId());

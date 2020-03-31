@@ -76,6 +76,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                 String planStatus = "";
                 String pintroduction = "";
                 String planTitle = "";
+                String matchPlanType="";
                 List<PlanResult2> result = tbPlanService.queryPlanByIdandUser(id,uid);
                 if (result != null && result.size() > 0) {
                     planResult2 = result.get(0);
@@ -84,11 +85,13 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                     planStatus = planResult2.getPlanStatus();
                     pintroduction = planResult2.getPintroduction();
                     planTitle = planResult2.getTitle();
+                    matchPlanType=planResult2.getMatchPlanType();
                 }
                 resultMap.put("planStatus", planStatus);
                 resultMap.put("title", planTitle);
                 resultMap.put("grade", grade);
                 resultMap.put("price", price);
+                resultMap.put("matchPlanType",matchPlanType);
                 if(freeOrPay.get("type")==3){//免费
                     resultMap.put("pintroduction", pintroduction);
                 }else{

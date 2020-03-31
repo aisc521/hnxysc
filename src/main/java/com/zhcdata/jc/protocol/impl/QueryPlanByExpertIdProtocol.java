@@ -86,7 +86,6 @@ public class QueryPlanByExpertIdProtocol implements BaseProtocol{
                     }
                     result1.setList(matchPlanResults1);
                 }
-                result1.setMatchPlanType("1");
                 result.add(result1);
             }
             resultMap.put("pageNo",pageNo);

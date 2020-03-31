@@ -27,6 +27,7 @@ public class PlanResult2 {
     private String grade;
     private String planStatus;
     private String pintroduction;
+    private String matchPlanType;
 
     public String getPintroduction() {
         return pintroduction;
@@ -197,4 +198,8 @@ public class PlanResult2 {
     public void setList(List<MatchPlanResult1> list) {
         this.list = list;
     }
+
+    public String getMatchPlanType() { return matchPlanType; }
+
+    public void setMatchPlanType(String matchPlanType) { this.matchPlanType = matchPlanType; }
 }
