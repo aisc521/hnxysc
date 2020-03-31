@@ -46,99 +46,99 @@ public class MatchListProtocol implements BaseProtocol {
     @Resource
     private TbPgUCollectService tbPgUCollectService;
 
-    private static final Map<String, String> CorrespondingMap = new HashMap<String, String>() {{
-        put("-5", "受让五球");
-        put("-4.75", "受让四球半/五球");
-        put("-4.5", "受让四球半");
-        put("-4.25", "受让四球/四球半");
-        put("-4", "受让四球");
-        put("-3.75", "受让三球半/四球");
-        put("-3.5", "受让三球半");
-        put("-3.25", "受让三球/三球半");
-        put("-3", "受让三球");
-        put("-2.75", "受让两球半/三球");
-        put("-2.5", "受让两球半");
-        put("-2.25", "受让两球/两球半");
-        put("-2", "受让两球");
-        put("-1.75", "受让球半/两球");
-        put("-1.5", "受让一球半");
-        put("-1.25", "受让一球/球半");
-        put("-1", "受让一球");
-        put("-1.0", "受让一球");
-        put("-0.75", "受让半一");
-        put("-0.5", "受让半球");
-        put("-0.25", "受让平半");
-        put("5", "五球");
-        put("4.75", "四球半/五球");
-        put("4.5", "四球半");
-        put("4.25", "四球/四球半");
-        put("4", "四球");
-        put("3.75", "三球半/四球");
-        put("3.5", "三球半");
-        put("3.25", "三球/三球半");
-        put("3", "三球");
-        put("2.75", "两球半/三球");
-        put("2.5", "两球半");
-        put("2.25", "两球/两球半");
-        put("2", "两球");
-        put("1.75", "球半/两球");
-        put("1.5", "一球半");
-        put("1.25", "一球/球半");
-        put("1", "一球");
-        put("1.0", "一球");
-        put("0.75", "半一");
-        put("0.5", "半球");
-        put("0.25", "平半");
-        put("-0", "平手");
-        put("0", "平手");
-    }};
+//    private static final Map<String, String> CorrespondingMap = new HashMap<String, String>() {{
+//        put("-5", "受让五球");
+//        put("-4.75", "受让四球半/五球");
+//        put("-4.5", "受让四球半");
+//        put("-4.25", "受让四球/四球半");
+//        put("-4", "受让四球");
+//        put("-3.75", "受让三球半/四球");
+//        put("-3.5", "受让三球半");
+//        put("-3.25", "受让三球/三球半");
+//        put("-3", "受让三球");
+//        put("-2.75", "受让两球半/三球");
+//        put("-2.5", "受让两球半");
+//        put("-2.25", "受让两球/两球半");
+//        put("-2", "受让两球");
+//        put("-1.75", "受让球半/两球");
+//        put("-1.5", "受让一球半");
+//        put("-1.25", "受让一球/球半");
+//        put("-1", "受让一球");
+//        put("-1.0", "受让一球");
+//        put("-0.75", "受让半一");
+//        put("-0.5", "受让半球");
+//        put("-0.25", "受让平半");
+//        put("5", "五球");
+//        put("4.75", "四球半/五球");
+//        put("4.5", "四球半");
+//        put("4.25", "四球/四球半");
+//        put("4", "四球");
+//        put("3.75", "三球半/四球");
+//        put("3.5", "三球半");
+//        put("3.25", "三球/三球半");
+//        put("3", "三球");
+//        put("2.75", "两球半/三球");
+//        put("2.5", "两球半");
+//        put("2.25", "两球/两球半");
+//        put("2", "两球");
+//        put("1.75", "球半/两球");
+//        put("1.5", "一球半");
+//        put("1.25", "一球/球半");
+//        put("1", "一球");
+//        put("1.0", "一球");
+//        put("0.75", "半一");
+//        put("0.5", "半球");
+//        put("0.25", "平半");
+//        put("-0", "平手");
+//        put("0", "平手");
+//    }};
 
-    private static final Map<String, String> CorrespondingMap1 = new HashMap<String, String>() {{
-        put("受让五球", "-5");
-        put("受让四球半/五球", "-4.75");
-        put("受让四球半", "-4.5");
-        put("受让四球/四球半", "-4.25");
-        put("受让四球", "-4");
-        put("受让三球半/四球", "-3.75");
-        put("受让三球半", "-3.5");
-        put("受让三球/三球半", "-3.25");
-        put("受让三球", "-3");
-        put("受让两球半/三球", "-2.75");
-        put("受让两球半", "-2.5");
-        put("受让两球/两球半", "-2.25");
-        put("受让两球", "-2");
-        put("受让球半/两球", "-1.75");
-        put("受让一球半", "-1.5");
-        put("受让一球/球半", "-1.25");
-        put("受让一球", "-1");
-        put("受让一球", "-1.0");
-        put("受让半一", "-0.75");
-        put("受让半球", "-0.5");
-        put("受让平半", "-0.25");
-        put("五球", "5");
-        put("四球半/五球", "4.75");
-        put("四球半", "4.5");
-        put("四球/四球半", "4.25");
-        put("四球", "4");
-        put("三球半/四球", "3.75");
-        put("三球半", "3.5");
-        put("三球/三球半", "3.25");
-        put("三球", "3");
-        put("两球半/三球", "2.75");
-        put("两球半", "2.5");
-        put("两球/两球半", "2.25");
-        put("两球", "2");
-        put("球半/两球", "1.75");
-        put("一球半", "1.5");
-        put("一球/球半", "1.25");
-        put("一球", "1");
-        put("一球", "1.0");
-        put("半一", "0.75");
-        put("半球", "0.5");
-        put("平半", "0.25");
-        put("平手", "-0");
-        put("平手", "0");
-    }};
+//    private static final Map<String, String> CorrespondingMap1 = new HashMap<String, String>() {{
+//        put("受让五球", "-5");
+//        put("受让四球半/五球", "-4.75");
+//        put("受让四球半", "-4.5");
+//        put("受让四球/四球半", "-4.25");
+//        put("受让四球", "-4");
+//        put("受让三球半/四球", "-3.75");
+//        put("受让三球半", "-3.5");
+//        put("受让三球/三球半", "-3.25");
+//        put("受让三球", "-3");
+//        put("受让两球半/三球", "-2.75");
+//        put("受让两球半", "-2.5");
+//        put("受让两球/两球半", "-2.25");
+//        put("受让两球", "-2");
+//        put("受让球半/两球", "-1.75");
+//        put("受让一球半", "-1.5");
+//        put("受让一球/球半", "-1.25");
+//        put("受让一球", "-1");
+//        put("受让一球", "-1.0");
+//        put("受让半一", "-0.75");
+//        put("受让半球", "-0.5");
+//        put("受让平半", "-0.25");
+//        put("五球", "5");
+//        put("四球半/五球", "4.75");
+//        put("四球半", "4.5");
+//        put("四球/四球半", "4.25");
+//        put("四球", "4");
+//        put("三球半/四球", "3.75");
+//        put("三球半", "3.5");
+//        put("三球/三球半", "3.25");
+//        put("三球", "3");
+//        put("两球半/三球", "2.75");
+//        put("两球半", "2.5");
+//        put("两球/两球半", "2.25");
+//        put("两球", "2");
+//        put("球半/两球", "1.75");
+//        put("一球半", "1.5");
+//        put("一球/球半", "1.25");
+//        put("一球", "1");
+//        put("一球", "1.0");
+//        put("半一", "0.75");
+//        put("半球", "0.5");
+//        put("平半", "0.25");
+//        put("平手", "-0");
+//        put("平手", "0");
+//    }};
 
     @Override
     public Map<String, Object> validParam(Map<String, String> paramMap) throws BaseException {
@@ -198,6 +198,7 @@ public class MatchListProtocol implements BaseProtocol {
         String issueNum = paramMap.get("issueNum");
         String panKouType = paramMap.get("panKouType");
         String matchType = paramMap.get("matchType");
+        String isCheck = paramMap.get("isCheck");
 
         List<MatchResult1> newList = new ArrayList<>();
 
@@ -218,11 +219,11 @@ public class MatchListProtocol implements BaseProtocol {
 
             PageHelper.startPage(Integer.parseInt(pageNo), 20);
             if(type.equals("4")) {
-                newList = scheduleService.queryMacthListForJob(time + " 10:59:59", endDate + " 10:59:59", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //全部
+                newList = scheduleService.queryMacthListForJob(time + " 10:59:59", endDate + " 10:59:59", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType),isCheck); //全部
             }else if(type.equals("2")) {
-                newList = scheduleService.queryMacthListForJob(time + " 09:59:59", endDate + " 09:59:59", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType)); //北单
+                newList = scheduleService.queryMacthListForJob(time + " 09:59:59", endDate + " 09:59:59", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType),isCheck); //北单
             }else {
-                newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + " 11:00:00", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType));
+                newList = scheduleService.queryMacthListForJob(time + " 11:00:00", endDate + " 11:00:00", type, "", "", issueNum, getPanKou(panKouType), getMatchType(matchType),isCheck);
             }
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
 
@@ -302,8 +303,17 @@ public class MatchListProtocol implements BaseProtocol {
                     String s = JsonMapper.defaultMapper().toJson(map.get("list"));
                     JsonMapper jsonMapper = JsonMapper.defaultMapper();
                     JavaType javaType1 = jsonMapper.buildCollectionType(List.class, MatchResult1.class);
-                    newList = jsonMapper.fromJson(s, javaType1);
+                    List<MatchResult1> list = jsonMapper.fromJson(s, javaType1);
 
+                    for(int v=0;v<list.size();v++) {
+                        if (!Strings.isNullOrEmpty(isCheck) && isCheck.equals("1")) {
+                            if (Integer.valueOf(list.get(v).getRecommendCount()) > 0) {
+                                newList.add(list.get(v));
+                            }
+                        } else {
+                            newList.add(list.get(v));
+                        }
+                    }
                 } else {
                     map.put("pageTotal", "0");
                     map.put("pageNo", "0");

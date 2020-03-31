@@ -936,7 +936,11 @@
                 #{name}
             </foreach>
         </if>
-        ) a GROUP BY a.matchId ORDER BY
+        ) a
+        <if test="isCheck == 1">
+        WHERE a.recommendCount>0
+        </if>
+        GROUP BY a.matchId ORDER BY
         <!--<if test="panKouTypeList != null or matchTypeList != null">-->
             abs(a.ord) asc,
         <!--</if>-->

@@ -1087,8 +1087,13 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @return
      */
     @Override
+    public List<MatchResult1> queryMacthListForJob(String startDate, String endDate, String type, String userId, String state,String issueNum,List<String> panKouType,List<String> matchType,String isCheck) {
+        return scheduleMapper.queryMacthListForJob(startDate, endDate, type, userId, state,issueNum,panKouType,matchType,isCheck);
+    }
+
+    @Override
     public List<MatchResult1> queryMacthListForJob(String startDate, String endDate, String type, String userId, String state,String issueNum,List<String> panKouType,List<String> matchType) {
-        return scheduleMapper.queryMacthListForJob(startDate, endDate, type, userId, state,issueNum,panKouType,matchType);
+        return scheduleMapper.queryMacthListForJob(startDate, endDate, type, userId, state,issueNum,panKouType,matchType,null);
     }
 
     @Override
