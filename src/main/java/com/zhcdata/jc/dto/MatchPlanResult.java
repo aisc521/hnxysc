@@ -16,6 +16,9 @@ public class MatchPlanResult {
 
     private String matchState;
 
+    private String matchPlanType;
+    private String odds;
+
 
     public String getMatchState() {
         return matchState;
@@ -123,4 +126,12 @@ public class MatchPlanResult {
     public void setDateOfMatch(String dateOfMatch) {
         this.dateOfMatch = dateOfMatch;
     }
+
+    public String getMatchPlanType() { return matchPlanType; }
+
+    public void setMatchPlanType(String matchPlanType) { this.matchPlanType = matchPlanType; }
+
+    public String getOdds() { return odds; }
+
+    public void setOdds(String odds) { this.odds = odds; }
 }

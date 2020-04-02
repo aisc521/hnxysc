@@ -11,6 +11,8 @@ import java.util.Map;
 
 public interface TbJcMatchService {
 
+    List<MatchPlanResult> queryList(String id,String matchPlanType);
+
     List<MatchPlanResult> queryList(String id);
 
     Map<String,Integer> queryMatchStatus(Long planId);

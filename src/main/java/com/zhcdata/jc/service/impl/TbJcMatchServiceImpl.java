@@ -23,8 +23,13 @@ public class TbJcMatchServiceImpl implements TbJcMatchService {
     @Resource
     private TbJcMatchMapper tbJcMatchMapper;
     @Override
+    public List<MatchPlanResult> queryList(String id,String matchPlanType) {
+        return tbJcMatchMapper.queryList(id,matchPlanType);
+    }
+
+    @Override
     public List<MatchPlanResult> queryList(String id) {
-        return tbJcMatchMapper.queryList(id);
+        return tbJcMatchMapper.queryList(id,"1");
     }
 
     //根据方案id查询是否需要计算比赛

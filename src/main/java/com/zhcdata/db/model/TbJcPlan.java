@@ -116,6 +116,7 @@ public class TbJcPlan implements Serializable {
     @Column(name = "plan_popularity")
     private Integer planPopularity;
 
+    private String matchPlanType;
 
     public Integer getCnt() {
         return cnt;
@@ -460,4 +461,8 @@ public class TbJcPlan implements Serializable {
     public void setPlanPopularity(Integer planPopularity) {
         this.planPopularity = planPopularity;
     }
+
+    public String getMatchPlanType() { return matchPlanType; }
+
+    public void setMatchPlanType(String matchPlanType) { this.matchPlanType = matchPlanType; }
 }

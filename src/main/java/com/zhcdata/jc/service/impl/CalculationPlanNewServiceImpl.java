@@ -6,6 +6,7 @@ import com.zhcdata.db.model.TbJcPurchaseDetailed;
 import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
+import com.zhcdata.jc.quartz.job.redis.MatchListDataJob;
 import com.zhcdata.jc.service.*;
 import com.zhcdata.jc.tools.ExpertLevelUtils;
 import org.slf4j.Logger;
@@ -46,6 +47,9 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
     @Resource
     TbJcPurchaseDetailedService purchaseDetailedService;
 
+    @Resource
+    MatchListDataJob matchListDataJob;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void calculationPlan(TbJcPlan tbJcPlan) throws BaseException {
@@ -58,9 +62,10 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
             return;
         }
         LOGGER.info("需要处理的方案 id = "+tbJcPlan.getId());
-        List<MatchPlanResult> matchPlanResultsList = tbJcMatchService.queryList(String.valueOf(tbJcPlan.getId())); //该方案的赛事信息
+        List<MatchPlanResult> matchPlanResultsList = tbJcMatchService.queryList(String.valueOf(tbJcPlan.getId()),tbJcPlan.getMatchPlanType()); //该方案的赛事信息
         int z_count = 0;        //已中方案数量 例如推3中1,推3中2
         int cancel = 0 ;        //存在有取消，推迟和腰斩的比赛标识
+        int re=-2;              //1中 0走 -1输
         for(MatchPlanResult matchPlanResult :matchPlanResultsList){
 
             int z = 0;              //胜平负和让球胜平负,有一个中了,就算中
@@ -68,15 +73,32 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
             int homeScore = Integer.parseInt(matchPlanResult.getHomeScore());
             int guestScore = Integer.parseInt(matchPlanResult.getGuestScore());
             String allSCore = homeScore+":"+guestScore;
-            int rq = new BigDecimal(matchPlanResult.getPolyGoal()).intValue();
 
-            LOGGER.error("比赛计算-比赛id="+matchPlanResult.getMatchId()+" 比分="+allSCore+" 让"+rq+" 球 比赛状态="+matchPlanResult.getMatchState());
+
+            LOGGER.error("比赛计算-比赛id="+matchPlanResult.getMatchId()+" 比分="+allSCore+"比赛状态="+matchPlanResult.getMatchState());
             if("-1".equals(matchPlanResult.getMatchState())){
-                String spf = planInfo.split("\\|")[0];          //胜平负
-                String rqspf = planInfo.split("\\|")[1];        //让球胜平负
-                if(isWinAwad(spf,homeScore,guestScore ,0)||isWinAwad(rqspf,homeScore,guestScore ,rq)){
-                    z_count = z_count+1;
-                    z = 1;
+                if(matchPlanResult.getMatchPlanType().equals("1")) {
+                    int rq = new BigDecimal(matchPlanResult.getPolyGoal()).intValue();
+                    LOGGER.error("比赛计算-比赛id="+matchPlanResult.getMatchId()+"让"+rq+"球");
+                    String spf = planInfo.split("\\|")[0];          //胜平负
+                    String rqspf = planInfo.split("\\|")[1];        //让球胜平负
+                    if (isWinAwad(spf, homeScore, guestScore, 0) || isWinAwad(rqspf, homeScore, guestScore, rq)) {
+                        z_count = z_count + 1;
+                        z = 1;
+                    }
+                }else if(matchPlanResult.getMatchPlanType().equals("2")) {
+                    //胜负玩法
+                    String rqspf = planInfo.split("\\|")[1];        //胜负玩法(按让球)
+                    String[] strs=rqspf.split(",");
+                    re=isWin(rqspf,matchPlanResult.getOdds(),homeScore,guestScore);
+                    if(re==1){
+                        z_count = z_count + 1;
+                        z=1;
+                    }else if(re==0){
+
+                    }else if(re==-1) {
+                        //未中
+                    }
                 }
             }else{
                 z_count = z_count+1;
@@ -102,11 +124,50 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 deductFrozen(tbJcPlan);
             }
         }else{
-            LOGGER.info("方案id="+tbJcPlan.getId()+" 退款操作-方案末中");
-            tbPlanService.updateStatus("0", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"0");
-            refundFrozenToMoney(tbJcPlan,"1");
+            if(re==0){
+                //胜负玩法 退款逻辑
+                LOGGER.info("方案id=" + tbJcPlan.getId() + " 退款操作-胜负玩法方案走盘");
+                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "走" + z_count, String.valueOf(tbJcPlan.getId()), "0");
+                refundFrozenToMoney(tbJcPlan, "1");
+            }else {
+                //竞彩玩法，正常退款逻辑
+                LOGGER.info("方案id=" + tbJcPlan.getId() + " 退款操作-方案末中");
+                tbPlanService.updateStatus("0", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()), "0");
+                refundFrozenToMoney(tbJcPlan, "1");
+            }
         }
     }
+
+    //处理亚盘是否中奖 yyc 2020-04-01
+    public int isWin(String spf,String odds,int homeScore,int guestScore ) {
+        int result = 0;
+        String panKou = odds.split("/")[2];
+        Float value = Math.abs(Float.valueOf(panKou)) % Float.valueOf("0.5");
+        if (value > 0) {
+            String[] panKou2 = matchListDataJob.getPanKou(panKou).split("/");
+            for (int j = 0; j < panKou2.length; j++) {
+                if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) > 0) {
+                    result = 1; //有一个中就算中
+                    break;
+                } else if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) == 0) {
+                    result = 0;//只有走才继续下一个
+                } else if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) < 0) {
+                    result = -1;//有一个输就算输
+                    break;
+                }
+            }
+        } else {
+            if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) > 0) {
+                result = 1;
+            } else if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) == 0) {
+                result = 0;
+            } else if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) < 0) {
+                result = -1;
+            }
+        }
+        return result;
+    }
+
     public boolean isWinAwad(String code,int homeScore,int guestScore ,int rq) throws BaseException {
         String []codeArray = code.split(",");
         if(codeArray.length!=3){

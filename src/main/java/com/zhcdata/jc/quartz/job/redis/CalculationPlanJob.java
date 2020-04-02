@@ -21,26 +21,11 @@ import java.util.List;
  * @Date 2019/9/20 14:27
  */
 public class CalculationPlanJob implements Job {
-    @Resource
-    private RedisUtils redisUtils;
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource
     private TbPlanService tbPlanService;
-
-    @Resource
-    private TbJcMatchService tbJcMatchService;
-    @Resource
-    private TbJcExpertService tbJcExpertService;
-
-    @Resource
-    private PayService payService;
-
-    @Resource
-    ExpertLevelUtils expertLevelUtils;
-    @Resource
-    private TbJcPurchaseDetailedService purchaseDetailedService;
 
     @Resource
     private CalculationPlanService calculationPlanService;
