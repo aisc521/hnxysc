@@ -9,8 +9,6 @@ import com.zhcdata.jc.service.TbJcVictoryService;
 import com.zhcdata.jc.service.TbPlanService;
 import com.zhcdata.jc.tools.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.javassist.bytecode.stackmap.BasicBlock;
-import org.omg.PortableInterceptor.INACTIVE;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -47,6 +45,9 @@ public class HandleExpertRecordJob implements Job {
 
     @Resource
     private RedisUtils redisUtils;
+
+    @Resource
+    MatchListDataJob matchListDataJob;
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
@@ -149,6 +150,9 @@ public class HandleExpertRecordJob implements Job {
                                 //if(planResults.get(k).getId()==486){
                                 //    String sfsd="";
                                 //}
+
+                                //新增胜负玩法逻辑 2020-04-02 yyc
+
                                 int xz1 = 0;                                          //记录选择个数(投入金额)
                                 int xz2 = 0;
                                 BigDecimal return_money = new BigDecimal(0);     //当前方案奖金
@@ -197,10 +201,13 @@ public class HandleExpertRecordJob implements Job {
                                         }
 
                                         //中红 不中黑
-                                        if (matchlist.get(m).getStatus().equals("1")) {
-                                            trend += "红";
-                                        } else {
-                                            trend += "黑";
+                                        if(planResults.get(k).getMatchPlanType().equals("1")) {
+                                            //竞彩在此处理，胜负玩法不在这处理
+                                            if (matchlist.get(m).getStatus().equals("1")) {
+                                                trend += "红";
+                                            } else {
+                                                trend += "黑";
+                                            }
                                         }
 
                                         //全部命中数(率)
@@ -232,113 +239,174 @@ public class HandleExpertRecordJob implements Job {
 
                                         //已购方案信息
                                         String planInfo = matchlist.get(m).getPlanInfo();
-                                        if (planInfo.contains("|")) {
-                                            String spf = planInfo.split("\\|")[0];
-                                            String rqspf = planInfo.split("\\|")[1];
+                                        if (planResults.get(k).getMatchPlanType().equals("1")) {
+                                            if (planInfo.contains("|")) {
+                                                String spf = planInfo.split("\\|")[0];
+                                                String rqspf = planInfo.split("\\|")[1];
 
-                                            String[] spfs = spf.split(",");             //胜平负
-                                            String[] rqspfs = rqspf.split(",");         //让球胜平负
+                                                String[] spfs = spf.split(",");             //胜平负
+                                                String[] rqspfs = rqspf.split(",");         //让球胜平负
 
-                                            BigDecimal money_match = new BigDecimal(0);     //当前赛事奖金
+                                                BigDecimal money_match = new BigDecimal(0);     //当前赛事奖金
 
-                                            if (!spf.equals("0,0,0")) {
-                                                //计算胜平负
-                                                if (spfs.length == 3) {
-                                                    if (Double.valueOf(spfs[0]) > 0) {
-                                                        if (m == 0) {
-                                                            xz1 += 1;
-                                                        } else if (m == 1) {
-                                                            xz2 += 1;
+                                                if (!spf.equals("0,0,0")) {
+                                                    //计算胜平负
+                                                    if (spfs.length == 3) {
+                                                        if (Double.valueOf(spfs[0]) > 0) {
+                                                            if (m == 0) {
+                                                                xz1 += 1;
+                                                            } else if (m == 1) {
+                                                                xz2 += 1;
+                                                            }
+
+                                                            if (Integer.valueOf(scores[0]) > Integer.valueOf(scores[1])) {
+                                                                money_match = new BigDecimal(spfs[0]);  //胜出 计奖金
+                                                            }
                                                         }
-
-                                                        if (Integer.valueOf(scores[0]) > Integer.valueOf(scores[1])) {
-                                                            money_match = new BigDecimal(spfs[0]);  //胜出 计奖金
+                                                        if (Double.valueOf(spfs[1]) > 0) {
+                                                            if (m == 0) {
+                                                                xz1 += 1;
+                                                            } else if (m == 1) {
+                                                                xz2 += 1;
+                                                            }
+                                                            if (Integer.valueOf(scores[0]) == Integer.valueOf(scores[1])) {
+                                                                money_match = new BigDecimal(spfs[1]);  //平 计奖金
+                                                            }
+                                                        }
+                                                        if (Double.valueOf(spfs[2]) > 0) {
+                                                            if (m == 0) {
+                                                                xz1 += 1;
+                                                            } else if (m == 1) {
+                                                                xz2 += 1;
+                                                            }
+                                                            if (Integer.valueOf(scores[0]) < Integer.valueOf(scores[1])) {
+                                                                money_match = new BigDecimal(spfs[2]);  //负 计奖金
+                                                            }
                                                         }
                                                     }
-                                                    if (Double.valueOf(spfs[1]) > 0) {
-                                                        if (m == 0) {
-                                                            xz1 += 1;
-                                                        } else if (m == 1) {
-                                                            xz2 += 1;
+                                                } else {
+                                                    //计算让球胜平负
+                                                    if (rqspfs.length == 3) {
+                                                        BigDecimal rb = new BigDecimal(0);           //让球数
+                                                        SPFListDto rballs = tbPlanService.querySPFList((matchlist.get(m).getMatchId()));
+                                                        if (rballs != null) {
+                                                            rb = new BigDecimal(rballs.getAwayTeamRangballs());
                                                         }
-                                                        if (Integer.valueOf(scores[0]) == Integer.valueOf(scores[1])) {
-                                                            money_match = new BigDecimal(spfs[1]);  //平 计奖金
+
+                                                        if (Double.valueOf(rqspfs[0]) > 0) {
+                                                            if (m == 0) {
+                                                                xz1 += 1;
+                                                            } else if (m == 1) {
+                                                                xz2 += 1;
+                                                            }
+
+                                                            if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) > 0) {
+                                                                money_match = new BigDecimal(rqspfs[0]);  //胜出 计奖金
+                                                            }
                                                         }
-                                                    }
-                                                    if (Double.valueOf(spfs[2]) > 0) {
-                                                        if (m == 0) {
-                                                            xz1 += 1;
-                                                        } else if (m == 1) {
-                                                            xz2 += 1;
+
+                                                        if (Double.valueOf(rqspfs[1]) > 0) {
+                                                            if (m == 0) {
+                                                                xz1 += 1;
+                                                            } else if (m == 1) {
+                                                                xz2 += 1;
+                                                            }
+                                                            if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) == 0) {
+                                                                money_match = new BigDecimal(rqspfs[1]);  //平 计奖金
+                                                            }
                                                         }
-                                                        if (Integer.valueOf(scores[0]) < Integer.valueOf(scores[1])) {
-                                                            money_match = new BigDecimal(spfs[2]);  //负 计奖金
+                                                        if (Double.valueOf(rqspfs[2]) > 0) {
+                                                            if (m == 0) {
+                                                                xz1 += 1;
+                                                            } else if (m == 1) {
+                                                                xz2 += 1;
+                                                            }
+                                                            if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) < 0) {
+                                                                money_match = new BigDecimal(rqspfs[2]);  //负 计奖金
+                                                            }
                                                         }
                                                     }
                                                 }
-                                            } else {
-                                                //计算让球胜平负
-                                                if (rqspfs.length == 3) {
-                                                    BigDecimal rb = new BigDecimal(0);           //让球数
-                                                    SPFListDto rballs = tbPlanService.querySPFList((matchlist.get(m).getMatchId()));
-                                                    if (rballs != null) {
-                                                        rb = new BigDecimal(rballs.getAwayTeamRangballs());
-                                                    }
 
-                                                    if (Double.valueOf(rqspfs[0]) > 0) {
-                                                        if (m == 0) {
-                                                            xz1 += 1;
-                                                        } else if (m == 1) {
-                                                            xz2 += 1;
-                                                        }
+                                                //比赛推迟36小时算取消,比赛算中,方案算结束。如果两场，需要等到推迟36小时，再结束
+                                                //这判断为1，没有问题
+                                                if (matchlist.get(m).getMatchState().equals("-10") || matchlist.get(m).getMatchState().equals("-12") || matchlist.get(m).getMatchState().equals("-14")) {
+                                                    //腰斩、取消、推迟的比赛，sp值为1
+                                                    money_match = new BigDecimal(1);
+                                                    if (xz1 > 0) {
+                                                        money_match = money_match.multiply(new BigDecimal(xz1));
+                                                    }
+                                                    if (xz2 > 0) {
+                                                        money_match = money_match.multiply(new BigDecimal(xz2));
+                                                    }
+                                                }
 
-                                                        if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) > 0) {
-                                                            money_match = new BigDecimal(rqspfs[0]);  //胜出 计奖金
-                                                        }
-                                                    }
-
-                                                    if (Double.valueOf(rqspfs[1]) > 0) {
-                                                        if (m == 0) {
-                                                            xz1 += 1;
-                                                        } else if (m == 1) {
-                                                            xz2 += 1;
-                                                        }
-                                                        if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) == 0) {
-                                                            money_match = new BigDecimal(rqspfs[1]);  //平 计奖金
-                                                        }
-                                                    }
-                                                    if (Double.valueOf(rqspfs[2]) > 0) {
-                                                        if (m == 0) {
-                                                            xz1 += 1;
-                                                        } else if (m == 1) {
-                                                            xz2 += 1;
-                                                        }
-                                                        if (new BigDecimal(scores[0]).add(rb).compareTo(new BigDecimal(scores[1])) < 0) {
-                                                            money_match = new BigDecimal(rqspfs[2]);  //负 计奖金
-                                                        }
-                                                    }
+                                                if (m == 0) {
+                                                    //第一场比赛
+                                                    return_money = money_match;
+                                                } else {
+                                                    //第二场比赛，目前仅支持最多两场
+                                                    return_money = return_money.multiply(money_match);
                                                 }
                                             }
+                                        } else {
+                                            //胜负玩法
+                                            xz1+=1; //推比赛数量
+                                            String[] odds = matchlist.get(m).getOdds().split("/");
+                                            String[] rqspf = planInfo.split("\\|")[1].split(",");   //专家选择的赔率信息
+                                            String panKou = odds[2];
+                                            Float value = Math.abs(Float.valueOf(panKou)) % Float.valueOf("0.5");
+                                            if (value > 0) {
+                                                String[] panKou2 = matchListDataJob.getPanKou(panKou).split("/");
+                                                for (int j = 0; j < panKou2.length; j++) {
 
-                                            //比赛推迟36小时算取消,比赛算中,方案算结束。如果两场，需要等到推迟36小时，再结束
-                                            //这判断为1，没有问题
-                                            if (matchlist.get(m).getMatchState().equals("-10") || matchlist.get(m).getMatchState().equals("-12") || matchlist.get(m).getMatchState().equals("-14")) {
-                                                //腰斩、取消、推迟的比赛，sp值为1
-                                                money_match = new BigDecimal(1);
-                                                if (xz1 > 0) {
-                                                    money_match = money_match.multiply(new BigDecimal(xz1));
+                                                    if (new BigDecimal(scores[0]).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) == 0) {
+                                                        //左盘走或者右盘走 走盘需要返回本金 这里赋值0.5
+                                                        return_money=return_money.add(new BigDecimal(0.5));
+                                                    }else {
+                                                        if(Double.valueOf(rqspf[0]) > 0) {
+                                                            if (new BigDecimal(scores[0]).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) > 0) {
+                                                                trend+="红";
+                                                                return_money = new BigDecimal(rqspf[0]).divide(new BigDecimal(2)).add(new BigDecimal(0.5));
+                                                                //此类盘口分两份，
+                                                            }else {
+                                                                trend+="黑";
+                                                            }
+                                                        }else if(Double.valueOf(rqspf[2]) > 0){
+                                                            if (new BigDecimal(scores[0]).add(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) < 0) {
+                                                                return_money = new BigDecimal(rqspf[2]).divide(new BigDecimal(2)).add(new BigDecimal(0.5));
+                                                                trend+="红";
+                                                            }else {
+                                                                trend+="黑";
+                                                            }
+                                                        }
+                                                    }
                                                 }
-                                                if (xz2 > 0) {
-                                                    money_match = money_match.multiply(new BigDecimal(xz2));
-                                                }
-                                            }
 
-                                            if (m == 0) {
-                                                //第一场比赛
-                                                return_money = money_match;
+
                                             } else {
-                                                //第二场比赛，目前仅支持最多两场
-                                                return_money = return_money.multiply(money_match);
+                                                //如果走盘
+                                                if (new BigDecimal(scores[0]).add(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) == 0) {
+                                                    trend+="走";
+                                                    return_money = new BigDecimal(1); //走盘按1处理(相当于原路返回)
+                                                }else {
+                                                    if(Double.valueOf(rqspf[0]) > 0) {
+                                                        if (new BigDecimal(scores[0]).add(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) > 0) {
+                                                            trend+="红";
+                                                            return_money = new BigDecimal(rqspf[0]).add(new BigDecimal(1)); //确认球探的盘口是否需要+1(目前需要加)
+                                                            //todo
+                                                        }else {
+                                                            trend+="黑";
+                                                        }
+                                                    }else if(Double.valueOf(rqspf[2]) > 0){
+                                                        if (new BigDecimal(scores[0]).add(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) < 0) {
+                                                            trend+="红";
+                                                            return_money = new BigDecimal(rqspf[2]).add(new BigDecimal(1));
+                                                        }else {
+                                                            trend+="黑";
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }

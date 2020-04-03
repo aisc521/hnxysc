@@ -143,26 +143,46 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
         int result = 0;
         String panKou = odds.split("/")[2];
         Float value = Math.abs(Float.valueOf(panKou)) % Float.valueOf("0.5");
+        String[] rqspf = spf.split(",");
         if (value > 0) {
             String[] panKou2 = matchListDataJob.getPanKou(panKou).split("/");
             for (int j = 0; j < panKou2.length; j++) {
-                if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) > 0) {
-                    result = 1; //有一个中就算中
-                    break;
-                } else if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) == 0) {
-                    result = 0;//只有走才继续下一个
-                } else if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) < 0) {
-                    result = -1;//有一个输就算输
-                    break;
+
+                if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) == 0) {
+                    result = 0;
+                } else {
+                    if (Double.valueOf(rqspf[0]) > 0) {
+                        if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) > 0) {
+                            result = 1;
+                        } else {
+                            result = -1;
+                        }
+                    } else if (Double.valueOf(rqspf[2]) > 0) {
+                        if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) < 0) {
+                            result = 1;
+                        } else {
+                            result = -1;
+                        }
+                    }
                 }
             }
         } else {
-            if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) > 0) {
-                result = 1;
-            } else if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) == 0) {
-                result = 0;
-            } else if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) < 0) {
-                result = -1;
+            if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) == 0) {
+                result = 0; //走盘
+            } else {
+                if (Double.valueOf(rqspf[0]) > 0) {
+                    if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) > 0) {
+                        result = 1;
+                    } else {
+                        result = -1;
+                    }
+                } else if (Double.valueOf(rqspf[2]) > 0) {
+                    if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) < 0) {
+                        result = 1;
+                    } else {
+                        result = -1;
+                    }
+                }
             }
         }
         return result;

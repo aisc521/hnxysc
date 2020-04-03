@@ -12,6 +12,7 @@ public class MatchPlanResult1 {
     private String status;
     private String isWin;
     private String matchState;
+    private String odds;
 
     public String getIsWin() {
         return isWin;
@@ -100,4 +101,8 @@ public class MatchPlanResult1 {
     public void setMatchState(String matchState) {
         this.matchState = matchState;
     }
+
+    public String getOdds() { return odds; }
+
+    public void setOdds(String odds) { this.odds = odds; }
 }
