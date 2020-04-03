@@ -139,7 +139,7 @@ public class HandleExpertRecordJob implements Job {
                     int jin5z = 0;        //近 5中几
                     int jin4z = 0;        //近 4中几
                     int jin3z = 0;        //近 3中几
-                    if (String.valueOf(expertResults.get(p).getId()).equals("121")) {
+                    if (String.valueOf(expertResults.get(p).getId()).equals("118")) {
                         String sd = "";
                     }
 
@@ -147,9 +147,9 @@ public class HandleExpertRecordJob implements Job {
                         List<TbJcPlan> planResults = tbPlanService.queryPlanList(String.valueOf(expertResults.get(p).getId()), "0"); //已结束方案
                         if (planResults != null && planResults.size() > 0) {
                             for (int k = 0; k < planResults.size(); k++) {
-                                //if(planResults.get(k).getId()==486){
-                                //    String sfsd="";
-                                //}
+                                if(planResults.get(k).getId()==1309){
+                                    String sfsd="";
+                                }
 
                                 //新增胜负玩法逻辑 2020-04-02 yyc
 
@@ -201,7 +201,7 @@ public class HandleExpertRecordJob implements Job {
                                         }
 
                                         //中红 不中黑
-                                        if(planResults.get(k).getMatchPlanType().equals("1")) {
+                                        if(planResults.get(k).getMatchPlanType()==null||planResults.get(k).getMatchPlanType().equals("1")) {
                                             //竞彩在此处理，胜负玩法不在这处理
                                             if (matchlist.get(m).getStatus().equals("1")) {
                                                 trend += "红";
@@ -239,7 +239,7 @@ public class HandleExpertRecordJob implements Job {
 
                                         //已购方案信息
                                         String planInfo = matchlist.get(m).getPlanInfo();
-                                        if (planResults.get(k).getMatchPlanType().equals("1")) {
+                                        if (planResults.get(k).getMatchPlanType()==null||planResults.get(k).getMatchPlanType().equals("1")) {
                                             if (planInfo.contains("|")) {
                                                 String spf = planInfo.split("\\|")[0];
                                                 String rqspf = planInfo.split("\\|")[1];
@@ -349,7 +349,7 @@ public class HandleExpertRecordJob implements Job {
                                                     return_money = return_money.multiply(money_match);
                                                 }
                                             }
-                                        } else {
+                                        } else if(planResults.get(k).getMatchPlanType()!=null&&planResults.get(k).getMatchPlanType().equals("2")){
                                             //胜负玩法
                                             xz1+=1; //推比赛数量
                                             String[] odds = matchlist.get(m).getOdds().split("/");
@@ -357,7 +357,13 @@ public class HandleExpertRecordJob implements Job {
                                             String panKou = odds[2];
                                             Float value = Math.abs(Float.valueOf(panKou)) % Float.valueOf("0.5");
                                             if (value > 0) {
-                                                String[] panKou2 = matchListDataJob.getPanKou(panKou).split("/");
+                                                int remark=0;
+
+                                                String pankou1=matchListDataJob.getPanKou(panKou);
+                                                if(pankou1.contains("-")){
+                                                    pankou1=pankou1.replace("/","/-");     //把-0.5/1 处理成-0.5/-1
+                                                }
+                                                String[] panKou2 = pankou1.split("/");
                                                 for (int j = 0; j < panKou2.length; j++) {
 
                                                     if (new BigDecimal(scores[0]).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) == 0) {
@@ -366,23 +372,27 @@ public class HandleExpertRecordJob implements Job {
                                                     }else {
                                                         if(Double.valueOf(rqspf[0]) > 0) {
                                                             if (new BigDecimal(scores[0]).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) > 0) {
-                                                                trend+="红";
+                                                                remark=1;
                                                                 return_money = new BigDecimal(rqspf[0]).divide(new BigDecimal(2)).add(new BigDecimal(0.5));
                                                                 //此类盘口分两份，
                                                             }else {
-                                                                trend+="黑";
+                                                                remark=-1;
                                                             }
-                                                        }else if(Double.valueOf(rqspf[2]) > 0){
+                                                        }else if(Double.valueOf(rqspf[1]) > 0){
                                                             if (new BigDecimal(scores[0]).add(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) < 0) {
                                                                 return_money = new BigDecimal(rqspf[2]).divide(new BigDecimal(2)).add(new BigDecimal(0.5));
-                                                                trend+="红";
+                                                                remark=1;
                                                             }else {
-                                                                trend+="黑";
+                                                                remark=-1;
                                                             }
                                                         }
                                                     }
                                                 }
-
+                                                if(remark==1){
+                                                    trend+="红";
+                                                }else if(remark==-1){
+                                                    trend+="黑";
+                                                }
 
                                             } else {
                                                 //如果走盘
@@ -398,7 +408,7 @@ public class HandleExpertRecordJob implements Job {
                                                         }else {
                                                             trend+="黑";
                                                         }
-                                                    }else if(Double.valueOf(rqspf[2]) > 0){
+                                                    }else if(Double.valueOf(rqspf[1]) > 0){
                                                         if (new BigDecimal(scores[0]).add(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) < 0) {
                                                             trend+="红";
                                                             return_money = new BigDecimal(rqspf[2]).add(new BigDecimal(1));

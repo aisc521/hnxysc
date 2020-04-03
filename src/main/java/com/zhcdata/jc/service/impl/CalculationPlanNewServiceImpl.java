@@ -77,7 +77,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
 
             LOGGER.error("比赛计算-比赛id="+matchPlanResult.getMatchId()+" 比分="+allSCore+"比赛状态="+matchPlanResult.getMatchState());
             if("-1".equals(matchPlanResult.getMatchState())){
-                if(matchPlanResult.getMatchPlanType().equals("1")) {
+                if(matchPlanResult.getMatchPlanType()!=null&&matchPlanResult.getMatchPlanType().equals("1")) {
                     int rq = new BigDecimal(matchPlanResult.getPolyGoal()).intValue();
                     LOGGER.error("比赛计算-比赛id="+matchPlanResult.getMatchId()+"让"+rq+"球");
                     String spf = planInfo.split("\\|")[0];          //胜平负
@@ -86,7 +86,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                         z_count = z_count + 1;
                         z = 1;
                     }
-                }else if(matchPlanResult.getMatchPlanType().equals("2")) {
+                }else if(matchPlanResult.getMatchPlanType()!=null&&matchPlanResult.getMatchPlanType().equals("2")) {
                     //胜负玩法
                     String rqspf = planInfo.split("\\|")[1];        //胜负玩法(按让球)
                     String[] strs=rqspf.split(",");
@@ -127,7 +127,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
             if(re==0){
                 //胜负玩法 退款逻辑
                 LOGGER.info("方案id=" + tbJcPlan.getId() + " 退款操作-胜负玩法方案走盘");
-                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "走" + z_count, String.valueOf(tbJcPlan.getId()), "0");
+                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "走" + "1", String.valueOf(tbJcPlan.getId()), "0");
                 refundFrozenToMoney(tbJcPlan, "1");
             }else {
                 //竞彩玩法，正常退款逻辑
@@ -145,7 +145,11 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
         Float value = Math.abs(Float.valueOf(panKou)) % Float.valueOf("0.5");
         String[] rqspf = spf.split(",");
         if (value > 0) {
-            String[] panKou2 = matchListDataJob.getPanKou(panKou).split("/");
+            String pankou1=matchListDataJob.getPanKou(panKou);
+            if(pankou1.contains("-")){
+                pankou1=pankou1.replace("/","/-");     //把-0.5/1 处理成-0.5/-1
+            }
+            String[] panKou2 = pankou1.split("/");
             for (int j = 0; j < panKou2.length; j++) {
 
                 if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) == 0) {
@@ -164,6 +168,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                             result = -1;
                         }
                     }
+                    break;   //少循环一次，这里只运算一次就知道结果
                 }
             }
         } else {
