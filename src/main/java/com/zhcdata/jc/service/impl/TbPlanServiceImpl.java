@@ -94,8 +94,8 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public List<Map<String, Object>> queryPlanInfo(String id) {
-        return tbJcPlanMapper.queryPlanInfo(id);
+    public List<Map<String, Object>> queryPlanInfo(String id,String matchPlanType) {
+        return tbJcPlanMapper.queryPlanInfo(id,matchPlanType);
     }
 
     @Override
