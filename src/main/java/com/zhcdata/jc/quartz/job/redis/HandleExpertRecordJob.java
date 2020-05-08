@@ -472,9 +472,11 @@ public class HandleExpertRecordJob implements Job {
                                     info.setOrder_By(207);
                                 } else if (Integer.parseInt(info.getSix_z()) == 5) {
                                     info.setOrder_By(208);
-                                } else if (Integer.parseInt(info.getFive_z()) == 4) {
+                                } else
+                                    //if (Integer.parseInt(info.getFive_z()) == 4) {
                                     //info.setOrder_By(209);        //5中4
-                                } else {
+                                    //} else
+                                    {
                                     //3类(倒序)
                                     if (new BigDecimal(info.getReturnSevenDays()).compareTo(new BigDecimal(100)) > 0) {
                                         info.setOrder_By(300);
