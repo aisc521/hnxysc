@@ -390,19 +390,22 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 String payType = String.valueOf(tbJcPurchaseDetailed.getPayType());
                 if("20".equals(payType)){
                     remark = "方案已中扣款";
-                }
+                }else
                 if("21".equals(payType)){
                     remark = "方案已中扣款";
-                }
+                }else
                 if("22".equals(payType)){
                     remark = "方案已中扣款";
-                }
+                }else
                 if("0".equals(payType)){
                     remark = "方案已中扣款";
-                }
+                }else
                 if("99".equals(payType)){
                     remark = "方案已中扣款";
+                }else if("77".equals(payType)){
+                    remark = "方案已中扣优惠券";
                 }
+
                 //判断是否支付成功
                 if("0".equals(tbJcPurchaseDetailed.getPayStatus())){//未成功
                     LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣款====付款未成功:" +  tbJcPurchaseDetailed.getBuyMoney() + "扣款类型:" + remark +  "订单号:" + tbJcPurchaseDetailed.getOrderId() + "方案id:" + tbJcPurchaseDetailed.getSchemeId());
@@ -415,13 +418,20 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     updatePd(tbJcPurchaseDetailed);
 
                 }else{
-                    if("77".equals(payType)&&"0".equals(tbJcPurchaseDetailed.getCouponType())){
+                    if ("77".equals(payType) && "0".equals(tbJcPurchaseDetailed.getCouponType())) {
                         //remark = "优惠卷上来直接扣除";
                         //优惠卷上来直接扣除
-                        //result = payService.currencyCouponPay(tbJcPurchaseDetailed.getUserId()+"",tbJcPurchaseDetailed.getCouponId(),tbJcPurchaseDetailed.getOrderId(),"",tbJcPurchaseDetailed.getSrc());
-                        result.put("resCode","000000");//优惠卷不退
+                        result = payService.currencyCouponPay(tbJcPurchaseDetailed.getUserId() + "", tbJcPurchaseDetailed.getCouponId(), tbJcPurchaseDetailed.getOrderId(), "", tbJcPurchaseDetailed.getSrc());
+                        if(result.get("resCode").toString().equals("000000")){
+                            LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣优惠券成功====扣款金额:" +  tbJcPurchaseDetailed.getThirdMoney() + "扣款类型:" + remark + "订单号:" + tbJcPurchaseDetailed.getOrderId() + "方案id:" + tbJcPurchaseDetailed.getSchemeId());
+                            result.put("resCode", "000000");//优惠卷不退
+                        }else {
+                            LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣优惠券失败"+result.get("message")+"====扣款金额:" +  tbJcPurchaseDetailed.getThirdMoney() + "扣款类型:" + remark + "订单号:" + tbJcPurchaseDetailed.getOrderId() + "方案id:" + tbJcPurchaseDetailed.getSchemeId());
+                        }
                     }
-                    result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(),tbJcPurchaseDetailed.getOrderId(), new BigDecimal(tbJcPurchaseDetailed.getBuyMoney()),remark,tbJcPurchaseDetailed.getSrc());
+                    if(tbJcPurchaseDetailed.getThirdMoney().compareTo(new BigDecimal(0))>0) {
+                        result = payService.deductFrozen(tbJcPurchaseDetailed.getUserId(), tbJcPurchaseDetailed.getOrderId(), new BigDecimal(tbJcPurchaseDetailed.getBuyMoney()), remark, tbJcPurchaseDetailed.getSrc());
+                    }
                 }
                 String resCode = String.valueOf(result.get("resCode"));
                 if("000000".equals(resCode) || "109024".equals(resCode) || "010124".equals(resCode)){
