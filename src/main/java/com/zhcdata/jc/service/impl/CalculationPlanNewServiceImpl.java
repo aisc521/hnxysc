@@ -353,6 +353,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     }
                 }
 
+                int s=-1;  //标识是否扣优惠券
                 //0表示通用券 目前只有通用券 可以不判断
                 if("77".equals(payType)&&"0".equals(tbJcPurchaseDetailed.getCouponType())){
                     if("1".equals(pay_status) && "JCZF".equals(order[0])){
@@ -368,9 +369,10 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                                 LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "退优惠券失败(比赛取消)" + result.get("message") + "====退款金额:" + tbJcPurchaseDetailed.getThirdMoney() + "扣款类型:" + remark + "订单号:" + tbJcPurchaseDetailed.getOrderId() + "方案id:" + tbJcPurchaseDetailed.getSchemeId());
                             }
                         }else {
+
                             //优惠券支付的方案 未中也不退 走盘也不退
                             result = payService.currencyCouponPay(tbJcPurchaseDetailed.getUserId() + "", tbJcPurchaseDetailed.getCouponId(), tbJcPurchaseDetailed.getOrderId(), "", tbJcPurchaseDetailed.getSrc());
-
+                            s=1; //扣优惠券
                             //扣除优惠券 不需要通知支付中心
                             if (result.get("resCode").toString().equals("000000")) {
                                 LOGGER.error("用户 ：" + tbJcPurchaseDetailed.getUserId() + "扣优惠券成功(方案未中)====扣款金额:" + tbJcPurchaseDetailed.getThirdMoney() + "扣款类型:" + remark + "订单号:" + tbJcPurchaseDetailed.getOrderId() + "方案id:" + tbJcPurchaseDetailed.getSchemeId());
@@ -384,7 +386,12 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 String resCode = String.valueOf(result.get("resCode"));
                 if("000000".equals(resCode) || "109023".equals(resCode) || "010124".equals(resCode)){//退款成功
                     //更新订单表信息
-                    tbJcPurchaseDetailed.setPayStatus(Long.valueOf(3));
+                    if(s==1) {
+                        //扣优惠券
+                        tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
+                    }else {
+                        tbJcPurchaseDetailed.setPayStatus(Long.valueOf(3));
+                    }
                     tbJcPurchaseDetailed.setAwardStatus(Long.valueOf(0));
                     tbJcPurchaseDetailed.setUpdateTime(new Date());
                     Example example = new Example(TbJcPurchaseDetailed.class);
