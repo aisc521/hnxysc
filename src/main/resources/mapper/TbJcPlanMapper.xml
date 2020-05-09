@@ -675,7 +675,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     <select id="selectPlanIdByMatchId" resultType="com.zhcdata.jc.dto.PlanIdDto">
         SELECT plan_id planId from tb_jc_match m
         left join jc_schedule s on s.ScheduleID in(#{matchId})
-        where m.match_id in(#{matchId}) and s.MatchID = m.match_num
+        where m.match_id in(#{matchId})
     </select>
     <select id="queryPlanInfoByPlanId" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
         select
