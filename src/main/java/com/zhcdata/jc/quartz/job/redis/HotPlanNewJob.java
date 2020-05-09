@@ -60,7 +60,10 @@ public class HotPlanNewJob  implements Job {
                         String lz = commonUtils.JsLz2(result1);
                         result1.setLz(lz);
                         result1.setzSevenDays(String.valueOf(new BigDecimal(result1.getzSevenDays()).intValue()));
-                        List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planList.get(k).getPlanId());
+                        List<MatchPlanResult> matchPlanResults = null; //tbJcMatchService.queryList(planList.get(k).getPlanId());
+                        if (planList.get(k).getMatchPlanType() != null) {
+                            matchPlanResults = tbJcMatchService.queryList(planList.get(k).getPlanId(), planList.get(k).getMatchPlanType());
+                        }
                         if (matchPlanResults != null && matchPlanResults.size() > 0) {
                             result1.setList(matchPlanResults);
                         }
