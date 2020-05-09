@@ -77,6 +77,9 @@ public class PurchasedPlanProtocol implements BaseProtocol {
                 purchasedPlanDto.setLz(lz);
                 String planId = purchasedPlanDto.getPlanId();
                 List<MatchPlanResult> matchPlanResults = tbJcMatchService.queryList(planId);
+                if(purchasedPlanDto.getMatchPlanType()!=null){
+                    matchPlanResults=tbJcMatchService.queryList(planId,purchasedPlanDto.getMatchPlanType());
+                }
                 purchasedPlanDto.setList(matchPlanResults);
                 list1.add(purchasedPlanDto);
             }
