@@ -66,6 +66,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
         int z_count = 0;        //已中方案数量 例如推3中1,推3中2
         int cancel = 0 ;        //存在有取消，推迟和腰斩的比赛标识
         int re=-2;              //1中 0走 -1输
+        int zz=0;               //标识胜负玩法赢走输 -1 黑 1中 2走
         for(MatchPlanResult matchPlanResult :matchPlanResultsList){
 
             int z = 0;              //胜平负和让球胜平负,有一个中了,就算中
@@ -94,10 +95,13 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     if(re==1){
                         z_count = z_count + 1;
                         z=1;
+                        zz=1;
                     }else if(re==0){
                         z=2; //走盘
+                        zz=2;
                     }else if(re==-1) {
                         //未中
+                        zz=-1;
                     }
                 }
             }else{
@@ -111,7 +115,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
          }
         //0 已结束 1 进行中 2 在售
         tbPlanService.updateStatusPlanById(String.valueOf(tbJcPlan.getId()),0);
-        if(z_count > 0&&matchPlanResultsList.size() == z_count){
+        if((z_count > 0&&matchPlanResultsList.size() == z_count)||zz==2){
 
             UpdateExpert(tbJcPlan);
             if(cancel == 1){ //退款
@@ -120,15 +124,20 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 refundFrozenToMoney(tbJcPlan,"2");
             }else{//扣款
                 LOGGER.info("方案id="+tbJcPlan.getId()+" 扣款操作-方案命中");
-                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"1");
+                if(zz==2){
+                    tbPlanService.updateStatus("1", matchPlanResultsList.size() + "走1", String.valueOf(tbJcPlan.getId()),"1");
+                }else {
+                    tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"1");
+                }
                 deductFrozen(tbJcPlan);
+
             }
         }else{
             if(re==0){
                 //胜负玩法 退款逻辑
-                LOGGER.info("方案id=" + tbJcPlan.getId() + " 退款操作-胜负玩法方案走盘");
-                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "走" + "1", String.valueOf(tbJcPlan.getId()), "0");
-                refundFrozenToMoney(tbJcPlan, "1");
+                LOGGER.info("方案id=" + tbJcPlan.getId() + " 退款操作-胜负玩法方案未中");
+                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + "0", String.valueOf(tbJcPlan.getId()), "0");
+                refundFrozenToMoney(tbJcPlan, "4");
             }else {
                 //竞彩玩法，正常退款逻辑
                 LOGGER.info("方案id=" + tbJcPlan.getId() + " 退款操作-方案末中");
