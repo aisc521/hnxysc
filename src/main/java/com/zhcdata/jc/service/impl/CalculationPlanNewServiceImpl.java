@@ -95,7 +95,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                         z_count = z_count + 1;
                         z=1;
                     }else if(re==0){
-
+                        z=2; //走盘
                     }else if(re==-1) {
                         //未中
                     }
