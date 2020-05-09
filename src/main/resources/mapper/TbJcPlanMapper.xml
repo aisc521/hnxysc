@@ -186,7 +186,7 @@
 
     <select id="queryPlanListJxAndZs" resultType="com.zhcdata.db.model.TbJcPlan">
         select * from (
-         select p.id,p.ascription_expert,MAX(m.date_of_match) date_of_match,match_plan_type matchPlanType from tb_jc_plan p ,tb_jc_match m
+         select p.id,p.ascription_expert,MAX(m.date_of_match) date_of_match,match_plan_type matchPlanType,p.price price,p.create_time  createTime from tb_jc_plan p ,tb_jc_match m
         where p.id = m.plan_id and p.status = '1'
         group by p.id,p.ascription_expert
         ) am where now()>am.date_of_match
@@ -675,7 +675,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
     <select id="selectPlanIdByMatchId" resultType="com.zhcdata.jc.dto.PlanIdDto">
         SELECT plan_id planId from tb_jc_match m
         left join jc_schedule s on s.ScheduleID in(#{matchId})
-        where m.match_id in(#{matchId}) and s.MatchID = m.match_num
+        where m.match_id in(#{matchId})
     </select>
     <select id="queryPlanInfoByPlanId" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
         select

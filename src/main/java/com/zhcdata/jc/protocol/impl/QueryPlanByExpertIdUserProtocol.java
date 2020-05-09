@@ -84,7 +84,10 @@ public class QueryPlanByExpertIdUserProtocol implements BaseProtocol{
                 result1.setzSevenDays(String.valueOf(new BigDecimal(result1.getzSevenDays()).intValue()));
                 result1.setzFiveDays(String.valueOf(new BigDecimal(result1.getzFiveDays()).intValue()));
                 result1.setzThreeDays(String.valueOf(new BigDecimal(result1.getzThreeDays()).intValue()));
-                List<MatchPlanResult> matchPlanResults = TbJcMatchService.queryList(planList.get(i).getPlanId());
+                List<MatchPlanResult> matchPlanResults =null;
+                if(planList.get(i).getMatchPlanType()!=null) {
+                    matchPlanResults = TbJcMatchService.queryList(planList.get(i).getPlanId(), planList.get(i).getMatchPlanType());
+                }
                 if (matchPlanResults != null && matchPlanResults.size() > 0) {
                     List<MatchPlanResult> matchPlanResults1 = new ArrayList<>();
                     for(int j = 0; j < matchPlanResults.size(); j++){

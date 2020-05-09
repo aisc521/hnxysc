@@ -91,12 +91,17 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                 if (type.equals("0")) {
                     //通用券
                     //使用优惠券
-                    result = payService.currencyCouponPay(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
+                    //result = payService.currencyCouponPay(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
+                    //if (!"000000".equals(result.get("resCode"))) {
+                    //      return result;
+                    //}
+                    //通用券变成冻结
+                    result = payService.currencyCouponFreeze(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
                     if (!"000000".equals(result.get("resCode"))) {
                         return result;
                     }
                     tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("couponPrice"));//优惠券金额(免费获取,金额0)
-                    tbJcPurchaseDetailed.setPayStatus(Long.parseLong("2"));
+                    tbJcPurchaseDetailed.setPayStatus(Long.parseLong("1"));
                     tbJcPurchaseDetailed.setThirdMoney(new BigDecimal(0));
                     tbJcPurchaseDetailed.setBuyMoney(Long.valueOf(price));
                     tbJcPurchaseDetailed.setPayInfo("优惠券支付");

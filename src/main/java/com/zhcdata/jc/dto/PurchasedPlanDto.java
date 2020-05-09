@@ -57,7 +57,7 @@ public class PurchasedPlanDto {
 
     private String orderId;
     private String returnSevenDays;
-
+    private String matchPlanType;
     public String getReturnSevenDays() {
         return returnSevenDays;
     }
@@ -374,5 +374,13 @@ public class PurchasedPlanDto {
 
     public void setLzBig(String lzBig) {
         this.lzBig = lzBig;
+    }
+
+    public String getMatchPlanType() {
+        return matchPlanType;
+    }
+
+    public void setMatchPlanType(String matchPlanType) {
+        this.matchPlanType = matchPlanType;
     }
 }

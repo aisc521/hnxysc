@@ -311,6 +311,27 @@ public class PayServiceImpl implements PayService {
         return returnMap;
     }
 
+    @Override
+    public Map<String, Object> currencyCouponFreeze(String userId,String couponId, String orderId, String description, String src) {
+        Map<String, Object> returnMap = new HashMap<String, Object>(2);
+        Map<String, Object> paramsMap = new HashMap<>(6);
+        try {
+            paramsMap.put("userId", userId);                   //登录用户id
+            paramsMap.put("oprSys", "O");                      //暂时传o
+            paramsMap.put("couponId", couponId);               //优惠券ID
+            paramsMap.put("orderId", orderId);                 //子系统订单号
+            paramsMap.put("oprStatus", "0");                   //冻结
+            String returnJson = HttpUtils.PayHttpPost(accUrl, paramsMap, "10100405", "UTF-8", src, commonUtils.bodyMd5(paramsMap));
+            returnMap = handlePayJosn(returnJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("优惠券锁定异常", e);
+            returnMap.put("resCode", ProtocolCodeMsg.COUPON_LOCKING_FAIL.getCode());
+            returnMap.put("message", ProtocolCodeMsg.COUPON_LOCKING_FAIL.getMsg());
+        }
+        return returnMap;
+    }
+
     //验证优惠券
     @Override
     public Map<String,Object> couponVerify(Map<String,String> paramMap,String src){
