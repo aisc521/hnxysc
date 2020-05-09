@@ -144,6 +144,8 @@ public interface PayService {
      */
     Map<String,Object> currencyCouponUnLock(String userId,String couponId, String orderId, String description, String src);
 
+    Map<String,Object> currencyCouponFreeze(String userId,String couponId, String orderId, String description, String src);
+
     /**
      * 验证优惠券
      * @param paramMap
