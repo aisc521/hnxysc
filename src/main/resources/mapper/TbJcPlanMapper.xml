@@ -186,7 +186,7 @@
 
     <select id="queryPlanListJxAndZs" resultType="com.zhcdata.db.model.TbJcPlan">
         select * from (
-         select p.id,p.ascription_expert,MAX(m.date_of_match) date_of_match,match_plan_type matchPlanType,p.price price from tb_jc_plan p ,tb_jc_match m
+         select p.id,p.ascription_expert,MAX(m.date_of_match) date_of_match,match_plan_type matchPlanType,p.price price,p.create_time  createTime from tb_jc_plan p ,tb_jc_match m
         where p.id = m.plan_id and p.status = '1'
         group by p.id,p.ascription_expert
         ) am where now()>am.date_of_match

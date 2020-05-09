@@ -42,8 +42,7 @@
     </if>
     <if test="matchPlanType == 2">
         SELECT m.id id,m.match_Id matchId,m.match_num matchNum,class.Name_JS matchName,
-        case when lo.turn = 'True' then t2.Name_J else t1.Name_J end hostTeam,
-        case when lo.turn = 'True' then t1.Name_J else t2.Name_J end visitTeam,
+        t1.Name_J hostTeam,t2.Name_J visitTeam,
         DATE_FORMAT(m.date_Of_Match,'%H:%i') as dateOfMatch,m.planInfo planInfo,m.status isWin ,
         s.GuestScore homeScore,
         s.HomeScore guestScore,
@@ -55,7 +54,6 @@
         LEFT JOIN team t1 ON s.HomeTeamID = t1.TeamID
         LEFT JOIN team t2 ON s.GuestTeamID = t2.TeamID
         LEFT JOIN sclass class ON s.SclassID = class.sclassID
-        LEFT JOIN jc_match_lottery lo ON s.ScheduleID = lo.ID_bet007
         LEFT JOIN tb_jc_plan plan on m.plan_id=plan.id
         where  s.scheduleID = m.match_id
         and plan_id =#{planId}
