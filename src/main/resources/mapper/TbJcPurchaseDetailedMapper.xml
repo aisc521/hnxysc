@@ -90,7 +90,7 @@
     LEFT JOIN tb_jc_victory  victory ON pd.expert_id = victory.expert_id
     LEFT JOIN tb_jc_plan plan ON pd.scheme_id = plan.id
     LEFT JOIN tb_jc_match match1 ON  pd.scheme_id = match1.plan_id
-    where pd.user_id = #{userId} and pd.pay_status in ('2','1','3')
+    where pd.user_id = #{userId} and pd.pay_status in ('2','1','3','9')
     GROUP BY pd.scheme_id
     order by pd.create_time desc
   </select>
