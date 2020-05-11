@@ -243,23 +243,23 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                             String winStatus = "0";
                             String rwinStatus = "0";
                             if (matchResultDou1 > matchResultDou2) {//胜
-                                winStatus = "1";
+                                rwinStatus = "1";
                             }
                             if (Objects.equals(matchResultDou1, matchResultDou2)) {//平
-                                winStatus = "2";
+                                rwinStatus = "2";
                             }
                             if (matchResultDou1 < matchResultDou2) {//负
-                                winStatus = "3";
+                                rwinStatus = "3";
                             }
                             if (matchPlanType == null || matchPlanType.equals("1")) {
                                 if ((matchResultDou1 + Double.valueOf(rang_num)) > matchResultDou2) {//让胜
-                                    rwinStatus = "1";
+                                    winStatus = "1";
                                 }
                                 if (Objects.equals((matchResultDou1 + Double.valueOf(rang_num)), matchResultDou2)) {//让平
-                                    rwinStatus = "2";
+                                    winStatus = "2";
                                 }
                                 if ((matchResultDou1 + Double.valueOf(rang_num)) < matchResultDou2) {//让负
-                                    rwinStatus = "3";
+                                    winStatus = "3";
                                 }
                             }
                             map.put("winStatus", "" + winStatus);
