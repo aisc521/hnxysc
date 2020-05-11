@@ -403,8 +403,14 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                     //更新订单表信息
                     if("3".equals(type)){//下架退款
                         tbJcPurchaseDetailed.setPayStatus(Long.valueOf(10));
-                    }else if("4".equals(type)){//方案走盘退款
-                        tbJcPurchaseDetailed.setPayStatus(Long.valueOf(9));
+                    }else if("4".equals(type)){
+                        if(s==1){
+                            //走盘扣优惠券 状态为支付成功
+                            tbJcPurchaseDetailed.setPayStatus(Long.valueOf(2));
+                        }else {
+                            //走盘不扣优惠券或非优惠券支付 退
+                            tbJcPurchaseDetailed.setPayStatus(Long.valueOf(9));
+                        }
                     }else {
                         if (s == 1) {
                             //扣优惠券
