@@ -235,6 +235,17 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                         if ("vs".equals(matchResult)) {//比赛异常状态返回0
                             map.put("winStatus", "0");
                             map.put("rwinStatus", "0");
+
+                            if(matchPlanType == null || matchPlanType.equals("2")){
+                                String w=list.get(i).get("planInfo").toString().split("\\|")[1];
+                                String[] ws = w.split(",");
+                                if(!ws[0].equals("0")){
+                                    map.put("rwinStatus", "1");
+                                }
+                                if(!ws[2].equals("0")){
+                                    map.put("rwinStatus", "3");
+                                }
+                            }
                         } else {
                             String[] matchResultArr = matchResult.split(":");
                             Double matchResultDou1 = Double.valueOf(matchResultArr[0]);//住比分
