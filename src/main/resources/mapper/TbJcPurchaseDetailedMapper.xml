@@ -84,7 +84,7 @@
     when pd.pay_type = '22' and pd.coupon_pay_money is not null then '微信支付+优惠券'
     when pd.pay_type = '99' and pd.coupon_pay_money is not null then '点播卡支付+优惠券'
     end AS paytype,
-    pd.order_id orderId
+    pd.order_id orderId,plan.match_Plan_Type matchPlanType
     from tb_jc_purchase_detailed pd
     LEFT JOIN tb_jc_expert expert ON pd.expert_id = expert.id
     LEFT JOIN tb_jc_victory  victory ON pd.expert_id = victory.expert_id
