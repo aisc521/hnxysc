@@ -168,17 +168,17 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
             String[] panKou2 = pankou1.split("/");
             for (int j = 0; j < panKou2.length; j++) {
 
-                if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) == 0) {
+                if (new BigDecimal(homeScore).subtract(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) == 0) {
                     result = 0;
                 } else {
                     if (Double.valueOf(rqspf[0]) > 0) {
-                        if (new BigDecimal(homeScore).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) > 0) {
+                        if (new BigDecimal(homeScore).subtract(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) > 0) {
                             result = 1;
                         } else {
                             result = -1;
                         }
                     } else if (Double.valueOf(rqspf[2]) > 0) {
-                        if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) < 0) {
+                        if (new BigDecimal(homeScore).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) < 0) {
                             result = 1;
                         } else {
                             result = -1;
@@ -188,17 +188,17 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                 }
             }
         } else {
-            if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) == 0) {
+            if (new BigDecimal(homeScore).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) == 0) {
                 result = 0; //走盘
             } else {
                 if (Double.valueOf(rqspf[0]) > 0) {
-                    if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) > 0) {
+                    if (new BigDecimal(homeScore).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) > 0) {
                         result = 1;
                     } else {
                         result = -1;
                     }
                 } else if (Double.valueOf(rqspf[2]) > 0) {
-                    if (new BigDecimal(homeScore).add(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) < 0) {
+                    if (new BigDecimal(homeScore).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) < 0) {
                         result = 1;
                     } else {
                         result = -1;

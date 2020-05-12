@@ -366,12 +366,12 @@ public class HandleExpertRecordJob implements Job {
                                                 String[] panKou2 = pankou1.split("/");
                                                 for (int j = 0; j < panKou2.length; j++) {
 
-                                                    if (new BigDecimal(scores[0]).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) == 0) {
+                                                    if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) == 0) {
                                                         //左盘走或者右盘走 走盘需要返回本金 这里赋值0.5
                                                         return_money=return_money.add(new BigDecimal(0.5));
                                                     }else {
                                                         if(Double.valueOf(rqspf[0]) > 0) {
-                                                            if (new BigDecimal(scores[0]).add(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) > 0) {
+                                                            if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) > 0) {
                                                                 remark=1;
                                                                 return_money = new BigDecimal(rqspf[0]).divide(new BigDecimal(2)).add(new BigDecimal(0.5));
                                                                 //此类盘口分两份，
@@ -379,7 +379,7 @@ public class HandleExpertRecordJob implements Job {
                                                                 remark=-1;
                                                             }
                                                         }else if(Double.valueOf(rqspf[1]) > 0){
-                                                            if (new BigDecimal(scores[0]).add(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) < 0) {
+                                                            if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) < 0) {
                                                                 return_money = new BigDecimal(rqspf[2]).divide(new BigDecimal(2)).add(new BigDecimal(0.5));
                                                                 remark=1;
                                                             }else {
@@ -396,12 +396,12 @@ public class HandleExpertRecordJob implements Job {
 
                                             } else {
                                                 //如果走盘
-                                                if (new BigDecimal(scores[0]).add(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) == 0) {
+                                                if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) == 0) {
                                                     trend+="走";
                                                     return_money = new BigDecimal(1); //走盘按1处理(相当于原路返回)
                                                 }else {
                                                     if(Double.valueOf(rqspf[0]) > 0) {
-                                                        if (new BigDecimal(scores[0]).add(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) > 0) {
+                                                        if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) > 0) {
                                                             trend+="红";
                                                             return_money = new BigDecimal(rqspf[0]).add(new BigDecimal(1)); //确认球探的盘口是否需要+1(目前需要加)
                                                             //todo
@@ -409,7 +409,7 @@ public class HandleExpertRecordJob implements Job {
                                                             trend+="黑";
                                                         }
                                                     }else if(Double.valueOf(rqspf[1]) > 0){
-                                                        if (new BigDecimal(scores[0]).add(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) < 0) {
+                                                        if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) < 0) {
                                                             trend+="红";
                                                             return_money = new BigDecimal(rqspf[2]).add(new BigDecimal(1));
                                                         }else {
