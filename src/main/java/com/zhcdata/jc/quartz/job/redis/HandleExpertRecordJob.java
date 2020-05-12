@@ -139,7 +139,7 @@ public class HandleExpertRecordJob implements Job {
                     int jin5z = 0;        //近 5中几
                     int jin4z = 0;        //近 4中几
                     int jin3z = 0;        //近 3中几
-                    if (String.valueOf(expertResults.get(p).getId()).equals("118")) {
+                    if (String.valueOf(expertResults.get(p).getId()).equals("172")) {
                         String sd = "";
                     }
 
@@ -356,7 +356,7 @@ public class HandleExpertRecordJob implements Job {
                                             String[] rqspf = planInfo.split("\\|")[1].split(",");   //专家选择的赔率信息
                                             String panKou = odds[2];
                                             Float value = Math.abs(Float.valueOf(panKou)) % Float.valueOf("0.5");
-                                            if (value > 0) {
+                                            if (value == 0) {
                                                 int remark=0;
 
                                                 String pankou1=matchListDataJob.getPanKou(panKou);
@@ -378,7 +378,7 @@ public class HandleExpertRecordJob implements Job {
                                                             }else {
                                                                 remark=-1;
                                                             }
-                                                        }else if(Double.valueOf(rqspf[1]) > 0){
+                                                        }else if(Double.valueOf(rqspf[2]) > 0){
                                                             if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) < 0) {
                                                                 return_money = new BigDecimal(rqspf[2]).divide(new BigDecimal(2)).add(new BigDecimal(0.5));
                                                                 remark=1;
