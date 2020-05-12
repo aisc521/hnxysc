@@ -178,7 +178,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
                             result = -1;
                         }
                     } else if (Double.valueOf(rqspf[2]) > 0) {
-                        if (new BigDecimal(homeScore).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(guestScore)) < 0) {
+                        if (new BigDecimal(homeScore).subtract(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(guestScore)) < 0) {
                             result = 1;
                         } else {
                             result = -1;
