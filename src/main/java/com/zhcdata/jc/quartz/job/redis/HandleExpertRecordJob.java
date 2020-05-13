@@ -356,7 +356,7 @@ public class HandleExpertRecordJob implements Job {
                                             String[] rqspf = planInfo.split("\\|")[1].split(",");   //专家选择的赔率信息
                                             String panKou = odds[2];
                                             Float value = Math.abs(Float.valueOf(panKou)) % Float.valueOf("0.5");
-                                            if (value == 0) {
+                                            if (value != 0) {
                                                 int remark=0;
 
                                                 String pankou1=matchListDataJob.getPanKou(panKou);
@@ -374,14 +374,14 @@ public class HandleExpertRecordJob implements Job {
                                                         if(Double.valueOf(rqspf[0]) > 0) {
                                                             if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) > 0) {
                                                                 remark=1;
-                                                                return_money = new BigDecimal(rqspf[0]).divide(new BigDecimal(2)).add(new BigDecimal(0.5));
+                                                                return_money = return_money.add(new BigDecimal(rqspf[0]).divide(new BigDecimal(2)).add(new BigDecimal(0.5)));
                                                                 //此类盘口分两份，
                                                             }else {
                                                                 remark=-1;
                                                             }
                                                         }else if(Double.valueOf(rqspf[2]) > 0){
                                                             if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou)).compareTo(new BigDecimal(scores[1])) < 0) {
-                                                                return_money = new BigDecimal(rqspf[2]).divide(new BigDecimal(2)).add(new BigDecimal(0.5));
+                                                                return_money = return_money.add(new BigDecimal(rqspf[2]).divide(new BigDecimal(2)).add(new BigDecimal(0.5)));
                                                                 remark=1;
                                                             }else {
                                                                 remark=-1;

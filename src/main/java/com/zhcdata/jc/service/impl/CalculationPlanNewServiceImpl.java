@@ -160,7 +160,7 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
         String panKou = odds.split("/")[2];
         Float value = Math.abs(Float.valueOf(panKou)) % Float.valueOf("0.5");
         String[] rqspf = spf.split(",");
-        if (value == 0) {
+        if (value != 0) {
             String pankou1=matchListDataJob.getPanKou(panKou);
             if(pankou1.contains("-")){
                 pankou1=pankou1.replace("/","/-");     //把-0.5/1 处理成-0.5/-1
