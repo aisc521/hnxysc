@@ -139,7 +139,7 @@ public class HandleExpertRecordJob implements Job {
                     int jin5z = 0;        //近 5中几
                     int jin4z = 0;        //近 4中几
                     int jin3z = 0;        //近 3中几
-                    if (String.valueOf(expertResults.get(p).getId()).equals("173")) {
+                    if (String.valueOf(expertResults.get(p).getId()).equals("174")) {
                         String sd = "";
                     }
 
@@ -369,6 +369,7 @@ public class HandleExpertRecordJob implements Job {
                                                     if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) == 0) {
                                                         //左盘走或者右盘走 走盘需要返回本金 这里赋值0.5
                                                         return_money=return_money.add(new BigDecimal(0.5));
+                                                        remark=0;
                                                     }else {
                                                         if(Double.valueOf(rqspf[0]) > 0) {
                                                             if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) > 0) {
@@ -392,6 +393,8 @@ public class HandleExpertRecordJob implements Job {
                                                     trend+="红";
                                                 }else if(remark==-1){
                                                     trend+="黑";
+                                                }else if(remark==0){
+                                                    trend+="走";
                                                 }
 
                                             } else {
