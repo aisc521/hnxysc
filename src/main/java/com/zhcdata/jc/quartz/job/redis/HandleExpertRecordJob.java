@@ -139,7 +139,7 @@ public class HandleExpertRecordJob implements Job {
                     int jin5z = 0;        //近 5中几
                     int jin4z = 0;        //近 4中几
                     int jin3z = 0;        //近 3中几
-                    if (String.valueOf(expertResults.get(p).getId()).equals("174")) {
+                    if (String.valueOf(expertResults.get(p).getId()).equals("176")) {
                         String sd = "";
                     }
 
@@ -163,7 +163,7 @@ public class HandleExpertRecordJob implements Job {
                                 List<MatchPlanResult1> matchlist = tbJcMatchService.queryList1(planResults.get(k).getId());   //当前方案的比赛
                                 if (matchlist != null && matchlist.size() > 0) {
                                     for (int m = 0; m < matchlist.size(); m++) {
-                                        if (matchlist.get(m).getStatus().equals("1")) {
+                                        if (matchlist.get(m).getStatus().equals("1")||matchlist.get(m).getStatus().equals("2")) {
                                             lz += 1;    //中,则+1
                                         } else {
                                             //历史最高连红 如果当前连中大于历史连中则替换
@@ -177,7 +177,7 @@ public class HandleExpertRecordJob implements Job {
                                         //三天
                                         if (matchlist.get(m).getDateOfMatch().compareTo(timeThree) >= 0) {
                                             three += 1;          //投入+1
-                                            if (matchlist.get(m).getStatus().equals("1")) {
+                                            if (matchlist.get(m).getStatus().equals("1")||matchlist.get(m).getStatus().equals("2")) {
                                                 three_z += 1;    //中奖+1
                                             }
                                         }
@@ -185,7 +185,7 @@ public class HandleExpertRecordJob implements Job {
                                         //五天
                                         if (matchlist.get(m).getDateOfMatch().compareTo(timeFive) >= 0) {
                                             five += 1;
-                                            if (matchlist.get(m).getStatus().equals("1")) {
+                                            if (matchlist.get(m).getStatus().equals("1")||matchlist.get(m).getStatus().equals("2")) {
                                                 five_z += 1;
                                             }
                                         }
@@ -195,7 +195,7 @@ public class HandleExpertRecordJob implements Job {
                                         if (matchlist.get(m).getDateOfMatch().compareTo(timeSeven) >= 0) {
                                             isServerDay = 1;
                                             seven += 1;
-                                            if (matchlist.get(m).getStatus().equals("1")) {
+                                            if (matchlist.get(m).getStatus().equals("1")||matchlist.get(m).getStatus().equals("2")) {
                                                 seven_z += 1;
                                             }
                                         }
@@ -211,7 +211,7 @@ public class HandleExpertRecordJob implements Job {
                                         }
 
                                         //全部命中数(率)
-                                        if (matchlist.get(m).getStatus().equals("1")) {
+                                        if (matchlist.get(m).getStatus().equals("1")||matchlist.get(m).getStatus().equals("2")) {
                                             z_count += 1;
                                         }
 
