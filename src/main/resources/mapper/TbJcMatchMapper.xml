@@ -42,10 +42,11 @@
     </if>
     <if test="matchPlanType == 2">
         SELECT m.id id,m.match_Id matchId,m.match_num matchNum,class.Name_JS matchName,
-        t1.Name_J hostTeam,t2.Name_J visitTeam,
+        case when (SELECT TURN from jc_match_lottery where ID_BET007=m.match_id and lottery = 'JCZQ') = 'True' then t2.Name_J else t1.Name_J end hostTeam,
+        case when (SELECT TURN from jc_match_lottery where ID_BET007=m.match_id and lottery = 'JCZQ') then t1.Name_J else t2.Name_J end visitTeam,
         DATE_FORMAT(m.date_Of_Match,'%H:%i') as dateOfMatch,m.planInfo planInfo,m.status isWin ,
-        s.GuestScore guestScore,
-        s.HomeScore homeScore,
+        case when (SELECT TURN from jc_match_lottery where ID_BET007=m.match_id and lottery = 'JCZQ') = 'True' then s.GuestScore else s.HomeScore end homeScore,
+        case when (SELECT TURN from jc_match_lottery where ID_BET007=m.match_id and lottery = 'JCZQ') = 'True' then s.HomeScore else s.GuestScore end guestScore,
         s.MatchState matchState,plan.match_Plan_Type matchPlanType,
         m.odds
         from
