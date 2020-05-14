@@ -78,7 +78,8 @@ public class QueryPlanByMatchIdAndUserProtocol implements BaseProtocol {
         String matchId = paramMap.get("matchId");
         String pageNo = paramMap.get("pageNo");
         String userId = paramMap.get("userId");
-        PageInfo<PlanIdDto> planIdDtos = tbPlanService.selectPlanIdByMatchId(matchId,Integer.valueOf(pageNo),20);
+        String matchStatus=tbPlanService.queryMatchStatus(matchId);
+        PageInfo<PlanIdDto> planIdDtos = tbPlanService.selectPlanIdByMatchId(matchId,Integer.valueOf(pageNo),20,matchStatus);
         List<PlanIdDto> planIdDtoList = planIdDtos.getList();
         List list = new ArrayList();
 

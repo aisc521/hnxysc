@@ -74,7 +74,9 @@ public interface TbPlanService {
 
     PageInfo<PlanResult1> queryPlanByExpertIdForXgAndUser(String[] pIdList, String userId, Integer integer, int i);
 
-    PageInfo<PlanIdDto> selectPlanIdByMatchId(String matchId,Integer pageNo,Integer pageAmount);
+    PageInfo<PlanIdDto> selectPlanIdByMatchId(String matchId,Integer pageNo,Integer pageAmount,String matchStatus);
+
+    String queryMatchStatus(String matchId);
 
     QueryPlanByMatchIdDto queryPlanInfoByPlanId(String planId);
 

@@ -149,11 +149,16 @@ public class TbPlanServiceImpl implements TbPlanService {
     }
 
     @Override
-    public  PageInfo<PlanIdDto> selectPlanIdByMatchId(String matchId,Integer pageNo,Integer pageAmount) {
+    public  PageInfo<PlanIdDto> selectPlanIdByMatchId(String matchId,Integer pageNo,Integer pageAmount,String matchStatus) {
 
         PageHelper.startPage(pageNo, pageAmount);
-        List<PlanIdDto> list = tbJcPlanMapper.selectPlanIdByMatchId(matchId);
+        List<PlanIdDto> list = tbJcPlanMapper.selectPlanIdByMatchId(matchId,matchStatus);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public String queryMatchStatus(String matchId){
+        return tbJcPlanMapper.queryMatchStatus(matchId);
     }
 
     @Override

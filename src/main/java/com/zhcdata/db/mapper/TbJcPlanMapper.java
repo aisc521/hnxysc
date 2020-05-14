@@ -55,7 +55,9 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     List<PlanResult1> queryPlanByExpertIdForXgAndUser(@Param("idList")String[] pIdList, @Param("userId")String userId);
 
-    List<PlanIdDto> selectPlanIdByMatchId(@Param("matchId")String matchId);
+    String queryMatchStatus(@Param("matchId")String matchId);
+
+    List<PlanIdDto> selectPlanIdByMatchId(@Param("matchId")String matchId,@Param("matchStatus")String matchStatus);
 
     QueryPlanByMatchIdDto queryPlanInfoByPlanId(@Param("planId")String planId);
 

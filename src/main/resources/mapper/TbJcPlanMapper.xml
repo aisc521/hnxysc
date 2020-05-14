@@ -671,12 +671,24 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
         ORDER BY  v.i asc,p.create_time desc
     </select>
 
+    <select id="queryMatchStatus" resultType="String">
+        select matchState from schedule where ScheduleID=#{matchId}
+    </select>
 
     <select id="selectPlanIdByMatchId" resultType="com.zhcdata.jc.dto.PlanIdDto">
-        SELECT plan_id planId from tb_jc_match m
-        left join jc_schedule s on s.ScheduleID in(#{matchId})
-        where m.match_id in(#{matchId})
+        <if test="matchStatus==-1">
+            SELECT plan_id planId from tb_jc_match m
+            left join jc_schedule s on s.ScheduleID in(#{matchId})
+            where m.match_id in(#{matchId})
+        </if>
+        <if test="matchStatus!=-1">
+            SELECT plan_id planId from tb_jc_match m
+            left join jc_schedule s on s.ScheduleID in(1734361)
+            LEFT JOIN tb_jc_plan plan on m.plan_id=plan.id
+            where m.match_id in(1734361) and plan.status!=0
+        </if>
     </select>
+
     <select id="queryPlanInfoByPlanId" resultType="com.zhcdata.jc.dto.QueryPlanByMatchIdDto">
         select
         e.id id,
