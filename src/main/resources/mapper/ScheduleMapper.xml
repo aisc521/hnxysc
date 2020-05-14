@@ -870,7 +870,7 @@
         WHEN lottery.LOTTERY = 'SF14' then '3'
         WHEN lottery.LOTTERY = 'BJDC' then '2'
         end as matchType,
-        case when (select matchState from schedule where ScheduleID=sc.ScheduleID)='0'
+        case when (select matchState from schedule where ScheduleID=sc.ScheduleID)!='-1'
         then (SELECT count(*) from tb_jc_match m
         left join tb_jc_plan p on m.plan_id = p.id
         left join tb_jc_expert e  on p.ascription_expert = e.id
