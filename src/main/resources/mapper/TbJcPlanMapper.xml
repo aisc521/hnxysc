@@ -866,7 +866,8 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
             p.status planStatus,
             p.id planid,
             p.plan_Hit planHit,
-            p.type planType
+            p.type planType,
+            p.match_Plan_Type matchPlanType
             from tb_jc_plan p
             left join tb_jc_expert e on p.ascription_expert = e.id
             left join
@@ -923,7 +924,8 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
             p.status planStatus,
             p.id planid,
             p.plan_Hit planHit,
-            p.type planType
+            p.type planType,
+            p.match_Plan_Type matchPlanType
             from tb_jc_plan p
             left join tb_jc_expert e on p.ascription_expert = e.id
             left join
@@ -981,7 +983,8 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
             p.status planStatus,
             p.id planid,
             p.plan_Hit planHit,
-            p.type planType
+            p.type planType,
+            p.match_Plan_Type matchPlanType
             from tb_jc_plan p
             left join tb_jc_expert e on p.ascription_expert = e.id
             left join
