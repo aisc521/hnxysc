@@ -74,6 +74,7 @@ public class MatchListJob implements Job{
                         toUpdate.setGuesthalfscore(xml.getGuesthalfscore());
                         toUpdate.setMatchtime(xml.getMatchtime());
                         toUpdate.setSclassid(Integer.valueOf(xml.getSclassid()));
+                        toUpdate.setBfshow(xml.getBfshow());
                         try {
                             log.info("赛程赛果修改比赛时间:比赛"+toUpdate.getScheduleid()+"修改为:"+sdf.format(xml.getMatchtime()));
                         }catch (Exception e){

@@ -97,8 +97,13 @@ public class BeanUtils {
         // TODO: 2019/9/10 下级分组
         if (StringUtils.isNotEmpty(model.getSubID()))
             inDb.setSubsclassid(Integer.parseInt(model.getSubID()));//自联赛ID
-        if (StringUtils.isNotEmpty(model.getHidden()))
-            inDb.setBfshow(model.getHidden().startsWith("F"));//是否显示
+        if (StringUtils.isNotEmpty(model.getHidden())){
+            if(model.getHidden().equals("False")||model.getHidden().equals("false")){
+                inDb.setBfshow(false);//是否显示
+            }else {
+                inDb.setBfshow(true);
+            }
+        }
         return inDb;
     }
 
