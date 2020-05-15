@@ -253,7 +253,7 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                             //计算胜平负状态
                             String winStatus = "0";
                             String rwinStatus = "0";
-                            if (matchPlanType == null || matchPlanType.equals("2")) {
+                            if (matchPlanType.equals("2")) {
                                 String w=list.get(i).get("planInfo").toString().split("\\|")[1];
                                 String[] ws = w.split(",");
                                 String re=firstInfo.get("statusmatch").toString();
@@ -273,16 +273,24 @@ public class QueryPlanDetailsProtocol implements BaseProtocol {
                                         rwinStatus = "1";
                                     }
                                 }
-
-                            }
-                            if (matchPlanType == null || matchPlanType.equals("1")) {
+                            }else if (matchPlanType == null || matchPlanType.equals("1")) {
                                 if ((matchResultDou1 + Double.valueOf(rang_num)) > matchResultDou2) {//让胜
-                                    winStatus = "1";
+                                    rwinStatus = "1";
                                 }
                                 if (Objects.equals((matchResultDou1 + Double.valueOf(rang_num)), matchResultDou2)) {//让平
-                                    winStatus = "2";
+                                    rwinStatus = "2";
                                 }
                                 if ((matchResultDou1 + Double.valueOf(rang_num)) < matchResultDou2) {//让负
+                                    rwinStatus = "3";
+                                }
+
+                                if (matchResultDou1 > matchResultDou2) {//让胜
+                                    winStatus = "1";
+                                }
+                                if (Objects.equals(matchResultDou1, matchResultDou2)) {//让平
+                                    winStatus = "2";
+                                }
+                                if (matchResultDou1 < matchResultDou2) {//让负
                                     winStatus = "3";
                                 }
                             }
