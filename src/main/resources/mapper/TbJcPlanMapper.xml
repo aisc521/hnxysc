@@ -683,9 +683,9 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
         </if>
         <if test="matchStatus!=-1">
             SELECT plan_id planId from tb_jc_match m
-            left join jc_schedule s on s.ScheduleID in(1734361)
+            left join jc_schedule s on s.ScheduleID in(#{matchId})
             LEFT JOIN tb_jc_plan plan on m.plan_id=plan.id
-            where m.match_id in(1734361) and plan.status!=0
+            where m.match_id in(#{matchId}) and plan.status!=0
         </if>
     </select>
 
