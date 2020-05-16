@@ -203,7 +203,7 @@ public class MatchListProtocol implements BaseProtocol {
         List<MatchResult1> newList = new ArrayList<>();
 
         //赛事类型或盘口赛选直接查数据库
-        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType)) {
+        if (!Strings.isNullOrEmpty(panKouType) || !Strings.isNullOrEmpty(matchType)||isCheck.equals("1")) {
             if (type.equals("all")) {
                 type = "4";
             }else if(type.equals("6")){
