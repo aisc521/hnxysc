@@ -139,7 +139,7 @@ public class HandleExpertRecordJob implements Job {
                     int jin5z = 0;        //近 5中几
                     int jin4z = 0;        //近 4中几
                     int jin3z = 0;        //近 3中几
-                    if (String.valueOf(expertResults.get(p).getId()).equals("176")) {
+                    if (String.valueOf(expertResults.get(p).getId()).equals("124")) {
                         String sd = "";
                     }
 
@@ -147,7 +147,7 @@ public class HandleExpertRecordJob implements Job {
                         List<TbJcPlan> planResults = tbPlanService.queryPlanList(String.valueOf(expertResults.get(p).getId()), "0"); //已结束方案
                         if (planResults != null && planResults.size() > 0) {
                             for (int k = 0; k < planResults.size(); k++) {
-                                if(planResults.get(k).getId()==1309){
+                                if(planResults.get(k).getId()==1103){
                                     String sfsd="";
                                 }
 
@@ -357,7 +357,7 @@ public class HandleExpertRecordJob implements Job {
                                             String panKou = odds[2];
                                             Float value = Math.abs(Float.valueOf(panKou)) % Float.valueOf("0.5");
                                             if (value != 0) {
-                                                int remark=0;
+                                                int remark=2;
 
                                                 String pankou1=matchListDataJob.getPanKou(panKou);
                                                 if(pankou1.contains("-")){
@@ -369,7 +369,10 @@ public class HandleExpertRecordJob implements Job {
                                                     if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) == 0) {
                                                         //左盘走或者右盘走 走盘需要返回本金 这里赋值0.5
                                                         return_money=return_money.add(new BigDecimal(0.5));
-                                                        remark=0;
+                                                        if(remark==2) {
+                                                            //第一次循环，是走盘，则显示走。如果第二次循环是走盘，不处理
+                                                            remark = 0;
+                                                        }
                                                     }else {
                                                         if(Double.valueOf(rqspf[0]) > 0) {
                                                             if (new BigDecimal(scores[0]).subtract(new BigDecimal(panKou2[j])).compareTo(new BigDecimal(scores[1])) > 0) {
