@@ -949,7 +949,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
 
             </if>
             GROUP BY p.id
-            ORDER BY p.is_right desc, v.i asc,p.create_time desc limit 999999999999)
+            ORDER BY p.order_by asc, v.i asc,p.create_time desc limit 999999999999)
 
             union all
 
@@ -1008,7 +1008,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
 
             </if>
             GROUP BY p.id
-            ORDER BY p.is_right desc, v.i asc,p.create_time desc limit 999999999999)
+            ORDER BY p.order_by asc, v.i asc,p.create_time desc limit 999999999999)
         </if>
 
     </select>
@@ -1131,7 +1131,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
 
             </if>
             GROUP BY p.id
-            ORDER BY  p.is_right desc ,v.i asc,p.create_time desc limit 999999999999)
+            ORDER BY  p.order_by asc ,v.i asc,p.create_time desc limit 999999999999)
 
             union all
 
@@ -1190,7 +1190,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
 
             </if>
             GROUP BY p.id
-            ORDER BY  p.is_right desc, v.i asc,p.create_time desc limit 999999999999)
+            ORDER BY  p.order_by asc, v.i asc,p.create_time desc limit 999999999999)
         </if>
     </select>
 </mapper>
