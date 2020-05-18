@@ -21,7 +21,7 @@ public interface TbJcPlanMapper extends Mapper<TbJcPlan> {
 
     SPFListDto querySPFList(@Param("MatchId") long MatchId);
 
-    int updateStatus(@Param("isRight") String isRight, @Param("planHit") String planHit, @Param("id") String id,@Param("flag") String flag);
+    int updateStatus(@Param("isRight") String isRight, @Param("planHit") String planHit, @Param("id") String id,@Param("flag") String flag,@Param("orderBy")Integer orderBy);
 
     List<PlanResult2> queryPlanById(@Param("id") String id);
 

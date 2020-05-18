@@ -178,13 +178,13 @@ public class CalculationPlanServiceImpl implements CalculationPlanService {
 
                     if (result == 0) {
                         //未中
-                        tbPlanService.updateStatus("0", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()),"0");
+                        tbPlanService.updateStatus("0", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()),"0",-1);
                         TbJcPlan tb = planResults.get(i);
                         //refundFrozenToMoney(tb);
                     } else if (result == 1) {
                         //已中
                         if(matchPlanResults.size()==ed){
-                            tbPlanService.updateStatus("1", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()),"1");
+                            tbPlanService.updateStatus("1", matchPlanResults.size() + "中" + z_count, String.valueOf(planResults.get(i).getId()),"1",-1);
 
                             TbJcPlan tb = planResults.get(i);//专家经验值+3
                             UpdateExpert(tb);

@@ -38,7 +38,7 @@ public interface TbPlanService {
 
     SPFListDto querySPFList(String matchId);
 
-    int updateStatus(String isRight, String planHit, String id,String flag);
+    int updateStatus(String isRight, String planHit, String id,String flag,Integer orderBy);
 
     List<PlanResult2> queryPlanById(String id);
 

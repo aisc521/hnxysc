@@ -120,22 +120,27 @@ public class CalculationPlanNewServiceImpl implements CalculationPlanNewService{
             UpdateExpert(tbJcPlan);  //更新专家经验值
             if(cancel == 1){
                 LOGGER.info("方案id="+tbJcPlan.getId()+" 退款操作-比赛异常退款");
-                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"0");
+                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"0",1);
                 refundFrozenToMoney(tbJcPlan,"2");
             }else{
                 //扣款
                 LOGGER.info("方案id="+tbJcPlan.getId()+" 扣款操作-方案命中");
-                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"1");
+                tbPlanService.updateStatus("1", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()),"1",1);
                 deductFrozen(tbJcPlan);
             }
         }else{
             //未中退 走盘也是未中(现金退、优惠券不退)
             LOGGER.info("方案id=" + tbJcPlan.getId() + " 退款操作-方案末中");
             if(zz==2) {
-                tbPlanService.updateStatus("0", matchPlanResultsList.size() + "走" + "1", String.valueOf(tbJcPlan.getId()), "0");
+                tbPlanService.updateStatus("0", matchPlanResultsList.size() + "走" + "1", String.valueOf(tbJcPlan.getId()), "0",2);
                 refundFrozenToMoney(tbJcPlan, "4");
             }else {
-                tbPlanService.updateStatus("0", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()), "0");
+                Integer orderBy=0; //标识方案显示顺序
+                if(z_count==0)
+                    orderBy=4;
+                else
+                    orderBy=3;
+                tbPlanService.updateStatus("0", matchPlanResultsList.size() + "中" + z_count, String.valueOf(tbJcPlan.getId()), "0",orderBy);
                 refundFrozenToMoney(tbJcPlan, "1");
             }
 
