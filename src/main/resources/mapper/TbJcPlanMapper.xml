@@ -541,7 +541,7 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
         update tb_jc_plan set status=#{status},update_time=now() where id = #{id}
     </update>
   <update id="updateStatusPlanByIdAndStatus">
-       update tb_jc_plan set status=#{status} where id = #{id} and status=#{oldStatus}
+       update tb_jc_plan set status=#{status},order_by='5' where id = #{id} and status=#{oldStatus}
   </update>
 
 
