@@ -454,7 +454,7 @@ public class HandleExpertRecordJob implements Job {
                             //处理近3 4 5 6 7 8 9 10场 命中场次
                             for (int b = trend.length() - 1; b >= 0; b--) {
                                 String v = trend.substring(b, b + 1);
-                                if (v.equals("红")) {
+                                if (v.equals("红")||v.equals("走")) {
                                     if (c < 4) {
                                         jin3z += 1;
                                         jin4z += 1;
