@@ -19,6 +19,7 @@ import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.utils.number.NumberUtil;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -172,7 +173,13 @@ public class SchemePurchaseProtocol implements BaseProtocol {
         }
         if("21".equals(payType) && list <= 0){
             resultMap.put("resCode", ProtocolCodeMsg.MONEY_ERROR.getCode());
-            resultMap.put("message", "支付宝支持的交易金额为大于10元");
+            resultMap.put("message", "支付宝支持的交易金额为大于50元");
+            return resultMap;
+        }
+        BigDecimal bigDecimal = new BigDecimal("50");
+        if("21".equals(payType) && bigDecimal.compareTo(new BigDecimal(tbJcPlan.getPrice())) > 0){
+            resultMap.put("resCode", ProtocolCodeMsg.MONEY_ERROR.getCode());
+            resultMap.put("message", "支付宝支持的交易金额为大于50元");
             return resultMap;
         }
         //判断首单 是都是点播卡支付
