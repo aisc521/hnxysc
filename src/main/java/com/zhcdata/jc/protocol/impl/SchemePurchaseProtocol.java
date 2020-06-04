@@ -176,10 +176,10 @@ public class SchemePurchaseProtocol implements BaseProtocol {
             resultMap.put("message", "支付宝支持的交易金额为大于50元");
             return resultMap;
         }
-        BigDecimal bigDecimal = new BigDecimal("50");
+        BigDecimal bigDecimal = new BigDecimal("60");
         if("21".equals(payType) && bigDecimal.compareTo(new BigDecimal(tbJcPlan.getPrice())) > 0){
             resultMap.put("resCode", ProtocolCodeMsg.MONEY_ERROR.getCode());
-            resultMap.put("message", "支付宝支持的交易金额为大于50元");
+            resultMap.put("message", "支付宝支持的交易金额为大于60元");
             return resultMap;
         }
         //判断首单 是都是点播卡支付
