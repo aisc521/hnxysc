@@ -1188,7 +1188,9 @@
     </select>
 
     <select id="queryMatchByStatus" resultType="com.zhcdata.db.model.Schedule">
-        select * from schedule sc where sc.MatchState in ('1','2','3','4','5')
+        select * from schedule sc where sc.MatchState in ('1','2','3','4','5') and MatchTime>date_sub(now(), interval 1 day)
+	    UNION ALL
+        select * from schedule sc where sc.MatchState =-1 and MatchTime>date_sub(now(), interval 5 hour)
     </select>
     <select id="queryLastNoCupMatchByTeam" resultType="com.zhcdata.db.model.Schedule">
         SELECT s.* from `schedule` s left join sclass ss on s.sclassID = ss.sclassID

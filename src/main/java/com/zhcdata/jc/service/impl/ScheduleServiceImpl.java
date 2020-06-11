@@ -1145,6 +1145,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public List<Schedule> queryMatchByStatus() {
+        // xml修改原因
+        // 1.查询状态 1 2 3 4 5，比赛很多都是很久以前的，各种原因暂停的赛事，改为最近24小时的赛事
+        // 2.之前只查 1 2 3 4 5，个别比赛的技术统计可能有延迟，比赛已经结束才推过来，改为最近3个小时结束的赛事
         return scheduleMapper.queryMatchByStatus();
     }
 
