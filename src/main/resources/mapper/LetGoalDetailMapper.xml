@@ -132,4 +132,9 @@
       isEarly = #{isearly,jdbcType=BIT}
     where ID = #{id,jdbcType=INTEGER}
   </update>
+  <delete id="deleteletgoaldetailByOddsid">
+    DELETE from europeoddsdetail where oddsid in(select oddsid from europeodds where ScheduleID = #{matchId})
+    DELETE from letgoaldetail where oddsid in(select oddsid from letgoal where ScheduleID = #{matchId})
+    DELETE from totalscoredetail where oddsid in(select oddsid from TotalScore where ScheduleID = #{matchId})
+  </delete>
 </mapper>

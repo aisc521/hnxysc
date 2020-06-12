@@ -21,4 +21,6 @@ public interface LetGoalDetailMapper {
     LetGoalDetail selectByMatchAndCpyOrderByTimeAscLimit1(@Param("id")int id, @Param("cpy")int cpy);
 
     void deleteByOddsId(Integer oddsid);
+
+    int deleteletgoaldetailByOddsid(@Param("matchId")String matchId);
 }

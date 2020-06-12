@@ -1,6 +1,7 @@
 package com.zhcdata.jc.service.impl;
 
 import com.zhcdata.db.mapper.JcScheduleMapper;
+import com.zhcdata.db.mapper.LetGoalDetailMapper;
 import com.zhcdata.db.mapper.ScheduleMapper;
 import com.zhcdata.db.model.JcSchedule;
 import com.zhcdata.db.model.Schedule;
@@ -28,6 +29,9 @@ public class GetMatchInfoByIdListServiceImpl implements GetMatchInfoByIdListServ
 
     @Resource
     JcScheduleMapper jcScheduleMapper;
+
+    @Resource
+    LetGoalDetailMapper letGoalDetailMapper;
 
     @Override
     public void dealMatch(String startDate,String endDate){
@@ -89,6 +93,24 @@ public class GetMatchInfoByIdListServiceImpl implements GetMatchInfoByIdListServ
                         }else {
                             LOGGER.info("更新失败(竞彩表,不需要)" + model.getScheduleid());
                         }
+
+                        //如果状态是取消 推迟 则删除赔率 盘口
+                        try {
+                            if ("-10".equals(rsp.getF()) || "-14".equals(rsp.getF())) {
+                                //盘口删除
+                                int re = letGoalDetailMapper.deleteletgoaldetailByOddsid(rsp.getA());
+                                if (re > 0) {
+                                    LOGGER.info("删除赔率盘口大小球成功(比赛推迟或取消)" + rsp.getA());
+                                } else {
+                                    LOGGER.info("删除赔率盘口大小球失败(比赛推迟或取消)" + rsp.getA());
+                                }
+                            }
+                        }catch (Exception ex){
+                            LOGGER.error("删除赔率盘口大小球异常");
+                            ex.printStackTrace();
+                        }
+
+
                         update++;
                     }
                 }
