@@ -562,7 +562,7 @@ public class CommonUtils {
             info.setLzNow("0");
         }
         Integer lh = new BigDecimal(info.getLzNow()).intValue();
-        if(lh >= 4){
+        if(lh >= 5){
             lz = info.getLzNow();
             return lz;
         }
@@ -710,7 +710,7 @@ public class CommonUtils {
             info.setLz("0");
         }
         Integer lh = new BigDecimal(info.getLz()).intValue();
-        if(lh >= 4){
+        if(lh >= 5){
             lz = info.getLz();
             return lz;
         }
@@ -855,7 +855,7 @@ public class CommonUtils {
             info.setLz("0");
         }
         Integer lh = new BigDecimal(info.getLz()).intValue();
-        if(lh >= 4){
+        if(lh >= 5){
             lz = info.getLz();
             return lz;
         }
@@ -1000,7 +1000,7 @@ public class CommonUtils {
             info.setLz("0");
         }
         Integer lh = new BigDecimal(info.getLz()).intValue();
-        if(lh >= 4){
+        if(lh >= 5){
             lz = info.getLz();
             return lz;
         }
@@ -1276,7 +1276,7 @@ public class CommonUtils {
             info.setLz("0");
         }
         Integer lh = new BigDecimal(info.getLz()).intValue();
-        if(lh >= 4){
+        if(lh >= 5){
             lz = info.getLz();
             return lz;
         }
@@ -1421,7 +1421,7 @@ public class CommonUtils {
             info.setExpertHitNum("0");
         }
         Integer lh = new BigDecimal(info.getExpertHitNum()).intValue();
-        if(lh >= 4){
+        if(lh >= 5){
             lz = info.getExpertHitNum();
             return lz;
         }
