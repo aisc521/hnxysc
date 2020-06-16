@@ -32,7 +32,7 @@
   </select>
   <select id="queryJcMatch" resultType="com.zhcdata.db.model.JcMatchLottery">
     SELECT lottery.ID_BET007 from `schedule` sc LEFT JOIN jc_match_lottery lottery on sc.scheduleID=lottery.ID_BET007
-    where lottery.Lottery='JCZQ' and sc.matchTime>= #{startTime} and sc.matchTime<![CDATA[ < ]]> #{endTime}
+    where lottery.Lottery='JCZQ' and sc.matchTime>= #{startTime} and sc.matchTime<![CDATA[ < ]]> #{endTime} and is_show = 1
   </select>
   <update id="updateByMatchId">
     update jc_match_lottery

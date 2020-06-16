@@ -82,16 +82,21 @@ public class CheckDelayMatchJob  implements Job {
             }
             LOGGER.info("彩票场次与比赛ID关联表接口 获取竞彩赛事ID" + schedule);
 
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 6; i++) {
                 String s = df1.format(calendar.getTime()) + " 11:00:00";
                 String e = df1.format(calendar1.getTime()) + " 11:00:00";
+                LOGGER.info("日期：s:" + s + "e:" + e);
                 List<JcMatchLottery> list = jcMatchLotteryMapper.queryJcMatch(s, e);
                 for (int k = 0; k < list.size(); k++) {
-                    LOGGER.info(list.get(k).getIdBet007().toString());
                     if (!schedule.contains(list.get(k).getIdBet007().toString())) {
-                        //这只负责处理 不应该显示的竞彩比赛
                         LOGGER.info(list.get(k).getIdBet007().toString());
-                        jcMatchLotteryMapper.updateByMatchId(list.get(k).getIdBet007(), 0);
+                        //这只负责处理 不应该显示的竞彩比赛
+                        int re = jcMatchLotteryMapper.updateByMatchId(list.get(k).getIdBet007(), 0);
+                        if (re > 0) {
+                            LOGGER.info("处理竞彩延期重开 成功");
+                        } else {
+                            LOGGER.info("处理竞彩延期重开 成功");
+                        }
                     }
                 }
 
