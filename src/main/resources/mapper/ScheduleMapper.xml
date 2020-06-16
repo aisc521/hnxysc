@@ -922,6 +922,7 @@
         </if>
         <if test="type == 1">/*竞彩*/
             and lottery.LOTTERY = 'JCZQ'
+            and lottery.is_show=1
         </if>
         <if test="type == 3">/*足彩*/
             and lottery.LOTTERY = 'SF14'

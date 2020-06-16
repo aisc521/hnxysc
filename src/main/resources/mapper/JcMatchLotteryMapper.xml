@@ -30,4 +30,13 @@
   <select id="queryJcMatchLotteryByMatchIdAndType" resultType="com.zhcdata.db.model.JcMatchLottery">
     select * from jc_match_lottery jc where jc.ID_BET007=#{matchId} and jc.LOTTERY in('JCZQ','BJDC')
   </select>
+  <select id="queryJcMatch" resultType="com.zhcdata.db.model.JcMatchLottery">
+    SELECT lottery.ID_BET007 from `schedule` sc LEFT JOIN jc_match_lottery lottery on sc.scheduleID=lottery.ID_BET007
+    where lottery.Lottery='JCZQ' and sc.matchTime>= #{startTime} and sc.matchTime<![CDATA[ < ]]> #{endTime}
+  </select>
+  <update id="updateByMatchId">
+    update jc_match_lottery
+    set is_show = #{show}
+    where ID_BET007 = #{matchId} and LOTTERY='JCZQ'
+  </update>
 </mapper>

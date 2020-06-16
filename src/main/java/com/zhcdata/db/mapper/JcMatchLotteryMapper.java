@@ -14,4 +14,8 @@ public interface JcMatchLotteryMapper extends Mapper<JcMatchLottery> {
     JcMatchLottery queryJcMatchLotteryByIssueNumAndNoId(@Param("issueNum") String issueNum, @Param("noId") String noId);
 
     List<JcMatchLottery> queryJcMatchLotteryByMatchIdAndType(@Param("matchId")Integer matchId);
+
+    List<JcMatchLottery> queryJcMatch(@Param("startTime")String startTime,@Param("endTime")String endTime);
+
+    int updateByMatchId(@Param("matchId")Long matchId,@Param("show")int show);
 }

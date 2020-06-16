@@ -315,6 +315,17 @@ public class MatchListDataAllJob  implements Job {
                 }
             }
         }
+        if(result1s==null||result1s.size()==0){
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("busiCode", "20010201");
+            map.put("resCode", "000000");
+            map.put("message", "成功");
+            map.put("pageNo", 1);
+            map.put("pageTotal", 0);
+            map.put("list", new ArrayList<>());
+            redisUtils.hset("SOCCER:HSET:AGAINSTLIST" + time + type, String.valueOf(1), JsonMapper.defaultMapper().toJson(new ArrayList<>()));
+            redisUtils.expire("SOCCER:HSET:AGAINSTLIST" + time + type, 1 * 60 * 60 * 24 * 35);
+        }
     }
 
     private String getMinute(String s, String e) {
