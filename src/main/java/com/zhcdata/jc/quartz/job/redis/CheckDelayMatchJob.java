@@ -79,6 +79,7 @@ public class CheckDelayMatchJob  implements Job {
             } catch (Exception e) {
                 log.error("彩票赛程与球探网ID关联表定时任务启动异常", e);
                 e.printStackTrace();
+                return;
             }
             LOGGER.info("彩票场次与比赛ID关联表接口 获取竞彩赛事ID" + schedule);
 
