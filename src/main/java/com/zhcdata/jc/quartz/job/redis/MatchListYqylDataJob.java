@@ -40,12 +40,22 @@ public class MatchListYqylDataJob implements Job {
             SimpleDateFormat df = new SimpleDateFormat("HH");
             SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
             String startDate="";  //开始时间
+            String startDate1="";  //开始时间
             String endDate="";    //结束时间
             String nowHour = df.format(new Date());    //当前小时
             if (Long.valueOf(nowHour) > 10) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(new Date());
+                //calendar.add(Calendar.DAY_OF_MONTH,-1);
                 startDate=df1.format(calendar.getTime()) + " 11:00:00";
+
+
+
+                Calendar calenda = Calendar.getInstance(); //创建Calendar 的实例
+                calenda.setTime(new Date());
+                calenda.add(Calendar.DAY_OF_MONTH,-1);
+                startDate1=df1.format(calenda.getTime()) + " 11:00:00";
+
 
                 Calendar calendar1 = Calendar.getInstance();
                 calendar1.setTime(new Date());
@@ -66,8 +76,14 @@ public class MatchListYqylDataJob implements Job {
 
             //更新当日所有
             List<MatchResult1> list1=new ArrayList<>();
-            List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null,null,null); //正在进行
-            list1.addAll(list1_1);
+            if (Long.valueOf(nowHour) > 10) {
+                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate1, endDate, "4","","1",null,null,null); //正在进行
+                list1.addAll(list1_1);
+            }else {
+                List<MatchResult1> list1_1 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","1",null,null,null); //正在进行
+                list1.addAll(list1_1);
+            }
+
             List<MatchResult1> list1_2 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","2",null,null,null); //未开始
             list1.addAll(list1_2);
             List<MatchResult1> list1_3 = scheduleService.queryMacthListForJob(startDate, endDate, "4","","3",null,null,null); //已结束
