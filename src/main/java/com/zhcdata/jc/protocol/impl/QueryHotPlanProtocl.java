@@ -1,9 +1,6 @@
 package com.zhcdata.jc.protocol.impl;
 
-import com.fasterxml.jackson.databind.JavaType;
 import com.google.common.base.Strings;
-import com.google.gson.Gson;
-import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.PlanResult1;
 import com.zhcdata.jc.dto.PlanResult3;
 import com.zhcdata.jc.dto.ProtocolParamDto;
@@ -11,12 +8,10 @@ import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
 import com.zhcdata.jc.protocol.BaseProtocol;
 import com.zhcdata.jc.tools.RedisUtils;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springside.modules.utils.mapper.JsonMapper;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -61,42 +56,54 @@ public class QueryHotPlanProtocl implements BaseProtocol {
         String type = paramMap.get("type");
         String pageNo = paramMap.get("pageNo");
         List<PlanResult1> f_result = new ArrayList<>();
+
+        String key="";
+        if (type.equals("2")) {
+            key="dc";
+        }else if(type.equals("1")){
+            key="ecy";
+        }else if(type.equals("4")){
+            key="mf";
+        }else if(type.equals("-1")) {
+            key = "";
+        }
+
         try {
-            String re = (String) redisUtils.hget("SOCCER:HSET:PLANHOT", pageNo);
+            String re = (String) redisUtils.hget("SOCCER:HSET:PLANHOT"+key, pageNo);
             JSONObject jsonObject = JSONObject.fromObject(re);
             System.out.println(jsonObject);
             PlanResult3 planResult3 = com.alibaba.fastjson.JSONObject.parseObject(re,PlanResult3.class);
             List<PlanResult1> result = planResult3.getList();
-            for (int j = 0; j < result.size(); j++) {
-                if (type.equals("2")) {
-                    //单场
-
-                    List<MatchPlanResult> matchPlanResults = result.get(j).getList();
-                    if (matchPlanResults != null && matchPlanResults.size() == 1) {
-                        f_result.add(result.get(j));
-                    }
-                } else if (type.equals("1")) {
-                    //2串1
-                    List<MatchPlanResult> matchPlanResults = result.get(j).getList();
-                    if (matchPlanResults != null && matchPlanResults.size() == 2) {
-                        f_result.add(result.get(j));
-                    }
-                } else if (type.equals("3")) {
-                    //不中退
-                    if (result.get(j).getPlanType().equals("2")) {
-                        f_result.add(result.get(j));
-                    }
-                } else if (type.equals("4")) {
-                    //免费
-                    if (result.get(j).getPlanType().equals("3")) {
-                        f_result.add(result.get(j));
-                    }
-                } else if (type.equals("-1")) {
-                    f_result.add(result.get(j));
-                }
-            }
+//            for (int j = 0; j < result.size(); j++) {
+//                if (type.equals("2")) {
+//                    //单场
+//
+//                    List<MatchPlanResult> matchPlanResults = result.get(j).getList();
+//                    if (matchPlanResults != null && matchPlanResults.size() == 1) {
+//                        f_result.add(result.get(j));
+//                    }
+//                } else if (type.equals("1")) {
+//                    //2串1
+//                    List<MatchPlanResult> matchPlanResults = result.get(j).getList();
+//                    if (matchPlanResults != null && matchPlanResults.size() == 2) {
+//                        f_result.add(result.get(j));
+//                    }
+//                } else if (type.equals("3")) {
+//                    //不中退
+//                    if (result.get(j).getPlanType().equals("2")) {
+//                        f_result.add(result.get(j));
+//                    }
+//                } else if (type.equals("4")) {
+//                    //免费
+//                    if (result.get(j).getPlanType().equals("3")) {
+//                        f_result.add(result.get(j));
+//                    }
+//                } else if (type.equals("-1")) {
+//                    f_result.add(result.get(j));
+//                }
+//            }
             if (!Strings.isNullOrEmpty(re)) {
-                resultMap.put("list", f_result);
+                resultMap.put("list", result);
                 resultMap.put("message", "成功");
                 resultMap.put("resCode", "000000");
                 resultMap.put("busiCode", "");
