@@ -1,8 +1,9 @@
 package com.zhcdata.jc.protocol.impl;
 
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Strings;
+import com.zhcdata.jc.dto.MatchPlanResult;
 import com.zhcdata.jc.dto.PlanResult1;
-import com.zhcdata.jc.dto.PlanResult3;
 import com.zhcdata.jc.dto.ProtocolParamDto;
 import com.zhcdata.jc.enums.ProtocolCodeMsg;
 import com.zhcdata.jc.exception.BaseException;
@@ -11,12 +12,12 @@ import com.zhcdata.jc.service.TbJcMatchService;
 import com.zhcdata.jc.service.TbPlanService;
 import com.zhcdata.jc.tools.CommonUtils;
 import com.zhcdata.jc.tools.RedisUtils;
-import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -72,22 +73,22 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
         String pageNo = paramMap.get("pageNo");
         String type = paramMap.get("type");
         String userId = paramMap.get("userId");
-//        PageInfo<PlanResult1> planList1 = tbPlanService.queryHotPlan(userId,Integer.valueOf(pageNo),20);
-//        List<PlanResult1> planList = planList1.getList();
-//        for (int k = 0; k < planList.size(); k++) {
-//             PlanResult1 result1 = planList.get(k);
-//             String lz = commonUtils.JsLz2(result1);
-//             result1.setzSevenDays(String.valueOf(new BigDecimal(result1.getzSevenDays()).intValue()));
-//             result1.setLz(lz);
-//            List<MatchPlanResult> matchPlanResults = null;
-//            if (planList.get(k).getMatchPlanType() != null) {
-//                matchPlanResults = tbJcMatchService.queryList(planList.get(k).getPlanId(), planList.get(k).getMatchPlanType());
-//            }
-//             if (matchPlanResults != null && matchPlanResults.size() > 0) {
-//                 result1.setList(matchPlanResults);
-//             }
-//            result.add(result1);
-//        }
+        PageInfo<PlanResult1> planList1 = tbPlanService.queryHotPlan(type,userId,Integer.valueOf(pageNo),20);
+        List<PlanResult1> planList = planList1.getList();
+        for (int k = 0; k < planList.size(); k++) {
+            PlanResult1 result1 = planList.get(k);
+            String lz = commonUtils.JsLz2(result1);
+            result1.setzSevenDays(String.valueOf(new BigDecimal(result1.getzSevenDays()).intValue()));
+            result1.setLz(lz);
+            List<MatchPlanResult> matchPlanResults = null;
+            if (planList.get(k).getMatchPlanType() != null) {
+                matchPlanResults = tbJcMatchService.queryList(planList.get(k).getPlanId(), planList.get(k).getMatchPlanType());
+            }
+            if (matchPlanResults != null && matchPlanResults.size() > 0) {
+                result1.setList(matchPlanResults);
+            }
+            result.add(result1);
+        }
 
 //        for (int j = 0; j < result.size(); j++) {
 //            if (type.equals("2")) {
@@ -116,28 +117,10 @@ public class QueryHotPlanUserProtocl implements BaseProtocol {
 //                f_result.add(result.get(j));
 //            }
 //        }
-
-        String key="";
-        if (type.equals("2")) {
-            key="dc";
-        }else if(type.equals("1")){
-            key="ecy";
-        }else if(type.equals("4")){
-            key="mf";
-        }else if(type.equals("-1")) {
-            key = "";
-        }
-
-        String re = (String) redisUtils.hget("SOCCER:HSET:PLANHOT"+key, pageNo);
-        JSONObject jsonObject = JSONObject.fromObject(re);
-        System.out.println(jsonObject);
-        PlanResult3 planResult3 = com.alibaba.fastjson.JSONObject.parseObject(re,PlanResult3.class);
-        result = planResult3.getList();
-
         resultMap.put("list",result);
         resultMap.put("pageNo",pageNo);
-        resultMap.put("pageTotal",planResult3.getPageTotal());
-        //resultMap.put("totalNum", planResult3.gett);
+        resultMap.put("pageTotal",planList1.getPages());
+        resultMap.put("totalNum", planList1.getTotal());
         return resultMap;
 
     }

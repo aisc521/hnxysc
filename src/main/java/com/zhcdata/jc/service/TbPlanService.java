@@ -89,7 +89,7 @@ public interface TbPlanService {
 
     TbJcPlan queryOnePlan(String expertId);
 
-    PageInfo<PlanResult1> queryHotPlan(String userId, Integer integer, int i);
+    PageInfo<PlanResult1> queryHotPlan(String type,String userId, Integer integer, int i);
 
     int updatePlanByPlanId(TbJcPlan tbJcPlan) throws BaseException;
 

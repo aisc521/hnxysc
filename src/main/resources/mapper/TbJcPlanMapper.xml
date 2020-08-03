@@ -805,7 +805,8 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
         v.four_z fourZ,
         v.three_z threeZ,
         v.return_seven_days returnSevenDays,
-        p.match_plan_type matchPlanType
+        p.match_plan_type matchPlanType,
+        p.match_count matchcount
         from tb_jc_plan  p
         LEFT JOIN (SELECT * from(
         SELECT * from
@@ -824,6 +825,15 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
             and pd.user_id = #{userId} and pd.pay_status in('1','2','3')
         </if>
         where 1=1 and p.status = '2' and v.order_By is not null and e.is_upshelf = '1'
+        <if test="type != null and type==2">
+            and p.match_count = 1
+        </if>
+        <if test="type != null and type==1">
+            and p.match_count = 2
+        </if>
+        <if test="type != null and type==4">
+            and p.type = 3
+        </if>
         GROUP BY p.id
         ORDER BY  v.i asc,p.create_time desc
 
