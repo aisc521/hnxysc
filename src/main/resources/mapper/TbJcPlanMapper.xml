@@ -807,7 +807,8 @@ SELECT jc.*,sc.MatchState Status,sc.HomeScore homeBalls,sc.GuestScore awayballs,
         v.three_z threeZ,
         v.return_seven_days returnSevenDays,
         p.match_plan_type matchPlanType,
-        p.match_count matchcount
+        p.match_count matchcount,
+        v.trend
         from tb_jc_plan  p
         LEFT JOIN (SELECT * from(
         SELECT * from
