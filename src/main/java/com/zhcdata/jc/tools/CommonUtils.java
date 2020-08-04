@@ -567,6 +567,23 @@ public class CommonUtils {
             return lz;
         }
 
+        if(info.getTrend().length()==1){
+            lz = info.getLzNow();
+            return lz;
+        }else if(info.getTrend().length()==2){
+            lz = info.getLzNow();
+            return lz;
+        }else if(info.getTrend().length()==3){
+            lz = info.getLzNow();
+            return lz;
+        }else if(info.getTrend().length()==4){
+            lz = info.getLzNow();
+            return lz;
+        }else if(info.getTrend().length()==5){
+            lz = info.getLzNow();
+            return lz;
+        }
+
 
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
             info.setTenZ("0");
@@ -1004,6 +1021,24 @@ public class CommonUtils {
             lz = info.getLz();
             return lz;
         }
+
+        if(info.getTrend().length()==1){
+            lz = info.getLz();
+            return lz;
+        }else if(info.getTrend().length()==2){
+            lz = info.getLz();
+            return lz;
+        }else if(info.getTrend().length()==3){
+            lz = info.getLz();
+            return lz;
+        }else if(info.getTrend().length()==4){
+            lz = info.getLz();
+            return lz;
+        }else if(info.getTrend().length()==5){
+            lz = info.getLz();
+            return lz;
+        }
+
         if(org.apache.commons.lang3.StringUtils.isBlank(info.getTenZ())){
             info.setTenZ("0");
         }

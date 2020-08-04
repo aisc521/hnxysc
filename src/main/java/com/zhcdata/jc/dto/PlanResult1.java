@@ -34,6 +34,7 @@ public class PlanResult1 {
     private String returnSevenDays;
     private String lzBig;
     private String matchPlanType;
+    private String trend;
 
     public String getLzBig() {
         return lzBig;
@@ -280,4 +281,12 @@ public class PlanResult1 {
     public String getMatchPlanType() { return matchPlanType; }
 
     public void setMatchPlanType(String matchPlanType) { this.matchPlanType = matchPlanType; }
+
+    public String getTrend() {
+        return trend;
+    }
+
+    public void setTrend(String trend) {
+        this.trend = trend;
+    }
 }

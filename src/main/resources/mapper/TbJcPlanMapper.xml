@@ -122,7 +122,8 @@
         v.three_z threeZ,
         v.lz_big lzBig,
         v.return_seven_days returnSevenDays,
-        p.match_plan_type matchPlanType
+        p.match_plan_type matchPlanType,
+        v.trend
         from tb_jc_plan  p
         LEFT JOIN tb_jc_victory v on p.ascription_expert=v.expert_id
         LEFT JOIN tb_jc_record_focus f on p.ascription_expert=f.expert_id
