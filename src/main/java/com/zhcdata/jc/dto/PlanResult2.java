@@ -28,6 +28,7 @@ public class PlanResult2 {
     private String planStatus;
     private String pintroduction;
     private String matchPlanType;
+    private String trend;
 
     public String getPintroduction() {
         return pintroduction;
@@ -202,4 +203,12 @@ public class PlanResult2 {
     public String getMatchPlanType() { return matchPlanType; }
 
     public void setMatchPlanType(String matchPlanType) { this.matchPlanType = matchPlanType; }
+
+    public String getTrend() {
+        return trend;
+    }
+
+    public void setTrend(String trend) {
+        this.trend = trend;
+    }
 }
