@@ -79,6 +79,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                     //未锁定，则锁定操作 已锁定，下一步
                     result = payService.currencyCouponLock(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
                     if (!"000000".equals(result.get("resCode"))) {
+                        addPlanPopularity(tbJcPlan);
                         return result;
                     }
                 }
@@ -98,6 +99,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                     //通用券变成冻结
                     result = payService.currencyCouponFreeze(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
                     if (!"000000".equals(result.get("resCode"))) {
+                        addPlanPopularity(tbJcPlan);
                         return result;
                     }
                     tbJcPurchaseDetailed.setCouponPayMoney(paramMap.get("couponPrice"));//优惠券金额(免费获取,金额0)
@@ -115,6 +117,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                         if (new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber"))) != 0) {
                             result.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
                             result.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
+                            addPlanPopularity(tbJcPlan);
                             return result;
                         }
                     } else if ("GT".equals(paramMap.get("useType"))) {
@@ -122,6 +125,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                         if (new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber"))) > 0) {
                             result.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
                             result.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
+                            addPlanPopularity(tbJcPlan);
                             return result;
                         }
                     }
@@ -143,6 +147,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                         if (new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber"))) != 0) {
                             result.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
                             result.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
+                            addPlanPopularity(tbJcPlan);
                             return result;
                         }
                     } else if ("GT".equals(paramMap.get("useType"))) {
@@ -150,6 +155,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                         if (new BigDecimal(price).compareTo(new BigDecimal(paramMap.get("useNumber"))) > 0) {
                             result.put("message", ProtocolCodeMsg.COUPON_NO_USE.getMsg());
                             result.put("resCode", ProtocolCodeMsg.COUPON_NO_USE.getCode());
+                            addPlanPopularity(tbJcPlan);
                             return result;
                         }
                     }
@@ -166,6 +172,7 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                     result.put("schemeName", tbJcPlan.getTitle());
                 }
                 if (type.equals("0")) {
+                    addPlanPopularity(tbJcPlan);
                     return result;
                 }
             } else {
@@ -231,6 +238,8 @@ public class TbJcPurchaseDetailedServiceImpl implements TbJcPurchaseDetailedServ
                     //抵扣券和打折券优惠券扣减(支付成功再扣减)
                     if ("000000".equals(result.get("resCode"))) {
                         result = payService.currencyCouponPay(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "购买方案", headBean.getSrc());
+                        //增加方案人气值
+                        addPlanPopularity(tbJcPlan);
                     }else {
                         result=payService.currencyCouponUnLock(userId, paramMap.get("couponId"), tbJcPurchaseDetailed.getOrderId(), "方案", headBean.getSrc());
                     }
