@@ -108,9 +108,20 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
                 type="3";
             }
             String endDate="";
+            SimpleDateFormat df2 = new SimpleDateFormat("HH");
             SimpleDateFormat df1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            String nowHour = df2.format(new Date());
+            String startDate1="";  //开始时间//当前小时
             if(!Strings.isNullOrEmpty(time)) {
+                if (Long.valueOf(nowHour) > 10) {
+                    Calendar calenda = Calendar.getInstance(); //创建Calendar 的实例
+                    calenda.setTime(new Date());
+                    calenda.add(Calendar.DAY_OF_MONTH,-1);
+                    startDate1=df.format(calenda.getTime()) + " 11:00:00";
+                }
+
+
                 time = time + " 11:00:00";
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(df.parse(time));
@@ -119,17 +130,27 @@ public class MatchListYqylUserIdProtocol  implements BaseProtocol {
             }
 
             String state="";
+
+            PageHelper.startPage(Integer.parseInt(pageNo), 20);
+
             if(tableType.equals("11")){
                 state="3"; // 赛果
+                newList = scheduleService.queryMacthListForJob(time, endDate , type, "", state, issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
             }else if(tableType.equals("22")){
                 state="0"; //赛程
+                newList = scheduleService.queryMacthListForJob(time, endDate , type, "", state, issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
             }else if(tableType.equals("33")){
-                //state="1"; //即时
+                state="6"; //即时
+                if (Long.valueOf(nowHour) > 10 && Long.valueOf(nowHour) <= 12) {
+                    newList = scheduleService.queryMacthListForJob(startDate1, endDate , type, "", state, issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
+
+                }else{
+                    newList = scheduleService.queryMacthListForJob(time, endDate , type, "", state, issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
+
+                }
             }
             //备注 赛果、赛程 需要传状态，即时的不需要状态(查当天的)
 
-            PageHelper.startPage(Integer.parseInt(pageNo), 20);
-            newList = scheduleService.queryMacthListForJob(time, endDate , type, "", state, issue, matchListProtocol.getPanKou(panKouType), matchListProtocol.getMatchType(matchType)); //全部
 
             PageInfo<MatchResult1> infos = new PageInfo<>(newList);
 

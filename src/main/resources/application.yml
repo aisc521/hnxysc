@@ -102,7 +102,7 @@ logging:
     com:
       zhcdata:
         db:
-          mapper: info
+          mapper: debug
 
 # 自定义属性
 custom:
