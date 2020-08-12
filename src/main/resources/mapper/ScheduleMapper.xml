@@ -924,7 +924,7 @@
             and sc.MatchState in(-1,-10,-12,-14)
         </if>
         <if test="state == 6">/*即时 不显示完成的*/
-            and sc.MatchState in('1','2','3','4','5','0','-10','-11','-12','-13','-14','-1')
+            and sc.MatchState in('1','2','3','4','5','0','-10','-11','-12','-13','-14')
         </if>
         <if test="type == 1">/*竞彩*/
             and lottery.LOTTERY = 'JCZQ'
